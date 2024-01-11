@@ -156,3 +156,4 @@ cython_debug/
 .idea/
 backend/.idea/
 frontend/.idea/
+backend/.env
