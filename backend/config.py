@@ -69,8 +69,8 @@ class Config:
         # secret
         self.AES_ENCRYPTION_KEY = load_str_env("AES_ENCRYPTION_KEY")
         self.JWT_SECRET_KEY = load_str_env("JWT_SECRET_KEY")
-        self.DEFAULT_USER = load_str_env("DEFAULT_USER")
-        self.DEFAULT_PASSWORD = load_str_env("DEFAULT_PASSWORD")
+        self.DEFAULT_ADMIN_USERNAME = load_str_env("DEFAULT_ADMIN_USERNAME")
+        self.DEFAULT_ADMIN_PASSWORD = load_str_env("DEFAULT_ADMIN_PASSWORD")
 
 
 CONFIG = Config()

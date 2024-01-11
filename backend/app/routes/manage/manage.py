@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse
 from config import CONFIG
-
+from common.services.auth.admin import create_default_admin_if_needed
 import logging
 
 logger = logging.Logger(__name__)
@@ -47,4 +47,9 @@ if CONFIG.TEST or CONFIG.DEV:
         await redis_pool.clean_data()
         await postgres_db_pool.clean_data()
         await pgvector_db_pool.clean_data()
+
+        conn = await postgres_db_pool.db_pool.acquire()
+        await create_default_admin_if_needed(postgres_conn=conn)
+        await postgres_db_pool.db_pool.release(conn)
+
         return BaseSuccessEmptyResponse()

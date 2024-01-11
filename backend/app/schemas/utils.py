@@ -1,7 +1,10 @@
-from typing import List, Dict
+from typing import Dict, List
 import re
-import openapi_spec_validator
+import json
 from common.error import raise_http_error, ErrorCode
+
+allowed_param_type = ["string", "number", "integer", "boolean"]
+MAXIMUM_PARAMETER_DESCRIPTION_LENGTH = 300
 
 
 def check_update_keys(data: Dict, keys: List[str]):
@@ -9,82 +12,81 @@ def check_update_keys(data: Dict, keys: List[str]):
         raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="At least one field should be filled")
 
 
+def validate_update_keys_at_leaset_one(data: Dict, keys: List[str]):
+    if not any(key in data and data[key] is not None for key in keys):
+        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"At least one update key should be provided.")
+
+
+def validate_non_nested_json(json_dict: Dict):
+    for key, value in json_dict.items():
+        if isinstance(value, dict):
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"Nested JSON is not allowed in {key}")
+
+
 def validate_identifier(identifier: str):
     r = "^[a-zA-Z_][a-zA-Z0-9_]*$"
-
     if not re.match(r, identifier):
-        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"Invalid identifier {identifier}")
-
+        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"{identifier} is an invalid identifier.")
     return identifier
 
+    # valid = identifier.isidentifier() and identifier[0].islower() and len(identifier) <= 255
+    # if not valid:
+    #     raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message='Invalid identifier')
 
-def validate_openapi_schema(schema: Dict, only_one_path_and_method: bool):
-    try:
-        openapi_spec_validator.validate(schema)
-        # check exactly one server in the schema
-    except Exception as e:
-        if hasattr(e, "message"):
-            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Invalid openapi schema: " + e.message)
-        else:
-            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Invalid openapi schema")
 
-    if "servers" not in schema:
-        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="No server is found in action schema")
+# get params like {{param}} from object
+def get_params(string: str = None, string_list: List[str] = None, json_dict: Dict = None, json_list: List[Dict] = None):
+    params = set()
 
-    if "paths" not in schema:
-        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="No paths is found in action schema")
+    if string:
+        params.update(re.findall("{{(.*?)}}", string))
 
-    if len(schema["servers"]) != 1:
-        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Exactly one server is allowed in action schema")
+    if string_list:
+        for s in string_list:
+            params.update(re.findall("{{(.*?)}}", s))
 
-    if only_one_path_and_method:
-        if len(schema["paths"]) != 1:
-            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Only one path is allowed in action schema")
-        path = list(schema["paths"].keys())[0]
-        if len(schema["paths"][path]) != 1:
-            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Only one method is allowed in action schema")
+    if json_dict:
+        # make json to string
+        json_str = json.dumps(json_dict)
+        params.update(re.findall("{{(.*?)}}", json_str))
 
-    # check each path method has a valid description and operationId
-    for path, methods in schema["paths"].items():
-        for method, details in methods.items():
-            if not details.get("description") or not isinstance(details["description"], str):
-                raise_http_error(
-                    ErrorCode.REQUEST_VALIDATION_ERROR,
-                    message=f"No description is found in {method} {path} in action schema",
-                )
-            if len(details["description"]) > 512:
-                raise_http_error(
-                    ErrorCode.REQUEST_VALIDATION_ERROR,
-                    message=f"Description cannot be longer than 512 characters in {method} {path} in action schema",
-                )
+    if json_list:
+        for jd in json_list:
+            # make json to string
+            js = json.dumps(jd)
+            params.update(re.findall("{{(.*?)}}", js))
 
-            if not details.get("operationId") or not isinstance(details["operationId"], str):
-                raise_http_error(
-                    ErrorCode.REQUEST_VALIDATION_ERROR,
-                    message=f"No operationId is found in {method} {path} in action schema",
-                )
-            if len(details["operationId"]) > 128:
-                raise_http_error(
-                    ErrorCode.REQUEST_VALIDATION_ERROR,
-                    message=f"operationId cannot be longer than 128 characters in {method} {path} in action schema",
-                )
+    param_list = list(params)
+    return param_list
 
-            if not re.match(r"^[a-zA-Z_][a-zA-Z0-9_]*$", details["operationId"]):
-                raise_http_error(
-                    ErrorCode.REQUEST_VALIDATION_ERROR,
-                    message=f'Invalid operationId {details["operationId"]} in {method} {path} in action schema',
-                )
 
-    return schema
+def validate_prompt_template(prompt_template: List[str]):
+    # check every item in prompt_template is string and not empty
+    for item in prompt_template:
+        if not isinstance(item, str):
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Prompt template should be a list of string.")
+        if not item:
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Prompt template should not be empty.")
+
+
+def validate_metadata(metadata: Dict):
+    for k, v in metadata.items():
+        if not isinstance(v, str):
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"Value '{v}' is not a string")
+        if not isinstance(k, str):
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"Key '{k}' is not a string")
+        if len(k) > 64:
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"Key '{k}' exceeds 64 characters")
+        if len(v) > 512:
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"Value '{v}' exceeds 512 characters")
+    return metadata
 
 
 def validate_list_position_condition(data: Dict):
     if data.get("order") and (data["order"] not in ["asc", "desc"]):
-        raise raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="order should be asc or desc")
+        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="order should be asc or desc")
 
     count = sum([1 for attr in ("after", "before", "offset") if data.get(attr) is not None])
     if count > 1:
-        raise raise_http_error(
-            ErrorCode.REQUEST_VALIDATION_ERROR, message="offset params cannot be used at the same time."
-        )
+        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="offset params cannot be used at the same time.")
     return data

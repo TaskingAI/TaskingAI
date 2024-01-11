@@ -1,11 +1,11 @@
 from enum import Enum
 
+__all__ = ["SerializePurpose", "Status"]
 
-class ReleaseStatus(int, Enum):
-    draft = 0
-    alpha_test = 1
-    beta_test = 2
-    released = 3
+
+class SerializePurpose(int, Enum):
+    REDIS = 1
+    RESPONSE = 2
 
 
 class Status(int, Enum):

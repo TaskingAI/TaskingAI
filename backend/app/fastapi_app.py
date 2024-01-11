@@ -25,6 +25,7 @@ logger.addHandler(console_handler)
 def create_app():
     from common.database.postgres.pool import postgres_db_pool, pgvector_db_pool
     from common.database.redis import redis_pool
+    from common.services.auth.admin import create_default_admin_if_needed
 
     app = FastAPI()
 
@@ -34,6 +35,11 @@ def create_app():
         await redis_pool.init_pool()
         await postgres_db_pool.init_pool()
         await pgvector_db_pool.init_pool()
+
+        # create default admin if needed
+        conn = await postgres_db_pool.db_pool.acquire()
+        await create_default_admin_if_needed(conn)
+        await postgres_db_pool.db_pool.release(conn)
 
     @app.on_event("shutdown")
     async def shutdown_event():

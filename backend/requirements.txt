@@ -10,6 +10,9 @@ gunicorn==21.2.0
 asyncio==3.4.3
 python_dateutil==2.8.2
 
+# crypto
+bcrypt==4.0.1
+
 # db
 asyncpg==0.28.0
 aioredis==2.0.1
