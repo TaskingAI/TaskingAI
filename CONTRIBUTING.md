@@ -86,5 +86,4 @@ Create a test file in your TaskingAI client code directory and another in your s
 
 If you have any questions or run into issues, please [file an issue](https://github.com/taskingai/taskingai-python-client/issues/new) on GitHub.
 
-
 Thank you for contributing to TaskingAI!
