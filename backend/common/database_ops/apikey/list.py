@@ -21,6 +21,6 @@ async def list_apikeys(
         conn=postgres_conn,
         object_class=Apikey,
         table_name="apikey",
-        order=SortOrderEnum.desc,
+        order=SortOrderEnum.DESC,
         sort_field="created_timestamp",
     )

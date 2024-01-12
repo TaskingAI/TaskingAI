@@ -77,7 +77,7 @@ class ListActionRequest(BaseModel):
 
     sort_field: str = Field(default="created_timestamp", description="The field to sort records by.")
     order: Optional[SortOrderEnum] = Field(
-        SortOrderEnum.desc, description="The order of actions to return, `asc` for ascending and `desc` for descending."
+        SortOrderEnum.DESC, description="The order of actions to return, `asc` for ascending and `desc` for descending."
     )
 
     after: Optional[str] = Field(

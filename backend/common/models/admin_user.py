@@ -33,10 +33,7 @@ class Admin(BaseModel):
             updated_timestamp=row["updated_timestamp"],
         )
 
-    def to_dict(
-        self,
-        purpose: SerializePurpose = None,
-    ):
+    def to_dict(self, purpose: SerializePurpose):
         ret = {
             "object": self.object_name(),
             "admin_id": self.admin_id,

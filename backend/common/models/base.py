@@ -9,17 +9,17 @@ class SerializePurpose(int, Enum):
     RESPONSE = 2
 
 
-class Status(int, Enum):
-    CREATING = 0
-    READY = 1
-    DELETING = 2
-    ERROR = 3
-    PARTIAL = 4
+class Status(str, Enum):
+    CREATING = "creating"
+    READY = "ready"
+    DELETING = "deleting"
+    ERROR = "error"
+    PARTIAL = "partial"
 
 
 class SortOrderEnum(str, Enum):
-    desc = "desc"
-    asc = "asc"
+    DESC = "desc"
+    ASC = "asc"
 
 
 ListResult = Tuple[List, int, bool]

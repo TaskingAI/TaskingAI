@@ -23,7 +23,7 @@ class ListModelRequest(BaseModel):
     #     description="The field to sort records by."
     # )
 
-    order: SortOrderEnum = Field(default="desc", description="The order to return. It can be `asc` or `desc`.")
+    order: SortOrderEnum = Field(SortOrderEnum.DESC, description="The order to return. It can be `asc` or `desc`.")
 
     after: Optional[str] = Field(
         None, min_length=8, max_length=8, description="The cursor represented by a model_id to fetch the next page."

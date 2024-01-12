@@ -6,3 +6,7 @@ from .model import *
 from .model_schema import *
 from .action import *
 from .authentication import *
+from .text_splitter import *
+from .collection import *
+from .record import *
+from .chunk import *

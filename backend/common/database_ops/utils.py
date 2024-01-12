@@ -128,15 +128,15 @@ async def list_objects(
                 params.append(value)
 
     # add timestamp condition
-    sql_order = "ASC" if order == SortOrderEnum.asc else "DESC"
+    sql_order = "ASC" if order == SortOrderEnum.ASC else "DESC"
     if after_value is not None:
-        operator = ">" if order == SortOrderEnum.asc else "<"
+        operator = ">" if order == SortOrderEnum.ASC else "<"
         where_clauses.append(f"{sort_field} {operator} ${len(params) + 1}")
         params.append(after_value)
 
     # if using before value, we need to reverse the order
     if before_value is not None:
-        operator = "<" if order == SortOrderEnum.asc else ">"
+        operator = "<" if order == SortOrderEnum.ASC else ">"
         where_clauses.append(f"{sort_field} {operator} ${len(params) + 1}")
         params.append(before_value)
 
