@@ -49,7 +49,7 @@ def _load_data_from_files(directory_path):
 
 
 _providers, _model_schemas = _load_data_from_files(
-    os.path.dirname(os.path.realpath(__file__)) + "/../../../resources/model_schemas"
+    os.path.dirname(os.path.realpath(__file__)) + "/../../../resources/data/model_schemas"
 )
 
 
