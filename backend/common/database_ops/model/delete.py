@@ -1,5 +1,5 @@
 from common.models import Model
-from .redis import redis_pop_model
+from common.database.redis import redis_object_pop
 
 
 async def delete_model(conn, model: Model):
@@ -7,4 +7,4 @@ async def delete_model(conn, model: Model):
     await conn.execute("DELETE FROM model WHERE model_id=$1;", model.model_id)
 
     # 2. pop from redis
-    await redis_pop_model(model=model)
+    await redis_object_pop(Model, model.model_id)

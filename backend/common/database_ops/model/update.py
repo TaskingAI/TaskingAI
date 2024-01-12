@@ -1,15 +1,15 @@
 from common.models import Model
 from typing import Dict
-from .redis import redis_pop_model
-from ..utils import prepare_and_execute_update
+from common.database.redis import redis_object_pop
+from ..utils import update_object
 
 
 async def update_model(conn, model: Model, update_dict: Dict):
     # 1. Invalidate cache
-    await redis_pop_model(model=model)
+    await redis_object_pop(Model, key=model.model_id)
 
     # 2. Update database
-    await prepare_and_execute_update(
+    await update_object(
         conn, update_dict, update_time=True, table_name="model", condition_fields={"model_id": model.model_id}
     )
 

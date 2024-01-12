@@ -2,6 +2,14 @@ from enum import Enum
 from fastapi import HTTPException
 
 
+class TKException(Exception):
+    pass
+
+
+class TKHTTPException(TKException):
+    pass
+
+
 class ErrorCode(str, Enum):
     UNKNOWN_ERROR = "UNKNOWN_ERROR"
     INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR"

@@ -25,5 +25,10 @@ def add_app_routes():
     routes.include_router(model_schema_router, prefix=CONFIG.APP_ROUTE_PREFIX)
     routes.include_router(model_router, prefix=CONFIG.APP_ROUTE_PREFIX)
 
+    # tool
+    from app.routes.tool.action import router as action_router
+
+    routes.include_router(action_router, prefix=CONFIG.APP_ROUTE_PREFIX)
+
 
 add_app_routes()

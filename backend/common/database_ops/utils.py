@@ -5,35 +5,32 @@ from typing import Any, Optional
 from common.models import SortOrderEnum, ListResult
 
 
-async def prepare_and_execute_update(
-    conn, update_dict: Dict, update_time: bool, table_name: str, condition_fields: Dict
-) -> None:
+async def update_object(conn, update_dict: Dict, update_time: bool, table_name: str, condition_fields: Dict) -> None:
+    # 2. build update dict
     pg_update_dict = update_dict.copy()
     for key, value in update_dict.items():
         if isinstance(value, (dict, list)):
             pg_update_dict[key] = json.dumps(value)
 
     timestamp_int = current_timestamp_int_milliseconds()
-    # Prepare the SET clause for the update query
+
+    # 3. Prepare the SET clause for the update query
     updates = ", ".join(
         f"{key} = ${idx}" for idx, key in enumerate(pg_update_dict.keys(), start=len(condition_fields) + 2)
     )
     if update_time:
         updates += ", updated_timestamp = $1"
 
-    # Prepare the WHERE clause for the update query
+    # 4. Prepare the WHERE clause for the update query
     conditions = " AND ".join(f"{key} = ${idx}" for idx, key in enumerate(condition_fields.keys(), start=2))
 
-    # Prepare the final query
+    # 5. Prepare the final query
     query = f"UPDATE {table_name} SET {updates} WHERE {conditions}"
 
-    # Prepare the arguments for the query
+    # 6. Prepare the arguments for the query
     args = [timestamp_int, *condition_fields.values(), *pg_update_dict.values()]
 
-    # log function, query and args
-    # logging.info(f'function: prepare_and_execute_update, query: {query}, args: {args}')
-
-    # Execute the query
+    # 7. Execute the query
     await conn.execute(query, *args)
 
 
@@ -45,7 +42,7 @@ async def get_object_total(
 ) -> int:
     """
     Build sql script for get total count operations
-    :conn: postgres connection
+    :param conn: postgres connection
     :param table_name: table name
     :param prefix_filters: the prefix filters, key is the column name, value is the prefix value
     :param equal_filters: the equal filters, key is the column name, value is the equal value
@@ -98,7 +95,7 @@ async def list_objects(
 ) -> ListResult:
     """
     Build sql script for listing operations
-    :conn: postgres connection
+    :param conn: postgres connection
     :param object_class: the class of the object to build
     :param table_name: table name
     :param limit: the maximum number of records to return
