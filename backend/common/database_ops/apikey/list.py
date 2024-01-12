@@ -1,25 +1,26 @@
-from common.models import Apikey
+from common.models import Apikey, SortOrderEnum, ListResult
+from ..utils import get_object_total, list_objects
 
 
 async def get_apikey_total(
-    conn,
-):
-    row = await conn.fetchrow(
-        """
-        SELECT COUNT(*) FROM apikey
-    """
-    )
-    return row["count"]
+    postgres_conn,
+) -> int:
+    return await get_object_total(conn=postgres_conn, table_name="apikey")
 
 
 async def list_apikeys(
-    conn,
-):
-    rows = await conn.fetch(
-        f"""
-         SELECT * FROM apikey
-         ORDER BY created_timestamp desc
-     """
+    postgres_conn,
+) -> ListResult:
+    """
+    List apikeys
+    :param postgres_conn: postgres connection
+    :return: a list of apikeys, total count of apikeys, and whether there are more apikeys
+    """
+
+    return await list_objects(
+        conn=postgres_conn,
+        object_class=Apikey,
+        table_name="apikey",
+        order=SortOrderEnum.desc,
+        sort_field="created_timestamp",
     )
-    apikeys = [Apikey.build(row) for row in rows]
-    return apikeys

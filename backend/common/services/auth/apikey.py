@@ -1,9 +1,15 @@
-from typing import List
-from common.models import Apikey
+from common.models import Apikey, ListResult
 from common.database_ops import apikey as db_apikey
 from common.error import ErrorCode, raise_http_error
 
-__all__ = ["list_apikeys", "create_apikey", "update_apikey", "get_apikey", "delete_apikey", "verify_apikey"]
+__all__ = [
+    "list_apikeys",
+    "create_apikey",
+    "update_apikey",
+    "get_apikey",
+    "delete_apikey",
+    "verify_apikey",
+]
 
 
 async def validate_and_get_apikey(postgres_conn, apikey_id: str) -> Apikey:
@@ -15,9 +21,8 @@ async def validate_and_get_apikey(postgres_conn, apikey_id: str) -> Apikey:
 
 async def list_apikeys(
     postgres_conn,
-) -> List[Apikey]:
-    apikeys = await db_apikey.list_apikeys(postgres_conn)
-    return apikeys
+) -> ListResult:
+    return await db_apikey.list_apikeys(postgres_conn)
 
 
 async def create_apikey(postgres_conn, name: str):

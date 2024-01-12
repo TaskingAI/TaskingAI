@@ -1,0 +1,56 @@
+provider:
+  provider_id: cohere
+  name: Cohere
+  credentials_schema:
+    type: object
+    properties:
+      COHERE_API_KEY:
+        type: string
+        description: Your Cohere API Key for authentication.
+        secret: true
+    required:
+      - COHERE_API_KEY
+    additionalProperties: false
+
+  model_schemas:
+    - model_schema_id: cohere/embed-english-light-v2.0
+      provider_model_id: embed-english-light-v2.0
+      name: embed-english-light-v2.0
+      type: text_embedding
+      properties:
+        embedding_size: 1024
+
+    - model_schema_id: cohere/embed-multilingual-v2.0
+      provider_model_id: embed-multilingual-v2.0
+      name: embed-multilingual-v2.0
+      type: text_embedding
+      properties:
+        embedding_size: 768
+
+    - model_schema_id: cohere/embed-english-v3.0
+      provider_model_id: embed-english-v3.0
+      name: embed-english-v3.0
+      type: text_embedding
+      properties:
+        embedding_size: 1024
+
+    - model_schema_id: cohere/embed-multilingual-v3.0
+      provider_model_id: embed-multilingual-v3.0
+      name: embed-multilingual-v3.0
+      type: text_embedding
+      properties:
+        embedding_size: 1024
+
+    - model_schema_id: cohere/embed-english-light-v3.0
+      provider_model_id: embed-english-light-v3.0
+      name: embed-english-light-v3.0
+      type: text_embedding
+      properties:
+        embedding_size: 384
+
+    - model_schema_id: cohere/embed-multilingual-light-v3.0
+      provider_model_id: embed-multilingual-light-v3.0
+      name: embed-multilingual-light-v3.0
+      type: text_embedding
+      properties:
+        embedding_size: 384

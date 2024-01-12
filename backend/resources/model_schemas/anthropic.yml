@@ -1,0 +1,47 @@
+provider:
+  provider_id: anthropic
+  name: Anthropic
+  credentials_schema:
+    type: object
+    properties:
+      ANTHROPIC_API_KEY:
+        type: string
+        description: Your Anthropic API Key for authentication.
+        secret: true
+      ANTHROPIC_API_VERSION:
+        type: string
+        description: The version of the Anthropic API being used.
+    required:
+      - ANTHROPIC_API_KEY
+    additionalProperties: false
+
+  model_schemas:
+    - model_schema_id: anthropic/claude-2.1
+      provider_model_id: claude-2.1
+      name: Claude 2.1
+      type: chat_completion
+      properties:
+        function_call: false
+        streaming: true
+        input_token_limit: 200000
+        output_token_limit: 4096
+
+    - model_schema_id: anthropic/claude-2.0
+      provider_model_id: claude-2.0
+      name: Claude 2.0
+      type: chat_completion
+      properties:
+        function_call: false
+        streaming: true
+        input_token_limit: 100000
+        output_token_limit: 4096
+
+    - model_schema_id: anthropic/claude-instant-1.2
+      provider_model_id: claude-instant-1.2
+      name: Claude Instant 1.2
+      type: chat_completion
+      properties:
+        function_call: false
+        streaming: true
+        input_token_limit: 100000
+        output_token_limit: 4096

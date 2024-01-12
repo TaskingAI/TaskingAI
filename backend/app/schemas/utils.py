@@ -12,11 +12,6 @@ def check_update_keys(data: Dict, keys: List[str]):
         raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="At least one field should be filled")
 
 
-def validate_update_keys_at_leaset_one(data: Dict, keys: List[str]):
-    if not any(key in data and data[key] is not None for key in keys):
-        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"At least one update key should be provided.")
-
-
 def validate_non_nested_json(json_dict: Dict):
     for key, value in json_dict.items():
         if isinstance(value, dict):
@@ -82,7 +77,7 @@ def validate_metadata(metadata: Dict):
     return metadata
 
 
-def validate_list_position_condition(data: Dict):
+def validate_list_cursors(data: Dict):
     if data.get("order") and (data["order"] not in ["asc", "desc"]):
         raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="order should be asc or desc")
 
