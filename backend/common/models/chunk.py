@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 from pydantic import BaseModel
 from common.utils import generate_random_id, load_json_attr
 from common.models import SerializePurpose
@@ -17,6 +17,8 @@ class Chunk(BaseModel):
     updated_timestamp: int
     created_timestamp: int
 
+    score: Optional[float] = None
+
     @staticmethod
     def generate_random_id():
         return generate_random_id(24)
@@ -33,6 +35,7 @@ class Chunk(BaseModel):
             collection_id=row["collection_id"],
             content=row["content"],
             metadata=load_json_attr(row, "metadata", {}),
+            score=row.get("score"),
             updated_timestamp=row["updated_timestamp"],
             created_timestamp=row["created_timestamp"],
         )
@@ -48,4 +51,9 @@ class Chunk(BaseModel):
             "updated_timestamp": self.updated_timestamp,
             "created_timestamp": self.created_timestamp,
         }
+
+        if purpose == SerializePurpose.RESPONSE:
+            if self.score is not None:
+                ret["score"] = self.score
+
         return ret

@@ -1,7 +1,7 @@
 from enum import Enum
 from pydantic import BaseModel
 from typing import Dict
-from common.utils import load_json_attr, load_normal_attr
+from common.utils import load_json_attr
 from .base import SerializePurpose
 
 __all__ = ["ModelType", "ModelSchema"]
@@ -32,7 +32,7 @@ class ModelSchema(BaseModel):
         return cls(
             model_schema_id=row["model_schema_id"],
             name=row["name"] or "",
-            description=load_normal_attr(row, "description", ""),
+            description=row.get("description", ""),
             provider_id=row["provider_id"],
             provider_model_id=row["provider_model_id"],
             type=row["type"],

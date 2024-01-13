@@ -1,8 +1,10 @@
 from typing import Optional, Dict
-from common.models import Collection, Record, RecordType, SortOrderEnum, ListResult
+from common.models import Collection, Record, RecordType, SortOrderEnum, ListResult, Model
 from common.database_ops import record as db_record
 from common.error import ErrorCode, raise_http_error
 from .collection import validate_and_get_collection
+from common.services.model.model import get_model
+from .embedding import embed_documents
 
 __all__ = [
     "list_records",
@@ -94,10 +96,33 @@ async def create_record(
     # validate collection
     collection: Collection = await validate_and_get_collection(postgres_conn, collection_id=collection_id)
 
+    # validate model
+    embedding_model: Model = await get_model(postgres_conn, collection.embedding_model_id)
+
+    # split content into chunks
+    documents = []
+
+    if type == RecordType.TEXT:
+        content = content.strip()
+        if not content:
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Content cannot be empty.")
+        documents = collection.text_splitter.split_text(content)
+    else:
+        raise NotImplementedError(f"Record type {type} is not supported yet.")
+
+    # embed the documents
+    embeddings = await embed_documents(
+        documents=documents,
+        embedding_model=embedding_model,
+        embedding_size=collection.embedding_size,
+    )
+
     # create record
-    record = await db_record.create_record(
+    record = await db_record.create_record_and_chunks(
         postgres_conn=postgres_conn,
         collection=collection,
+        chunk_texts=documents,
+        chunk_embeddings=embeddings,
         title=title,
         type=type,
         content=content,

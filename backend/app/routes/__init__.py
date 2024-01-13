@@ -33,9 +33,11 @@ def add_routes(route_prefix: str):
     # retrieval
     from app.routes.retrieval.collection import router as collection_router
     from app.routes.retrieval.record import router as record_router
+    from app.routes.retrieval.chunk import router as chunk_router
 
     routes.include_router(collection_router, prefix=route_prefix)
     routes.include_router(record_router, prefix=route_prefix)
+    routes.include_router(chunk_router, prefix=route_prefix)
 
 
 add_routes(CONFIG.APP_ROUTE_PREFIX)

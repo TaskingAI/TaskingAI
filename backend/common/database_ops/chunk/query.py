@@ -1,6 +1,6 @@
 import json
 from typing import List
-from common.models import Collection
+from common.models import Collection, Chunk
 from .utils import get_ef_search
 import logging
 import heapq
@@ -11,9 +11,18 @@ logger = logging.getLogger(__name__)
 async def _query_chunks_in_one_collection(
     conn,
     collection: Collection,
-    query_vector: List[float],
     top_k: int,
+    query_vector: List[float],
 ):
+    """
+    Query top_k related chunks in one collection
+    :param conn: postgres connection
+    :param collection: the collection where the chunks belong to
+    :param top_k: the number of chunks to be returned
+    :param query_vector: the query vector
+    :return: the top_k related chunks
+    """
+
     table_name = Collection.get_chunk_table_name(collection.collection_id)
     ef_search = get_ef_search(
         capacity=collection.capacity, num_chunks=collection.num_chunks, embedding_size=collection.embedding_size
@@ -32,7 +41,7 @@ async def _query_chunks_in_one_collection(
 
         # by default, use cosine distance
         sql = f"""
-            SELECT chunk_id, record_id, content, metadata,
+            SELECT chunk_id, record_id, collection_id, content, metadata,
             created_timestamp, updated_timestamp, 1 - (embedding <=> $1) AS score
             FROM {table_name}
             ORDER BY embedding <=> $1
@@ -41,40 +50,42 @@ async def _query_chunks_in_one_collection(
 
         rows = await conn.fetch(sql, json.dumps(query_vector), top_k)
 
-    chunks = [
-        {
-            "chunk_id": row["chunk_id"],
-            "record_id": row["record_id"],
-            "collection_id": collection.collection_id,
-            "score": row["score"],
-            "text": row["text"],
-            "metadata": json.loads(row["metadata"]) if row["metadata"] else None,
-        }
-        for row in rows
-    ]
+    chunks = [Chunk.build(row) for row in rows]
 
     return chunks
 
 
 async def query_chunks(
     conn,
-    query_vector: List[float],
-    top_k: int,
     collections: List[Collection],
-):
+    top_k: int,
+    query_vector: List[float],
+) -> List[Chunk]:
+    """
+    Query top_k related chunks in all collections
+    :param conn: postgres connection
+    :param collections: the collections where the chunks belong to
+    :param top_k: the number of chunks to be returned
+    :param query_vector: the query vector
+    :return: the top_k related chunks
+    """
+
     results = []
     for collection in collections:
         # query chunks in one collection
         chunks = await _query_chunks_in_one_collection(
             conn=conn,
             collection=collection,
-            query_vector=query_vector,
             top_k=top_k,
+            query_vector=query_vector,
         )
         results.append(chunks)
 
     # merge chunks from all collections
-    chunks = heapq.merge(*results, key=lambda x: x["score"], reverse=True)
-    top_k_chunks = chunks[:top_k]
+    top_k_chunks = []
+    for chunk in heapq.merge(*results, key=lambda x: x.score, reverse=True):
+        top_k_chunks.append(chunk)
+        if len(top_k_chunks) >= top_k:
+            break
 
     return top_k_chunks

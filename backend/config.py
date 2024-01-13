@@ -59,6 +59,9 @@ class Config:
         self.APP_ROUTE_PREFIX = "/api/v1"
         self.API_ROUTE_PREFIX = "/v1"
 
+        # inference
+        self.TASKINGAI_INFERENCE_URL = load_str_env("TASKINGAI_INFERENCE_URL")
+
         # database
         self.POSTGRES_URL = load_str_env("POSTGRES_URL")
         self.POSTGRES_MAX_CONNECTIONS = load_int_env("POSTGRES_MAX_CONNECTIONS", default=10)

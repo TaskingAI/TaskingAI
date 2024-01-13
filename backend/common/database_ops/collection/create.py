@@ -60,8 +60,8 @@ async def create_collection(
                 content TEXT NOT NULL,
                 metadata JSONB NOT NULL DEFAULT '{{}}',
                 embedding vector({embedding_size}) NOT NULL,
-                updated_timestamp BIGINT NOT NULL,
-                created_timestamp BIGINT NOT NULL,
+                created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
+                updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
                 FOREIGN KEY (collection_id, record_id) REFERENCES record (collection_id, record_id) ON DELETE CASCADE
             );
         """
