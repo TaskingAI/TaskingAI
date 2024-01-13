@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS model (
     name TEXT NOT NULL,
     encrypted_credentials JSONB NOT NULL,
     display_credentials JSONB NOT NULL,
+    -- todo: add metadata
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
 );
@@ -50,13 +51,13 @@ CREATE TABLE IF NOT EXISTS action (
     description TEXT NOT NULL,
     openapi_schema JSONB NOT NULL,
     authentication JSONB NOT NULL DEFAULT '{}',
+    -- todo: add metadata
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
 );
 
 
 CREATE TABLE IF NOT EXISTS collection (
-
     collection_id CHAR(24) PRIMARY KEY,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
@@ -74,15 +75,17 @@ CREATE TABLE IF NOT EXISTS collection (
 
 
 CREATE TABLE IF NOT EXISTS record (
-    record_id CHAR(24) PRIMARY KEY,
     collection_id CHAR(24) NOT NULL REFERENCES collection (collection_id) ON DELETE CASCADE,
-    status INTEGER NOT NULL,
+    record_id CHAR(24) NOT NULL ,
     num_chunks INTEGER NOT NULL DEFAULT 0,
-    type INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    type TEXT NOT NULL,
     content TEXT NOT NULL,
+    status TEXT NOT NULL,
     metadata JSONB NOT NULL DEFAULT '{}',
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
-    updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
+    updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
+    PRIMARY KEY (collection_id, record_id)
 );
 
 

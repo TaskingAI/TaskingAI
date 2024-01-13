@@ -55,12 +55,14 @@ async def create_collection(
         create_chunk_table_sql = f"""
             CREATE TABLE IF NOT EXISTS {chunk_table_name} (
                 chunk_id CHAR(24) NOT NULL PRIMARY KEY,
-                record_id CHAR(24) NOT NULL REFERENCES record (record_id) ON DELETE CASCADE,
+                collection_id CHAR(24) NOT NULL,
+                record_id CHAR(24) NOT NULL,
                 content TEXT NOT NULL,
                 metadata JSONB NOT NULL DEFAULT '{{}}',
                 embedding vector({embedding_size}) NOT NULL,
                 updated_timestamp BIGINT NOT NULL,
-                created_timestamp BIGINT NOT NULL
+                created_timestamp BIGINT NOT NULL,
+                FOREIGN KEY (collection_id, record_id) REFERENCES record (collection_id, record_id) ON DELETE CASCADE
             );
         """
 

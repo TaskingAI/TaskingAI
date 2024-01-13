@@ -17,8 +17,8 @@ class RecordType(str, Enum):
 
 class Record(BaseModel):
     record_id: str
-    title: str
     collection_id: str
+    title: str
     status: Status
     num_chunks: int
     type: RecordType
@@ -44,7 +44,7 @@ class Record(BaseModel):
             status=Status(row["status"]),
             num_chunks=row["num_chunks"],
             type=RecordType(row["type"]),
-            content=load_json_attr(row, "content", {}),
+            content=row["content"],
             metadata=load_json_attr(row, "metadata", {}),
             updated_timestamp=row["updated_timestamp"],
             created_timestamp=row["created_timestamp"],
@@ -54,8 +54,8 @@ class Record(BaseModel):
         ret = {
             "object": self.object_name(),
             "record_id": self.record_id,
-            "title": self.title,
             "collection_id": self.collection_id,
+            "title": self.title,
             "status": self.status.value,
             "num_chunks": self.num_chunks,
             "type": self.type.value,

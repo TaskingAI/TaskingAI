@@ -58,12 +58,20 @@ class RecordCreateRequest(BaseModel):
         escription="The record type. Currently only `text` is supported.",
     )
 
-    text: Optional[str] = Field(
-        None,
+    title: str = Field(
+        "",
+        min_length=0,
+        max_length=256,
+        description="The record title.",
+        examples=["Record title"],
+    )
+
+    content: str = Field(
+        ...,
         min_length=1,
         max_length=32768,
-        description="The record text, which is required when the record type is `text`.",
-        examples=["Record text"],
+        description="The record content.",
+        examples=["Record content"],
     )
 
     metadata: Dict[str, str] = Field(
@@ -78,16 +86,6 @@ class RecordCreateRequest(BaseModel):
 
     class Config:
         extra = Extra.forbid
-
-    @model_validator(mode="before")
-    def custom_validate(cls, data: Any):
-        if type == RecordType.TEXT:
-            if data.get("text") is None:
-                raise ValueError("text should be filled when type is text")
-        else:
-            raise ValueError("Only text type is supported now.")
-
-        return data
 
     @field_validator("metadata")
     def validate_metadata(cls, metadata: Dict):

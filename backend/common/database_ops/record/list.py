@@ -1,4 +1,4 @@
-from common.models import Record, SortOrderEnum
+from common.models import Record, SortOrderEnum, Collection
 from typing import Optional, Tuple, List
 from typing import Dict
 from ..utils import get_object_total, list_objects
@@ -23,8 +23,10 @@ async def get_record_total(postgres_conn, prefix_filters: Dict, equal_filters: D
 
 async def list_records(
     postgres_conn,
+    collection: Collection,
     limit: int,
     order: SortOrderEnum,
+    # todo: add different sort field options
     after_record: Optional[Record] = None,
     before_record: Optional[Record] = None,
     offset: int = 0,
@@ -34,6 +36,7 @@ async def list_records(
     """
     List records
     :param postgres_conn: postgres connection
+    :param collection: the collection where the record belongs to
     :param limit: the limit of the query
     :param order: the order of the query, asc or desc
     :param after_record: the record to query after
@@ -44,7 +47,10 @@ async def list_records(
     :return: a list of records, total count of records, and whether there are more records
     """
 
-    # todo: add different sort field options
+    # add collection_id to equal_filters
+    if equal_filters is None:
+        equal_filters = {}
+    equal_filters["collection_id"] = collection.collection_id
 
     return await list_objects(
         conn=postgres_conn,
