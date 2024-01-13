@@ -56,9 +56,13 @@ async def apply_migration(
     :param version: the target version of migration
     :param sql: sql script content
     """
+
     try:
         async with conn.transaction():
-            await conn.execute(sql)
+            if sql.strip() == "":
+                logger.warning(f"Migration version {version} script is empty")
+            else:
+                await conn.execute(sql)
             await conn.execute(f"INSERT INTO {MIGRATION_TABLE} (version) VALUES ($1)", version)
             logger.info(f"Migration version {version} applied successfully")
     except Exception as e:

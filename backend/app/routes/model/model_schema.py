@@ -4,7 +4,7 @@ from ..utils import auth_info_required
 
 from fastapi import APIRouter, Depends, Request
 from typing import List, Dict
-from app.schemas.model.model_schema import ListModelSchemaRequest
+from app.schemas.model.model_schema import ModelSchemaListRequest
 from common.services.model.model_schema import list_providers, list_model_schemas
 from common.models import SerializePurpose, Provider
 
@@ -32,7 +32,7 @@ async def api_list_providers(request: Request, auth_info: Dict = Depends(auth_in
     tags=["Model"],
 )
 async def api_list_model_schemas(
-    request: Request, data: ListModelSchemaRequest = Depends(), auth_info: Dict = Depends(auth_info_required)
+    request: Request, data: ModelSchemaListRequest = Depends(), auth_info: Dict = Depends(auth_info_required)
 ):
     model_schemas, total, has_more = await list_model_schemas(
         limit=data.limit,

@@ -139,6 +139,7 @@ async def list_objects(
         operator = "<" if order == SortOrderEnum.ASC else ">"
         where_clauses.append(f"{sort_field} {operator} ${len(params) + 1}")
         params.append(before_value)
+        sql_order = "DESC" if order == SortOrderEnum.ASC else "ASC"
 
     # combine where clauses
     combined_where_clause = " AND ".join(where_clauses)

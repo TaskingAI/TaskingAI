@@ -1,5 +1,6 @@
 from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
+from typing import Dict, List
 from common.database.postgres.pool import postgres_db_pool
 from common.services.tool.action import *
 from app.schemas.tool.action import *
@@ -11,14 +12,14 @@ router = APIRouter()
 
 @router.get(
     "/actions",
-    tags=["Action"],
+    tags=["Tool"],
     summary="List Actions",
     operation_id="list_actions",
     response_model=BaseSuccessListResponse,
 )
 async def api_list_actions(
     request: Request,
-    data: ListActionRequest = Depends(),
+    data: ActionListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
@@ -42,7 +43,7 @@ async def api_list_actions(
 
 @router.get(
     "/actions/{action_id}",
-    tags=["Action"],
+    tags=["Tool"],
     summary="Get Action",
     operation_id="get_action",
     response_model=BaseSuccessDataResponse,
@@ -62,18 +63,18 @@ async def api_get_action(
 
 @router.post(
     "/actions/bulk_create",
-    tags=["Action"],
+    tags=["Tool"],
     summary="Bulk create action",
     operation_id="bulk_create_action",
     response_model=BaseSuccessDataResponse,
 )
 async def api_bulk_create_actions(
     request: Request,
-    data: BulkCreateActionRequest,
+    data: ActionBulkCreateRequest,
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
-    actions: List[Action] = await create_action(
+    actions: List[Action] = await bulk_create_actions(
         postgres_conn=postgres_conn,
         openapi_schema=data.openapi_schema,
         authentication=data.authentication,
@@ -84,7 +85,7 @@ async def api_bulk_create_actions(
 
 @router.post(
     "/actions/{action_id}",
-    tags=["Action"],
+    tags=["Tool"],
     summary="Update Action",
     operation_id="update_action",
     response_model=BaseSuccessDataResponse,
@@ -92,7 +93,7 @@ async def api_bulk_create_actions(
 async def api_update_action(
     action_id: str,
     request: Request,
-    data: UpdateActionRequest,
+    data: ActionUpdateRequest,
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
@@ -107,7 +108,7 @@ async def api_update_action(
 
 @router.delete(
     "/actions/{action_id}",
-    tags=["Action"],
+    tags=["Tool"],
     summary="Delete Action",
     operation_id="delete_action",
     response_model=BaseSuccessEmptyResponse,
@@ -127,7 +128,7 @@ async def api_delete_action(
 
 @router.post(
     "/actions/{action_id}/run",
-    tags=["Action"],
+    tags=["Tool"],
     summary="Run Action",
     operation_id="run_action",
     response_model=BaseSuccessDataResponse,
@@ -135,7 +136,7 @@ async def api_delete_action(
 async def api_run_action(
     action_id: str,
     request: Request,
-    data: RunActionRequest,
+    data: ActionRunRequest,
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):

@@ -7,7 +7,7 @@ from ..utils import validate_list_cursors
 # GET /model_schemas
 
 
-class ListModelSchemaRequest(BaseModel):
+class ModelSchemaListRequest(BaseModel):
     limit: int = Field(20, ge=1, le=100, description="The maximum number of model schemas to return.", examples=[20])
 
     after: Optional[str] = Field(

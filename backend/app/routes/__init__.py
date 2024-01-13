@@ -30,5 +30,10 @@ def add_app_routes():
 
     routes.include_router(action_router, prefix=CONFIG.APP_ROUTE_PREFIX)
 
+    # retrieval
+    from app.routes.retrieval.collection import router as collection_router
+
+    routes.include_router(collection_router, prefix=CONFIG.APP_ROUTE_PREFIX)
+
 
 add_app_routes()

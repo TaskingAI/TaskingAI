@@ -72,7 +72,7 @@ def validate_openapi_schema(schema: Dict, only_one_path_and_method: bool):
 # GET /actions
 
 
-class ListActionRequest(BaseModel):
+class ActionListRequest(BaseModel):
     limit: int = Field(20, ge=1, le=100, description="The maximum number of actions to return.", examples=[20])
 
     sort_field: str = Field(default="created_timestamp", description="The field to sort records by.")
@@ -112,7 +112,7 @@ class ListActionRequest(BaseModel):
 # POST /actions
 
 
-class BulkCreateActionRequest(BaseModel):
+class ActionBulkCreateRequest(BaseModel):
     openapi_schema: Dict = Field(
         ...,
         description="The action schema is compliant with the OpenAPI Specification. "
@@ -139,7 +139,7 @@ class BulkCreateActionRequest(BaseModel):
 # POST /actions/{action_id}
 
 
-class UpdateActionRequest(BaseModel):
+class ActionUpdateRequest(BaseModel):
     openapi_schema: Optional[Dict] = Field(
         default=None,
         description="The action schema, which is compliant with the OpenAPI Specification. "
@@ -168,6 +168,6 @@ class UpdateActionRequest(BaseModel):
 # POST /actions/{action_id}/run
 
 
-class RunActionRequest(BaseModel):
+class ActionRunRequest(BaseModel):
     parameters: Optional[Dict[str, Any]] = Field(None)
     headers: Optional[Dict[str, Any]] = Field(None)

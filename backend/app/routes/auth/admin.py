@@ -19,7 +19,7 @@ router = APIRouter()
 )
 async def api_login_admin(
     request: Request,
-    data: LoginAdminRequest,
+    data: AdminLoginRequest,
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     admin: Admin = await login_admin(

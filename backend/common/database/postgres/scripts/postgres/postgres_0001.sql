@@ -1,5 +1,15 @@
 CREATE EXTENSION IF NOT EXISTS vector;
 
+CREATE TABLE IF NOT EXISTS stats (
+    num_apikeys INTEGER NOT NULL DEFAULT 0,
+    num_models INTEGER NOT NULL DEFAULT 0,
+    num_actions INTEGER NOT NULL DEFAULT 0,
+    num_collections INTEGER NOT NULL DEFAULT 0,
+    num_records INTEGER NOT NULL DEFAULT 0,
+    num_chunks INTEGER NOT NULL DEFAULT 0,
+    created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
+);
+
 
 CREATE TABLE IF NOT EXISTS app_admin (
     admin_id CHAR(16) PRIMARY KEY,
@@ -58,31 +68,22 @@ CREATE TABLE IF NOT EXISTS collection (
     text_splitter JSONB NOT NULL,
     status TEXT NOT NULL,
     metadata JSONB NOT NULL DEFAULT '{}',
-    created_timestamp BIGINT NOT NULL,
-    updated_timestamp BIGINT NOT NULL
+    created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
+    updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
 );
 
 
 CREATE TABLE IF NOT EXISTS record (
-    record_id CHAR(24) NOT NULL PRIMARY KEY,
+    record_id CHAR(24) PRIMARY KEY,
     collection_id CHAR(24) NOT NULL REFERENCES collection (collection_id) ON DELETE CASCADE,
     status INTEGER NOT NULL,
     num_chunks INTEGER NOT NULL DEFAULT 0,
     type INTEGER NOT NULL,
     content TEXT NOT NULL,
     metadata JSONB NOT NULL DEFAULT '{}',
-    updated_timestamp BIGINT NOT NULL,
-    created_timestamp BIGINT NOT NULL
+    created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
+    updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
 );
 
 
--- CREATE TABLE IF NOT EXISTS chunk (
---     chunk_id CHAR(24) NOT NULL PRIMARY KEY,
---     record_id CHAR(24) NOT NULL REFERENCES record (record_id) ON DELETE CASCADE,
---     collection_id CHAR(24) NOT NULL REFERENCES collection (collection_id) ON DELETE CASCADE,
---     content TEXT NOT NULL,
---     metadata JSONB NOT NULL DEFAULT '{}',
---     embedding vector(1536) NOT NULL,
---     updated_timestamp BIGINT NOT NULL,
---     created_timestamp BIGINT NOT NULL
--- );
+--todo: index on created_timestamp and name for each table

@@ -19,11 +19,11 @@ class Chunk(BaseModel):
 
     @staticmethod
     def generate_random_id():
-        return "qpEa" + generate_random_id(20)
+        return generate_random_id(24)
 
     @staticmethod
     def object_name():
-        return "Record"
+        return "Chunk"
 
     @classmethod
     def build(cls, row: Dict):

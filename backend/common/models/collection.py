@@ -37,6 +37,16 @@ class Collection(BaseModel):
     def generate_random_id():
         return generate_random_id(24).lower()
 
+    @staticmethod
+    def get_chunk_table_name(collection_id: str):
+        """
+        Get the chunk table name in postgres database
+        :param collection_id:
+        :return: the chunk table name
+        """
+
+        return f"c1_{collection_id}"
+
     @classmethod
     def build(cls, row: Dict):
         text_splitter_dict = load_json_attr(row, "text_splitter", {"type": "token"})
@@ -52,6 +62,7 @@ class Collection(BaseModel):
             embedding_model_id=row["embedding_model_id"],
             embedding_size=row["embedding_size"],
             text_splitter=text_splitter,
+            status=Status(row["status"]),
             metadata=load_json_attr(row, "metadata", {}),
             updated_timestamp=row["updated_timestamp"],
             created_timestamp=row["created_timestamp"],
@@ -68,8 +79,8 @@ class Collection(BaseModel):
             "capacity": self.capacity,
             "embedding_model_id": self.embedding_model_id,
             "embedding_size": self.embedding_size,
-            "status": self.status.value,
             "text_splitter": self.text_splitter.model_dump(),
+            "status": self.status.value,
             "metadata": self.metadata,
             "updated_timestamp": self.updated_timestamp,
             "created_timestamp": self.created_timestamp,

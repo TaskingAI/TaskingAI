@@ -14,7 +14,7 @@ router = APIRouter()
 )
 async def api_list_models(
     request: Request,
-    data: ListModelRequest = Depends(),
+    data: ModelListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
@@ -67,7 +67,7 @@ async def api_get_model(
 )
 async def api_create_model(
     request: Request,
-    data: CreateModelRequest,
+    data: ModelCreateRequest,
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
@@ -90,7 +90,7 @@ async def api_create_model(
 async def api_update_model(
     model_id: str,
     request: Request,
-    data: UpdateModelRequest,
+    data: ModelUpdateRequest,
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):

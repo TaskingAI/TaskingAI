@@ -6,6 +6,6 @@ from pydantic import BaseModel, Field
 # POST /admin/login
 
 
-class LoginAdminRequest(BaseModel):
+class AdminLoginRequest(BaseModel):
     username: str = Field(...)
     password: str = Field(..., min_length=8, max_length=32)

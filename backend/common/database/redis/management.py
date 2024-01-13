@@ -11,7 +11,7 @@ def _real_key(ObjectClass, key: str):
 
 def _build_object_from_value_dict(ObjectClass, value: dict):
     try:
-        return ObjectClass(**value)
+        return ObjectClass.build(value)
     except Exception as e:
         raise Exception(f"_build_object_from_value_dict: error={e}")
 

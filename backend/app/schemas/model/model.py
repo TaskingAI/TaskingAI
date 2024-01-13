@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field, model_validator, field_validator
 from typing import Optional, Any, Dict
 from ..utils import validate_list_cursors, check_update_keys
 from common.models import ModelType, SortOrderEnum
-from enum import Enum
 from common.services.model.model_schema import get_provider
 
 # ----------------------------
@@ -10,18 +9,10 @@ from common.services.model.model_schema import get_provider
 # GET /models
 
 
-class SortFieldEnum(str, Enum):
-    created_timestamp = "created_timestamp"
-
-
-class ListModelRequest(BaseModel):
+class ModelListRequest(BaseModel):
     limit: int = Field(20, ge=1, le=100, description="The maximum number of models to return.", examples=[20])
 
     # todo: add different sort field options
-    # sort_field: SortFieldEnum = Field(
-    #     default="created_timestamp",
-    #     description="The field to sort records by."
-    # )
 
     order: SortOrderEnum = Field(SortOrderEnum.DESC, description="The order to return. It can be `asc` or `desc`.")
 
@@ -65,7 +56,7 @@ class ListModelRequest(BaseModel):
 # POST /models
 
 
-class CreateModelRequest(BaseModel):
+class ModelCreateRequest(BaseModel):
     name: str = Field(..., min_length=1, max_length=256, description="The name of the model.")
     model_schema_id: str = Field(..., min_length=1, max_length=50, description="The provider_model_id of the model.")
     credentials: Dict = Field(default=None, description="The credentials of the model.")
@@ -76,7 +67,7 @@ class CreateModelRequest(BaseModel):
 # POST /models/{model_id}
 
 
-class UpdateModelRequest(BaseModel):
+class ModelUpdateRequest(BaseModel):
     name: Optional[str] = Field(default=None, min_length=1, max_length=255, description="The name of the model.")
     credentials: Optional[Dict] = Field(default=None, description="The credentials of the model.")
 

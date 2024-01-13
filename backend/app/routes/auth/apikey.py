@@ -41,7 +41,7 @@ async def api_list_apikeys(
 async def api_get_apikey(
     apikey_id: str,
     request: Request,
-    data: GetApikeyRequest = Depends(),
+    data: ApikeyGetRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
@@ -61,7 +61,7 @@ async def api_get_apikey(
 )
 async def api_create_apikey(
     request: Request,
-    data: CreateApikeyRequest,
+    data: ApikeyCreateRequest,
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
@@ -82,7 +82,7 @@ async def api_create_apikey(
 async def api_update_apikey(
     apikey_id: str,
     request: Request,
-    data: UpdateApikeyRequest,
+    data: ApikeyUpdateRequest,
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):

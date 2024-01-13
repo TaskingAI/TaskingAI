@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 # POST /apikeys
 
 
-class CreateApikeyRequest(BaseModel):
+class ApikeyCreateRequest(BaseModel):
     name: str = Field(..., min_length=1, max_length=255, description="Name of the API key.")
 
 
@@ -15,7 +15,7 @@ class CreateApikeyRequest(BaseModel):
 # POST /apikeys/{apikey_id}
 
 
-class UpdateApikeyRequest(BaseModel):
+class ApikeyUpdateRequest(BaseModel):
     name: str = Field(..., min_length=1, max_length=255, description="API key name.")
 
 
@@ -24,5 +24,5 @@ class UpdateApikeyRequest(BaseModel):
 # Get /apikeys/{apikey_id}
 
 
-class GetApikeyRequest(BaseModel):
+class ApikeyGetRequest(BaseModel):
     plain: bool = Field(False, description="Whether to return the API key in plain text.")

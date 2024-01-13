@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 from common.models import Action, Authentication, SortOrderEnum, ListResult
 from common.database_ops import action as db_action
 from common.error import ErrorCode, raise_http_error
@@ -8,7 +8,7 @@ from .openapi_call import call_action_api
 
 __all__ = [
     "list_actions",
-    "create_action",
+    "bulk_create_actions",
     "update_action",
     "get_action",
     "delete_action",
@@ -68,11 +68,11 @@ async def list_actions(
     )
 
 
-async def create_action(
+async def bulk_create_actions(
     postgres_conn,
     openapi_schema: Dict,
     authentication: Authentication,
-):
+) -> List[Action]:
     schemas = split_openapi_schema(openapi_schema)
     if not schemas:
         raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Failed to parse OpenAPI schema")
@@ -82,12 +82,12 @@ async def create_action(
         function = extract_function_description(schema)
         action_tuples.append((schema, function["name"], function["description"]))
 
-    action = await db_action.create_actions(
+    actions = await db_action.create_actions(
         postgres_conn=postgres_conn,
         actions=action_tuples,
         authentication=authentication,
     )
-    return action
+    return actions
 
 
 async def update_action(
@@ -95,7 +95,7 @@ async def update_action(
     action_id: str,
     openapi_schema: Dict,
     authentication: Authentication,
-):
+) -> Action:
     action: Action = await validate_and_get_action(postgres_conn, action_id=action_id)
 
     update_dict = {}
@@ -116,15 +116,14 @@ async def update_action(
     return action
 
 
-async def get_action(postgres_conn, action_id: str):
+async def get_action(postgres_conn, action_id: str) -> Action:
     action: Action = await validate_and_get_action(postgres_conn, action_id)
     return action
 
 
-async def delete_action(postgres_conn, action_id: str):
+async def delete_action(postgres_conn, action_id: str) -> None:
     action: Action = await validate_and_get_action(postgres_conn, action_id)
     await db_action.delete_action(postgres_conn, action)
-    return action
 
 
 async def run_action(postgres_conn, action_id: str, parameters: Dict, headers: Dict) -> Dict:

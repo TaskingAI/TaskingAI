@@ -21,6 +21,16 @@ class Model(BaseModel):
     updated_timestamp: int
     created_timestamp: int
 
+    def model_schema(self):
+        from common.services.model.model_schema import get_model_schema
+
+        return get_model_schema(self.model_schema_id)
+
+    def provider(self):
+        from common.services.model.model_schema import get_provider
+
+        return get_provider(self.provider_id)
+
     @staticmethod
     def object_name():
         return "Model"
