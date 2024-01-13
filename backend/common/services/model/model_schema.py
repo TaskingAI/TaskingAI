@@ -6,6 +6,8 @@ import yaml
 __all__ = [
     "list_providers",
     "list_model_schemas",
+    "get_provider",
+    "get_model_schema",
 ]
 
 

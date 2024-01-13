@@ -1,47 +1,17 @@
-import aiohttp
 from typing import List
-from common.utils import ResponseWrapper, check_http_error
+from common.utils import check_http_error
 from config import CONFIG
 from common.models import Model
 import hashlib
-
-
-async def _inference(
-    embedding_model: Model,
-    input_text_list: List[str],
-    input_type: str,
-) -> ResponseWrapper:
-    """
-    make the text embedding inference request
-    :param embedding_model: the embedding model to use
-    :param input_text_list: the input text list
-    :param input_type: the input type
-    :return: the inference response
-    """
-
-    model_schema = embedding_model.model_schema()
-
-    payload = {
-        "provider_model_id": model_schema.provider_model_id,
-        "provider_id": model_schema.provider_id,
-        "credentials": embedding_model.encrypted_credentials,
-        # todo encrypted_credentials
-        "input": input_text_list,
-        "input_type": input_type,
-    }
-
-    async with aiohttp.ClientSession() as session:
-        url = f"{CONFIG.TASKINGAI_INFERENCE_URL}/v1/inference/text_embedding"
-        response = await session.post(url, json=payload)
-        return ResponseWrapper(response.status, await response.json())
+from common.services.inference.text_embedding import text_embedding
 
 
 def _generate_random_unit_vector(text, dim):
     """
-    generate a random unit vector for development purpose
+    generate a random unit vector based on the input text
     :param text: the input text
     :param dim: the dimension of the vector
-    :return:
+    :return: a random unit vector
     """
 
     import numpy as np
@@ -63,29 +33,41 @@ async def embed_query(query: str, embedding_model: Model, embedding_size: int):
     :param query: the query text
     :param embedding_model: the embedding_model to use
     :param embedding_size: the embedding size of the model
-    :return:
+    :return: the embedding vector
     """
 
     if CONFIG.DEV:
         return _generate_random_unit_vector(query, embedding_size)
 
-    response = await _inference(embedding_model=embedding_model, input_text_list=[query], input_type="query")
+    response = await text_embedding(
+        provider_id=embedding_model.provider_id,
+        provider_model_id=embedding_model.provider_model_id,
+        credentials=embedding_model.encrypted_credentials,
+        input_text_list=[query],
+        input_type="query",
+    )
     check_http_error(response)
     return response.json()["data"][0]["embedding"]
 
 
-async def embed_documents(documents: List[str], embedding_model: Model, embedding_size: int):
+async def embed_documents(documents: List[str], embedding_model: Model, embedding_size: int) -> List[List[float]]:
     """
     embed the query text
     :param documents: the text list of the documents
     :param embedding_model: the embedding_model to use
     :param embedding_size: the embedding size of the model
-    :return:
+    :return: a list of embedding vectors
     """
 
     if CONFIG.DEV:
         return [_generate_random_unit_vector(text, embedding_size) for text in documents]
 
-    response = await _inference(embedding_model=embedding_model, input_text_list=documents, input_type="document")
+    response = await text_embedding(
+        provider_id=embedding_model.provider_id,
+        provider_model_id=embedding_model.provider_model_id,
+        credentials=embedding_model.encrypted_credentials,
+        input_text_list=documents,
+        input_type="document",
+    )
     check_http_error(response)
     return [d["embedding"] for d in response.json()["data"]]

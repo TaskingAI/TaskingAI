@@ -39,5 +39,12 @@ def add_routes(route_prefix: str):
     routes.include_router(record_router, prefix=route_prefix)
     routes.include_router(chunk_router, prefix=route_prefix)
 
+    # inference
+    from app.routes.inference.text_embedding import router as text_embedding_router
+    from app.routes.inference.chat_completion import router as chat_completion_router
+
+    routes.include_router(text_embedding_router, prefix=route_prefix)
+    routes.include_router(chat_completion_router, prefix=route_prefix)
+
 
 add_routes(CONFIG.APP_ROUTE_PREFIX)

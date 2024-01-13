@@ -1,8 +1,10 @@
 from typing import Optional, Dict
-from common.models import Model, ModelType, ListResult, SortOrderEnum
+from common.models import Model, ModelType, ListResult, SortOrderEnum, ModelSchema, Provider
 from common.database_ops import model as db_model
-from .model_schema import get_model_schema
+from .model_schema import get_model_schema, get_provider
 from common.error import ErrorCode, raise_http_error
+from common.services.inference.verify_credentials import verify_credentials
+from common.utils import check_http_error
 
 __all__ = [
     "list_models",
@@ -73,23 +75,73 @@ async def list_models(
     )
 
 
+def _build_display_credentials(original_credentials: Dict, credential_schema: Dict) -> Dict:
+    """
+    build masked credentials for display purpose
+    :param original_credentials: the original credentials
+    :param credential_schema: the credential schema
+    :return:
+    """
+
+    display_credentials = {}
+
+    for key, value in original_credentials.items():
+        # check if the key is in the schema
+        if key in credential_schema["properties"]:
+            if credential_schema["properties"][key].get("secret"):
+                # mask the secret value
+                value_length = len(value)
+
+                if value_length <= 8:
+                    # if the value length is less than 8, just mask the whole value
+                    masked_value = "*" * value_length
+                else:
+                    masked_value = value[:2] + "*" * min(10, value_length - 4) + value[-2:]
+
+                display_credentials[key] = masked_value
+            else:
+                # the value is not secret, so just keep the original value
+                display_credentials[key] = value
+
+    return display_credentials
+
+
 async def create_model(
     postgres_conn,
     model_schema_id: str,
     name: str,
     credentials: Dict,
 ):
-    # todo verify credentials
-    model_schema = get_model_schema(model_schema_id)
-    # todo: encrypt credentials
+    # verify model schema exists
+    model_schema: ModelSchema = get_model_schema(model_schema_id)
+    if not model_schema:
+        raise_http_error(ErrorCode.OBJECT_NOT_FOUND, message=f"Model schema {model_schema_id} not found.")
+
+    # get provider
+    provider: Provider = get_provider(model_schema.provider_id)
+
+    # verify model credentials
+    response = await verify_credentials(
+        provider_id=model_schema.provider_id,
+        provider_model_id=model_schema.provider_model_id,
+        model_type=model_schema.type.value,
+        credentials=credentials,
+    )
+    check_http_error(response)
+    encrypted_credentials = response.json()["data"]
+    display_credentials = _build_display_credentials(
+        original_credentials=credentials,
+        credential_schema=provider.credentials_schema,
+    )
+
     model = await db_model.create_model(
         conn=postgres_conn,
         model_schema_id=model_schema_id,
         provider_id=model_schema.provider_id,
         provider_model_id=model_schema.provider_model_id,
         name=name,
-        encrypted_credentials=credentials,
-        display_credentials=credentials,
+        encrypted_credentials=encrypted_credentials,
+        display_credentials=display_credentials,
     )
     return model
 
@@ -97,13 +149,31 @@ async def create_model(
 async def update_model(postgres_conn, model_id: str, name: Optional[str], credentials: Optional[Dict]):
     model: Model = await validate_and_get_model(postgres_conn, model_id)
     update_dict = {}
+
     if name:
         update_dict["name"] = name
+
     if credentials:
-        # todo verify credentials
-        # todo: encrypt credentials
-        update_dict["encrypted_credentials"] = credentials
-        update_dict["display_credentials"] = credentials
+        # verify model credentials
+        model_schema = model.model_schema()
+        response = await verify_credentials(
+            provider_id=model_schema.provider_id,
+            provider_model_id=model_schema.provider_model_id,
+            model_type=model_schema.type.value,
+            credentials=credentials,
+        )
+        check_http_error(response)
+        encrypted_credentials = response.json()["data"]
+
+        # build masked credentials for display purpose
+        display_credentials = _build_display_credentials(
+            original_credentials=credentials,
+            credential_schema=model_schema.credential_schema,
+        )
+
+        update_dict["encrypted_credentials"] = encrypted_credentials
+        update_dict["display_credentials"] = display_credentials
+
     model = await db_model.update_model(
         conn=postgres_conn,
         model=model,
