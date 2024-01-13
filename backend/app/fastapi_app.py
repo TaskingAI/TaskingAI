@@ -23,7 +23,7 @@ logger.addHandler(console_handler)
 
 
 def create_app():
-    from common.database.postgres.pool import postgres_db_pool, pgvector_db_pool
+    from common.database.postgres.pool import postgres_db_pool
     from common.database.redis import redis_pool
     from common.services.auth.admin import create_default_admin_if_needed
 
@@ -34,7 +34,6 @@ def create_app():
         logger.info("FastAPI app startup...")
         await redis_pool.init_pool()
         await postgres_db_pool.init_pool()
-        await pgvector_db_pool.init_pool()
 
         # create default admin if needed
         conn = await postgres_db_pool.db_pool.acquire()
@@ -46,7 +45,6 @@ def create_app():
         logger.info("FastAPI app shutdown...")
         await redis_pool.close_pool()
         await postgres_db_pool.close_pool()
-        await pgvector_db_pool.close_pool()
 
     app.exception_handler(HTTPException)(custom_http_exception_handler)
     app.exception_handler(RequestValidationError)(custom_request_validation_error_handler)

@@ -109,13 +109,3 @@ postgres_db_pool = PostgresDatabasePool(
     migration_script_filename_format=r"postgres_(\d+).sql",
     clean_db_table_order=[],
 )
-
-# init pgvector db pool instance
-pgvector_db_pool = PostgresDatabasePool(
-    url=CONFIG.PGVECTOR_URL,
-    max_connections=CONFIG.PGVECTOR_MAX_CONNECTIONS,
-    migration_version=CONFIG.PGVECTOR_SCHEMA_VERSION,
-    migration_script_dir="scripts/pgvector/",
-    migration_script_filename_format=r"pgvector_(\d+).sql",
-    clean_db_table_order=["c1_"],
-)
