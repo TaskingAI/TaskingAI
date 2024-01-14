@@ -90,14 +90,18 @@ class PostgresDatabasePool:
             await self.db_pool.close()
             logger.info(f"Postgres database {self.db_name} pool closed.")
 
-    async def get_db_connection(self):
-        """Get database connection from pool"""
+    # async def get_db_connection(self):
+    #     """Get database connection from pool"""
+    #
+    #     async with self.db_pool.acquire() as connection:
+    #         try:
+    #             yield connection
+    #         finally:
+    #             await self.db_pool.release(connection)
 
-        async with self.db_pool.acquire() as connection:
-            try:
-                yield connection
-            finally:
-                await self.db_pool.release(connection)
+    def get_db_connection(self):
+        """Get database connection from pool"""
+        return self.db_pool.acquire()
 
 
 # init postgres db pool instance

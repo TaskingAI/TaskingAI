@@ -1,28 +1,31 @@
+from common.database.postgres.pool import postgres_db_pool
 from common.models import Model, SortOrderEnum
 from typing import Optional, Tuple, List
 from typing import Dict
 from common.database_ops.utils import get_object_total, list_objects
 
 
-async def get_model_total(postgres_conn, prefix_filters: Dict, equal_filters: Dict) -> int:
+async def get_model_total(
+    prefix_filters: Dict,
+    equal_filters: Dict,
+) -> int:
     """
     Get total count of models
-    :param postgres_conn: postgres connection
     :param prefix_filters: the prefix filters, key is the column name, value is the prefix value
     :param equal_filters: the equal filters, key is the column name, value is the equal value
     :return: total count of models
     """
 
-    return await get_object_total(
-        conn=postgres_conn,
-        table_name="model",
-        prefix_filters=prefix_filters,
-        equal_filters=equal_filters,
-    )
+    async with postgres_db_pool.get_db_connection() as conn:
+        return await get_object_total(
+            conn=conn,
+            table_name="model",
+            prefix_filters=prefix_filters,
+            equal_filters=equal_filters,
+        )
 
 
 async def list_models(
-    postgres_conn,
     limit: int,
     order: SortOrderEnum,
     after_model: Optional[Model] = None,
@@ -33,7 +36,6 @@ async def list_models(
 ) -> Tuple[List[Model], int, bool]:
     """
     List models
-    :param postgres_conn: postgres connection
     :param limit: the limit of the query
     :param order: the order of the query, asc or desc
     :param after_model: the model to query after
@@ -46,16 +48,17 @@ async def list_models(
 
     # todo: add different sort field options
 
-    return await list_objects(
-        conn=postgres_conn,
-        object_class=Model,
-        table_name="model",
-        limit=limit,
-        order=order,
-        sort_field="created_timestamp",
-        after_value=after_model.created_timestamp if after_model else None,
-        before_value=before_model.created_timestamp if before_model else None,
-        offset=offset,
-        prefix_filters=prefix_filters,
-        equal_filters=equal_filters,
-    )
+    async with postgres_db_pool.get_db_connection() as conn:
+        return await list_objects(
+            conn=conn,
+            object_class=Model,
+            table_name="model",
+            limit=limit,
+            order=order,
+            sort_field="created_timestamp",
+            after_value=after_model.created_timestamp if after_model else None,
+            before_value=before_model.created_timestamp if before_model else None,
+            offset=offset,
+            prefix_filters=prefix_filters,
+            equal_filters=equal_filters,
+        )

@@ -15,15 +15,14 @@ __all__ = [
 ]
 
 
-async def validate_and_get_model(postgres_conn, model_id: str) -> Model:
-    model = await db_model.get_model(postgres_conn, model_id)
+async def validate_and_get_model(model_id: str) -> Model:
+    model = await db_model.get_model(model_id)
     if not model:
         raise_http_error(ErrorCode.OBJECT_NOT_FOUND, message=f"Model {model_id} not found.")
     return model
 
 
 async def list_models(
-    postgres_conn,
     limit: int,
     order: SortOrderEnum,
     after: Optional[str],
@@ -36,7 +35,6 @@ async def list_models(
 ) -> ListResult:
     """
     List models
-    :param postgres_conn: postgres connection
     :param limit: the limit of the query
     :param order: the order of the query, asc or desc
     :param after: the cursor ID to query after
@@ -52,13 +50,12 @@ async def list_models(
     after_model, before_model = None, None
 
     if after:
-        after_model = await validate_and_get_model(postgres_conn, after)
+        after_model = await validate_and_get_model(after)
 
     if before:
-        before_model = await validate_and_get_model(postgres_conn, before)
+        before_model = await validate_and_get_model(before)
 
     return await db_model.list_models(
-        postgres_conn=postgres_conn,
         limit=limit,
         order=order,
         after_model=after_model,
@@ -107,7 +104,6 @@ def _build_display_credentials(original_credentials: Dict, credential_schema: Di
 
 
 async def create_model(
-    postgres_conn,
     model_schema_id: str,
     name: str,
     credentials: Dict,
@@ -135,7 +131,6 @@ async def create_model(
     )
 
     model = await db_model.create_model(
-        conn=postgres_conn,
         model_schema_id=model_schema_id,
         provider_id=model_schema.provider_id,
         provider_model_id=model_schema.provider_model_id,
@@ -146,8 +141,8 @@ async def create_model(
     return model
 
 
-async def update_model(postgres_conn, model_id: str, name: Optional[str], credentials: Optional[Dict]):
-    model: Model = await validate_and_get_model(postgres_conn, model_id)
+async def update_model(model_id: str, name: Optional[str], credentials: Optional[Dict]):
+    model: Model = await validate_and_get_model(model_id)
     update_dict = {}
 
     if name:
@@ -175,19 +170,18 @@ async def update_model(postgres_conn, model_id: str, name: Optional[str], creden
         update_dict["display_credentials"] = display_credentials
 
     model = await db_model.update_model(
-        conn=postgres_conn,
         model=model,
         update_dict=update_dict,
     )
     return model
 
 
-async def get_model(postgres_conn, model_id: str):
-    model: Model = await validate_and_get_model(postgres_conn, model_id)
+async def get_model(model_id: str):
+    model: Model = await validate_and_get_model(model_id)
     return model
 
 
-async def delete_model(postgres_conn, model_id: str):
-    model: Model = await validate_and_get_model(postgres_conn, model_id)
-    await db_model.delete_model(postgres_conn, model)
+async def delete_model(model_id: str):
+    model: Model = await validate_and_get_model(model_id)
+    await db_model.delete_model(model)
     return model
