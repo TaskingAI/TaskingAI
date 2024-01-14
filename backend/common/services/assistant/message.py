@@ -8,7 +8,6 @@ from common.models import (
     ListResult,
     MessageRole,
     ChatMemory,
-    build_chat_memory,
 )
 from common.database_ops.assistant import message as db_message
 from common.error import ErrorCode, raise_http_error
@@ -88,9 +87,7 @@ async def create_message(
 
     # validate chat
     chat: Chat = await get_chat(assistant_id=assistant_id, chat_id=chat_id)
-
-    chat_memory: ChatMemory = build_chat_memory(chat.memory)
-    updated_chat_memory: ChatMemory = await chat_memory.update_memory(new_message_text=content.text, role=role.value)
+    updated_chat_memory: ChatMemory = await chat.memory.update_memory(new_message_text=content.text, role=role.value)
 
     # create message
     message = await db_message.create_message(
