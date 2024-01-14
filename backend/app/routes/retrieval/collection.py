@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Request
 from common.database.postgres.pool import postgres_db_pool
 from common.services.retrieval.collection import *
 from app.schemas.retrieval.collection import *
-from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse
+from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse, BaseListRequest
 from common.models import Collection, SerializePurpose
 
 router = APIRouter()
@@ -18,7 +18,7 @@ router = APIRouter()
 )
 async def api_list_collections(
     request: Request,
-    data: CollectionListRequest = Depends(),
+    data: BaseListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):

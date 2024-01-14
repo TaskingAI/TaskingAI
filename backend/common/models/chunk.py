@@ -21,7 +21,7 @@ class Chunk(BaseModel):
 
     @staticmethod
     def generate_random_id():
-        return generate_random_id(24)
+        return "LmK0" + generate_random_id(20)
 
     @staticmethod
     def object_name():

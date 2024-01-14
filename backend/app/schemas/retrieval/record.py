@@ -38,7 +38,6 @@ class RecordListRequest(BaseModel):
     )
 
     id_search: Optional[str] = Field(None, min_length=1, max_length=256, description="The record ID to search for.")
-    name_search: Optional[str] = Field(None, min_length=1, max_length=256, description="The record name to search for.")
 
     class Config:
         extra = Extra.forbid

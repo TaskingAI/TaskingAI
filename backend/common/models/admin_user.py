@@ -19,7 +19,7 @@ class Admin(BaseModel):
 
     @staticmethod
     def generate_random_id():
-        return generate_random_id(16)
+        return "X3Ar" + generate_random_id(12)
 
     @classmethod
     def build(cls, row: Dict):

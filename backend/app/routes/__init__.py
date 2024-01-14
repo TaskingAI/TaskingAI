@@ -46,5 +46,14 @@ def add_routes(route_prefix: str):
     routes.include_router(text_embedding_router, prefix=route_prefix)
     routes.include_router(chat_completion_router, prefix=route_prefix)
 
+    # assistant
+    from app.routes.assistant.assistant import router as assistant_router
+    from app.routes.assistant.chat import router as chat_router
+
+    # todo: from app.routes.assistant.message import router as message_router
+
+    routes.include_router(assistant_router, prefix=route_prefix)
+    routes.include_router(chat_router, prefix=route_prefix)
+
 
 add_routes(CONFIG.APP_ROUTE_PREFIX)

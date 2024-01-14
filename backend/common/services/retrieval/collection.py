@@ -2,7 +2,7 @@ from typing import Optional, Dict
 from common.models import Collection, SortOrderEnum, ListResult, TextSplitter, ModelType
 from common.database_ops import collection as db_collection
 from common.error import ErrorCode, raise_http_error
-from common.services.model.model import validate_and_get_model
+from common.services.model.model import get_model
 
 __all__ = [
     "list_collections",
@@ -87,7 +87,7 @@ async def create_collection(
     """
 
     # validate embedding model
-    embedding_model = await validate_and_get_model(postgres_conn, embedding_model_id)
+    embedding_model = await get_model(postgres_conn, embedding_model_id)
     model_schema = embedding_model.model_schema()
     if not model_schema.type == ModelType.TEXT_EMBEDDING:
         raise_http_error(

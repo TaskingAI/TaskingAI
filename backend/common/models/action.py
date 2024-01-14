@@ -24,7 +24,7 @@ class Action(BaseModel):
 
     @staticmethod
     def generate_random_id():
-        return generate_random_id(24)
+        return "bFBd" + generate_random_id(20)
 
     @classmethod
     def build(cls, row: Dict):

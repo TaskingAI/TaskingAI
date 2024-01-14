@@ -10,3 +10,8 @@ from .text_splitter import *
 from .collection import *
 from .record import *
 from .chunk import *
+from .assistant import *
+from .assistant_retrieval import *
+from .chat import *
+from .message import *
+from .memory import *

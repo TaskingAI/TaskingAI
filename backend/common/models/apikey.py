@@ -24,7 +24,7 @@ class Apikey(BaseModel):
 
     @staticmethod
     def generate_random_apikey(apikey_id):
-        return apikey_id + generate_random_id(24)
+        return "tk" + apikey_id + generate_random_id(22)
 
     @staticmethod
     def get_apikey_id_from_apikey(apikey):

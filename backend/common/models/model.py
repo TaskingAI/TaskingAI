@@ -37,7 +37,7 @@ class Model(BaseModel):
 
     @staticmethod
     def generate_random_id():
-        return generate_random_id(8)
+        return "Tp" + generate_random_id(6)
 
     @staticmethod
     def generate_random_apikey(apikey_id):

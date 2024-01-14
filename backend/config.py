@@ -45,7 +45,6 @@ class Config:
         # version
         self.VERSION = "0.0.1"
         self.POSTGRES_SCHEMA_VERSION = 1
-        self.PGVECTOR_SCHEMA_VERSION = 1
 
         # mode
         self.MODE = load_str_env("MODE").lower()
@@ -66,8 +65,6 @@ class Config:
         self.POSTGRES_URL = load_str_env("POSTGRES_URL")
         self.POSTGRES_MAX_CONNECTIONS = load_int_env("POSTGRES_MAX_CONNECTIONS", default=10)
         self.REDIS_URL = load_str_env("REDIS_URL")
-        self.PGVECTOR_URL = load_str_env("PGVECTOR_URL")
-        self.PGVECTOR_MAX_CONNECTIONS = load_int_env("PGVECTOR_MAX_CONNECTIONS", default=10)
 
         # secret
         self.AES_ENCRYPTION_KEY = load_str_env("AES_ENCRYPTION_KEY")

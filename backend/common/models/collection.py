@@ -35,7 +35,7 @@ class Collection(BaseModel):
 
     @staticmethod
     def generate_random_id():
-        return generate_random_id(24).lower()
+        return "DbgY" + generate_random_id(20).lower()
 
     @staticmethod
     def get_chunk_table_name(collection_id: str):

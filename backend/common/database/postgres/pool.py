@@ -105,7 +105,7 @@ postgres_db_pool = PostgresDatabasePool(
     url=CONFIG.POSTGRES_URL,
     max_connections=CONFIG.POSTGRES_MAX_CONNECTIONS,
     migration_version=CONFIG.POSTGRES_SCHEMA_VERSION,
-    migration_script_dir="scripts/postgres/",
+    migration_script_dir="scripts/",
     migration_script_filename_format=r"postgres_(\d+).sql",
-    clean_db_table_order=[],
+    clean_db_table_order=["c1_"],
 )

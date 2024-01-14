@@ -1,7 +1,7 @@
 from typing import Optional, Any, Dict
 from pydantic import BaseModel, Field, model_validator, field_validator
-from ..utils import check_update_keys, validate_list_cursors
-from common.models import Authentication, AuthenticationType, SortOrderEnum
+from ..utils import check_update_keys
+from common.models import Authentication, AuthenticationType
 import openapi_spec_validator
 from common.error import raise_http_error, ErrorCode
 import re
@@ -65,46 +65,6 @@ def validate_openapi_schema(schema: Dict, only_one_path_and_method: bool):
                 )
 
     return schema
-
-
-# ----------------------------
-# List Action
-# GET /actions
-
-
-class ActionListRequest(BaseModel):
-    limit: int = Field(20, ge=1, le=100, description="The maximum number of actions to return.", examples=[20])
-
-    sort_field: str = Field(default="created_timestamp", description="The field to sort records by.")
-    order: Optional[SortOrderEnum] = Field(
-        SortOrderEnum.DESC, description="The order of actions to return, `asc` for ascending and `desc` for descending."
-    )
-
-    after: Optional[str] = Field(
-        None,
-        min_length=20,
-        max_length=30,
-        description="The cursor represented by a action_id to fetch the next page of actions.",
-    )
-    before: Optional[str] = Field(
-        None,
-        min_length=20,
-        max_length=30,
-        description="The cursor represented by a action_id to fetch the previous page of actions.",
-    )
-    offset: Optional[int] = Field(
-        None,
-        ge=0,
-        description="The offset of actions to return. Only one in `offset`, `after` and `before` can be used at the same time.",
-    )
-
-    id_search: Optional[str] = Field(None, min_length=1, max_length=256, description="The record ID to search for.")
-    name_search: Optional[str] = Field(None, min_length=1, max_length=256, description="The record name to search for.")
-
-    # after and before cannot be used at the same time
-    @model_validator(mode="before")
-    def custom_validate(cls, data: Any):
-        return validate_list_cursors(data)
 
 
 # ----------------------------

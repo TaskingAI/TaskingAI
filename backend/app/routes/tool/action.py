@@ -4,7 +4,7 @@ from typing import Dict, List
 from common.database.postgres.pool import postgres_db_pool
 from common.services.tool.action import *
 from app.schemas.tool.action import *
-from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse
+from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse, BaseListRequest
 from common.models import Action, SerializePurpose
 
 router = APIRouter()
@@ -19,7 +19,7 @@ router = APIRouter()
 )
 async def api_list_actions(
     request: Request,
-    data: ActionListRequest = Depends(),
+    data: BaseListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
     postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):

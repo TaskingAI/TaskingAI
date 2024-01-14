@@ -1,60 +1,15 @@
 from typing import Optional
 from pydantic import BaseModel, Field, model_validator, field_validator, Extra
 from typing import Any, Dict
-from ..utils import check_update_keys, validate_metadata, validate_list_cursors
-from common.models import SortOrderEnum, TextSplitter, build_text_splitter
+from ..utils import check_update_keys, validate_metadata
+from common.models import TextSplitter, build_text_splitter
 from common.error import raise_http_error, ErrorCode
-
-
-# ----------------------------
-# List Collection
-# GET /collections
-class CollectionListRequest(BaseModel):
-    limit: int = Field(20, ge=1, le=100, description="The maximum number of collections to return.", examples=[20])
-
-    # todo: add different sort field options
-    order: Optional[SortOrderEnum] = Field(
-        SortOrderEnum.DESC,
-        description="The order of collections to return, `asc` for ascending and `desc` for descending.",
-        examples=["desc"],
-    )
-
-    after: Optional[str] = Field(
-        None,
-        min_length=24,
-        max_length=24,
-        description="The cursor represented by a collection_id to fetch the next page of collections.",
-    )
-    before: Optional[str] = Field(
-        None,
-        min_length=24,
-        max_length=24,
-        description="The cursor represented by a collection_id to fetch the previous page of collections.",
-    )
-    offset: Optional[int] = Field(
-        None,
-        ge=0,
-        description="The offset of collections to return. "
-        "Only one in `offset`, `after` and `before` can be used at the same time.",
-    )
-
-    id_search: Optional[str] = Field(None, min_length=1, max_length=256, description="The collection ID to search for.")
-    name_search: Optional[str] = Field(
-        None, min_length=1, max_length=256, description="The collection name to search for."
-    )
-
-    class Config:
-        extra = Extra.forbid
-
-    # after and before cannot be used at the same time
-    @model_validator(mode="before")
-    def custom_validate(cls, data: Any):
-        return validate_list_cursors(data)
-
 
 # ----------------------------
 # Create Collection
 # POST /collections
+
+
 class CollectionCreateRequest(BaseModel):
     capacity: int = Field(
         1000,
