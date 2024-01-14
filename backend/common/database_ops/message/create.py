@@ -1,4 +1,4 @@
-from common.models import Chat, Message
+from common.models import Chat, Message, MessageContent
 from .get import get_message
 from typing import Dict
 from common.models.message import MessageRole
@@ -9,7 +9,7 @@ async def create_message(
     postgres_conn,
     chat: Chat,
     role: MessageRole,
-    content: Dict,
+    content: MessageContent,
     metadata: Dict[str, str],
 ) -> Message:
     """
@@ -36,7 +36,7 @@ async def create_message(
             chat.chat_id,
             chat.assistant_id,
             role.value,
-            json.dumps(content),
+            content.model_dump_json(),
             json.dumps(metadata),
         )
 

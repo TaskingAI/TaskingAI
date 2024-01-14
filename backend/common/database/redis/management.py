@@ -10,10 +10,7 @@ def _real_key(ObjectClass, key: str):
 
 
 def _build_object_from_value_dict(ObjectClass, value: dict):
-    try:
-        return ObjectClass.build(value)
-    except Exception as e:
-        raise Exception(f"_build_object_from_value_dict: error={e}")
+    return ObjectClass.build(value)
 
 
 async def redis_object_set_int(ObjectClass, key: str, value: int, expire: int = 3600 * 4):

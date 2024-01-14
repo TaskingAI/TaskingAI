@@ -2,7 +2,6 @@ from common.utils import generate_random_id, load_json_attr
 from pydantic import BaseModel, Field
 from typing import Dict, List
 from .base import SerializePurpose
-import json
 
 __all__ = [
     "Assistant",
@@ -49,7 +48,7 @@ class Assistant(BaseModel):
             name=row["name"],
             description=row["description"],
             system_prompt_template=load_json_attr(row, "system_prompt_template", []),
-            memory=json.loads(row["memory"]),
+            memory=load_json_attr(row, "memory", {}),
             tools=load_json_attr(row, "tools", []),
             tool_configs=load_json_attr(row, "tool_configs", {}),
             retrievals=load_json_attr(row, "retrievals", []),

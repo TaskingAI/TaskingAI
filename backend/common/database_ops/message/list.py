@@ -29,9 +29,6 @@ async def list_messages(
     # todo: add different sort field options
     after_message: Optional[Message] = None,
     before_message: Optional[Message] = None,
-    offset: int = 0,
-    prefix_filters: Optional[Dict] = None,
-    equal_filters: Optional[Dict] = None,
 ) -> Tuple[List[Message], int, bool]:
     """
     List messages
@@ -41,17 +38,11 @@ async def list_messages(
     :param order: the order of the query, asc or desc
     :param after_message: the message to query after
     :param before_message: the message to query before
-    :param offset: the offset of the query
-    :param prefix_filters: the prefix filters, key is the column name, value is the prefix value
-    :param equal_filters: the equal filters, key is the column name, value is the equal value
     :return: a list of messages, total count of messages, and whether there are more messages
     """
 
-    # add chat_id to equal_filters
-    if equal_filters is None:
-        equal_filters = {}
-    equal_filters["assistant_id"] = chat.assistant_id
-    equal_filters["chat_id"] = chat.chat_id
+    # build equal_filters
+    equal_filters = {"assistant_id": chat.assistant_id, "chat_id": chat.chat_id}
 
     return await list_objects(
         conn=postgres_conn,
@@ -62,7 +53,5 @@ async def list_messages(
         sort_field="created_timestamp",
         after_value=after_message.created_timestamp if after_message else None,
         before_value=before_message.created_timestamp if before_message else None,
-        offset=offset,
-        prefix_filters=prefix_filters,
         equal_filters=equal_filters,
     )
