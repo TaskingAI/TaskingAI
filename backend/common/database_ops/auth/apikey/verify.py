@@ -8,7 +8,7 @@ async def verify_apikey(
 ) -> bool:
     # 1. get from redis
     apikey_id = Apikey.get_apikey_id_from_apikey(apikey)
-    apikey: Apikey = await get_apikey(conn, apikey_id)
+    apikey: Apikey = await get_apikey(apikey_id)
     if apikey:
         return False
 

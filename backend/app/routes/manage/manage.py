@@ -38,16 +38,13 @@ async def api_version():
 
 
 if CONFIG.TEST or CONFIG.DEV:
-    from common.database.postgres.pool import postgres_db_pool
     from common.database.redis import redis_pool
+    from common.database.postgres import postgres_db_pool
 
     @router.post("/clean_data", response_model=BaseSuccessEmptyResponse)
     async def api_clean_data():
         await redis_pool.clean_data()
         await postgres_db_pool.clean_data()
-
-        conn = await postgres_db_pool.db_pool.acquire()
-        await create_default_admin_if_needed(postgres_conn=conn)
-        await postgres_db_pool.db_pool.release(conn)
+        await create_default_admin_if_needed()
 
         return BaseSuccessEmptyResponse()

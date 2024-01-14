@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, Request
-from common.database.postgres.pool import postgres_db_pool
 from typing import Dict
 from ..utils import auth_info_required, check_http_error
 from app.schemas.inference.text_embedding import TextEmbeddingRequest, TextEmbeddingResponse
@@ -24,11 +23,9 @@ async def api_text_embedding(
     request: Request,
     data: TextEmbeddingRequest,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     # validate model
     model: Model = await get_model(
-        postgres_conn=postgres_conn,
         model_id=data.model_id,
     )
 

@@ -1,6 +1,5 @@
 from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
-from common.database.postgres.pool import postgres_db_pool
 from common.services.assistant.assistant import *
 from app.schemas.assistant.assistant import *
 from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse, BaseListRequest
@@ -20,10 +19,8 @@ async def api_list_assistants(
     request: Request,
     data: BaseListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     assistants, total, has_more = await list_assistants(
-        postgres_conn,
         limit=data.limit,
         order=data.order,
         after=data.after,
@@ -51,10 +48,8 @@ async def api_get_assistant(
     assistant_id: str,
     request: Request,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     assistant: Assistant = await get_assistant(
-        postgres_conn=postgres_conn,
         assistant_id=assistant_id,
     )
     return BaseSuccessDataResponse(data=assistant.to_dict(purpose=SerializePurpose.RESPONSE))
@@ -71,10 +66,8 @@ async def api_create_assistants(
     request: Request,
     data: AssistantCreateRequest,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     assistant: Assistant = await create_assistant(
-        postgres_conn=postgres_conn,
         model_id=data.model_id,
         name=data.name,
         description=data.description,
@@ -104,10 +97,8 @@ async def api_update_assistant(
     request: Request,
     data: AssistantUpdateRequest,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     assistant: Assistant = await update_assistant(
-        postgres_conn=postgres_conn,
         assistant_id=assistant_id,
         model_id=data.model_id,
         name=data.name,
@@ -133,10 +124,8 @@ async def api_delete_assistant(
     assistant_id: str,
     request: Request,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     await delete_assistant(
-        postgres_conn=postgres_conn,
         assistant_id=assistant_id,
     )
     return BaseSuccessEmptyResponse()

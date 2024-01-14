@@ -1,7 +1,6 @@
 from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
 from typing import Dict, List
-from common.database.postgres.pool import postgres_db_pool
 from common.services.tool.action import *
 from app.schemas.tool.action import *
 from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse, BaseListRequest
@@ -21,10 +20,8 @@ async def api_list_actions(
     request: Request,
     data: BaseListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     actions, total, has_more = await list_actions(
-        postgres_conn,
         limit=data.limit,
         order=data.order,
         after=data.after,
@@ -52,10 +49,8 @@ async def api_get_action(
     action_id: str,
     request: Request,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     action: Action = await get_action(
-        postgres_conn=postgres_conn,
         action_id=action_id,
     )
     return BaseSuccessDataResponse(data=action.to_dict(purpose=SerializePurpose.RESPONSE))
@@ -72,10 +67,8 @@ async def api_bulk_create_actions(
     request: Request,
     data: ActionBulkCreateRequest,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     actions: List[Action] = await bulk_create_actions(
-        postgres_conn=postgres_conn,
         openapi_schema=data.openapi_schema,
         authentication=data.authentication,
     )
@@ -95,10 +88,8 @@ async def api_update_action(
     request: Request,
     data: ActionUpdateRequest,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     action: Action = await update_action(
-        postgres_conn=postgres_conn,
         action_id=action_id,
         openapi_schema=data.openapi_schema,
         authentication=data.authentication,
@@ -117,10 +108,8 @@ async def api_delete_action(
     action_id: str,
     request: Request,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     await delete_action(
-        postgres_conn=postgres_conn,
         action_id=action_id,
     )
     return BaseSuccessEmptyResponse()
@@ -138,10 +127,8 @@ async def api_run_action(
     request: Request,
     data: ActionRunRequest,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     response: Dict = await run_action(
-        postgres_conn=postgres_conn,
         action_id=action_id,
         parameters=data.parameters,
         headers=data.headers,

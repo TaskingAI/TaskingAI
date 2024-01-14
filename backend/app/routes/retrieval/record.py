@@ -1,6 +1,5 @@
 from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
-from common.database.postgres.pool import postgres_db_pool
 from common.services.retrieval.record import *
 from app.schemas.retrieval.record import *
 from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse
@@ -21,10 +20,8 @@ async def api_list_records(
     collection_id: str,
     data: RecordListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     records, total, has_more = await list_records(
-        postgres_conn,
         collection_id=collection_id,
         limit=data.limit,
         order=data.order,
@@ -53,10 +50,8 @@ async def api_get_record(
     request: Request,
     collection_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     record: Record = await get_record(
-        postgres_conn=postgres_conn,
         collection_id=collection_id,
         record_id=record_id,
     )
@@ -75,10 +70,8 @@ async def api_create_records(
     data: RecordCreateRequest,
     collection_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     record: Record = await create_record(
-        postgres_conn=postgres_conn,
         collection_id=collection_id,
         title=data.title,
         type=data.type,
@@ -105,10 +98,8 @@ async def api_update_record(
     data: RecordUpdateRequest,
     collection_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     record: Record = await update_record(
-        postgres_conn=postgres_conn,
         collection_id=collection_id,
         record_id=record_id,
         metadata=data.metadata,
@@ -128,10 +119,8 @@ async def api_delete_record(
     request: Request,
     collection_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     await delete_record(
-        postgres_conn=postgres_conn,
         collection_id=collection_id,
         record_id=record_id,
     )

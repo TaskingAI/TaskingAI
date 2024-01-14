@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends
-from common.database.postgres.pool import postgres_db_pool
+from fastapi import APIRouter
 from common.services.retrieval.chunk import *
 from app.schemas.retrieval.chunk import *
 from app.schemas.base import BaseSuccessListResponse
@@ -11,12 +10,13 @@ router = APIRouter()
 
 @router.post(
     "/collections/{collection_id}/chunks/query",
+    tags=["Retrieval"],
+    summary="Query chunks",
+    operation_id="query_chunks",
+    response_model=BaseSuccessListResponse,
 )
-async def api_query_chunk(
-    data: ChunkQueryRequest, collection_id: str, postgres_conn=Depends(postgres_db_pool.get_db_connection)
-):
+async def api_query_chunk(data: ChunkQueryRequest, collection_id: str):
     chunks: List[Chunk] = await query_chunks(
-        postgres_conn,
         collection_ids=[collection_id],
         top_k=data.top_k,
         query_text=data.query_text,

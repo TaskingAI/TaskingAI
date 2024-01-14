@@ -12,44 +12,42 @@ __all__ = [
 ]
 
 
-async def validate_and_get_apikey(postgres_conn, apikey_id: str) -> Apikey:
-    apikey = await db_apikey.get_apikey(postgres_conn, apikey_id)
+async def validate_and_get_apikey(apikey_id: str) -> Apikey:
+    apikey = await db_apikey.get_apikey(apikey_id)
     if not apikey:
         raise_http_error(ErrorCode.OBJECT_NOT_FOUND, message=f"API Key with apikey_id={apikey_id} not found.")
     return apikey
 
 
-async def list_apikeys(
-    postgres_conn,
-) -> ListResult:
-    return await db_apikey.list_apikeys(postgres_conn)
+async def list_apikeys() -> ListResult:
+    return await db_apikey.list_apikeys()
 
 
-async def create_apikey(postgres_conn, name: str):
+async def create_apikey(name: str):
     # at most 10 apikeys
-    apikey = await db_apikey.create_apikey(postgres_conn, name, max_count=10)
+    apikey = await db_apikey.create_apikey(name, max_count=10)
     return apikey
 
 
-async def update_apikey(postgres_conn, apikey_id: str, name: str):
-    apikey: Apikey = await validate_and_get_apikey(postgres_conn, apikey_id)
-    apikey = await db_apikey.update_apikey(postgres_conn, apikey, {"name": name})
+async def update_apikey(apikey_id: str, name: str):
+    apikey: Apikey = await validate_and_get_apikey(apikey_id)
+    apikey = await db_apikey.update_apikey(apikey, {"name": name})
     return apikey
 
 
-async def get_apikey(postgres_conn, apikey_id: str):
-    apikey: Apikey = await validate_and_get_apikey(postgres_conn, apikey_id)
+async def get_apikey(apikey_id: str):
+    apikey: Apikey = await validate_and_get_apikey(apikey_id)
     return apikey
 
 
-async def delete_apikey(postgres_conn, apikey_id: str):
-    apikey: Apikey = await validate_and_get_apikey(postgres_conn, apikey_id)
-    await db_apikey.delete_apikey(postgres_conn, apikey)
+async def delete_apikey(apikey_id: str):
+    apikey: Apikey = await validate_and_get_apikey(apikey_id)
+    await db_apikey.delete_apikey(apikey)
     return apikey
 
 
-async def verify_apikey(postgres_conn, apikey: str):
-    verify = await db_apikey.verify_apikey(postgres_conn, apikey)
+async def verify_apikey(apikey: str):
+    verify = await db_apikey.verify_apikey(apikey)
     if not verify:
         raise_http_error(ErrorCode.APIKEY_VALIDATION_FAILED, message="Invalid API Key.")
     return True

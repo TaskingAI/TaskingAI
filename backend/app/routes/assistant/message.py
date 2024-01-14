@@ -1,6 +1,5 @@
 from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
-from common.database.postgres.pool import postgres_db_pool
 from common.services.assistant.message import *
 from app.schemas.assistant.message import *
 from app.schemas.base import BaseSuccessDataResponse, BaseSuccessListResponse
@@ -23,10 +22,8 @@ async def api_list_messages(
     chat_id: str,
     data: MessageListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     messages, total, has_more = await list_messages(
-        postgres_conn,
         assistant_id=assistant_id,
         chat_id=chat_id,
         limit=data.limit,
@@ -55,10 +52,8 @@ async def api_get_message(
     assistant_id: str,
     chat_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     message: Message = await get_message(
-        postgres_conn=postgres_conn,
         assistant_id=assistant_id,
         chat_id=chat_id,
         message_id=message_id,
@@ -79,10 +74,8 @@ async def api_create_messages(
     assistant_id: str,
     chat_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     message: Message = await create_message(
-        postgres_conn=postgres_conn,
         assistant_id=assistant_id,
         chat_id=chat_id,
         role=data.role,
@@ -110,10 +103,8 @@ async def api_update_message(
     assistant_id: str,
     chat_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     message: Message = await update_message(
-        postgres_conn=postgres_conn,
         assistant_id=assistant_id,
         chat_id=chat_id,
         message_id=message_id,

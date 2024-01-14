@@ -34,11 +34,7 @@ def create_app():
         logger.info("FastAPI app startup...")
         await redis_pool.init_pool()
         await postgres_db_pool.init_pool()
-
-        # create default admin if needed
-        conn = await postgres_db_pool.db_pool.acquire()
-        await create_default_admin_if_needed(conn)
-        await postgres_db_pool.db_pool.release(conn)
+        await create_default_admin_if_needed()
 
     @app.on_event("shutdown")
     async def shutdown_event():

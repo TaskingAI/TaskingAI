@@ -1,3 +1,4 @@
+from common.database.postgres.pool import postgres_db_pool
 import json
 from typing import List
 from common.models import Collection, Chunk
@@ -9,14 +10,12 @@ logger = logging.getLogger(__name__)
 
 
 async def _query_chunks_in_one_collection(
-    conn,
     collection: Collection,
     top_k: int,
     query_vector: List[float],
 ):
     """
     Query top_k related chunks in one collection
-    :param conn: postgres connection
     :param collection: the collection where the chunks belong to
     :param top_k: the number of chunks to be returned
     :param query_vector: the query vector
@@ -29,26 +28,26 @@ async def _query_chunks_in_one_collection(
     )
 
     # we use cosine distance by default
+    async with postgres_db_pool.get_db_connection() as conn:
+        async with conn.transaction():
+            # logger.debug(f"searching with ef_search = {ef_search}")
 
-    async with conn.transaction():
-        # logger.debug(f"searching with ef_search = {ef_search}")
+            await conn.execute(
+                f"""
+                SET LOCAL hnsw.ef_search = {ef_search};
+            """
+            )
 
-        await conn.execute(
-            f"""
-            SET LOCAL hnsw.ef_search = {ef_search};
-        """
-        )
+            # by default, use cosine distance
+            sql = f"""
+                SELECT chunk_id, record_id, collection_id, content, metadata,
+                created_timestamp, updated_timestamp, 1 - (embedding <=> $1) AS score
+                FROM {table_name}
+                ORDER BY embedding <=> $1
+                LIMIT $2
+            """
 
-        # by default, use cosine distance
-        sql = f"""
-            SELECT chunk_id, record_id, collection_id, content, metadata,
-            created_timestamp, updated_timestamp, 1 - (embedding <=> $1) AS score
-            FROM {table_name}
-            ORDER BY embedding <=> $1
-            LIMIT $2
-        """
-
-        rows = await conn.fetch(sql, json.dumps(query_vector), top_k)
+            rows = await conn.fetch(sql, json.dumps(query_vector), top_k)
 
     chunks = [Chunk.build(row) for row in rows]
 
@@ -56,14 +55,12 @@ async def _query_chunks_in_one_collection(
 
 
 async def query_chunks(
-    conn,
     collections: List[Collection],
     top_k: int,
     query_vector: List[float],
 ) -> List[Chunk]:
     """
     Query top_k related chunks in all collections
-    :param conn: postgres connection
     :param collections: the collections where the chunks belong to
     :param top_k: the number of chunks to be returned
     :param query_vector: the query vector
@@ -74,7 +71,6 @@ async def query_chunks(
     for collection in collections:
         # query chunks in one collection
         chunks = await _query_chunks_in_one_collection(
-            conn=conn,
             collection=collection,
             top_k=top_k,
             query_vector=query_vector,

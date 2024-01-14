@@ -1,26 +1,23 @@
+from common.database.postgres.pool import postgres_db_pool
 from common.models import Apikey, SortOrderEnum, ListResult
 from common.database_ops.utils import get_object_total, list_objects
 
 
-async def get_apikey_total(
-    postgres_conn,
-) -> int:
-    return await get_object_total(conn=postgres_conn, table_name="apikey")
+async def get_apikey_total() -> int:
+    async with postgres_db_pool.get_db_connection() as conn:
+        return await get_object_total(conn, table_name="apikey")
 
 
-async def list_apikeys(
-    postgres_conn,
-) -> ListResult:
+async def list_apikeys() -> ListResult:
     """
     List apikeys
-    :param postgres_conn: postgres connection
     :return: a list of apikeys, total count of apikeys, and whether there are more apikeys
     """
-
-    return await list_objects(
-        conn=postgres_conn,
-        object_class=Apikey,
-        table_name="apikey",
-        order=SortOrderEnum.DESC,
-        sort_field="created_timestamp",
-    )
+    async with postgres_db_pool.get_db_connection() as conn:
+        return await list_objects(
+            conn=conn,
+            object_class=Apikey,
+            table_name="apikey",
+            order=SortOrderEnum.DESC,
+            sort_field="created_timestamp",
+        )

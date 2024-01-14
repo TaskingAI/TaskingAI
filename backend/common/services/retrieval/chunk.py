@@ -12,14 +12,12 @@ __all__ = [
 
 
 async def query_chunks(
-    postgres_conn,
     collection_ids: List[str],
     top_k: int,
     query_text: str,
 ) -> List[Chunk]:
     """
     Query the top_k related chunks from the specified collections.
-    :param postgres_conn: postgres connection
     :param collection_ids: the collection ids.
     :param top_k: the number of chunks to query.
     :param query_text: the query text.
@@ -30,7 +28,7 @@ async def query_chunks(
     collections = []
     for collection_id in collection_ids:
         # currently, raise error when collection is not found
-        collection: Collection = await validate_and_get_collection(postgres_conn, collection_id=collection_id)
+        collection: Collection = await validate_and_get_collection(collection_id=collection_id)
         collections.append(collection)
 
     # check all collections have the same embedding model
@@ -41,7 +39,7 @@ async def query_chunks(
         )
 
     # validate model
-    embedding_model: Model = await get_model(postgres_conn, collections[0].embedding_model_id)
+    embedding_model: Model = await get_model(collections[0].embedding_model_id)
 
     # compute query vector
     query_vector = await embed_query(
@@ -52,7 +50,6 @@ async def query_chunks(
 
     # query related chunks
     record = await db_chunk.query_chunks(
-        postgres_conn,
         collections=collections,
         top_k=top_k,
         query_vector=query_vector,

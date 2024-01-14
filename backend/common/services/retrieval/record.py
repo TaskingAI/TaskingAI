@@ -15,15 +15,14 @@ __all__ = [
 ]
 
 
-async def validate_and_get_record(postgres_conn, collection: Collection, record_id: str) -> Record:
-    record = await db_record.get_record(postgres_conn, collection, record_id)
+async def validate_and_get_record(collection: Collection, record_id: str) -> Record:
+    record = await db_record.get_record(collection, record_id)
     if not record:
         raise_http_error(ErrorCode.OBJECT_NOT_FOUND, message=f"Record {record_id} not found.")
     return record
 
 
 async def list_records(
-    postgres_conn,
     collection_id: str,
     limit: int,
     order: SortOrderEnum,
@@ -34,7 +33,6 @@ async def list_records(
 ) -> ListResult:
     """
     List records
-    :param postgres_conn: postgres connection
     :param collection_id: the collection id
     :param limit: the limit of the query
     :param order: the order of the query, asc or desc
@@ -46,19 +44,18 @@ async def list_records(
     """
 
     # validate collection
-    collection = await validate_and_get_collection(postgres_conn, collection_id=collection_id)
+    collection = await validate_and_get_collection(collection_id=collection_id)
 
     # validate after and before
     after_record, before_record = None, None
 
     if after:
-        after_record = await validate_and_get_record(postgres_conn, collection, after)
+        after_record = await validate_and_get_record(collection, after)
 
     if before:
-        before_record = await validate_and_get_record(postgres_conn, collection, before)
+        before_record = await validate_and_get_record(collection, before)
 
     return await db_record.list_records(
-        postgres_conn=postgres_conn,
         collection=collection,
         limit=limit,
         order=order,
@@ -72,7 +69,6 @@ async def list_records(
 
 
 async def create_record(
-    postgres_conn,
     collection_id: str,
     title: str,
     type: RecordType,
@@ -81,7 +77,6 @@ async def create_record(
 ) -> Record:
     """
     Create record
-    :param postgres_conn: postgres connection
     :param collection_id: the collection id
     :param title: the record title
     :param type: the record type
@@ -91,10 +86,10 @@ async def create_record(
     """
 
     # validate collection
-    collection: Collection = await validate_and_get_collection(postgres_conn, collection_id=collection_id)
+    collection: Collection = await validate_and_get_collection(collection_id=collection_id)
 
     # validate model
-    embedding_model: Model = await get_model(postgres_conn, collection.embedding_model_id)
+    embedding_model: Model = await get_model(collection.embedding_model_id)
 
     # split content into chunks
     documents = []
@@ -116,7 +111,6 @@ async def create_record(
 
     # create record
     record = await db_record.create_record_and_chunks(
-        postgres_conn=postgres_conn,
         collection=collection,
         chunk_texts=documents,
         chunk_embeddings=embeddings,
@@ -129,7 +123,6 @@ async def create_record(
 
 
 async def update_record(
-    postgres_conn,
     collection_id: str,
     record_id: str,
     metadata: Optional[Dict[str, str]],
@@ -138,14 +131,13 @@ async def update_record(
 
     """
     Update record
-    :param postgres_conn: postgres connection
     :param record_id: the record id
     :param metadata: the record metadata to update
     :return: the updated record
     """
 
-    collection: Collection = await validate_and_get_collection(postgres_conn, collection_id=collection_id)
-    record: Record = await validate_and_get_record(postgres_conn, collection=collection, record_id=record_id)
+    collection: Collection = await validate_and_get_collection(collection_id=collection_id)
+    record: Record = await validate_and_get_record(collection=collection, record_id=record_id)
 
     update_dict = {}
 
@@ -154,7 +146,6 @@ async def update_record(
 
     if update_dict:
         record = await db_record.update_record(
-            conn=postgres_conn,
             collection=collection,
             record=record,
             update_dict=update_dict,
@@ -163,26 +154,24 @@ async def update_record(
     return record
 
 
-async def get_record(postgres_conn, collection_id: str, record_id: str) -> Record:
+async def get_record(collection_id: str, record_id: str) -> Record:
     """
     Get record
-    :param postgres_conn: postgres connection
     :param collection_id: the collection id
     :param record_id: the record id
     :return: the record
     """
-    collection: Collection = await validate_and_get_collection(postgres_conn, collection_id=collection_id)
-    record: Record = await validate_and_get_record(postgres_conn, collection, record_id)
+    collection: Collection = await validate_and_get_collection(collection_id=collection_id)
+    record: Record = await validate_and_get_record(collection, record_id)
     return record
 
 
-async def delete_record(postgres_conn, collection_id: str, record_id: str) -> None:
+async def delete_record(collection_id: str, record_id: str) -> None:
     """
     Delete record
-    :param postgres_conn: postgres connection
     :param collection_id: the collection id
     :param record_id: the record id
     """
-    collection: Collection = await validate_and_get_collection(postgres_conn, collection_id=collection_id)
-    record: Record = await validate_and_get_record(postgres_conn, collection, record_id)
-    await db_record.delete_record(postgres_conn, record)
+    collection: Collection = await validate_and_get_collection(collection_id=collection_id)
+    record: Record = await validate_and_get_record(collection, record_id)
+    await db_record.delete_record(record)

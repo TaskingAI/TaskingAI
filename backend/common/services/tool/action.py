@@ -16,15 +16,14 @@ __all__ = [
 ]
 
 
-async def validate_and_get_action(postgres_conn, action_id: str) -> Action:
-    action = await db_action.get_action(postgres_conn, action_id)
+async def validate_and_get_action(action_id: str) -> Action:
+    action = await db_action.get_action(action_id)
     if not action:
         raise_http_error(ErrorCode.OBJECT_NOT_FOUND, message=f"Action {action_id} not found.")
     return action
 
 
 async def list_actions(
-    postgres_conn,
     limit: int,
     order: SortOrderEnum,
     after: Optional[str],
@@ -35,7 +34,6 @@ async def list_actions(
 ) -> ListResult:
     """
     List actions
-    :param postgres_conn: postgres connection
     :param limit: the limit of the query
     :param order: the order of the query, asc or desc
     :param after: the cursor ID to query after
@@ -49,13 +47,12 @@ async def list_actions(
     after_action, before_action = None, None
 
     if after:
-        after_action = await validate_and_get_action(postgres_conn, after)
+        after_action = await validate_and_get_action(after)
 
     if before:
-        before_action = await validate_and_get_action(postgres_conn, before)
+        before_action = await validate_and_get_action(before)
 
     return await db_action.list_actions(
-        postgres_conn=postgres_conn,
         limit=limit,
         order=order,
         after_action=after_action,
@@ -69,7 +66,6 @@ async def list_actions(
 
 
 async def bulk_create_actions(
-    postgres_conn,
     openapi_schema: Dict,
     authentication: Authentication,
 ) -> List[Action]:
@@ -83,7 +79,6 @@ async def bulk_create_actions(
         action_tuples.append((schema, function["name"], function["description"]))
 
     actions = await db_action.create_actions(
-        postgres_conn=postgres_conn,
         actions=action_tuples,
         authentication=authentication,
     )
@@ -91,12 +86,11 @@ async def bulk_create_actions(
 
 
 async def update_action(
-    postgres_conn,
     action_id: str,
     openapi_schema: Dict,
     authentication: Authentication,
 ) -> Action:
-    action: Action = await validate_and_get_action(postgres_conn, action_id=action_id)
+    action: Action = await validate_and_get_action(action_id=action_id)
 
     update_dict = {}
     if openapi_schema:
@@ -109,33 +103,31 @@ async def update_action(
         update_dict["authentication"] = authentication.model_dump()
 
     action = await db_action.update_action(
-        conn=postgres_conn,
         action=action,
         update_dict=update_dict,
     )
     return action
 
 
-async def get_action(postgres_conn, action_id: str) -> Action:
-    action: Action = await validate_and_get_action(postgres_conn, action_id)
+async def get_action(action_id: str) -> Action:
+    action: Action = await validate_and_get_action(action_id)
     return action
 
 
-async def delete_action(postgres_conn, action_id: str) -> None:
-    action: Action = await validate_and_get_action(postgres_conn, action_id)
-    await db_action.delete_action(postgres_conn, action)
+async def delete_action(action_id: str) -> None:
+    action: Action = await validate_and_get_action(action_id)
+    await db_action.delete_action(action)
 
 
-async def run_action(postgres_conn, action_id: str, parameters: Dict, headers: Dict) -> Dict:
+async def run_action(action_id: str, parameters: Dict, headers: Dict) -> Dict:
     """
     Run an action
-    :param postgres_conn: postgres connection
     :param action_id: the action ID
     :param parameters: the parameters for the API call
     :param headers: the headers for the API call
     :return: the response of the API call
     """
-    action: Action = await validate_and_get_action(postgres_conn, action_id=action_id)
+    action: Action = await validate_and_get_action(action_id=action_id)
     response = await call_action_api(
         openapi_schema=action.openapi_schema,
         authentication=action.authentication,

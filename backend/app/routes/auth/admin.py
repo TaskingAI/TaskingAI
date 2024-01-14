@@ -1,6 +1,5 @@
 from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
-from common.database.postgres.pool import postgres_db_pool
 from typing import Dict
 from common.services.auth.admin import *
 from app.schemas.auth.admin import *
@@ -20,10 +19,8 @@ router = APIRouter()
 async def api_login_admin(
     request: Request,
     data: AdminLoginRequest,
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     admin: Admin = await login_admin(
-        postgres_conn=postgres_conn,
         username=data.username,
         password=data.password,
     )
@@ -42,10 +39,8 @@ async def api_login_admin(
 async def api_logout_admin(
     request: Request,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     await logout_admin(
-        postgres_conn=postgres_conn,
         admin_id=auth_info["admin_id"],
     )
     return BaseSuccessEmptyResponse()
@@ -75,10 +70,8 @@ async def api_verify_admin_token(
 async def api_refresh_admin_token(
     request: Request,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     admin = await refresh_admin_token(
-        postgres_conn=postgres_conn,
         admin_id=auth_info["admin_id"],
     )
     return BaseSuccessDataResponse(

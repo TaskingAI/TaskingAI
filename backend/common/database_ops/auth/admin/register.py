@@ -1,3 +1,4 @@
+from common.database.postgres.pool import postgres_db_pool
 from common.models import Admin
 from .redis import set_redis_admin
 import logging
@@ -19,25 +20,26 @@ def _generate_password_hash(password: str):
     return salt_str, password_hash_str
 
 
-async def register_admin(conn, username: str, password: str) -> Admin:
+async def register_admin(username: str, password: str) -> Admin:
     admin_id = Admin.generate_random_id()
     salt, password_hash = _generate_password_hash(password)
     token = generate_token(admin_id, [])
 
     # 1. create admin in database
-    async with conn.transaction():
-        row = await conn.fetchrow(
-            """
-            INSERT INTO app_admin (admin_id, username, password_hash, salt, token)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING *
-        """,
-            admin_id,
-            username,
-            password_hash,
-            salt,
-            token,
-        )
+    async with postgres_db_pool.get_db_connection() as conn:
+        async with conn.transaction():
+            row = await conn.fetchrow(
+                """
+                INSERT INTO app_admin (admin_id, username, password_hash, salt, token)
+                VALUES ($1, $2, $3, $4, $5)
+                RETURNING *
+            """,
+                admin_id,
+                username,
+                password_hash,
+                salt,
+                token,
+            )
 
     # 2. write to redis and return
     admin = Admin.build(row)

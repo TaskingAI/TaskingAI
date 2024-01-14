@@ -27,15 +27,14 @@ __all__ = [
 ]
 
 
-async def validate_and_get_assistant(postgres_conn, assistant_id: str) -> Assistant:
-    assistant = await db_assistant.get_assistant(postgres_conn, assistant_id)
+async def validate_and_get_assistant(assistant_id: str) -> Assistant:
+    assistant = await db_assistant.get_assistant(assistant_id)
     if not assistant:
         raise_http_error(ErrorCode.OBJECT_NOT_FOUND, message=f"Assistant {assistant_id} not found.")
     return assistant
 
 
 async def list_assistants(
-    postgres_conn,
     limit: int,
     order: SortOrderEnum,
     after: Optional[str],
@@ -46,7 +45,6 @@ async def list_assistants(
 ) -> ListResult:
     """
     List assistants
-    :param postgres_conn: postgres connection
     :param limit: the limit of the query
     :param order: the order of the query, asc or desc
     :param after: the cursor ID to query after
@@ -60,13 +58,12 @@ async def list_assistants(
     after_assistant, before_assistant = None, None
 
     if after:
-        after_assistant = await validate_and_get_assistant(postgres_conn, after)
+        after_assistant = await validate_and_get_assistant(after)
 
     if before:
-        before_assistant = await validate_and_get_assistant(postgres_conn, before)
+        before_assistant = await validate_and_get_assistant(before)
 
     return await db_assistant.list_assistants(
-        postgres_conn=postgres_conn,
         limit=limit,
         order=order,
         after_assistant=after_assistant,
@@ -80,14 +77,12 @@ async def list_assistants(
 
 
 async def _validate_tools(
-    postgres_conn,
     tools: List[AssistantTool],
     model_function_call_enabled: bool,
     model_id: str,
 ):
     """
     Validate tools
-    :param postgres_conn: postgres connection
     :param tools: a list of assistant tools
     :param model_function_call_enabled: if the model supports function call
     :param model_id: assistant model id
@@ -102,14 +97,13 @@ async def _validate_tools(
 
     for tool in tools:
         if tool.type == "action":
-            await get_action(postgres_conn, tool.id)
+            await get_action(tool.id)
         # todo: support more tool types
         else:
             raise NotImplementedError(f"Tool type {tool.type} is not supported yet.")
 
 
 async def _validate_retrievals(
-    postgres_conn,
     retrievals: List[AssistantRetrieval],
     retrieval_configs: AssistantRetrievalConfig,
     model_function_call_enabled: bool,
@@ -117,7 +111,6 @@ async def _validate_retrievals(
 ):
     """
     Validate retrievals
-    :param postgres_conn: postgres connection
     :param retrievals: a list of assistant retrievals
     :param retrieval_configs: assistant retrieval configs
     :param model_function_call_enabled: if the model supports function call
@@ -133,13 +126,12 @@ async def _validate_retrievals(
 
     for retrieval in retrievals:
         if retrieval.type == "collection":
-            await get_collection(postgres_conn, retrieval.id)
+            await get_collection(retrieval.id)
         else:
             raise NotImplementedError(f"Retrieval type {retrieval.type} is not supported yet.")
 
 
 async def create_assistant(
-    postgres_conn,
     model_id: str,
     name: str,
     description: str,
@@ -153,7 +145,6 @@ async def create_assistant(
 ) -> Assistant:
     """
     Create assistant
-    :param postgres_conn: postgres connection
     :param model_id: model id
     :param name: assistant name
     :param description: assistant description
@@ -168,7 +159,7 @@ async def create_assistant(
     """
 
     # validate chat completion model
-    model: Model = await get_model(postgres_conn, model_id)
+    model: Model = await get_model(model_id)
     model_schema: ModelSchema = model.model_schema()
     if not model_schema.type == ModelType.CHAT_COMPLETION:
         raise_http_error(
@@ -180,7 +171,6 @@ async def create_assistant(
     # validate tools
     if tools:
         await _validate_tools(
-            postgres_conn=postgres_conn,
             tools=tools,
             model_function_call_enabled=model_function_call_enabled,
             model_id=model_id,
@@ -189,7 +179,6 @@ async def create_assistant(
     # validate retrievals
     if retrievals:
         await _validate_retrievals(
-            postgres_conn=postgres_conn,
             retrievals=retrievals,
             retrieval_configs=retrieval_configs,
             model_function_call_enabled=model_function_call_enabled,
@@ -198,7 +187,6 @@ async def create_assistant(
 
     # create assistant
     assistant = await db_assistant.create_assistant(
-        postgres_conn=postgres_conn,
         name=name,
         description=description,
         model_id=model_id,
@@ -214,7 +202,6 @@ async def create_assistant(
 
 
 async def update_assistant(
-    postgres_conn,
     assistant_id: str,
     model_id: Optional[str],
     name: Optional[str],
@@ -229,7 +216,6 @@ async def update_assistant(
 ) -> Assistant:
     """
     Update assistant
-    :param postgres_conn: postgres connection
     :param assistant_id: the assistant id
     :param model_id: model id
     :param name: assistant name
@@ -245,7 +231,7 @@ async def update_assistant(
     """
 
     # get assistant
-    assistant: Assistant = await validate_and_get_assistant(postgres_conn, assistant_id=assistant_id)
+    assistant: Assistant = await validate_and_get_assistant(assistant_id=assistant_id)
 
     # prepare update dict
     update_dict = {}
@@ -283,14 +269,13 @@ async def update_assistant(
         retrieval_configs = assistant.retrieval_configs
 
     # get model properties
-    model: Model = await get_model(postgres_conn, model_id)
+    model: Model = await get_model(model_id)
     model_schema: ModelSchema = model.model_schema()
     model_function_call_enabled = model_schema.properties.get("function_call", False)
 
     # validate tools
     if tools:
         await _validate_tools(
-            postgres_conn=postgres_conn,
             tools=tools,
             model_function_call_enabled=model_function_call_enabled,
             model_id=model_id,
@@ -299,7 +284,6 @@ async def update_assistant(
     # validate retrievals
     if retrievals:
         await _validate_retrievals(
-            postgres_conn=postgres_conn,
             retrievals=retrievals,
             retrieval_configs=retrieval_configs,
             model_function_call_enabled=model_function_call_enabled,
@@ -315,7 +299,6 @@ async def update_assistant(
 
     if update_dict:
         assistant = await db_assistant.update_assistant(
-            conn=postgres_conn,
             assistant=assistant,
             update_dict=update_dict,
         )
@@ -323,24 +306,22 @@ async def update_assistant(
     return assistant
 
 
-async def get_assistant(postgres_conn, assistant_id: str) -> Assistant:
+async def get_assistant(assistant_id: str) -> Assistant:
     """
     Get assistant
-    :param postgres_conn: postgres connection
     :param assistant_id: the assistant id
     :return: the assistant
     """
 
-    assistant: Assistant = await validate_and_get_assistant(postgres_conn, assistant_id)
+    assistant: Assistant = await validate_and_get_assistant(assistant_id)
     return assistant
 
 
-async def delete_assistant(postgres_conn, assistant_id: str) -> None:
+async def delete_assistant(assistant_id: str) -> None:
     """
     Delete assistant
-    :param postgres_conn: postgres connection
     :param assistant_id: the assistant id
     """
 
-    assistant: Assistant = await validate_and_get_assistant(postgres_conn, assistant_id)
-    await db_assistant.delete_assistant(postgres_conn, assistant)
+    assistant: Assistant = await validate_and_get_assistant(assistant_id)
+    await db_assistant.delete_assistant(assistant)

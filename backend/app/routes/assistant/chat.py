@@ -1,6 +1,5 @@
 from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
-from common.database.postgres.pool import postgres_db_pool
 from common.services.assistant.chat import *
 from app.schemas.assistant.chat import *
 from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse, BaseListRequest
@@ -21,10 +20,8 @@ async def api_list_chats(
     assistant_id: str,
     data: BaseListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     chats, total, has_more = await list_chats(
-        postgres_conn,
         assistant_id=assistant_id,
         limit=data.limit,
         order=data.order,
@@ -54,10 +51,8 @@ async def api_get_chat(
     request: Request,
     assistant_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     chat: Chat = await get_chat(
-        postgres_conn=postgres_conn,
         assistant_id=assistant_id,
         chat_id=chat_id,
     )
@@ -76,10 +71,8 @@ async def api_create_chats(
     data: ChatCreateRequest,
     assistant_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     chat: Chat = await create_chat(
-        postgres_conn=postgres_conn,
         assistant_id=assistant_id,
         metadata=data.metadata,
     )
@@ -103,10 +96,8 @@ async def api_update_chat(
     data: ChatUpdateRequest,
     assistant_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     chat: Chat = await update_chat(
-        postgres_conn=postgres_conn,
         assistant_id=assistant_id,
         chat_id=chat_id,
         metadata=data.metadata,
@@ -126,10 +117,8 @@ async def api_delete_chat(
     request: Request,
     assistant_id: str,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     await delete_chat(
-        postgres_conn=postgres_conn,
         assistant_id=assistant_id,
         chat_id=chat_id,
     )

@@ -15,10 +15,10 @@ def _verify_password(password: str, salt: str, password_hash: str):
         return False
 
 
-async def login_admin(conn, admin: Admin, password: str):
+async def login_admin(admin: Admin, password: str):
     # 1. check password
     if _verify_password(password, admin.salt, admin.password_hash):
-        admin = await refresh_admin_token(conn, admin)
+        admin = await refresh_admin_token(admin)
     else:
         raise_http_error(ErrorCode.INCORRECT_PASSWORD, message="Password is incorrect.")
 

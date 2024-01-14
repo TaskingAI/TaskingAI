@@ -24,9 +24,9 @@ def decode_jwt(token: str):
         raise_http_error(ErrorCode.TOKEN_VALIDATION_FAILED, message="Unknown token error")
 
 
-async def verify_admin_token(conn, token: str):
+async def verify_admin_token(token: str):
     admin_id, user_permissions = decode_jwt(token)
-    admin = await get_admin_by_id(conn, admin_id)
+    admin = await get_admin_by_id(admin_id)
     if admin and admin.token == token:
         return admin
     return None

@@ -13,15 +13,14 @@ __all__ = [
 ]
 
 
-async def validate_and_get_collection(postgres_conn, collection_id: str) -> Collection:
-    collection = await db_collection.get_collection(postgres_conn, collection_id)
+async def validate_and_get_collection(collection_id: str) -> Collection:
+    collection = await db_collection.get_collection(collection_id)
     if not collection:
         raise_http_error(ErrorCode.OBJECT_NOT_FOUND, message=f"Collection {collection_id} not found.")
     return collection
 
 
 async def list_collections(
-    postgres_conn,
     limit: int,
     order: SortOrderEnum,
     after: Optional[str],
@@ -32,7 +31,6 @@ async def list_collections(
 ) -> ListResult:
     """
     List collections
-    :param postgres_conn: postgres connection
     :param limit: the limit of the query
     :param order: the order of the query, asc or desc
     :param after: the cursor ID to query after
@@ -46,13 +44,12 @@ async def list_collections(
     after_collection, before_collection = None, None
 
     if after:
-        after_collection = await validate_and_get_collection(postgres_conn, after)
+        after_collection = await validate_and_get_collection(after)
 
     if before:
-        before_collection = await validate_and_get_collection(postgres_conn, before)
+        before_collection = await validate_and_get_collection(before)
 
     return await db_collection.list_collections(
-        postgres_conn=postgres_conn,
         limit=limit,
         order=order,
         after_collection=after_collection,
@@ -66,7 +63,6 @@ async def list_collections(
 
 
 async def create_collection(
-    postgres_conn,
     name: str,
     description: str,
     capacity: int,
@@ -76,7 +72,6 @@ async def create_collection(
 ) -> Collection:
     """
     Create collection
-    :param postgres_conn: postgres connection
     :param name: the collection name
     :param description: the collection description
     :param capacity: the collection capacity
@@ -87,7 +82,7 @@ async def create_collection(
     """
 
     # validate embedding model
-    embedding_model = await get_model(postgres_conn, embedding_model_id)
+    embedding_model = await get_model(embedding_model_id)
     model_schema = embedding_model.model_schema()
     if not model_schema.type == ModelType.TEXT_EMBEDDING:
         raise_http_error(
@@ -105,7 +100,6 @@ async def create_collection(
 
     # create collection
     collection = await db_collection.create_collection(
-        postgres_conn=postgres_conn,
         name=name,
         description=description,
         capacity=capacity,
@@ -118,7 +112,6 @@ async def create_collection(
 
 
 async def update_collection(
-    postgres_conn,
     collection_id: str,
     name: Optional[str],
     description: Optional[str],
@@ -126,7 +119,6 @@ async def update_collection(
 ) -> Collection:
     """
     Update collection
-    :param postgres_conn: postgres connection
     :param collection_id: the collection id
     :param name: the collection name to update
     :param description: the collection description to update
@@ -134,7 +126,7 @@ async def update_collection(
     :return: the updated collection
     """
 
-    collection: Collection = await validate_and_get_collection(postgres_conn, collection_id=collection_id)
+    collection: Collection = await validate_and_get_collection(collection_id=collection_id)
 
     update_dict = {}
 
@@ -147,7 +139,6 @@ async def update_collection(
 
     if update_dict:
         collection = await db_collection.update_collection(
-            conn=postgres_conn,
             collection=collection,
             update_dict=update_dict,
         )
@@ -155,24 +146,22 @@ async def update_collection(
     return collection
 
 
-async def get_collection(postgres_conn, collection_id: str) -> Collection:
+async def get_collection(collection_id: str) -> Collection:
     """
     Get collection
-    :param postgres_conn: postgres connection
     :param collection_id: the collection id
     :return: the collection
     """
 
-    collection: Collection = await validate_and_get_collection(postgres_conn, collection_id)
+    collection: Collection = await validate_and_get_collection(collection_id)
     return collection
 
 
-async def delete_collection(postgres_conn, collection_id: str) -> None:
+async def delete_collection(collection_id: str) -> None:
     """
     Delete collection
-    :param postgres_conn: postgres connection
     :param collection_id: the collection id
     """
 
-    collection: Collection = await validate_and_get_collection(postgres_conn, collection_id)
-    await db_collection.delete_collection(postgres_conn, collection)
+    collection: Collection = await validate_and_get_collection(collection_id)
+    await db_collection.delete_collection(collection)

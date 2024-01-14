@@ -1,6 +1,5 @@
 from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
-from common.database.postgres.pool import postgres_db_pool
 from common.services.retrieval.collection import *
 from app.schemas.retrieval.collection import *
 from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse, BaseListRequest
@@ -20,10 +19,8 @@ async def api_list_collections(
     request: Request,
     data: BaseListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     collections, total, has_more = await list_collections(
-        postgres_conn,
         limit=data.limit,
         order=data.order,
         after=data.after,
@@ -51,10 +48,8 @@ async def api_get_collection(
     collection_id: str,
     request: Request,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     collection: Collection = await get_collection(
-        postgres_conn=postgres_conn,
         collection_id=collection_id,
     )
     return BaseSuccessDataResponse(data=collection.to_dict(purpose=SerializePurpose.RESPONSE))
@@ -71,10 +66,8 @@ async def api_create_collections(
     request: Request,
     data: CollectionCreateRequest,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     collection: Collection = await create_collection(
-        postgres_conn=postgres_conn,
         name=data.name,
         description=data.description,
         capacity=data.capacity,
@@ -101,10 +94,8 @@ async def api_update_collection(
     request: Request,
     data: CollectionUpdateRequest,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     collection: Collection = await update_collection(
-        postgres_conn=postgres_conn,
         collection_id=collection_id,
         name=data.name,
         description=data.description,
@@ -124,10 +115,8 @@ async def api_delete_collection(
     collection_id: str,
     request: Request,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     await delete_collection(
-        postgres_conn=postgres_conn,
         collection_id=collection_id,
     )
     return BaseSuccessEmptyResponse()

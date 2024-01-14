@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, Request
-from common.database.postgres.pool import postgres_db_pool
 import json
 from typing import Dict
 from starlette.responses import StreamingResponse
@@ -26,11 +25,9 @@ async def api_chat_completion(
     request: Request,
     data: ChatCompletionRequest,
     auth_info: Dict = Depends(auth_info_required),
-    postgres_conn=Depends(postgres_db_pool.get_db_connection),
 ):
     # validate model
     model: Model = await get_model(
-        postgres_conn=postgres_conn,
         model_id=data.model_id,
     )
 

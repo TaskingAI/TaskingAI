@@ -1,3 +1,4 @@
+from common.database.postgres.pool import postgres_db_pool
 from common.models import Collection, Record, Chunk, RecordType, Status
 from .get import get_record
 from typing import Dict, List
@@ -5,7 +6,6 @@ import json
 
 
 async def create_record_and_chunks(
-    postgres_conn,
     collection: Collection,
     chunk_texts: List[str],
     chunk_embeddings: List[List[float]],
@@ -16,7 +16,6 @@ async def create_record_and_chunks(
 ) -> Record:
     """
     Create record and its chunks
-    :param postgres_conn: postgres connection
     :param collection: the collection where the record belongs to
     :param chunk_texts: the text list of the chunks to be created
     :param chunk_embeddings: the embedding list of the chunks to be created
@@ -62,40 +61,41 @@ async def create_record_and_chunks(
         VALUES {insert_values_sql};
     """
 
-    async with postgres_conn.transaction():
-        # 1. insert record into database
-        await postgres_conn.execute(
-            """
-            INSERT INTO record (record_id, collection_id, title, type, content, status, metadata, num_chunks)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-        """,
-            new_record_id,
-            collection.collection_id,
-            title,
-            type.value,
-            content,
-            Status.READY.value,
-            json.dumps(metadata),
-            len(chunk_texts),
-        )
+    async with postgres_db_pool.get_db_connection() as conn:
+        async with conn.transaction():
+            # 1. insert record into database
+            await conn.execute(
+                """
+                INSERT INTO record (record_id, collection_id, title, type, content, status, metadata, num_chunks)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            """,
+                new_record_id,
+                collection.collection_id,
+                title,
+                type.value,
+                content,
+                Status.READY.value,
+                json.dumps(metadata),
+                len(chunk_texts),
+            )
 
-        # 2. insert chunks
+            # 2. insert chunks
 
-        await postgres_conn.execute(insert_chunks_sql, *params)
+            await conn.execute(insert_chunks_sql, *params)
 
-        # 3. update collection stats
-        await postgres_conn.execute(
-            """
-            UPDATE collection
-            SET num_records = num_records + 1,
-                num_chunks = num_chunks + $1
-            WHERE collection_id = $2
-        """,
-            len(chunk_texts),
-            collection.collection_id,
-        )
+            # 3. update collection stats
+            await conn.execute(
+                """
+                UPDATE collection
+                SET num_records = num_records + 1,
+                    num_chunks = num_chunks + $1
+                WHERE collection_id = $2
+            """,
+                len(chunk_texts),
+                collection.collection_id,
+            )
 
     # 4. get and return
-    record = await get_record(postgres_conn, collection=collection, record_id=new_record_id)
+    record = await get_record(collection=collection, record_id=new_record_id)
 
     return record

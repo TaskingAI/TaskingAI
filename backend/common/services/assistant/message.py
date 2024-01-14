@@ -12,15 +12,14 @@ __all__ = [
 ]
 
 
-async def validate_and_get_message(postgres_conn, chat: Chat, message_id: str) -> Message:
-    message = await db_message.get_message(postgres_conn, chat, message_id)
+async def validate_and_get_message(chat: Chat, message_id: str) -> Message:
+    message = await db_message.get_message(chat, message_id)
     if not message:
         raise_http_error(ErrorCode.OBJECT_NOT_FOUND, message=f"Message {message_id} not found.")
     return message
 
 
 async def list_messages(
-    postgres_conn,
     assistant_id: str,
     chat_id: str,
     limit: int,
@@ -30,7 +29,6 @@ async def list_messages(
 ) -> ListResult:
     """
     List messages
-    :param postgres_conn: postgres connection
     :param assistant_id: the assistant id
     :param chat_id: the chat id
     :param limit: the limit of the query
@@ -41,19 +39,18 @@ async def list_messages(
     """
 
     # validate chat
-    chat = await get_chat(postgres_conn, assistant_id=assistant_id, chat_id=chat_id)
+    chat = await get_chat(assistant_id=assistant_id, chat_id=chat_id)
 
     # validate after and before
     after_message, before_message = None, None
 
     if after:
-        after_message = await validate_and_get_message(postgres_conn, chat, after)
+        after_message = await validate_and_get_message(chat, after)
 
     if before:
-        before_message = await validate_and_get_message(postgres_conn, chat, before)
+        before_message = await validate_and_get_message(chat, before)
 
     return await db_message.list_messages(
-        postgres_conn=postgres_conn,
         chat=chat,
         limit=limit,
         order=order,
@@ -63,7 +60,6 @@ async def list_messages(
 
 
 async def create_message(
-    postgres_conn,
     assistant_id: str,
     chat_id: str,
     role: MessageRole,
@@ -72,7 +68,6 @@ async def create_message(
 ) -> Message:
     """
     Create message
-    :param postgres_conn: postgres connection
     :param assistant_id: the assistant id
     :param chat_id: the chat id
     :param role: the message role, user or assistant
@@ -82,11 +77,10 @@ async def create_message(
     """
 
     # validate chat
-    chat: Chat = await get_chat(postgres_conn, assistant_id=assistant_id, chat_id=chat_id)
+    chat: Chat = await get_chat(assistant_id=assistant_id, chat_id=chat_id)
 
     # create message
     message = await db_message.create_message(
-        postgres_conn=postgres_conn,
         chat=chat,
         role=role,
         content=content,  # todo check content type
@@ -96,7 +90,6 @@ async def create_message(
 
 
 async def update_message(
-    postgres_conn,
     assistant_id: str,
     chat_id: str,
     message_id: str,
@@ -104,7 +97,6 @@ async def update_message(
 ) -> Message:
     """
     Update message
-    :param postgres_conn: postgres connection
     :param assistant_id: the assistant id
     :param chat_id: the chat id
     :param message_id: the message id
@@ -113,8 +105,8 @@ async def update_message(
     """
 
     # validate chat
-    chat: Chat = await get_chat(postgres_conn, assistant_id=assistant_id, chat_id=chat_id)
-    message: Message = await validate_and_get_message(postgres_conn, chat=chat, message_id=message_id)
+    chat: Chat = await get_chat(assistant_id=assistant_id, chat_id=chat_id)
+    message: Message = await validate_and_get_message(chat=chat, message_id=message_id)
 
     update_dict = {}
 
@@ -123,7 +115,6 @@ async def update_message(
 
     if update_dict:
         message = await db_message.update_message(
-            conn=postgres_conn,
             chat=chat,
             message=message,
             update_dict=update_dict,
@@ -132,10 +123,9 @@ async def update_message(
     return message
 
 
-async def get_message(postgres_conn, assistant_id: str, chat_id: str, message_id: str) -> Message:
+async def get_message(assistant_id: str, chat_id: str, message_id: str) -> Message:
     """
     Get message
-    :param postgres_conn: postgres connection
     :param assistant_id: the assistant id
     :param chat_id: the chat id
     :param message_id: the message id
@@ -143,6 +133,6 @@ async def get_message(postgres_conn, assistant_id: str, chat_id: str, message_id
     """
 
     # get chat
-    chat: Chat = await get_chat(postgres_conn, assistant_id=assistant_id, chat_id=chat_id)
-    message: Message = await validate_and_get_message(postgres_conn, chat, message_id)
+    chat: Chat = await get_chat(assistant_id=assistant_id, chat_id=chat_id)
+    message: Message = await validate_and_get_message(chat, message_id)
     return message
