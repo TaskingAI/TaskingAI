@@ -1,6 +1,6 @@
 from typing import List
 from common.models import Collection, Chunk, Model
-from common.database_ops import chunk as db_chunk
+from common.database_ops.retrieval import chunk as db_chunk
 from common.error import ErrorCode, raise_http_error
 from common.services.model.model import get_model
 from .collection import validate_and_get_collection

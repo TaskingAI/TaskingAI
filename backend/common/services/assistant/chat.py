@@ -1,6 +1,6 @@
 from typing import Optional, Dict
 from common.models import Assistant, Chat, SortOrderEnum, ListResult
-from common.database_ops import chat as db_chat
+from common.database_ops.assistant import chat as db_chat
 from common.error import ErrorCode, raise_http_error
 from .assistant import validate_and_get_assistant
 

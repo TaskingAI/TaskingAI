@@ -1,5 +1,5 @@
 from common.models import Admin
-from common.database_ops import admin as db_admin
+from common.database_ops.auth import admin as db_admin
 from common.error import ErrorCode, raise_http_error
 from config import CONFIG
 

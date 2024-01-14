@@ -12,7 +12,7 @@ from common.models import (
     ModelSchema,
     AssistantMemory,
 )
-from common.database_ops import assistant as db_assistant
+from common.database_ops.assistant import assistant as db_assistant
 from common.error import ErrorCode, raise_http_error
 from common.services.tool.action import get_action
 from common.services.retrieval.collection import get_collection

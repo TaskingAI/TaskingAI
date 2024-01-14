@@ -1,6 +1,6 @@
 from typing import Optional, Dict
 from common.models import Collection, SortOrderEnum, ListResult, TextSplitter, ModelType
-from common.database_ops import collection as db_collection
+from common.database_ops.retrieval import collection as db_collection
 from common.error import ErrorCode, raise_http_error
 from common.services.model.model import get_model
 

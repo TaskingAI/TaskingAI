@@ -1,6 +1,6 @@
 from typing import Optional, Dict
 from common.models import Collection, Record, RecordType, SortOrderEnum, ListResult, Model
-from common.database_ops import record as db_record
+from common.database_ops.retrieval import record as db_record
 from common.error import ErrorCode, raise_http_error
 from .collection import validate_and_get_collection
 from common.services.model.model import get_model
@@ -31,7 +31,6 @@ async def list_records(
     before: Optional[str],
     offset: Optional[int],
     id_search: Optional[str],
-    name_search: Optional[str],
 ) -> ListResult:
     """
     List records
@@ -43,7 +42,6 @@ async def list_records(
     :param before: the cursor ID to query before
     :param offset: the offset of the query
     :param id_search: the record ID to search for
-    :param name_search: the record name to search for
     :return: a list of records, total count of records, and whether there are more records
     """
 
@@ -69,7 +67,6 @@ async def list_records(
         offset=offset,
         prefix_filters={
             "record_id": id_search,
-            "name": name_search,
         },
     )
 

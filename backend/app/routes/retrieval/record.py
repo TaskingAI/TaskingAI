@@ -32,7 +32,6 @@ async def api_list_records(
         before=data.before,
         offset=data.offset,
         id_search=data.id_search,
-        name_search=data.name_search,
     )
     return BaseSuccessListResponse(
         data=[record.to_dict(purpose=SerializePurpose.RESPONSE) for record in records],

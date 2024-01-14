@@ -1,5 +1,5 @@
 from common.models import Apikey, ListResult
-from common.database_ops import apikey as db_apikey
+from common.database_ops.auth import apikey as db_apikey
 from common.error import ErrorCode, raise_http_error
 
 __all__ = [

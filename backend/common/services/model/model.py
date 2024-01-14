@@ -1,6 +1,6 @@
 from typing import Optional, Dict
 from common.models import Model, ModelType, ListResult, SortOrderEnum, ModelSchema, Provider
-from common.database_ops import model as db_model
+from common.database_ops.model import model as db_model
 from .model_schema import get_model_schema, get_provider
 from common.error import ErrorCode, raise_http_error
 from common.services.inference.verify_credentials import verify_credentials

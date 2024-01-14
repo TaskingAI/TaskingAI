@@ -1,6 +1,6 @@
 from typing import Optional, Dict, List
 from common.models import Action, Authentication, SortOrderEnum, ListResult
-from common.database_ops import action as db_action
+from common.database_ops.tool import action as db_action
 from common.error import ErrorCode, raise_http_error
 from .openapi_utils import split_openapi_schema, extract_function_description
 from .openapi_call import call_action_api

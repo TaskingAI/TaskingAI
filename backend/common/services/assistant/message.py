@@ -1,6 +1,6 @@
 from typing import Optional, Dict
 from common.models import Chat, Message, MessageContent, SortOrderEnum, ListResult, MessageRole
-from common.database_ops import message as db_message
+from common.database_ops.assistant import message as db_message
 from common.error import ErrorCode, raise_http_error
 from .chat import get_chat
 
