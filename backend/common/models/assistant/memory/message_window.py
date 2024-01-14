@@ -1,5 +1,5 @@
 from ._base import *
-from ._utils import message_role_to_memory_role, count_tokens
+from ._utils import count_tokens
 
 
 class ChatMessageWindowMemory(ChatMemory):
@@ -27,23 +27,19 @@ class ChatMessageWindowMemory(ChatMemory):
             "max_tokens": self.max_tokens,
         }
 
-    async def update_memory(self, new_message: Message):
+    async def update_memory(self, new_message_text: str, role: str):
         messages = self.messages
         max_messages = self.max_messages
         max_tokens = self.max_tokens
 
-        role = message_role_to_memory_role(new_message.role)
-
         # Calculate token count for new message
-        new_message_token_count = count_tokens(new_message.content["text"])
+        new_message_token_count = count_tokens(new_message_text)
 
         # Add new message to the memory
-        messages.append(
-            ChatMemoryMessage(role=role, content=new_message.content["text"], token_count=new_message_token_count)
-        )
+        messages.append(ChatMemoryMessage(role=role, content=new_message_text, token_count=new_message_token_count))
 
         # Trim messages to ensure they don't exceed max_messages or max_tokens
-        if role == ChatMemoryMessageRole.assistant:
+        if role == "assistant":
             total_tokens = sum(message.token_count for message in messages)
             while len(messages) > max_messages or total_tokens > max_tokens:
                 removed_message = messages.pop(0)

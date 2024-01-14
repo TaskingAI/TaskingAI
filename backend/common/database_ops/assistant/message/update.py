@@ -13,7 +13,7 @@ async def update_message(chat: Chat, message: Message, update_dict: Dict):
             update_dict=update_dict,
             update_time=True,
             table_name="message",
-            condition_fields={
+            equal_filters={
                 "assistant_id": message.assistant_id,
                 "chat_id": message.chat_id,
                 "message_id": message.message_id,

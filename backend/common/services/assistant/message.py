@@ -1,5 +1,15 @@
 from typing import Optional, Dict
-from common.models import Chat, Message, MessageContent, SortOrderEnum, ListResult, MessageRole
+
+from common.models import (
+    Chat,
+    Message,
+    MessageContent,
+    SortOrderEnum,
+    ListResult,
+    MessageRole,
+    ChatMemory,
+    build_chat_memory,
+)
 from common.database_ops.assistant import message as db_message
 from common.error import ErrorCode, raise_http_error
 from .chat import get_chat
@@ -79,13 +89,18 @@ async def create_message(
     # validate chat
     chat: Chat = await get_chat(assistant_id=assistant_id, chat_id=chat_id)
 
+    chat_memory: ChatMemory = build_chat_memory(chat.memory)
+    updated_chat_memory: ChatMemory = await chat_memory.update_memory(new_message_text=content.text, role=role.value)
+
     # create message
     message = await db_message.create_message(
         chat=chat,
         role=role,
         content=content,  # todo check content type
         metadata=metadata,
+        updated_chat_memory=updated_chat_memory,
     )
+
     return message
 
 
@@ -93,7 +108,7 @@ async def update_message(
     assistant_id: str,
     chat_id: str,
     message_id: str,
-    metadata: Optional[Dict[str, str]],
+    metadata: Dict[str, str],
 ) -> Message:
     """
     Update message
@@ -107,18 +122,11 @@ async def update_message(
     # validate chat
     chat: Chat = await get_chat(assistant_id=assistant_id, chat_id=chat_id)
     message: Message = await validate_and_get_message(chat=chat, message_id=message_id)
-
-    update_dict = {}
-
-    if metadata:
-        update_dict["metadata"] = metadata
-
-    if update_dict:
-        message = await db_message.update_message(
-            chat=chat,
-            message=message,
-            update_dict=update_dict,
-        )
+    message = await db_message.update_message(
+        chat=chat,
+        message=message,
+        update_dict={"metadata": metadata},
+    )
 
     return message
 

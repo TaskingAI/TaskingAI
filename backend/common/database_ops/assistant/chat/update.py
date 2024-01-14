@@ -17,7 +17,7 @@ async def update_chat(assistant: Assistant, chat: Chat, update_dict: Dict):
             update_dict=update_dict,
             update_time=True,
             table_name="chat",
-            condition_fields={"assistant_id": chat.assistant_id, "chat_id": chat.chat_id},
+            equal_filters={"assistant_id": chat.assistant_id, "chat_id": chat.chat_id},
         )
 
     # 3. Get updated chat

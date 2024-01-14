@@ -17,7 +17,7 @@ async def update_action(action: Action, update_dict: Dict):
             update_dict=update_dict,
             update_time=True,
             table_name="action",
-            condition_fields={"action_id": action.action_id},
+            equal_filters={"action_id": action.action_id},
         )
 
     # 3. Get updated action

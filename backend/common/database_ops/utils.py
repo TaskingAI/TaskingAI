@@ -5,7 +5,7 @@ from typing import Any, Optional
 from common.models import SortOrderEnum, ListResult
 
 
-async def update_object(conn, update_dict: Dict, update_time: bool, table_name: str, condition_fields: Dict) -> None:
+async def update_object(conn, update_dict: Dict, update_time: bool, table_name: str, equal_filters: Dict) -> None:
     # 2. build update dict
     pg_update_dict = update_dict.copy()
     for key, value in update_dict.items():
@@ -16,19 +16,19 @@ async def update_object(conn, update_dict: Dict, update_time: bool, table_name: 
 
     # 3. Prepare the SET clause for the update query
     updates = ", ".join(
-        f"{key} = ${idx}" for idx, key in enumerate(pg_update_dict.keys(), start=len(condition_fields) + 2)
+        f"{key} = ${idx}" for idx, key in enumerate(pg_update_dict.keys(), start=len(equal_filters) + 2)
     )
     if update_time:
         updates += ", updated_timestamp = $1"
 
     # 4. Prepare the WHERE clause for the update query
-    conditions = " AND ".join(f"{key} = ${idx}" for idx, key in enumerate(condition_fields.keys(), start=2))
+    conditions = " AND ".join(f"{key} = ${idx}" for idx, key in enumerate(equal_filters.keys(), start=2))
 
     # 5. Prepare the final query
     query = f"UPDATE {table_name} SET {updates} WHERE {conditions}"
 
     # 6. Prepare the arguments for the query
-    args = [timestamp_int, *condition_fields.values(), *pg_update_dict.values()]
+    args = [timestamp_int, *equal_filters.values(), *pg_update_dict.values()]
 
     # 7. Execute the query
     await conn.execute(query, *args)

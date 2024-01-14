@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from enum import Enum
 from common.utils import generate_random_id, load_json_attr
-from typing import Dict, Optional, Any
+from typing import Dict, Any
 from common.models import SerializePurpose
 
 __all__ = ["Message", "MessageRole", "MessageContent", "MessageGenerationLog"]
@@ -29,9 +29,7 @@ class MessageGenerationLog(BaseModel):
     event: str = Field(..., description="The log event.")
     event_id: str = Field(..., min_length=24, max_length=24, description="The event ID.")
     event_step: str = Field(..., description="The current step of the event.")
-    created_timestamp: int = Field(
-        ..., ge=0, description="The timestamp when the log was created.", example=1700000000000
-    )
+    timestamp: int = Field(..., ge=0, description="The timestamp when the log was created.", example=1700000000000)
     content: Dict[str, Any] = Field(..., description="The log content.")
 
 
@@ -41,7 +39,7 @@ class MessageContent(BaseModel):
     MessageContent is the content of a message. Currently only text content is supported.
     """
 
-    text: Optional[str] = Field(None, description="The text content of the message.", examples=["Hello!"])
+    text: str = Field(..., description="The text content of the message.", examples=["Hello!"])
 
     # todo: support more content type, i.e. file, image, etc.
 

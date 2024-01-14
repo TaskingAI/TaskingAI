@@ -130,11 +130,11 @@ async def update_collection(
 
     update_dict = {}
 
-    if name:
+    if name is not None:
         update_dict["name"] = name
-    if description:
+    if description is not None:
         update_dict["description"] = description
-    if metadata:
+    if metadata is not None:
         update_dict["metadata"] = metadata
 
     if update_dict:

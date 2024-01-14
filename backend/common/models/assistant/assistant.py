@@ -2,6 +2,8 @@ from common.utils import generate_random_id, load_json_attr
 from pydantic import BaseModel, Field
 from typing import Dict, List
 from common.models import SerializePurpose
+from .assistant_retrieval import AssistantRetrieval, AssistantRetrievalConfig
+from .memory import AssistantMemory, build_assistant_memory
 
 __all__ = [
     "Assistant",
@@ -20,12 +22,12 @@ class Assistant(BaseModel):
     name: str
     description: str
     system_prompt_template: List[str]
-    memory: Dict
+    memory: AssistantMemory
 
-    tools: List
-    tool_configs: Dict
-    retrievals: List
-    retrieval_configs: Dict
+    tools: List[AssistantTool]
+    # todo: tool_configs: Dict
+    retrievals: List[AssistantRetrieval]
+    retrieval_configs: AssistantRetrievalConfig
 
     metadata: Dict
 
@@ -42,33 +44,37 @@ class Assistant(BaseModel):
 
     @classmethod
     def build(cls, row: Dict):
+        memory_dict = load_json_attr(row, "memory", {})
+        memory = build_assistant_memory(memory_dict)
         return cls(
             assistant_id=row["assistant_id"],
             model_id=row["model_id"],
             name=row["name"],
             description=row["description"],
             system_prompt_template=load_json_attr(row, "system_prompt_template", []),
-            memory=load_json_attr(row, "memory", {}),
+            memory=memory,
             tools=load_json_attr(row, "tools", []),
-            tool_configs=load_json_attr(row, "tool_configs", {}),
+            # todo: tool_configs=load_json_attr(row, "tool_configs", {}),
             retrievals=load_json_attr(row, "retrievals", []),
-            retrieval_configs=load_json_attr(row, "retrieval_configs", {}),
+            retrieval_configs=AssistantRetrievalConfig(**load_json_attr(row, "retrieval_configs", {})),
             metadata=load_json_attr(row, "metadata", {}),
             created_timestamp=row["created_timestamp"],
             updated_timestamp=row["updated_timestamp"],
         )
 
     def to_dict(self, purpose: SerializePurpose):
-        ret = {
+        return {
             "object": self.object_name(),
             "assistant_id": self.assistant_id,
             "model_id": self.model_id,
             "name": self.name,
             "description": self.description,
             "system_prompt_template": self.system_prompt_template,
-            "memory": self.memory,
+            "memory": self.memory.model_dump(),
+            "tools": self.tools,
+            "retrievals": self.retrievals,
+            "retrieval_configs": self.retrieval_configs.model_dump(),
             "metadata": self.metadata,
             "created_timestamp": self.created_timestamp,
             "updated_timestamp": self.updated_timestamp,
         }
-        return ret

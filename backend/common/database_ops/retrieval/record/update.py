@@ -13,7 +13,7 @@ async def update_record(collection: Collection, record: Record, update_dict: Dic
             update_dict=update_dict,
             update_time=True,
             table_name="record",
-            condition_fields={"collection_id": record.collection_id, "record_id": record.record_id},
+            equal_filters={"collection_id": record.collection_id, "record_id": record.record_id},
         )
 
     # 2. Get updated record

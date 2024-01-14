@@ -1,8 +1,9 @@
 from common.database.postgres.pool import postgres_db_pool
-from common.models import Chat, Message, MessageContent
+from common.models import Chat, Message, MessageContent, ChatMemory
 from .get import get_message
 from typing import Dict
 from common.models import MessageRole
+from common.database_ops.utils import update_object
 import json
 
 
@@ -11,6 +12,7 @@ async def create_message(
     role: MessageRole,
     content: MessageContent,
     metadata: Dict[str, str],
+    updated_chat_memory: ChatMemory,
 ) -> Message:
     """
     Create message
@@ -18,6 +20,7 @@ async def create_message(
     :param role: the message role, user or assistant
     :param content: the message content
     :param metadata: the message metadata
+    :param updated_chat_memory: the chat memory to update
     :return: the created message
     """
 
@@ -38,6 +41,15 @@ async def create_message(
                 role.value,
                 content.model_dump_json(),
                 json.dumps(metadata),
+            )
+
+            # 2. update chat memory
+            await update_object(
+                conn=conn,
+                update_dict={"memory": updated_chat_memory.model_dump_json()},
+                update_time=True,
+                table_name="chat",
+                equal_filters={"assistant_id": chat.assistant_id, "chat_id": chat.chat_id},
             )
 
     # 2. get and return

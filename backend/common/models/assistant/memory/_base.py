@@ -2,7 +2,6 @@ from enum import Enum
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional, Any, Dict, List
 from abc import ABC, abstractmethod
-from common.models import Message
 from common.error import raise_http_error, ErrorCode
 
 
@@ -20,21 +19,16 @@ class AssistantMemory(BaseModel, ABC):
         raise NotImplementedError
 
 
-class ChatMemoryMessageRole(str, Enum):
-    user = "user"
-    assistant = "assistant"
-
-
 class ChatMemoryMessage(BaseModel):
-    role: ChatMemoryMessageRole = Field(..., description="The role of the message.")
+    role: str = Field(..., description="The role of the message.")
     content: str = Field(..., description="The text content of the message.")
     token_count: Optional[int] = Field(None, description="The number of tokens in the message.")
 
     def model_dump(self, **kwargs) -> Dict[str, Any]:
         if self.token_count is not None:
-            return {"role": self.role.value, "content": self.content, "token_count": self.token_count}
+            return {"role": self.role, "content": self.content, "token_count": self.token_count}
         else:
-            return {"role": self.role.value, "content": self.content}
+            return {"role": self.role, "content": self.content}
 
 
 class ChatMemory(BaseModel, ABC):
@@ -56,5 +50,5 @@ class ChatMemory(BaseModel, ABC):
         return messages
 
     @abstractmethod
-    async def update_memory(self, new_message: Message):
+    async def update_memory(self, new_message_text: str, role: str):
         raise NotImplementedError

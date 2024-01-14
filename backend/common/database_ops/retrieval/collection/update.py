@@ -17,7 +17,7 @@ async def update_collection(collection: Collection, update_dict: Dict):
             update_dict=update_dict,
             update_time=True,
             table_name="collection",
-            condition_fields={"collection_id": collection.collection_id},
+            equal_filters={"collection_id": collection.collection_id},
         )
 
     # 3. Get updated collection

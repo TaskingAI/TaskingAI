@@ -24,6 +24,7 @@ class ErrorCode(str, Enum):
     DUPLICATE_OBJECT = "DUPLICATE_OBJECT"
     ACTION_API_REQUEST_ERROR = "ACTION_API_REQUEST_ERROR"
     OBJECT_LOCKED = "OBJECT_LOCKED"
+    INVALID_REQUEST = "INVALID_REQUEST"
 
 
 error_messages = {
@@ -43,6 +44,7 @@ error_messages = {
     ErrorCode.DUPLICATE_OBJECT: {"status_code": 409, "message": "Duplicate object."},
     ErrorCode.ACTION_API_REQUEST_ERROR: {"status_code": 400, "message": "Action API request error."},
     ErrorCode.OBJECT_LOCKED: {"status_code": 423, "message": "Object locked."},
+    ErrorCode.INVALID_REQUEST: {"status_code": 400, "message": "Invalid request."},
 }
 
 assert len(error_messages) == len(ErrorCode)

@@ -145,10 +145,10 @@ async def update_model(model_id: str, name: Optional[str], credentials: Optional
     model: Model = await validate_and_get_model(model_id)
     update_dict = {}
 
-    if name:
+    if name is not None:
         update_dict["name"] = name
 
-    if credentials:
+    if credentials is not None:
         # verify model credentials
         model_schema = model.model_schema()
         response = await verify_credentials(

@@ -1,18 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS vector;
 
-CREATE TABLE IF NOT EXISTS metadata (
-    project_id CHAR(8) PRIMARY KEY,
-    num_apikeys INTEGER NOT NULL DEFAULT 0,
-    num_models INTEGER NOT NULL DEFAULT 0,
-    num_actions INTEGER NOT NULL DEFAULT 0,
-    num_collections INTEGER NOT NULL DEFAULT 0,
-    num_records INTEGER NOT NULL DEFAULT 0,
-    num_chunks INTEGER NOT NULL DEFAULT 0,
-    num_assistants INTEGER NOT NULL DEFAULT 0,
-    num_chats INTEGER NOT NULL DEFAULT 0,
-    created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
-);
-
 
 CREATE TABLE IF NOT EXISTS app_admin (
     admin_id CHAR(16) PRIMARY KEY,

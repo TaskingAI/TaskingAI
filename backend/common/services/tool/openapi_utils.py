@@ -39,7 +39,7 @@ def _to_snake_case(name):
     return re.sub("([a-z0-9])([A-Z])", r"\1_\2", temp).lower()
 
 
-def _generate_function_name(method, path, operation_id=None):
+def _function_name(method, path, operation_id=None):
     if operation_id:
         # Use operationId and convert to snake_case
         return _to_snake_case(operation_id)
@@ -56,7 +56,7 @@ def _generate_function_name(method, path, operation_id=None):
     return snake_case_name
 
 
-def extract_function_description(openapi_schema: Dict):
+def function_format(openapi_schema: Dict):
     # copy openapi_schema to avoid modifying the original
     openapi_dict = copy.deepcopy(openapi_schema)
 
@@ -67,8 +67,8 @@ def extract_function_description(openapi_schema: Dict):
     # check operationId
     operation_id = method_info.get("operationId", None)
 
-    # generate function name
-    function_name = _generate_function_name(method, path, operation_id)
+    # get function name
+    function_name = _function_name(method, path, operation_id)
 
     # extract description
     description = method_info.get("description", "")

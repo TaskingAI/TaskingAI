@@ -50,10 +50,12 @@ def add_routes(route_prefix: str):
     from app.routes.assistant.assistant import router as assistant_router
     from app.routes.assistant.chat import router as chat_router
     from app.routes.assistant.message import router as message_router
+    from app.routes.assistant.generation import router as generation_router
 
     routes.include_router(assistant_router, prefix=route_prefix)
     routes.include_router(chat_router, prefix=route_prefix)
     routes.include_router(message_router, prefix=route_prefix)
+    routes.include_router(generation_router, prefix=route_prefix)
 
 
 add_routes(CONFIG.APP_ROUTE_PREFIX)

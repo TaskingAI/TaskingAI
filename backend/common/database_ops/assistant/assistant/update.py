@@ -17,7 +17,7 @@ async def update_assistant(assistant: Assistant, update_dict: Dict):
             update_dict=update_dict,
             update_time=True,
             table_name="assistant",
-            condition_fields={"assistant_id": assistant.assistant_id},
+            equal_filters={"assistant_id": assistant.assistant_id},
         )
 
     # 3. Get updated assistant

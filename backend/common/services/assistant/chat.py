@@ -1,5 +1,11 @@
 from typing import Optional, Dict
-from common.models import Assistant, Chat, SortOrderEnum, ListResult
+from common.models import (
+    Assistant,
+    Chat,
+    SortOrderEnum,
+    ListResult,
+    ChatMemory,
+)
 from common.database_ops.assistant import chat as db_chat
 from common.error import ErrorCode, raise_http_error
 from .assistant import validate_and_get_assistant
@@ -85,10 +91,12 @@ async def create_chat(
 
     # validate assistant
     assistant: Assistant = await validate_and_get_assistant(assistant_id=assistant_id)
+    chat_memory: ChatMemory = assistant.memory.init_chat_memory()
 
     # create chat
     chat = await db_chat.create_chat(
         assistant=assistant,
+        memory=chat_memory,
         metadata=metadata,
     )
     return chat
@@ -97,7 +105,7 @@ async def create_chat(
 async def update_chat(
     assistant_id: str,
     chat_id: str,
-    metadata: Optional[Dict[str, str]],
+    metadata: Dict[str, str],
 ) -> Chat:
     """
     Update chat
@@ -109,18 +117,35 @@ async def update_chat(
 
     assistant: Assistant = await validate_and_get_assistant(assistant_id=assistant_id)
     chat: Chat = await validate_and_get_chat(assistant=assistant, chat_id=chat_id)
+    chat = await db_chat.update_chat(
+        assistant=assistant,
+        chat=chat,
+        update_dict={"metadata": metadata},
+    )
 
-    update_dict = {}
+    return chat
 
-    if metadata:
-        update_dict["metadata"] = metadata
 
-    if update_dict:
-        chat = await db_chat.update_chat(
-            assistant=assistant,
-            chat=chat,
-            update_dict=update_dict,
-        )
+async def update_chat_memory(
+    assistant_id: str,
+    chat_id: str,
+    memory: ChatMemory,
+) -> Chat:
+    """
+    Update chat
+    :param assistant_id: the assistant id
+    :param chat_id: the chat id
+    :param memory: the chat memory to update
+    :return: the updated chat
+    """
+
+    assistant: Assistant = await validate_and_get_assistant(assistant_id=assistant_id)
+    chat: Chat = await validate_and_get_chat(assistant=assistant, chat_id=chat_id)
+    chat = await db_chat.update_chat(
+        assistant=assistant,
+        chat=chat,
+        update_dict={"memory": memory.model_dump()},
+    )
 
     return chat
 

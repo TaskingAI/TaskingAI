@@ -15,7 +15,7 @@ async def update_model(
     async with postgres_db_pool.get_db_connection() as conn:
         # 2. Update database
         await update_object(
-            conn, update_dict, update_time=True, table_name="model", condition_fields={"model_id": model.model_id}
+            conn, update_dict, update_time=True, table_name="model", equal_filters={"model_id": model.model_id}
         )
 
     # 3. Update aimodel model

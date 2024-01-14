@@ -138,18 +138,11 @@ async def update_record(
 
     collection: Collection = await validate_and_get_collection(collection_id=collection_id)
     record: Record = await validate_and_get_record(collection=collection, record_id=record_id)
-
-    update_dict = {}
-
-    if metadata:
-        update_dict["metadata"] = metadata
-
-    if update_dict:
-        record = await db_record.update_record(
-            collection=collection,
-            record=record,
-            update_dict=update_dict,
-        )
+    record = await db_record.update_record(
+        collection=collection,
+        record=record,
+        update_dict={"metadata": metadata},
+    )
 
     return record
 

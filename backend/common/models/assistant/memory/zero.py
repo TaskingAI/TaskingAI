@@ -1,19 +1,15 @@
 from ._base import *
-from ._utils import message_role_to_memory_role
 
 
 class ChatZeroMemory(ChatMemory):
     type: MemoryType = Field(MemoryType.zero, Literal=MemoryType.zero, description="The type of the memory.")
 
-    async def update_memory(self, new_message: Message):
+    async def update_memory(self, new_message_text: str, role: str):
         messages = self.messages
-        role: ChatMemoryMessageRole = message_role_to_memory_role(new_message.role)
-        if role == ChatMemoryMessageRole.user:
+        if role == "user":
             # add message
-            return ChatZeroMemory(
-                messages=[*messages, ChatMemoryMessage(role=role, content=new_message.content["text"])]
-            )
-        elif role == ChatMemoryMessageRole.assistant:
+            return ChatZeroMemory(messages=[*messages, ChatMemoryMessage(role=role, content=new_message_text)])
+        elif role == "assistant":
             # clean message
             return ChatZeroMemory()
 

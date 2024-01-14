@@ -2,7 +2,7 @@ from typing import Optional, Dict, List
 from common.models import Action, Authentication, SortOrderEnum, ListResult
 from common.database_ops.tool import action as db_action
 from common.error import ErrorCode, raise_http_error
-from .openapi_utils import split_openapi_schema, extract_function_description
+from .openapi_utils import split_openapi_schema, function_format
 from .openapi_call import call_action_api
 
 
@@ -75,7 +75,7 @@ async def bulk_create_actions(
 
     action_tuples = []
     for schema in schemas:
-        function = extract_function_description(schema)
+        function = function_format(schema)
         action_tuples.append((schema, function["name"], function["description"]))
 
     actions = await db_action.create_actions(
@@ -93,13 +93,14 @@ async def update_action(
     action: Action = await validate_and_get_action(action_id=action_id)
 
     update_dict = {}
-    if openapi_schema:
+
+    if openapi_schema is not None:
         update_dict["openapi_schema"] = openapi_schema
-        function_desc = extract_function_description(openapi_schema)
+        function_desc = function_format(openapi_schema)
         update_dict["name"] = function_desc["name"]
         update_dict["description"] = function_desc["description"]
 
-    if authentication:
+    if authentication is not None:
         update_dict["authentication"] = authentication.model_dump()
 
     action = await db_action.update_action(

@@ -236,34 +236,34 @@ async def update_assistant(
     # prepare update dict
     update_dict = {}
 
-    if model_id:
+    if model_id is not None:
         update_dict["model_id"] = model_id
     else:
         model_id = assistant.model_id
 
-    if name:
+    if name is not None:
         update_dict["name"] = name
 
-    if description:
+    if description is not None:
         update_dict["description"] = description
 
-    if system_prompt_template:
+    if system_prompt_template is not None:
         update_dict["system_prompt_template"] = system_prompt_template
 
-    if memory:
+    if memory is not None:
         update_dict["memory"] = memory.model_dump()
 
-    if tools:
+    if tools is not None:
         update_dict["tools"] = tools
     else:
         tools = assistant.tools
 
-    if retrievals:
+    if retrievals is not None:
         update_dict["retrievals"] = retrievals
     else:
         retrievals = assistant.retrievals
 
-    if retrieval_configs:
+    if retrieval_configs is not None:
         update_dict["retrieval_configs"] = retrieval_configs.model_dump()
     else:
         retrieval_configs = assistant.retrieval_configs
