@@ -1,35 +1,7 @@
 from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field, field_validator, model_validator, Extra
 from ..utils import validate_metadata, validate_list_cursors
-from enum import Enum
-from common.models import SortOrderEnum, MessageContent
-
-
-class MessageRole(str, Enum):
-    user = "user"
-    assistant = "assistant"
-
-
-class ChatLogType(str, Enum):
-    retrieval = "retrieval"
-    tool_call = "tool_call"
-    tool_result = "tool_result"
-
-
-class MessageGenerationLog(BaseModel):
-    object: str = Field(
-        "MessageGenerationLog",
-        Literal="MessageGenerationLog",
-        description="The object type, which is always `MessageGenerationLog`.",
-    )
-    session_id: str = Field(
-        ..., min_length=24, max_length=24, description="The session ID from which the log is generated."
-    )
-    event: str = Field(..., description="The log event.")
-    event_id: str = Field(..., min_length=24, max_length=24, description="The event ID.")
-    event_step: str = Field(..., description="The step of the event.")
-    timestamp: int = Field(..., ge=0, description="The timestamp when the log was created.", example=1700000000000)
-    content: Dict[str, Any] = Field(..., description="The log content.")
+from common.models import SortOrderEnum, MessageContent, MessageRole
 
 
 # ----------------------------
@@ -70,12 +42,10 @@ class MessageListRequest(BaseModel):
 # ----------------------------
 # Create Message
 # POST /assistants/{assistant_id}/chats/{chat_id}/messages
-
-
 class MessageCreateRequest(BaseModel):
     role: MessageRole = Field(
-        MessageRole.user,
-        Literal=MessageRole.user,
+        MessageRole.USER,
+        Literal=MessageRole.USER,
         description="The role of the message. Currently only `user` is supported.",
         examples=["user"],
     )
@@ -96,7 +66,7 @@ class MessageCreateRequest(BaseModel):
 
     @field_validator("role")
     def validate_role(cls, role: MessageRole):
-        if role != MessageRole.user:
+        if role != MessageRole.USER:
             raise ValueError("Currently only `user` is supported.")
         return role
 
@@ -108,8 +78,6 @@ class MessageCreateRequest(BaseModel):
 # ----------------------------
 # Update Message
 # POST /assistants/{assistant_id}/chats/{chat_id}/messages/{message_id}
-
-
 class MessageUpdateRequest(BaseModel):
     metadata: Dict[str, str] = Field(
         None,
@@ -131,8 +99,6 @@ class MessageUpdateRequest(BaseModel):
 # ----------------------------
 # Generate Assistant Message
 # POST /assistants/{assistant_id}/chats/{chat_id}/messages/generate
-
-
 class MessageGenerateRequest(BaseModel):
     system_prompt_variables: Dict = Field(
         {},

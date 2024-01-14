@@ -23,6 +23,7 @@ class ErrorCode(str, Enum):
     RESOURCE_LIMIT_REACHED = "RESOURCE_LIMIT_REACHED"
     DUPLICATE_OBJECT = "DUPLICATE_OBJECT"
     ACTION_API_REQUEST_ERROR = "ACTION_API_REQUEST_ERROR"
+    OBJECT_LOCKED = "OBJECT_LOCKED"
 
 
 error_messages = {
@@ -41,6 +42,7 @@ error_messages = {
     },
     ErrorCode.DUPLICATE_OBJECT: {"status_code": 409, "message": "Duplicate object."},
     ErrorCode.ACTION_API_REQUEST_ERROR: {"status_code": 400, "message": "Action API request error."},
+    ErrorCode.OBJECT_LOCKED: {"status_code": 423, "message": "Object locked."},
 }
 
 assert len(error_messages) == len(ErrorCode)

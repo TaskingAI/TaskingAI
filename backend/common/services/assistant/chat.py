@@ -10,6 +10,9 @@ __all__ = [
     "update_chat",
     "get_chat",
     "delete_chat",
+    "is_chat_locked",
+    "lock_chat",
+    "unlock_chat",
 ]
 
 
@@ -154,3 +157,33 @@ async def delete_chat(postgres_conn, assistant_id: str, chat_id: str) -> None:
     assistant: Assistant = await validate_and_get_assistant(postgres_conn, assistant_id=assistant_id)
     chat: Chat = await validate_and_get_chat(postgres_conn, assistant, chat_id)
     await db_chat.delete_chat(postgres_conn, chat)
+
+
+async def is_chat_locked(assistant_id: str, chat_id: str) -> bool:
+    """
+    Is chat locked
+    :param assistant_id: the assistant id
+    :param chat_id : the chat id
+    :return: True or False, indicating whether the chat is locked
+    """
+    return await db_chat.is_chat_locked(assistant_id, chat_id)
+
+
+async def lock_chat(assistant_id: str, chat_id: str):
+    """
+    Lock the chat
+    :param assistant_id: the assistant id
+    :param chat_id: the chat id
+    :return:
+    """
+    await db_chat.set_chat_lock(assistant_id, chat_id, True)
+
+
+async def unlock_chat(assistant_id: str, chat_id: str):
+    """
+    Unlock the chat
+    :param assistant_id: the assistant id
+    :param chat_id: the chat id
+    :return:
+    """
+    await db_chat.set_chat_lock(assistant_id, chat_id, False)
