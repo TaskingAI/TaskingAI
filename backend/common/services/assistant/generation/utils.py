@@ -6,6 +6,7 @@ from common.error import raise_http_error, ErrorCode
 from common.services.retrieval.chunk import query_chunks
 from common.models import AssistantRetrievalMethod, Chunk, AssistantTool
 from common.services.tool.openapi_utils import function_format
+from common.services.tool.action import get_action
 from common.utils import generate_random_id
 
 
@@ -16,7 +17,7 @@ class MessageGenerationException(Exception):
 def build_system_prompt(
     system_prompt_template: List[str],
     system_prompt_variables: Dict,
-    context_summary: Optional[str],
+    # context_summary: Optional[str],
     retrieval_doc: Optional[str],
 ) -> str:
     """
@@ -24,7 +25,6 @@ def build_system_prompt(
 
     :param system_prompt_template: A list of template strings with placeholders for variables.
     :param system_prompt_variables: A dictionary mapping variable names to their values.
-    :param context_summary: A summary of the conversation context to be appended to the prompt.
     :param retrieval_doc: A related document to be appended to the prompt.
     :return: The final prompt string with variable substitutions made and optional context and document appended.
 
@@ -56,8 +56,8 @@ def build_system_prompt(
         final_prompt += f"\n\n-------\nRELATED DOCUMENT: {retrieval_doc}"
 
     # If a context summary is provided, append it to the final prompt with a separator.
-    if context_summary:
-        final_prompt += f"\n\n-------\nCONVERSATION CONTEXT SUMMARY: {context_summary}"
+    # if context_summary:
+    #     final_prompt += f"\n\n-------\nCONVERSATION CONTEXT SUMMARY: {context_summary}"
 
     # Return the final prompt string.
     return final_prompt
@@ -74,7 +74,7 @@ def build_chat_completion_messages(system_prompt: str, history_messages: List[Di
     return [{"role": "system", "content": system_prompt}] + history_messages
 
 
-async def get_and_validate_chat_memory(assistant_id: str, chat_id: str):
+async def get_chat_memory_messages(assistant_id: str, chat_id: str):
     """
     Retrieves and validates the chat memory from a given chat.
 
@@ -90,28 +90,27 @@ async def get_and_validate_chat_memory(assistant_id: str, chat_id: str):
         chat_id=chat_id,
     )
 
-    # Default chat memory to empty if not present
-    chat_memory = chat.memory or {"messages": [], "context_summary": None}
+    # todo: use context summary
 
     # Extract messages and context summary from the chat memory
-    chat_memory_messages = chat_memory["messages"]
-    chat_memory_context_summary = chat_memory.get("context_summary")
+    chat_memory_messages = chat.memory.messages
 
     # Validate the chat memory to ensure it ends with a user message
     if chat_memory_messages:
         last_message = chat_memory_messages[-1]
-        if last_message["role"] == "assistant":
+        if last_message.role == "assistant":
             raise_http_error(
                 ErrorCode.INVALID_REQUEST,
                 message="Cannot generate another assistant message after an assistant message.",
             )
 
     # Ensure there is at least one user message in the chat memory
-    user_message_count = sum(1 for message in chat_memory_messages if message["role"] == "user")
+    user_message_count = sum(1 for message in chat_memory_messages if message.role == "user")
     if user_message_count == 0:
         raise_http_error(ErrorCode.INVALID_REQUEST, message="There is no user message in the chat context.")
 
-    return chat_memory_messages, chat_memory_context_summary
+    message_dicts = [message.model_dump() for message in chat_memory_messages]
+    return message_dicts
 
 
 async def fetch_tool_functions(tools: List[AssistantTool]) -> Tuple[Dict, List]:
@@ -132,7 +131,8 @@ async def fetch_tool_functions(tools: List[AssistantTool]) -> Tuple[Dict, List]:
     # Process each tool and build a dictionary with tool details
     for tool in tools:
         if tool.type == "action":
-            function = function_format(tool.action.openapi_schema)
+            action = await get_action(tool.id)
+            function = function_format(action.openapi_schema)
             tool_dict[function["name"]] = {"function": function, "type": "action", "id": tool.id}
 
     # Compile the list of functions from the tool dictionary
@@ -158,7 +158,7 @@ async def query_retrieval_collections(
     chunks: List[Chunk] = await query_chunks(collection_ids=collection_ids, top_k=top_k, query_text=query_text)
 
     # Concatenate the text from each chunk into a single retrieval document
-    retrieval_doc = "\n\n".join([chunk["text"] for chunk in chunks])
+    retrieval_doc = "\n\n".join([chunk.content for chunk in chunks])
 
     return retrieval_doc, chunks
 

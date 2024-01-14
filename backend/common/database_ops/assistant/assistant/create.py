@@ -14,9 +14,9 @@ async def create_assistant(
     description: str,
     system_prompt_template: List[str],
     memory: Dict,
-    tools: List,
+    tools: List[Dict],
     tool_configs: Dict,
-    retrievals: List,
+    retrievals: List[Dict],
     retrieval_configs: Dict,
     metadata: Dict,
 ) -> Assistant:

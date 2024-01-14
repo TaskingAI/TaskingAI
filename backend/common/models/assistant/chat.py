@@ -24,7 +24,7 @@ class Chat(BaseModel):
 
     @classmethod
     def build(cls, row):
-        memory_dict = load_json_attr(row, "memory", {})
+        memory_dict = load_json_attr(row, key="memory", default_value={"messages": [], "context_summary": None})
         chat_memory: ChatMemory = build_chat_memory(memory_dict)
         return cls(
             chat_id=row["chat_id"],

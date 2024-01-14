@@ -1,4 +1,3 @@
-import json
 from pydantic import BaseModel
 from typing import Dict
 from .authentication import Authentication, AuthenticationType
@@ -29,16 +28,12 @@ class Action(BaseModel):
     @classmethod
     def build(cls, row: Dict):
         # laod authentication
-        authentication_dict = (
-            json.loads(row["authentication"])
-            if row["authentication"]
-            else Authentication(type=AuthenticationType.none).model_dump()
-        )
-
-        authentication = None
+        authentication_dict = load_json_attr(row, "authentication", default_value={})
         if authentication_dict:
             authentication = Authentication(**authentication_dict)
             authentication.decrypt()
+        else:
+            authentication = Authentication(type=AuthenticationType.none).model_dump()
 
         return cls(
             action_id=row["action_id"],

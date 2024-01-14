@@ -29,7 +29,7 @@ def load_json_attr(row: Dict, key: str, default_value: Any = None):
     if data:
         if isinstance(data, str):
             return json.loads(data)
-        elif isinstance(data, dict):
+        elif isinstance(data, dict) or isinstance(data, list):
             return data
         else:
             logger.error(f"load_json_dict: error, key={key}, data={data}, default_value={default_value}")

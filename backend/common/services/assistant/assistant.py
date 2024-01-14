@@ -192,9 +192,9 @@ async def create_assistant(
         model_id=model_id,
         system_prompt_template=system_prompt_template,
         memory=memory.model_dump(),
-        tools=tools,
+        tools=[t.model_dump() for t in tools],
         tool_configs={},
-        retrievals=retrievals,
+        retrievals=[r.model_dump() for r in retrievals],
         retrieval_configs=retrieval_configs.model_dump(),
         metadata=metadata,
     )
@@ -254,12 +254,12 @@ async def update_assistant(
         update_dict["memory"] = memory.model_dump()
 
     if tools is not None:
-        update_dict["tools"] = tools
+        update_dict["tools"] = [t.model_dump() for t in tools]
     else:
         tools = assistant.tools
 
     if retrievals is not None:
-        update_dict["retrievals"] = retrievals
+        update_dict["retrievals"] = [r.model_dump() for r in retrievals]
     else:
         retrievals = assistant.retrievals
 

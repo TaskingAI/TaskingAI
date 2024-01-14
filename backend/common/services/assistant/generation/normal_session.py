@@ -1,9 +1,6 @@
 from .session import Session
-from .utils import *
 from app.schemas.base import BaseSuccessDataResponse
-from common.services.assistant.chat import unlock_chat
 from common.services.inference.chat_completion import chat_completion
-from common.error import raise_http_error, ErrorCode
 from common.utils import check_http_error
 
 import logging
@@ -34,29 +31,32 @@ class NormalSession(Session):
     async def generate(self):
         function_calls_round_index = 0
 
-        try:
+        # try:
+        if 1:
             while True:
-                try:
+                # try:
+                if 1:
                     chat_completion_assistant_message, chat_completion_function_calls_dict_list = await self.inference()
-                except Exception as e:
-                    raise MessageGenerationException(f"Error occurred in chat completion inference")
+                # except Exception as e:
+                #     raise MessageGenerationException(f"Error occurred in chat completion inference")
 
                 logger.debug(f"chat_completion_assistant_message = {chat_completion_assistant_message}")
                 logger.debug(f"chat_completion_function_calls_dict_list = {chat_completion_function_calls_dict_list}")
 
                 if chat_completion_function_calls_dict_list:
                     function_calls_round_index += 1
-                    try:
+                    # try:
+                    if 1:
                         await self.use_tool(
                             chat_completion_function_calls_dict_list, round_index=function_calls_round_index, log=False
                         )
                         await self.run_tools_without_log(chat_completion_function_calls_dict_list)
-                    except MessageGenerationException as e:
-                        logger.error(f"MessageGenerationException occurred in using the tools: {e}")
-                        raise e
-                    except Exception as e:
-                        logger.error(f"MessageGenerationException occurred in using the tools: {e}")
-                        raise MessageGenerationException(f"Error occurred in using the tools")
+                    # except MessageGenerationException as e:
+                    #     logger.error(f"MessageGenerationException occurred in using the tools: {e}")
+                    #     raise e
+                    # except Exception as e:
+                    #     logger.error(f"MessageGenerationException occurred in using the tools: {e}")
+                    #     raise MessageGenerationException(f"Error occurred in using the tools")
 
                 else:
                     break
@@ -64,15 +64,15 @@ class NormalSession(Session):
             message = await self.create_assistant_message(chat_completion_assistant_message["content"])
             return BaseSuccessDataResponse(data=message.model_dump())
 
-        except MessageGenerationException as e:
-            logger.error(f"NormalSession.generate: MessageGenerationException error = {e}")
-            raise_http_error(ErrorCode.INTERNAL_SERVER_ERROR, message=str(e))
-
-        except Exception as e:
-            logger.error(f"NormalSession.generate: Exception error = {e}")
-            raise_http_error(
-                ErrorCode.INTERNAL_SERVER_ERROR, message=str("Assistant message not generated due to an unknown error.")
-            )
-
-        finally:
-            await unlock_chat(self.assistant_id, self.chat_id)
+        # except MessageGenerationException as e:
+        #     logger.error(f"NormalSession.generate: MessageGenerationException error = {e}")
+        #     raise_http_error(ErrorCode.INTERNAL_SERVER_ERROR, message=str(e))
+        #
+        # except Exception as e:
+        #     logger.error(f"NormalSession.generate: Exception error = {e}")
+        #     raise_http_error(
+        #         ErrorCode.INTERNAL_SERVER_ERROR, message=str("Assistant message not generated due to an unknown error.")
+        #     )
+        #
+        # finally:
+        #     await unlock_chat(self.assistant_id, self.chat_id)

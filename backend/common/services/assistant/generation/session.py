@@ -1,7 +1,8 @@
+import json
 from abc import ABC
 from .utils import *
 from .log import *
-from common.models import AssistantRetrievalConfig, MessageRole, MessageContent, Model, ModelSchema, Assistant, Chat
+from common.models import MessageRole, MessageContent, Model, ModelSchema, Assistant, Chat
 from common.services.assistant.message import create_message
 from common.services.model.model import get_model
 from common.services.assistant.assistant import get_assistant
@@ -28,7 +29,6 @@ class Session(ABC):
         # todo config this in tools
 
         # retrievals
-        self.retrieval_configs: AssistantRetrievalConfig = None
         self.retrieval_tool_name = None
         self.retrieval_collection_ids = None
 
@@ -37,7 +37,7 @@ class Session(ABC):
         self.model_schema: ModelSchema = None
 
         # chat memory
-        self.chat_memory_context_summary = None
+        # self.chat_memory_context_summary = None
         self.chat_memory_messages = None
 
         # chat completion parameters
@@ -79,10 +79,8 @@ class Session(ABC):
             )
 
         # 4. Get chat memory
-        self.chat_memory_messages, self.chat_memory_context_summary = await get_and_validate_chat_memory(
-            self.assistant_id, self.chat_id
-        )
-        logger.debug(f"Chat memory: {self.chat_memory_messages}, summary: {self.chat_memory_context_summary}")
+        self.chat_memory_messages = await get_chat_memory_messages(self.assistant_id, self.chat_id)
+        logger.debug(f"Chat memory: {self.chat_memory_messages}")
 
         # 5. Get tools
         self.tool_use_count = {}
@@ -94,14 +92,14 @@ class Session(ABC):
 
         if self.assistant.retrievals:
             self.retrieval_collection_ids = [
-                retrieval["id"] for retrieval in self.assistant.retrievals if retrieval["type"] == "collection"
+                retrieval.id for retrieval in self.assistant.retrievals if retrieval.type == "collection"
             ]
 
-            if self.retrieval_configs.method != AssistantRetrievalMethod.FUNCTION_CALL:
+            if self.assistant.retrieval_configs.method != AssistantRetrievalMethod.FUNCTION_CALL:
                 # build query text and query retrieval collections
                 retrieval_query_text = get_system_prompt_retrieval_query_text(
                     chat_memory_messages=self.chat_memory_messages,
-                    method=self.retrieval_configs.method,
+                    method=self.assistant.retrieval_configs.method,
                 )
                 if retrieval_query_text:
                     retrieval_event_id = generate_random_event_id()
@@ -111,14 +109,14 @@ class Session(ABC):
                             event_id=retrieval_event_id,
                             collection_ids=self.retrieval_collection_ids,
                             query_text=retrieval_query_text,
-                            top_k=self.retrieval_configs.top_k,
+                            top_k=self.assistant.retrieval_configs.top_k,
                         )
                         self.prepare_logs.append(retrieval_log_input)
 
                     retrieval_doc, retrieval_chunks = await query_retrieval_collections(
                         collection_ids=self.retrieval_collection_ids,
                         query_text=retrieval_query_text,
-                        top_k=self.retrieval_configs.top_k,
+                        top_k=self.assistant.retrieval_configs.top_k,
                     )
 
                     if retrival_log:
@@ -134,7 +132,7 @@ class Session(ABC):
                 # make retrieval a function
                 retrieval_function = build_retrieval_function_dict(
                     existing_tool_names=list(self.tool_dict.keys()),
-                    description=self.retrieval_configs.function_description,
+                    description=self.assistant.retrieval_configs.function_description,
                 )
                 self.retrieval_tool_name = retrieval_function["name"]
                 self.chat_completion_functions.append(retrieval_function)
@@ -143,7 +141,7 @@ class Session(ABC):
         self.system_prompt = build_system_prompt(
             system_prompt_template=self.assistant.system_prompt_template,
             system_prompt_variables=system_prompt_variables or {},
-            context_summary=self.chat_memory_context_summary,
+            # context_summary=self.chat_memory_context_summary,
             retrieval_doc=retrieval_doc,
         )
         self.chat_completion_messages = build_chat_completion_messages(
@@ -196,7 +194,7 @@ class Session(ABC):
                         event_id=event_id,
                         collection_ids=self.retrieval_collection_ids,
                         query_text=query_text,
-                        top_k=self.retrieval_configs.top_k,
+                        top_k=self.assistant.retrieval_configs.top_k,
                     )
                     logs.append(retrieval_input_log_dict)
 
@@ -235,13 +233,13 @@ class Session(ABC):
                 # retrieval
                 query_text = arguments.get("query_text")
                 if not query_text:
-                    raise MessageGenerationException("Error occured when retrieving related documents")
+                    raise MessageGenerationException("Error occurred when retrieving related documents")
 
                 logger.debug(f"Query text: {query_text}")
                 tool_result, _ = await query_retrieval_collections(
                     collection_ids=self.retrieval_collection_ids,
                     query_text=query_text,
-                    top_k=self.retrieval_configs.top_k,
+                    top_k=self.assistant.retrieval_configs.top_k,
                 )
                 logger.debug(f"Retrieval result: {query_text}" + "\n" + "-" * 30)
 
@@ -250,11 +248,12 @@ class Session(ABC):
                 tool_id = self.tool_dict[tool_name]["id"]
 
                 if tool_type == "action":
-                    tool_result = await run_action(
+                    tool_result_dict = await run_action(
                         action_id=tool_id,
                         parameters=arguments,
                         headers={},
                     )
+                    tool_result = json.dumps(tool_result_dict)
                     logger.debug(f"Action result: {tool_result}")
 
                 else:
@@ -294,7 +293,7 @@ class Session(ABC):
                 tool_result, related_chunks = await query_retrieval_collections(
                     collection_ids=self.retrieval_collection_ids,
                     query_text=query_text,
-                    top_k=self.retrieval_configs.top_k,
+                    top_k=self.assistant.retrieval_configs.top_k,
                 )
                 logger.debug(f"Retrieval result: {query_text}" + "\n" + "-" * 30)
 
@@ -311,12 +310,12 @@ class Session(ABC):
                 tool_id = self.tool_dict[tool_name]["id"]
 
                 if tool_type == "action":
-                    tool_result = await run_action(
+                    tool_result_dict = await run_action(
                         action_id=tool_id,
                         parameters=arguments,
                         headers={},
                     )
-
+                    tool_result = json.dumps(tool_result_dict)
                     logger.debug(f"Action result: {tool_result}")
 
                     tool_action_result_log_dict = build_tool_action_output_log_dict(
@@ -324,7 +323,7 @@ class Session(ABC):
                         event_id=event_id,
                         action_id=tool_id,
                         name=tool_name,
-                        output=tool_result,
+                        output=tool_result_dict,
                     )
                     yield tool_action_result_log_dict
 
