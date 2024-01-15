@@ -107,7 +107,7 @@ async def api_update_chat(
 
 @router.delete(
     "/assistants/{assistant_id}/chats/{chat_id}",
-    tags=["Chat"],
+    tags=["Assistant"],
     summary="Delete Chat",
     operation_id="delete_chat",
     response_model=BaseSuccessEmptyResponse,

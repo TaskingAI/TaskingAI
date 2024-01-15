@@ -106,7 +106,7 @@ async def api_update_collection(
 
 @router.delete(
     "/collections/{collection_id}",
-    tags=["Collection"],
+    tags=["Retrieval"],
     summary="Delete Collection",
     operation_id="delete_collection",
     response_model=BaseSuccessEmptyResponse,

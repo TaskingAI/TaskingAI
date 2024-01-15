@@ -109,7 +109,7 @@ async def api_update_record(
 
 @router.delete(
     "/collections/{collection_id}/records/{record_id}",
-    tags=["Record"],
+    tags=["Retrieval"],
     summary="Delete Record",
     operation_id="delete_record",
     response_model=BaseSuccessEmptyResponse,

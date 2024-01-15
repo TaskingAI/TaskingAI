@@ -59,7 +59,7 @@ async def api_get_action(
 @router.post(
     "/actions/bulk_create",
     tags=["Tool"],
-    summary="Bulk create action",
+    summary="Bulk Create Action",
     operation_id="bulk_create_action",
     response_model=BaseSuccessDataResponse,
 )

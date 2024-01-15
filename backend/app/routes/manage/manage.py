@@ -12,7 +12,7 @@ router = APIRouter()
 # todo: add apikey auth
 @router.get(
     "/health_check",
-    tags=["manage"],
+    tags=["Manage"],
     operation_id="health_check",
     summary="Health check",
     response_model=BaseSuccessEmptyResponse,
@@ -23,7 +23,7 @@ async def api_health_check():
 
 @router.get(
     "/version",
-    tags=["manage"],
+    tags=["Manage"],
     operation_id="get_version",
     summary="Get application version",
     response_model=BaseSuccessDataResponse,
@@ -41,7 +41,13 @@ if CONFIG.TEST or CONFIG.DEV:
     from common.database.redis import redis_pool
     from common.database.postgres import postgres_db_pool
 
-    @router.post("/clean_data", response_model=BaseSuccessEmptyResponse)
+    @router.post(
+        "/clean_data",
+        tags=["Manage"],
+        operation_id="clean_data",
+        summary="Clean application version",
+        response_model=BaseSuccessEmptyResponse,
+    )
     async def api_clean_data():
         await redis_pool.clean_data()
         await postgres_db_pool.clean_data()
