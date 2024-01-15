@@ -78,5 +78,6 @@ class Model(BaseModel):
 
         elif purpose == SerializePurpose.RESPONSE:
             ret["display_credentials"] = self.display_credentials
+            ret["type"] = self.model_schema().type.value
 
         return ret
