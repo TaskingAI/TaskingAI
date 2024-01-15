@@ -9,7 +9,7 @@ python-dotenv==1.0.0
 gunicorn==21.2.0
 asyncio==3.4.3
 python_dateutil==2.8.2
-pycryptodome==3.19.0
+pycryptodome==3.20.0
 
 # crypto
 bcrypt==4.0.1

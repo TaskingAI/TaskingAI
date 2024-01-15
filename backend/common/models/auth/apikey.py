@@ -28,7 +28,7 @@ class Apikey(BaseModel):
 
     @staticmethod
     def get_apikey_id_from_apikey(apikey):
-        return apikey[:8]
+        return apikey[2:10]
 
     @classmethod
     def build(cls, row: Dict):

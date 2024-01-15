@@ -51,10 +51,10 @@ async def api_auth_info_required(request: Request) -> Dict:
 
 
 async def auth_info_required(request: Request) -> Dict:
-    if request.url.path.startswith(CONFIG.APP_ROUTE_PREFIX):
+    if CONFIG.WEB:
         return await app_admin_auth_info_required(request)
 
-    elif request.url.path.startswith(CONFIG.API_ROUTE_PREFIX):
+    elif CONFIG.API:
         return await api_auth_info_required(request)
 
     raise NotImplementedError("Unknown auth type")

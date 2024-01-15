@@ -37,7 +37,7 @@ async def api_version():
     )
 
 
-if CONFIG.TEST or CONFIG.DEV:
+if CONFIG.WEB and (CONFIG.TEST or CONFIG.DEV):
     from common.database.redis import redis_pool
     from common.database.postgres import postgres_db_pool
 
