@@ -1,14 +1,23 @@
 import os
-from typing import Dict
+from typing import Dict, Tuple, Optional
 from common.models import Authentication, AuthenticationType
 import aiohttp
 from aiohttp.client_exceptions import ClientConnectorError
 import logging
+import urllib.parse
 
 logger = logging.getLogger(__name__)
 
 
 def _prepare_headers(authentication: Authentication, extra_headers: Dict) -> Dict:
+    """
+    Prepares the headers for an HTTP request including authentication and additional headers.
+
+    :param authentication: An Authentication object containing the authentication details.
+    :param extra_headers: A dictionary of additional headers to include in the request.
+    :return: A dictionary of headers for the HTTP request.
+    """
+
     headers = {}
 
     if extra_headers:
@@ -16,7 +25,7 @@ def _prepare_headers(authentication: Authentication, extra_headers: Dict) -> Dic
 
     if authentication:
         if authentication.type == AuthenticationType.basic:
-            # Basic Authentication: Encode the secret and add it to headers
+            # Basic Authentication: Assume the secret is a base64 encoded string
             headers["Authorization"] = f"Basic {authentication.secret}"
 
         elif authentication.type == AuthenticationType.bearer:
@@ -30,38 +39,84 @@ def _prepare_headers(authentication: Authentication, extra_headers: Dict) -> Dic
     return headers
 
 
-def _prepare_request_parameters(openapi_path_schema, parameters):
-    """Prepare URL path, query parameters and request body according to OpenAPI schema."""
-    path_params, query_params, body, content_type = {}, {}, None, None
+def _prepare_request_parameters(
+    openapi_schema: Dict, method: str, path: str, parameter_dict: Dict
+) -> Tuple[str, Optional[Dict], Optional[Dict], Optional[str]]:
+    """
+    Prepares request parameters for an API call based on OpenAPI schema definitions.
 
-    for param in openapi_path_schema.get("parameters", []):
-        param_name = param["name"]
-        param_in = param["in"]
-        param_value = None
+    :param openapi_schema: The OpenAPI specification as a dictionary.
+    :param method: The HTTP method (e.g., 'GET', 'POST').
+    :param path: The API endpoint path.
+    :param parameter_dict: Dictionary containing parameters to be used in the request.
+    :return: A tuple with the final URL, query parameters, body, and content type.
+    :raises ValueError: If the path or method is not found in the OpenAPI schema.
+    """
 
-        # Check if the parameter has an enum with only one value
-        if "enum" in param["schema"] and len(param["schema"]["enum"]) == 1:
-            # Use the single enum value
-            param_value = param["schema"]["enum"][0]
-        elif parameters:
-            param_value = parameters.get(param_name)
+    # Extract base URL from OpenAPI schema and construct final endpoint URL
+    base_url = openapi_schema["servers"][0]["url"]
+    final_url = f"{base_url}{path}"
+    query_params = {}
+    body = None
+    content_type = None
 
-        if param_value is not None:
-            if param_in == "path":
-                path_params[param_name] = param_value
-            elif param_in == "query":
-                query_params[param_name] = param_value
+    # Verify if the provided path exists in the OpenAPI schema
+    path_item = openapi_schema["paths"].get(path)
+    if path_item is None:
+        raise ValueError(f"No path item found for path: {path}")
 
-    # handle request body
-    if "requestBody" in openapi_path_schema:
-        content_type = openapi_path_schema["requestBody"]["content"]
-        if parameters:
-            if "application/json" in content_type:
-                body = parameters
-            elif "application/x-www-form-urlencoded" in content_type:
-                body = parameters
+    # Verify if the provided method is defined for the path in the OpenAPI schema
+    operation = path_item.get(method.lower())
+    if operation is None:
+        raise ValueError(f"No operation found for method: {method} at path: {path}")
 
-    return path_params, query_params, body, content_type
+    # Populate query parameters and path parameters from parameter_dict
+    if "parameters" in operation:
+        for param in operation["parameters"]:
+            param_name = param["name"]
+            param_in = param["in"]
+            # Set parameter value in appropriate location based on its 'in' field
+
+            # Check for the presence of 'enum' in the parameter schema and if it contains exactly one value
+            param_value = None
+            if "enum" in param["schema"] and len(param["schema"]["enum"]) == 1:
+                param_value = param["schema"]["enum"][0]
+            elif param_name in parameter_dict:
+                param_value = parameter_dict[param_name]
+
+            if param_value is not None:
+                if param_in == "query":
+                    query_params[param_name] = param_value
+                elif param_in == "path":
+                    # Replace path parameters with corresponding values
+                    final_url = final_url.replace(f"{{{param_name}}}", urllib.parse.quote(str(param_value)))
+
+    # Append query string to the final URL if there are query parameters
+    if query_params:
+        final_url += "?" + urllib.parse.urlencode(query_params)
+
+    # Handle requestBody if it's required by the operation
+    if "requestBody" in operation:
+        content_type, body_schema = next(iter(operation["requestBody"]["content"].items()))
+        required_body_fields = list(body_schema.get("schema", {}).get("properties", {}).keys())
+        properties = body_schema.get("schema", {}).get("properties", {})
+
+        # Initialize body with default enum values if any
+        body_defaults = {
+            k: param["enum"][0] for k, param in properties.items() if "enum" in param and len(param["enum"]) == 1
+        }
+        # Update the body with parameters from parameter_dict if they are in the schema
+        body = {k: parameter_dict.get(k, body_defaults.get(k)) for k in required_body_fields}
+
+        if "application/json" in operation["requestBody"]["content"]:
+            content_type = "application/json"
+            body = {k: v for k, v in parameter_dict.items() if k in required_body_fields}
+
+        elif "application/x-www-form-urlencoded" in operation["requestBody"]["content"]:
+            content_type = "application/x-www-form-urlencoded"
+            body = {k: v for k, v in parameter_dict.items() if k in required_body_fields}
+
+    return final_url, query_params, body, content_type
 
 
 class ActionApiCallException(Exception):
@@ -81,22 +136,14 @@ async def call_action_api(
     """
 
     # Extract information from OpenAPI schema
-    base_url = openapi_schema["servers"][0]["url"]
     path, method_info = next(iter(openapi_schema["paths"].items()))
     method = next(iter(method_info.keys()))
 
     # Prepare request parameters
-    openapi_path_schema = openapi_schema.get("paths", {}).get(path, {}).get(method, {})
-    if not openapi_path_schema:
-        raise ActionApiCallException(f"Path {path} with method {method} is not found in OpenAPI schema")
+    url, query_params, body, content_type = _prepare_request_parameters(
+        openapi_schema=openapi_schema, method=method, path=path, parameter_dict=parameters
+    )
 
-    path_params, query_params, body, content_type = _prepare_request_parameters(openapi_path_schema, parameters)
-
-    # Substitute path parameters in URL
-    for key, value in path_params.items():
-        path = path.replace(f"{{{key}}}", str(value))
-
-    url = f"{base_url}{path}"
     headers = _prepare_headers(authentication, headers)
 
     # Debug
@@ -113,15 +160,14 @@ async def call_action_api(
             if os.environ.get("HTTP_PROXY_URL"):
                 request_kwargs["proxy"] = os.environ.get("HTTP_PROXY_URL")
 
-            if content_type:
-                if "application/json" in content_type.keys():
-                    request_kwargs["json"] = body
-                elif "application/x-www-form-urlencoded" in content_type.keys():
-                    request_kwargs["data"] = body
+            if content_type == "application/json":
+                request_kwargs["json"] = body
+            elif content_type == "application/x-www-form-urlencoded":
+                request_kwargs["data"] = body
 
             async with session.request(method, url, **request_kwargs) as response:
-                content_type = response.headers.get("Content-Type", "").lower()
-                if "application/json" in content_type:
+                response_content_type = response.headers.get("Content-Type", "").lower()
+                if "application/json" in response_content_type:
                     data = await response.json()
                 else:
                     data = await response.text()

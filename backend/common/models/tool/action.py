@@ -46,7 +46,7 @@ class Action(BaseModel):
         )
 
     def to_dict(self, purpose: SerializePurpose):
-        authentication_dict = self.authentication.model_dump()
+        authentication_dict = self.authentication.model_dump(exclude_none=True)
         authentication_dict.pop("encrypted")
 
         ret = {

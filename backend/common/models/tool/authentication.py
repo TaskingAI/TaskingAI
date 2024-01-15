@@ -27,9 +27,14 @@ def validate_authentication_data(data: Dict):
         if "content" not in data or data["content"] is None:
             raise ValueError("Content is required for custom authentication.")
 
-    elif data["type"] == AuthenticationType.basic or data["type"] == AuthenticationType.bearer:
+    elif data["type"] == AuthenticationType.bearer:
         if "secret" not in data or data["secret"] is None:
             raise ValueError(f'Secret is required for {data["type"]} authentication.')
+
+    elif data["type"] == AuthenticationType.basic:
+        if "secret" not in data or data["secret"] is None:
+            raise ValueError(f'Secret is required for {data["type"]} authentication.')
+        # assume the secret is a base64 encoded string
 
     elif data["type"] == AuthenticationType.none:
         data["secret"] = None
