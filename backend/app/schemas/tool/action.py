@@ -13,9 +13,9 @@ def validate_openapi_schema(schema: Dict, only_one_path_and_method: bool):
         # check exactly one server in the schema
     except Exception as e:
         if hasattr(e, "message"):
-            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Invalid openapi schema: " + e.message)
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"Invalid openapi schema: {e.message}")
         else:
-            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Invalid openapi schema")
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"Invalid openapi schema: {e}")
 
     if "servers" not in schema:
         raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="No server is found in action schema")
@@ -37,10 +37,14 @@ def validate_openapi_schema(schema: Dict, only_one_path_and_method: bool):
     for path, methods in schema["paths"].items():
         for method, details in methods.items():
             if not details.get("description") or not isinstance(details["description"], str):
-                raise_http_error(
-                    ErrorCode.REQUEST_VALIDATION_ERROR,
-                    message=f"No description is found in {method} {path} in action schema",
-                )
+                if details.get("summary") and isinstance(details["summary"], str):
+                    # use summary as its description
+                    details["description"] = details["summary"]
+                else:
+                    raise_http_error(
+                        ErrorCode.REQUEST_VALIDATION_ERROR,
+                        message=f"No description is found in {method} {path} in action schema",
+                    )
             if len(details["description"]) > 512:
                 raise_http_error(
                     ErrorCode.REQUEST_VALIDATION_ERROR,

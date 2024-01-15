@@ -1,3 +1,4 @@
+import os
 from typing import Dict
 from common.models import Authentication, AuthenticationType
 import aiohttp
@@ -36,21 +37,29 @@ def _prepare_request_parameters(openapi_path_schema, parameters):
     for param in openapi_path_schema.get("parameters", []):
         param_name = param["name"]
         param_in = param["in"]
-        if parameters:
+        param_value = None
+
+        # Check if the parameter has an enum with only one value
+        if "enum" in param["schema"] and len(param["schema"]["enum"]) == 1:
+            # Use the single enum value
+            param_value = param["schema"]["enum"][0]
+        elif parameters:
             param_value = parameters.get(param_name)
 
-            if param_in == "path" and param_value is not None:
+        if param_value is not None:
+            if param_in == "path":
                 path_params[param_name] = param_value
-            elif param_in == "query" and param_value is not None:
+            elif param_in == "query":
                 query_params[param_name] = param_value
 
+    # handle request body
     if "requestBody" in openapi_path_schema:
         content_type = openapi_path_schema["requestBody"]["content"]
         if parameters:
             if "application/json" in content_type:
-                body = parameters.get("body")
+                body = parameters
             elif "application/x-www-form-urlencoded" in content_type:
-                body = parameters.get("form")
+                body = parameters
 
     return path_params, query_params, body, content_type
 
@@ -100,6 +109,10 @@ async def call_action_api(
     try:
         async with aiohttp.ClientSession() as session:
             request_kwargs = {"params": query_params, "headers": headers}
+
+            if os.environ.get("HTTP_PROXY_URL"):
+                request_kwargs["proxy"] = os.environ.get("HTTP_PROXY_URL")
+
             if content_type:
                 if "application/json" in content_type.keys():
                     request_kwargs["json"] = body

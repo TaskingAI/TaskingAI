@@ -57,6 +57,12 @@ def _function_name(method, path, operation_id=None):
 
 
 def function_format(openapi_schema: Dict):
+    """
+    Extract function name, description and parameters from OpenAPI schema.
+    :param openapi_schema: a dict of OpenAPI schema
+    :return:
+    """
+
     # copy openapi_schema to avoid modifying the original
     openapi_dict = copy.deepcopy(openapi_schema)
 
@@ -84,6 +90,16 @@ def function_format(openapi_schema: Dict):
         name = param["name"]
         param_schema = param["schema"]
         param_schema["description"] = param.get("description", "")
+
+        # Check if the parameter has an enum with only one value
+        if "enum" in param_schema:
+            if not isinstance(param_schema["enum"], list):
+                logger.warning(f"Parameter {name} has an enum that is not a list")
+                continue
+            if len(param_schema["enum"]) == 1:
+                # Remove the enum and use the value as default
+                continue
+
         parameters_schema["properties"][name] = param_schema
         if param.get("required", False):
             parameters_schema["required"].append(name)
