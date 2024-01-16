@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field, Extra, field_validator
-from typing import Dict
-from ..utils import validate_metadata
+from pydantic import BaseModel, Field, Extra, field_validator, model_validator
+from typing import Dict, Optional
+from ..utils import validate_metadata, check_update_keys
 
 
 # ----------------------------
@@ -51,9 +51,17 @@ class ChunkCreateRequest(BaseModel):
 # ----------------------------
 # Update Chunk
 # POST /collections/{collection_id}/chunks/{chunk_id}
-class UpdateCreateRequest(BaseModel):
-    metadata: Dict[str, str] = Field(
-        {},
+class ChunkUpdateRequest(BaseModel):
+    content: Optional[str] = Field(
+        None,
+        min_length=1,
+        max_length=4096,
+        description="The record content.",
+        examples=["Record content"],
+    )
+
+    metadata: Optional[Dict[str, str]] = Field(
+        None,
         min_items=0,
         max_items=16,
         description="The record metadata. "
@@ -66,4 +74,18 @@ class UpdateCreateRequest(BaseModel):
     def validate_metadata(cls, metadata: Dict):
         return validate_metadata(metadata)
 
-    # todo: support update chunk content
+    @model_validator(mode="before")
+    def custom_validate(cls, data: Dict):
+        # check at least one field is not None
+        check_update_keys(data, ["content", "metadata"])
+
+        if data.get("text_splitter") is not None and data.get("content") is None:
+            raise ValueError("Cannot use text splitter without updating content.")
+
+        if data.get("content") is not None and data.get("text_splitter") is None:
+            raise ValueError("Cannot update content without specifying text splitter.")
+
+        if data.get("type") is not None and data.get("content") is None:
+            raise ValueError("Cannot update type without updating content.")
+
+        return data

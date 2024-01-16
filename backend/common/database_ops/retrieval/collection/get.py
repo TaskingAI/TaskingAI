@@ -1,11 +1,10 @@
 from common.database.postgres.pool import postgres_db_pool
-from common.models import Collection, SerializePurpose
-from common.database.redis import redis_object_get_object, redis_object_set_object
+from common.models import Collection
 
 
 async def get_collection(collection_id: str):
     # 1. get from redis
-    collection: Collection = await redis_object_get_object(Collection, key=collection_id)
+    collection: Collection = await Collection.get_redis(collection_id)
     if collection:
         return collection
 
@@ -19,9 +18,7 @@ async def get_collection(collection_id: str):
     # 3. write to redis and return
     if row:
         collection = Collection.build(row)
-        await redis_object_set_object(
-            Collection, key=collection_id, value=collection.to_dict(purpose=SerializePurpose.REDIS)
-        )
+        await collection.set_redis()
         return collection
 
     return None

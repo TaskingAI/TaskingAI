@@ -14,6 +14,7 @@ __all__ = [
     "create_chunk",
     "get_chunk",
     "delete_chunk",
+    "update_chunk",
 ]
 
 
@@ -165,7 +166,6 @@ async def create_chunk(
     """
     Create chunk
     :param collection_id: the collection id
-    :param record_id: the record id
     :param content: the chunk content
     :param metadata: the chunk metadata
     :return: the created chunk
@@ -234,3 +234,42 @@ async def delete_chunk(
     # delete chunk
     await db_chunk.delete_chunk(chunk=chunk)
     return
+
+
+async def update_chunk(
+    collection_id: str,
+    chunk_id: str,
+    content: str,
+    metadata: Dict[str, str],
+) -> Chunk:
+    """
+    Create chunk
+    :param collection_id: the collection id
+    :param chunk_id: the chunk id
+    :param content: the chunk content
+    :param metadata: the chunk metadata
+    :return: the created chunk
+    """
+
+    # Get collection
+    collection: Collection = await get_collection(collection_id=collection_id)
+
+    # Get model
+    embedding_model: Model = await get_model(collection.embedding_model_id)
+
+    # embed the document
+    embeddings = await embed_documents(
+        documents=[content],
+        embedding_model=embedding_model,
+        embedding_size=collection.embedding_size,
+    )
+    embedding = embeddings[0]
+
+    # create record
+    record = await db_chunk.create_chunk(
+        collection=collection,
+        content=content,
+        embedding=embedding,
+        metadata=metadata,
+    )
+    return record

@@ -1,8 +1,9 @@
 from common.database.postgres.pool import postgres_db_pool
-from common.models import Collection, Record, Chunk, RecordType, Status
+from common.models import Collection, Record, RecordType, Status
 from .get import get_record
 from typing import Dict, List
 import json
+from .utils import insert_record_chunks
 
 
 async def create_record_and_chunks(
@@ -29,38 +30,6 @@ async def create_record_and_chunks(
     # generate record id
     new_record_id = Record.generate_random_id()
 
-    # prepare chunk insert sql
-    num_chunks = len(chunk_texts)
-    chunk_table_name = Collection.get_chunk_table_name(collection.collection_id)
-
-    insert_values_sql = ", ".join(
-        [
-            f"(${i * 6 + 1}, ${i * 6 + 2}, ${i * 6 + 3}, ${i * 6 + 4}, ${i * 6 + 5}, ${i * 6 + 6})"
-            for i in range(num_chunks)
-        ]
-    )
-
-    #  prepare chunk insert params
-    params = []
-    for i in range(num_chunks):
-        new_chunk_id = Chunk.generate_random_id()
-        params.extend(
-            [
-                new_chunk_id,
-                new_record_id,
-                collection.collection_id,
-                json.dumps(chunk_embeddings[i]),
-                chunk_texts[i],
-                "{}",
-            ]
-        )
-
-    # make the final insert sql
-    insert_chunks_sql = f"""
-        INSERT INTO {chunk_table_name}(chunk_id, record_id, collection_id, embedding, content, metadata)
-        VALUES {insert_values_sql};
-    """
-
     async with postgres_db_pool.get_db_connection() as conn:
         async with conn.transaction():
             # 1. insert record into database
@@ -80,8 +49,13 @@ async def create_record_and_chunks(
             )
 
             # 2. insert chunks
-
-            await conn.execute(insert_chunks_sql, *params)
+            await insert_record_chunks(
+                conn=conn,
+                collection_id=collection.collection_id,
+                record_id=new_record_id,
+                chunk_texts=chunk_texts,
+                chunk_embeddings=chunk_embeddings,
+            )
 
             # 3. update collection stats
             await conn.execute(
@@ -94,6 +68,8 @@ async def create_record_and_chunks(
                 len(chunk_texts),
                 collection.collection_id,
             )
+
+            await collection.pop_redis()
 
     # 4. get and return
     record = await get_record(collection=collection, record_id=new_record_id)

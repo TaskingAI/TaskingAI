@@ -1,11 +1,10 @@
 from common.database.postgres.pool import postgres_db_pool
 from common.models import Collection
-from common.database.redis import redis_object_pop
 
 
 async def delete_collection(collection: Collection):
     # 1. pop from redis
-    await redis_object_pop(Collection, collection.collection_id)
+    await collection.pop_redis()
 
     async with postgres_db_pool.get_db_connection() as conn:
         async with conn.transaction():

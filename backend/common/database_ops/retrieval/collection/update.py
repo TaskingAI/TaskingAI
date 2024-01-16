@@ -3,12 +3,11 @@ from common.models import Collection
 from typing import Dict
 from common.database_ops.utils import update_object
 from .get import get_collection
-from common.database.redis import redis_object_pop
 
 
 async def update_collection(collection: Collection, update_dict: Dict):
     # 1. pop from redis
-    await redis_object_pop(Collection, collection.collection_id)
+    await collection.pop_redis()
 
     # 2. Update collection in database
     async with postgres_db_pool.get_db_connection() as conn:

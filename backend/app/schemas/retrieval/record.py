@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field, model_validator, field_validator, Extra
-from typing import Any, Dict
-from ..utils import validate_metadata, validate_list_cursors
+from typing import Dict
+from ..utils import validate_metadata, validate_list_cursors, check_update_keys
 from common.models import SortOrderEnum, RecordType
 from common.models import TextSplitter, build_text_splitter
 
@@ -45,7 +45,7 @@ class RecordListRequest(BaseModel):
 
     # after and before cannot be used at the same time
     @model_validator(mode="before")
-    def custom_validate(cls, data: Any):
+    def custom_validate(cls, data: Dict):
         return validate_list_cursors(data)
 
 
@@ -109,8 +109,35 @@ class RecordCreateRequest(BaseModel):
 # Update Record
 # POST /collections/{collection_id}/records/{record_id}
 class RecordUpdateRequest(BaseModel):
-    metadata: Dict[str, str] = Field(
-        ...,
+    type: Optional[RecordType] = Field(
+        None,
+        escription="The record type. Currently only `text` is supported.",
+    )
+
+    title: Optional[str] = Field(
+        None,
+        min_length=0,
+        max_length=256,
+        description="The record title.",
+        examples=["Record title"],
+    )
+
+    content: Optional[str] = Field(
+        None,
+        min_length=1,
+        max_length=32768,
+        description="The record content.",
+        examples=["Record content"],
+    )
+
+    text_splitter: Optional[TextSplitter] = Field(
+        None,
+        description="The text splitter indicating how to split records into chunks. "
+        "It cannot change after creation.",
+    )
+
+    metadata: Optional[Dict[str, str]] = Field(
+        None,
         min_items=0,
         max_items=16,
         description="The record metadata. "
@@ -119,9 +146,32 @@ class RecordUpdateRequest(BaseModel):
         examples=[{}],
     )
 
+    @field_validator("text_splitter", mode="before")
+    def validate_text_splitter(cls, text_splitter_dict: Dict):
+        text_splitter = build_text_splitter(text_splitter_dict)
+        if text_splitter is None:
+            raise ValueError("Invalid text splitter.")
+        return text_splitter
+
     class Config:
         extra = Extra.forbid
 
     @field_validator("metadata")
     def validate_metadata(cls, metadata: Dict):
         return validate_metadata(metadata)
+
+    @model_validator(mode="before")
+    def custom_validate(cls, data: Dict):
+        # check at least one field is not None
+        check_update_keys(data, ["title", "content", "metadata"])
+
+        if data.get("text_splitter") is not None and data.get("content") is None:
+            raise ValueError("Cannot use text splitter without updating content.")
+
+        if data.get("content") is not None and data.get("text_splitter") is None:
+            raise ValueError("Cannot update content without specifying text splitter.")
+
+        if data.get("type") is not None and data.get("content") is None:
+            raise ValueError("Cannot update type without updating content.")
+
+        return data

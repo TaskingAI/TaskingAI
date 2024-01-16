@@ -154,3 +154,26 @@ async def api_delete_chunk(
         chunk_id=chunk_id,
     )
     return BaseSuccessEmptyResponse()
+
+
+@router.post(
+    "/collections/{collection_id}/chunks/{chunk_id}",
+    tags=["Retrieval"],
+    summary="Update chunk",
+    operation_id="update_chunk",
+    response_model=BaseSuccessDataResponse,
+)
+async def api_update_chunk(
+    request: Request,
+    collection_id: str,
+    chunk_id: str,
+    data: ChunkUpdateRequest,
+    auth_info: Dict = Depends(auth_info_required),
+):
+    chunk: Chunk = await update_chunk(
+        collection_id=collection_id,
+        chunk_id=chunk_id,
+        content=data.content,
+        metadata=data.metadata,
+    )
+    return BaseSuccessDataResponse(data=chunk.to_dict(purpose=SerializePurpose.RESPONSE))

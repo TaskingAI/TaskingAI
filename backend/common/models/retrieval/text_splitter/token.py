@@ -49,7 +49,8 @@ def tiktoken_text_split(text: str, title: Optional[str], chunk_size: int, chunk_
 
     # append title to each chunk
     for i in range(len(chunks)):
-        chunks[i] = f"{title}\n\n{chunks[i]}"
+        if title:
+            chunks[i] = f"{title}\n\n{chunks[i]}"
         # chunks[i] = f"{title}\nChunk[{i+1}]/[{len(chunks)}]\n\n{chunks[i]}"
 
     return chunks

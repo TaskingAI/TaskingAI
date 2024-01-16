@@ -103,6 +103,10 @@ async def api_update_record(
     record: Record = await update_record(
         collection_id=collection_id,
         record_id=record_id,
+        title=data.title,
+        type=data.type,
+        content=data.content,
+        text_splitter=data.text_splitter,
         metadata=data.metadata,
     )
     return BaseSuccessDataResponse(data=record.to_dict(purpose=SerializePurpose.RESPONSE))

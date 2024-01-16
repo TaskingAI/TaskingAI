@@ -125,23 +125,62 @@ async def create_record(
 async def update_record(
     collection_id: str,
     record_id: str,
-    metadata: Optional[Dict[str, str]],
+    title: Optional[str],
+    type: Optional[RecordType],
+    content: Optional[str],
+    text_splitter: Optional[TextSplitter],
+    metadata: Dict[str, str],
 ) -> Record:
     # todo: support record content update
 
     """
     Update record
+    :param collection_id: the collection id
     :param record_id: the record id
-    :param metadata: the record metadata to update
-    :return: the updated record
+    :param title: the record title
+    :param type: the record type
+    :param content: the record content
+    :param text_splitter: the text splitter to split the content into chunks
+    :param metadata: the record metadata
+    :return: the created record
     """
 
     collection: Collection = await validate_and_get_collection(collection_id=collection_id)
     record: Record = await validate_and_get_record(collection=collection, record_id=record_id)
+    new_type = type if type is not None else record.type
+    new_title = title if title is not None else record.title
+
+    documents = None
+    embeddings = None
+    if content is not None:
+        # validate model
+        embedding_model: Model = await get_model(collection.embedding_model_id)
+
+        # split content into chunks
+        if new_type == RecordType.TEXT:
+            content = content.strip()
+            if not content:
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Content cannot be empty.")
+            documents = text_splitter.split_text(text=content, title=new_title)
+        else:
+            raise NotImplementedError(f"Record type {type} is not supported yet.")
+
+        # embed the documents
+        embeddings = await embed_documents(
+            documents=documents,
+            embedding_model=embedding_model,
+            embedding_size=collection.embedding_size,
+        )
+
+    # create record
     record = await db_record.update_record(
         collection=collection,
         record=record,
-        update_dict={"metadata": metadata},
+        title=title,
+        type=type,
+        chunk_texts=documents,
+        chunk_embeddings=embeddings,
+        metadata=metadata,
     )
 
     return record
@@ -167,4 +206,4 @@ async def delete_record(collection_id: str, record_id: str) -> None:
     """
     collection: Collection = await validate_and_get_collection(collection_id=collection_id)
     record: Record = await validate_and_get_record(collection, record_id)
-    await db_record.delete_record(record)
+    await db_record.delete_record(collection, record)
