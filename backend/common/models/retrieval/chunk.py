@@ -10,7 +10,7 @@ __all__ = [
 
 class Chunk(BaseModel):
     chunk_id: str
-    record_id: str
+    record_id: Optional[str]
     collection_id: str
     content: str  # todo: text content
     metadata: Dict
@@ -31,7 +31,7 @@ class Chunk(BaseModel):
     def build(cls, row: Dict):
         return cls(
             chunk_id=row["chunk_id"],
-            record_id=row["record_id"],
+            record_id=row.get("record_id"),
             collection_id=row["collection_id"],
             content=row["content"],
             metadata=load_json_attr(row, "metadata", {}),

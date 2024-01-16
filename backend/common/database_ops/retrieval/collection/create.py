@@ -52,7 +52,7 @@ async def create_collection(
                 CREATE TABLE IF NOT EXISTS {chunk_table_name} (
                     chunk_id CHAR(24) NOT NULL PRIMARY KEY,
                     collection_id CHAR(24) NOT NULL,
-                    record_id CHAR(24) NOT NULL,
+                    record_id CHAR(24),
                     content TEXT NOT NULL,
                     metadata JSONB NOT NULL DEFAULT '{{}}',
                     embedding vector({embedding_size}) NOT NULL,

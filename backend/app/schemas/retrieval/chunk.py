@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field, Extra
+from pydantic import BaseModel, Field, Extra, field_validator
+from typing import Dict
+from ..utils import validate_metadata
 
 
 # ----------------------------
@@ -17,3 +19,51 @@ class ChunkQueryRequest(BaseModel):
 
     class Config:
         extra = Extra.forbid
+
+
+# ----------------------------
+# Create Chunk
+# POST /collections/{collection_id}/chunks
+class ChunkCreateRequest(BaseModel):
+    content: str = Field(
+        ...,
+        min_length=1,
+        max_length=4096,
+        description="The record content.",
+        examples=["Record content"],
+    )
+
+    metadata: Dict[str, str] = Field(
+        {},
+        min_items=0,
+        max_items=16,
+        description="The record metadata. "
+        "It can store up to 16 key-value pairs where each key's length is less than 64 "
+        "and value's length is less than 512.",
+        examples=[{}],
+    )
+
+    @field_validator("metadata")
+    def validate_metadata(cls, metadata: Dict):
+        return validate_metadata(metadata)
+
+
+# ----------------------------
+# Update Chunk
+# POST /collections/{collection_id}/chunks/{chunk_id}
+class UpdateCreateRequest(BaseModel):
+    metadata: Dict[str, str] = Field(
+        {},
+        min_items=0,
+        max_items=16,
+        description="The record metadata. "
+        "It can store up to 16 key-value pairs where each key's length is less than 64 "
+        "and value's length is less than 512.",
+        examples=[{}],
+    )
+
+    @field_validator("metadata")
+    def validate_metadata(cls, metadata: Dict):
+        return validate_metadata(metadata)
+
+    # todo: support update chunk content

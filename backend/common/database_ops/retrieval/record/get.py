@@ -1,8 +1,19 @@
 from common.database.postgres.pool import postgres_db_pool
 from common.models import Record, Collection
+from typing import Optional
 
 
-async def get_record(collection: Collection, record_id: str):
+async def get_record(
+    collection: Collection,
+    record_id: str,
+) -> Optional[Record]:
+    """
+    Get record
+    :param collection: the collection where the record belongs to
+    :param record_id: the record id
+    :return: the record
+    """
+
     # 1. get from db
     async with postgres_db_pool.get_db_connection() as conn:
         row = await conn.fetchrow(
