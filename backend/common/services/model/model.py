@@ -3,7 +3,7 @@ from common.models import Model, ModelType, ListResult, SortOrderEnum, ModelSche
 from common.database_ops.model import model as db_model
 from .model_schema import get_model_schema, get_provider
 from common.error import ErrorCode, raise_http_error
-from common.services.inference.verify_credentials import verify_credentials
+from common.services.inference.common import verify_credentials
 from common.utils import check_http_error
 
 __all__ = [

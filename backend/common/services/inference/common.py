@@ -18,3 +18,11 @@ async def verify_credentials(
             },
         )
         return ResponseWrapper(response.status, await response.json())
+
+
+async def health_check() -> ResponseWrapper:
+    async with aiohttp.ClientSession() as session:
+        response = await session.get(
+            f"{CONFIG.TASKINGAI_INFERENCE_URL}/v1/health_check",
+        )
+        return ResponseWrapper(response.status, await response.json())

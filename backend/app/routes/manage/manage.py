@@ -9,7 +9,6 @@ logger = logging.Logger(__name__)
 router = APIRouter()
 
 
-# todo: add apikey auth
 @router.get(
     "/health_check",
     tags=["Manage"],

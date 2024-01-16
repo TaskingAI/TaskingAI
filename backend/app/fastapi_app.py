@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from app.routes import routes
 from common.error.exception_handlers import *
+from common.utils import check_http_error
 import os
 import logging
 
@@ -26,6 +27,7 @@ def create_app():
     from common.database.postgres.pool import postgres_db_pool
     from common.database.redis import redis_pool
     from common.services.auth.admin import create_default_admin_if_needed
+    from common.services.inference.common import health_check as inference_health_check
 
     app = FastAPI()
 
@@ -35,6 +37,7 @@ def create_app():
         await redis_pool.init_pool()
         await postgres_db_pool.init_pool()
         await create_default_admin_if_needed()
+        check_http_error(await inference_health_check())
 
     @app.on_event("shutdown")
     async def shutdown_event():

@@ -1,6 +1,5 @@
 # Use a specific version for reproducibility
 FROM python:3.10.12-slim
-ARG VERSION="0.0.1"
 
 # Set environment variables
 ENV PYTHONPATH=/code/ \

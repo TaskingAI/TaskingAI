@@ -5,7 +5,7 @@ from starlette.responses import StreamingResponse
 from ..utils import auth_info_required
 from typing import Dict
 from common.services.assistant.generation import NormalSession, StreamSession
-from common.services.assistant.chat import is_chat_locked
+from common.services.assistant.chat import is_chat_locked, lock_chat
 from common.error import ErrorCode, raise_http_error
 import logging
 
@@ -46,7 +46,7 @@ async def api_chat_generate(
             debug=payload.debug,
         )
         await session.prepare(stream, system_prompt_variables, retrival_log=payload.debug)
-        # todo: await lock_chat(assistant_id, chat_id)
+        await lock_chat(assistant_id, chat_id)
         return StreamingResponse(session.stream_generate(), media_type="text/event-stream")
 
     else:
@@ -55,5 +55,5 @@ async def api_chat_generate(
             chat_id=chat_id,
         )
         await session.prepare(stream, system_prompt_variables, retrival_log=False)
-        # await todo: lock_chat(assistant_id, chat_id)
+        await lock_chat(assistant_id, chat_id)
         return await session.generate()
