@@ -1,6 +1,6 @@
 from ._base import TextSplitter, TextSplitterType
 from pydantic import Field, model_validator
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from enum import Enum
 import tiktoken
 import math
@@ -8,7 +8,7 @@ import math
 tiktoken_tokenizer = tiktoken.encoding_for_model("text-embedding-ada-002")
 
 
-def tiktoken_text_split(text: str, chunk_size: int, chunk_overlap: int) -> List[str]:
+def tiktoken_text_split(text: str, title: Optional[str], chunk_size: int, chunk_overlap: int) -> List[str]:
     if not text:
         return []
 
@@ -47,6 +47,10 @@ def tiktoken_text_split(text: str, chunk_size: int, chunk_overlap: int) -> List[
         # update chunk_start
         chunk_start = chunk_end - min(chunk_overlap, chunk_size)
 
+    # append title to each chunk
+    for i in range(len(chunks)):
+        chunks[i] = f"{title}\nChunk[{i+1}]/[{len(chunks)}]\n\n{chunks[i]}"
+
     return chunks
 
 
@@ -74,9 +78,9 @@ class TokenTextSplitter(TextSplitter):
             raise ValueError("chunk_overlap must be less than or equal to chunk_size/2")
         return data
 
-    def split_text(self, text: str) -> List[str]:
+    def split_text(self, text: str, title: Optional[str]) -> List[str]:
         if self.tokenizer_type == TokenizerType.TIKTOKEN:
-            return tiktoken_text_split(text, self.chunk_size, self.chunk_overlap)
+            return tiktoken_text_split(text, title, self.chunk_size, self.chunk_overlap)
         else:
             raise NotImplementedError
 

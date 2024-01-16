@@ -72,7 +72,6 @@ async def api_create_collections(
         description=data.description,
         capacity=data.capacity,
         embedding_model_id=data.embedding_model_id,
-        text_splitter=data.text_splitter,
         metadata=data.metadata,
     )
     return BaseSuccessDataResponse(

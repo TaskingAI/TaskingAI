@@ -2,8 +2,6 @@ from typing import Optional
 from pydantic import BaseModel, Field, model_validator, field_validator, Extra
 from typing import Any, Dict
 from ..utils import check_update_keys, validate_metadata
-from common.models import TextSplitter, build_text_splitter
-from common.error import raise_http_error, ErrorCode
 
 # ----------------------------
 # Create Collection
@@ -34,12 +32,6 @@ class CollectionCreateRequest(BaseModel):
         example="A collection of project documents.",
     )
 
-    text_splitter: TextSplitter = Field(
-        None,
-        description="The text splitter indicating how to split records into chunks. "
-        "It cannot change after creation.",
-    )
-
     metadata: Dict[str, str] = Field(
         {},
         min_items=0,
@@ -61,13 +53,6 @@ class CollectionCreateRequest(BaseModel):
                 "Currently only capacity of 1000 is supported " "and we will support more options in the future."
             )
         return capacity
-
-    @field_validator("text_splitter", mode="before")
-    def validate_text_splitter(cls, text_splitter_dict: Dict):
-        text_splitter = build_text_splitter(text_splitter_dict)
-        if text_splitter is None:
-            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid text splitter.")
-        return text_splitter
 
     class Config:
         extra = Extra.forbid

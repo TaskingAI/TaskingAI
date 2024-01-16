@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field, model_validator, field_validator, Extra
 from typing import Any, Dict
 from ..utils import validate_metadata, validate_list_cursors
 from common.models import SortOrderEnum, RecordType
+from common.models import TextSplitter, build_text_splitter
 
 
 # ----------------------------
@@ -73,6 +74,12 @@ class RecordCreateRequest(BaseModel):
         examples=["Record content"],
     )
 
+    text_splitter: TextSplitter = Field(
+        ...,
+        description="The text splitter indicating how to split records into chunks. "
+        "It cannot change after creation.",
+    )
+
     metadata: Dict[str, str] = Field(
         {},
         min_items=0,
@@ -82,6 +89,13 @@ class RecordCreateRequest(BaseModel):
         "and value's length is less than 512.",
         examples=[{}],
     )
+
+    @field_validator("text_splitter", mode="before")
+    def validate_text_splitter(cls, text_splitter_dict: Dict):
+        text_splitter = build_text_splitter(text_splitter_dict)
+        if text_splitter is None:
+            raise ValueError("Invalid text splitter.")
+        return text_splitter
 
     class Config:
         extra = Extra.forbid

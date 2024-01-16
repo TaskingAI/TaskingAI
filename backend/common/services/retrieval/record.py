@@ -1,5 +1,5 @@
 from typing import Optional, Dict
-from common.models import Collection, Record, RecordType, SortOrderEnum, ListResult, Model
+from common.models import Collection, Record, RecordType, SortOrderEnum, TextSplitter, ListResult, Model
 from common.database_ops.retrieval import record as db_record
 from common.error import ErrorCode, raise_http_error
 from .collection import validate_and_get_collection
@@ -73,6 +73,7 @@ async def create_record(
     title: str,
     type: RecordType,
     content: str,
+    text_splitter: TextSplitter,
     metadata: Dict[str, str],
 ) -> Record:
     """
@@ -81,6 +82,7 @@ async def create_record(
     :param title: the record title
     :param type: the record type
     :param content: the record content
+    :param text_splitter: the text splitter to split the content into chunks
     :param metadata: the record metadata
     :return: the created record
     """
@@ -92,13 +94,11 @@ async def create_record(
     embedding_model: Model = await get_model(collection.embedding_model_id)
 
     # split content into chunks
-    documents = []
-
     if type == RecordType.TEXT:
         content = content.strip()
         if not content:
             raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Content cannot be empty.")
-        documents = collection.text_splitter.split_text(content)
+        documents = text_splitter.split_text(text=content, title=title)
     else:
         raise NotImplementedError(f"Record type {type} is not supported yet.")
 

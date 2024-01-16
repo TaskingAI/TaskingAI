@@ -1,5 +1,5 @@
 from typing import Optional, Dict
-from common.models import Collection, SortOrderEnum, ListResult, TextSplitter, ModelType
+from common.models import Collection, SortOrderEnum, ListResult, ModelType
 from common.database_ops.retrieval import collection as db_collection
 from common.error import ErrorCode, raise_http_error
 from common.services.model.model import get_model
@@ -67,7 +67,6 @@ async def create_collection(
     description: str,
     capacity: int,
     embedding_model_id: str,
-    text_splitter: TextSplitter,
     metadata: Dict[str, str],
 ) -> Collection:
     """
@@ -76,7 +75,6 @@ async def create_collection(
     :param description: the collection description
     :param capacity: the collection capacity
     :param embedding_model_id: the embedding model id
-    :param text_splitter: the text splitter
     :param metadata: the collection metadata
     :return: the created collection
     """
@@ -105,7 +103,6 @@ async def create_collection(
         capacity=capacity,
         embedding_model_id=embedding_model_id,
         embedding_size=embedding_size,
-        text_splitter=text_splitter,
         metadata=metadata,
     )
     return collection

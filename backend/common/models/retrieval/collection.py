@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing import Dict
 from common.models import Status
 from common.utils import generate_random_id, load_json_attr
-from common.models import TextSplitter, build_text_splitter
 from common.models import SerializePurpose
 
 __all__ = [
@@ -20,7 +19,6 @@ class Collection(BaseModel):
     capacity: int
     embedding_model_id: str
     embedding_size: int
-    text_splitter: TextSplitter
     status: Status
     metadata: Dict
     updated_timestamp: int
@@ -49,9 +47,6 @@ class Collection(BaseModel):
 
     @classmethod
     def build(cls, row: Dict):
-        text_splitter_dict = load_json_attr(row, "text_splitter", {"type": "token"})
-        text_splitter = build_text_splitter(text_splitter_dict)
-
         return cls(
             collection_id=row["collection_id"],
             name=row["name"],
@@ -61,7 +56,6 @@ class Collection(BaseModel):
             capacity=row["capacity"],
             embedding_model_id=row["embedding_model_id"],
             embedding_size=row["embedding_size"],
-            text_splitter=text_splitter,
             status=Status(row["status"]),
             metadata=load_json_attr(row, "metadata", {}),
             updated_timestamp=row["updated_timestamp"],
@@ -79,7 +73,6 @@ class Collection(BaseModel):
             "capacity": self.capacity,
             "embedding_model_id": self.embedding_model_id,
             "embedding_size": self.embedding_size,
-            "text_splitter": self.text_splitter.model_dump(),
             "status": self.status.value,
             "metadata": self.metadata,
             "updated_timestamp": self.updated_timestamp,

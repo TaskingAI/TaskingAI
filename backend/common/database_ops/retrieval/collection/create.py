@@ -1,5 +1,5 @@
 from common.database.postgres.pool import postgres_db_pool
-from common.models import Collection, TextSplitter, Status
+from common.models import Collection, Status
 from .get import get_collection
 from typing import Dict
 import json
@@ -14,7 +14,6 @@ async def create_collection(
     capacity: int,
     embedding_model_id: str,
     embedding_size: int,
-    text_splitter: TextSplitter,
     metadata: Dict[str, str],
 ) -> Collection:
     """
@@ -24,7 +23,6 @@ async def create_collection(
     :param capacity: the collection capacity
     :param embedding_model_id: the embedding model id
     :param embedding_size: the embedding size
-    :param text_splitter: the text splitter
     :param metadata: the collection metadata
     :return: the created collection
     """
@@ -36,8 +34,8 @@ async def create_collection(
             await conn.execute(
                 """
                 INSERT INTO collection (collection_id, name, description, capacity,
-                embedding_model_id, embedding_size, text_splitter, status, metadata)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                embedding_model_id, embedding_size, status, metadata)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             """,
                 new_id,
                 name,
@@ -45,7 +43,6 @@ async def create_collection(
                 capacity,
                 embedding_model_id,
                 embedding_size,
-                text_splitter.model_dump_json(),
                 Status.READY.value,
                 json.dumps(metadata),
             )

@@ -56,7 +56,6 @@ CREATE TABLE IF NOT EXISTS collection (
     capacity INTEGER NOT NULL,
     embedding_model_id CHAR(8) NOT NULL,
     embedding_size INTEGER NOT NULL,
-    text_splitter JSONB NOT NULL,
     status TEXT NOT NULL,
     metadata JSONB NOT NULL DEFAULT '{}',
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,

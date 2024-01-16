@@ -76,6 +76,7 @@ async def api_create_records(
         title=data.title,
         type=data.type,
         content=data.content,
+        text_splitter=data.text_splitter,
         metadata=data.metadata,
     )
     return BaseSuccessDataResponse(
