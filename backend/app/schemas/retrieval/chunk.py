@@ -78,14 +78,4 @@ class ChunkUpdateRequest(BaseModel):
     def custom_validate(cls, data: Dict):
         # check at least one field is not None
         check_update_keys(data, ["content", "metadata"])
-
-        if data.get("text_splitter") is not None and data.get("content") is None:
-            raise ValueError("Cannot use text splitter without updating content.")
-
-        if data.get("content") is not None and data.get("text_splitter") is None:
-            raise ValueError("Cannot update content without specifying text splitter.")
-
-        if data.get("type") is not None and data.get("content") is None:
-            raise ValueError("Cannot update type without updating content.")
-
         return data
