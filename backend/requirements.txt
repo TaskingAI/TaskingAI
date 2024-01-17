@@ -21,3 +21,8 @@ aioredis==2.0.1
 # retrieval
 tiktoken==0.5.2
 numpy==1.26.3
+
+# tests
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-ordering==0.6

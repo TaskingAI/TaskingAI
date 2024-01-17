@@ -11,7 +11,7 @@ async def text_embedding(
     payload = {
         "provider_id": provider_id,
         "provider_model_id": provider_model_id,
-        "credentials": credentials,
+        "encrypted_credentials": credentials,
         "input": input_text_list,
     }
     if input_type:
