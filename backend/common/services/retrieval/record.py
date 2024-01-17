@@ -176,6 +176,7 @@ async def update_record(
         record=record,
         title=title,
         type=type,
+        content=content,
         chunk_texts=documents,
         chunk_embeddings=embeddings,
         metadata=metadata,

@@ -243,7 +243,7 @@ async def update_chunk(
     metadata: Dict[str, str],
 ) -> Chunk:
     """
-    Create chunk
+    Update chunk
     :param collection_id: the collection id
     :param chunk_id: the chunk id
     :param content: the chunk content
@@ -253,6 +253,9 @@ async def update_chunk(
 
     # Get collection
     collection: Collection = await get_collection(collection_id=collection_id)
+
+    # validate chunk
+    chunk = await validate_and_get_chunk(collection=collection, chunk_id=chunk_id)
 
     # Get model
     embedding_model: Model = await get_model(collection.embedding_model_id)
@@ -265,9 +268,10 @@ async def update_chunk(
     )
     embedding = embeddings[0]
 
-    # create record
-    record = await db_chunk.create_chunk(
+    # update chunk
+    record = await db_chunk.update_chunk(
         collection=collection,
+        chunk=chunk,
         content=content,
         embedding=embedding,
         metadata=metadata,

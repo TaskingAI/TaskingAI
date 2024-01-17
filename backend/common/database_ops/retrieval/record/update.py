@@ -11,6 +11,7 @@ async def update_record(
     record: Record,
     title: Optional[str],
     type: Optional[RecordType],
+    content: Optional[str],
     chunk_texts: Optional[List[str]],
     chunk_embeddings: Optional[List[List[float]]],
     metadata: Optional[Dict],
@@ -23,6 +24,8 @@ async def update_record(
         update_dict["type"] = type.value
     if metadata is not None:
         update_dict["metadata"] = metadata
+    if content is not None:
+        update_dict["content"] = content
 
     async with postgres_db_pool.get_db_connection() as conn:
         async with conn.transaction():
