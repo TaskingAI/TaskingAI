@@ -16,6 +16,8 @@ class Model(BaseModel):
     provider_model_id: str
 
     name: str
+    type: str
+    properties: Dict
     encrypted_credentials: Dict
     display_credentials: Dict
     updated_timestamp: int
@@ -45,12 +47,21 @@ class Model(BaseModel):
 
     @classmethod
     def build(cls, row: Dict):
+        from common.services.model.model_schema import get_model_schema
+
+        model_schema_id = row["model_schema_id"]
+        model_schema = get_model_schema(model_schema_id)
+        properties = {}
+        if model_schema:
+            properties = model_schema.properties
         return cls(
             model_id=row["model_id"],
             model_schema_id=row["model_schema_id"],
             provider_id=row["provider_id"],
             provider_model_id=row["provider_model_id"],
             name=row["name"],
+            type=row["type"],
+            properties=properties,
             encrypted_credentials=load_json_attr(row, "encrypted_credentials", {}),
             display_credentials=load_json_attr(row, "display_credentials", {}),
             updated_timestamp=row["updated_timestamp"],
@@ -68,6 +79,7 @@ class Model(BaseModel):
             "provider_id": self.provider_id,
             "provider_model_id": self.provider_model_id,
             "name": self.name,
+            "type": self.type,
             "updated_timestamp": self.updated_timestamp,
             "created_timestamp": self.created_timestamp,
         }
@@ -78,6 +90,6 @@ class Model(BaseModel):
 
         elif purpose == SerializePurpose.RESPONSE:
             ret["display_credentials"] = self.display_credentials
-            ret["type"] = self.model_schema().type.value
+            ret["properties"] = self.model_schema().properties
 
         return ret

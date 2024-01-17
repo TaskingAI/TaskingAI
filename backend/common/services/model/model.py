@@ -67,7 +67,7 @@ async def list_models(
         },
         equal_filters={
             "provider_id": provider_id,
-            "model_type": model_type,
+            "type": model_type,
         },
     )
 
@@ -135,6 +135,7 @@ async def create_model(
         provider_id=model_schema.provider_id,
         provider_model_id=model_schema.provider_model_id,
         name=name,
+        type=model_schema.type,
         encrypted_credentials=encrypted_credentials,
         display_credentials=display_credentials,
     )

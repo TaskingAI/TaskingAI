@@ -43,14 +43,16 @@ def _load_data_from_files(directory_path):
 
     # sort provider by name
     providers.sort(key=lambda x: x.name)
+    provider_dict = {provider.provider_id: provider for provider in providers}
 
     # sort model schemas by provider_id, name
     model_schemas.sort(key=lambda x: (x.provider_id, x.name))
+    model_schema_dict = {model_schema.model_schema_id: model_schema for model_schema in model_schemas}
 
-    return providers, model_schemas
+    return providers, model_schemas, provider_dict, model_schema_dict
 
 
-_providers, _model_schemas = _load_data_from_files(
+_providers, _model_schemas, _provider_dict, _model_schema_dict = _load_data_from_files(
     os.path.dirname(os.path.realpath(__file__)) + "/../../../resources/data/model_schemas"
 )
 
@@ -122,7 +124,7 @@ def get_provider(provider_id: str) -> Optional[Provider]:
     :param provider_id: the provider id.
     :return: the provider or None if not found.
     """
-    return next((provider for provider in _providers if provider.provider_id == provider_id), None)
+    return _provider_dict.get(provider_id)
 
 
 def get_model_schema(model_schema_id: str) -> Optional[ModelSchema]:
@@ -132,4 +134,4 @@ def get_model_schema(model_schema_id: str) -> Optional[ModelSchema]:
     :param model_schema_id: the model schema id.
     :return: the model schema or None if not found.
     """
-    return next((schema for schema in _model_schemas if schema.model_schema_id == model_schema_id), None)
+    return _model_schema_dict.get(model_schema_id)

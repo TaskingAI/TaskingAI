@@ -37,3 +37,23 @@ class ModelSchemaListRequest(BaseModel):
     @model_validator(mode="before")
     def custom_validate(cls, data: Any):
         return validate_list_cursors(data)
+
+
+class ModelSchemaGetRequest(BaseModel):
+    model_schema_id: str = Field(
+        ...,
+        min_length=1,
+        max_length=255,
+        description="The model schema ID.",
+        examples=["openai/gpt-4"],
+    )
+
+
+class ProviderGetRequest(BaseModel):
+    provider_id: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+        description="The provider ID.",
+        examples=["openai"],
+    )

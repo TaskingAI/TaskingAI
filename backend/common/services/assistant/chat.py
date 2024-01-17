@@ -37,7 +37,6 @@ async def list_chats(
     before: Optional[str],
     offset: Optional[int],
     id_search: Optional[str],
-    name_search: Optional[str],
 ) -> ListResult:
     """
     List chats
@@ -48,7 +47,6 @@ async def list_chats(
     :param before: the cursor ID to query before
     :param offset: the offset of the query
     :param id_search: the chat ID to search for
-    :param name_search: the chat name to search for
     :return: a list of chats, total count of chats, and whether there are more chats
     """
 
@@ -73,7 +71,6 @@ async def list_chats(
         offset=offset,
         prefix_filters={
             "chat_id": id_search,
-            "name": name_search,
         },
     )
 

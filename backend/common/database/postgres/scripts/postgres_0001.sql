@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS model (
     model_schema_id TEXT NOT NULL,
     provider_id TEXT NOT NULL,
     provider_model_id TEXT NOT NULL,
+    type TEXT NOT NULL,
     name TEXT NOT NULL,
     encrypted_credentials JSONB NOT NULL,
     display_credentials JSONB NOT NULL,

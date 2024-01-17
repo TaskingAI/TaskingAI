@@ -29,7 +29,6 @@ async def api_list_chats(
         before=data.before,
         offset=data.offset,
         id_search=data.id_search,
-        name_search=data.name_search,
     )
     return BaseSuccessListResponse(
         data=[chat.to_dict(purpose=SerializePurpose.RESPONSE) for chat in chats],

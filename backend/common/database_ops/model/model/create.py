@@ -1,6 +1,6 @@
 import json
 from common.database.postgres.pool import postgres_db_pool
-from common.models import Model
+from common.models import Model, ModelType
 from .get import get_model
 from typing import Dict
 
@@ -10,6 +10,7 @@ async def create_model(
     provider_id: str,
     provider_model_id: str,
     name: str,
+    type: ModelType,
     encrypted_credentials: Dict,
     display_credentials: Dict,
 ):
@@ -20,14 +21,22 @@ async def create_model(
         await conn.execute(
             """
             INSERT INTO model (
-                model_id, model_schema_id, provider_id, provider_model_id, name, encrypted_credentials, display_credentials
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7);
+                model_id,
+                model_schema_id,
+                provider_id,
+                provider_model_id,
+                name,
+                type,
+                encrypted_credentials,
+                display_credentials
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         """,
             new_id,
             model_schema_id,
             provider_id,
             provider_model_id,
             name,
+            type.value,
             json.dumps(encrypted_credentials),
             json.dumps(display_credentials),
         )
