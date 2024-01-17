@@ -7,12 +7,12 @@ from config import CONFIG
 
 class TestAdmin:
 
-    admin_res_list = ["object", "admin_id", "username", "token", "created_timestamp", "updated_timestamp"]
-    admin_res_keys = set(admin_res_list)
+    admin_list = ["object", "admin_id", "username", "token", "created_timestamp", "updated_timestamp"]
+    admin_keys = set(admin_list)
     token = None
 
     @pytest.mark.asyncio
-    @pytest.mark.run(order=0)
+    @pytest.mark.run(order=101)
     async def test_login(self):
 
         login_data = {"username": CONFIG.DEFAULT_ADMIN_USERNAME, "password": CONFIG.DEFAULT_ADMIN_PASSWORD}
@@ -21,10 +21,10 @@ class TestAdmin:
         assert res.status_code == 200
         assert res_json.get("status") == "success"
         assert res_json.get("data").get("username") == CONFIG.DEFAULT_ADMIN_USERNAME
-        assert set(res_json.get("data").keys()) == self.admin_res_keys
+        assert set(res_json.get("data").keys()) == self.admin_keys
         TestAdmin.token = res_json.get("data").get("token")
 
-    @pytest.mark.run(order=1)
+    @pytest.mark.run(order=102)
     @pytest.mark.asyncio
     async def test_verify_token(self):
 
@@ -34,7 +34,7 @@ class TestAdmin:
         assert res_json.get("status") == "success"
         await asyncio.sleep(1)
 
-    @pytest.mark.run(order=2)
+    @pytest.mark.run(order=103)
     @pytest.mark.asyncio
     async def test_refresh_token(self):
 
@@ -43,7 +43,7 @@ class TestAdmin:
         assert res.status_code == 200
         assert res_json.get("status") == "success"
         assert res_json.get("data").get("token") != TestAdmin.token
-        assert set(res_json.get("data").keys()) == self.admin_res_keys
+        assert set(res_json.get("data").keys()) == self.admin_keys
 
         # verify token with old token
 
@@ -60,9 +60,9 @@ class TestAdmin:
         assert verify_new_token_res.status_code == 200
         assert verify_new_token_res_json.get("status") == "success"
 
-    @pytest.mark.run(order=3)
+    @pytest.mark.run(order=104)
     @pytest.mark.asyncio
-    async def test_success_logout(self):
+    async def test_logout(self):
 
         res = await logout(TestAdmin.token)
         res_json = res.json()

@@ -6,7 +6,7 @@ TaskingAI is licensed under the Apache License 2.0, with the following modificat
    - TaskingAI may be used for commercial purposes, such as backend integration or as an application development platform. However, for multi-tenant SaaS services similar to TaskingAI's service edition, written authorization is required.
    - Modification or removal of TaskingAI's logo or copyright information is prohibited.
 
-   For licensing inquiries, contact [license@taskingai.ai](mailto:license@taskingai.ai).
+   For licensing inquiries, contact [support@taskingai.ai](mailto:support@taskingai.ai).
 
 2. **Contributions:**
    - Contributors agree that their code may be subject to changes in the open-source agreement and used for commercial purposes by TaskingAI.
@@ -17,7 +17,7 @@ Other rights and restrictions follow the Apache License 2.0, which is available 
 
 The design of TaskingAI is protected by appearance patents.
 
-© 2024 TaskingAI, Inc.
+© 2024 AutoPulse, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

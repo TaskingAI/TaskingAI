@@ -48,12 +48,12 @@ class TestChat(Assistant):
             "limit": 10,
             "offset": 0,
             "order": "desc",
-            "id_search": Assistant.chat_id[:5],
-            "name_search": "My"
+            "id_search": Assistant.chat_id[:5]
         }
         res = await list_chats(Assistant.assistant_id, list_chats_data)
         assert res.status_code == 200
         assert res.json().get("status") == "success"
+        assert len(res.json().get("data")) == 1
         assert res.json().get("fetched_count") == 1
         assert res.json().get("total_count") == 1
         assert res.json().get("has_more") is False
@@ -72,6 +72,8 @@ class TestChat(Assistant):
         assert res.json().get("data").get("assistant_id") == Assistant.assistant_id
         assert set(res.json().get("data").keys()) == self.data_keys
         assert (set(res.json().get("data").get("memory").keys()).issubset(self.data_content_keys))
+        for key in update_chat_data:
+            assert res.json().get("data").get(key) == update_chat_data[key]
 
     @pytest.mark.run(order=78)
     @pytest.mark.asyncio

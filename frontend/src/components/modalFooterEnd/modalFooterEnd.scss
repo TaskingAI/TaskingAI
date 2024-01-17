@@ -1,0 +1,10 @@
+.button-footer{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+    .next-button {
+        margin-left:10px;
+        background-color:#09914f;
+        color:white;
+    }
+}

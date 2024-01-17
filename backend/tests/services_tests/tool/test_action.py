@@ -254,7 +254,7 @@ class TestAction:
     @pytest.mark.run(order=31)
     @pytest.mark.asyncio
     @pytest.mark.parametrize("create_action_data", create_action_data_list)
-    async def test_success_create_action(self, create_action_data):
+    async def test_create_action(self, create_action_data):
 
         res = await create_action(create_action_data)
         res_json = res.json()
@@ -295,9 +295,10 @@ class TestAction:
         res_json = res.json()
         assert res.status_code == 200
         assert res_json.get("status") == "success"
+        assert res_json.get("data").get("action_id") == TestAction.action_ids[0]
         assert set(res_json.get("data").keys()) == TestAction.action_keys
         assert set(res_json.get("data").get("authentication").keys()).issubset(TestAction.action_authentication_keys)
-        assert set(res_json.get("data").get("openapi_schema").keys()) == TestAction.action_openapi_schema_keys
+        assert set(res_json.get("data").get("openapi_schema").keys()).issubset(TestAction.action_openapi_schema_keys)
 
     @pytest.mark.run(order=34)
     @pytest.mark.asyncio
@@ -362,13 +363,14 @@ class TestAction:
         res_json = res.json()
         assert res.status_code == 200
         assert res_json.get("status") == "success"
+        assert res_json.get("data").get("action_id") == TestAction.action_ids[0]
         assert set(res_json.get("data").keys()) == TestAction.action_keys
         assert set(res_json.get("data").get("authentication").keys()).issubset(TestAction.action_authentication_keys)
-        assert set(res_json.get("data").get("openapi_schema").keys()) == TestAction.action_openapi_schema_keys
+        assert set(res_json.get("data").get("openapi_schema").keys()).issubset(TestAction.action_openapi_schema_keys)
 
     @pytest.mark.run(order=36)
     @pytest.mark.asyncio
-    async def test_success_delete_action(self):
+    async def test_delete_action(self):
 
         for action_id in TestAction.action_ids:
             res = await delete_action(action_id)

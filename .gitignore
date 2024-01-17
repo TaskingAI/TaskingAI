@@ -157,3 +157,9 @@ cython_debug/
 backend/.idea/
 frontend/.idea/
 backend/.env
+
+# node
+frontend/node_modules/
+
+# MacOS
+**.DS_Store

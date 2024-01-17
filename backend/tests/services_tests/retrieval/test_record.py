@@ -6,9 +6,9 @@ from tests.services_tests.retrieval import Retrieval
 
 class TestRecord(Retrieval):
 
-    data_list = ["object", 'record_id', 'collection_id',  'num_chunks', 'content',  'metadata', 'type',
-                 'updated_timestamp', 'created_timestamp', 'status', "title"]
-    data_keys = set(data_list)
+    record_list = ["object", 'record_id', 'collection_id',  'num_chunks', 'content',  'metadata', 'type',
+                   'updated_timestamp', 'created_timestamp', 'status', "title"]
+    record_keys = set(record_list)
 
     @pytest.mark.run(order=35)
     @pytest.mark.asyncio
@@ -18,6 +18,11 @@ class TestRecord(Retrieval):
             "type": "text",
             "title": "test create record",
             "content": "This is a test for create record.",
+            "text_splitter": {
+                "type": "token",
+                "chunk_size": 200,
+                "chunk_overlap": 100
+            },
             "metadata": {
                 "key1": "value1"
             }
@@ -27,10 +32,13 @@ class TestRecord(Retrieval):
         assert res.status_code == 200
         assert res_json.get("status") == "success"
         for key in create_record_data:
-            assert res_json.get("data").get(key) == create_record_data[key]
+            if key == "text_splitter":
+                continue
+            else:
+                assert res_json.get("data").get(key) == create_record_data[key]
         assert res_json.get("data").get("collection_id") == Retrieval.collection_id
         assert res_json.get("data").get("status") == "ready"
-        assert set(res_json.get("data").keys()) == self.data_keys
+        assert set(res_json.get("data").keys()) == self.record_keys
         Retrieval.record_id = res_json.get("data").get("record_id")
 
     @pytest.mark.run(order=36)
@@ -44,7 +52,7 @@ class TestRecord(Retrieval):
         assert record_res_json.get("data").get("record_id") == Retrieval.record_id
         assert record_res_json.get("data").get("collection_id") == Retrieval.collection_id
         assert record_res_json.get("data").get("status") == "ready"
-        assert set(record_res_json.get("data").keys()) == self.data_keys
+        assert set(record_res_json.get("data").keys()) == self.record_keys
 
     @pytest.mark.run(order=37)
     @pytest.mark.asyncio
@@ -53,12 +61,13 @@ class TestRecord(Retrieval):
             "limit": 10,
             "offset": 0,
             "order": "desc",
-            "id_search": Retrieval.record_id[:5]
+            "id_search": Retrieval.record_id[:8]
         }
         list_records_res = await list_records(Retrieval.collection_id, list_records_data)
         list_records_res_json = list_records_res.json()
         assert list_records_res.status_code == 200
         assert list_records_res_json.get("status") == "success"
+        assert len(list_records_res_json.get("data")) == 1
         assert list_records_res_json.get("fetched_count") == 1
         assert list_records_res_json.get("total_count") == 1
         assert list_records_res_json.get("has_more") is False
@@ -67,8 +76,16 @@ class TestRecord(Retrieval):
     @pytest.mark.asyncio
     async def test_update_record(self):
         update_record_data = {
+            "type": "text",
+            "title": "test update record",
+            "content": "This is a test for update record.",
+            "text_splitter": {
+                "type": "token",
+                "chunk_size": 500,
+                "chunk_overlap": 200
+            },
             "metadata": {
-                "key2": "value2"
+                "key": "value"
             }
         }
         res = await update_record(Retrieval.collection_id, Retrieval.record_id, update_record_data)
@@ -78,11 +95,14 @@ class TestRecord(Retrieval):
         assert res_json.get("data").get("record_id") == Retrieval.record_id
         assert res_json.get("data").get("collection_id") == Retrieval.collection_id
         assert res_json.get("data").get("status") == "ready"
-        assert set(res_json.get("data").keys()) == self.data_keys
+        assert set(res_json.get("data").keys()) == self.record_keys
         for key in update_record_data:
-            assert res_json.get("data").get(key) == update_record_data[key]
+            if key == "text_splitter":
+                continue
+            else:
+                assert res_json.get("data").get(key) == update_record_data[key]
 
-    @pytest.mark.run(order=40)
+    @pytest.mark.run(order=49)
     @pytest.mark.asyncio
     async def test_delete_record(self):
 

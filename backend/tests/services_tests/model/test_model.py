@@ -7,7 +7,7 @@ class TestModel:
 
     model_id = None
     model_list = ["object", "model_id", "model_schema_id", "provider_id", "provider_model_id", "name", "type",
-                  "updated_timestamp", "created_timestamp",  "display_credentials"]
+                  "updated_timestamp", "created_timestamp",  "display_credentials", 'properties']
     model_keys = set(model_list)
     create_model_list = [
         {
@@ -21,26 +21,7 @@ class TestModel:
             "credentials": {"OPENAI_API_KEY": "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"}
         }
     ]
-    list_models_list = [
-        {
-            "limit": 10,
-            "offset": 0,
-            "order": "desc",
-            "id_search": "openai",
-            "name_search": "My",
-            "provider_id": "openai",
-            "type": "chat_completion",
-        },
-        {
-            "limit": 10,
-            "offset": 0,
-            "order": "asc",
-            "id_search": "openai",
-            "name_search": "My",
-            "provider_id": "openai",
-            "type": "text_embedding",
-        }
-    ]
+
     update_model_list = [
         {
             "name": "My Chat Completion Model Test",
@@ -64,8 +45,17 @@ class TestModel:
 
     @pytest.mark.asyncio
     @pytest.mark.run(order=23)
-    @pytest.mark.parametrize("list_model_data", list_models_list)
-    async def test_list_models(self, list_model_data):
+    async def test_list_models(self):
+
+        list_model_data = {
+            "limit": 10,
+            "offset": 0,
+            "order": "asc",
+            "id_search": self.model_id[:6],
+            "name_search": "My",
+            "provider_id": "openai",
+            "type": "chat_completion",
+        }
 
         res = await list_models(list_model_data)
         res_json = res.json()

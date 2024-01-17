@@ -1,0 +1,154 @@
+.drawer-assistant {
+    width: 100%;
+
+    .name-prompt {
+        // font-weight: bold;
+        font-size: 16px;
+        font-family: Inter;
+        color: #2b2b2b;
+        margin: 24px 24px 10px 24px;
+    }
+
+    .input {
+        margin: 0 24px;
+        width: calc(100% - 48px) !important;
+    }
+
+    .desc-prompt {
+        font-weight: bold;
+        margin-bottom: 3px;
+        margin-top: 20px;
+    }
+
+    .input-double {
+        display: flex;
+        justify-content: space-between;
+        margin: 8px 24px 0 24px;
+
+        .ant-input-number {
+            width: 49%;
+        }
+    }
+
+    .ant-select {
+        width: 100%;
+    }
+
+    .desc-retrieval {
+        // font-weight: bold;
+        color: #2b2b2b;
+        margin: 24px 24px 3px 24px;
+        font-size: 16px;
+        line-height: 20px;
+        font-size: 16px;
+        font-family: Inter;
+
+    }
+
+    .span {
+        color: #ec1943;
+    }
+
+    .label {
+        position: relative;
+        font-size: 16px;
+        line-height: 20px;
+        // font-weight: 600;
+        font-family: Inter;
+        text-align: left;
+        color: #2b2b2b;
+        margin: 20px 24px 10px 24px !important;
+    }
+
+
+    .label-desc {
+        width: calc(100% - 48px) !important;
+        position: relative;
+        font-size: 14px;
+        line-height: 20px;
+        font-family: Inter;
+        color: #777777;
+        text-align: left;
+        display: inline-block;
+        margin: 0 24px 10px 24px;
+
+        .referToThe {
+            text-decoration: underline;
+        }
+
+        .referToTheDocumentationFor {
+            color: #777777;
+        }
+
+    }
+
+    .hr {
+        border: 1px solid #e4e4e4;
+        margin: 24px -10px 0 0;
+    }
+
+    .input-bottom {
+        margin-bottom: 24px;
+    }
+
+    .add-bottom {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 24px 0 24px;
+
+        .ant-btn {
+            width: 50px;
+            padding: 0 !important;
+            border: none;
+box-shadow: none;
+            .ant-btn-icon {
+                // margin-inline-end: 0 !important;
+                margin-right: 6px;
+            }
+        }
+
+        .ant-btn:hover {
+            // background-color: white !important;
+            border: none !important;
+            color: #087443 !important;
+        }
+
+        .ant-btn:focus {
+            background-color: white !important;
+            border-color: #087443 !important;
+            box-shadow: none !important;
+            outline: none !important;
+            color: #2b2b2b !important;
+        }
+
+        .ant-btn:visited {
+            background-color: white !important;
+            border: none !important;
+        }
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .input-map {
+        width: calc(100% - 48px) !important;
+        display: flex;
+        margin: 0 24px;
+        align-items: center;
+        justify-content: space-between;
+
+        .select {
+            width: 20%;
+            margin-top: 8px;
+        }
+
+        .inputs {
+            width: 95%;
+            margin-top: 8px;
+
+        }
+    }
+}

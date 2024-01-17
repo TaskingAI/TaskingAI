@@ -1,0 +1,440 @@
+.retrieval {
+    background-color: white;
+    height: 100%;
+
+    .ant-spin-nested-loading {
+        height: 100% !important;
+        // overflow: hidden;
+    }
+
+    .craftingThePerfect1 {
+        // width: 100%;
+        padding: 20px;
+        position: relative;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 500;
+        font-family: Inter;
+        color: #777;
+        text-align: left;
+        display: inline-block;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e4e4e4;
+    }
+
+    // .header-prompts {
+    //     display: flex;
+    //     justify-content: flex-end;
+    //     margin-top: 24px;
+    //     // .form {
+    //     //     display: flex;
+    //     // }
+
+    //     .plusParent {
+    //         display: flex;
+    //         margin-bottom: 24px;
+    //         margin-right: 24px;
+
+    //         .arrowSyncParent {
+    //             height: 100%;
+    //             position: relative;
+    //             border-radius: 8px;
+    //             border: 1px solid #e4e4e4;
+    //             box-sizing: border-box;
+    //             // width: 100%;
+    //             display: flex;
+    //             flex-direction: row;
+    //             align-items: center;
+    //             justify-content: center;
+    //             padding: 12px;
+    //             cursor: pointer;
+    //         }
+    //         .arrowSyncParent:hover {
+    //             background-color: #f5f5f5;
+    //         }
+    //         .prompt-button {
+    //             background-color: #099250;
+    //             color: white;
+    //             margin-left: 10px;
+    //             height: 40px;
+    //         }
+    //         .prompt-button:hover{
+    //             color: #fff !important;
+    //             cursor: pointer;
+    //             background-color: #2ea26a;
+    //             border:1px solid transparent;
+    //         }
+    //     }
+    // }
+
+
+}
+
+.retrieval-model {
+    :global {
+        .ant-modal-body {
+            padding: 0 24px;
+        }
+
+        .ant-modal-footer {
+            // padding: 0 24px;
+            height: 70px;
+            // display: block;
+            text-align: start;
+       
+            // div{
+            //     display: flex;
+            //     align-items: center;
+            //     justify-content: space-between;
+            // }
+        }
+    }
+    .cancelButton{
+        margin-right: 10px;
+    }
+}
+
+.a {
+    margin-right: 10px
+}
+
+.drawer-retrievals {
+    :global {
+        .ant-drawer-header-title {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: center;
+
+            .ant-drawer-close {
+                margin-inline-end: 0px;
+            }
+        }
+
+        .ant-drawer-body {
+            padding: 0px;
+            overflow-x: hidden;
+        }
+
+        .ant-drawer-footer {
+            height: 70px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 8px 0;
+        }
+    }
+
+
+    .drawer-retrieval {
+        .name-prompt {
+            margin-bottom: 3px;
+            margin: 24px 0 10px 24px !important;
+            font-size: 16px;
+        }
+
+        .input {
+            margin: 0 24px 10px 24px !important;
+            width: calc(100% - 48px) !important;
+        }
+
+        .desc-prompt {
+            margin: 20px 24px 3px 24px !important;
+            font-size: 16px;
+        }
+
+        .hr {
+            border-bottom: 1px solid #e4e4e4;
+            height: 1px;
+            margin: 24px -10px 0 0;
+        }
+
+        .span {
+            color: #ec1943;
+        }
+
+        .ant-select {
+            width: 100%;
+        }
+
+        .label {
+            position: relative;
+            font-size: 16px;
+            line-height: 20px;
+            font-family: Inter;
+            text-align: left;
+            color: #2b2b2b;
+            margin: 20px 24px 10px 24px;
+        }
+
+        .ant-input-number {
+            width: 100%;
+        }
+
+        .input-number {
+            margin-bottom: 24px !important;
+        }
+
+        .label-desc {
+            width: calc(100% - 48px) !important;
+            position: relative;
+            font-size: 14px;
+            line-height: 20px;
+            font-family: Inter;
+            color: #777777;
+            text-align: left;
+            display: inline-block;
+            margin: 0 24px 10px 24px;
+
+            .referToThe {
+                text-decoration: underline;
+            }
+
+            .referToTheDocumentationFor {
+                color: #777777;
+            }
+
+        }
+
+        .add-bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+
+            .ant-btn {
+                width: 50px;
+                padding: 0 !important;
+                border: none;
+
+                .ant-btn-icon {
+                    margin-inline-end: 0 !important;
+                }
+            }
+
+            .ant-btn:hover {
+                background-color: white !important;
+                border: none !important;
+                color: black !important;
+            }
+
+            .ant-btn:active {
+                background-color: white !important;
+                border: none !important;
+            }
+
+            .ant-btn:visited {
+                background-color: white !important;
+                border: none !important;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .input-map {
+            // margin-bottom: 10px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .input {
+                margin-top: 8px;
+                width: 95%;
+            }
+        }
+    }
+}
+
+.desc-completion-model {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+    font-family: Inter;
+    color: #ec1943 !important;
+    text-align: left;
+}
+
+.retrieval {
+    .spinloading {
+        padding: 0 24px;
+        height: 100% !important;
+
+        :global {
+            .ant-spin-container {
+                height: 100%;
+            }
+        }
+    }
+}
+
+.table-custom {
+    height: 100%;
+
+    .ant-spin-nested-loading {
+        height: 100% !important;
+    }
+
+    border: 1px solid #eee !important;
+    border-radius: 8px !important;
+    margin-bottom: 30px;
+
+}
+
+.ant-table-empty {
+    .ant-table-content {
+        border: 1px solid #eee;
+        border-radius: 8px;
+    }
+
+    .ant-table-cell {
+        border: none !important;
+    }
+}
+
+.img-icon-close {
+    height: 27px;
+}
+
+.table-edit-icon {
+    border: 1px solid #e4e4e4;
+    padding: 8px;
+    height: 34px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    .edit-icon {
+        display: none;
+    }
+}
+
+.table-edit-icon:hover {
+    background-color: #f5f5f5;
+    position: relative;
+
+    .edit-icon {
+        position: absolute;
+        border: 1px solid #e4e4e4;
+        display: block;
+        bottom: 35px;
+        padding: 2px 8px;
+        border-radius: 8px;
+        color: #777;
+        background-color: #fff;
+        left: -6px;
+    }
+}
+
+.drawer-inner-table {
+    :global {
+        .ant-drawer-body {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            overflow: hidden !important;
+
+            .ant-spin-nested-loading {
+                height: 100% !important;
+
+                .ant-spin-container {
+                    height: 100% !important;
+                    overflow: hidden;
+
+                    .modal-table {
+                        height: calc(100% - 34px) !important;
+                        overflow: hidden;
+
+                        .table-border {
+                            height: calc(100% - 56px) !important;
+
+                            .ant-table-wrapper {
+                                height: calc(100% - 51px) !important;
+
+                                .ant-spin-nested-loading {
+                                    min-height: 100% !important;
+                                    height: 100% !important;
+
+                                    .ant-spin-container {
+                                        min-height: 100% !important;
+                                        height: 100% !important;
+
+                                        .ant-table {
+                                            min-height: 96% !important;
+                                            height: 95% !important;
+
+                                            .ant-table-container {
+                                                min-height: 100% !important;
+                                                height: 100% !important;
+
+                                                .ant-table-body {
+                                                    min-height: calc(100% - 55px) !important;
+                                                    height: calc(100% - 55px) !important;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    .ant-drawer-body {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        overflow: hidden !important;
+
+        .ant-spin-nested-loading {
+            height: 100% !important;
+
+            .ant-spin-container {
+                height: 100% !important;
+                overflow: hidden;
+
+                .modal-table {
+                    height: calc(100% - 34px) !important;
+                    overflow: hidden;
+
+                    .table-border {
+                        height: calc(100% - 56px) !important;
+
+                        .ant-table-wrapper {
+                            height: calc(100% - 51px) !important;
+
+                            .ant-spin-nested-loading {
+                                min-height: 100% !important;
+                                height: 100% !important;
+
+                                .ant-spin-container {
+                                    min-height: 100% !important;
+                                    height: 100% !important;
+
+                                    .ant-table {
+                                        min-height: 96% !important;
+                                        height: 95% !important;
+
+                                        .ant-table-container {
+                                            min-height: 100% !important;
+                                            height: 100% !important;
+
+                                            .ant-table-body {
+                                                min-height: calc(100% - 55px) !important;
+                                                height: calc(100% - 55px) !important;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,71 @@
+.create-project {
+    padding: 0 !important;
+
+    .ant-modal-content {
+        .ant-modal-header {
+            .title {
+                position: relative;
+                font-size: 18px;
+                font-weight: 500;
+                font-family: Inter;
+                color: #2b2b2b;
+                text-align: left;
+
+            }
+        }
+    }
+
+    .ant-modal-body {
+        padding: 24px !important;
+
+        .required-label {
+            position: relative;
+            font-size: 16px;
+            line-height: 20px;
+            font-family: Inter;
+            text-align: left;
+            color: #2b2b2b;
+
+            .required-span {
+                color: #ec1943;
+            }
+        }
+
+        .project-indu {
+            width: 100%;
+            position: relative;
+            font-size: 14px;
+            line-height: 20px;
+            font-family: Inter;
+            color: #777;
+            text-align: left;
+            display: inline-block;
+        }
+.input{
+    margin-bottom: 24px;
+}
+        .required-label-two {
+            margin-top: 24px;
+        }
+
+        .project-indu-model {
+            margin: 6px 0;
+        }
+
+        .ant-input {
+            width: 100%;
+            // margin: 10px 0 20px 0;
+        }
+
+        .ant-input-textarea-affix-wrapper {
+            height: auto !important;
+            width: 100% !important;
+        }
+    }
+}
+
+
+
+
+
+

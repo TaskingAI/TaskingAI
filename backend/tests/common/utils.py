@@ -1,7 +1,7 @@
 import requests
 from typing import Dict
 
-from tests.config import HOST
+from tests.config import HOST, WEB_SERVICE_PORT, API_SERVICE_PORT
 from config import CONFIG
 
 
@@ -19,11 +19,24 @@ def get_headers(token):
 
 
 def get_token():
-
-    app_base_url = f"{HOST}:{CONFIG.SERVICE_PORT}{CONFIG.APP_ROUTE_PREFIX}"
+    app_base_url = f"{HOST}:{WEB_SERVICE_PORT}{CONFIG.WEB_ROUTE_PREFIX}"
     login_data = {"username": CONFIG.DEFAULT_ADMIN_USERNAME, "password": CONFIG.DEFAULT_ADMIN_PASSWORD}
     response = requests.post(f"{app_base_url}/admins/login", json=login_data)
     return response.json()['data']['token']
 
 
 Token = get_token()
+
+
+def get_apikey():
+    app_base_url = f"{HOST}:{WEB_SERVICE_PORT}{CONFIG.WEB_ROUTE_PREFIX}"
+    create_apikey_res = requests.post(f"{app_base_url}/apikeys", headers=get_headers(Token),
+                                      json={"name": "test_apikey"})
+    apikey_id = create_apikey_res.json()['data']['apikey_id']
+    apikey_res = requests.get(f"{app_base_url}/apikeys/{apikey_id}", headers=get_headers(Token),
+                              params={"plain": True})
+    return apikey_res.json()['data']['apikey']
+
+
+if CONFIG.API:
+    APIKEY = get_apikey()

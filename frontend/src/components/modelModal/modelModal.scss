@@ -1,0 +1,598 @@
+.create-model-one {
+    .ant-modal-content {
+        .ant-modal-body {
+            height: 626px;
+            padding: 0 0 0 24px;
+
+            .ant-spin-nested-loading {
+                height: 100%;
+
+                .ant-spin-container {
+                    height: 100%;
+                }
+            }
+        }
+    }
+
+}
+
+.create-model {
+    display: flex;
+    height: 100%;
+
+    .left {
+        width: 255px;
+        padding-top: 24px;
+        border-right: 1px solid #e4e4e4;
+        height: calc(100% - 24px);
+
+        .modal-provider {
+            width: 100%;
+            margin-bottom: 24px;
+            position: relative;
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: 600;
+            font-family: Inter;
+            color: #2b2b2b;
+            text-align: left;
+            display: inline-block;
+
+        }
+
+        .provider {
+            display: flex;
+            height: 24px;
+            padding: 12px;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-right: 24px;
+            margin-bottom: 4px;
+
+            .name {
+                margin-left: 5px
+            }
+        }
+
+        .select-provider {
+            background-color: #f3f8f6;
+        }
+
+        .provider:hover {
+            background-color: rgba(0, 0, 0, 0.06);
+        }
+
+        .select-provider:hover {
+            background-color: #f3f8f6;
+        }
+    }
+
+    .right {
+        width: 300px;
+        border-left: 1px solid #e4e4e4;
+
+        .chat-name {
+            // width: 100%;
+            position: relative;
+            padding-top: 24px;
+            padding-left: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e4e4e4;
+            font-size: 16px;
+            margin-bottom: 24px;
+            line-height: 20px;
+            font-weight: 600;
+            font-family: Inter;
+            color: #2b2b2b;
+        }
+
+        .content {
+            padding-left: 24px;
+            border-bottom: 1px solid #e4e4e4;
+            padding-bottom: 24px;
+
+            .label3 {
+                align-self: stretch;
+                position: relative;
+                margin-bottom: 8px;
+            }
+
+            .modelproviderIcon {
+                position: relative;
+                width: 16px;
+                height: 16px;
+                overflow: hidden;
+                flex-shrink: 0;
+            }
+
+            .openai {
+                position: relative;
+            }
+
+            .modelproviderParent {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                margin-bottom: 24px;
+                gap: 6px;
+            }
+
+            .chatCompletion {
+                position: relative;
+                line-height: 24px;
+                font-weight: 500;
+            }
+
+            .modeltypetag {
+                position: relative;
+                border-radius: 8px;
+                background-color: #fff;
+                border: 1px solid #e4e4e4;
+                // width: calc(100% - 24px);
+                padding: 5px 12px;
+                text-align: left;
+                font-size: 14px;
+                color: #087443;
+                font-family: Inter;
+            }
+        }
+
+        .feature {
+            padding-top: 24px;
+            padding-left: 24px;
+
+            .lable3 {
+                position: relative;
+                font-size: 16px;
+                line-height: 20px;
+                font-weight: 600;
+                font-family: Inter;
+                color: #2b2b2b;
+                text-align: left;
+                margin-bottom: 8px;
+
+            }
+
+            .stream {
+                position: relative;
+            }
+
+            .instanceChild {
+                align-self: stretch;
+                position: relative;
+                border-right: 1px solid #e4e4e4;
+                box-sizing: border-box;
+                width: 1px;
+            }
+
+            .on {
+                position: relative;
+                color: #2b2b2b;
+            }
+
+            .streamParent {
+                border-radius: 8px;
+                border: 1px solid #e4e4e4;
+                box-sizing: border-box;
+                height: 24px;
+                line-height: 15px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 0px 4px;
+                gap: 3px;
+            }
+
+            .instanceParent {
+                width: 100%;
+                position: relative;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 6px;
+                text-align: left;
+                font-size: 12px;
+                color: #777;
+                font-family: Inter;
+            }
+
+
+        }
+    }
+
+    .center {
+        width: 720px;
+        margin-top: 24px;
+        padding-top: 24px;
+        margin: 0 24px 0 24px;
+        position: relative;
+
+        .ant-spin-nested-loading {
+            .ant-spin-container {
+
+                .img-model {
+                    height: 580px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                }
+
+
+            }
+        }
+
+        .ant-pagination {
+            position: absolute;
+            bottom: 24px;
+            left: 0;
+            right: 0;
+
+        }
+    }
+
+    .label {
+        position: relative;
+        line-height: 20px;
+        font-weight: 600;
+    }
+
+    .inputWithLabel1 {
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        text-align: left;
+        font-size: 16px;
+        color: #2b2b2b;
+        font-family: Inter;
+    }
+
+}
+
+.card-map {
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .modelproviderIcon {
+        position: relative;
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .openaigpt4 {
+        position: relative;
+        font-weight: 500;
+    }
+
+    .modelproviderParent {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 5px;
+    }
+
+    .frameDiv {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .frameWrapper {
+        align-self: stretch;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .providermodelcardInner {
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .chatCompletion {
+        position: relative;
+        line-height: 24px;
+        font-weight: 500;
+    }
+
+    .frameIcon1 {
+        position: relative;
+        width: 24px;
+        height: 24px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .chatCompletionParent {
+        align-self: stretch;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        color: #777;
+    }
+
+    .providermodelcard {
+        position: relative;
+        border-radius: 5px;
+        background-color: #fff;
+        border: 2px solid #eee;
+        box-sizing: border-box;
+        width: 48%;
+        margin-bottom: 10px;
+        overflow: hidden;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 12px;
+        gap: 5px;
+        height: 92px;
+        text-align: left;
+        font-size: 14px;
+        color: #2b2b2b;
+        font-family: Inter;
+    }
+
+    .providermodelcard:hover {
+        background-color: #eee;
+        cursor: pointer;
+
+        .anticon {
+            transform: translateX(5px);
+            transition: transform 0.3s ease;
+        }
+    }
+
+    .providermodelcard:not(:hover) .anticon {
+        transform: translateX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .providermodelcardInner1 {
+        border: 2px solid #087443;
+    }
+
+}
+
+.second-modals {
+    position: relative;
+
+    .hr {
+        position: absolute;
+        // width: 100%;
+        left: -20px;
+        right: -20px;
+        height: 1px;
+        background-color: #eee;
+        line-height: 1;
+    }
+
+    .frameParent {
+        align-self: stretch;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        margin: 6px 0 20px 0 !important;
+    }
+
+    .input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .basicInformation {
+        position: relative;
+        font-size: 18px;
+        line-height: 32px;
+        font-family: Inter;
+        color: #2b2b2b;
+        text-align: left;
+
+    }
+
+    .label {
+        position: relative;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 600;
+        font-family: Inter;
+        color: #2b2b2b;
+        text-align: left;
+    }
+
+    .modelproviderIcon {
+        position: relative;
+        width: 18px;
+        height: 18px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .openai {
+        position: relative;
+        font-weight: 500;
+    }
+
+    .modelproviderParent {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 5px;
+    }
+
+    .frameParent {
+        flex: 1;
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        text-align: left;
+        font-size: 14px;
+        color: #2b2b2b;
+        font-family: Inter;
+    }
+
+    .label-name {
+        position: relative;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 600;
+        font-family: Inter;
+        text-align: left;
+        color: #2b2b2b;
+
+        .span {
+            color: #ec1943;
+        }
+    }
+
+    .label-desc {
+        width: 100%;
+        position: relative;
+        font-size: 14px;
+        line-height: 20px;
+        font-family: Inter;
+        color: #777;
+        text-align: left;
+        display: inline-block;
+    }
+
+    .credentials {
+        position: relative;
+        font-size: 18px;
+        line-height: 32px;
+        font-family: Inter;
+        color: #2b2b2b;
+        text-align: left;
+        margin-top: 48px;
+        display: block;
+    }
+
+    .inputWithLabel1 {
+        flex: 1;
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 8px;
+        text-align: left;
+        font-size: 16px;
+        color: #2b2b2b;
+        font-family: Inter;
+
+        .span {
+            font-weight: 600;
+            color: #ec1943;
+        }
+
+        .label {
+            position: relative;
+            line-height: 20px;
+        }
+
+        .label1 {
+            align-self: stretch;
+            position: relative;
+            font-size: 14px;
+            line-height: 20px;
+            color: #777;
+        }
+    }
+}
+
+
+
+.second-form {
+    .form-item {
+        margin-bottom: 0;
+    }
+
+    .ant-form-item-control-input {
+        height: auto;
+
+        .ant-form-item-control-input-content {
+            height: auto;
+        }
+    }
+
+    #AZURE_OPENAI_API_KEY {
+        height: 100%;
+    }
+
+    .description {
+        width: 100%;
+        position: relative;
+        font-size: 14px;
+        line-height: 20px;
+        font-family: Inter;
+        color: #777;
+        text-align: left;
+        display: inline-block;
+    }
+}
+
+.modal-content {
+    .ant-modal-content {
+        // max-height: 800px;
+        // overflow: auto;
+
+        .ant-modal-body {
+            // max-height: 660px;
+            padding: 24px;
+
+            // overflow: auto;
+            .input-form {
+                // height: 130px;
+
+                .ant-form-item {
+                    height: 100%;
+
+                    .ant-form-item-row {
+                        // height: 100%;
+                        flex-wrap: wrap !important;
+                        width: 100%;
+
+                        .ant-form-item-control-input {
+                            height: 100%;
+
+                            .ant-form-item-control-input-content {
+                                height: 100% !important;
+                            }
+                        }
+                    }
+                }
+
+                .ant-form-item-required {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}

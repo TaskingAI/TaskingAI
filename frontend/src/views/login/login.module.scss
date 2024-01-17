@@ -1,0 +1,130 @@
+.login {
+    border: 2px solid #eee;
+    padding: 36px;
+    margin: auto;
+    min-width: 540px;
+    border-radius: 16px;
+    font-family: var(--text-single-100-regular);
+    .social_btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e4e4e4;
+        border-radius: 6px;
+        height: 38px;
+        cursor: pointer;
+        margin-top: 12px;
+        font-size: 16px;
+        font-family: Inter;
+        color: #2b2b2b;
+
+        .social-icon {
+            margin-right: 8px;
+        }
+    }
+
+    .social_btn:hover {
+        color: #2b2b2b;
+        border: 1px solid transparent;
+        background-color: #eee;
+    }
+
+    .img {
+        height: 20px;
+        width: 20px;
+    }
+
+    .submit-btn {
+        text-align: center;
+        background-color: #09914f;
+        width: 100%;
+        height: 40px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        box-shadow: rgba(16, 24, 40, 0.05) 0px 1px 2px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: initial;
+        border-image: initial;
+        border-radius: 8px;
+        gap: 8px;
+        margin: auto;
+        padding: 12px 18px;
+        color: #fff;
+        font-family: "Inter", Helvetica;
+        font-weight: 600;
+    }
+
+    .submit-btn:hover {
+        opacity: 0.9;
+        color: white !important;
+        border: none !important;
+    }
+
+    .welCome-font {
+        position: relative;
+        font-size: 24px;
+        line-height: 29px;
+        font-family: Inter;
+        font-weight: bold;
+        color: #2b2b2b;
+        text-align: left;
+        margin-top: 18px;
+        margin-bottom: 24px;
+    }
+
+
+    .account {
+        text-align: center;
+        height: 30px;
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    .img-google {
+        width: 20px;
+        height: 20px;
+    }
+
+    .ai-header {
+        display: flex;
+        align-items: center;
+
+        .img-ai {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px
+        }
+    }
+
+    .rememeber {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 30px;
+    }
+
+    .forgot-pass {
+        color: #333;
+        text-decoration: underline;
+
+    }
+
+    .forgot-pass:hover {
+        color: #09914f;
+        text-decoration: underline;
+    }
+
+    .vertification-code {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .input-edit {
+        height: 38px;
+    }
+
+
+}

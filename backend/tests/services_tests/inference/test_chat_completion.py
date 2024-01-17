@@ -6,6 +6,8 @@ from tests.services_api.model.model import create_model
 
 class TestChatCompletion:
 
+    chat_completion_model_id = None
+
     @pytest.mark.run(order=31)
     @pytest.mark.asyncio
     async def test_chat_completion_by_normal(self):
@@ -18,10 +20,10 @@ class TestChatCompletion:
 
         create_chat_completion_model_res = await create_model(create_chat_completion_model_data)
         create_chat_completion_model_res_json = create_chat_completion_model_res.json()
-        chat_completion_model_id = create_chat_completion_model_res_json.get("data").get("model_id")
+        TestChatCompletion.chat_completion_model_id = create_chat_completion_model_res_json.get("data").get("model_id")
 
         chat_completion_data = {
-                                "model_id": chat_completion_model_id,
+                                "model_id": self.chat_completion_model_id,
                                 "messages": [
                                     {
                                         "role": "user",
@@ -43,21 +45,12 @@ class TestChatCompletion:
         assert res_json.get("data").get("message").get("content") is not None
         assert res_json.get("data").get("message").get("function_calls") is None
 
-    @pytest.mark.run(order=31)
+    @pytest.mark.run(order=32)
     @pytest.mark.asyncio
     async def test_chat_completion_by_normal_function_call(self):
-        create_chat_completion_model_data = {
-            "model_schema_id": "openai/gpt-3.5-turbo",
-            "name": "My Language Model",
-            "credentials": {"OPENAI_API_KEY": "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"}
-        }
-
-        create_chat_completion_model_res = await create_model(create_chat_completion_model_data)
-        create_chat_completion_model_res_json = create_chat_completion_model_res.json()
-        chat_completion_model_id = create_chat_completion_model_res_json.get("data").get("model_id")
 
         chat_completion_data = {
-                                "model_id": chat_completion_model_id,
+                                "model_id": self.chat_completion_model_id,
                                 "messages": [
                                     {
                                         "role": "user",
@@ -101,21 +94,12 @@ class TestChatCompletion:
         assert res_json.get("data").get("message").get("content") is None
         assert res_json.get("data").get("message").get("function_calls") is not None
 
-    @pytest.mark.run(order=31)
+    @pytest.mark.run(order=33)
     @pytest.mark.asyncio
     async def test_chat_completion_by_normal_function_call_result(self):
-        create_chat_completion_model_data = {
-            "model_schema_id": "openai/gpt-3.5-turbo",
-            "name": "My Language Model",
-            "credentials": {"OPENAI_API_KEY": "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"}
-        }
-
-        create_chat_completion_model_res = await create_model(create_chat_completion_model_data)
-        create_chat_completion_model_res_json = create_chat_completion_model_res.json()
-        chat_completion_model_id = create_chat_completion_model_res_json.get("data").get("model_id")
 
         chat_completion_data = {
-                                "model_id": chat_completion_model_id,
+                                "model_id": self.chat_completion_model_id,
                                 "messages": [
                                     {
                                         "role": "user",
@@ -156,22 +140,12 @@ class TestChatCompletion:
         assert res_json.get("data").get("message").get("content") is not None
         assert res_json.get("data").get("message").get("function_calls") is None
 
-    @pytest.mark.run(order=31)
+    @pytest.mark.run(order=34)
     @pytest.mark.asyncio
     async def test_chat_completion_by_normal_length(self):
 
-        create_chat_completion_model_data = {
-            "model_schema_id": "openai/gpt-3.5-turbo",
-            "name": "My Language Model",
-            "credentials": {"OPENAI_API_KEY": "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"}
-        }
-
-        create_chat_completion_model_res = await create_model(create_chat_completion_model_data)
-        create_chat_completion_model_res_json = create_chat_completion_model_res.json()
-        chat_completion_model_id = create_chat_completion_model_res_json.get("data").get("model_id")
-
         chat_completion_data = {
-            "model_id": chat_completion_model_id,
+            "model_id": self.chat_completion_model_id,
             "messages": [
                 {
                     "role": "user",

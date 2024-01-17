@@ -39,7 +39,7 @@ class TestAssistant(Assistant):
                     "You are a professional assistant speaking {{language}}."
                 ],
                 "memory": {
-                    "type": "zero"
+                    "type": "naive"
                 },
                 "tools": [],
                 "retrievals": [],
@@ -91,6 +91,7 @@ class TestAssistant(Assistant):
         res_json = res.json()
         assert res.status_code == 200
         assert res_json.get("status") == "success"
+        assert len(res_json.get("data")) == 1
         assert res_json.get("fetched_count") == 1
         assert res_json.get("total_count") == 1
         assert res_json.get("has_more") is False
@@ -122,6 +123,7 @@ class TestAssistant(Assistant):
         res_json = res.json()
         assert res.status_code == 200
         assert res_json.get("status") == "success"
+        assert res_json.get("data").get("assistant_id") == Assistant.assistant_id
         for key in update_assistant_data:
             assert res_json.get("data").get(key) == update_assistant_data[key]
         assert set(res_json.get("data").keys()) == self.data_keys

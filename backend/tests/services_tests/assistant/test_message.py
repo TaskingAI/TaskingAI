@@ -48,6 +48,7 @@ class TestMessage(Assistant):
         res = await list_messages(Assistant.assistant_id, Assistant.chat_id, list_messages_data)
         assert res.status_code == 200
         assert res.json().get("status") == "success"
+        assert len(res.json().get("data")) == 1
         assert res.json().get("fetched_count") == 1
         assert res.json().get("total_count") == 1
         assert res.json().get("has_more") is False

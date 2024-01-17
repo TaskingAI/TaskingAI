@@ -8,12 +8,10 @@ from tests.services_tests.retrieval import Retrieval
 
 class TestCollection(Retrieval):
 
-    data_list = ['object', 'collection_id', 'name', 'description', 'num_records', 'num_chunks', 'capacity',
-                 'embedding_model_id', 'embedding_size', 'metadata',  'updated_timestamp', 'created_timestamp',
-                 'status',  "text_splitter"]
-    data_keys = set(data_list)
-    data_text_splitter = ["type", "chunk_size", "chunk_overlap"]
-    data_text_splitter_keys = set(data_text_splitter)
+    collection_list = ['object', 'collection_id', 'name', 'description', 'num_records', 'num_chunks', 'capacity',
+                       'embedding_model_id', 'embedding_size', 'metadata',  'updated_timestamp', 'created_timestamp',
+                       'status']
+    collection_keys = set(collection_list)
 
     @pytest.mark.run(order=31)
     @pytest.mark.asyncio
@@ -34,11 +32,6 @@ class TestCollection(Retrieval):
                                     "embedding_model_id": text_embedding_model_id,
                                     "name": "test",
                                     "description": "description",
-                                    "text_splitter": {
-                                        "type": "token",
-                                        "chunk_size": 200,
-                                        "chunk_overlap": 100
-                                    },
                                     "metadata": {
                                         "key1": "value1",
                                         "key2": "value2"
@@ -49,8 +42,7 @@ class TestCollection(Retrieval):
         assert res.status_code == 200
         assert res_json.get("status") == "success"
         assert res_json.get("data").get("status") == "ready"
-        assert set(res_json.get("data").keys()) == self.data_keys
-        assert set(res_json.get("data").get("text_splitter").keys()) == self.data_text_splitter_keys
+        assert set(res_json.get("data").keys()) == self.collection_keys
         for key in create_collection_data:
             assert res_json.get("data").get(key) == create_collection_data[key]
         Retrieval.collection_id = res_json.get("data").get("collection_id")
@@ -65,8 +57,8 @@ class TestCollection(Retrieval):
         assert collection_res.status_code == 200
         assert collection_json.get("status") == "success"
         assert collection_json.get("data").get("status") == "ready"
-        assert set(collection_json.get("data").keys()) == self.data_keys
-        assert set(collection_json.get("data").get("text_splitter").keys()) == self.data_text_splitter_keys
+        assert collection_json.get("data").get("collection_id") == self.collection_id
+        assert set(collection_json.get("data").keys()) == self.collection_keys
 
     @pytest.mark.run(order=33)
     @pytest.mark.asyncio
@@ -76,13 +68,14 @@ class TestCollection(Retrieval):
             "limit": 10,
             "offset": 0,
             "order": "desc",
-            "id_search": Retrieval.collection_id[:4],
+            "id_search": Retrieval.collection_id[:8],
             "name_search": Retrieval.collection_name[:2],
         }
         res = await list_collections(list_collections_data)
         res_json = res.json()
         assert res.status_code == 200
         assert res_json.get("status") == "success"
+        assert len(res_json.get("data")) == 1
         assert res_json.get("fetched_count") == 1
         assert res_json.get("total_count") == 1
         assert res_json.get("has_more") is False
@@ -103,12 +96,12 @@ class TestCollection(Retrieval):
         assert res.status_code == 200
         assert res_json.get("status") == "success"
         assert res_json.get("data").get("status") == "ready"
-        assert set(res_json.get("data").keys()) == self.data_keys
-        assert set(res_json.get("data").get("text_splitter").keys()) == self.data_text_splitter_keys
+        assert res_json.get("data").get("collection_id") == Retrieval.collection_id
+        assert set(res_json.get("data").keys()) == self.collection_keys
         for key in update_collection_data:
             assert res_json.get("data").get(key) == update_collection_data[key]
 
-    @pytest.mark.run(order=41)
+    @pytest.mark.run(order=50)
     @pytest.mark.asyncio
     async def test_delete_collection(self):
 

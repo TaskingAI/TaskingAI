@@ -2,15 +2,15 @@ import aiohttp
 
 from typing import Dict
 from tests.common.utils import ResponseWrapper, get_headers
-from tests.config import HOST
+from tests.config import HOST, WEB_SERVICE_PORT
 from config import CONFIG
 
-APP_BASE_URL = f"{HOST}:{CONFIG.SERVICE_PORT}{CONFIG.APP_ROUTE_PREFIX}"
+BASE_URL = f"{HOST}:{WEB_SERVICE_PORT}{CONFIG.WEB_ROUTE_PREFIX}"
 
 
 async def login(payload: Dict):
     async with aiohttp.ClientSession() as session:
-        request_url = f"{APP_BASE_URL}/admins/login"
+        request_url = f"{BASE_URL}/admins/login"
         response = await session.post(request_url, json=payload)
         return ResponseWrapper(response.status, await response.json())
 
@@ -18,19 +18,19 @@ async def login(payload: Dict):
 async def verify_token(token: str):
     headers = get_headers(token)
     async with aiohttp.ClientSession(headers=headers) as session:
-        response = await session.post(f"{APP_BASE_URL}/admins/verify_token")
+        response = await session.post(f"{BASE_URL}/admins/verify_token")
         return ResponseWrapper(response.status, await response.json())
 
 
 async def refresh_token(token: str):
     headers = get_headers(token)
     async with aiohttp.ClientSession(headers=headers) as session:
-        response = await session.post(f"{APP_BASE_URL}/admins/refresh_token")
+        response = await session.post(f"{BASE_URL}/admins/refresh_token")
         return ResponseWrapper(response.status, await response.json())
 
 
 async def logout(token: str):
     headers = get_headers(token)
     async with aiohttp.ClientSession(headers=headers) as session:
-        response = await session.post(f"{APP_BASE_URL}/admins/logout")
+        response = await session.post(f"{BASE_URL}/admins/logout")
         return ResponseWrapper(response.status, await response.json())
