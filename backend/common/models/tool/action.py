@@ -4,6 +4,7 @@ from .authentication import Authentication, AuthenticationType
 from common.utils import generate_random_id
 from common.utils import load_json_attr
 from common.models import SerializePurpose
+from common.database.redis import redis_object_pop, redis_object_set_object, redis_object_get_object
 
 __all__ = ["Action"]
 
@@ -61,3 +62,20 @@ class Action(BaseModel):
         }
 
         return ret
+
+    @classmethod
+    async def get_redis(cls, action_id: str):
+        return await redis_object_get_object(Action, action_id)
+
+    async def set_redis(self):
+        await redis_object_set_object(
+            Action,
+            key=self.action_id,
+            value=self.to_dict(purpose=SerializePurpose.REDIS),
+        )
+
+    async def pop_redis(self):
+        await redis_object_pop(
+            Action,
+            key=self.action_id,
+        )

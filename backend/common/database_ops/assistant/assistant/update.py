@@ -3,12 +3,11 @@ from common.models import Assistant
 from typing import Dict
 from common.database_ops.utils import update_object
 from .get import get_assistant
-from common.database.redis import redis_object_pop
 
 
 async def update_assistant(assistant: Assistant, update_dict: Dict):
     # 1. pop from redis
-    await redis_object_pop(Assistant, assistant.assistant_id)
+    await assistant.pop_redis()
 
     async with postgres_db_pool.get_db_connection() as conn:
         # 2. Update assistant in database

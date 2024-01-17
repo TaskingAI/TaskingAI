@@ -1,11 +1,10 @@
 from common.database.postgres.pool import postgres_db_pool
-from common.models import Apikey, SerializePurpose
-from common.database.redis import redis_object_get_object, redis_object_set_object
+from common.models import Apikey
 
 
 async def get_apikey(apikey_id: str):
     # 1. get from redis
-    apikey: Apikey = await redis_object_get_object(Apikey, key=apikey_id)
+    apikey: Apikey = await Apikey.get_redis(apikey_id)
     if apikey:
         return apikey
 
@@ -21,11 +20,7 @@ async def get_apikey(apikey_id: str):
     # 3. write to redis
     if row:
         apikey = Apikey.build(row)
-        await redis_object_set_object(
-            Apikey,
-            key=apikey_id,
-            value=apikey.to_dict(purpose=SerializePurpose.REDIS),
-        )
+        await apikey.set_redis()
         return apikey
 
     return None

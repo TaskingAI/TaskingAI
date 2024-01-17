@@ -1,6 +1,5 @@
 from common.database.postgres.pool import postgres_db_pool
 from common.models import Admin
-from .redis import set_redis_admin, get_redis_admin_by_id, get_redis_admin_by_username
 import logging
 
 logger = logging.getLogger(__name__)
@@ -10,9 +9,9 @@ async def get_admin_by_id(
     admin_id: str,
 ):
     # 1. get from redis
-    redis_admin: Admin = await get_redis_admin_by_id(admin_id)
-    if redis_admin:
-        return redis_admin
+    admin: Admin = await Admin.get_redis_by_id(admin_id)
+    if admin:
+        return admin
 
     # 2. get from database
     async with postgres_db_pool.get_db_connection() as conn:
@@ -26,7 +25,7 @@ async def get_admin_by_id(
     # 3. write to redis and return
     if row:
         admin = Admin.build(row)
-        await set_redis_admin(admin)
+        await admin.set_redis()
         return admin
 
     return None
@@ -36,7 +35,7 @@ async def get_admin_by_username(
     username: str,
 ):
     # 1. get from redis
-    admin: Admin = await get_redis_admin_by_username(username)
+    admin: Admin = await Admin.get_redis_by_username(username)
     if admin:
         return admin
 
@@ -52,7 +51,7 @@ async def get_admin_by_username(
     # 3. write to redis and return
     if row:
         admin = Admin.build(row)
-        await set_redis_admin(admin)
+        await admin.set_redis()
         return admin
 
     return None

@@ -1,11 +1,10 @@
 from common.database.postgres.pool import postgres_db_pool
 from common.models import Chat
-from common.database.redis import redis_object_pop
 
 
 async def delete_chat(chat: Chat):
     # 1. pop from redis
-    await redis_object_pop(Chat, f"{chat.assistant_id}:{chat.chat_id}")
+    await chat.pop_redis()
 
     async with postgres_db_pool.get_db_connection() as conn:
         async with conn.transaction():

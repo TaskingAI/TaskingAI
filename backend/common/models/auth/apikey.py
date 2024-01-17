@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Dict
 from common.models import SerializePurpose
 from common.utils import aes_decrypt
+from common.database.redis import redis_object_pop, redis_object_set_object, redis_object_get_object
 
 __all__ = ["Apikey"]
 
@@ -60,3 +61,20 @@ class Apikey(BaseModel):
                 ret["apikey"] = apikey[:2] + "*" * (len(apikey) - 4) + apikey[-2:]
 
         return ret
+
+    @classmethod
+    async def get_redis(cls, apikey_id: str):
+        return await redis_object_get_object(Apikey, apikey_id)
+
+    async def set_redis(self):
+        await redis_object_set_object(
+            Apikey,
+            key=self.apikey_id,
+            value=self.to_dict(purpose=SerializePurpose.REDIS),
+        )
+
+    async def pop_redis(self):
+        await redis_object_pop(
+            Apikey,
+            key=self.apikey_id,
+        )

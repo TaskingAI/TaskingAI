@@ -1,6 +1,5 @@
 from common.database.postgres.pool import postgres_db_pool
 from common.models import Model
-from common.database.redis import redis_object_pop
 
 
 async def delete_model(
@@ -11,4 +10,4 @@ async def delete_model(
         await conn.execute("DELETE FROM model WHERE model_id=$1;", model.model_id)
 
     # 2. pop from redis
-    await redis_object_pop(Model, model.model_id)
+    await model.pop_redis()

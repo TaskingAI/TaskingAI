@@ -2,7 +2,6 @@ from common.models import Admin
 from common.error import raise_http_error, ErrorCode
 import bcrypt
 from .refresh_token import refresh_admin_token
-from .redis import set_redis_admin
 
 
 def _verify_password(password: str, salt: str, password_hash: str):
@@ -21,8 +20,5 @@ async def login_admin(admin: Admin, password: str):
         admin = await refresh_admin_token(admin)
     else:
         raise_http_error(ErrorCode.INCORRECT_PASSWORD, message="Password is incorrect.")
-
-    # 2. write to redis and return
-    await set_redis_admin(admin)
 
     return admin

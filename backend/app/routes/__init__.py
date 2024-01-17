@@ -74,7 +74,6 @@ if CONFIG.WEB:
 
 elif CONFIG.API:
     add_manage_routes(CONFIG.API_ROUTE_PREFIX)
-    add_model_routes(CONFIG.API_ROUTE_PREFIX)
     add_tool_routes(CONFIG.API_ROUTE_PREFIX)
     add_retrieval_routes(CONFIG.API_ROUTE_PREFIX)
     add_inference_routes(CONFIG.API_ROUTE_PREFIX)

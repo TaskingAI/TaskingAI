@@ -2,13 +2,12 @@ from common.database.postgres.pool import postgres_db_pool
 from .get import get_apikey
 from common.models import Apikey
 from typing import Dict
-from common.database.redis import redis_object_pop
 from common.database_ops.utils import update_object
 
 
 async def update_apikey(apikey: Apikey, update_dict: Dict):
     # 1. Pop from redis
-    await redis_object_pop(Apikey, apikey.apikey_id)
+    await apikey.pop_redis()
 
     # 2. Update database
     async with postgres_db_pool.get_db_connection() as conn:

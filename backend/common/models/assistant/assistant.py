@@ -4,6 +4,7 @@ from typing import Dict, List
 from common.models import SerializePurpose
 from .assistant_retrieval import AssistantRetrieval, AssistantRetrievalConfig
 from .memory import AssistantMemory, build_assistant_memory
+from common.database.redis import redis_object_pop, redis_object_set_object, redis_object_get_object
 
 __all__ = [
     "Assistant",
@@ -78,3 +79,20 @@ class Assistant(BaseModel):
             "created_timestamp": self.created_timestamp,
             "updated_timestamp": self.updated_timestamp,
         }
+
+    @classmethod
+    async def get_redis(cls, assistant_id: str):
+        return await redis_object_get_object(Assistant, assistant_id)
+
+    async def set_redis(self):
+        await redis_object_set_object(
+            Assistant,
+            key=self.assistant_id,
+            value=self.to_dict(purpose=SerializePurpose.REDIS),
+        )
+
+    async def pop_redis(self):
+        await redis_object_pop(
+            Assistant,
+            key=self.assistant_id,
+        )

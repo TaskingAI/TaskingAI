@@ -1,6 +1,5 @@
 from common.database.postgres.pool import postgres_db_pool
 from common.models import Admin
-from .redis import set_redis_admin
 import logging
 import bcrypt
 from .refresh_token import generate_token
@@ -43,7 +42,7 @@ async def register_admin(username: str, password: str) -> Admin:
 
     # 2. write to redis and return
     admin = Admin.build(row)
-    await set_redis_admin(admin)
+    await admin.set_redis()
 
     logger.info(f"Registered admin {username}")
 

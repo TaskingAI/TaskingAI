@@ -1,6 +1,5 @@
 from common.database.postgres.pool import postgres_db_pool
 from common.models import Admin
-from .redis import pop_redis_admin
 from common.database_ops.utils import current_timestamp_int_milliseconds
 
 
@@ -18,6 +17,6 @@ async def logout_admin(admin: Admin):
     admin.token = None
 
     # 2. remove from redis
-    await pop_redis_admin(admin)
+    await admin.pop_redis()
 
     return admin

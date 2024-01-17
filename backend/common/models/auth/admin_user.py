@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Dict, Optional
 from common.utils import generate_random_id
 from common.models import SerializePurpose
+from common.database.redis import redis_object_pop, redis_object_set_object, redis_object_get_object
 
 
 class Admin(BaseModel):
@@ -49,3 +50,33 @@ class Admin(BaseModel):
             ret["token"] = self.token
 
         return ret
+
+    @classmethod
+    async def get_redis_by_id(cls, admin_id: str):
+        return await redis_object_get_object(Admin, admin_id)
+
+    @classmethod
+    async def get_redis_by_username(cls, username: str):
+        return await redis_object_get_object(Admin, username)
+
+    async def set_redis(self):
+        await redis_object_set_object(
+            Admin,
+            key=self.admin_id,
+            value=self.to_dict(purpose=SerializePurpose.REDIS),
+        )
+        await redis_object_set_object(
+            Admin,
+            key=self.username,
+            value=self.to_dict(purpose=SerializePurpose.REDIS),
+        )
+
+    async def pop_redis(self):
+        await redis_object_pop(
+            Admin,
+            key=self.admin_id,
+        )
+        await redis_object_pop(
+            Admin,
+            key=self.username,
+        )

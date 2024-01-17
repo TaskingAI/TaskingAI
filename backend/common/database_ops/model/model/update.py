@@ -1,7 +1,6 @@
 from common.database.postgres.pool import postgres_db_pool
 from common.models import Model
 from typing import Dict
-from common.database.redis import redis_object_pop
 from common.database_ops.utils import update_object
 
 
@@ -10,7 +9,7 @@ async def update_model(
     update_dict: Dict,
 ):
     # 1. Invalidate cache
-    await redis_object_pop(Model, key=model.model_id)
+    await model.pop_redis()
 
     async with postgres_db_pool.get_db_connection() as conn:
         # 2. Update database

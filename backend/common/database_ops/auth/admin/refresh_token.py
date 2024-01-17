@@ -1,6 +1,5 @@
 from common.database.postgres.pool import postgres_db_pool
 from common.models import Admin
-from .redis import set_redis_admin
 from common.database_ops.utils import current_timestamp_int_milliseconds
 import jwt
 from datetime import datetime, timedelta
@@ -39,6 +38,6 @@ async def refresh_admin_token(admin: Admin):
     admin.updated_timestamp = current_timestamp
 
     # 3. write to redis and return
-    await set_redis_admin(admin)
+    await admin.set_redis()
 
     return admin
