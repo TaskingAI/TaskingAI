@@ -22,7 +22,7 @@ async def chat_completion(
         "provider_id": provider_id,
         "provider_model_id": provider_model_id,
         "messages": messages,  # List of message dicts
-        "credentials": credentials,
+        "encrypted_credentials": credentials,
         "configs": configs,
         "function_call": function_call,
         "functions": functions,

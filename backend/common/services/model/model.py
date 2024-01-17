@@ -150,6 +150,7 @@ async def update_model(model_id: str, name: Optional[str], credentials: Optional
         update_dict["name"] = name
 
     if credentials is not None:
+
         # verify model credentials
         model_schema = model.model_schema()
         response = await verify_credentials(
@@ -161,10 +162,13 @@ async def update_model(model_id: str, name: Optional[str], credentials: Optional
         check_http_error(response)
         encrypted_credentials = response.json()["data"]
 
+        # get provider
+        provider: Provider = get_provider(model_schema.provider_id)
+
         # build masked credentials for display purpose
         display_credentials = _build_display_credentials(
             original_credentials=credentials,
-            credential_schema=model_schema.credential_schema,
+            credential_schema=provider.credentials_schema,
         )
 
         update_dict["encrypted_credentials"] = encrypted_credentials
