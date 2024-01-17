@@ -5,13 +5,17 @@ from config import CONFIG
 
 
 async def text_embedding(
-    provider_id: str, provider_model_id: str, credentials: Dict, input_text_list: List[str], input_type: Optional[str]
+    provider_id: str,
+    provider_model_id: str,
+    encrypted_credentials: Dict,
+    input_text_list: List[str],
+    input_type: Optional[str],
 ) -> ResponseWrapper:
     request_url = f"{CONFIG.TASKINGAI_INFERENCE_URL}/v1/text_embedding"
     payload = {
         "provider_id": provider_id,
         "provider_model_id": provider_model_id,
-        "encrypted_credentials": credentials,
+        "encrypted_credentials": encrypted_credentials,
         "input": input_text_list,
     }
     if input_type:

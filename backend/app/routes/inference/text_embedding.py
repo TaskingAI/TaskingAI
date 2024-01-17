@@ -41,7 +41,7 @@ async def api_text_embedding(
     response = await text_embedding(
         provider_id=model_schema.provider_id,
         provider_model_id=model_schema.provider_model_id,
-        credentials=model.encrypted_credentials,  # todo: use decrypted_credentials
+        encrypted_credentials=model.encrypted_credentials,
         input_text_list=data.input,
         input_type=data.input_type,
     )

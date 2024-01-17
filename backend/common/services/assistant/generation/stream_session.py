@@ -34,7 +34,7 @@ class StreamSession(Session):
             provider_id=self.model_schema.provider_id,
             provider_model_id=self.model_schema.provider_model_id,
             messages=self.chat_completion_messages,
-            credentials=self.model.encrypted_credentials,
+            encrypted_credentials=self.model.encrypted_credentials,
             configs={},
             function_call=None,  # todo
             functions=self.chat_completion_functions,

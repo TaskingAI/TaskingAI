@@ -8,6 +8,8 @@ from common.services.model.model import get_model
 from common.services.assistant.assistant import get_assistant
 from common.services.assistant.chat import get_chat
 from common.services.tool.action import run_action
+from common.services.inference.chat_completion import chat_completion
+from common.utils import check_http_error
 from common.error import ErrorCode, raise_http_error
 import logging
 
@@ -333,3 +335,19 @@ class Session(ABC):
 
             # append tool result message
             self.chat_completion_messages.append({"role": "function", "content": tool_result, "id": function_call_id})
+
+    async def inference(self):
+        chat_completion_response = await chat_completion(
+            provider_id=self.model_schema.provider_id,
+            provider_model_id=self.model_schema.provider_model_id,
+            messages=self.chat_completion_messages,
+            encrypted_credentials=self.model.encrypted_credentials,
+            configs={},
+            function_call=None,  # todo
+            functions=self.chat_completion_functions,
+        )
+        check_http_error(chat_completion_response)
+        completion_data = chat_completion_response.json()["data"]
+        assistant_message_dict = completion_data["message"]
+        function_calls = assistant_message_dict.get("function_calls")
+        return assistant_message_dict, function_calls

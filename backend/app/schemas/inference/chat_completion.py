@@ -111,9 +111,6 @@ class ChatCompletion(BaseModel):
 
 # Chat Completion
 # POST /v1/chat_completion
-# Request Params: None
-# Request: ChatCompletionRequest
-# Response: ChatCompletionResponse
 class ChatCompletionRequest(BaseModel):
     model_id: str = Field(
         ..., min_length=8, max_length=8, description="The chat completion model id.", examples=["abcdefgh"]
@@ -133,8 +130,9 @@ class ChatCompletionRequest(BaseModel):
             ChatCompletionSystemMessage,
         ]
     ] = Field(
-        ..., description="The messages to be sent to the model."
-    )  # todo 需要说明
+        ...,
+        description="The messages to be sent to the model.",
+    )
     function_call: Optional[str] = Field(
         None,
         description="Controls whether a specific function is invoked by the model. "
@@ -166,8 +164,3 @@ class ChatCompletionRequest(BaseModel):
             return ChatCompletionFunctionMessage(**message_data)
         else:
             raise ValueError(f"Invalid message role: {role}")
-
-
-class ChatCompletionResponse(BaseModel):
-    status: str = Field("success", Literal="success", description="The response status.", examples=["success"])
-    data: ChatCompletion = Field(..., description="The chat completion response data.")

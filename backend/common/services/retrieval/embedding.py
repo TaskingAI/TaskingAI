@@ -42,7 +42,7 @@ async def embed_query(query: str, embedding_model: Model, embedding_size: int):
     response = await text_embedding(
         provider_id=embedding_model.provider_id,
         provider_model_id=embedding_model.provider_model_id,
-        credentials=embedding_model.encrypted_credentials,
+        encrypted_credentials=embedding_model.encrypted_credentials,
         input_text_list=[query],
         input_type="query",
     )
@@ -65,7 +65,7 @@ async def embed_documents(documents: List[str], embedding_model: Model, embeddin
     response = await text_embedding(
         provider_id=embedding_model.provider_id,
         provider_model_id=embedding_model.provider_model_id,
-        credentials=embedding_model.encrypted_credentials,
+        encrypted_credentials=embedding_model.encrypted_credentials,
         input_text_list=documents,
         input_type="document",
     )

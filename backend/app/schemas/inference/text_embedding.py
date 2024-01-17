@@ -10,9 +10,6 @@ class TextEmbeddingInputType(str, Enum):
 
 # Text Embedding
 # POST /v1/text_embedding
-# Request Params: None
-# Request: TextEmbeddingRequest
-# Response: ChatCompletionResponse
 class TextEmbeddingRequest(BaseModel):
     model_id: str = Field(
         ..., min_length=8, max_length=8, description="The text embedding model id.", examples=["abcdefgh"]

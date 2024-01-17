@@ -3,7 +3,8 @@ import json
 from typing import Dict
 from starlette.responses import StreamingResponse
 from ..utils import auth_info_required, check_http_error
-from app.schemas.inference.chat_completion import ChatCompletionRequest, ChatCompletionResponse
+from app.schemas.inference.chat_completion import ChatCompletionRequest
+from app.schemas.base import BaseSuccessDataResponse
 from common.services.inference.chat_completion import chat_completion, chat_completion_stream
 from common.services.model.model import get_model
 from common.models import Model, ModelSchema, ModelType
@@ -19,7 +20,7 @@ router = APIRouter()
     tags=["Inference"],
     responses={422: {"description": "Unprocessable Entity"}},
     description="Model inference for chat completion.",
-    response_model=ChatCompletionResponse,
+    response_model=BaseSuccessDataResponse,
 )
 async def api_chat_completion(
     request: Request,
@@ -54,7 +55,7 @@ async def api_chat_completion(
                 provider_id=model_schema.provider_id,
                 provider_model_id=model_schema.provider_model_id,
                 messages=message_dicts,
-                credentials=model.encrypted_credentials,  # todo: use decrypted_credentials
+                encrypted_credentials=model.encrypted_credentials,
                 configs=data.configs,
                 function_call=data.function_call,
                 functions=functions,
@@ -71,10 +72,10 @@ async def api_chat_completion(
             provider_id=model_schema.provider_id,
             provider_model_id=model_schema.provider_model_id,
             messages=message_dicts,
-            credentials=model.encrypted_credentials,  # todo: use decrypted_credentials
+            encrypted_credentials=model.encrypted_credentials,
             configs=data.configs,
             function_call=data.function_call,
             functions=functions,
         )
         check_http_error(response)
-        return ChatCompletionResponse(data=response.json()["data"])
+        return BaseSuccessDataResponse(data=response.json()["data"])
