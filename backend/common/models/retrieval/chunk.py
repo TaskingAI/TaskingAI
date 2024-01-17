@@ -12,7 +12,7 @@ class Chunk(BaseModel):
     chunk_id: str
     record_id: Optional[str]
     collection_id: str
-    content: str  # todo: text content
+    content: str
     metadata: Dict
     updated_timestamp: int
     created_timestamp: int

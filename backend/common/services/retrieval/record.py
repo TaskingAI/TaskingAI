@@ -131,8 +131,6 @@ async def update_record(
     text_splitter: Optional[TextSplitter],
     metadata: Dict[str, str],
 ) -> Record:
-    # todo: support record content update
-
     """
     Update record
     :param collection_id: the collection id

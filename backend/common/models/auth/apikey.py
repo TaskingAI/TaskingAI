@@ -2,14 +2,14 @@ from common.utils import generate_random_id
 from pydantic import BaseModel
 from typing import Dict
 from common.models import SerializePurpose
+from common.utils import aes_decrypt
 
 __all__ = ["Apikey"]
 
 
 class Apikey(BaseModel):
     apikey_id: str
-    # todo: use apikey_secret
-    apikey: str
+    encrypted_apikey: str
     name: str
     updated_timestamp: int
     created_timestamp: int
@@ -34,7 +34,7 @@ class Apikey(BaseModel):
     def build(cls, row: Dict):
         return cls(
             apikey_id=row["apikey_id"],
-            apikey=row["apikey"],
+            encrypted_apikey=row["encrypted_apikey"],
             name=row["name"],
             updated_timestamp=row["updated_timestamp"],
             created_timestamp=row["created_timestamp"],
@@ -50,12 +50,13 @@ class Apikey(BaseModel):
         }
 
         if purpose == SerializePurpose.REDIS:
-            ret["apikey"] = self.apikey
+            ret["encrypted_apikey"] = self.encrypted_apikey
 
         elif purpose == SerializePurpose.RESPONSE:
+            apikey = aes_decrypt(self.encrypted_apikey)
             if plain:
-                ret["apikey"] = self.apikey
+                ret["apikey"] = apikey
             else:
-                ret["apikey"] = self.apikey[:2] + "*" * (len(self.apikey) - 4) + self.apikey[-2:]
+                ret["apikey"] = apikey[:2] + "*" * (len(apikey) - 4) + apikey[-2:]
 
         return ret

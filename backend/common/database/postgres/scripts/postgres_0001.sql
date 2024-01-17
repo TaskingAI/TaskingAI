@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS app_admin (
 
 CREATE TABLE IF NOT EXISTS apikey (
     apikey_id CHAR(8) PRIMARY KEY,
-    apikey TEXT NOT NULL UNIQUE, -- todo: secret apikey
+    encrypted_apikey TEXT NOT NULL UNIQUE,
     name TEXT NOT NULL,
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
@@ -30,11 +30,11 @@ CREATE TABLE IF NOT EXISTS model (
     name TEXT NOT NULL,
     encrypted_credentials JSONB NOT NULL,
     display_credentials JSONB NOT NULL,
-    -- todo: add metadata
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
 );
-
+CREATE INDEX IF NOT EXISTS model_created_timestamp_idx ON model (created_timestamp);
+CREATE INDEX IF NOT EXISTS model_name_idx ON model (name);
 
 CREATE TABLE IF NOT EXISTS action (
     action_id CHAR(24) NOT NULL PRIMARY KEY,
@@ -42,10 +42,11 @@ CREATE TABLE IF NOT EXISTS action (
     description TEXT NOT NULL,
     openapi_schema JSONB NOT NULL,
     authentication JSONB NOT NULL DEFAULT '{}',
-    -- todo: add metadata
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
 );
+CREATE INDEX IF NOT EXISTS action_created_timestamp_idx ON action (created_timestamp);
+CREATE INDEX IF NOT EXISTS action_name_idx ON action (name);
 
 
 CREATE TABLE IF NOT EXISTS collection (
@@ -62,6 +63,8 @@ CREATE TABLE IF NOT EXISTS collection (
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
 );
+CREATE INDEX IF NOT EXISTS collection_created_timestamp_idx ON collection (created_timestamp);
+CREATE INDEX IF NOT EXISTS collection_name_idx ON collection (name);
 
 
 CREATE TABLE IF NOT EXISTS record (
@@ -77,6 +80,7 @@ CREATE TABLE IF NOT EXISTS record (
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     PRIMARY KEY (collection_id, record_id)
 );
+CREATE INDEX IF NOT EXISTS record_collection_id_created_timestamp_idx ON record (collection_id, created_timestamp);
 
 
 CREATE TABLE IF NOT EXISTS assistant (
@@ -98,6 +102,8 @@ CREATE TABLE IF NOT EXISTS assistant (
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
 );
+CREATE INDEX IF NOT EXISTS assistant_created_timestamp_idx ON assistant (created_timestamp);
+CREATE INDEX IF NOT EXISTS assistant_name_idx ON assistant (name);
 
 
 CREATE TABLE IF NOT EXISTS chat (
@@ -109,7 +115,7 @@ CREATE TABLE IF NOT EXISTS chat (
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     PRIMARY KEY (assistant_id, chat_id)
 );
-
+CREATE INDEX IF NOT EXISTS chat_assistant_id_created_timestamp_idx ON chat (assistant_id, created_timestamp);
 
 CREATE TABLE IF NOT EXISTS message (
     message_id CHAR(24) NOT NULL,
@@ -122,6 +128,3 @@ CREATE TABLE IF NOT EXISTS message (
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     PRIMARY KEY (assistant_id, chat_id, message_id)
 );
-
-
---todo: index on created_timestamp and name for each table

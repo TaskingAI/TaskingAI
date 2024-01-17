@@ -47,7 +47,7 @@ async def delete_apikey(apikey_id: str):
 
 
 async def verify_apikey(apikey: str):
-    verify = await db_apikey.verify_apikey(apikey)
+    verify = await db_apikey.verify_apikey(input_apikey=apikey)
     if not verify:
         raise_http_error(ErrorCode.APIKEY_VALIDATION_FAILED, message="Invalid API Key.")
     return True

@@ -3,11 +3,13 @@ from common.models import Apikey
 from .get import get_apikey
 from .list import get_apikey_total
 from common.error import raise_http_error, ErrorCode
+from common.utils import aes_encrypt
 
 
 async def create_apikey(name: str, max_count: int):
     new_id = Apikey.generate_random_id()
     new_apikey = Apikey.generate_random_apikey(new_id)
+    new_encrypted_apikey = aes_encrypt(new_apikey)
 
     # 1. select the number of apikeys in the project
     if max_count > 0:
@@ -23,11 +25,11 @@ async def create_apikey(name: str, max_count: int):
         await conn.execute(
             """
             INSERT INTO apikey (
-                apikey_id, apikey, name
+                apikey_id, encrypted_apikey, name
             ) VALUES ($1, $2, $3);
         """,
             new_id,
-            new_apikey,
+            new_encrypted_apikey,
             name,
         )
 

@@ -93,7 +93,7 @@ async def create_message(
     message = await db_message.create_message(
         chat=chat,
         role=role,
-        content=content,  # todo check content type
+        content=content,
         metadata=metadata,
         updated_chat_memory=updated_chat_memory,
     )

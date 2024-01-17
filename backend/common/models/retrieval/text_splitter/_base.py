@@ -19,5 +19,3 @@ class TextSplitter(BaseModel):
     @abstractmethod
     def split_text(self, text: str, title: Optional[str]) -> List[str]:
         raise NotImplementedError
-
-    # todo: add title to each chunk
