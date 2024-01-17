@@ -51,6 +51,8 @@ async def create_message(
                 table_name="chat",
                 equal_filters={"assistant_id": chat.assistant_id, "chat_id": chat.chat_id},
             )
+            chat.memory = updated_chat_memory
+            await chat.set_redis()
 
     # 2. get and return
     message = await get_message(chat=chat, message_id=new_message_id)
