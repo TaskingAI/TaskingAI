@@ -18,7 +18,9 @@
 
 Please give us a **FREE STAR🌟** on GitHub if you find it useful.
 
-[//]: # "todo: add a gif demo"
+<p>
+<img src="static/img/star.gif" alt="">
+</p>
 
 ## What Can You Build with TaskingAI?
 
@@ -51,7 +53,9 @@ Here is a comparison between the mainstream agent development framework and Task
 
 TaskingAI's architecture is designed with modularity and flexibility at its core, enabling compatibility with a wide spectrum of LLMs. This adaptability allows it to effortlessly support a variety of applications, from straightforward demos to sophisticated, multi-tenant AI systems. Constructed on a foundation of open-source principles, TaskingAI incorporates numerous open-source tools, ensuring that the platform is not only versatile but also customizable.
 
-[//]: # "todo: add architecture diagram"
+<p>
+<img src="static/img/architecture.png" alt="">
+</p>
 
 **[Nginx](https://www.nginx.com/)**: Functions as the frontend web server, efficiently routing traffic to the designated services within the architecture.
 
