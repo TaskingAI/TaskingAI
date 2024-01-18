@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from 'antd';
-import './modalFooterEnd.scss'
+import styles from './modalFooterEnd.module.scss'
 
 function ModalFooterEnd({ onCancel, handleOk }) {
     const [confirmLoading, setConfirmLoading] = useState(false)
@@ -16,11 +16,11 @@ function ModalFooterEnd({ onCancel, handleOk }) {
           }
     }
     return (
-        <div className='button-footer'>
+        <div className={styles['button-footer']}>
             <Button key="cancel" onClick={handleCancel} className='cancel-button'>
                 Cancel
             </Button>
-            <Button key="Confirm" onClick={handleSuccess} className='next-button' loading={confirmLoading}>
+            <Button key="Confirm" onClick={handleSuccess} className={styles['next-button']} loading={confirmLoading}>
                 Confirm
             </Button>
         </div>

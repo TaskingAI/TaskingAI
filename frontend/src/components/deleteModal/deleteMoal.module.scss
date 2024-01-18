@@ -1,12 +1,15 @@
 .delete-modals {
+    :global {
+        .ant-modal-content {
+            .ant-modal-body {
+                padding: 24px;
 
-    .ant-modal-content {
-        .ant-modal-body {
-            padding: 24px !important;
-            .p {
-                line-height: 1;
-                margin: 0;
             }
         }
+    }
+
+    .p {
+        line-height: 1;
+        margin: 0;
     }
 }

@@ -8,9 +8,10 @@ const sendMessage = async (assistantsId:string, chatId:string, params:object) =>
     const project_base_url = `api/v1`
     return await request.post(`${project_base_url}/assistants/${assistantsId}/chats/${chatId}/messages`, params)
 }
-const getListChats = async  <T extends Record<string, string>>(
-    params: T,
-    assistantsId:string
+const getListChats = async  <T extends Record<string, any>>(
+    assistantsId:string,
+    params: T
+
   ) => {
     const project_base_url = `api/v1`
     let str = ''
@@ -22,7 +23,7 @@ const getListChats = async  <T extends Record<string, string>>(
     }
     return await request.get(`${project_base_url}/assistants/${assistantsId}/chats?${str}`)
 }
-const generateMessage = async (assistantsId:string, chatId:string, params:string) => {
+const generateMessage = async (assistantsId:string, chatId:string, params:object) => {
     const project_base_url = `api/v1`
     return await request.post(`${project_base_url}/assistants/${assistantsId}/chats/${chatId}/generate`, params)
 }

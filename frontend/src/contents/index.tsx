@@ -20,6 +20,11 @@ const statusReverse = {
     error: 'red',
     deleting: 'red'
 }
+const revereseLabel = {
+    naive: 'Naive',
+    zero: 'Zero',
+    [`message_window`]: 'Message Window',
+}
 const handleCopy = (text: string) => {
     const clipboard = new ClipboardJS('.icon-copy', {
         text: () => text
@@ -131,7 +136,7 @@ const collectionTableColumn: any = [
         key: 'name',
         width: 240,
         fixed: 'left',
-        render: (text:string, record:any) =>
+        render: (text: string, record: any) =>
             <div>
                 <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Collection'}</p>
                 <p style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
@@ -146,7 +151,7 @@ const collectionTableColumn: any = [
         dataIndex: 'description',
         key: 'description',
         width: 360,
-        render: (text:string) => (
+        render: (text: string) => (
             <>
                 <div>{text}</div>
             </>
@@ -157,7 +162,7 @@ const collectionTableColumn: any = [
         dataIndex: 'num_records',
         key: 'num_records',
         width: 180,
-        render: (text:string) => (
+        render: (text: string) => (
             <>
                 <div>{text}</div>
             </>
@@ -168,7 +173,7 @@ const collectionTableColumn: any = [
         dataIndex: 'capacity1',
         key: 'capacity1',
         width: 180,
-        render: (text:string) => (
+        render: (text: string) => (
             <div>{text}</div>
         )
     },
@@ -177,7 +182,7 @@ const collectionTableColumn: any = [
         dataIndex: 'status',
         key: 'status',
         width: 180,
-        render: (text:string) => (
+        render: (text: string) => (
             <Tag color={statusReverse[text as keyof typeof statusReverse] || 'defaultColor'}
             >
                 {text}
@@ -190,7 +195,7 @@ const collectionTableColumn: any = [
         key: 'ModelID',
         ellipsis: true,
         width: 180,
-        render: (_:string) => (
+        render: (_: string) => (
             <div>{_}</div>
         )
     },
@@ -199,8 +204,172 @@ const collectionTableColumn: any = [
         dataIndex: 'created_timestamp',
         key: 'created_timestamp',
         width: 180,
-        render: (time:number) => <div>{formatTimestamp(time)}</div>
+        render: (time: number) => <div>{formatTimestamp(time)}</div>
     },
 
 ];
-export { collectionTableColumn, tooltipEditTitle, tooltipDeleteTitle, tooltipPlaygroundTitle, tooltipShowTitle, tooltipHideTitle, modelsTableColumn };
+const actionsTableColumn: any = [
+    {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+        fixed: 'left',
+        width: 240,
+        render: (text, record) =>
+            <div>
+                <p className='table-text' style={{ fontSize: '14px' }}>{text}</p>
+                <p style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
+                    <span style={{ color: '#777', fontSize: '12px' }}>{record.action_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.action_id)} />
+
+                </p>
+            </div>
+        ,
+    },
+    {
+        title: 'Description',
+        dataIndex: 'description',
+        key: 'description',
+        width: 360,
+        render: (text) => (
+            <>
+                <div>{text}</div>
+            </>
+        ),
+    },
+    {
+        title: 'Method',
+        dataIndex: 'method',
+        key: 'method',
+        width: 180,
+        render: (_) => (
+            <>
+                {_}
+            </>
+        ),
+    },
+    {
+        title: 'Endpoint',
+        dataIndex: 'endpoint',
+        key: 'endpoint',
+        width: 360,
+        render: (_) => (
+            <>
+                {_}
+            </>
+        ),
+    },
+    {
+        title: 'Created at',
+        width: 180,
+        dataIndex: 'created_timestamp',
+        key: 'created_timestamp',
+        render: (time) => <div>{formatTimestamp(time)}</div>
+    }]
+const apikeysTableColumn: any = [
+    {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+        fixed: 'left',
+        width: 240,
+        render: (text) =>
+            <div>
+                {text}
+            </div>
+        ,
+    },
+    {
+        title: 'Key',
+        dataIndex: 'api_key',
+        key: 'api_key',
+        width: 360,
+        render: (apiKey) => (
+            <>
+                <div style={{ display: 'flex', alignItems: 'center', margin: 0 }}><span style={{ fontSize: '12px', color: '#777' }}>{apiKey}</span> {!apiKey.includes('****') && <CopyOutlined className='icon-copy' onClick={() => handleCopy(apiKey)} />}</div>
+            </>
+        ),
+    },
+    {
+        title: 'Created at',
+        dataIndex: 'created_timestamp',
+        key: 'created_timestamp',
+        width: 180,
+        render: (time) => <div>{formatTimestamp(time)}</div>
+    },
+    {
+        title: 'Last updated',
+        dataIndex: 'updated_timestamp',
+        key: 'updated_timestamp',
+        width: 180,
+        render: (time) => <div>{formatTimestamp(time)}</div>
+    }
+
+];
+const assistantTableColumn: any = [
+    {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+        width: 240,
+        height: 45,
+        fixed: 'left',
+        render: (text, record) =>
+            <div>
+                <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Assistant'}</p>
+                <p style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
+                    <span style={{ fontSize: '12px', color: '#777' }}>{record.assistant_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.assistant_id)} />
+
+                </p>
+            </div>
+        ,
+    },
+    {
+        title: 'Description',
+        width: 360,
+        dataIndex: 'description',
+        key: 'description',
+        render: (text) => (
+            <>
+                <div>{text}</div>
+            </>
+        ),
+    },
+    {
+        title: 'Language model',
+        dataIndex: 'model_id',
+        width: 360,
+        key: 'model_id',
+        ellipsis: true,
+        render: (_) => (
+            <div>{_}</div>
+
+        )
+    },
+    {
+        title: 'Prompt template',
+        width: 360,
+        dataIndex: 'promptTemplate',
+        ellipsis: true,
+        render: (_) => (
+            <div>{_}</div>
+
+        )
+    },
+    {
+        title: 'Memory',
+        width: 180,
+        dataIndex: 'memory',
+        render: (_) => (
+            <div>{revereseLabel[_]}</div>
+
+        )
+    },
+    {
+        title: 'Created at',
+        width: 180,
+        dataIndex: 'created_timestamp',
+        key: 'created_timestamp',
+        render: (time) => <div>{formatTimestamp(time)}</div>
+    },
+]
+export { collectionTableColumn, assistantTableColumn, apikeysTableColumn, actionsTableColumn, tooltipEditTitle, tooltipDeleteTitle, tooltipPlaygroundTitle, tooltipShowTitle, tooltipHideTitle, modelsTableColumn };

@@ -6,6 +6,7 @@ interface CustomErrorResponse {
         };
     };
 }
+
 class CustomError extends Error {
     response: CustomErrorResponse;
 
@@ -37,7 +38,7 @@ interface ChildRefType {
 interface TableProps {
     columns: any[];
   ifAllowNew?: boolean;
-  hangleFilterData?: () => void;
+  hangleFilterData?: (value) => void;
   ifOnlyId?: boolean;
   defaultSelectedRowKeys?: string[];
   updatePrevButton?: boolean;
@@ -45,10 +46,10 @@ interface TableProps {
   dataSource?: any[]; 
   mode?: string;
   ifSelect?: boolean;
-  onChildEvent?: (event: Event) => void;
+  onChildEvent?: (event: any) => void;
   id?: string;
   hasMore?: boolean;
-  onOpenDrawer?: () => void;
+  onOpenDrawer?: (value) => void;
   name?: string;
   handleRecordsSelected?: (selectedRowKeys: string[], selectedRows: RecordType[]) => void;
 }
@@ -75,5 +76,16 @@ interface formDataType{
     required:Array<string>;
 
 }
-export type {formDataType,promptListType, projectIdType,ModelProviderType,projectHomeType,RecordType,ChildRefType,TableProps,modelModalProps}
+interface settingModalProps {
+    contains?:any,
+    style?:{
+        display:string
+    },
+}
+interface contentRefType {
+    scrollTop?:any;
+    scrollHeight?:any;
+    scrollTo?:any
+}
+export type {contentRefType,formDataType,settingModalProps,promptListType, projectIdType,ModelProviderType,projectHomeType,RecordType,ChildRefType,TableProps,modelModalProps}
 export default CustomError

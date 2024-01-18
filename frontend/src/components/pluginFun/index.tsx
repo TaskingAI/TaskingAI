@@ -2,7 +2,6 @@ import './pluginFun.scss'
 import { PlusOutlined, SyncOutlined, CopyOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react'
 import ModalFooterEnd from '../modalFooterEnd/index'
-import { v4 as uuidv4 } from 'uuid'
 import {
     Button,
     Space, Table, Tag,  Drawer, Input, Select, Checkbox, Spin
@@ -33,7 +32,7 @@ function convertToParameterSchema(data) {
     };
 
     data.forEach((item) => {
-        const { key, name, type, required, description } = item;
+        const {  name, type, required, description } = item;
 
         parameterSchema.properties[name] = {
             type,
@@ -110,7 +109,7 @@ function PluginFun() {
     const fetchData = async (offset, limit) => {
         setLoading(true);
         try {
-            const res = await getPluginList(offset, limit)
+            const res:any = await getPluginList(offset, limit)
             setPluginFunList(convertToNewFormat(res.data));
             setPagination({
                 ...pagination,
@@ -303,7 +302,6 @@ function PluginFun() {
     const handleAdd = () => {
         setDataSource((prevDataSource) =>
             prevDataSource.concat({
-                key: uuidv4(),
                 name: '',
                 type: 'string',
                 required: false,

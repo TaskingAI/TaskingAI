@@ -1,7 +1,7 @@
 import styles from './retrieval.module.scss'
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
-import { getRetrievalList, createRetrieval, deleteRetrieval, updateRetrieval } from '../../axios/retrieval.js'
-import { getModelsList } from '../../axios/models.js'
+import { getRetrievalList, createRetrieval, deleteRetrieval, updateRetrieval } from '../../axios/retrieval.ts'
+import { getModelsList } from '../../axios/models.ts'
 import RecordPage from '../recordPage/index';
 import { useEffect, useState, useRef } from 'react'
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
@@ -15,7 +15,7 @@ import { ChildRefType } from '../../contant/index.ts'
 
 import ModalFooterEnd from '../modalFooterEnd/index'
 import { toast } from 'react-toastify'
-import { tooltipEditTitle, tooltipDeleteTitle } from '../../contents/index.js'
+import { tooltipEditTitle, tooltipDeleteTitle } from '../../contents/index.tsx'
 import { useNavigate } from 'react-router-dom';
 import DeleteModal from '../deleteModal/index.tsx'
 import RecordIcon from '../../assets/img/recordIcon.svg?react'

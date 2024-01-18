@@ -1,6 +1,6 @@
 import { request } from '../utils/index'
 
-const getAssistantsList = async  <T extends Record<string, string>>(
+const getAssistantsList = async  <T extends Record<string, any>>(
     params: T,
 ) => {
     const project_base_url = `api/v1`

@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
-import ModalTable from '../modalTable/index.js';
+import ModalTable from '../modalTable/index.tsx';
 import {
     Button,
     Space, Tag, Input, Spin, Tooltip, Modal
 } from 'antd';
 import './recordPage.scss'
 import { toast } from 'react-toastify';
-import { tooltipDeleteTitle, tooltipShowTitle } from '../../contents/index.js'
+import { tooltipDeleteTitle, tooltipShowTitle } from '../../contents/index.tsx'
 
-import DeleteModal from '../deleteModal/index.js';
+import DeleteModal from '../deleteModal/index.tsx';
 import CopyOutlined from '../../assets/img/copyIcon.svg?react'
-import { getRecordsList, createRecord, deleteRecord, updateRecord, getRecord } from '../../axios/record.js'
+import { getRecordsList, createRecord, deleteRecord, updateRecord, getRecord } from '../../axios/record.ts'
 import { formatTimestamp } from '@/utils/util'
-// import EditIcon from '../../assets/img/editIcon.svg?react'
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
 import closeIcon from '../../assets/img/x-close.svg'
 import ShowEye from '../../assets/img/showEye.svg?react'
@@ -137,7 +136,7 @@ function RecordPage({ collectionId }) {
         }
         fetchData(collectionId, params)
     }, [collectionId])
-    const fetchData = async (collectionId:string, params:object) => {
+    const fetchData = async (collectionId:string, params:Record<string,any>) => {
         setLoading(true);
         try {
             const res:any = await getRecordsList(collectionId, params)

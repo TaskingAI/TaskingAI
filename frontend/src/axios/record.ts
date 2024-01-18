@@ -1,6 +1,6 @@
 import { request } from '../utils/index'
 
-const getRecordsList = async <T extends Record<string,string>>(params:T,collectionId:string)=> {
+const getRecordsList = async <T extends Record<string,string>>(collectionId:string,params:T)=> {
 const project_base_url = `api/v1`
     let str = ''
     if(params){

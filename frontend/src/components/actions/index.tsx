@@ -4,23 +4,16 @@ import {
 import styles from './action.module.scss'
 import { useState, useEffect } from 'react';
 import { getFirstMethodAndEndpoint } from '../../utils/util.ts'
-import { getActionsList, updateActions, deleteActions, createActions, getActionsDetail } from '../../axios/actions.js'
+import { getActionsList, updateActions, deleteActions, createActions, getActionsDetail } from '../../axios/actions.ts'
 import closeIcon from '../../assets/img/x-close.svg'
-import DeleteModal from '../deleteModal/index.jsx'
+import DeleteModal from '../deleteModal/index.tsx'
 import ModalTable from '../modalTable/index'
 import ModalFooterEnd from '../modalFooterEnd/index'
-// import Ajv from 'ajv';
 import EditIcon from '../../assets/img/editIcon.svg?react'
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
-import { formatTimestamp } from '@/utils/util'
-import ClipboardJS from 'clipboard';
-import { tooltipEditTitle, tooltipDeleteTitle } from '../../contents/index.js'
-
+import { tooltipEditTitle, tooltipDeleteTitle } from '../../contents/index.tsx'
 import { toast } from 'react-toastify';
-import CopyOutlined from '../../assets/img/copyIcon.svg?react'
-// const ajv = new Ajv({ strict: false });
-// const validate = ajv.compile(openAiJson);
-
+import {actionsTableColumn} from '../../contents/index.tsx'
 function Actions() {
     const [loading, setLoading] = useState(false);
     const [pluginFunList, setPluginFunList] = useState([])
@@ -30,9 +23,8 @@ function Actions() {
     const [tipSchema, setTipSchema] = useState(false)
     const [drawerTitle, setDrawerTitle] = useState('Bulk Create Action')
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
-    const [description, setDescription] = useState('')
     const [radioValue, setRadioValue] = useState('none')
-    const [Authentication, setAuthentication] = useState('')
+    const [Authentication, setAuthentication] = useState<string>('')
     const [schema, setSchema] = useState('')
     const [custom, setCustom] = useState('')
     const [limit, setLimit] = useState(20)
@@ -50,7 +42,7 @@ function Actions() {
     const fetchData = async (params) => {
         setLoading(true);
         try {
-            const res = await getActionsList(params)
+            const res:any = await getActionsList(params)
             const data = res.data.map((item) => {
                 return {
                     ...item,
@@ -68,8 +60,6 @@ function Actions() {
         setLoading(false);
     };
     const handleCreatePrompt = async (value) => {
-        setDrawerName('')
-        setDescription('')
         setSchema('')
         setActionId('')
         setRadioValue('none')
@@ -78,98 +68,31 @@ function Actions() {
         setDrawerTitle('Bulk Create Action')
         setOpenDrawer(value)
     }
-    const handleCopy = (text) => {
-        const clipboard = new ClipboardJS('.icon-copy', {
-            text: () => text
-        });
-        clipboard.on('success', function () {
-            toast.success('Copied to clipboard')
-            clipboard.destroy()
-        });
-        clipboard.on('error', function (e) {
-            console.log(e);
-        });
-    }
-    const columns = [
-        {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-            fixed: 'left',
-            width: 240,
-            render: (text, record) =>
-                <div>
-                    <p className='table-text' style={{ fontSize: '14px' }}>{text}</p>
-                    <p style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
-                        <span style={{ color: '#777', fontSize: '12px' }}>{record.action_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.action_id)} />
-
-                    </p>
+ 
+    const columns= [...actionsTableColumn]
+    columns.push({
+        title: 'Actions',
+        key: 'action',
+        fixed: 'right',
+        width: 118,
+        render: (_, record) => (
+            <Space size="middle">
+                <div onClick={() => handleEdit(record)} className='table-edit-icon'>
+                    <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <EditIcon />
+                    </Tooltip>
                 </div>
-            ,
-        },
-        {
-            title: 'Description',
-            dataIndex: 'description',
-            key: 'description',
-            width: 360,
-            render: (text) => (
-                <>
-                    <div>{text}</div>
-                </>
-            ),
-        },
-        {
-            title: 'Method',
-            dataIndex: 'method',
-            key: 'method',
-            width: 180,
-            render: (_) => (
-                <>
-                    {_}
-                </>
-            ),
-        },
-        {
-            title: 'Endpoint',
-            dataIndex: 'endpoint',
-            key: 'endpoint',
-            width: 360,
-            render: (_) => (
-                <>
-                    {_}
-                </>
-            ),
-        },
-        {
-            title: 'Created at',
-            width: 180,
-            dataIndex: 'created_timestamp',
-            key: 'created_timestamp',
-            render: (time) => <div>{formatTimestamp(time)}</div>
-        },
-        {
-            title: 'Actions',
-            key: 'action',
-            fixed: 'right',
-            width: 118,
-            render: (_, record) => (
-                <Space size="middle">
-                    <div onClick={() => handleEdit(record)} className='table-edit-icon'>
-                        <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
-                            <EditIcon />
-                        </Tooltip>
-                    </div>
-                    <div onClick={() => handleDelete(record)} className='table-edit-icon'>
-                        <Tooltip placement='bottom' title={tooltipDeleteTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
-                            <DeleteIcon />
-                        </Tooltip>
-                    </div>
-                </Space>
-            ),
-        },
-    ];
+                <div onClick={() => handleDelete(record)} className='table-edit-icon'>
+                    <Tooltip placement='bottom' title={tooltipDeleteTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <DeleteIcon />
+                    </Tooltip>
+                </div>
+            </Space>
+        ),
+    },)
+    
+ 
 
-    const [drawerName, setDrawerName] = useState('')
     const handleEdit = async (val) => {
         setLoading(true)
         const res = await getActionsDetail(val.action_id)
@@ -182,7 +105,7 @@ function Actions() {
             if (res.data.authentication.content) {
                 setRadioValue('custom')
                 setCustom(Object.keys(res.data.authentication.content)[0])
-                setAuthentication(Object.values(res.data.authentication.content)[0])
+                setAuthentication(Object.values(res.data.authentication.content)[0] as string)
             } else {
                 setRadioValue(res.data.authentication.type)
                 setAuthentication(res.data.authentication.secret)
@@ -216,7 +139,9 @@ function Actions() {
         const commonData = {
             schema: JSON.parse(schemaStr),
             authentication: {
-                type: radioValue
+                type: radioValue,
+                content:undefined,
+                secret: undefined
             }
         };
         if (radioValue === 'custom') {
@@ -262,7 +187,6 @@ function Actions() {
     const handleCancel = () => {
         setOpenDrawer(false)
     }
-    // Function description
     const handleSchemaChange = (e) => {
         setSchema(e.target.value)
         if (!e.target.value) {
@@ -279,13 +203,7 @@ function Actions() {
     const onRadioChange = (e) => {
         setRadioValue(e.target.value)
     }
-    // const handleValidate = () => {
-    //     if (validate(JSON.parse(schema))) {
-    //         toast.success('Valid schema')
-    //     } else {
-    //         toast.error('Invalid schema')
-    //     }
-    // }
+
     const hangleChangeAuthorization = (e) => {
         setAuthentication(e.target.value)
     }
@@ -356,7 +274,6 @@ function Actions() {
                         </div>
                         }
                     </div>
-                    {/* <span onClick={handleValidate} className='valid-schema'>Valid schema</span> */}
 
                 </div>
             </Drawer>

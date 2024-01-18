@@ -49,7 +49,7 @@ function DrawerAssistant({ handleAddPromptInput, handleMemoryChange1, inputValue
             <div className='label-desc'>
                 A description of the assistant.
             </div>
-            <Input.TextArea className='input' type="text" autoSize={{ minRows: 3, maxRows: 10 }} showCount
+            <Input.TextArea className='input'  autoSize={{ minRows: 3, maxRows: 10 }} showCount
                 maxLength={200} value={drawerDesc} onChange={handleDescriptionChanges} />
             <hr className='hr'></hr>
             <div className='label'>
@@ -79,7 +79,6 @@ function DrawerAssistant({ handleAddPromptInput, handleMemoryChange1, inputValue
             {systemPromptTemplate?.map((value, index) => (
                 <div className='input-map' key={index}>
                     <Input.TextArea
-                        type="text"
                         autoSize={{ minRows: 1, maxRows: 10 }}
                         value={value}
                         className='inputs'
@@ -126,7 +125,7 @@ function DrawerAssistant({ handleAddPromptInput, handleMemoryChange1, inputValue
             {
                 memoryValue === 'message_window' && <div className='input-double'>
                     <InputNumber
-                        parser={(value) => (isNaN(value) ? 1 : parseInt(value, 10))}
+                        parser={(value:any) => (isNaN(value) ? 1 : parseInt(value, 10))}
                         min={1}
                         max={1024}
                         placeholder='Enter max messages (from 1 to 1024)'
@@ -134,7 +133,7 @@ function DrawerAssistant({ handleAddPromptInput, handleMemoryChange1, inputValue
                         onChange={(e) => handleInputValue1(e)}
                     />
 
-                    <InputNumber parser={(value) => (isNaN(value) ? 1 : parseInt(value, 10))} min={1} max={8192} placeholder='Enter max token(from 1 to 8192)' value={inputValue2} onChange={(e) => handleInputValue2(e)}></InputNumber>
+                    <InputNumber parser={(value:any) => (isNaN(value) ? 1 : parseInt(value, 10))} min={1} max={8192} placeholder='Enter max token(from 1 to 8192)' value={inputValue2} onChange={(e) => handleInputValue2(e)}></InputNumber>
                 </div>
             }
 

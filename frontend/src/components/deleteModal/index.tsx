@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     Button,
     Modal
 } from 'antd';
-import './deleteMoal.module.scss'
+import styles from './deleteMoal.module.scss'
 import closeIcon from '../../assets/img/x-close.svg'
 
 const DeleteModal = (props) => {
@@ -38,11 +38,11 @@ const DeleteModal = (props) => {
             onOk={handleOk}
             centered
             closeIcon={<img src={closeIcon} alt="closeIcon" />}
-            className='delete-modals'
+            className={styles['delete-modals']}
             onCancel={handleCancel}
             footer={customFooter}
         >
-            <p className='p'>
+            <p className={styles['p']}>
                 {parts.map((part, index) => (
                     <span key={index} style={part.toLowerCase() === projectName?.toLowerCase() ? { color: '#087443' } : {}}>
                         {part}

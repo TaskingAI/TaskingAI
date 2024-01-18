@@ -12,6 +12,7 @@ import { TableProps } from '../../contant/index'
 function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSelectedRowKeys, updatePrevButton, ifHideFooter, dataSource, mode, ifSelect, onChildEvent, id, hasMore, onOpenDrawer, name, handleRecordsSelected }:TableProps) {
     const [selectedValue, setSelectedValue] = useState('name_search')
     const [selectValueEnd, setSelectValueEnd] = useState('All Records')
+   
     const [inputValue, setInputValue] = useState('')
     const [scroll, setScroll] = useState({ x: 0, y: 0 });
     const [pageLimit, setPageLimit] = useState(20)
@@ -25,7 +26,12 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
     const [filterConfig, setFilterConfig] = useState({
         limit: 20,
         sort_field: 'created_timestamp',
+        after:undefined,
+        before:undefined,
+        id_search:undefined,
+        name_search:undefined
     })
+    console.log(selectValueEnd,filterConfig,pageLimit)
     const [enterPlaceHolder, setEnterPlaceHolder] = useState('Enter Name')
     const empty = {
         ['API Key']: <NoApikey />,
@@ -38,10 +44,10 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
     const [selectedRowKeys, setSelectedRowKeys] = useState((defaultSelectedRowKeys && defaultSelectedRowKeys.length) ? defaultSelectedRowKeys : []);
     useEffect(() => {
         const updateScroll = () => {
-            let tableContainer = document.querySelector('.ant-table-container .ant-table-body table');
-            let tableContainerH = document.querySelector('.ant-table-container');
-            let modalInnerTable = document.querySelector('.modal-inner-table');
-            let drawerInnerTable = document.querySelector('.drawer-inner-table');
+            let tableContainer: HTMLElement | null = document.querySelector('.ant-table-container .ant-table-body table');
+            let tableContainerH: HTMLElement | null = document.querySelector('.ant-table-container');
+            let modalInnerTable: HTMLElement | null = document.querySelector('.modal-inner-table');
+            let drawerInnerTable: HTMLElement | null = document.querySelector('.drawer-inner-table');
             let containerWidth = 0;
             let containerHeight = 0;
             if (!modalInnerTable && !drawerInnerTable) {
@@ -55,8 +61,8 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                     y: containerHeight * 0.9
                 });
             } else if (modalInnerTable) {
-                const tableContainer = document.querySelector('.modal-inner-table .ant-table-container table');
-                const tableContainerH = document.querySelector('.modal-inner-table .ant-table-container');
+                const tableContainer: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container table');
+                const tableContainerH: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container');
                 containerWidth = tableContainer.offsetWidth;
                 containerHeight = tableContainerH.offsetHeight;
                 setScroll({
@@ -65,8 +71,8 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                 });
 
             } else if (drawerInnerTable) {
-                const tableContainer = document.querySelector('.drawer-inner-table .ant-table-container table');
-                const tableContainerH = document.querySelector('.drawer-inner-table');
+                const tableContainer: HTMLElement | null = document.querySelector('.drawer-inner-table .ant-table-container table');
+                const tableContainerH: HTMLElement | null = document.querySelector('.drawer-inner-table');
                 containerWidth = tableContainer.offsetWidth;
                 containerHeight = tableContainerH.offsetHeight;
                 setScroll({
@@ -215,7 +221,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         setSelectedRowKeys(newSelectedRowKeys);
 
     }
-    const rowSelection = {
+    const rowSelection:any = {
         selectedRowKeys,
         width: 45,
         onChange: onSelectChange,
@@ -326,7 +332,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         setSelectedRowKeys(newSelectedRowKeys);
     };
 
-    const handleChangePageLimit = (value, pageSize) => {
+    const handleChangePageLimit = (_value, pageSize) => {
         setPageLimit(pageSize)
         setIfClickPageSizeLimit(true)
         setPrevButtonDisabled(true)
@@ -384,7 +390,8 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             </div>}
 
             <div className='table-border'>
-                <Table scroll={scroll} {...(ifSelect ? { rowSelection: rowSelection } : null)} columns={columns} dataSource={dataSource} pagination={false}
+                <Table scroll={scroll}  columns={columns} dataSource={dataSource} pagination={false}
+                   {...(ifSelect ? { rowSelection: rowSelection } : null)}
                     onRow={(record) => {
                         return {
                             onClick: () => {

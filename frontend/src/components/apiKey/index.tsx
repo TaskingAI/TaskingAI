@@ -1,20 +1,16 @@
 import styles from './apiKey.module.scss'
-
 import ModalTable from '../modalTable/index'
-import ClipboardJS from 'clipboard';
 import closeIcon from '../../assets/img/x-close.svg'
 import { Button, Modal, Form, Input, Spin, Space, Tooltip } from 'antd'
 import { useState, useEffect } from 'react';
-import { formatTimestamp } from '@/utils/util'
 import { toast } from 'react-toastify'
-import CopyOutlined from '../../assets/img/copyIcon.svg?react'
-import { tooltipEditTitle, tooltipDeleteTitle, tooltipHideTitle, tooltipShowTitle } from '../../contents/index.js'
-
+import { tooltipEditTitle, tooltipDeleteTitle, tooltipHideTitle, tooltipShowTitle } from '../../contents/index.tsx'
 import EditIcon from '../../assets/img/editIcon.svg?react'
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
 import ShowEye from '../../assets/img/showEye.svg?react'
 import HideEye from '../../assets/img/eyeClose.svg?react'
-import { createApiKeys, getApiKeysList, getApiKeys, updateApiKeys, deleteApiKeys } from '../../axios/apiKeys.js'
+import { apikeysTableColumn } from '../../contents/index'
+import { createApiKeys, getApiKeysList, getApiKeys, updateApiKeys, deleteApiKeys } from '../../axios/apiKeys.ts'
 function ApiKeys() {
     useEffect(() => {
         const params = {
@@ -32,9 +28,8 @@ function ApiKeys() {
     const [apiKeysList, setApiKeysList] = useState([])
     const [loading, setLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
-    const [tableLoading, setTableLoading] = useState(false);
     const [apiKeyName, setapiKeyName] = useState('');
-    const [record, setRecord] = useState({});
+    const [record, setRecord] = useState<any>({});
     const [initialValues, setInitialValues] = useState({
         name: '',
     })
@@ -53,7 +48,6 @@ function ApiKeys() {
         }
     }, [apiKeyName])
     const fetchData = async (params) => {
-        setTableLoading(true)
         try {
             const res = await getApiKeysList(params)
             const data = res.data.map((item) => {
@@ -67,88 +61,37 @@ function ApiKeys() {
         } catch (e) {
             console.log(e)
         }
-        setTableLoading(false)
-    }
-    const handleCopy = (text) => {
-        const clipboard = new ClipboardJS('.icon-copy', {
-            text: () => text
-        });
-        clipboard.on('success', function (e) {
-            toast.success('Copied to clipboard')
-            clipboard.destroy()
-        });
-        clipboard.on('error', function (e) {
-            console.log(e);
-        });
     }
 
-    const columns = [
-        {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-            fixed: 'left',
-            width: 240,
-            render: (text) =>
-                <div>
-                    {text}
+   const columns = [...apikeysTableColumn]
+   columns.push(
+    {
+        title: 'Actions',
+        key: 'action',
+        fixed: 'right',
+        width: 157,
+        render: (_, record) => (
+            <Space size="middle">
+                <div onClick={() => handleShow(record)} className='table-edit-icon1'>
+                    <Tooltip placement='bottom' color='#fff' arrow={false} overlayClassName='table-tooltip' title={record.api_key.includes('***') ? tooltipShowTitle : tooltipHideTitle}>
+                        {record.api_key.includes('***') ? <ShowEye /> : <HideEye />}
+                    </Tooltip>
                 </div>
-            ,
-        },
-        {
-            title: 'Key',
-            dataIndex: 'api_key',
-            key: 'api_key',
-            width: 360,
-            render: (apiKey) => (
-                <>
-                    <div style={{ display: 'flex', alignItems: 'center', margin: 0 }}><span style={{ fontSize: '12px', color: '#777' }}>{apiKey}</span> {!apiKey.includes('****') && <CopyOutlined className='icon-copy' onClick={() => handleCopy(apiKey)} />}</div>
-                </>
-            ),
-        },
-        {
-            title: 'Created at',
-            dataIndex: 'created_timestamp',
-            key: 'created_timestamp',
-            width: 180,
-            render: (time) => <div>{formatTimestamp(time)}</div>
-        },
-        {
-            title: 'Last updated',
-            dataIndex: 'updated_timestamp',
-            key: 'updated_timestamp',
-            width: 180,
-            render: (time) => <div>{formatTimestamp(time)}</div>
-        },
-        {
-            title: 'Actions',
-            key: 'action',
-            fixed: 'right',
-            width: 157,
-            render: (_, record) => (
-                <Space size="middle">
-                    <div onClick={() => handleShow(record)} className='table-edit-icon1'>
-                        {/* <span className='edit-icon'>{record.api_key.includes('***') ? 'Show' : 'Hide'}</span> */}
-                        <Tooltip placement='bottom' color='#fff' arrow={false} overlayClassName='table-tooltip' title={record.api_key.includes('***') ? tooltipShowTitle : tooltipHideTitle}>
-                            {record.api_key.includes('***') ? <ShowEye /> : <HideEye />}
-                        </Tooltip>
-                    </div>
-                    <div onClick={() => handleEdit(record)} className='table-edit-icon'>
-                        <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
-                            <EditIcon />
-                        </Tooltip>
-                    </div>
-                    <div onClick={() => handleDelete(record)} className='table-edit-icon'>
-                        <Tooltip placement='bottom' title={tooltipDeleteTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
-                            <DeleteIcon />
-                        </Tooltip>
+                <div onClick={() => handleEdit(record)} className='table-edit-icon'>
+                    <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <EditIcon />
+                    </Tooltip>
+                </div>
+                <div onClick={() => handleDelete(record)} className='table-edit-icon'>
+                    <Tooltip placement='bottom' title={tooltipDeleteTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <DeleteIcon />
+                    </Tooltip>
 
-                    </div>
-                </Space>
-            ),
-        },
-    ];
-
+                </div>
+            </Space>
+        ),
+    }
+   )
     const handleModalCancel = async () => {
         await form.resetFields()
         await form.setFieldsValue({ name: '' });
@@ -164,12 +107,11 @@ function ApiKeys() {
         await deleteForm.resetFields()
     }
     const handleShow = async (val) => {
-        setTableLoading(true)
         let res;
         if (val.api_key.includes('***')) {
-            res = await getApiKeys(val.apikey_id, true)
+            res = await getApiKeys(val.apikey_id, 'true')
         } else {
-            res = await getApiKeys(val.apikey_id, false)
+            res = await getApiKeys(val.apikey_id, 'false')
         }
 
         const updatedApiKeysList = apiKeysList.map((item) => {
@@ -182,7 +124,6 @@ function ApiKeys() {
             }
         });
         setApiKeysList(updatedApiKeysList);
-        setTableLoading(false)
     }
     const handleEdit = async (val) => {
         setInitialValues({
@@ -202,7 +143,6 @@ function ApiKeys() {
         setRecord(record)
     }
     const handleDeleteValue = (e) => {
-        // setOpenDeleteModal(true)
         if (e.target.value === record.name) {
             setDisabled(false)
         } else {
@@ -233,7 +173,9 @@ function ApiKeys() {
                 setLoading(false);
                 await form1.resetFields()
                 await form1.setFieldsValue({ name: '' });
-            }).catch((errorInfo) => { })
+            }).catch((errorInfo) => { 
+                console.log(errorInfo)
+            })
             return
         } else {
             form.validateFields().then(async () => {
@@ -257,7 +199,9 @@ function ApiKeys() {
                 setLoading(false);
                 await form.resetFields()
                 await form.setFieldsValue({ name: '' });
-            }).catch((errorInfo) => { })
+            }).catch((errorInfo) => {
+                console.log(errorInfo)
+             })
             return
         }
     }
@@ -285,7 +229,7 @@ function ApiKeys() {
         <div className={styles["api-keys"]}>
 
             <Spin spinning={false} wrapperClassName={styles.spinloading}>
-                <ModalTable ifSelect={false} ifHideFooter={true} columns={columns} name="API Key" className={apiKeysList.length && 'table-custom'} dataSource={apiKeysList} onChildEvent={handleChildEvent} onOpenDrawer={handleNewInstance} />
+                <ModalTable ifSelect={false} ifHideFooter={true} columns={columns} name="API Key" dataSource={apiKeysList} onChildEvent={handleChildEvent} onOpenDrawer={handleNewInstance} />
             </Spin>
             <Modal title='Edit API Key'
                 onCancel={handleModalCancel}
