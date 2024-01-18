@@ -137,11 +137,11 @@ function RecordPage({ collectionId }) {
         }
         fetchData(collectionId, params)
     }, [collectionId])
-    const fetchData = async (collectionId, params) => {
+    const fetchData = async (collectionId:string, params:object) => {
         setLoading(true);
         try {
-            const res = await getRecordsList(collectionId, params)
-            const data = res.data.map((item) => {
+            const res:any = await getRecordsList(collectionId, params)
+            const data = res.data.map((item:any) => {
                 return {
                     ...item,
                     key: item.record_id
@@ -164,7 +164,7 @@ function RecordPage({ collectionId }) {
     const handleCancel = () => {
         setCreateOpenModal(false)
     }
-    const handleDelete = async (record) => {
+    const handleDelete = async (record:any) => {
         try {
             setOpenDeleteModal(true)
             setDeleteId(record.record_id)
@@ -188,7 +188,7 @@ function RecordPage({ collectionId }) {
         }
         setOpenDeleteModal(false)
     }
-    const handleEdit = async (record) => {
+    const handleEdit = async (record:any) => {
         setDrawerTitle('Edit Record')
         setInputDisabeld(true)
         setRecordId(record.record_id)
@@ -227,7 +227,7 @@ function RecordPage({ collectionId }) {
         setCreateOpenModal(false)
         setConfirmLoading(false)
     }
-    const handleContentChange = (e) => {
+    const handleContentChange = (e:any) => {
         setContentValue(e.target.value)
     }
     return (

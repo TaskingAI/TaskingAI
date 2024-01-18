@@ -15,7 +15,7 @@ import Assistant from '../../assets/img/assistantsNew.svg?react'
 import aiIcon from "../../assets/img/LOGO+TEXT.svg";
 import Retrieval from '../../assets/img/retrievalNew.svg?react';
 import Plugin from '../../assets/img/toolsNew.svg?react';
-import Setting from '../../assets/img/settingNew.svg?react';
+// import Setting from '../../assets/img/settingNew.svg?react';
 import Back from '../../assets/img/backHomeNew.svg?react';
 import Apikeys from '../../assets/img/apikeysNew.svg?react';
 import TaskingAi from '../../assets/img/taskingAi.svg?react';

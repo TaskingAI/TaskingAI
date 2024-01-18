@@ -1,5 +1,5 @@
 
-import { Tag, Tooltip } from 'antd';
+import { Tag } from 'antd';
 import { formatTimestamp } from '@/utils/util'
 import GoogleIcon from '@/assets/img/googleIcon.svg?react'
 import ModelProvider from '@/assets/img/ModelProvider.svg?react'
@@ -120,7 +120,7 @@ const modelsTableColumn: any = [
         width: 180,
         dataIndex: 'created_timestamp',
         key: 'created_timestamp',
-        render: (time: string) => <div>{formatTimestamp(time)}</div>
+        render: (time: number) => <div>{formatTimestamp(time)}</div>
     },
 
 ];

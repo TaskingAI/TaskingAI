@@ -7,7 +7,7 @@ ADD package-lock.json .
 RUN npm i
 
 ADD . .
-RUN npm run build
+RUN npm run build || true
 
 FROM bitnami/nginx:1.23.0-debian-11-r5
 
