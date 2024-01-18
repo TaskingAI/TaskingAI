@@ -9,7 +9,7 @@ RUN npm i
 ADD . .
 RUN npm run build
 
-FROM bitnami/nginx:1.23.0-debian-11-r5
+FROM nginx:1.24
 
 EXPOSE 8080
 
