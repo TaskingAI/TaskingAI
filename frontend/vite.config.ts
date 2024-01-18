@@ -8,13 +8,13 @@ export default defineConfig({
       '@': '/src',
     },
   },
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://192.168.3.31:8010",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
-      },
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     "/api": {
+  //       target: "http://192.168.3.31:8010",
+  //       changeOrigin: true,
+  //       rewrite: (path) => path.replace(/^\/api/, ""),
+  //     },
+  //   },
+  // },
 })

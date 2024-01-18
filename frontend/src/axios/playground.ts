@@ -32,9 +32,10 @@ const deleteChatItem = async (assistantsId:string, chatId:string) => {
     return await request.delete(`${project_base_url}/assistants/${assistantsId}/chats/${chatId}`)
 }
 const getHistoryMessage = async  <T extends Record<string, string>>(
-    params: T,
     assistantsId:string,
-    chatId:string
+    chatId:string,
+    params: T,
+
   ) => {
     const project_base_url = `api/v1`
     let str = ''

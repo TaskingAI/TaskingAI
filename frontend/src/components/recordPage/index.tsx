@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import ModalTable from '../modalTable/index.tsx';
 import {
     Button,
-    Space, Tag, Input, Spin, Tooltip, Modal
+    Space, Tag, Input, Spin, Tooltip, Modal,InputNumber
 } from 'antd';
-import './recordPage.scss'
+import styles from  './recordPage.module.scss'
 import { toast } from 'react-toastify';
 import { tooltipDeleteTitle, tooltipShowTitle } from '../../contents/index.tsx'
 
@@ -24,7 +24,7 @@ const statusReverse = {
     deleting: 'red'
 }
 
-function RecordPage({ collectionId }) {
+function RecordPage({ collectionId,title }) {
     const handleCopy = (text) => {
         const clipboard = new ClipboardJS('.icon-copy', {
             text: () => text
@@ -57,7 +57,7 @@ function RecordPage({ collectionId }) {
             key: 'content',
             ellipsis: true,
             render: (text) => (
-                <Tooltip title={text.text} placement='bottom'><span style={{ maxWidth: '480px', overflow: 'hidden', display: 'inline-block' }}>{text.text}</span></Tooltip>
+                <Tooltip title={text.text} placement='bottom'><span style={{ maxWidth: '480px', overflow: 'hidden', display: 'inline-block' }}>{text}</span></Tooltip>
             ),
         },
         {
@@ -125,6 +125,8 @@ function RecordPage({ collectionId }) {
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
     const [drawerTitle, setDrawerTitle] = useState('Create Record')
     const [deleteId, setDeleteId] = useState('')
+    const [chunkSize, setChunkSize] = useState('')
+    const [chunkOverlap, setChunkOverlap] = useState('')
     const handleChildEvent = async (value) => {
         setLimit(value.limit)
         setUpdatePrevButton(false)
@@ -193,7 +195,7 @@ function RecordPage({ collectionId }) {
         setRecordId(record.record_id)
         setCreateOpenModal(true)
         const res = await getRecord(collectionId, record.record_id)
-        setContentValue(res.data.content.text)
+        setContentValue(res.data.content)
     }
     const handleConfirm = async () => {
         if (!contentValue) {
@@ -204,7 +206,12 @@ function RecordPage({ collectionId }) {
         try {
             const params = {
                 type: 'text',
-                text: contentValue
+                title,
+                content: contentValue,
+                text_splitter:{
+                    type:'token'
+                }
+
             }
             if (drawerTitle === 'Create Record') {
                 await createRecord(collectionId, params)
@@ -239,11 +246,26 @@ function RecordPage({ collectionId }) {
                 <Button key="submit" onClick={() => handleConfirm()} className='next-button' loading={confirmLoading}>
                     Confirm
                 </Button>
-            ]} title={drawerTitle} className='record-create-model' open={createOpenModal} width={720} onCancel={handleCancel} closeIcon={<img src={closeIcon} alt="closeIcon" />}>
-                <div className='text-content'>
-                    <div className='text-title'>Text content</div>
-                    <div className='desc'>The content of the record. Upon creation, it will be segmented into smaller chunks and converted into computationally manageable vectors, following the rules set in the collection configuration. Currently only content in raw text format is supported.</div>
-                    <Input.TextArea disabled={inputDisabeld} placeholder='Enter description' showCount minLength={0} maxLength={32768} value={contentValue} onChange={handleContentChange} className='input'></Input.TextArea>
+            ]} title={drawerTitle} className={styles['record-create-model']} open={createOpenModal} width={720} onCancel={handleCancel} closeIcon={<img src={closeIcon} alt="closeIcon" />}>
+                <div className={styles['text-content']}>
+                    <div className={styles['text-title']}>Text content</div>
+                    <div className={styles['desc']}>The content of the record. Upon creation, it will be segmented into smaller chunks and converted into computationally manageable vectors, following the rules set in the collection configuration. Currently only content in raw text format is supported.</div>
+                    <Input.TextArea disabled={inputDisabeld} placeholder='Enter description' showCount minLength={0} maxLength={32768} value={contentValue} onChange={handleContentChange} className={styles['input']}></Input.TextArea>
+                    <div className={styles.label1}>Text Splitter</div>
+                    <div className={styles['label']}>
+                        <span className={styles['span']}>*</span>
+                        <span>{`Chunk size`}</span>
+
+                    </div>
+                    <div className={styles['label-desc']}>The collection's records will be segmented into separate chunks to optimize data retrieval. Each chunk's capacity, known as the chunk size,ranges from 100 to 500 tokens.</div>
+                    <InputNumber className={styles['input-number']} disabled={inputDisabeld} placeholder='Enter chunk size(range:100-500)' parser={(value:string) => (isNaN(Number(value)) ? '1' : String(parseInt(value, 10)))} value={chunkSize} onChange={(value) => setChunkSize(value)} min='100' max='500'></InputNumber>
+                    <div className={styles['label']}>
+                        <span className={styles['span']}>*</span>
+                        <span>{`Chunk overlap`}</span>
+
+                    </div>
+                    <div className={styles['label-desc']}>{`Chunk overlap specifies how much overlap there should be between chunks,counted by number of chunk text tokens.It cannot be larger then chunk_size.`}</div>
+                    <InputNumber className={styles['input-number']} disabled={inputDisabeld} placeholder='Enter chunk overlap' value={chunkOverlap} onChange={(value) => setChunkOverlap(value)} parser={(value:string) => (isNaN(Number(value)) ? '1' : String(parseInt(value, 10)))} min='0' max='100'></InputNumber>
                 </div>
             </Modal>
             <DeleteModal open={OpenDeleteModal} describe={`Are you sure you want to delete reocrd ${deleteId}? This action cannot be undone and all chunks associated with the reocrd will be deleted.`} title="Delete Record" projectName={deleteId} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>

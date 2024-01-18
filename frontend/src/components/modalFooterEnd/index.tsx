@@ -20,7 +20,7 @@ function ModalFooterEnd({ onCancel, handleOk }) {
             <Button key="cancel" onClick={handleCancel} className='cancel-button'>
                 Cancel
             </Button>
-            <Button key="Confirm" onClick={handleSuccess} className={styles['next-button']} loading={confirmLoading}>
+            <Button key="Confirm" onClick={handleSuccess} className={`next-button ${styles['button']}`} loading={confirmLoading}>
                 Confirm
             </Button>
         </div>

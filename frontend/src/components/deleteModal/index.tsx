@@ -25,7 +25,7 @@ const DeleteModal = (props) => {
             <Button key="back" onClick={handleCancel} className='cancel-button'>
                 Cancel
             </Button>
-            <Button key="submit" type="primary" onClick={handleOk} danger loading={deleteLoading} className='delete-button'>
+            <Button key="submit" type="primary" onClick={handleOk} danger loading={deleteLoading} className={`delete-button ${styles.button}`}>
                 Delete
             </Button>
         </div>

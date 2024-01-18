@@ -70,7 +70,6 @@ function Retrieval() {
     const [recordsSelected, setRecordsSelected] = useState([])
     const [selectedRows, setSelectedRows] = useState<string[]>([])
     // const [modelId, setModelId] = useState(undefined)
-    const [chunkSize, setChunkSize] = useState<number>()
     const [options, setOptions] = useState([])
     const childRef = useRef<ChildRefType | null>(null);
     const [selectValue, setSelectValue] = useState(1000)
@@ -141,7 +140,6 @@ function Retrieval() {
         setCollectionId('')
         setRecordsSelected([])
         setDefaultSelectedRowKeys([])
-        setChunkSize(200)
         setDescriptionText('')
         // setChunkOverlap(10)
         setSelectedRows([])
@@ -159,7 +157,6 @@ function Retrieval() {
         setRecordOpen(true)
     }
     const handleEdit = (val:any) => {
-        console.log(val)
         setDrawerTitle('Edit Collection')
         setDrawerName(val.name)
         setEditDisabled(true)
@@ -206,7 +203,8 @@ function Retrieval() {
     }
 
     const handleRequest = async () => {
-        if (!selectedRows || !chunkSize || !selectValue) {
+
+        if (!selectedRows  || !selectValue) {
             return toast.error('Missing required parameters')
         }
         // if (modelId.length !== 8) {
@@ -379,7 +377,7 @@ function Retrieval() {
             {/* <TKNegativeModal open={OpenDeleteModal} objectClassName="Collection" objectName={deleteValue} description="This action cannot be undone and all retrieval integrations associated with the collection will be affected."></TKNegativeModal> */}
             <DeleteModal describe={`Are you sure you want to delete ${deleteValue || 'Untitled Collection'}? This action cannot be undone and all retrieval integrations associated with the collection will be affected.`} open={OpenDeleteModal} title='Delete Collection' projectName={deleteValue || 'Untitled Collection'} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
             <Drawer className={styles['drawer-inner-table']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleRecordCancel} placement="right" size='large' open={recordOpen} width={1000} title={`${drawerName} / Records`}>
-                <RecordPage collectionId={collectionRecordId}></RecordPage>
+                <RecordPage collectionId={collectionRecordId} title={drawerName}></RecordPage>
             </Drawer>
         </div>)
 }

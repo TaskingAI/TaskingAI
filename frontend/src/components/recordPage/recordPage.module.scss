@@ -1,0 +1,93 @@
+.record-create-model {
+    min-height: 720px;
+
+    :global {
+        .ant-modal-content {
+            height: 720px;
+            padding: 0;
+
+            .ant-modal-body {
+                height: calc(100% - 115px);
+                padding: 0px;
+
+            }
+        }
+
+    }
+
+    .text-content {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+
+        .text-title {
+            position: relative;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 24px 24px 0 24px;
+            font-family: Inter;
+            color: #2b2b2b;
+            text-align: left;
+        }
+
+        .desc {
+            width: calc(100% - 48px) !important;
+            margin: 8px 0;
+            position: relative;
+            font-size: 14px;
+            font-family: Inter;
+            color: #777;
+            padding: 0px 24px 0 24px;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .input {
+            flex: 1;
+            margin:0 24px 24px 24px !important;
+            width: calc(100% - 48px) !important;
+        }
+    }
+
+    .label {
+        position: relative;
+        font-size: 16px;
+        line-height: 20px;
+        font-family: Inter;
+        text-align: left;
+        color: #2b2b2b;
+        margin: 20px 0px 10px 24px;
+
+        .span {
+            color: #ec1943;
+        }
+    }
+
+    .label-desc {
+        width: calc(100% - 48px) !important;
+        position: relative;
+        font-size: 14px;
+        line-height: 20px;
+        font-family: Inter;
+        color: #777777;
+        text-align: left;
+        display: inline-block;
+        margin: 0 24px 10px 24px;
+    }
+
+    .input-number {
+        margin:0 24px 24px 24px !important;
+        width: calc(100% - 48px) !important;
+    }
+
+    .label1 {
+        position: relative;
+        font-size: 18px;
+        font-weight: 600;
+        font-family: Inter;
+        color: #2b2b2b;
+        text-align: left;
+        margin: 24px 0 0 24px;
+    }
+
+}
