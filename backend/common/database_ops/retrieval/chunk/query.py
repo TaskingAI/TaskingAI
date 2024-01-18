@@ -30,7 +30,7 @@ async def _query_chunks_in_one_collection(
     # we use cosine distance by default
     async with postgres_db_pool.get_db_connection() as conn:
         async with conn.transaction():
-            # logger.debug(f"searching with ef_search = {ef_search}")
+            logger.debug(f"_query_chunks_in_one_collection: Query with ef_search = {ef_search}")
 
             await conn.execute(
                 f"""

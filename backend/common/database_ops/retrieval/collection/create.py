@@ -4,6 +4,7 @@ from .get import get_collection
 from typing import Dict
 import json
 import logging
+from ..chunk.utils import get_m_ef_construction
 
 logger = logging.getLogger(__name__)
 
@@ -62,12 +63,21 @@ async def create_collection(
                 );
             """
 
-        logging.debug(f"create_collection: create chunk table with: \n {create_chunk_table_sql}")
+            logging.debug(f"create_collection: create chunk table with: \n {create_chunk_table_sql}")
 
-        # 2. create the chunk table
-        await conn.execute(create_chunk_table_sql)
+            # 2. create the chunk table
+            await conn.execute(create_chunk_table_sql)
 
-        # 3. todo: add index
+            # 3. add hnsw vector index
+            m, ef_construction = get_m_ef_construction(capacity, embedding_size)
+            await conn.execute(
+                f"""
+                CREATE INDEX ON {chunk_table_name}
+                USING hnsw (embedding vector_cosine_ops)
+                WITH (m = {m}, ef_construction = {ef_construction});
+             """
+            )
+            logger.debug(f"create_collection: create hnsw index with m={m}, ef_construction={ef_construction}")
 
     # 3. get and add to redis
     collection = await get_collection(new_id)
