@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 // const baseURL = import.meta.env.VITE_BASE_URL;
 // console.log(baseURL);
 const request = axios.create({
+  baseURL: '/',
   timeout: 60000
 });
 request.interceptors.request.use(
