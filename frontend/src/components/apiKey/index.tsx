@@ -73,7 +73,7 @@ function ApiKeys() {
         render: (_, record) => (
             <Space size="middle">
                 <div onClick={() => handleShow(record)} className='table-edit-icon1'>
-                    <Tooltip placement='bottom' color='#fff' arrow={false} overlayClassName='table-tooltip' title={record.api_key.includes('***') ? tooltipShowTitle : tooltipHideTitle}>
+                    <Tooltip placement='bottom' color='#fff' arrow={false} overlayClassName='table-tooltip' title={record.apikey.includes('***') ? tooltipShowTitle : tooltipHideTitle}>
                         {record.apikey.includes('***') ? <ShowEye /> : <HideEye />}
                     </Tooltip>
                 </div>

@@ -5,6 +5,7 @@ import GoogleIcon from '@/assets/img/googleIcon.svg?react'
 import ModelProvider from '@/assets/img/ModelProvider.svg?react'
 import Anthropic from '@/assets/img/Anthropic.svg?react'
 import Frame from '@/assets/img/Frame.svg?react'
+import ZhiPu from '@/assets/img/Zhipu.svg?react'
 import ClipboardJS from 'clipboard';
 import { toast } from 'react-toastify';
 import CohereIcon from '@/assets/img/cohereIcon.svg?react'
@@ -38,21 +39,20 @@ const handleCopy = (text: string) => {
         console.log(e);
     });
 }
+const providerIcons = {
+    openai: <ModelProvider width='16px' height='16px' />,
+    anthropic: <Anthropic width='16px' height='16px' />,
+    azure_openai: <Frame width='16px' height='16px' />,
+    google_gemini: <GoogleIcon width='16px' height='16px' />,
+    mistralai: <MistralAI width='16px' height='16px' />,
+    cohere: <CohereIcon width='16px' height='16px' />,
+    zhipu: <ZhiPu width='16px' height='16px' />
+};
+
 const imgReverse = (providerId: string) => {
-    if (providerId === 'openai') {
-        return <ModelProvider width='16px' height='16px' />
-    } else if (providerId === 'anthropic') {
-        return <Anthropic width='16px' height='16px' />
-    } else if (providerId === 'azure_openai') {
-        return <Frame width='16px' height='16px' />
-    } else if (providerId === 'google_gemini') {
-        return <GoogleIcon width='16px' height='16px' />
-    } else if (providerId === 'cohere') {
-        return <CohereIcon width='16px' height='16px' />
-    } else if (providerId === 'mistralai') {
-        return <MistralAI width='16px' height='16px' />
-    }
-}
+    return providerIcons[providerId] || null;
+};
+
 const typeReverse: Record<string, string> = {
     instruct_completion: 'Instruct Completion',
     chat_completion: 'Chat Completion',
@@ -375,4 +375,5 @@ const assistantTableColumn: any = [
         render: (time) => <div>{formatTimestamp(time)}</div>
     },
 ]
-export { collectionTableColumn, assistantTableColumn, apikeysTableColumn, actionsTableColumn, tooltipEditTitle, tooltipDeleteTitle, tooltipPlaygroundTitle, tooltipShowTitle, tooltipHideTitle, modelsTableColumn };
+
+export { collectionTableColumn,imgReverse, assistantTableColumn, apikeysTableColumn, actionsTableColumn, tooltipEditTitle, tooltipDeleteTitle, tooltipPlaygroundTitle, tooltipShowTitle, tooltipHideTitle, modelsTableColumn };

@@ -1,13 +1,7 @@
 import { useEffect, useState, useRef, ChangeEvent } from 'react'
 import { Modal, Button, Spin, Space, Input, Form, Drawer, Tooltip } from 'antd'
 import styles from './modelsPage.module.scss'
-import GoogleIcon from '../../assets/img/googleIcon.svg?react'
-import MistralAI from '@/assets/img/MistralAI.svg?react'
 
-import ModelProvider from '../../assets/img/ModelProvider.svg?react'
-import Anthropic from '../../assets/img/Anthropic.svg?react'
-import Frame from '../../assets/img/Frame.svg?react'
-import CohereIcon from '../../assets/img/cohereIcon.svg?react'
 // import { TKButton } from '@taskingai/taskingai-ui'
 import { getModelsList, updateModels, deleteModels, getModelsForm, getAiModelsForm } from '@/axios/models'
 import { tooltipEditTitle, tooltipDeleteTitle } from '../../contents/index.tsx'
@@ -18,7 +12,8 @@ import ModalTable from '@/components/modalTable';
 import ModelModal from '@/components/modelModal';
 import closeIcon from '../../assets/img/x-close.svg'
 import { toast } from 'react-toastify';
-import { RecordType,ChildRefType,formDataType } from '../../contant/index.ts'
+import { RecordType, ChildRefType, formDataType } from '../../contant/index.ts'
+import { imgReverse } from '../../contents/index.tsx'
 function ModelsPage() {
     const [form] = Form.useForm()
     const [form1] = Form.useForm()
@@ -53,11 +48,11 @@ function ModelsPage() {
     const [deleteLoading, setDeleteLoading] = useState(false)
 
 
-    const fetchData = async (params:Record<string,any>) => {
+    const fetchData = async (params: Record<string, any>) => {
         try {
             setLoading(true)
-            const res:any = await getModelsList(params)
-            const data = res.data.map((item:RecordType) => {
+            const res: any = await getModelsList(params)
+            const data = res.data.map((item: RecordType) => {
                 return {
                     ...item,
                     key: item.model_id,
@@ -167,13 +162,13 @@ function ModelsPage() {
         setDrawerEditOpen(true)
         setLoading(false)
     }
-    const fetchEditFormData = async (model_id:string, provider_id:string) => {
+    const fetchEditFormData = async (model_id: string, provider_id: string) => {
         const res = await getModelsForm(model_id)
         const res1 = await getAiModelsForm(provider_id, 'true')
         setFormData(res1.data[0].credentials_schema)
         form.setFieldsValue(res.data.display_credentials)
     }
- 
+
     const handleConfirm = async () => {
         await form1.validateFields().then(async () => {
 
@@ -192,7 +187,7 @@ function ModelsPage() {
                     }
                     await fetchData(params1)
                 } catch (error) {
-                        toast.error(error.response.data.error.message)
+                    toast.error(error.response.data.error.message)
                 }
 
 
@@ -205,22 +200,8 @@ function ModelsPage() {
         setOpenDeleteModal(false)
     }
 
-    const imgReverse = (providerId: string) => {
-        if (providerId === 'openai') {
-            return <ModelProvider width='16px' height='16px' />
-        } else if (providerId === 'anthropic') {
-            return <Anthropic width='16px' height='16px' />
-        } else if (providerId === 'azure_openai') {
-            return <Frame width='16px' height='16px' />
-        } else if (providerId === 'google_gemini') {
-            return <GoogleIcon width='16px' height='16px' />
-        } else if (providerId === 'cohere') {
-            return <CohereIcon width='16px' height='16px' />
-        } else if (providerId === 'mistralai') {
-            return <MistralAI width='16px' height='16px' />
-        }
-    }
-    const handleValuesChange = (changedValues:object) => {
+
+    const handleValuesChange = (changedValues: object) => {
         form.validateFields(Object.keys(changedValues));
     };
     const handleResetCredentials = async () => {
@@ -228,7 +209,7 @@ function ModelsPage() {
         setFormShow(false)
         setResetButtonShow(false)
     }
-    const handleChildEvent = async (value:Record<string,any>) => {
+    const handleChildEvent = async (value: Record<string, any>) => {
         setUpdatePrevButton(false)
         setLimit(value.limit)
         await fetchData(value);

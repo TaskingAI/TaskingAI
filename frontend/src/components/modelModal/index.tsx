@@ -4,14 +4,9 @@ import {
 
 } from '@ant-design/icons';
 import './modelModal.scss'
-import ModelProvider from '../../assets/img/ModelProvider.svg?react'
-import Anthropic from '../../assets/img/Anthropic.svg?react'
-import Frame from '../../assets/img/Frame.svg?react'
-import GoogleIcon from '../../assets/img/googleIcon.svg?react'
-import MistralAI from '@/assets/img/MistralAI.svg?react'
 
 import NoModel from '../../assets/img/NO_MODEL.svg?react'
-import CohereIcon from '../../assets/img/cohereIcon.svg?react'
+import {imgReverse} from '@/contents/index'
 import { Modal, Pagination, Button, Spin, Input, Form } from 'antd'
 import { getAiModelsList, createModels, getAiModelsForm, getModelProviderList } from '../../axios/models'
 import { toast } from 'react-toastify'
@@ -100,21 +95,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         setNextLoading(false)
         setModelTwoOpen(true)
     }
-    const imgReverse = (providerId: string) => {
-        if (providerId === 'openai') {
-            return <ModelProvider width='16px' height='16px' />
-        }else if (providerId === 'anthropic') {
-            return <Anthropic width='16px' height='16px' />
-        } else if (providerId === 'azure_openai') {
-            return <Frame width='16px' height='16px' />
-        } else if (providerId === 'google_gemini') {
-            return <GoogleIcon width='16px' height='16px' />
-        } else if (providerId === 'cohere') {
-            return <CohereIcon width='16px' height='16px' />
-        } else if (providerId === 'mistralai') {
-            return <MistralAI width='16px' height='16px' />
-        }
-    }
+
     const handleConfirm = async () => {
         form1.validateFields().then(async () => {
             form.validateFields().then(async () => {
@@ -175,6 +156,8 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
             return <span>Google Gemini</span>
         } else if (providerId === 'cohere') {
             return <span>Cohere</span>
+        } else if(providerId === 'zhipu') {
+            return <span>ZhiPu</span>
         }
     }
     return (

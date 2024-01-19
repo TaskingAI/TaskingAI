@@ -12,7 +12,7 @@ import EditIcon from '../../assets/img/editIcon.svg?react'
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
 import JumpIcon from '../../assets/img/assistantJumpIcon.svg?react'
 import ModalFooterEnd from '../modalFooterEnd/index'
-import {  getFirstMethodAndEndpoint } from '@/utils/util'
+import { getFirstMethodAndEndpoint } from '@/utils/util'
 import { toast } from 'react-toastify'
 import DeleteModal from '../deleteModal/index.tsx'
 import DrawerAssistant from '../drawerAssistant/index'
@@ -20,10 +20,10 @@ import closeIcon from '../../assets/img/x-close.svg'
 import { useNavigate } from 'react-router-dom';
 import { ChildRefType } from '../../contant/index.ts'
 
-import { assistantTableColumn,modelsTableColumn,actionsTableColumn,collectionTableColumn } from '../../contents/index'
+import { assistantTableColumn, modelsTableColumn, actionsTableColumn, collectionTableColumn } from '../../contents/index'
 import {
     Button,
-    Space, Radio,  Drawer, Input, Spin, Modal, Tooltip
+    Space, Radio, Drawer, Input, Spin, Modal, Tooltip
 } from 'antd';
 import { getRetrievalList } from '../../axios/retrieval.ts';
 const titleCase = (str) => {
@@ -126,7 +126,7 @@ function Assistant() {
     const fetchData = async (params) => {
         setLoading(true);
         try {
-            const res:any = await getAssistantsList(params)
+            const res: any = await getAssistantsList(params)
             const data = res.data.map((item) => {
                 return {
                     ...item,
@@ -170,7 +170,7 @@ function Assistant() {
             schema: JSON.parse(schema),
             authentication: {
                 type: radioValue,
-                content:undefined,
+                content: undefined,
                 secret: undefined
             }
         };
@@ -199,7 +199,7 @@ function Assistant() {
     }
     const fetchDataRetrievalData = async (params) => {
         try {
-            const res:any = await getRetrievalList(params)
+            const res: any = await getRetrievalList(params)
             const data = res.data.map((item) => {
                 return {
                     ...item,
@@ -231,7 +231,7 @@ function Assistant() {
     }
     const fetchActionsList = async (params) => {
         try {
-            const res:any = await getActionsList(params)
+            const res: any = await getActionsList(params)
             const data = res.data.map((item) => {
                 return {
                     ...item,
@@ -331,6 +331,9 @@ function Assistant() {
         } else {
             systemTemplate = systemPromptTemplate
         }
+        if (selectedRows.length === 0) {
+            return toast.error('Please select a model')
+        }
         const params = {
             model_id: selectedRows[0].slice(-8),
             name: drawerName || '',
@@ -353,7 +356,6 @@ function Assistant() {
         if (count > 16384) {
             return toast.error('System prompt template cannot exceed 16384 characters')
         }
-
         if (selectedRows[0].slice(-8).length !== 8) {
             return toast.error('Model ID must be 8 characters')
         }
@@ -377,13 +379,13 @@ function Assistant() {
 
     }
 
-    const fetchModelsList = async (value?:any) => {
+    const fetchModelsList = async (value?: any) => {
         const params = {
             limit: modelLimit || 20,
             ...value
         }
         try {
-            const res:any = await getModelsList(params, 'chat_completion')
+            const res: any = await getModelsList(params, 'chat_completion')
             const data = res.data.map((item) => {
                 return {
                     ...item,
@@ -517,7 +519,7 @@ function Assistant() {
             <Drawer
                 className={styles['drawer-assistants']}
                 closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />}
-                onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel}  />}>
+                onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <DrawerAssistant selectedActionsRows={selectedActionsRows} inputValue1={inputValueOne} inputValue2={inputValueTwo} handleMemoryChange1={handleMemoryChange1} memoryValue={memoryValue} handleAddPromptInput={handleAddPrompt} handleActionModalTable={handleActionModalTable} drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} selectedRows={selectedRows} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange} handleModalTable={handleModalTable} selectedRetrievalRows={selectedRetrievalRows}></DrawerAssistant>
             </Drawer>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered footer={[

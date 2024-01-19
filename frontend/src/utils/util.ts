@@ -68,5 +68,6 @@ const findRouteByPath = (path:string, routes:any) => {
       return text;
     }
   };
+
   export { findRouteByPath, getFirstMethodAndEndpoint,formatTimestamp,parseAndRenderText };
   

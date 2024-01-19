@@ -194,7 +194,7 @@ function Retrieval() {
 
     const handleRequest = async () => {
 
-        if (!selectedRows  || !selectValue) {
+        if (selectedRows.length === 0  || !selectValue) {
             return toast.error('Missing required parameters')
         }
         // if (modelId.length !== 8) {
