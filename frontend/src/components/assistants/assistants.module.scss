@@ -293,10 +293,13 @@
     }
 }
 .drawer-assistants{
-    .ant-drawer-body{
-        padding: 0 !important;
-        overflow-x: hidden;
+    :global{
+        .ant-drawer-body{
+            padding: 0 !important;
+            overflow-x: hidden;
+        }
     }
+
 }
 .table-edit-icon:hover{
     background-color: #f5f5f5;

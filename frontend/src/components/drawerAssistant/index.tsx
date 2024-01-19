@@ -51,7 +51,7 @@ function DrawerAssistant({ handleAddPromptInput, handleMemoryChange1, inputValue
             </div>
             <Input.TextArea className='input'  autoSize={{ minRows: 3, maxRows: 10 }} showCount
                 maxLength={200} value={drawerDesc} onChange={handleDescriptionChanges} />
-            <hr className='hr'></hr>
+            <div className='hr'></div>
             <div className='label'>
                 <span className='span'>*</span>
                 <span>{`Language model `}</span>
@@ -91,7 +91,7 @@ function DrawerAssistant({ handleAddPromptInput, handleMemoryChange1, inputValue
                 <Button onClick={handleAddPrompt} disabled={systemPromptTemplate.length === 10} icon={<PlusOutlined />}>Add</Button>
                 <span>{systemPromptTemplate.length}/10</span>
             </div>
-            <hr className='hr'></hr>
+            <div className='hr'></div>
             <div className='label'>
                 <span className='span'>*</span>
                 <span>{`Memory`}</span>
@@ -137,7 +137,7 @@ function DrawerAssistant({ handleAddPromptInput, handleMemoryChange1, inputValue
                 </div>
             }
 
-            <hr className='hr'></hr>
+            <div className='hr'></div>
             <div className='desc-retrieval'>
                 Retrieval
             </div>
@@ -145,7 +145,7 @@ function DrawerAssistant({ handleAddPromptInput, handleMemoryChange1, inputValue
                 Enter the collection ID available in your project.
             </div>
             <Select className='input' placeholder="Select collections" onClick={handleModalTables} suffixIcon={<RightOutlined />} mode="multiple" open={false} value={selectedRetrievalRows} maxTagCount={2} removeIcon={null} />
-            <hr className='hr'></hr>
+            <div className='hr'></div>
             <div className='desc-retrieval'>
                 Tools
             </div>
