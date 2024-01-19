@@ -6,6 +6,7 @@ from .log import *
 from .utils import generate_random_event_id
 from common.services.inference.chat_completion import chat_completion_stream
 from common.services.assistant.chat import unlock_chat
+from common.models import SerializePurpose
 
 import logging
 
@@ -153,7 +154,8 @@ class StreamSession(Session):
 
             # raise MessageGenerationException("Manually raise error to test")
             message = await self.create_assistant_message(chat_completion_assistant_message_dict["content"])
-            yield f"data: {message.model_dump_json()}\n\n"
+            message_dict = message.to_dict(purpose=SerializePurpose.RESPONSE)
+            yield f"data: {json.dumps(message_dict)}\n\n"
             yield f"data: [DONE]\n\n"
 
         except MessageGenerationException as e:

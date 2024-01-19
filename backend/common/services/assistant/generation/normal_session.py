@@ -1,6 +1,7 @@
 from .session import Session
 from app.schemas.base import BaseSuccessDataResponse
 from .utils import MessageGenerationException
+from common.models import SerializePurpose
 from common.error import raise_http_error, ErrorCode
 from common.services.assistant.chat import unlock_chat
 
@@ -44,7 +45,7 @@ class NormalSession(Session):
                     break
 
             message = await self.create_assistant_message(chat_completion_assistant_message["content"])
-            return BaseSuccessDataResponse(data=message.model_dump())
+            return BaseSuccessDataResponse(data=message.to_dict(purpose=SerializePurpose.RESPONSE))
 
         except MessageGenerationException as e:
             logger.error(f"NormalSession.generate: MessageGenerationException error = {e}")
