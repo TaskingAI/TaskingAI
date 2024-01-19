@@ -53,7 +53,7 @@ async def refresh_admin_token(admin_id: str) -> Admin:
 
 
 async def create_default_admin_if_needed() -> Admin:
-    admin = await db_admin.get_admin_by_username("admin")
+    admin = await db_admin.get_admin_by_username(CONFIG.DEFAULT_ADMIN_USERNAME)
     if not admin:
         admin = await db_admin.register_admin(CONFIG.DEFAULT_ADMIN_USERNAME, CONFIG.DEFAULT_ADMIN_PASSWORD)
     return admin

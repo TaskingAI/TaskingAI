@@ -1,67 +1,65 @@
-version: "0.0.1"
+version: "0.1.0"
 
 services:
-  inference:
+  frontend:
+    image: taskingai-console:0.1.0
+    depends_on:
+      - backend-web
+      - backend-api
+      - backend-inference
+
+  backend-inference:
     image: taskingai-inference:1.1.0
-    expose:
-      - "8002"
     environment:
       AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8002/v1/health_check"]
+      test:
+        ["CMD", "curl", "-f", "http://backend-inference:8000/v1/health_check"]
       interval: 5s
       timeout: 5s
       retries: 10
 
   backend-api:
-    image: taskingai-backend:0.0.1
-    ports:
-      - "8000:8000"
+    image: taskingai-server:0.1.0
     environment:
       POSTGRES_URL: postgres://postgres:TaskingAI321@db:5432/taskingai
       REDIS_URL: redis://:TaskingAI321@cache:6379/0
-      TASKINGAI_INFERENCE_URL: http://localhost:8002
+      TASKINGAI_INFERENCE_URL: http://backend-inference:8000
       AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
+      DEFAULT_ADMIN_USERNAME: admin
+      DEFAULT_ADMIN_PASSWORD: TaskingAI321
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/v1/health_check"]
+      test: ["CMD", "curl", "-f", "http://backend-api:8000/v1/health_check"]
       interval: 5s
       timeout: 5s
       retries: 10
     depends_on:
       - db
       - cache
+      - backend-inference
 
   backend-web:
-    image: taskingai-backend:0.0.1
-    ports:
-      - "8001:8001"
+    image: taskingai-server:0.1.0
     environment:
       POSTGRES_URL: postgres://postgres:TaskingAI321@db:5432/taskingai
       REDIS_URL: redis://:TaskingAI321@cache:6379/0
-      TASKINGAI_INFERENCE_URL: http://localhost:8002
+      TASKINGAI_INFERENCE_URL: http://backend-inference:8000
       AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
       PURPOSE: WEB
+      DEFAULT_ADMIN_USERNAME: admin
+      DEFAULT_ADMIN_PASSWORD: TaskingAI321
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8001/api/v1/health_check"]
+      test: ["CMD", "curl", "-f", "http://backend-web:8000/api/v1/health_check"]
       interval: 5s
       timeout: 5s
       retries: 10
     depends_on:
       - db
       - cache
-
-  #  frontend:
-  #    image: your-frontend-image
-  #    ports:
-  #      - "80:80"
-  #    depends_on:
-  #      - backend1
-  #      - backend2
+      - backend-inference
 
   db:
     image: ankane/pgvector:v0.5.1
-    #    ports:
-    #      - "5432"
     environment:
       POSTGRES_DB: taskingai
       POSTGRES_USER: postgres
@@ -78,8 +76,6 @@ services:
   cache:
     image: redis:7-alpine
     command: ["redis-server", "--requirepass", "TaskingAI321"]
-    #    ports:
-    #      - "6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -88,6 +84,19 @@ services:
       timeout: 5s
       retries: 10
     restart: always
+
+  nginx:
+    image: nginx:1.24
+    ports:
+      - "8080:80"
+      # edit this to change the port, for example to "8080:80" to use port 8080
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+    depends_on:
+      - frontend
+      - backend-web
+      - backend-api
+      - backend-inference
 
 volumes:
   postgres_data:

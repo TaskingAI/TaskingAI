@@ -36,7 +36,8 @@ def create_app():
         logger.info("FastAPI app startup...")
         await redis_pool.init_pool()
         await postgres_db_pool.init_pool()
-        await create_default_admin_if_needed()
+        if CONFIG.WEB:
+            await create_default_admin_if_needed()
         check_http_error(await inference_health_check())
 
     @app.on_event("shutdown")

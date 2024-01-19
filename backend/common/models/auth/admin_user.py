@@ -53,30 +53,36 @@ class Admin(BaseModel):
 
     @classmethod
     async def get_redis_by_id(cls, admin_id: str):
-        return await redis_object_get_object(Admin, admin_id)
+        return await redis_object_get_object(
+            Admin,
+            key="id:" + admin_id,
+        )
 
     @classmethod
     async def get_redis_by_username(cls, username: str):
-        return await redis_object_get_object(Admin, username)
+        return await redis_object_get_object(
+            Admin,
+            key="username:" + username,
+        )
 
     async def set_redis(self):
         await redis_object_set_object(
             Admin,
-            key=self.admin_id,
+            key="id:" + self.admin_id,
             value=self.to_dict(purpose=SerializePurpose.REDIS),
         )
         await redis_object_set_object(
             Admin,
-            key=self.username,
+            key="username:" + self.username,
             value=self.to_dict(purpose=SerializePurpose.REDIS),
         )
 
     async def pop_redis(self):
         await redis_object_pop(
             Admin,
-            key=self.admin_id,
+            key="id:" + self.admin_id,
         )
         await redis_object_pop(
             Admin,
-            key=self.username,
+            key="username:" + self.username,
         )

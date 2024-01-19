@@ -19,6 +19,9 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . ./
 
+# Expose port 8000
+EXPOSE 8000
+
 # Command to run the application using gunicorn
 CMD gunicorn --bind 0.0.0.0:8000 \
          --preload \
@@ -27,5 +30,3 @@ CMD gunicorn --bind 0.0.0.0:8000 \
          --worker-connections 200 \
          -k uvicorn.workers.UvicornWorker \
          app.fastapi_app:app
-
-EXPOSE 8000

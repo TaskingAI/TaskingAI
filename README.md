@@ -94,7 +94,7 @@ Inside the cloned repository, go to the docker directory and launch the services
 
 ```bash
 cd docker
-docker-compose up -d
+docker-compose -p taskingai up -d
 ```
 
 Once the service is up, access the TaskingAI console through your browser with the URL http://localhost:8080.
