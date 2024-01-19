@@ -1,135 +1,152 @@
 .create-collection {
-    .ant-modal-content {
-        .ant-modal-body {
-            padding: 24px 0;
-            overflow: auto;
-            max-height: 680px;
-
-            .drawer-retrieval {
-                .name-prompt {
-                    margin: 0px 0 10px 24px;
-                    color: var(--color-text-primary);
-                    font-size: 16px;
-                }
-
-                .input {
-                    margin: 0 24px 0px 24px;
-                    width: calc(100% - 48px) !important;
-                }
-
-                .desc-prompt {
-                    margin: 20px 24px 3px 24px;
-                    color: var(--color-text-primary);
-                    font-size: 16px;
-                }
-
-                .hr {
-                    // border: 1px solid var(--color-divider;
-                    height: 1px;
-                    background-color: var(--color-divider);
-                    // margin: 24px -10px 0 0;
-                    margin-top: 24px;
-                }
-
-                .span {
-                    color: var(--color-negative);
-                }
-
-                .ant-select {
-                    width: 100%;
-                }
-
-                .label {
-                    position: relative;
-                    font-size: 16px;
-                    line-height: 20px;
-                    font-family: Inter;
-                    text-align: left;
-                    color: var(--color-text-primary);
-                    margin: 20px 24px 10px 24px;
-                }
-
-                .ant-input-number {
-                    width: 100%;
-                }
-
-                .input-number {
-                    margin-bottom: 24px !important;
-                }
-
-                .label-desc {
-                    width: calc(100% - 48px) !important;
-                    position: relative;
-                    font-size: 14px;
-                    line-height: 20px;
-                    font-family: Inter;
-                    color: #777777;
-                    text-align: left;
-                    display: inline-block;
-                    margin: 0 24px 10px 24px;
-
-                    .referToThe {
-                        text-decoration: underline;
-                    }
-
-                    .referToTheDocumentationFor {
-                        color: #777777;
-                    }
-
-                }
-
-                .add-bottom {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-top: 10px;
-
-                    .ant-btn {
-                        width: 50px;
-                        padding: 0 !important;
-                        border: none;
-
-                        .ant-btn-icon {
-                            margin-inline-end: 0 !important;
-                        }
-                    }
-
-                    .ant-btn:hover {
-                        background-color: white !important;
-                        border: none !important;
-                        color: black !important;
-                    }
-
-                    .ant-btn:active {
-                        background-color: white !important;
-                        border: none !important;
-                    }
-
-                    .ant-btn:visited {
-                        background-color: white !important;
-                        border: none !important;
-                    }
-                }
-
-                .input-group {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                }
-
-                .input-map {
-                    // margin-bottom: 10px;
-                    width: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    .input {
-                        margin-top: 8px;
-                        width: 95%;
-                    }
-                }
+    :global {
+        .ant-modal-content {
+            .ant-modal-body {
+                padding: 24px 0;
+                overflow: auto;
+                max-height: 680px;
             }
         }
     }
 
+    .drawer-retrieval {
+        .name-prompt {
+            margin: 0px 0 10px 24px;
+            color: var(--color-text-primary);
+            font-size: 16px;
+        }
+
+        .input {
+            margin: 0 24px 0px 24px;
+            width: calc(100% - 48px) !important;
+        }
+
+        .desc-prompt {
+            margin: 20px 24px 3px 24px;
+            color: var(--color-text-primary);
+            font-size: 16px;
+        }
+
+        .hr {
+            height: 1px;
+            background-color: var(--color-divider);
+            margin-top: 24px;
+        }
+
+        .span {
+            color: var(--color-negative);
+        }
+
+        .ant-select {
+            width: 100%;
+        }
+
+        .label {
+            position: relative;
+            font-size: 16px;
+            line-height: 20px;
+            font-family: Inter;
+            text-align: left;
+            color: var(--color-text-primary);
+            margin: 20px 24px 10px 24px;
+        }
+
+        .ant-input-number {
+            width: 100%;
+        }
+
+        .input-number {
+            margin-bottom: 24px !important;
+        }
+
+        .label-desc {
+            width: calc(100% - 48px) !important;
+            position: relative;
+            font-size: 14px;
+            line-height: 20px;
+            font-family: Inter;
+            color: #777777;
+            text-align: left;
+            display: inline-block;
+            margin: 0 24px 10px 24px;
+
+            .referToThe {
+                text-decoration: underline;
+            }
+
+            .referToTheDocumentationFor {
+                color: #777777;
+            }
+
+        }
+
+        .add-bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+
+            .ant-btn {
+                width: 50px;
+                padding: 0 !important;
+                border: none;
+
+                .ant-btn-icon {
+                    margin-inline-end: 0 !important;
+                }
+            }
+
+            .ant-btn:hover {
+                background-color: white !important;
+                border: none !important;
+                color: black !important;
+            }
+
+            .ant-btn:active {
+                background-color: white !important;
+                border: none !important;
+            }
+
+            .ant-btn:visited {
+                background-color: white !important;
+                border: none !important;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .input-map {
+            // margin-bottom: 10px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .input {
+                margin-top: 8px;
+                width: 95%;
+            }
+        }
+    }
+}
+
+.cancelButton {
+    margin-right: 10px;
+}
+.retrieval-model {
+    :global {
+        .ant-modal-body {
+            padding: 0 24px;
+        }
+        .ant-modal-footer {
+            height: 70px;
+            text-align: start;
+        }
+    }
+    .cancelButton {
+        margin-right: 10px;
+    }
 }

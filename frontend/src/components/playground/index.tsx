@@ -1,4 +1,4 @@
-import './playground.scss'
+import styles from './playground.module.scss'
 import { useState, useEffect, useRef } from 'react'
 import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Radio, Collapse } from 'antd'
 import { PlusOutlined, RightOutlined, LoadingOutlined, Loading3QuartersOutlined } from '@ant-design/icons';
@@ -28,7 +28,8 @@ import MessageSuccess from '../../assets/img/messageSuccess.svg?react'
 import ClipboardJS from 'clipboard';
 import DrawerAssistant from '../drawerAssistant/index'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { assistantTableColumn,modelsTableColumn,actionsTableColumn,collectionTableColumn } from '../../contents/index'
+const port =  window.location.port;
+import { assistantTableColumn, modelsTableColumn, actionsTableColumn, collectionTableColumn } from '../../contents/index'
 const plainOptions = [
     { label: 'Stream', value: 1 },
     { label: 'Debug', value: 2 },
@@ -116,7 +117,7 @@ function Playground() {
     const [noPreviousMessage, setNoPreviousMessage] = useState(false)
     const [groupedMessages, setGroupedMessages] = useState({
         role: 'Assistant',
-        content: { text: [{ event_step: '',color:undefined,event_id:undefined }] },
+        content: { text: [{ event_step: '', color: undefined, event_id: undefined }] },
         useId: 'user'
     });
     const handleCopy = (text) => {
@@ -161,7 +162,7 @@ function Playground() {
                     behavior: 'smooth',
                 });
             }
-  
+
         }
     }, [contentTalkLoading, contentTalk, shouldSmoothScroll]);
 
@@ -191,7 +192,7 @@ function Playground() {
         } else if (item.object === 'Message' && checkBoxValue1.indexOf(1) === -1 && checkBoxValue1.indexOf(2) !== -1) {
             updatedGroupedMessages.content.text[updatedGroupedMessages.content.text.length - 1].event_step = item.content.text;
         } else if (item.object === 'Error') {
-            toast.error(item.message, { autoClose: 10000 })
+            // toast.error(item.message, { autoClose: 10000 })
             setErrorContent(JSON.stringify(item, null, 4))
             setGenerateButtonLoading(false)
             setLottieAnimShow(false)
@@ -201,7 +202,7 @@ function Playground() {
         return updatedGroupedMessages;
     }
     const fetchAssistantsList = async () => {
-        const res:any = await getAssistantsList({limit:20})
+        const res: any = await getAssistantsList({ limit: 20 })
         const data = res.data.map((item) => {
             return {
                 ...item,
@@ -227,7 +228,7 @@ function Playground() {
         const assistantId = queryParams.get('assistant_id')
         if (assistantId) {
             setAssistantId([assistantId])
-            const res:any = await getListChats(assistantId, params)
+            const res: any = await getListChats(assistantId, params)
             setListChats(res.data)
             setLoadMoreHasMore(res.has_more)
             setChatId(res.data[0]?.chat_id)
@@ -247,7 +248,7 @@ function Playground() {
         } else {
             setShouldSmoothScroll(true)
         }
-        const res:any = await getHistoryMessage(assistantId, chatId, param)
+        const res: any = await getHistoryMessage(assistantId, chatId, param)
         const data = res.data.reverse()
         setContentHasMore(res.has_more)
         setContentTalk(prevValues => [...data, ...prevValues])
@@ -288,7 +289,7 @@ function Playground() {
     }
     const fetchActionsList = async (params) => {
         try {
-            const res:any = await getActionsList(params)
+            const res: any = await getActionsList(params)
             const data = res.data.map((item) => {
                 return {
                     ...item,
@@ -307,7 +308,7 @@ function Playground() {
     const fetchModelsList = async (params) => {
 
         try {
-            const res:any = await getModelsList(params, 'chat_completion')
+            const res: any = await getModelsList(params, 'chat_completion')
             const data = res.data.map((item) => {
                 return {
                     ...item,
@@ -526,10 +527,10 @@ function Playground() {
             stream: stream,
             debug: debug
         }
-  
+
         let source;
         if (stream || debug) {
-            source = new SSE(`http://192.168.3.31:8010/${project_base_url}/assistants/${id}/chats/${chatId}/generate`, {
+            source = new SSE(`http://localhost:${port}/${project_base_url}/assistants/${id}/chats/${chatId}/generate`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -599,8 +600,9 @@ function Playground() {
                     setGenerateButtonLoading(false)
                     return
                 }
-
                 const data = JSON.parse(e.data)
+                console.log(data)
+
                 if (data.object === 'MessageGenerationLog') {
                     setDebugArray2(prevValues => [...prevValues, data])
                 }
@@ -612,7 +614,7 @@ function Playground() {
         }
         setGroupedMessages({
             role: 'Assistant',
-            content: { text: [{ event_step: '',color:undefined,event_id:undefined }] },
+            content: { text: [{ event_step: '', color: undefined, event_id: undefined }] },
             useId: 'user'
         })
 
@@ -643,7 +645,7 @@ function Playground() {
     }
     const fetchDataRetrievalData = async (params) => {
         try {
-            const res:any = await getRetrievalList(params)
+            const res: any = await getRetrievalList(params)
             const data = res.data.map((item) => {
                 return {
                     ...item,
@@ -678,7 +680,7 @@ function Playground() {
     const handleListChats = async () => {
         const splitArray = assistantId[0].split('-')
         const id = splitArray.slice(-1)[0]
-        const res = await getListChats(id,{limit:20})
+        const res = await getListChats(id, { limit: 20 })
         setListChats(res.data)
         setChatId(res.data[0]?.chat_id)
         const param = {
@@ -715,8 +717,8 @@ function Playground() {
             schema: JSON.parse(schema),
             authentication: {
                 type: radioValue,
-                content:undefined,
-                secret:undefined
+                content: undefined,
+                secret: undefined
             }
         };
         if (radioValue === 'custom') {
@@ -842,7 +844,7 @@ function Playground() {
             id = assistantId[0]
         }
         setNoPreviousChat(true)
-        const res:any = await getListChats(id, params)
+        const res: any = await getListChats(id, params)
         setListChats(prevValues => [...prevValues, ...res.data])
         setLoadMoreHasMore(res.has_more)
     }
@@ -889,7 +891,7 @@ function Playground() {
                 id = assistantId[0]
             }
             await deleteChatItem(id, chatId)
-            const res:any = await getListChats(id,{limit:20})
+            const res: any = await getListChats(id, { limit: 20 })
             setListChats(res.data)
             setLoadMoreHasMore(res.has_more)
             setChatId(res.data[0]?.chat_id)
@@ -949,106 +951,106 @@ function Playground() {
     return (
         <Spin spinning={loading}>
 
-            <div className='playground'>
-                <div className='left-content'>
-                    <div className='top'>
-                        <div className='select-assistant'>Assistant</div>
-                        {!assistantId && <div className='select-desc'>Select or enter a valid assistant ID to start chatting</div>}
+            <div className={styles['playground']}>
+                <div className={styles['left-content']}>
+                    <div className={styles['top']}>
+                        <div className={styles['select-assistant']}>Assistant</div>
+                        {!assistantId && <div className={styles['select-desc']}>Select or enter a valid assistant ID to start chatting</div>}
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Select open={false} suffixIcon={<RightOutlined />} onClick={handleSelectAssistantID} value={assistantId} className='select' removeIcon={null}>
+                            <Select open={false} suffixIcon={<RightOutlined />} onClick={handleSelectAssistantID} value={assistantId} className={styles['select']} removeIcon={null}>
                             </Select>
-                            {assistantId && <Button icon={<EditIcon />} onClick={handleEditAssistant} className='edit-button'></Button>}
+                            {assistantId && <Button icon={<EditIcon />} onClick={handleEditAssistant} className={styles['edit-button']}></Button>}
                         </div>
                     </div>
-                    <div className='bottom'>
-                        <div className='bottom-chats'>
+                    <div className={styles['bottom']}>
+                        <div className={styles['bottom-chats']}>
                             <div>Chats</div>
-                            <div className='actionbuttondownload' onClick={handleNewChat}>
+                            <div className={styles['actionbuttondownload']} onClick={handleNewChat}>
                                 <PlusOutlined />
-                                <div className='text1'>New chat</div>
+                                <div className={styles['text1']}>New chat</div>
                             </div>
                         </div>
-                        <div className='chats'>
-                            <div className='chat-message'>
-                                {listChats.map((item, index) => (<div key={index} className={`functionaliconsParent ${chatId === item.chat_id && 'chatId'}`} onClick={() => handleOpenChat(item.chat_id)}>
-                                    <ChatIcon className='functionalicons'></ChatIcon>
-                                    <div className='asad233913210fsadp2131Parent'>
-                                        <div className='asad233913210fsadp2131'>{item.chat_id}</div>
-                                        <div className='apr2720231'>{formatTimestamp(item.created_timestamp)}</div>
+                        <div className={styles['chats']}>
+                            <div className={styles['chat-message']}>
+                                {listChats.map((item, index) => (<div key={index} className={`${styles.functionaliconsParent} ${chatId === item.chat_id && styles.chatId}`} onClick={() => handleOpenChat(item.chat_id)}>
+                                    <ChatIcon className={styles['functionalicons']}></ChatIcon>
+                                    <div className={styles['Parent']}>
+                                        <div className={styles['son']}>{item.chat_id}</div>
+                                        <div className={styles['son1']}>{formatTimestamp(item.created_timestamp)}</div>
                                     </div>
                                 </div>))}
-                                {(!loadMoreHasMore && noPreviousChat) && <div className='lineParent'>
-                                    <div className='frameChild' />
-                                    <div className='noPreviousChat1'>No previous chat</div>
-                                    <div className='frameChild' />
+                                {(!loadMoreHasMore && noPreviousChat) && <div className={styles['lineParent']}>
+                                    <div className={styles['frameChild']} />
+                                    <div className={styles['noPreviousChat1']}>No previous chat</div>
+                                    <div className={styles['frameChild']} />
                                 </div>}
 
                             </div>
 
 
-                            {loadMoreHasMore && <div className='lineParent' style={{ marginTop: '10px' }}>
-                                <div className='frameChild' />
-                                <div className='formbuttoncancel' onClick={handleLodaMore}>
-                                    <div className='text1'>Load more</div>
+                            {loadMoreHasMore && <div className={styles['lineParent']} style={{ marginTop: '10px' }}>
+                                <div className={styles['frameChild']} />
+                                <div className={styles['formbuttoncancel']} onClick={handleLodaMore}>
+                                    <div className={styles['text1']}>Load more</div>
                                 </div>
-                                <div className='frameChild' />
+                                <div className={styles['frameChild']} />
                             </div>}
                         </div>
 
                     </div>
                 </div>
-                <div className='right-content'>
-                    <div className='header-top'>
-                        <div className='header-left'>
-                            <span className='chat'>Chat</span>
-                            <span className='desc'>{chatId}</span>
+                <div className={styles['right-content']}>
+                    <div className={styles['header-top']}>
+                        <div className={styles['header-left']}>
+                            <span className={styles['chat']}>Chat</span>
+                            <span className={styles['desc']}>{chatId}</span>
                         </div>
 
-                        <div className='header-right' onClick={handleDeleteChat}>
+                        <div className={styles['header-right']} onClick={handleDeleteChat}>
                             <Button icon={<DeleteIcon />} className='cancel-button'>Delete chat</Button>
                         </div>
                     </div>
-                    {!chatId && <div className='content-center'>
-                        <div className='content-img'>
+                    {!chatId && <div className={styles['content-center']}>
+                        <div className={styles['content-img']}>
                             <PlaygroundImg />
-                            <div className='waiting-for-configuration'>Waiting for Configuration</div>
+                            <div className={styles['waiting-for-configuration']}>Waiting for Configuration</div>
                         </div>
                     </div>}
                     {chatId &&
                         <Spin spinning={contentTalkLoading}>
-                            <div className='content-talk' ref={contentRef}>
+                            <div className={styles['content-talk']} ref={contentRef}>
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <Spin spinning={contentLoading} />
                                 </div>
-                                {(!contentHasMore && noPreviousMessage) && <div className='lineParent'>
-                                    <div className='frameChild' />
-                                    <div className='noPreviousChat1'>No previous message </div>
-                                    <div className='frameChild' />
+                                {(!contentHasMore && noPreviousMessage) && <div className={styles['lineParent']}>
+                                    <div className={styles['frameChild']} />
+                                    <div className={styles['noPreviousChat1']}>No previous message </div>
+                                    <div className={styles['frameChild']} />
                                 </div>}
-                                {contentHasMore && <div className='lineParent' style={{ marginTop: '10px' }}>
-                                    <div className='frameChild' />
-                                    <div className='formbuttoncancel' onClick={handleContentLodaMore}>
-                                        <div className='text1'>Load more</div>
+                                {contentHasMore && <div className={styles['lineParent']} style={{ marginTop: '10px' }}>
+                                    <div className={styles['frameChild']} />
+                                    <div className={styles['formbuttoncancel']} onClick={handleContentLodaMore}>
+                                        <div className={styles['text1']}>Load more</div>
                                     </div>
-                                    <div className='frameChild' />
+                                    <div className={styles['frameChild']} />
                                 </div>}
                                 {contentTalk.map((item, index) => (
-                                    <div className='message' key={index} ref={divRef}>
-                                        <div className={`subText1 ${item.role === 'user' ? 'user' : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
-                                        {typeof (item.content.text) === 'string' && <div className={`text1 ${item.role === 'user' ? 'userInfo' : ''}`}>{item.content.text}</div>}
-                                        {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? 'userInfo' : ''}`}>{item.content.text.map((item1, index1) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && 'lastItem'}`}>
+                                    <div className={styles['message']} key={index} ref={divRef}>
+                                        <div className={`${styles.subText1} ${item.role === 'user' ? 'user' : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
+                                        {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text}</div>}
+                                        {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1, index1) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && 'lastItem'}`}>
                                             {(item1.color === 'orange' && index === contentTalk.length - 1 && item1.event_step !== '') ?
                                                 (<div style={{ display: 'flex', alignItems: 'center' }}>{lottieAnimShow && (
                                                     <>
-                                                        <Spin indicator={<Loading3QuartersOutlined className='loading-icon' spin />} />
+                                                        <Spin indicator={<Loading3QuartersOutlined className={styles['loading-icon']} spin />} />
                                                         {item1.event_step}
                                                     </>
                                                 )}
                                                 </div>) :
                                                 (
                                                     item1.color !== 'orange' && (<div onClick={() => handleClickDebug(item1)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                                                        {(item1.event_step !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className='message-success' />}{item1.event_step}</>)}
-                                                        {(item1.event_step === 'Error Occurred') && (<><ErrorIcon className='message-success'></ErrorIcon><span style={{ color: '#ec1943' }}>Error Occurred</span></>)}
+                                                        {(item1.event_step !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}{item1.event_step}</>)}
+                                                        {(item1.event_step === 'Error Occurred') && (<><ErrorIcon className={styles['message-success']}></ErrorIcon><span style={{ color: '#ec1943' }}>Error Occurred</span></>)}
                                                     </div>
                                                     )
                                                 )
@@ -1060,29 +1062,29 @@ function Playground() {
                         </Spin>
                     }
 
-                    <div className={`content-bottom ${!chatId ? 'none' : ''}`}>
-                        <TextArea className='textarea' autoSize={{ minRows: 3, maxRows: 6 }} value={contentValue} onChange={(e) => setContentValue(e.target.value)}></TextArea>
-                        <div className='button-group'>
+                    <div className={`${styles['content-bottom']} ${!chatId ? styles.none : ''}`}>
+                        <TextArea className={styles['textarea']} autoSize={{ minRows: 3, maxRows: 6 }} value={contentValue} onChange={(e) => setContentValue(e.target.value)}></TextArea>
+                        <div className={styles['button-group']}>
                             <div style={{ display: 'flex' }}>
                                 {/* <Button className='next-button button'>Send and generate</Button> */}
-                                <div className={`formbuttoncancel ${sendButtonLoading ? 'loading' : ''}`} onClick={handleCreateMessage}>
-                                    {sendButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}  <div className='text1'>Send</div>
+                                <div className={`${styles.formbuttoncancel} ${sendButtonLoading ? styles.loading : ''}`} onClick={handleCreateMessage}>
+                                    {sendButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}  <div className={styles['text1']}>Send</div>
                                 </div>
-                                <div className={`formbuttoncancel button1 ${generateButtonLoading ? 'loading' : ''}`} onClick={handleGenerateMessage}>
-                                    {generateButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}<div className='text1'>Generate</div>
+                                <div className={`${styles.formbuttoncancel} ${styles.button1} ${generateButtonLoading ? styles.loading : ''}`} onClick={handleGenerateMessage}>
+                                    {generateButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}<div className={styles['text1']}>Generate</div>
                                 </div>
                             </div>
-                            <div className='actionbuttonedit' onMouseEnter={handleMouseEnter} ref={settingIcon}>
-                                <ModalSettingIcon className='functionalicons' />
+                            <div className={styles['actionbuttonedit']} onMouseEnter={handleMouseEnter} ref={settingIcon}>
+                                <ModalSettingIcon className={styles['functionalicons']} />
                             </div>
                         </div>
-                        <div className='setting-modal' ref={settingModal} style={{ display: 'none' }}>
-                            <div className='generation-options'>
+                        <div className={styles['setting-modal']} ref={settingModal} style={{ display: 'none' }}>
+                            <div className={styles['generation-options']}>
                                 Generation options
                             </div>
-                            <div className='desc'>Select the type of messages that will be returned to the frontend.</div>
+                            <div className={styles['desc']}>Select the type of messages that will be returned to the frontend.</div>
                             <Checkbox.Group onChange={handleChangeCheckbox} options={plainOptions} defaultValue={JSON.parse(localStorage.getItem('checkedValues')) || checkBoxValue} />
-                            <div className='select-assistant'>Prompt variables</div>
+                            <div className={styles['select-assistant']}>Prompt variables</div>
                             <TextArea style={{ height: '300px' }} placeholder={`{\n   key: value\n}`}
                                 value={systemPromptVariables} onChange={(e) => setSystemPromptVariable(e.target.value)}></TextArea>
                         </div>
@@ -1091,7 +1093,7 @@ function Playground() {
             </div>
             <Drawer
                 closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />}
-                className='assistant-drawer'
+                className={styles['assistant-drawer']}
                 onClose={handleCancel} title='Edit Assistant' placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <DrawerAssistant selectedActionsRows={selectedActionsRows} memoryValue={memoryValue} inputValue1={inputValueOne} handleMemoryChange1={handleMemoryChange1} inputValue2={inputValueTwo} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} handleAddPromptInput={handleAddPrompt} handleActionModalTable={handleActionModalTable} drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} selectedRows={selectedRows} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange} handleModalTable={handleModalTable} selectedRetrievalRows={selectedRetrievalRows}></DrawerAssistant>
             </Drawer>
@@ -1105,7 +1107,7 @@ function Playground() {
                         <span className='select-record'>
                             {recordsSelected1.length}  {recordsSelected1.length > 1 ? 'items' : 'item'} selected
                         </span>
-                        <Button key="cancel" onClick={handleCloseModal} className='cancel-button'>
+                        <Button key="cancel" onClick={handleCloseModal} className={`cancel-button ${styles.cancelButton}`}>
                             Cancel
                         </Button>
                         <Button key="submit" onClick={handleCreateConfrim} className='next-button'>
@@ -1115,10 +1117,10 @@ function Playground() {
 
                 </div>
 
-            ]} title='Select Collection' open={openModalTable} width={1000} onCancel={handleCloseModal} className='modal-inner-table'>
+            ]} title='Select Collection' open={openModalTable} width={1000} onCancel={handleCloseModal} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
             </Modal>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} centered footer={[
+            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered footer={[
                 <div className='footer-group' key='footer'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateAction} className='cancel-button'>
                         New Action
@@ -1127,7 +1129,7 @@ function Playground() {
                         <span className='select-record'>
                             {recordsActionSelected.length}  {recordsActionSelected.length > 1 ? 'items' : 'item'} selected
                         </span>
-                        <Button key="cancel" onClick={handleActionModalClose} className='cancel-button'>
+                        <Button key="cancel" onClick={handleActionModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             Cancel
                         </Button>
                         <Button key="submit" onClick={handleActionModalClose} className='next-button'>
@@ -1137,10 +1139,10 @@ function Playground() {
 
                 </div>
 
-            ]} title='Select Action' open={modalActionTableOpen} width={1000} className='modal-inner-table' onCancel={handleActionModalClose}>
+            ]} title='Select Action' open={modalActionTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`} onCancel={handleActionModalClose}>
                 <ModalTable updatePrevButton={updateActionPrevButton} defaultSelectedRowKeys={selectedActionsRows} mode='multiple' handleRecordsSelected={handleActionRecordsSelected} ifSelect={true} columns={actionsTableColumn} hasMore={hasActionMore} id='action_id' dataSource={actionList} onChildEvent={handleChildActionEvent}></ModalTable>
             </Modal>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} centered onCancel={handleModalClose} footer={[
+            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='group'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
                         New model
@@ -1149,7 +1151,7 @@ function Playground() {
                         <span className='select-record'>
                             1 item selected
                         </span>
-                        <Button key="cancel" onClick={handleModalClose} className='cancel-button'>
+                        <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             Cancel
                         </Button>
                         <Button key="submit" onClick={handleModalClose} className='next-button'>
@@ -1159,28 +1161,28 @@ function Playground() {
 
                 </div>
 
-            ]} title='Select Model' open={modalTableOpen} width={1000} className='modal-inner-table'>
+            ]} title='Select Model' open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable name="model" defaultSelectedRowKeys={Array.isArray(selectedRows) ? selectedRows : [selectedRows]} updatePrevButton={updateModelPrevButton} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
-            <Drawer closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
-                <div className='action-drawer'>
-                    <div className='label'>
+            <Drawer closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
+                <div className={styles['action-drawer']}>
+                    <div className={styles['label']}>
                         <span className='span'> *</span>
                         <span>Schema</span>
 
                     </div>
-                    <div className='label-description'> The action schema, Which is compliant with the OpenAPI
+                    <div className={styles['label-description']}> The action schema, Which is compliant with the OpenAPI
                         Specification. It should only have exactly one path and one method.</div>
-                    <TextArea className='input-drawer' autoSize={{ minRows: 10, maxRows: 20 }} value={schema}
+                    <TextArea className={styles['input-drawer']} autoSize={{ minRows: 10, maxRows: 20 }} value={schema}
                         onChange={handleSchemaChange} showCount maxLength={32768}></TextArea>
                     {/* <span onClick={handleValidate} className='valid-schema'>Valid schema</span> */}
                     <div className={`desc-action-error ${tipSchema ? 'show' : ''}`}>Schema is required</div>
-                    <div className='label'>
-                        <span className='span'> *</span>
+                    <div className={styles['label']}>
+                        <span className={styles['span']}> *</span>
                         <span>Authentication</span>
 
                     </div>
-                    <div className='label-description'>Authentication Type</div>
+                    <div className={styles['label-description']}>Authentication Type</div>
                     <Radio.Group onChange={onRadioChange} value={radioValue}>
                         <Radio value='none'>None</Radio>
                         <Radio value='basic'>Basic</Radio>
@@ -1188,18 +1190,18 @@ function Playground() {
                         <Radio value='custom'>Custom</Radio>
                     </Radio.Group>
                     {radioValue !== 'none' && <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '15px 0' }}>
-                        {radioValue !== 'custom' ? <span className='desc-description'>Authorization </span> : <Input placeholder='X-Custom' onChange={handleCustom} value={custom} style={{ width: '14%' }} />} <span className='desc-description'>:</span>  <Input prefix={<span style={{ color: '#999' }} >{radioValue !== 'custom' && titleCase(radioValue)}</span>} value={Authentication} placeholder='<Secret>' onChange={hangleChangeAuthorization} style={{ width: '83%' }}></Input>
+                        {radioValue !== 'custom' ? <span className={styles['desc-description']}>Authorization </span> : <Input placeholder='X-Custom' onChange={handleCustom} value={custom} style={{ width: '14%' }} />} <span className='desc-description'>:</span>  <Input prefix={<span style={{ color: '#999' }} >{radioValue !== 'custom' && titleCase(radioValue)}</span>} value={Authentication} placeholder='<Secret>' onChange={hangleChangeAuthorization} style={{ width: '83%' }}></Input>
                     </div>
                     }
                 </div>
             </Drawer>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} onCancel={handleAssistantModalClose} centered footer={[
+            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleAssistantModalClose} centered footer={[
                 <div className='footer-group' style={{ justifyContent: 'flex-end' }} key='footer'>
                     <div>
                         <span className='select-record'>
                             {recordsSelected.length} item selected
                         </span>
-                        <Button key="cancel" onClick={handleAssistantModalClose} className='cancel-button'>
+                        <Button key="cancel" onClick={handleAssistantModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             Cancel
                         </Button>
                         <Button key="submit" onClick={handleAssistantModalClose1} className='next-button' loading={confirmLoading}>
@@ -1209,42 +1211,42 @@ function Playground() {
 
                 </div>
 
-            ]} title='Select Assistant' open={openAssistantModalTable} width={1000} className='modal-inner-table model1'>
+            ]} title='Select Assistant' open={openAssistantModalTable} width={1000} className={`modal-inner-table ${styles.model1}`}>
                 <ModalTable name='Assistant' ifAllowNew={true} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedAssistant} handleRecordsSelected={handleRecordsAssistantSelected} ifSelect={true} columns={assistantTableColumn} hasMore={modelHasMore} id='assistant_id' dataSource={optionList} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <CreateCollection handleFetchData={() => fetchDataRetrievalData({ limit: retrievalLimit || 20 })} handleModalCloseOrOpen={() => setOpenCollectionDrawer(false)} OpenDrawer={openCollectionDrawer}></CreateCollection>
-            <Drawer width={700} open={contentDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} onClose={handleCloseContentDrawer} title='Chat Completion'>
+            <Drawer width={700} open={contentDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCloseContentDrawer} title='Chat Completion'>
                 <Collapse expandIconPosition='end' items={[
                     {
                         key: '1',
                         label: collapseLabel1,
-                        children: <div className='content-drawer'>
-                            <div className='content'>
-                                <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatCompletionCall)} />
+                        children: <div className={styles['content-drawer']}>
+                            <div className={styles['content']}>
+                                <CopyOutlined className={styles['icon-copy']} onClick={() => handleCopy(chatCompletionCall)} />
                             </div>
                             <TextArea autoSize={true} value={chatCompletionCall} disabled />
                         </div>
                     }]}></Collapse>
-                <Collapse className='collapse-drawer' expandIconPosition='end' items={[
+                <Collapse className={styles['collapse-drawer']} expandIconPosition='end' items={[
                     {
                         key: '2',
                         label: collapseLabel2,
-                        children: <div className='content-drawer'>
-                            <div className='content'>
-                                <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatCompletionResult)} />
+                        children: <div className={styles['content-drawer']}>
+                            <div className={styles['content']}>
+                                <CopyOutlined className={styles['icon-copy']} onClick={() => handleCopy(chatCompletionResult)} />
                             </div>
                             <TextArea autoSize={true} value={chatCompletionResult} disabled />
                         </div>
                     }]}></Collapse>
 
             </Drawer>
-            <Drawer width={700} open={contentErrorDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} onClose={handleCloseContentErrorDrawer} title='Chat Completion'>
+            <Drawer width={700} open={contentErrorDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCloseContentErrorDrawer} title='Chat Completion'>
                 <Collapse expandIconPosition='end' items={[
                     {
                         key: '1',
                         label: 'Error Occurred',
-                        children: <div className='content-drawer'>
-                            <div className='content'>
+                        children: <div className={styles['content-drawer']}>
+                            <div className={styles['content']}>
                                 <CopyOutlined className='icon-copy' onClick={() => handleCopy(errorContent)} />
                             </div>
                             <TextArea autoSize={true} value={errorContent} disabled />

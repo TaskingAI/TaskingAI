@@ -83,10 +83,7 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
             const params = {
                 capacity: Number(selectValue),
                 embedding_model_id: selectedRows[0].slice(-8),
-                configs: {
-                    chunk_size: Number(chunkSize),
-                    chunk_overlap: Number(chunkOverlap)
-                },
+        
                 name: drawerName || '',
                 description: descriptionText || '',
                 metadata: {}
@@ -206,7 +203,7 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
                         <span className='select-record'>
                             {recordsSelected.length} {recordsSelected.length > 1 ? 'items' : 'item'} selected
                         </span>
-                        <Button key="cancel" onClick={handleModalClose} className='cancel-button'>
+                        <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             Cancel
                         </Button>
                         <Button key="submit" onClick={handleModalClose} className='next-button'>
@@ -216,7 +213,7 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
 
                 </div>
 
-            ]} title='Select Model' open={modalTableOpen} width={1000} className='modal-inner-table'>
+            ]} title='Select Model' open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable name="model" onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <ModelModal getOptionsList={fetchModelsList} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} modelType='text_embedding' handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>

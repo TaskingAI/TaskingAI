@@ -444,3 +444,27 @@ body {
   background-color: #f3f8f6;
   color: var(--color-primary);
 }
+.ant-checkbox-checked:hover {
+  .ant-checkbox-inner {
+    background-color: #087443 !important;
+    border: 1px solid transparent !important;
+  }
+}
+
+.ant-checkbox-wrapper:hover {
+  .ant-checkbox-inner {
+    border: 1px solid #ccc !important;
+  }
+}
+
+.ant-checkbox-wrapper-checked:hover {
+  .ant-checkbox.ant-checkbox-checked::after{
+    border: 1px solid #087443 !important;
+    .ant-checkbox-inner {
+      background-color: #087443 !important;
+    border: 1px solid #087443 !important;
+
+    }
+  
+  }
+}
