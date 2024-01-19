@@ -10,8 +10,8 @@
     }
 
     .next-button {
-        background-color: #099250;
-        color: #fff
+        background-color: var(--color-positive);
+        color: var(--color-invert-text)
     }
     .button{
         margin-left: 10px;

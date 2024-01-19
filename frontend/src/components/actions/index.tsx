@@ -64,7 +64,7 @@ function Actions() {
         setActionId('')
         setRadioValue('none')
         setAuthentication('')
-
+        setTipSchema(false)
         setDrawerTitle('Bulk Create Action')
         setOpenDrawer(value)
     }
@@ -96,7 +96,7 @@ function Actions() {
     const handleEdit = async (val) => {
         setLoading(true)
         const res = await getActionsDetail(val.action_id)
-        const formattedData = JSON.stringify(res.data.schema, null, 4);
+        const formattedData = JSON.stringify(res.data.openapi_schema, null, 4);
         setDrawerTitle('Edit Action')
         setTipSchema(false)
         setActionId(val.action_id)
@@ -137,7 +137,7 @@ function Actions() {
         }
         setTipSchema(false)
         const commonData = {
-            schema: JSON.parse(schemaStr),
+            openapi_schema: JSON.parse(schemaStr),
             authentication: {
                 type: radioValue,
                 content:undefined,
@@ -230,7 +230,7 @@ function Actions() {
                 <ModalTable updatePrevButton={updatePrevButton} name='action' id='action_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
             <DeleteModal open={OpenDeleteModal} describe={`Are you sure you want to delete ${deleteValue}? This action cannot be undone and all integrations associated with the action will be affected.`} title='Delete Action' projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
-            <Drawer closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
+            <Drawer className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <div className={styles['action-drawer']}>
                     <div className={styles['top']}>
                         <div className={styles['label']} style={{ marginTop: 0 }}>
@@ -241,19 +241,19 @@ function Actions() {
                         {drawerTitle === 'Bulk Create Action' ?
                             <div className={styles['label-description']}>
                                 The action JSON schema is compliant with
-                                <a href="https://www.openapis.org/what-is-openapi" target="_blank" rel="noopener noreferrer" className={styles['href']}> the OpenAPI Specification</a>.
+                                <a href="https://www.openapis.org/what-is-openapi" target="_blank" rel="noopener noreferrer" className={'href'}> the OpenAPI Specification</a>.
                                 If there are multiple paths and methods in the schema, the service will create multiple
                                 actions whose schema only has exactly one path and one method. We’ll use "operationId" and
                                 "description" fields of each endpoint method as the name and description of the tool. Check
-                                <a href="https://docs.tasking.ai/docs/guide/tool/action" target="_blank" rel="noopener noreferrer" className={styles['href']}> the documentation </a>
+                                <a href="https://docs.tasking.ai/docs/guide/tool/action" target="_blank" rel="noopener noreferrer" className={'href'}> the documentation </a>
                                 to learn more.
                             </div> :
                             <div className={styles['label-description']}> The action schema, Which is compliant with the OpenAPI
                                 Specification. It should only have exactly one path and one method.</div>}
 
-                        <TextArea className={styles['input-drawer']} value={schema}
+                        <TextArea value={schema}
                             onChange={handleSchemaChange} showCount maxLength={32768}></TextArea>
-                        <div className={`desc-action-error ${tipSchema ? 'show' : ''}`}>Schema is required</div>
+                        <div className={`${styles['desc-action-error']} ${tipSchema ? styles.show : ''}`}>Schema is required</div>
 
                     </div>
                     <div className={styles['bottom']}>

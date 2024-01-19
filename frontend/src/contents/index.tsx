@@ -280,8 +280,8 @@ const apikeysTableColumn: any = [
     },
     {
         title: 'Key',
-        dataIndex: 'api_key',
-        key: 'api_key',
+        dataIndex: 'apikey',
+        key: 'apikey',
         width: 360,
         render: (apiKey) => (
             <>

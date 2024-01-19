@@ -26,7 +26,7 @@
                 height: 100%;
                 position: relative;
                 border-radius: 8px;
-                border: 1px solid #e4e4e4;
+                border: 1px solid var(--color-divider);
                 box-sizing: border-box;
                 // width: 100%;
                 display: flex;
@@ -42,16 +42,16 @@
             }
 
             .prompt-button {
-                background-color: #099250;
+                background-color: var(--color-positive);
                 color: white;
                 margin-left: 10px;
                 height: 40px;
             }
 
             .prompt-button:hover {
-                color: #fff !important;
+                color: var(--color-invert-text) !important;
                 cursor: pointer;
-                background-color: #2ea26a;
+                background-color: var(--color-positive-hover);
                 border: 1px solid transparent;
             }
         }
@@ -59,8 +59,8 @@
 
     .usersCanSetUpAndSelectFrParent {
         position: relative;
-        background-color: #fff;
-        border-bottom: 1px solid #e4e4e4;
+        background-color: var(--color-invert-text);
+        border-bottom: 1px solid var(--color-divider);
         box-sizing: border-box;
         overflow: hidden;
         display: flex;
@@ -80,7 +80,7 @@
         line-height: 24px;
         font-weight: 600;
         font-family: Inter;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         text-align: left;
         margin: 20px;
     }
@@ -180,7 +180,7 @@
 
     .registertag {
         border-radius: 8px;
-        background-color: #fff;
+        background-color: var(--color-invert-text);
         border: 1px solid #bfbfbf;
         display: flex;
         flex-direction: row;
@@ -225,8 +225,8 @@
     .property1disabled {
         position: relative;
         border-radius: 5px;
-        background-color: #fff;
-        // border: 1px solid #e4e4e4;
+        background-color: var(--color-invert-text);
+        // border: 1px solid var(--color-divider;
         box-sizing: border-box;
         width: 100%;
         overflow: hidden;
@@ -239,7 +239,7 @@
         gap: 24px;
         text-align: left;
         font-size: 18px;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         font-family: Inter;
     }
 
@@ -272,8 +272,8 @@
     .property1enabled {
         position: relative;
         border-radius: 5px;
-        background-color: #fff;
-        border: 1px solid #e4e4e4;
+        background-color: var(--color-invert-text);
+        border: 1px solid var(--color-divider);
         box-sizing: border-box;
         width: 100%;
         overflow: hidden;
@@ -285,7 +285,7 @@
         gap: 24px;
         text-align: left;
         font-size: 18px;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         font-family: Inter;
     }
 
@@ -329,15 +329,15 @@
 
     .registertagEnabled {
         border-radius: 8px;
-        background-color: #fff;
-        border: 1px solid #099250;
+        background-color: var(--color-invert-text);
+        border: 1px solid var(--color-positive);
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
         padding: 0px 12px;
         font-size: 14px;
-        color: #099250;
+        color: var(--color-positive);
     }
 
     .basicInformationParent {
@@ -453,7 +453,7 @@
         font-size: 18px;
         line-height: 32px;
         font-family: Inter;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         text-align: left;
 
     }
@@ -464,7 +464,7 @@
         line-height: 20px;
         font-weight: 600;
         font-family: Inter;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         text-align: left;
     }
 
@@ -499,7 +499,7 @@
         justify-content: flex-start;
         text-align: left;
         font-size: 14px;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         font-family: Inter;
     }
 
@@ -510,10 +510,10 @@
         font-weight: 600;
         font-family: Inter;
         text-align: left;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
 
         .span {
-            color: #ec1943;
+            color: var(--color-negative);
         }
     }
 
@@ -534,7 +534,7 @@
         font-size: 18px;
         line-height: 32px;
         font-family: Inter;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         font-weight: 600;
         text-align: left;
         margin-top: 24px !important;
@@ -548,8 +548,8 @@
     .formbuttoncancel {
         position: relative;
         border-radius: 8px;
-        background-color: #fff;
-        border: 1px solid #e4e4e4;
+        background-color: var(--color-invert-text);
+        border: 1px solid var(--color-divider);
         box-sizing: border-box;
         width: 163px;
         overflow: hidden;
@@ -562,7 +562,7 @@
         padding: 8px 12px;
         text-align: left;
         font-size: 14px;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         font-family: Inter;
     }
 
@@ -577,12 +577,12 @@
         gap: 8px;
         text-align: left;
         font-size: 16px;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         font-family: Inter;
 
         .span {
             font-weight: 600;
-            color: #ec1943;
+            color: var(--color-negative);
         }
 
         .label {
@@ -608,7 +608,7 @@
     text-align: left;
 
     .span {
-        color: #087443;
+        color: var(--color-primary);
     }
 }
 
@@ -668,12 +668,12 @@
         margin: 0 0 24px 0;
         text-align: left;
         font-family: Inter;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         // height: 39px;
         line-height: 24px !important;
 
         .span {
-            color: #087443;
+            color: var(--color-primary);
         }
     }
 }

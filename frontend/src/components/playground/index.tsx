@@ -737,7 +737,7 @@ function Playground() {
             await fetchActionsList(params);
         } catch (error) {
             console.error(error);
-            toast.error(error.response.data.error.message)
+            toast.error(error.message)
         }
 
         setOpenDrawer(false)

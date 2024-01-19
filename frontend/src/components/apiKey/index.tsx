@@ -55,8 +55,8 @@ function ApiKeys() {
                     ...item,
                     key: item.apikey_id
                 }
-
             })
+            console.log(data)
             setApiKeysList(data)
         } catch (e) {
             console.log(e)
@@ -74,7 +74,7 @@ function ApiKeys() {
             <Space size="middle">
                 <div onClick={() => handleShow(record)} className='table-edit-icon1'>
                     <Tooltip placement='bottom' color='#fff' arrow={false} overlayClassName='table-tooltip' title={record.api_key.includes('***') ? tooltipShowTitle : tooltipHideTitle}>
-                        {record.api_key.includes('***') ? <ShowEye /> : <HideEye />}
+                        {record.apikey.includes('***') ? <ShowEye /> : <HideEye />}
                     </Tooltip>
                 </div>
                 <div onClick={() => handleEdit(record)} className='table-edit-icon'>
@@ -108,7 +108,7 @@ function ApiKeys() {
     }
     const handleShow = async (val) => {
         let res;
-        if (val.api_key.includes('***')) {
+        if (val.apikey.includes('***')) {
             res = await getApiKeys(val.apikey_id, 'true')
         } else {
             res = await getApiKeys(val.apikey_id, 'false')
@@ -155,10 +155,9 @@ function ApiKeys() {
                 setLoading(true);
                 const params = {
                     name: createNameValue,
-                    apikey_id: id
                 }
                 try {
-                    await updateApiKeys(params)
+                    await updateApiKeys(id,params)
                     setOpenEditAPIKey(false)
                     toast.success('Update successful')
 
@@ -213,10 +212,8 @@ function ApiKeys() {
     }
     const handleDeleteConfrim = async () => {
         setDeleteLoading(true)
-        const params = {
-            apikey_id: record.apikey_id
-        }
-        await deleteApiKeys(params)
+
+        await deleteApiKeys(record.apikey_id)
         setApiKeysList(prevList => prevList.filter(item => record.apikey_id !== item.apikey_id));
         const params1 = {
             limit: 20,

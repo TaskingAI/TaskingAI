@@ -11,7 +11,7 @@
     .superchargeYourInstancesWitParent {
         width: 100%;
         position: relative;
-        background-color: #fff;
+        background-color: var(--color-invert-text);
         padding: 20px;
         border-bottom: 1px solid #eee;
         box-sizing: border-box;
@@ -44,7 +44,7 @@
                 height: 100%;
                 position: relative;
                 border-radius: 8px;
-                border: 1px solid #e4e4e4;
+                border: 1px solid var(--color-divider);
                 box-sizing: border-box;
                 // width: 100%;
                 display: flex;
@@ -59,16 +59,16 @@
             }
 
             .prompt-button {
-                background-color: #099250;
+                background-color: --color-positive;
                 color: white;
                 margin-left: 10px;
                 height: 40px;
             }
 
             .prompt-button:hover {
-                color: #fff !important;
+                color:var(--color-invert-text) !important;
                 cursor: pointer;
-                background-color: #2ea26a;
+                background-color: var(--color-positive-hover);
                 border: 1px solid transparent;
             }
         }
@@ -93,11 +93,11 @@
         // margin-top: 24px;
         font-family: Inter;
         text-align: left;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
     }
 
     .span {
-        color: #ec1943;
+        color: var(--color-negative);
     }
 
     .label {
@@ -108,7 +108,7 @@
         margin-top: 24px;
         font-family: Inter;
         text-align: left;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
     }
 
     .label-description {
@@ -129,12 +129,12 @@
     .tip-error {
         opacity: 0;
         transition: opacity 0.5s ease;
-        color: #ec1943;
+        color: var(--color-negative);
     }
 
     .tip-error.show {
         opacity: 1;
-        color: #ec1943;
+        color: var(--color-negative);
 
     }
 

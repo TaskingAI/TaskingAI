@@ -23,7 +23,7 @@
     .left {
         width: 255px;
         padding-top: 24px;
-        border-right: 1px solid #e4e4e4;
+        border-right: 1px solid var(--color-divider);
         height: calc(100% - 24px);
 
         .modal-provider {
@@ -34,7 +34,7 @@
             line-height: 20px;
             font-weight: 600;
             font-family: Inter;
-            color: #2b2b2b;
+            color: var(--color-text-primary);
             text-align: left;
             display: inline-block;
 
@@ -70,7 +70,7 @@
 
     .right {
         width: 300px;
-        border-left: 1px solid #e4e4e4;
+        border-left: 1px solid var(--color-divider);
 
         .chat-name {
             // width: 100%;
@@ -78,18 +78,18 @@
             padding-top: 24px;
             padding-left: 24px;
             padding-bottom: 24px;
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid var(--color-divider);
             font-size: 16px;
             margin-bottom: 24px;
             line-height: 20px;
             font-weight: 600;
             font-family: Inter;
-            color: #2b2b2b;
+            color: var(--color-text-primary);
         }
 
         .content {
             padding-left: 24px;
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid var(--color-divider);
             padding-bottom: 24px;
 
             .label3 {
@@ -128,13 +128,13 @@
             .modeltypetag {
                 position: relative;
                 border-radius: 8px;
-                background-color: #fff;
-                border: 1px solid #e4e4e4;
+                background-color: var(--color-invert-text);
+                border: 1px solid var(--color-divider);
                 // width: calc(100% - 24px);
                 padding: 5px 12px;
                 text-align: left;
                 font-size: 14px;
-                color: #087443;
+                color:var(--color-primary);
                 font-family: Inter;
             }
         }
@@ -149,7 +149,7 @@
                 line-height: 20px;
                 font-weight: 600;
                 font-family: Inter;
-                color: #2b2b2b;
+                color: var(--color-text-primary);
                 text-align: left;
                 margin-bottom: 8px;
 
@@ -162,19 +162,19 @@
             .instanceChild {
                 align-self: stretch;
                 position: relative;
-                border-right: 1px solid #e4e4e4;
+                border-right: 1px solid var(--color-divider);
                 box-sizing: border-box;
                 width: 1px;
             }
 
             .on {
                 position: relative;
-                color: #2b2b2b;
+                color: var(--color-text-primary);
             }
 
             .streamParent {
                 border-radius: 8px;
-                border: 1px solid #e4e4e4;
+                border: 1px solid var(--color-divider);
                 box-sizing: border-box;
                 height: 24px;
                 line-height: 15px;
@@ -251,7 +251,7 @@
         justify-content: flex-start;
         text-align: left;
         font-size: 16px;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         font-family: Inter;
     }
 
@@ -334,7 +334,7 @@
     .providermodelcard {
         position: relative;
         border-radius: 5px;
-        background-color: #fff;
+        background-color: var(--color-invert-text);
         border: 2px solid #eee;
         box-sizing: border-box;
         width: 48%;
@@ -350,7 +350,7 @@
         height: 92px;
         text-align: left;
         font-size: 14px;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         font-family: Inter;
     }
 
@@ -370,7 +370,7 @@
     }
 
     .providermodelcardInner1 {
-        border: 2px solid #087443;
+        border: 2px solid var(--color-primary);
     }
 
 }
@@ -407,7 +407,7 @@
         font-size: 18px;
         line-height: 32px;
         font-family: Inter;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         text-align: left;
 
     }
@@ -418,7 +418,7 @@
         line-height: 20px;
         font-weight: 600;
         font-family: Inter;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         text-align: left;
     }
 
@@ -453,7 +453,7 @@
         justify-content: flex-start;
         text-align: left;
         font-size: 14px;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         font-family: Inter;
     }
 
@@ -464,10 +464,10 @@
         font-weight: 600;
         font-family: Inter;
         text-align: left;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
 
         .span {
-            color: #ec1943;
+            color: var(--color-negative);
         }
     }
 
@@ -487,7 +487,7 @@
         font-size: 18px;
         line-height: 32px;
         font-family: Inter;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         text-align: left;
         margin-top: 48px;
         display: block;
@@ -504,12 +504,12 @@
         gap: 8px;
         text-align: left;
         font-size: 16px;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         font-family: Inter;
 
         .span {
             font-weight: 600;
-            color: #ec1943;
+            color: var(--color-negative);
         }
 
         .label {

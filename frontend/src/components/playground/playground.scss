@@ -35,16 +35,16 @@
                 }
 
                 .edit-button:hover {
-                    border: 1px solid #e4e4e4 !important;
-                    color: #2b2b2b !important;
-                    background-color: #fff;
+                    border: 1px solid var(--color-divider) !important;
+                    color: var(--color-text-primary) !important;
+                    background-color: var(--color-invert-text);
                 }
 
                 .disabled {
                     background-color: #eee;
                     color: #bfbfbf !important;
                     background-color: #eee !important;
-                    border: 1px solid #e4e4e4 !important;
+                    border: 1px solid var(--color-divider) !important;
                 }
             }
 
@@ -77,8 +77,8 @@
                         position: relative;
                         cursor: pointer;
                         border-radius: 8px;
-                        background-color: #fff;
-                        border: 1px solid #e4e4e4;
+                        background-color: var(--color-invert-text);
+                        border: 1px solid var(--color-divider);
                         box-sizing: border-box;
                         // width: 100%;
                         height: 34px;
@@ -92,7 +92,7 @@
                         gap: 4px;
                         text-align: left;
                         font-size: 14px;
-                        color: #2b2b2b;
+                        color: var(--color-text-primary);
                         font-family: Inter;
                     }
                 }
@@ -124,8 +124,8 @@
                     .frameChild {
                         flex: 1;
                         position: relative;
-                        background-color: #e4e4e4;
-                        border-top: 1px solid #e4e4e4;
+                        background-color: var(--color-divider);
+                        border-top: 1px solid var(--color-divider);
                         box-sizing: border-box;
                         height: 1px;
                     }
@@ -136,19 +136,19 @@
 
                     .text1 {
                         position: relative;
-                        color: #2b2b2b;
+                        color: var(--color-text-primary);
                     }
 
                     .formbuttoncancel {
                         border-radius: 8px;
-                        background-color: #fff;
-                        border: 1px solid #e4e4e4;
+                        background-color: var(--color-invert-text);
+                        border: 1px solid var(--color-divider);
                         box-sizing: border-box;
                         height: 34px;
                         cursor: pointer;
                         overflow: hidden;
                         display: flex;
-                        color: #2b2b2b;
+                        color: var(--color-text-primary);
                         flex-direction: row;
                         align-items: center;
                         justify-content: flex-start;
@@ -206,7 +206,7 @@
                     position: relative;
                     border-radius: 8px;
                     margin-top: 10px;
-                    background-color: #fff;
+                    background-color: var(--color-invert-text);
                     display: flex;
                     flex-direction: row;
                     align-items: center;
@@ -230,12 +230,12 @@
                 }
 
                 .functionaliconsParent.chatId {
-                    color: #087443;
+                    color: var(--color-primary);
                     background-color: #f3f8f6;
                     cursor: auto;
 
                     svg path {
-                        stroke: #087443;
+                        stroke: var(--color-primary);
                     }
                 }
 
@@ -246,7 +246,7 @@
                 font-size: 16px;
                 font-weight: 500;
                 font-family: Inter;
-                color: #2b2b2b;
+                color: var(--color-text-primary);
                 text-align: left;
                 margin-bottom: 10px;
             }
@@ -286,7 +286,7 @@
                         font-size: 18px;
                         font-weight: 500;
                         font-family: Inter;
-                        color: #2b2b2b;
+                        color: var(--color-text-primary);
                         text-align: left;
                         margin-right: 10px;
                     }
@@ -317,7 +317,7 @@
                     //     background-color: #eee;
                     //     color: #bfbfbf !important;
                     //     background-color: #eee !important;
-                    //     border: 1px solid #e4e4e4 !important;
+                    //     border: 1px solid var(--color-divider !important;
                     // }
                 }
             }
@@ -346,7 +346,7 @@
                     line-height: 44px;
                     font-weight: 600;
                     font-family: Inter;
-                    color: #e4e4e4;
+                    color: var(--color-divider);
                     text-align: left;
                 }
             }
@@ -371,7 +371,7 @@
                     gap: 4px;
                     text-align: left;
                     font-size: 12px;
-                    color: #2b2b2b;
+                    color: var(--color-text-primary);
                     font-family: Inter;
                     margin-top: 10px;
 
@@ -386,7 +386,7 @@
 
 
                     .green {
-                        color: #099250;
+                        color: var(--color-positive);
                         display: flex;
                         align-items: center;
                     }
@@ -400,14 +400,14 @@
                         width: 100%;
                         font-size: 12px;
                         font-family: Inter;
-                        color: #2b2b2b;
+                        color: var(--color-text-primary);
                     }
 
                     .subText1 {
                         position: relative;
                         font-size: 12px;
                         font-family: Inter;
-                        color: #2b2b2b;
+                        color: var(--color-text-primary);
                         text-align: left;
                         font-weight: bold;
                     }
@@ -417,7 +417,7 @@
                         position: relative;
                         font-size: 12px;
                         font-family: Inter;
-                        color: #2b2b2b;
+                        color: var(--color-text-primary);
                         text-align: left;
                         white-space: pre-wrap;
                         display: inline-block;
@@ -448,8 +448,8 @@
                 .frameChild {
                     flex: 1;
                     position: relative;
-                    background-color: #e4e4e4;
-                    border-top: 1px solid #e4e4e4;
+                    background-color: var(--color-divider);
+                    border-top: 1px solid var(--color-divider);
                     box-sizing: border-box;
                     height: 1px;
                 }
@@ -476,14 +476,14 @@
 
                     .formbuttoncancel {
                         border-radius: 8px;
-                        background-color: #fff;
-                        border: 1px solid #e4e4e4;
+                        background-color: var(--color-invert-text);
+                        border: 1px solid var(--color-divider);
                         box-sizing: border-box;
                         height: 34px;
                         cursor: pointer;
                         overflow: hidden;
                         display: flex;
-                        color: #2b2b2b;
+                        color: var(--color-text-primary);
                         flex-direction: row;
                         align-items: center;
                         justify-content: flex-start;
@@ -523,7 +523,7 @@
 
                     .text1 {
                         position: relative;
-                        color: #2b2b2b;
+                        color: var(--color-text-primary);
                     }
 
                     .loading {
@@ -532,14 +532,14 @@
 
                     .formbuttoncancel {
                         border-radius: 8px;
-                        background-color: #fff;
-                        border: 1px solid #e4e4e4;
+                        background-color: var(--color-invert-text);
+                        border: 1px solid var(--color-divider);
                         box-sizing: border-box;
                         height: 34px;
                         cursor: pointer;
                         overflow: hidden;
                         display: flex;
-                        color: #2b2b2b;
+                        color: var(--color-text-primary);
                         flex-direction: row;
                         align-items: center;
                         justify-content: flex-start;
@@ -547,8 +547,8 @@
                     }
 
                     .formbuttoncancel:hover {
-                        border: 1px solid #e4e4e4;
-                        color: #2b2b2b;
+                        border: 1px solid var(--color-divider);
+                        color: var(--color-text-primary);
                         background-color: #eee;
                     }
 
@@ -563,8 +563,8 @@
                     .actionbuttonedit {
                         position: relative;
                         border-radius: 8px;
-                        background-color: #fff;
-                        border: 1px solid #e4e4e4;
+                        background-color: var(--color-invert-text);
+                        border: 1px solid var(--color-divider);
                         box-sizing: border-box;
                         // width: 100%;
                         cursor: pointer;
@@ -612,11 +612,11 @@
         // margin-top: 24px;
         font-family: Inter;
         text-align: left;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
     }
 
     .span {
-        color: #ec1943;
+        color: var(--color-negative);
     }
 
     .label {
@@ -626,7 +626,7 @@
         margin-top: 10px;
         font-family: Inter;
         text-align: left;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
     }
 
     .label-description {
@@ -651,7 +651,7 @@
     .error {
         opacity: 0;
         transition: opacity 0.5s ease;
-        color: #ec1943;
+        color: var(--color-negative);
 
         &.show {
             opacity: 1;
@@ -671,7 +671,7 @@
     }
 
     .valid-schema {
-        color: #099250;
+        color: var(--color-positive);
         cursor: pointer;
     }
 }
@@ -696,8 +696,8 @@
     width: 346px;
     height: 491px;
     padding: 24px;
-    background-color: #fff;
-    border: 1px solid #e4e4e4;
+    background-color: var(--color-invert-text);
+    border: 1px solid var(--color-divider);
     border-radius: 8px;
     position: absolute;
     right: 30px;
@@ -708,7 +708,7 @@
         font-size: 16px;
         font-weight: 500;
         font-family: Inter;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         text-align: left;
     }
 
@@ -728,7 +728,7 @@
         font-size: 16px;
         font-weight: 500;
         font-family: Inter;
-        color: #2b2b2b;
+        color: var(--color-text-primary);
         text-align: left;
         margin-top: 16px;
         margin-bottom: 8px;
