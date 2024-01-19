@@ -110,7 +110,7 @@ function Assistant() {
     const [inputValueTwo, setInputValueTwo] = useState(2000)
     const navigate = useNavigate()
     useEffect(() => {
-        // fetchModelsList()
+        fetchModelsList()
         const params = {
             limit: 20,
         }
@@ -146,7 +146,7 @@ function Assistant() {
         setLoading(false);
     };
     const handleJump = (value) => {
-        navigate(`/projects/playground?assistant_id=${value.assistant_id}`)
+        navigate(`/project/playground?assistant_id=${value.assistant_id}`)
     }
     const handleModalClose = () => {
         setModalTableOpen(false)
@@ -521,15 +521,15 @@ function Assistant() {
                 <DrawerAssistant selectedActionsRows={selectedActionsRows} inputValue1={inputValueOne} inputValue2={inputValueTwo} handleMemoryChange1={handleMemoryChange1} memoryValue={memoryValue} handleAddPromptInput={handleAddPrompt} handleActionModalTable={handleActionModalTable} drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} selectedRows={selectedRows} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange} handleModalTable={handleModalTable} selectedRetrievalRows={selectedRetrievalRows}></DrawerAssistant>
             </Drawer>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered footer={[
-                <div className={styles['footer-group']} style={{ display: 'flex', justifyContent: 'space-between' }} key='footer2'>
+                <div className={'footer-group'} style={{ display: 'flex', justifyContent: 'space-between' }} key='footer2'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleNewModal} className='cancel-button'>
                         New Collection
                     </Button>
                     <div>
-                        <span className={styles['select-record']}>
+                        <span className='select-record'>
                             {recordsSelected1.length}  {recordsSelected1.length > 1 ? 'items' : 'item'} selected
                         </span>
-                        <Button key="cancel" onClick={handleCloseModal} className='cancel-button'>
+                        <Button key="cancel" onClick={handleCloseModal} className={`cancel-button ${styles.cancelButton}`}>
                             Cancel
                         </Button>
                         <Button key="submit" onClick={handleCreateConfrim} className='next-button'>
@@ -538,21 +538,21 @@ function Assistant() {
                     </div>
 
                 </div>
-            ]} title='Select Collection' open={openModalTable} width={1000} onCancel={handleCloseModal} className={`${styles['modal-inner-table']} ${styles['retrieval-model']}`}>
+            ]} title='Select Collection' open={openModalTable} width={1000} onCancel={handleCloseModal} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable onOpenDrawer={handleNewModal} name='Collection' updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
             </Modal>
 
             <ModelModal ref={childRef} open={modelOne} handleSetModelConfirmOne={handleSetModelConfirmOne} handleSetModelOne={handleModalCancel} getOptionsList={fetchModelsList} modelType='chat_completion'></ModelModal>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
-                <div className={styles['footer-group']} key='footer1'>
+                <div className='footer-group' key='footer1'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
                         New Model
                     </Button>
                     <div>
-                        <span className={styles['select-record']}>
+                        <span className='select-record'>
                             {recordsSelected.length}  {recordsSelected.length > 1 ? 'items' : 'item'} selected
                         </span>
-                        <Button key="cancel" onClick={handleModalClose} className='cancel-button'>
+                        <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             Cancel
                         </Button>
                         <Button key="submit" onClick={handleModalClose} className='next-button'>
@@ -562,20 +562,20 @@ function Assistant() {
 
                 </div>
 
-            ]} title='Select Model' open={modalTableOpen} width={1000} className='modal-inner-table retrieval-model'>
+            ]} title='Select Model' open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable onOpenDrawer={handleCreateModelId} name="model" updatePrevButton={updateModelPrevButton} defaultSelectedRowKeys={selectedRows} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
 
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered footer={[
-                <div className={styles['footer-group']} key='footer3'>
+                <div className='footer-group' key='footer3'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateAction} className='cancel-button'>
                         New Action
                     </Button>
                     <div>
-                        <span className={styles['select-record']}>
+                        <span className='select-record'>
                             {recordsSelected.length}  {recordsSelected.length > 1 ? 'items' : 'item'} selected
                         </span>
-                        <Button key="cancel" onClick={handleActionModalClose} className='cancel-button'>
+                        <Button key="cancel" onClick={handleActionModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             Cancel
                         </Button>
                         <Button key="submit" onClick={handleActionModalClose} className='next-button'>
@@ -585,7 +585,7 @@ function Assistant() {
 
                 </div>
 
-            ]} title='Select Action' open={modalActionTableOpen} width={1000} className='modal-inner-table retrieval-model' onCancel={handleActionModalClose}>
+            ]} title='Select Action' open={modalActionTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`} onCancel={handleActionModalClose}>
                 <ModalTable onOpenDrawer={handleCreateAction} name="Action" updatePrevButton={updateActionPrevButton} defaultSelectedRowKeys={selectedActionsRows} hangleFilterData={hangleFilterActionData} handleRecordsSelected={handleRecordsActionSelected} ifSelect={true} mode='multiple' columns={actionsTableColumn} hasMore={hasActionMore} id='action_id' dataSource={actionList} onChildEvent={handleChildActionEvent}></ModalTable>
             </Modal>
             <DeleteModal open={OpenDeleteModal} describe={`Are you sure you want to delete ${deleteValue || 'Untitled Assistant'}? This action cannot be undone and all integrations associated with the assistant will be affected.`} title='Delete Assistant' projectName={deleteValue || 'Untitled Assistant'} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />

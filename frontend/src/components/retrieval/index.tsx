@@ -69,7 +69,6 @@ function Retrieval() {
     const [deleteValue, setDeleteValue] = useState('')
     const [recordsSelected, setRecordsSelected] = useState([])
     const [selectedRows, setSelectedRows] = useState<string[]>([])
-    // const [modelId, setModelId] = useState(undefined)
     const [options, setOptions] = useState([])
     const childRef = useRef<ChildRefType | null>(null);
     const [selectValue, setSelectValue] = useState(1000)
@@ -97,7 +96,6 @@ function Retrieval() {
     }
     const handleModalClose = () => {
         setModalTableOpen(false)
-        setUpdatePrevButton(false)
     }
     const fetchData = async (params:Record<string,string | number>) => {
         setLoading(true);
@@ -121,14 +119,14 @@ function Retrieval() {
     const fetchModelsList = async (params:Record<string, any>) => {
 
         try {
-            const res = await getModelsList(params, 'text_embedding')
+            const res:any = await getModelsList(params, 'text_embedding')
             const data = res.data.map((item:any) => {
                 return {
                     ...item,
                     key: item.model_id,
                 }
             })
-            setModelHasMore(data.hasMore)
+            setModelHasMore(res.has_more)
             setOptions(data)
         } catch (error) {
             console.log(error)
@@ -148,7 +146,6 @@ function Retrieval() {
         setEmbeddingSize(0)
         setOpenDrawer(true)
         setEditDisabled(false)
-        setUpdatePrevButton(false)
     }
     const handleRecord = (val:any) => {
         setCollectionRecordId(val.collection_id)
@@ -167,22 +164,18 @@ function Retrieval() {
         setSelectValue(val.capacity)
         // setModelId(val.embedding_model_id)
         setOpenDrawer(true)
-        setUpdatePrevButton(false)
     }
 
     const handleDelete = (val:any) => {
         setOpenDeleteModal(true)
         setDeleteValue(val.name)
-        setUpdatePrevButton(false)
         setCollectionId(val.collection_id)
     }
     const onDeleteCancel = () => {
         setOpenDeleteModal(false)
-        setUpdatePrevButton(false)
     }
     const handleRecordCancel = () => {
         setRecordOpen(false)
-        setUpdatePrevButton(false)
         navigate(`/project/collections`)
     }
     const onDeleteConfirm = async () => {
@@ -249,7 +242,6 @@ function Retrieval() {
     }
     const handleCancel = () => {
         setOpenDrawer(false)
-        setUpdatePrevButton(false)
     }
     const handleModalCancel = () => {
         setModelOne(false)
@@ -263,6 +255,8 @@ function Retrieval() {
         childRef.current?.fetchAiModelsList()
     }
     const handleChildModelEvent = async (value:Record<string,any>) => {
+        console.log(value)
+        setUpdatePrevButton(false)
         await fetchModelsList(value)
     }
     const handleSelectValue = (value:number) => {
@@ -273,7 +267,6 @@ function Retrieval() {
             return
         }
         setModalTableOpen(true)
-        setUpdatePrevButton(false)
         // if (value) {
         //     setModelId(value)
         // }

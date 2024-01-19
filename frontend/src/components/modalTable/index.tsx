@@ -1,6 +1,6 @@
 import { Table, Select, Input, Button, Pagination, Empty } from 'antd';
 import { useState, useEffect } from 'react';
-import './modalTable.scss'
+import  styles from  './modalTable.module.scss'
 import { PlusOutlined } from '@ant-design/icons';
 import NoApikey from '../../assets/img/NO_APIKEY.svg?react'
 import NoAssistant from '../../assets/img/NO_ASSISTANT.svg?react'
@@ -9,10 +9,10 @@ import NoModel from '../../assets/img/NO_MODEL.svg?react'
 import NoRecord from '../../assets/img/NO_RECORD_2.svg?react'
 import NoTool from '../../assets/img/NO_TOOL.svg?react'
 import { TableProps } from '../../contant/index'
-function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSelectedRowKeys, updatePrevButton, ifHideFooter, dataSource, mode, ifSelect, onChildEvent, id, hasMore, onOpenDrawer, name, handleRecordsSelected }:TableProps) {
+function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSelectedRowKeys, updatePrevButton, ifHideFooter, dataSource, mode, ifSelect, onChildEvent, id, hasMore, onOpenDrawer, name, handleRecordsSelected }: TableProps) {
     const [selectedValue, setSelectedValue] = useState('name_search')
     const [selectValueEnd, setSelectValueEnd] = useState('All Records')
-   
+
     const [inputValue, setInputValue] = useState('')
     const [scroll, setScroll] = useState({ x: 0, y: 0 });
     const [pageLimit, setPageLimit] = useState(20)
@@ -23,15 +23,12 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
     const [nextButtonDisabled, setNextButtonDisabled] = useState(false)
     const [previousButtonDisabled, setPrevButtonDisabled] = useState(true)
     const [isFirstRender, setIsFirstRender] = useState(true);
-    const [filterConfig, setFilterConfig] = useState({
+    const [filterConfig, setFilterConfig] = useState<any>({
         limit: 20,
         sort_field: 'created_timestamp',
-        after:undefined,
-        before:undefined,
-        id_search:undefined,
-        name_search:undefined
+
     })
-    console.log(selectValueEnd,filterConfig,pageLimit)
+    console.log(selectValueEnd, filterConfig, pageLimit)
     const [enterPlaceHolder, setEnterPlaceHolder] = useState('Enter Name')
     const empty = {
         ['API Key']: <NoApikey />,
@@ -137,6 +134,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             }
             return
         }
+        console.log(hasMore, flagPrev, flagNext)
         if (!hasMore && !flagPrev && !flagNext) {
             setNextButtonDisabled(true)
             setPrevButtonDisabled(true)
@@ -206,7 +204,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         handleRecordsSelected(newSelectedRowKeys, selectedRows)
     };
     const onSelectChange1 = (record) => {
-        const key = record.key; 
+        const key = record.key;
         const isSelected = selectedRowKeys.includes(key);
         let newSelectedRowKeys
         if (mode === 'multiple') {
@@ -221,7 +219,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         setSelectedRowKeys(newSelectedRowKeys);
 
     }
-    const rowSelection:any = {
+    const rowSelection: any = {
         selectedRowKeys,
         width: 45,
         onChange: onSelectChange,
@@ -343,6 +341,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             };
             delete newFilterConfig.before
             delete newFilterConfig.after
+            console.log(12312312313)
             onChildEvent(newFilterConfig);
             return newFilterConfig;
         });
@@ -365,33 +364,33 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             description={
                 <div>
                     <p style={{ color: '#bfbfbf', fontSize: '14px' }}>No {name}</p>
-                    {!ifAllowNew && <Button icon={<PlusOutlined />} className='prompt-button' onClick={handleCreatePrompt}>New {name}</Button>}
+                    {!ifAllowNew && <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>New {name}</Button>}
 
                 </div>
             }
         />
     );
     return (
-        <div className='modal-table'>
-            {!ifHideFooter ? <div className='header-table'>
-                <Select defaultValue={ifOnlyId ? 'ID' : 'name'} onChange={handleSelectFrontChange} options={ifOnlyId ? optionsFront1 : optionsFront} className='select-name' />
-                <Input placeholder={enterPlaceHolder} className='input-name' onChange={handleInputChange} value={inputValue} />
+        <div className={styles['modal-table']}>
+            {!ifHideFooter ? <div className={styles['header-table']}>
+                <Select defaultValue={ifOnlyId ? 'ID' : 'name'} onChange={handleSelectFrontChange} options={ifOnlyId ? optionsFront1 : optionsFront} className={styles['select-name']} />
+                <Input placeholder={enterPlaceHolder} className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
                 <Button className='cancel-button' onClick={handleSearch}>Search</Button>
-                {(ifSelect && mode === 'multiple') && <Select defaultValue="All records" onChange={handleSelectEndChange} options={optionsEnd} className='select-data' />}
-                {!ifSelect && <div className='header-new'>
-                    <div className='plusParent'>
-                        <Button icon={<PlusOutlined />} className='prompt-button' onClick={handleCreatePrompt}>New {name}</Button>
+                {(ifSelect && mode === 'multiple') && <Select defaultValue="All records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />}
+                {!ifSelect && <div className={styles['header-new']}>
+                    <div className={styles['plusParent']}>
+                        <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>New {name}</Button>
                     </div>
                 </div>}
-            </div> : <div className='header-news'>
-                <div className='plusParent'>
-                    <Button icon={<PlusOutlined />} className='prompt-button' onClick={handleCreatePrompt}>New {name}</Button>
+            </div> : <div className={styles['header-news']}>
+                <div className={styles['plusParent']}>
+                    <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>New {name}</Button>
                 </div>
             </div>}
 
-            <div className='table-border'>
-                <Table scroll={scroll}  columns={columns} dataSource={dataSource} pagination={false}
-                   {...(ifSelect ? { rowSelection: rowSelection } : null)}
+            <div className={styles['table-border']}>
+                <Table scroll={scroll} columns={columns} dataSource={dataSource} pagination={false}
+                    {...(ifSelect ? { rowSelection: rowSelection } : null)}
                     onRow={(record) => {
                         return {
                             onClick: () => {
@@ -403,11 +402,11 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                     locale={{
                         emptyText: customEmptyText
                     }}
-                    className={`${dataSource.length === 0 && 'empty-table'}`}
+                    className={`${dataSource.length === 0 && styles['empty-table']}`}
                 />
-                {!ifHideFooter && <div className={`footer ${ifSelect ? 'footer-position' : ''}`}>
-                    <Button className='previous-button' style={{ borderRight: 'none' }} onClick={handlePrevious} disabled={previousButtonDisabled}>Previous</Button>
-                    <Button className='next-button-group' onClick={handleNext} disabled={nextButtonDisabled}>Next</Button>
+                {!ifHideFooter && <div className={`${styles.footer} ${ifSelect ? styles['footer-position'] : ''}`}>
+                    <Button className={styles['previous-button']} style={{ borderRight: 'none' }} onClick={handlePrevious} disabled={previousButtonDisabled}>Previous</Button>
+                    <Button className={styles['next-button-group']} onClick={handleNext} disabled={nextButtonDisabled}>Next</Button>
                     <Pagination defaultPageSize={20} showQuickJumper={false} showSizeChanger={true} onChange={handleChangePageLimit} />
                 </div>}
             </div>

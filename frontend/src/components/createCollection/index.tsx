@@ -40,14 +40,14 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
     const fetchModelsList = async (params) => {
 
         try {
-            const res = await getModelsList(params, 'text_embedding')
+            const res:any = await getModelsList(params, 'text_embedding')
             const data = res.data.map((item) => {
                 return {
                     ...item,
                     key: item.model_id,
                 }
             })
-            setModelHasMore(data.hasMore)
+            setModelHasMore(res.has_more)
             setOptions(data)
         } catch (error) {
             console.log(error)
