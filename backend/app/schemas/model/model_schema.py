@@ -12,14 +12,14 @@ class ModelSchemaListRequest(BaseModel):
 
     after: Optional[str] = Field(
         None,
-        min_length=8,
-        max_length=8,
+        min_length=1,
+        max_length=50,
         description="The cursor represented by a model_schema_id to fetch the next page.",
     )
     before: Optional[str] = Field(
         None,
-        min_length=8,
-        max_length=8,
+        min_length=1,
+        max_length=50,
         description="The cursor represented by a model_schema_id to fetch the previous page.",
     )
     offset: Optional[int] = Field(
