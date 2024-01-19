@@ -1,64 +1,59 @@
 from typing import Optional, List
-import os
 from common.models import Provider, ModelSchema, ListResult
-import yaml
+from config import CONFIG
+import aiohttp
+from common.utils import ResponseWrapper, check_http_error
+import logging
+
+logger = logging.getLogger(__name__)
 
 __all__ = [
     "list_providers",
     "list_model_schemas",
     "get_provider",
     "get_model_schema",
+    "load_model_schema_data",
 ]
 
+_providers, _model_schemas, _provider_dict, _model_schema_dict = [], [], {}, {}
 
-def _load_data_from_files(directory_path):
-    providers = []
-    model_schemas = []
 
-    # Iterate through each file in the directory
-    for filename in os.listdir(directory_path):
-        file_path = os.path.join(directory_path, filename)
+async def load_model_schema_data():
+    async with aiohttp.ClientSession() as session:
+        response = await session.get(
+            f"{CONFIG.TASKINGAI_INFERENCE_URL}/v1/providers",
+        )
+        response_wrapper = ResponseWrapper(response.status, await response.json())
+        check_http_error(response_wrapper)
+        providers = [Provider.build(provider_data) for provider_data in response_wrapper.json()["data"]]
 
-        # Check if file is not empty
-        if os.path.getsize(file_path) > 0:
-            try:
-                # Open and read the file
-                with open(file_path, "r") as file:
-                    data = yaml.safe_load(file)  # Use yaml.safe_load to load YAML data
-
-                # Process the data
-                provider_data = data["provider"]
-                provider = Provider.build(provider_data)
-                providers.append(provider)
-
-                for model_schema_data in provider_data["model_schemas"]:
-                    model_schema_data["provider_id"] = provider.provider_id
-                    model_schema = ModelSchema.build(model_schema_data)
-                    model_schemas.append(model_schema)
-
-            except yaml.YAMLError as e:
-                print(f"Error loading YAML from file {file_path}: {e}")
-        else:
-            print(f"Skipping empty file: {file_path}")
+    async with aiohttp.ClientSession() as session:
+        response = await session.get(
+            f"{CONFIG.TASKINGAI_INFERENCE_URL}/v1/model_schemas",
+        )
+        response_wrapper = ResponseWrapper(response.status, await response.json())
+        check_http_error(response_wrapper)
+        model_schemas = [ModelSchema.build(model_schema_data) for model_schema_data in response_wrapper.json()["data"]]
 
     # sort provider by name
-    providers.sort(key=lambda x: x.name)
     provider_dict = {provider.provider_id: provider for provider in providers}
 
     # sort model schemas by provider_id, name
-    model_schemas.sort(key=lambda x: (x.provider_id, x.name))
     model_schema_dict = {model_schema.model_schema_id: model_schema for model_schema in model_schemas}
 
-    return providers, model_schemas, provider_dict, model_schema_dict
+    global _providers, _model_schemas, _provider_dict, _model_schema_dict
+    _providers = providers
+    _model_schemas = model_schemas
+    _provider_dict = provider_dict
+    _model_schema_dict = model_schema_dict
 
-
-_providers, _model_schemas, _provider_dict, _model_schema_dict = _load_data_from_files(
-    os.path.dirname(os.path.realpath(__file__)) + "/../../../resources/data/model_schemas"
-)
+    logger.debug(f"load_model_schema_data succeeded!")
+    logger.debug(f"_providers: {_providers}")
+    logger.debug(f"_model_schemas: {_model_schemas}")
 
 
 async def list_providers() -> List[Provider]:
-    return _providers
+    return _providers or []
 
 
 async def list_model_schemas(
