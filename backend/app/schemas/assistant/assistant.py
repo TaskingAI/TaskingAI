@@ -24,10 +24,10 @@ class AssistantCreateRequest(BaseModel):
         examples=["abcdefgh"],
     )
 
-    name: str = Field(None, min_length=0, max_length=256, description="The assistant name", examples=["My Assistant"])
+    name: str = Field("", min_length=0, max_length=256, description="The assistant name", examples=["My Assistant"])
 
     description: str = Field(
-        None, min_length=0, max_length=512, description="The assistant description", examples=["A helpful assistant"]
+        "", min_length=0, max_length=512, description="The assistant description", examples=["A helpful assistant"]
     )
 
     system_prompt_template: List[str] = Field(

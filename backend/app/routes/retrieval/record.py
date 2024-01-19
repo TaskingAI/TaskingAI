@@ -61,8 +61,8 @@ async def api_get_record(
 @router.post(
     "/collections/{collection_id}/records",
     tags=["Retrieval"],
-    summary="Bulk create record",
-    operation_id="bulk_create_record",
+    summary="Create record",
+    operation_id="create_record",
     response_model=BaseSuccessDataResponse,
 )
 async def api_create_records(

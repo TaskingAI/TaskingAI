@@ -82,7 +82,7 @@ class Message(BaseModel):
             "chat_id": self.chat_id,
             "assistant_id": self.assistant_id,
             "role": self.role.value,
-            "content": self.content,
+            "content": self.content.model_dump(),
             "metadata": self.metadata,
             "updated_timestamp": self.updated_timestamp,
             "created_timestamp": self.created_timestamp,

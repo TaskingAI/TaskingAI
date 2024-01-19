@@ -64,8 +64,8 @@ async def api_get_message(
 @router.post(
     "/assistants/{assistant_id}/chats/{chat_id}/messages",
     tags=["Assistant"],
-    summary="Bulk create message",
-    operation_id="bulk_create_message",
+    summary="Create message",
+    operation_id="create_message",
     response_model=BaseSuccessDataResponse,
 )
 async def api_create_messages(

@@ -58,8 +58,8 @@ async def api_get_assistant(
 @router.post(
     "/assistants",
     tags=["Assistant"],
-    summary="Bulk create assistant",
-    operation_id="bulk_create_assistant",
+    summary="Create assistant",
+    operation_id="create_assistant",
     response_model=BaseSuccessDataResponse,
 )
 async def api_create_assistants(
