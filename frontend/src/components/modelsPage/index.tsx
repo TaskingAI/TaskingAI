@@ -19,7 +19,6 @@ import ModelModal from '@/components/modelModal';
 import closeIcon from '../../assets/img/x-close.svg'
 import { toast } from 'react-toastify';
 import { RecordType,ChildRefType,formDataType } from '../../contant/index.ts'
-import CustomError from '../../contant/index.ts'
 function ModelsPage() {
     const [form] = Form.useForm()
     const [form1] = Form.useForm()
@@ -193,9 +192,7 @@ function ModelsPage() {
                     }
                     await fetchData(params1)
                 } catch (error) {
-                    if (error instanceof CustomError) {
                         toast.error(error.response.data.error.message)
-                    }
                 }
 
 

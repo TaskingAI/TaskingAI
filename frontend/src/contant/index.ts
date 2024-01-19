@@ -1,21 +1,5 @@
 
-interface CustomErrorResponse {
-    data: {
-        error: {
-            message: string;
-        };
-    };
-}
 
-class CustomError extends Error {
-    response: CustomErrorResponse;
-
-    constructor(message: string, response: CustomErrorResponse) {
-        super(message);
-        this.name = 'CustomError';
-        this.response = response;
-    }
-}
 interface projectHomeType {
     key: string;
     [key: string]: any;
@@ -88,4 +72,3 @@ interface contentRefType {
     scrollTo?:any
 }
 export type {contentRefType,formDataType,settingModalProps,promptListType, projectIdType,ModelProviderType,projectHomeType,RecordType,ChildRefType,TableProps,modelModalProps}
-export default CustomError

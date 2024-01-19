@@ -8,7 +8,6 @@ import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
 import EditIcon from '../../assets/img/editIcon.svg?react'
 import ModalTable from '../modalTable/index';
 import ModelModal from '../modelModal/index'
-import CustomError from '../../contant/index.ts'
 // import {TKNegativeModal} from '@taskingai/taskingai-ui'
 import { modelsTableColumn, collectionTableColumn } from '../../contents/index.tsx'
 import { ChildRefType } from '../../contant/index.ts'
@@ -189,9 +188,7 @@ function Retrieval() {
             setUpdateRetrievalPrevButton(true)
 
         } catch (error) {
-            if (error instanceof CustomError) {
                 toast.error(error.response.data.error.message)
-            }
         }
     }
 
@@ -232,9 +229,7 @@ function Retrieval() {
             setUpdateRetrievalPrevButton(true)
 
         } catch (error) {
-            if (error instanceof CustomError) {
                 toast.error(error.response.data.error.message)
-            }
         }
     }
     const handleNameChange = (e:React.ChangeEvent<HTMLInputElement>) => {

@@ -1,18 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button } from 'antd';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import aiIcon from "../../assets/img/LOGO+TEXT.svg";
 import Beta from "../../assets/img/CommunityTag.svg?react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import style from './login.module.scss'
-import CustomError from '@/contant/index'
 import { fetchLogin } from '@/axios/index'
 
 function Login() {
-    useEffect(() => {
-        document.title = 'TaskingAI | Authentication';
-    }, [])
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const onFinish = async (val: object) => {
@@ -24,14 +20,12 @@ function Login() {
             await navigate('/project/models')
             toast.success('Signin successful')
         } catch (error) {
-            if (error instanceof CustomError) {
-                toast.error(error.response.data.error.message)
-            }
+            toast.error(error.response.data.error.message)
         }
         setLoading(false)
 
     }
- 
+
     return (
         <>
             <div className={style.login}>
@@ -49,7 +43,7 @@ function Login() {
                                 required: true,
                                 message: 'Please input your username.',
                             },
-                      
+
                         ]}
                     >
                         <Input placeholder='Enter your username' className={style["input-edit"]} />

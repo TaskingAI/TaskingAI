@@ -12,7 +12,6 @@ import MistralAI from '@/assets/img/MistralAI.svg?react'
 
 import NoModel from '../../assets/img/NO_MODEL.svg?react'
 import CohereIcon from '../../assets/img/cohereIcon.svg?react'
-import CustomError from '../../contant/index.ts'
 import { Modal, Pagination, Button, Spin, Input, Form } from 'antd'
 import { getAiModelsList, createModels, getAiModelsForm, getModelProviderList } from '../../axios/models'
 import { toast } from 'react-toastify'
@@ -104,8 +103,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const imgReverse = (providerId: string) => {
         if (providerId === 'openai') {
             return <ModelProvider width='16px' height='16px' />
-        }
-        else if (providerId === 'anthropic') {
+        }else if (providerId === 'anthropic') {
             return <Anthropic width='16px' height='16px' />
         } else if (providerId === 'azure_openai') {
             return <Frame width='16px' height='16px' />
@@ -113,7 +111,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
             return <GoogleIcon width='16px' height='16px' />
         } else if (providerId === 'cohere') {
             return <CohereIcon width='16px' height='16px' />
-        }else if (providerId === 'mistralai') {
+        } else if (providerId === 'mistralai') {
             return <MistralAI width='16px' height='16px' />
         }
     }
@@ -134,10 +132,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     props.getOptionsList({ limit: 20 }, props.modelType as string)
                     props.handleSetModelConfirmOne(false)
                 } catch (e) {
-                    console.log(e)
-                    if (e instanceof CustomError) {
-                        toast.error(e.response.data.error.message)
-                    }
+                    toast.error(e.response.data.error.message)
                 } finally {
                     setConfirmLoading(false)
                 }
@@ -326,7 +321,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                 ]}
                             >
                                 <div>
-                                <div className='description'>{(property as { description: string }).description}</div>
+                                    <div className='description'>{(property as { description: string }).description}</div>
 
                                     <Input placeholder={`Enter ${key}`} className='input' />
                                 </div>

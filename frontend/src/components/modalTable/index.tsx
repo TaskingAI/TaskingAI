@@ -53,6 +53,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                 }
                 containerWidth = tableContainer.offsetWidth;
                 containerHeight = tableContainerH.offsetHeight;
+
                 setScroll({
                     x: containerWidth,
                     y: containerHeight * 0.9
@@ -80,7 +81,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
 
         };
         updateScroll();
-    }, []);
+    },[]);
     useEffect(() => {
         setOriginalDataSource(dataSource)
     }, [])
