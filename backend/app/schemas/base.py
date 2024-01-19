@@ -38,15 +38,15 @@ class BaseListRequest(BaseModel):
 
     after: Optional[str] = Field(
         None,
-        min_length=24,
-        max_length=24,
+        min_length=1,
+        max_length=50,
         description="The cursor represented by a object_id to fetch the next page of objects.",
     )
 
     before: Optional[str] = Field(
         None,
-        min_length=24,
-        max_length=24,
+        min_length=1,
+        max_length=50,
         description="The cursor represented by a object_id to fetch the previous page of objects.",
     )
 
@@ -57,7 +57,7 @@ class BaseListRequest(BaseModel):
         "Only one in `offset`, `after` and `before` can be used at the same time.",
     )
 
-    id_search: Optional[str] = Field(None, min_length=1, max_length=256, description="The object ID to search for.")
+    id_search: Optional[str] = Field(None, min_length=1, max_length=50, description="The object ID to search for.")
 
     name_search: Optional[str] = Field(None, min_length=1, max_length=256, description="The object name to search for.")
 

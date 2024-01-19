@@ -79,9 +79,9 @@ def validate_metadata(metadata: Dict):
 
 def validate_list_cursors(data: Dict):
     if data.get("order") and (data["order"] not in ["asc", "desc"]):
-        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="order should be asc or desc")
+        raise ValueError("order should be asc or desc")
 
     count = sum([1 for attr in ("after", "before", "offset") if data.get(attr) is not None])
     if count > 1:
-        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="offset params cannot be used at the same time.")
+        raise ValueError("cursor params cannot be used at the same time.")
     return data
