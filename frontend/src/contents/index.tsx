@@ -5,7 +5,7 @@ import GoogleIcon from '@/assets/img/googleIcon.svg?react'
 import ModelProvider from '@/assets/img/ModelProvider.svg?react'
 import Anthropic from '@/assets/img/Anthropic.svg?react'
 import Frame from '@/assets/img/Frame.svg?react'
-import ZhiPu from '@/assets/img/Zhipu.svg?react'
+import ZhiPu from '@/assets/img/Zhipu.svg'
 import ClipboardJS from 'clipboard';
 import { toast } from 'react-toastify';
 import CohereIcon from '@/assets/img/cohereIcon.svg?react'
@@ -46,7 +46,7 @@ const providerIcons = {
     google_gemini: <GoogleIcon width='16px' height='16px' />,
     mistralai: <MistralAI width='16px' height='16px' />,
     cohere: <CohereIcon width='16px' height='16px' />,
-    zhipu: <ZhiPu width='16px' height='16px' />
+    zhipu: <img src={ZhiPu} style={{width:'18px',height:'18px'}}></img>
 };
 
 const imgReverse = (providerId: string) => {
