@@ -1,6 +1,6 @@
 .api-keys {
     height: 100%;
-   padding: 0 24px;
+    padding: 0 24px;
     background-color: white;
 
     :global {
@@ -151,14 +151,26 @@
     }
 }
 
-.edit-form {
-    margin-left: 0;
-    height: 100%;
+.create-apikey-modal {
+    :global {
+        .ant-modal-body {
+            padding: 24px;
 
-    .ant-form-item {
-        margin-bottom: 0;
+        }
+    }
+
+    .edit-form {
+        margin-left: 0;
+        height: 100%;
+        :global {
+            .ant-form-item {
+                margin-bottom: 0;
+            }
+        }
     }
 }
+
+
 
 
 .disabled-button {

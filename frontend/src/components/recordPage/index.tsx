@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import ModalTable from '../modalTable/index.tsx';
 import {
     Button,
-    Space, Tag, Input, Spin, Tooltip, Modal,InputNumber
+    Space, Tag, Input, Spin, Tooltip, Modal, InputNumber
 } from 'antd';
-import styles from  './recordPage.module.scss'
+import styles from './recordPage.module.scss'
 import { toast } from 'react-toastify';
 import { tooltipDeleteTitle, tooltipShowTitle } from '../../contents/index.tsx'
 
@@ -24,7 +24,7 @@ const statusReverse = {
     deleting: 'red'
 }
 
-function RecordPage({ collectionId,title }) {
+function RecordPage({ collectionId }) {
     const handleCopy = (text) => {
         const clipboard = new ClipboardJS('.icon-copy', {
             text: () => text
@@ -120,13 +120,13 @@ function RecordPage({ collectionId,title }) {
     const [limit, setLimit] = useState(20)
     const [contentValue, setContentValue] = useState('')
     const [recordId, setRecordId] = useState('')
-    const [inputDisabeld, setInputDisabeld] = useState(false)
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
     const [drawerTitle, setDrawerTitle] = useState('Create Record')
     const [deleteId, setDeleteId] = useState('')
-    const [chunkSize, setChunkSize] = useState('')
-    const [chunkOverlap, setChunkOverlap] = useState('')
+    const [chunkSize, setChunkSize] = useState(200)
+    const [title, setTitle] = useState('')
+    const [chunkOverlap, setChunkOverlap] = useState(10)
     const handleChildEvent = async (value) => {
         setLimit(value.limit)
         setUpdatePrevButton(false)
@@ -138,11 +138,11 @@ function RecordPage({ collectionId,title }) {
         }
         fetchData(collectionId, params)
     }, [collectionId])
-    const fetchData = async (collectionId:string, params:Record<string,any>) => {
+    const fetchData = async (collectionId: string, params: Record<string, any>) => {
         setLoading(true);
         try {
-            const res:any = await getRecordsList(collectionId, params)
-            const data = res.data.map((item:any) => {
+            const res: any = await getRecordsList(collectionId, params)
+            const data = res.data.map((item: any) => {
                 return {
                     ...item,
                     key: item.record_id
@@ -158,14 +158,17 @@ function RecordPage({ collectionId,title }) {
     };
     const handleCreatePrompt = () => {
         setContentValue('')
+        setTitle('')
+        setChunkSize(200)
+        setChunkOverlap(10)
+
         setDrawerTitle('Create Record')
-        setInputDisabeld(false)
         setCreateOpenModal(true)
     }
     const handleCancel = () => {
         setCreateOpenModal(false)
     }
-    const handleDelete = async (record:any) => {
+    const handleDelete = async (record: any) => {
         try {
             setOpenDeleteModal(true)
             setDeleteId(record.record_id)
@@ -189,13 +192,16 @@ function RecordPage({ collectionId,title }) {
         }
         setOpenDeleteModal(false)
     }
-    const handleEdit = async (record:any) => {
+    const handleEdit = async (record: any) => {
+        console.log(record)
         setDrawerTitle('Edit Record')
-        setInputDisabeld(true)
         setRecordId(record.record_id)
         setCreateOpenModal(true)
         const res = await getRecord(collectionId, record.record_id)
         setContentValue(res.data.content)
+        setTitle(res.data.title)
+        setChunkSize(Number(localStorage.getItem('chunkSize')))
+        setChunkOverlap(Number(localStorage.getItem('chunkOverlap')))   
     }
     const handleConfirm = async () => {
         if (!contentValue) {
@@ -208,8 +214,10 @@ function RecordPage({ collectionId,title }) {
                 type: 'text',
                 title,
                 content: contentValue,
-                text_splitter:{
-                    type:'token'
+                text_splitter: {
+                    type: 'token',
+                    chunk_size: chunkSize,
+                    chunk_overlap: chunkOverlap
                 }
 
             }
@@ -222,6 +230,8 @@ function RecordPage({ collectionId,title }) {
                 }
                 await updateRecord(collectionId, recordId, param1)
             }
+            localStorage.setItem('chunkSize', String(chunkSize) || '200')
+            localStorage.setItem('chunkOverlap', String(chunkOverlap) || '10')
             const params3 = {
                 limit: limit || 20,
             }
@@ -233,7 +243,7 @@ function RecordPage({ collectionId,title }) {
         setCreateOpenModal(false)
         setConfirmLoading(false)
     }
-    const handleContentChange = (e:any) => {
+    const handleContentChange = (e: any) => {
         setContentValue(e.target.value)
     }
     return (
@@ -246,26 +256,28 @@ function RecordPage({ collectionId,title }) {
                 <Button key="submit" onClick={() => handleConfirm()} className='next-button' loading={confirmLoading}>
                     Confirm
                 </Button>
-            ]} title={drawerTitle} className={styles['record-create-model']} open={createOpenModal} width={720} onCancel={handleCancel} closeIcon={<img src={closeIcon} alt="closeIcon" />}>
+            ]} title={drawerTitle} centered className={styles['record-create-model']} open={createOpenModal} width={720} onCancel={handleCancel} closeIcon={<img src={closeIcon} alt="closeIcon" />}>
                 <div className={styles['text-content']}>
+                    <div className={styles['text-title']}>Title</div>
+                    <div className={styles.desc}>The title of the record. It will be appended to the top of each chunk derived from the record to improve semantic relevance.</div>
+                    <Input className={styles['input1']} placeholder='Enter name' value={title} onChange={(e) => setTitle(e.target.value)}></Input>
                     <div className={styles['text-title']}>Text content</div>
                     <div className={styles['desc']}>The content of the record. Upon creation, it will be segmented into smaller chunks and converted into computationally manageable vectors, following the rules set in the collection configuration. Currently only content in raw text format is supported.</div>
-                    <Input.TextArea disabled={inputDisabeld} placeholder='Enter description' showCount minLength={0} maxLength={32768} value={contentValue} onChange={handleContentChange} className={styles['input']}></Input.TextArea>
+                    <Input.TextArea placeholder='Enter description' showCount minLength={0} maxLength={32768} value={contentValue} onChange={handleContentChange} className={styles['input']}></Input.TextArea>
                     <div className={styles.label1}>Text Splitter</div>
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
                         <span>{`Chunk size`}</span>
-
                     </div>
                     <div className={styles['label-desc']}>The collection's records will be segmented into separate chunks to optimize data retrieval. Each chunk's capacity, known as the chunk size,ranges from 100 to 500 tokens.</div>
-                    <InputNumber className={styles['input-number']} disabled={inputDisabeld} placeholder='Enter chunk size(range:100-500)' parser={(value:string) => (isNaN(Number(value)) ? '1' : String(parseInt(value, 10)))} value={chunkSize} onChange={(value) => setChunkSize(value)} min='100' max='500'></InputNumber>
+                    <InputNumber className={styles['input-number1']} placeholder='Enter chunk size(range:100-500)' parser={(value: string) => (isNaN(Number(value)) ? 1 : parseInt(value, 10))} value={chunkSize} onChange={(value:number) => setChunkSize(value)} min={100} max={500}></InputNumber>
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
                         <span>{`Chunk overlap`}</span>
 
                     </div>
                     <div className={styles['label-desc']}>{`Chunk overlap specifies how much overlap there should be between chunks,counted by number of chunk text tokens.It cannot be larger then chunk_size.`}</div>
-                    <InputNumber className={styles['input-number']} disabled={inputDisabeld} placeholder='Enter chunk overlap' value={chunkOverlap} onChange={(value) => setChunkOverlap(value)} parser={(value:string) => (isNaN(Number(value)) ? '1' : String(parseInt(value, 10)))} min='0' max='100'></InputNumber>
+                    <InputNumber className={styles['input-number']}  placeholder='Enter chunk overlap' value={chunkOverlap} onChange={(value) => setChunkOverlap(value)} parser={(value: string) => (isNaN(Number(value)) ? 1 : parseInt(value, 10))} min={0} max={100}></InputNumber>
                 </div>
             </Modal>
             <DeleteModal open={OpenDeleteModal} describe={`Are you sure you want to delete reocrd ${deleteId}? This action cannot be undone and all chunks associated with the reocrd will be deleted.`} title="Delete Record" projectName={deleteId} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>

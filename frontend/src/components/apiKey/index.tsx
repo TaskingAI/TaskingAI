@@ -255,7 +255,7 @@ function ApiKeys() {
             <Modal title='Create API Key'
                 onCancel={handleCreateCancel}
                 open={openCreateAPIKey}
-                className={styles['delete-apikey-modal']}
+                className={styles['create-apikey-modal']}
                 centered
                 closeIcon={<img src={closeIcon} alt="closeIcon" />}
                 footer={[

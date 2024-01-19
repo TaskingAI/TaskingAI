@@ -329,6 +329,14 @@
 
 .drawer-inner-table {
     :global {
+        .ant-drawer-header {
+           .ant-drawer-header-title{
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-between;
+              
+           }
+        }
         .ant-drawer-body {
             padding-top: 0 !important;
             padding-bottom: 0 !important;

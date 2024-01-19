@@ -32,7 +32,7 @@ const titleCase = (str) => {
 }
 function Assistant() {
     const columns = [...assistantTableColumn]
-    columns.push([
+    columns.push(
         {
             title: 'Actions',
             key: 'action',
@@ -60,7 +60,7 @@ function Assistant() {
                 </Space>
             ),
         },
-    ]);
+    );
     const [assistantsList, setAssistantsList] = useState([])
     const [OpenDrawer, setOpenDrawer] = useState(false)
     const [loading, setLoading] = useState(false);
