@@ -20,8 +20,7 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
     const [descriptionText, setDescriptionText] = useState('')
     const [selectedRows, setSelectedRows] = useState([])
     const [selectValue, setSelectValue] = useState(1000)
-    const [chunkOverlap, setChunkOverlap] = useState(10)
-    const [chunkSize, setChunkSize] = useState(200)
+
     const [modelOne, setModelOne] = useState(false);
     const [recordsSelected, setRecordsSelected] = useState([])
     const [updatePrevButton, setUpdatePrevButton] = useState(false)
@@ -59,8 +58,6 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
         setDescriptionText('')
         setSelectedRows([])
         setSelectValue(1000)
-        setChunkOverlap(10)
-        setChunkSize(200)
         setRecordsSelected([])
         setDefaultSelectedRowKeys([])
         setUpdatePrevButton(false)
@@ -76,7 +73,7 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
         setSelectValue(value)
     }
     const handleRequest = async () => {
-        if (!selectedRows || !chunkSize || !selectValue) {
+        if (!selectedRows  || !selectValue) {
             return toast.error('Missing required parameters')
         }
         try {
@@ -94,8 +91,6 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
             setDescriptionText('')
             setSelectedRows([])
             setSelectValue(1000)
-            setChunkOverlap(10)
-            setChunkSize(200)
             setRecordsSelected([])
             setDefaultSelectedRowKeys([])
             handleModalCloseOrOpen(false)

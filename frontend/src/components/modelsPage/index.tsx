@@ -2,6 +2,8 @@ import { useEffect, useState, useRef, ChangeEvent } from 'react'
 import { Modal, Button, Spin, Space, Input, Form, Drawer, Tooltip } from 'antd'
 import styles from './modelsPage.module.scss'
 import GoogleIcon from '../../assets/img/googleIcon.svg?react'
+import MistralAI from '@/assets/img/MistralAI.svg?react'
+
 import ModelProvider from '../../assets/img/ModelProvider.svg?react'
 import Anthropic from '../../assets/img/Anthropic.svg?react'
 import Frame from '../../assets/img/Frame.svg?react'
@@ -217,6 +219,8 @@ function ModelsPage() {
             return <GoogleIcon width='16px' height='16px' />
         } else if (providerId === 'cohere') {
             return <CohereIcon width='16px' height='16px' />
+        } else if (providerId === 'mistralai') {
+            return <MistralAI width='16px' height='16px' />
         }
     }
     const handleValuesChange = (changedValues:object) => {

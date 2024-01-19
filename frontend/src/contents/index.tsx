@@ -8,6 +8,7 @@ import Frame from '@/assets/img/Frame.svg?react'
 import ClipboardJS from 'clipboard';
 import { toast } from 'react-toastify';
 import CohereIcon from '@/assets/img/cohereIcon.svg?react'
+import MistralAI from '@/assets/img/MistralAI.svg?react'
 import CopyOutlined from '@/assets/img/copyIcon.svg?react';
 const tooltipEditTitle = <span style={{ color: '#777' }}>Edit</span>;
 const tooltipPlaygroundTitle = <span style={{ color: '#777' }}>Playground</span>;
@@ -48,6 +49,8 @@ const imgReverse = (providerId: string) => {
         return <GoogleIcon width='16px' height='16px' />
     } else if (providerId === 'cohere') {
         return <CohereIcon width='16px' height='16px' />
+    } else if (providerId === 'mistralai') {
+        return <MistralAI width='16px' height='16px' />
     }
 }
 const typeReverse: Record<string, string> = {
