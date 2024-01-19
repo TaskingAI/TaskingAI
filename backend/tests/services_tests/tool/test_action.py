@@ -2,7 +2,7 @@ import pytest
 
 from tests.services_api.tool.action import (create_action, get_action, list_actions, update_action, delete_action,
                                             run_action)
-
+from tests.settings import OPENAI_API_KEY
 
 run_count = 0
 
@@ -216,7 +216,7 @@ class TestAction:
                                     },
                 "authentication": {
                     "type": "bearer",
-                    "secret": "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"
+                    "secret": OPENAI_API_KEY
                 }
                 }
     ]

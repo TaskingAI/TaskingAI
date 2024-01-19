@@ -4,6 +4,7 @@ from tests.services_api.retrieval.collection import (create_collection, get_coll
                                                      update_collection, delete_collection)
 from tests.services_api.model.model import create_model
 from tests.services_tests.retrieval import Retrieval
+from tests.settings import OPENAI_API_KEY
 
 
 class TestCollection(Retrieval):
@@ -20,7 +21,7 @@ class TestCollection(Retrieval):
         create_text_embedding_model_data = {
             "name": "My Embedding Model",
             "model_schema_id": "openai/text-embedding-ada-002",
-            "credentials": {"OPENAI_API_KEY": "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"}
+            "credentials": {"OPENAI_API_KEY": OPENAI_API_KEY}
         }
 
         create_text_embedding_model_res = await create_model(create_text_embedding_model_data)

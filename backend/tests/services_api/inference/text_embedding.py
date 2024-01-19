@@ -2,7 +2,7 @@ import aiohttp
 from typing import Dict
 
 from tests.common.utils import ResponseWrapper, get_headers, Token
-from tests.config import HOST
+from tests.settings import HOST
 from config import CONFIG
 
 if CONFIG.WEB:

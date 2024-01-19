@@ -1,7 +1,7 @@
 import requests
 from typing import Dict
 
-from tests.config import HOST, WEB_SERVICE_PORT, API_SERVICE_PORT
+from tests.settings import HOST, WEB_SERVICE_PORT, API_SERVICE_PORT
 from config import CONFIG
 
 

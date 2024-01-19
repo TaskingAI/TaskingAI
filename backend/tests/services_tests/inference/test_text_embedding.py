@@ -2,6 +2,7 @@ import pytest
 
 from tests.services_api.inference.text_embedding import text_embedding
 from tests.services_api.model.model import create_model
+from tests.settings import OPENAI_API_KEY
 
 
 class TestTextEmbedding:
@@ -30,7 +31,7 @@ class TestTextEmbedding:
             create_text_embedding_model_data = {
                 "name": "My Embedding Model",
                 "model_schema_id": "openai/text-embedding-ada-002",
-                "credentials": {"OPENAI_API_KEY": "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"}
+                "credentials": {"OPENAI_API_KEY": OPENAI_API_KEY}
             }
 
             create_text_embedding_model_res = await create_model(create_text_embedding_model_data)

@@ -1,6 +1,7 @@
 import pytest
 
 from tests.services_api.model.model import create_model, list_models, get_model, update_model, delete_model
+from tests.settings import OPENAI_API_KEY
 
 
 class TestModel:
@@ -13,19 +14,19 @@ class TestModel:
         {
             "name": "My Text Embedding Model",
             "model_schema_id": "openai/text-embedding-ada-002",
-            "credentials": {"OPENAI_API_KEY": "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"}
+            "credentials": {"OPENAI_API_KEY": OPENAI_API_KEY}
         },
         {
             "name": "My Chat Completion Model",
             "model_schema_id": "openai/gpt-3.5-turbo",
-            "credentials": {"OPENAI_API_KEY": "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"}
+            "credentials": {"OPENAI_API_KEY": OPENAI_API_KEY}
         }
     ]
 
     update_model_list = [
         {
             "name": "My Chat Completion Model Test",
-            "credentials": {"OPENAI_API_KEY": "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"}
+            "credentials": {"OPENAI_API_KEY": OPENAI_API_KEY}
         }
     ]
 

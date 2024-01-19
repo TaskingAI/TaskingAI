@@ -4,6 +4,7 @@ from tests.services_api.assistant.assistant import (create_assistant, get_assist
                                                     delete_assistant)
 from tests.services_api.model.model import create_model
 from tests.services_tests.assistant import Assistant
+from tests.settings import OPENAI_API_KEY
 
 
 class TestAssistant(Assistant):
@@ -23,7 +24,7 @@ class TestAssistant(Assistant):
         create_chat_completion_model_data = {
             "model_schema_id": "openai/gpt-3.5-turbo",
             "name": "My Language Model",
-            "credentials": {"OPENAI_API_KEY": "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"}
+            "credentials": {"OPENAI_API_KEY": OPENAI_API_KEY}
         }
 
         create_chat_completion_model_res = await create_model(create_chat_completion_model_data)
