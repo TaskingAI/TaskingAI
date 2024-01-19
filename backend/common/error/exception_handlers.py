@@ -24,7 +24,7 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
         return JSONResponse(
             status_code=exc.status_code,
             content=build_error_response_dict(
-                error_code=exc.detail.get("error_code", ErrorCode.UNKNOWN_ERROR),
+                error_code=exc.detail.get("error_code", exc.detail.get("code", ErrorCode.UNKNOWN_ERROR)),
                 message=exc.detail.get("message", None),
             ),
         )

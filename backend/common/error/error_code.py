@@ -52,5 +52,6 @@ assert len(error_messages) == len(ErrorCode)
 
 def raise_http_error(error_code: ErrorCode, message: str):
     raise HTTPException(
-        status_code=error_messages[error_code]["status_code"], detail={"error_code": error_code, "message": message}
+        status_code=error_messages[error_code]["status_code"],
+        detail={"error_code": error_code, "message": message},
     )
