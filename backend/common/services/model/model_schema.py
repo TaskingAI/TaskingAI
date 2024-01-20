@@ -26,6 +26,7 @@ async def load_model_schema_data():
         response_wrapper = ResponseWrapper(response.status, await response.json())
         check_http_error(response_wrapper)
         providers = [Provider.build(provider_data) for provider_data in response_wrapper.json()["data"]]
+        providers.sort(key=lambda x: x.provider_id)
 
     async with aiohttp.ClientSession() as session:
         response = await session.get(
@@ -34,6 +35,7 @@ async def load_model_schema_data():
         response_wrapper = ResponseWrapper(response.status, await response.json())
         check_http_error(response_wrapper)
         model_schemas = [ModelSchema.build(model_schema_data) for model_schema_data in response_wrapper.json()["data"]]
+        model_schemas.sort(key=lambda x: x.model_schema_id)
 
     # sort provider by name
     provider_dict = {provider.provider_id: provider for provider in providers}
@@ -58,8 +60,6 @@ async def list_providers() -> List[Provider]:
 
 async def list_model_schemas(
     limit: int,
-    after: Optional[str],
-    before: Optional[str],
     offset: Optional[int],
     provider_id: Optional[str],
     type: Optional[str],
@@ -69,17 +69,11 @@ async def list_model_schemas(
     Only one in `offset`, `after` and `before` can be used at the same time.
 
     :param limit: the maximum number of model schemas to return.
-    :param after: the cursor represented by a model_schema_id to fetch the next page.
-    :param before: the cursor represented by a model_schema_id to fetch the previous page.
     :param offset: the offset of model schemas to return.
     :param provider_id: the provider id to filter by.
     :param type: the model type to filter by.
     :return: a tuple of (model schemas, total count, has more)
     """
-
-    # Ensure only one of after, before, or offset is used
-    if sum(x is not None for x in [after, before, offset]) > 1:
-        raise ValueError("Only one of 'after', 'before', or 'offset' can be used")
 
     # Filter by provider_id and type
     filtered_schemas = [
@@ -88,23 +82,9 @@ async def list_model_schemas(
         if (provider_id is None or schema.provider_id == provider_id) and (type is None or schema.type == type)
     ]
 
-    # Find the index for pagination
-    start_index = 0
-    if after:
-        start_index = next(
-            (i for i, schema in enumerate(filtered_schemas) if schema.model_schema_id == after), len(filtered_schemas)
-        )
-    elif before:
-        start_index = (
-            next((i for i, schema in enumerate(filtered_schemas) if schema.model_schema_id == before), 0) - limit
-        )
-        start_index = max(0, start_index)
-    elif offset is not None:
-        start_index = offset
-
     # Paginate
-    end_index = start_index + limit
-    page = filtered_schemas[start_index:end_index]
+    end_index = offset + limit
+    page = filtered_schemas[offset:end_index]
 
     # Check if there's more
     has_more = end_index < len(filtered_schemas)

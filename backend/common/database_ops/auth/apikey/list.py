@@ -20,4 +20,5 @@ async def list_apikeys() -> ListResult:
             table_name="apikey",
             order=SortOrderEnum.DESC,
             sort_field="created_timestamp",
+            object_id_name="apikey_id",
         )

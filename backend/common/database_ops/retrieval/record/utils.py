@@ -1,6 +1,7 @@
 from typing import List
 from common.models import Collection, Chunk
 import json
+from common.utils import current_timestamp_int_milliseconds
 
 
 async def insert_record_chunks(
@@ -24,9 +25,22 @@ async def insert_record_chunks(
     num_chunks = len(chunk_texts)
     chunk_table_name = Collection.get_chunk_table_name(collection_id)
 
+    # make different timestamps for each chunk
+    current_timestamp = current_timestamp_int_milliseconds()
+    timestamps = [current_timestamp + i for i in range(len(chunk_texts))]
+
     insert_values_sql = ", ".join(
         [
-            f"(${i * 6 + 1}, ${i * 6 + 2}, ${i * 6 + 3}, ${i * 6 + 4}, ${i * 6 + 5}, ${i * 6 + 6})"
+            f"("
+            f"${i * 8 + 1}, "
+            f"${i * 8 + 2}, "
+            f"${i * 8 + 3}, "
+            f"${i * 8 + 4}, "
+            f"${i * 8 + 5}, "
+            f"${i * 8 + 6}, "
+            f"${i * 8 + 7}, "
+            f"${i * 8 + 8}"
+            f")"
             for i in range(num_chunks)
         ]
     )
@@ -43,12 +57,15 @@ async def insert_record_chunks(
                 json.dumps(chunk_embeddings[i]),
                 chunk_texts[i],
                 "{}",
+                timestamps[i],
+                timestamps[i],
             ]
         )
 
     # make the final insert sql
     insert_chunks_sql = f"""
-        INSERT INTO {chunk_table_name}(chunk_id, record_id, collection_id, embedding, content, metadata)
+        INSERT INTO {chunk_table_name}(chunk_id, record_id, collection_id, embedding, content,
+         metadata, updated_timestamp, created_timestamp)
         VALUES {insert_values_sql};
     """
 

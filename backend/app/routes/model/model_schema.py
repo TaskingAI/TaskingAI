@@ -63,8 +63,6 @@ async def api_list_model_schemas(
 ):
     model_schemas, total, has_more = await list_model_schemas(
         limit=data.limit,
-        after=data.after,
-        before=data.before,
         offset=data.offset,
         provider_id=data.provider_id,
         type=data.type,

@@ -3,6 +3,9 @@ from common.utils import current_timestamp_int_milliseconds
 import json
 from typing import Any, Optional
 from common.models import SortOrderEnum, ListResult
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 async def update_object(conn, update_dict: Dict, update_time: bool, table_name: str, equal_filters: Dict) -> None:
@@ -86,8 +89,11 @@ async def list_objects(
     table_name: str,
     order: SortOrderEnum,
     sort_field: str,
+    object_id_name: Optional[str],
     limit: Optional[int] = None,
+    after_id: Optional[str] = None,
     after_value: Optional[Any] = None,
+    before_id: Optional[str] = None,
     before_value: Optional[Any] = None,
     offset: Optional[int] = None,
     prefix_filters: Optional[Dict] = None,
@@ -101,8 +107,11 @@ async def list_objects(
     :param limit: the maximum number of records to return
     :param order: the order of records to return, desc or asc
     :param sort_field: the field to sort records by
+    :param object_id_name: the name of the object id
     :param after_value: the cursor represented by a value to fetch the next page
+    :param after_id: the object id of the after cursor
     :param before_value: the cursor represented by a value to fetch the previous page
+    :param before_id: the object id of the before cursor
     :param offset: the offset of records to return
     :param prefix_filters: the prefix filters, key is the column name, value is the prefix value
     :param equal_filters: the equal filters, key is the column name, value is the equal value
@@ -112,6 +121,11 @@ async def list_objects(
 
     params = []
     where_clauses = []
+
+    # assume all id fields are named as {table_name}_id
+    secondary_sort_field = object_id_name
+    after_secondary_value = after_id
+    before_secondary_value = before_id
 
     # add prefix filters
     if prefix_filters:
@@ -129,16 +143,20 @@ async def list_objects(
 
     # add timestamp condition
     sql_order = "ASC" if order == SortOrderEnum.ASC else "DESC"
-    if after_value is not None:
+    if after_value is not None and after_secondary_value is not None:
         operator = ">" if order == SortOrderEnum.ASC else "<"
-        where_clauses.append(f"{sort_field} {operator} ${len(params) + 1}")
-        params.append(after_value)
+        where_clauses.append(
+            f"({sort_field}, {secondary_sort_field}) {operator} (${len(params) + 1}, ${len(params) + 2})"
+        )
+        params.extend([after_value, after_secondary_value])
 
     # if using before value, we need to reverse the order
-    if before_value is not None:
+    if before_value is not None and before_secondary_value is not None:
         operator = "<" if order == SortOrderEnum.ASC else ">"
-        where_clauses.append(f"{sort_field} {operator} ${len(params) + 1}")
-        params.append(before_value)
+        where_clauses.append(
+            f"({sort_field}, {secondary_sort_field}) {operator} (${len(params) + 1}, ${len(params) + 2})"
+        )
+        params.extend([before_value, before_secondary_value])
         sql_order = "DESC" if order == SortOrderEnum.ASC else "ASC"
 
     # combine where clauses
@@ -159,13 +177,13 @@ async def list_objects(
 
     # build query
     query = f"""
-      SELECT *
-      FROM {table_name}
-      {combined_where_clause}
-      ORDER BY {sort_field} {sql_order}
-      {limit_clause}
-      {sql_offset}
-      """
+    SELECT *
+    FROM {table_name}
+    {combined_where_clause}
+    ORDER BY {sort_field} {sql_order}, {secondary_sort_field} {sql_order}
+    {limit_clause}
+    {sql_offset}
+    """
 
     # fetch rows
     rows = await conn.fetch(query, *params)

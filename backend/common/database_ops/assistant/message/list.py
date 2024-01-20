@@ -50,7 +50,10 @@ async def list_messages(
             limit=limit,
             order=order,
             sort_field="created_timestamp",
+            object_id_name="message_id",
             after_value=after_message.created_timestamp if after_message else None,
+            after_id=after_message.message_id if after_message else None,
             before_value=before_message.created_timestamp if before_message else None,
+            before_id=before_message.message_id if before_message else None,
             equal_filters=equal_filters,
         )
