@@ -55,6 +55,8 @@ async def create_collection(
                     collection_id CHAR(24) NOT NULL,
                     record_id CHAR(24),
                     content TEXT NOT NULL,
+                    num_tokens INT NOT NULL DEFAULT 0,
+                    extra JSONB NOT NULL DEFAULT '{{}}',
                     metadata JSONB NOT NULL DEFAULT '{{}}',
                     embedding vector({embedding_size}) NOT NULL,
                     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,

@@ -42,6 +42,8 @@ CREATE TABLE IF NOT EXISTS action (
     description TEXT NOT NULL,
     openapi_schema JSONB NOT NULL,
     authentication JSONB NOT NULL DEFAULT '{}',
+    extra jsonb NOT NULL DEFAULT '{}',
+    metadata JSONB NOT NULL DEFAULT '{}',
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
 );
@@ -59,6 +61,7 @@ CREATE TABLE IF NOT EXISTS collection (
     embedding_model_id CHAR(8) NOT NULL,
     embedding_size INTEGER NOT NULL,
     status TEXT NOT NULL,
+    extra jsonb NOT NULL DEFAULT '{}',
     metadata JSONB NOT NULL DEFAULT '{}',
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT
@@ -75,6 +78,7 @@ CREATE TABLE IF NOT EXISTS record (
     type TEXT NOT NULL,
     content TEXT NOT NULL,
     status TEXT NOT NULL,
+    extra jsonb NOT NULL DEFAULT '{}',
     metadata JSONB NOT NULL DEFAULT '{}',
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
@@ -96,7 +100,9 @@ CREATE TABLE IF NOT EXISTS assistant (
     retrievals JSONB DEFAULT '[]',
     retrieval_configs JSONB DEFAULT '{}',
 
+    num_chats INTEGER NOT NULL DEFAULT 0,
     memory JSONB NOT NULL DEFAULT '{}',
+    extra jsonb NOT NULL DEFAULT '{}',
     metadata JSONB NOT NULL DEFAULT '{}',
 
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
@@ -109,8 +115,10 @@ CREATE INDEX IF NOT EXISTS assistant_name_idx ON assistant (name);
 CREATE TABLE IF NOT EXISTS chat (
     assistant_id CHAR(24) NOT NULL,
     chat_id CHAR(24) NOT NULL,
-    metadata JSONB NOT NULL DEFAULT '{}',
     memory JSONB NOT NULL DEFAULT '{}',
+    num_messages INTEGER NOT NULL DEFAULT 0,
+    extra jsonb NOT NULL DEFAULT '{}',
+    metadata JSONB NOT NULL DEFAULT '{}',
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     PRIMARY KEY (assistant_id, chat_id)
@@ -123,6 +131,8 @@ CREATE TABLE IF NOT EXISTS message (
     assistant_id CHAR(24) NOT NULL,
     role TEXT NOT NULL,
     content TEXT NOT NULL,
+    num_tokens INTEGER NOT NULL DEFAULT 0,
+    extra jsonb NOT NULL DEFAULT '{}',
     metadata JSONB NOT NULL DEFAULT '{}',
     created_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
     updated_timestamp BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
