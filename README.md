@@ -10,8 +10,10 @@
 
 1. **All-In-One LLM Platform**: Access hundreds of AI models with unified APIs.
 2. **Intuitive UI Console**: Simplifies project management and allows in-console workflow testing.
-3. **BaaS-Inspired Workflow**: TaskingAI distinctly separates AI logic (server-side) from product development (client-side), offering a clear pathway from console-based prototyping to scalable solutions using RESTful APIs and client SDKs.
-4. **Customizable Integration**: Enhance LLM functionalities with customizable tools and advanced Retrieval-Augmented Generation (RAG) system
+3. **BaaS-Inspired Workflow**: Separate AI logic (server-side) from product development (client-side), offering a clear pathway from console-based prototyping to scalable solutions using RESTful APIs and client SDKs.
+4. **Customizable Integration**: Enhance LLM functionalities with customizable **tools** and advanced **Retrieval-Augmented Generation** (RAG) system
+5. **Asynchronous Efficiency**: Harness Python FastAPI's asynchronous features for high-performance, concurrent computation, enhancing the responsiveness and scalability of the applications.
+
 <p>
 <img src="static/img/console.png" alt="">
 </p>
@@ -32,11 +34,17 @@ Please give us a **FREE STAR🌟** on GitHub if you find it useful.
 
 ## Why TaskingAI?
 
+### Problems with existing products
+
 The Assistant API from OpenAI, while robust for GPTs-like functionalities, has limitations due to its design where key functions like tools and documentation retrieval are tied to individual assistants. This structure can restrict flexibility in multi-tenant applications, where shared data is essential.
+
+### How TaskingAI solves the problem
 
 TaskingAI overcomes these obstacles by decoupling key modules, offering broader model support and an open-source framework. Its adaptability makes it a superior choice for developers needing more versatile, data-sharing capable AI solutions, particularly for complex, customizable projects.
 
-Here is a comparison between the mainstream agent development framework and TaskingAI:
+### Comparisons
+
+Here is a comparison table among the mainstream agent development frameworks and TaskingAI:
 
 | Feature                  | LangChain               | OpenAI <br/> Assistant API | TaskingAI               |
 | ------------------------ | ----------------------- | -------------------------- | ----------------------- |
@@ -83,7 +91,7 @@ A simple way to initiate self-hosted TaskingAI community edition is through [Doc
 
 ### Step-by-Step Guide
 
-First, clone the TaskingAI community edition repository from GitHub.
+First, clone the TaskingAI (community edition) repository from GitHub.
 
 ```bash
 git clone https://github.com/taskingai/taskingai.git
