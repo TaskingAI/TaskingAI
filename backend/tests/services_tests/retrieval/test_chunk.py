@@ -7,8 +7,8 @@ from tests.services_tests.retrieval import Retrieval
 
 class TestChunk(Retrieval):
 
-    chunk_list = ["object", "chunk_id", "record_id", "collection_id", "content", "metadata", "updated_timestamp",
-                  "created_timestamp"]
+    chunk_list = ["object", "chunk_id", "record_id", "collection_id", "content", "num_tokens", "metadata",
+                  "updated_timestamp", "created_timestamp"]
     chunk_keys = set(chunk_list)
 
     @pytest.mark.run(order=39)
@@ -48,6 +48,7 @@ class TestChunk(Retrieval):
         assert res_json.get("status") == "success"
         assert res_json.get("data").get("collection_id") == Retrieval.collection_id
         assert res_json.get("data").get("record_id") is None
+        assert res_json.get("data").get("num_tokens") > 0
         for key in create_chunk_data:
             assert res_json.get("data").get(key) == create_chunk_data[key]
         assert set(res_json.get("data").keys()) == self.chunk_keys
@@ -64,6 +65,7 @@ class TestChunk(Retrieval):
         assert chunk_res_json.get("data").get("chunk_id") == Retrieval.chunk_id
         assert chunk_res_json.get("data").get("collection_id") == Retrieval.collection_id
         assert chunk_res_json.get("data").get("record_id") is None
+        assert chunk_res_json.get("data").get("num_tokens") > 0
         assert set(chunk_res_json.get("data").keys()) == self.chunk_keys
 
     @pytest.mark.run(order=42)
@@ -83,6 +85,7 @@ class TestChunk(Retrieval):
         assert res_json.get("data").get("chunk_id") == Retrieval.chunk_id
         assert res_json.get("data").get("collection_id") == Retrieval.collection_id
         assert res_json.get("data").get("record_id") is None
+        assert res_json.get("data").get("num_tokens") > 0
         for key in update_chunk_data:
             assert res_json.get("data").get(key) == update_chunk_data[key]
         assert set(res_json.get("data").keys()) == self.chunk_keys

@@ -7,8 +7,8 @@ from tests.services_tests.assistant import Assistant
 
 class TestMessage(Assistant):
 
-    data_list = ['object', "message_id", 'chat_id', 'assistant_id', "role", 'metadata', "content", 'created_timestamp',
-                 'updated_timestamp']
+    data_list = ['object', "message_id", 'chat_id', 'assistant_id', "role", "num_tokens", 'metadata', "content",
+                 'created_timestamp', 'updated_timestamp']
     data_keys = set(data_list)
 
     @pytest.mark.run(order=66)
@@ -32,6 +32,7 @@ class TestMessage(Assistant):
         assert res.json().get("status") == "success"
         for key in create_message_data:
             assert res.json().get("data").get(key) == create_message_data[key]
+        assert res.json().get("data").get("num_tokens") > 0
         assert res.json().get("data").get("chat_id") == Assistant.chat_id
         assert res.json().get("data").get("assistant_id") == Assistant.assistant_id
         assert set(res.json().get("data").keys()) == self.data_keys
@@ -64,6 +65,7 @@ class TestMessage(Assistant):
         assert res_json.get("data").get("message_id") == Assistant.message_id
         assert res_json.get("data").get("chat_id") == Assistant.chat_id
         assert res_json.get("data").get("assistant_id") == Assistant.assistant_id
+        assert res.json().get("data").get("num_tokens") > 0
         assert set(res_json.get("data").keys()) == self.data_keys
 
     @pytest.mark.run(order=69)
@@ -80,6 +82,7 @@ class TestMessage(Assistant):
         assert res.json().get("data").get("chat_id") == Assistant.chat_id
         assert res.json().get("data").get("assistant_id") == Assistant.assistant_id
         assert set(res.json().get("data").keys()) == self.data_keys
+        assert res.json().get("data").get("num_tokens") > 0
         for key in update_message_data:
             assert res.json().get("data").get(key) == update_message_data[key]
 
@@ -96,3 +99,4 @@ class TestMessage(Assistant):
         assert set(res_json.get("data").keys()).issubset(self.data_keys)
         assert res_json.get("data").get("role") == "assistant"
         assert res_json.get("data").get("content").get("text") is not None
+        assert res.json().get("data").get("num_tokens") > 0
