@@ -147,7 +147,6 @@ function ModelsPage() {
         setDrawerEditOpen(false);
     };
     const handleEdit = async (record: RecordType) => {
-        console.log(record)
         setLoading(true)
         setFormShow(true)
         setResetButtonShow(true)

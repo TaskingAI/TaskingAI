@@ -45,7 +45,6 @@ const ProjectHome = () => {
     const [key, setKey] = useState('')
 
     const selectedKey = location.pathname === '/project' || location.pathname === '/project/' ? '/project/models' : location.pathname
-    console.log(selectedKey.includes('tools'))
     const [isOpen, setOpen] = useState(selectedKey.includes('tools') || false)
     const [collapsed, setCollapsed] = useState(false);
     const [showTaskingAi, setShowTaskingAi] = useState(true);
@@ -53,11 +52,9 @@ const ProjectHome = () => {
 
     useEffect(() => {
         const key = location.pathname
-        console.log(key)
         setKey(key)
     }, [location.pathname])
     const handleClickMenu = (e: projectHomeType) => {
-        console.log(e.key)
         setKey(e.key)
         if (e.key.includes('tools')) {
             setOpen(true)

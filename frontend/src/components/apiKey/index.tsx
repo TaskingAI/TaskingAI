@@ -56,7 +56,6 @@ function ApiKeys() {
                     key: item.apikey_id
                 }
             })
-            console.log(data)
             setApiKeysList(data)
         } catch (e) {
             console.log(e)

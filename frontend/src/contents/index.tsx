@@ -16,6 +16,7 @@ const tooltipPlaygroundTitle = <span style={{ color: '#777' }}>Playground</span>
 const tooltipDeleteTitle = <span style={{ color: '#777' }}>Delete</span>;
 const tooltipShowTitle = <span style={{ color: '#777' }}>Show</span>
 const tooltipHideTitle = <span style={{ color: '#777' }}>Hide</span>
+const tooltipRecordTitle = <span style={{ color: '#777' }}>Record</span>
 const statusReverse = {
     creating: 'orange',
     ready: 'green',
@@ -376,4 +377,4 @@ const assistantTableColumn: any = [
     },
 ]
 
-export { collectionTableColumn,imgReverse, assistantTableColumn, apikeysTableColumn, actionsTableColumn, tooltipEditTitle, tooltipDeleteTitle, tooltipPlaygroundTitle, tooltipShowTitle, tooltipHideTitle, modelsTableColumn };
+export { collectionTableColumn,imgReverse, assistantTableColumn, apikeysTableColumn, actionsTableColumn, tooltipEditTitle,tooltipRecordTitle, tooltipDeleteTitle, tooltipPlaygroundTitle, tooltipShowTitle, tooltipHideTitle, modelsTableColumn };

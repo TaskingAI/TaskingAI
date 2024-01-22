@@ -28,7 +28,6 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         sort_field: 'created_timestamp',
 
     })
-    console.log(selectValueEnd, filterConfig, pageLimit)
     const [enterPlaceHolder, setEnterPlaceHolder] = useState('Enter Name')
     const empty = {
         ['API Key']: <NoApikey />,
@@ -44,19 +43,18 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             let tableContainer: HTMLElement | null = document.querySelector('.ant-table-container .ant-table-body table');
             let tableContainerH: HTMLElement | null = document.querySelector('.ant-table-container');
             let modalInnerTable: HTMLElement | null = document.querySelector('.modal-inner-table');
-            let drawerInnerTable: HTMLElement | null = document.querySelector('.drawer-inner-table');
+            let elementsWithPrefix:any = document.querySelectorAll('[class*="_drawer-inner-table"]');
             let containerWidth = 0;
             let containerHeight = 0;
-            if (!modalInnerTable && !drawerInnerTable) {
+            if (!modalInnerTable && elementsWithPrefix.length===0) {
                 if (!tableContainer) {
                     return
                 }
                 containerWidth = tableContainer.offsetWidth;
                 containerHeight = tableContainerH.offsetHeight;
-
                 setScroll({
                     x: containerWidth,
-                    y: containerHeight * 0.9
+                    y: containerHeight - 61
                 });
             } else if (modalInnerTable) {
                 const tableContainer: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container table');
@@ -67,15 +65,15 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                     x: containerWidth,
                     y: 400,
                 });
-
-            } else if (drawerInnerTable) {
-                const tableContainer: HTMLElement | null = document.querySelector('.drawer-inner-table .ant-table-container table');
-                const tableContainerH: HTMLElement | null = document.querySelector('.drawer-inner-table');
-                containerWidth = tableContainer.offsetWidth;
-                containerHeight = tableContainerH.offsetHeight;
+            } else if (elementsWithPrefix.length !==0) {
+                let firstElement = elementsWithPrefix[0];
+                let antDrawerBodyClassName = firstElement.querySelector('.ant-drawer-body');
+                let tableClassName = firstElement.querySelector('.ant-drawer-body table')
+                containerWidth = tableClassName.offsetWidth;
+                containerHeight = antDrawerBodyClassName.offsetHeight;
                 setScroll({
                     x: containerWidth,
-                    y: containerHeight - 200,
+                    y: containerHeight - 202,
                 });
             }
 
@@ -135,7 +133,6 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             }
             return
         }
-        console.log(hasMore, flagPrev, flagNext)
         if (!hasMore && !flagPrev && !flagNext) {
             setNextButtonDisabled(true)
             setPrevButtonDisabled(true)
@@ -342,7 +339,6 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             };
             delete newFilterConfig.before
             delete newFilterConfig.after
-            console.log(12312312313)
             onChildEvent(newFilterConfig);
             return newFilterConfig;
         });

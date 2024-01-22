@@ -9,7 +9,7 @@ import EditIcon from '../../assets/img/editIcon.svg?react'
 import ModalTable from '../modalTable/index';
 import ModelModal from '../modelModal/index'
 // import {TKNegativeModal} from '@taskingai/taskingai-ui'
-import { modelsTableColumn, collectionTableColumn } from '../../contents/index.tsx'
+import { modelsTableColumn, collectionTableColumn, tooltipRecordTitle } from '../../contents/index.tsx'
 import { ChildRefType } from '../../contant/index.ts'
 
 import ModalFooterEnd from '../modalFooterEnd/index'
@@ -31,10 +31,12 @@ function Retrieval() {
         key: 'action',
         fixed: 'right',
         width: 157,
-        render: (_:string, record:object) => (
+        render: (_: string, record: object) => (
             <Space size="middle">
                 <div className='table-edit-icon' onClick={() => handleRecord(record)}>
-                    <RecordIcon />
+                    <Tooltip placement='bottom' color="#fff" arrow={false} overlayClassName='table-tooltip' title={tooltipRecordTitle}>
+                        <RecordIcon />
+                    </Tooltip>
                 </div>
                 <div onClick={() => handleEdit(record)} className='table-edit-icon'>
                     <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
@@ -84,7 +86,7 @@ function Retrieval() {
         fetchData(params);
         fetchModelsList(params)
     }, []);
-    const handleRecordsSelected = (value:any, selectedRows:Array<any>) => {
+    const handleRecordsSelected = (value: any, selectedRows: Array<any>) => {
         setRecordsSelected(value)
         const tag = selectedRows.map(item => (item.name + '-' + item.model_id))
         if (value.length === 0) {
@@ -96,11 +98,11 @@ function Retrieval() {
     const handleModalClose = () => {
         setModalTableOpen(false)
     }
-    const fetchData = async (params:Record<string,string | number>) => {
+    const fetchData = async (params: Record<string, string | number>) => {
         setLoading(true);
         try {
-            const res:any = await getRetrievalList(params)
-            const data = res.data.map((item:any) => {
+            const res: any = await getRetrievalList(params)
+            const data = res.data.map((item: any) => {
                 return {
                     ...item,
                     capacity1: item.num_chunks + '/' + item.capacity,
@@ -115,11 +117,11 @@ function Retrieval() {
         }
         setLoading(false);
     };
-    const fetchModelsList = async (params:Record<string, any>) => {
+    const fetchModelsList = async (params: Record<string, any>) => {
 
         try {
-            const res:any = await getModelsList(params, 'text_embedding')
-            const data = res.data.map((item:any) => {
+            const res: any = await getModelsList(params, 'text_embedding')
+            const data = res.data.map((item: any) => {
                 return {
                     ...item,
                     key: item.model_id,
@@ -146,13 +148,13 @@ function Retrieval() {
         setOpenDrawer(true)
         setEditDisabled(false)
     }
-    const handleRecord = (val:any) => {
+    const handleRecord = (val: any) => {
         setCollectionRecordId(val.collection_id)
         navigate(`/project/collections/${val.collection_id}/records`)
         setDrawerName(val.name || 'Untitled Collection')
         setRecordOpen(true)
     }
-    const handleEdit = (val:any) => {
+    const handleEdit = (val: any) => {
         setDrawerTitle('Edit Collection')
         setDrawerName(val.name)
         setEditDisabled(true)
@@ -165,7 +167,7 @@ function Retrieval() {
         setOpenDrawer(true)
     }
 
-    const handleDelete = (val:any) => {
+    const handleDelete = (val: any) => {
         setOpenDeleteModal(true)
         setDeleteValue(val.name)
         setCollectionId(val.collection_id)
@@ -188,13 +190,13 @@ function Retrieval() {
             setUpdateRetrievalPrevButton(true)
 
         } catch (error) {
-                toast.error(error.response.data.error.message)
+            toast.error(error.response.data.error.message)
         }
     }
 
     const handleRequest = async () => {
 
-        if (selectedRows.length === 0  || !selectValue) {
+        if (selectedRows.length === 0 || !selectValue) {
             return toast.error('Missing required parameters')
         }
         // if (modelId.length !== 8) {
@@ -213,7 +215,7 @@ function Retrieval() {
                 const params = {
                     capacity: Number(selectValue),
                     embedding_model_id: selectedRows[0].slice(-8),
-      
+
                     name: drawerName || '',
                     description: descriptionText || '',
                     embedding_size: embeddingSize || undefined,
@@ -229,10 +231,10 @@ function Retrieval() {
             setUpdateRetrievalPrevButton(true)
 
         } catch (error) {
-                toast.error(error.response.data.error.message)
+            toast.error(error.response.data.error.message)
         }
     }
-    const handleNameChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDrawerName(e.target.value)
     }
     const handleCancel = () => {
@@ -249,12 +251,11 @@ function Retrieval() {
         await setModelOne(true)
         childRef.current?.fetchAiModelsList()
     }
-    const handleChildModelEvent = async (value:Record<string,any>) => {
-        console.log(value)
+    const handleChildModelEvent = async (value: Record<string, any>) => {
         setUpdatePrevButton(false)
         await fetchModelsList(value)
     }
-    const handleSelectValue = (value:number) => {
+    const handleSelectValue = (value: number) => {
         setSelectValue(value)
     }
     const handleSelectModelId = () => {
@@ -267,7 +268,7 @@ function Retrieval() {
         // }
     }
 
-    const handleChildEvent = async (value:any) => {
+    const handleChildEvent = async (value: any) => {
         setLimit(value.limit)
         setUpdateRetrievalPrevButton(false)
         await fetchData(value);
@@ -362,7 +363,6 @@ function Retrieval() {
             ]} title='Select Model' open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable name="model" onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
-            {/* <TKNegativeModal open={OpenDeleteModal} objectClassName="Collection" objectName={deleteValue} description="This action cannot be undone and all retrieval integrations associated with the collection will be affected."></TKNegativeModal> */}
             <DeleteModal describe={`Are you sure you want to delete ${deleteValue || 'Untitled Collection'}? This action cannot be undone and all retrieval integrations associated with the collection will be affected.`} open={OpenDeleteModal} title='Delete Collection' projectName={deleteValue || 'Untitled Collection'} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
             <Drawer className={styles['drawer-inner-table']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleRecordCancel} placement="right" size='large' open={recordOpen} width={1000} title={`${drawerName} / Records`}>
                 <RecordPage collectionId={collectionRecordId} ></RecordPage>

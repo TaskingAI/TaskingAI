@@ -9,7 +9,7 @@
             .ant-modal-body {
                 height: calc(100% - 115px);
                 padding: 0px;
-
+                overflow: auto;
             }
         }
 
@@ -17,7 +17,6 @@
 
     .text-content {
         display: flex;
-        height: 100%;
         flex-direction: column;
 
         .text-title {
@@ -46,6 +45,12 @@
             flex: 1;
             margin:0 24px 32px 24px !important;
             width: calc(100% - 48px) !important;
+            height: 500px;
+            :global {
+                textarea {
+                    height: 500px;
+                }
+            }
         }
         .input1{
             margin:10px 24px 0px 24px !important;

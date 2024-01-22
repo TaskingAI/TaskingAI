@@ -167,7 +167,7 @@ function Assistant() {
         }
         setTipSchema(false)
         const commonData = {
-            schema: JSON.parse(schema),
+            openapi_schema: JSON.parse(schema),
             authentication: {
                 type: radioValue,
                 content: undefined,

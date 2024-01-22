@@ -601,7 +601,6 @@ function Playground() {
                     return
                 }
                 const data = JSON.parse(e.data)
-                console.log(data)
 
                 if (data.object === 'MessageGenerationLog') {
                     setDebugArray2(prevValues => [...prevValues, data])
@@ -714,7 +713,7 @@ function Playground() {
         }
         setTipSchema(false)
         const commonData = {
-            schema: JSON.parse(schema),
+            openapi_schema: JSON.parse(schema),
             authentication: {
                 type: radioValue,
                 content: undefined,

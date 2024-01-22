@@ -158,6 +158,8 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
             return <span>Cohere</span>
         } else if(providerId === 'zhipu') {
             return <span>ZhiPu</span>
+        } else if (providerId === 'mistralai') {
+            return <span>MistralAI</span>
         }
     }
     return (
@@ -174,7 +176,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     <div className='create-model'>
                         <div className='left'>
                             <div className='modal-provider'>Model provider</div>
-                            {ModelProviderList.map((item, index) => (
+                            {ModelProviderList?.map((item, index) => (
                                 <div key={index} onClick={() => getCenterData(item.provider_id)} className={`provider ${item.provider_id === providerId && 'select-provider'}`}>
                                     {imgReverse(item.provider_id)}
                                     <div className='name'>{item.name}</div>

@@ -6,7 +6,7 @@ import {
 } from 'antd';
 import styles from './recordPage.module.scss'
 import { toast } from 'react-toastify';
-import { tooltipDeleteTitle, tooltipShowTitle } from '../../contents/index.tsx'
+import { tooltipDeleteTitle,tooltipEditTitle } from '../../contents/index.tsx'
 
 import DeleteModal from '../deleteModal/index.tsx';
 import CopyOutlined from '../../assets/img/copyIcon.svg?react'
@@ -14,7 +14,7 @@ import { getRecordsList, createRecord, deleteRecord, updateRecord, getRecord } f
 import { formatTimestamp } from '@/utils/util'
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
 import closeIcon from '../../assets/img/x-close.svg'
-import ShowEye from '../../assets/img/showEye.svg?react'
+import EditIcon from '../../assets/img/editIcon.svg?react'
 import ClipboardJS from 'clipboard';
 
 const statusReverse = {
@@ -98,8 +98,8 @@ function RecordPage({ collectionId }) {
                 <Space size="middle">
                     <div onClick={() => handleEdit(record)} className='table-edit-icon' style={{ height: '34px', width: '34px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         {/* <span className='edit-icon'>Edit</span> */}
-                        <Tooltip placement='bottom' title={tooltipShowTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
-                            <ShowEye />
+                        <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                            <EditIcon />
 
                         </Tooltip>
                     </div>
@@ -193,7 +193,6 @@ function RecordPage({ collectionId }) {
         setOpenDeleteModal(false)
     }
     const handleEdit = async (record: any) => {
-        console.log(record)
         setDrawerTitle('Edit Record')
         setRecordId(record.record_id)
         setCreateOpenModal(true)
@@ -231,7 +230,7 @@ function RecordPage({ collectionId }) {
                 await updateRecord(collectionId, recordId, param1)
             }
             localStorage.setItem('chunkSize', String(chunkSize) || '200')
-            localStorage.setItem('chunkOverlap', String(chunkOverlap) || '10')
+            localStorage.setItem('chunkOverlap', String(chunkOverlap) || '20')
             const params3 = {
                 limit: limit || 20,
             }

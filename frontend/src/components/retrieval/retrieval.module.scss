@@ -354,100 +354,11 @@
                     height: 100% !important;
                     overflow: hidden;
 
-                    .modal-table {
-                        height: calc(100% - 34px) !important;
-                        overflow: hidden;
-
-                        .table-border {
-                            height: calc(100% - 56px) !important;
-
-                            .ant-table-wrapper {
-                                height: calc(100% - 51px) !important;
-
-                                .ant-spin-nested-loading {
-                                    min-height: 100% !important;
-                                    height: 100% !important;
-
-                                    .ant-spin-container {
-                                        min-height: 100% !important;
-                                        height: 100% !important;
-
-                                        .ant-table {
-                                            min-height: 96% !important;
-                                            height: 95% !important;
-
-                                            .ant-table-container {
-                                                min-height: 100% !important;
-                                                height: 100% !important;
-
-                                                .ant-table-body {
-                                                    min-height: calc(100% - 55px) !important;
-                                                    height: calc(100% - 55px) !important;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                    }
                 }
             }
         }
     }
 
-    .ant-drawer-body {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        overflow: hidden !important;
 
-        .ant-spin-nested-loading {
-            height: 100% !important;
 
-            .ant-spin-container {
-                height: 100% !important;
-                overflow: hidden;
-
-                .modal-table {
-                    height: calc(100% - 34px) !important;
-                    overflow: hidden;
-
-                    .table-border {
-                        height: calc(100% - 56px) !important;
-
-                        .ant-table-wrapper {
-                            height: calc(100% - 51px) !important;
-
-                            .ant-spin-nested-loading {
-                                min-height: 100% !important;
-                                height: 100% !important;
-
-                                .ant-spin-container {
-                                    min-height: 100% !important;
-                                    height: 100% !important;
-
-                                    .ant-table {
-                                        min-height: 96% !important;
-                                        height: 95% !important;
-
-                                        .ant-table-container {
-                                            min-height: 100% !important;
-                                            height: 100% !important;
-
-                                            .ant-table-body {
-                                                min-height: calc(100% - 55px) !important;
-                                                height: calc(100% - 55px) !important;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-    }
 }

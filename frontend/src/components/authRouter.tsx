@@ -16,7 +16,6 @@ function AuthRouter({ children }: AuthRouterProps) {
       if (token) {
         try {
           const res = await verifyToken();
-          console.log(res)
           if (String(res.status) === 'success') {
             if (pathname === '/' || pathname === '/auth/signin' || pathname === 'auth/signup' || pathname === '/auth/reset-password' || pathname === '/auth') {
               navigate('/project');

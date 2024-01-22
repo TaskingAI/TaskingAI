@@ -15,7 +15,6 @@ function Login() {
         setLoading(true)
         try {
             const res = await fetchLogin(val)
-            console.log(res)
             localStorage.setItem('token', res.data.token)
             await navigate('/project/models')
             toast.success('Signin successful')
