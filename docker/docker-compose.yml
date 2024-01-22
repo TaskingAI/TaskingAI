@@ -2,7 +2,7 @@ version: "0.1.0"
 
 services:
   frontend:
-    image: taskingai-console:0.1.0
+    image: taskingai/taskingai-console:0.1.0
     depends_on:
       - backend-web
       - backend-api
@@ -20,7 +20,7 @@ services:
       retries: 10
 
   backend-api:
-    image: taskingai-server:0.1.0
+    image: taskingai/taskingai-server:0.1.0
     environment:
       POSTGRES_URL: postgres://postgres:TaskingAI321@db:5432/taskingai
       REDIS_URL: redis://:TaskingAI321@cache:6379/0
