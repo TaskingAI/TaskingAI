@@ -115,7 +115,7 @@ Here is a client code example:
 import taskingai
 from taskingai.assistant.memory import AssistantNaiveMemory
 
-taskingai.init(api_key='YOUR_API_KEY')
+taskingai.init(api_key='YOUR_API_KEY', host='http://localhost:8080')
 
 # Create a new assistant
 assistant = taskingai.assistant.create_assistant(
@@ -146,11 +146,9 @@ print(assistant_message)
 
 Note that the `YOUR_API_KEY` and `YOUR_MODEL_ID` should be replaced with the actual API key and chat completion model ID you created in the console.
 
-You can learn more in the [documentation](https://docs.tasking.ai/docs/guide/getting_started/self_hosting/overview) and [python client SDK repository](https://www.github.com/taskingai/taskingai-python-client).
+You can learn more in the [documentation](https://docs.tasking.ai/docs/guide/getting_started/self_hosting/overview).
 
 ## Resources
-
-[//]: # "- [Cloud Platform](https://app.tasking.ai)"
 
 - [Documentation](https://docs.tasking.ai)
 - [API Reference](https://docs.tasking.ai/api)
