@@ -1175,7 +1175,7 @@ function Playground() {
                     <TextArea className={styles['input-drawer']} autoSize={{ minRows: 10, maxRows: 20 }} value={schema}
                         onChange={handleSchemaChange} showCount maxLength={32768}></TextArea>
                     {/* <span onClick={handleValidate} className='valid-schema'>Valid schema</span> */}
-                    <div className={`desc-action-error ${tipSchema ? 'show' : ''}`}>Schema is required</div>
+                    <div className={`${styles['desc-action-error']} ${tipSchema ? styles.show : ''}`}>Schema is required</div>
                     <div className={styles['label']}>
                         <span className={styles['span']}> *</span>
                         <span>Authentication</span>

@@ -12,12 +12,12 @@
         position: relative;
 
         .empty-table {
-            :global{
+            :global {
                 .ant-table-header {
                     border-bottom: 1px solid #eee;
                 }
             }
-        
+
         }
 
         :global {
@@ -175,14 +175,18 @@
             .ant-pagination-item {
                 display: none;
             }
-            .ant-btn-default:hover{
-               color: #2B2B2B;
+
+            .ant-btn-default:hover {
+                color: #2B2B2B;
+                border: 1px solid var(--color-divider);
+
             }
-            .ant-btn-default:disabled{
+
+            .ant-btn-default:disabled {
                 border: 1px solid var(--color-divider);
                 color: #bfbfbf;
             }
-            
+
         }
 
 
@@ -196,6 +200,10 @@
             color: #bfbfbf;
             background-color: white;
             border: 1px solid var(--color-divider);
+
+            div {
+                display: none;
+            }
         }
 
 
@@ -209,6 +217,10 @@
 
             border: 1px solid var(--color-divider);
             border-bottom-left-radius: 0;
+
+            div {
+                display: none;
+            }
         }
 
 
@@ -299,12 +311,12 @@
     }
 
     .retrieval-model {
-        :global{
+        :global {
             .ant-modal-body {
                 padding: 24px;
             }
         }
-     
+
     }
 }
 

@@ -523,7 +523,7 @@ function Assistant() {
                 <DrawerAssistant selectedActionsRows={selectedActionsRows} inputValue1={inputValueOne} inputValue2={inputValueTwo} handleMemoryChange1={handleMemoryChange1} memoryValue={memoryValue} handleAddPromptInput={handleAddPrompt} handleActionModalTable={handleActionModalTable} drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} selectedRows={selectedRows} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange} handleModalTable={handleModalTable} selectedRetrievalRows={selectedRetrievalRows}></DrawerAssistant>
             </Drawer>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered footer={[
-                <div className={'footer-group'} style={{ display: 'flex', justifyContent: 'space-between' }} key='footer2'>
+                <div className='footer-group' style={{ display: 'flex', justifyContent: 'space-between' }} key='footer2'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleNewModal} className='cancel-button'>
                         New Collection
                     </Button>
@@ -603,7 +603,7 @@ function Assistant() {
                     <Input.TextArea className={styles['input-drawer']} autoSize={{ minRows: 10, maxRows: 20 }} value={schema}
                         onChange={handleSchemaChange} showCount maxLength={32768}></Input.TextArea>
                     {/* <span onClick={handleValidate} className='valid-schema'>Valid schema</span> */}
-                    <div className={`desc-action-error ${tipSchema ? 'show' : ''}`}>Schema is required</div>
+                    <div className={`${styles['desc-action-error']} ${tipSchema ? styles.show : ''}`}>Schema is required</div>
                     <div className={styles['label']}>
                         <span className={styles['span']}> *</span>
                         <span>Authentication</span>
