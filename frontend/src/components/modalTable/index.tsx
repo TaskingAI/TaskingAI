@@ -1,6 +1,6 @@
 import { Table, Select, Input, Button, Pagination, Empty } from 'antd';
 import { useState, useEffect } from 'react';
-import  styles from  './modalTable.module.scss'
+import styles from './modalTable.module.scss'
 import { PlusOutlined } from '@ant-design/icons';
 import NoApikey from '../../assets/img/NO_APIKEY.svg?react'
 import NoAssistant from '../../assets/img/NO_ASSISTANT.svg?react'
@@ -11,11 +11,8 @@ import NoTool from '../../assets/img/NO_TOOL.svg?react'
 import { TableProps } from '../../contant/index'
 function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSelectedRowKeys, updatePrevButton, ifHideFooter, dataSource, mode, ifSelect, onChildEvent, id, hasMore, onOpenDrawer, name, handleRecordsSelected }: TableProps) {
     const [selectedValue, setSelectedValue] = useState('name_search')
-    const [selectValueEnd, setSelectValueEnd] = useState('All Records')
-
     const [inputValue, setInputValue] = useState('')
     const [scroll, setScroll] = useState({ x: 0, y: 0 });
-    const [pageLimit, setPageLimit] = useState(20)
     const [ifClickPageSizeLimit, setIfClickPageSizeLimit] = useState(false)
     const [flagPrev, setFlagPrev] = useState(false)
     const [originalDataSource, setOriginalDataSource] = useState([]);
@@ -28,6 +25,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         sort_field: 'created_timestamp',
 
     })
+    console.log(filterConfig)
     const [enterPlaceHolder, setEnterPlaceHolder] = useState('Enter Name')
     const empty = {
         ['API Key']: <NoApikey />,
@@ -43,10 +41,10 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             let tableContainer: HTMLElement | null = document.querySelector('.ant-table-container .ant-table-body table');
             let tableContainerH: HTMLElement | null = document.querySelector('.ant-table-container');
             let modalInnerTable: HTMLElement | null = document.querySelector('.modal-inner-table');
-            let elementsWithPrefix:any = document.querySelectorAll('[class*="_drawer-inner-table"]');
+            let elementsWithPrefix: any = document.querySelectorAll('[class*="_drawer-inner-table"]');
             let containerWidth = 0;
             let containerHeight = 0;
-            if (!modalInnerTable && elementsWithPrefix.length===0) {
+            if (!modalInnerTable && elementsWithPrefix.length === 0) {
                 if (!tableContainer) {
                     return
                 }
@@ -65,7 +63,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                     x: containerWidth,
                     y: 400,
                 });
-            } else if (elementsWithPrefix.length !==0) {
+            } else if (elementsWithPrefix.length !== 0) {
                 let firstElement = elementsWithPrefix[0];
                 let antDrawerBodyClassName = firstElement.querySelector('.ant-drawer-body');
                 let tableClassName = firstElement.querySelector('.ant-drawer-body table')
@@ -79,7 +77,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
 
         };
         updateScroll();
-    },[]);
+    }, []);
     useEffect(() => {
         setOriginalDataSource(dataSource)
     }, [])
@@ -190,7 +188,6 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         }
     }
     const handleSelectEndChange = (value) => {
-        setSelectValueEnd(value)
         if (value === 'Selected Records') {
             const filteredRows = originalDataSource.filter(row => selectedRowKeys.includes(row.key));
             hangleFilterData(filteredRows)
@@ -274,11 +271,6 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             onChildEvent(newFilterConfig);
             setFlagPrev(true)
             setFlagNext(false)
-            // if(hasMore){
-            //     setPreviousButtonDisabled(false)
-            // }else {
-            //     setPreviousButtonDisabled(true)
-            // }
             return newFilterConfig;
         });
 
@@ -329,7 +321,6 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
     };
 
     const handleChangePageLimit = (_value, pageSize) => {
-        setPageLimit(pageSize)
         setIfClickPageSizeLimit(true)
         setPrevButtonDisabled(true)
         setFilterConfig(prevFilterConfig => {
