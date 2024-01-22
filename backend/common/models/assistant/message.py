@@ -50,6 +50,7 @@ class Message(BaseModel):
     assistant_id: str
     role: MessageRole
     content: MessageContent
+    num_tokens: int
     metadata: Dict
     updated_timestamp: int
     created_timestamp: int
@@ -70,6 +71,7 @@ class Message(BaseModel):
             assistant_id=row["assistant_id"],
             role=MessageRole(row["role"]),
             content=MessageContent(**load_json_attr(row, "content", {})),
+            num_tokens=row["num_tokens"],
             metadata=load_json_attr(row, "metadata", {}),
             updated_timestamp=row["updated_timestamp"],
             created_timestamp=row["created_timestamp"],
@@ -83,6 +85,7 @@ class Message(BaseModel):
             "assistant_id": self.assistant_id,
             "role": self.role.value,
             "content": self.content.model_dump(),
+            "num_tokens": self.num_tokens,
             "metadata": self.metadata,
             "updated_timestamp": self.updated_timestamp,
             "created_timestamp": self.created_timestamp,

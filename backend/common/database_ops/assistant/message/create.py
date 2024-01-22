@@ -11,6 +11,7 @@ async def create_message(
     chat: Chat,
     role: MessageRole,
     content: MessageContent,
+    num_tokens: int,
     metadata: Dict[str, str],
     updated_chat_memory: ChatMemory,
 ) -> Message:
@@ -19,6 +20,7 @@ async def create_message(
     :param chat: the chat where the message belongs to
     :param role: the message role, user or assistant
     :param content: the message content
+    :param num_tokens: the number of content tokens
     :param metadata: the message metadata
     :param updated_chat_memory: the chat memory to update
     :return: the created message
@@ -32,14 +34,15 @@ async def create_message(
             # 1. insert message into database
             await conn.execute(
                 """
-                INSERT INTO message (message_id, chat_id, assistant_id, role, content, metadata)
-                VALUES ($1, $2, $3, $4, $5, $6)
+                INSERT INTO message (message_id, chat_id, assistant_id, role, content, num_tokens, metadata)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
             """,
                 new_message_id,
                 chat.chat_id,
                 chat.assistant_id,
                 role.value,
                 content.model_dump_json(),
+                num_tokens,
                 json.dumps(metadata),
             )
 

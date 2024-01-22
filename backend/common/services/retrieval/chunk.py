@@ -186,7 +186,7 @@ async def create_chunk(
     embedding = embeddings[0]
 
     # create record
-    num_tokens = default_tokenizer().count_tokens(content)
+    num_tokens = default_tokenizer.count_tokens(content)
     record = await db_chunk.create_chunk(
         collection=collection,
         content=content,
@@ -274,7 +274,7 @@ async def update_chunk(
         embedding = embeddings[0]
 
         # update chunk
-        num_tokens = default_tokenizer().count_tokens(content)
+        num_tokens = default_tokenizer.count_tokens(content)
 
     record = await db_chunk.update_chunk(
         collection=collection,

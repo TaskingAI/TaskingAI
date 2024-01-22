@@ -50,5 +50,4 @@ def get_tokenizer(type: TokenizerType):
     return tokenizer
 
 
-def default_tokenizer():
-    return get_tokenizer(TokenizerType.TIKTOKEN)
+default_tokenizer = get_tokenizer(TokenizerType.TIKTOKEN)
