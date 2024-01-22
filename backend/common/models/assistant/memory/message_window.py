@@ -1,5 +1,4 @@
 from ._base import *
-from ._utils import count_tokens
 
 
 class ChatMessageWindowMemory(ChatMemory):
@@ -27,13 +26,15 @@ class ChatMessageWindowMemory(ChatMemory):
             "max_tokens": self.max_tokens,
         }
 
-    async def update_memory(self, new_message_text: str, role: str):
+    async def update_memory(
+        self,
+        new_message_text: str,
+        new_message_token_count: int,
+        role: str,
+    ):
         messages = self.messages
         max_messages = self.max_messages
         max_tokens = self.max_tokens
-
-        # Calculate token count for new message
-        new_message_token_count = count_tokens(new_message_text)
 
         # Add new message to the memory
         messages.append(ChatMemoryMessage(role=role, content=new_message_text, token_count=new_message_token_count))

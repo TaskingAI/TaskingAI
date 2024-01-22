@@ -50,5 +50,10 @@ class ChatMemory(BaseModel, ABC):
         return messages
 
     @abstractmethod
-    async def update_memory(self, new_message_text: str, role: str):
+    async def update_memory(
+        self,
+        new_message_text: str,
+        role: str,
+        new_message_token_count: int,
+    ):
         raise NotImplementedError

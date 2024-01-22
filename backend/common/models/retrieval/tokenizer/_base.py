@@ -29,6 +29,8 @@ class Tokenizer(BaseModel):
         raise NotImplementedError
 
     def count_tokens(self, text: str) -> int:
+        if not text or not isinstance(text, str):
+            return 0
         return len(self.encode(text))
 
 

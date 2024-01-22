@@ -88,10 +88,14 @@ async def create_message(
 
     # validate chat
     chat: Chat = await get_chat(assistant_id=assistant_id, chat_id=chat_id)
-    updated_chat_memory: ChatMemory = await chat.memory.update_memory(new_message_text=content.text, role=role.value)
 
     # count tokens
     num_tokens = default_tokenizer.count_tokens(content.text)
+
+    # update chat memory
+    updated_chat_memory: ChatMemory = await chat.memory.update_memory(
+        new_message_text=content.text, new_message_token_count=num_tokens, role=role.value
+    )
 
     # create message
     message = await db_message.create_message(

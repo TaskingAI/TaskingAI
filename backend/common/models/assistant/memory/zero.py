@@ -4,7 +4,7 @@ from ._base import *
 class ChatZeroMemory(ChatMemory):
     type: MemoryType = Field(MemoryType.zero, Literal=MemoryType.zero, description="The type of the memory.")
 
-    async def update_memory(self, new_message_text: str, role: str):
+    async def update_memory(self, new_message_text: str, new_message_token_count: int, role: str):
         messages = self.messages
         if role == "user":
             # add message
