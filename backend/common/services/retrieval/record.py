@@ -98,13 +98,13 @@ async def create_record(
         content = content.strip()
         if not content:
             raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Content cannot be empty.")
-        documents = text_splitter.split_text(text=content, title=title)
+        chunk_text_list, num_tokens_list = text_splitter.split_text(text=content, title=title)
     else:
         raise NotImplementedError(f"Record type {type} is not supported yet.")
 
     # embed the documents
     embeddings = await embed_documents(
-        documents=documents,
+        documents=chunk_text_list,
         embedding_model=embedding_model,
         embedding_size=collection.embedding_size,
     )
@@ -112,8 +112,9 @@ async def create_record(
     # create record
     record = await db_record.create_record_and_chunks(
         collection=collection,
-        chunk_texts=documents,
-        chunk_embeddings=embeddings,
+        chunk_text_list=chunk_text_list,
+        chunk_embedding_list=embeddings,
+        chunk_num_tokens_list=num_tokens_list,
         title=title,
         type=type,
         content=content,
@@ -148,8 +149,8 @@ async def update_record(
     new_type = type if type is not None else record.type
     new_title = title if title is not None else record.title
 
-    documents = None
-    embeddings = None
+    chunk_text_list, num_tokens_list, embeddings = None, None, None
+
     if content is not None:
         # validate model
         embedding_model: Model = await get_model(collection.embedding_model_id)
@@ -159,13 +160,13 @@ async def update_record(
             content = content.strip()
             if not content:
                 raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message="Content cannot be empty.")
-            documents = text_splitter.split_text(text=content, title=new_title)
+            chunk_text_list, num_tokens_list = text_splitter.split_text(text=content, title=new_title)
         else:
             raise NotImplementedError(f"Record type {type} is not supported yet.")
 
         # embed the documents
         embeddings = await embed_documents(
-            documents=documents,
+            documents=chunk_text_list,
             embedding_model=embedding_model,
             embedding_size=collection.embedding_size,
         )
@@ -177,8 +178,9 @@ async def update_record(
         title=title,
         type=type,
         content=content,
-        chunk_texts=documents,
-        chunk_embeddings=embeddings,
+        chunk_text_list=chunk_text_list,
+        chunk_num_tokens_list=num_tokens_list,
+        chunk_embedding_list=embeddings,
         metadata=metadata,
     )
 

@@ -1,18 +1,27 @@
 from ._base import TextSplitter, TextSplitterType
 from pydantic import Field, model_validator
-from typing import List, Dict, Any, Optional
-from enum import Enum
-import tiktoken
+from typing import List, Dict, Any, Optional, Tuple
 import math
+from ..tokenizer import TokenizerType, Tokenizer, get_tokenizer
 
-tiktoken_tokenizer = tiktoken.encoding_for_model("text-embedding-ada-002")
 
+def _text_split(
+    tokenizer: Tokenizer, text: str, title: Optional[str], chunk_size: int, chunk_overlap: int
+) -> Tuple[List[str], List[int]]:
+    """
+    Split text into chunks.
+    :param tokenizer: the tokenizer to encode and decode text
+    :param text: the text to split
+    :param title: the title of the text. If not None, the title will be appended to the beginning of each chunk
+    :param chunk_size: the maximum number of tokens in each text chunk
+    :param chunk_overlap: the number of overlapping tokens between adjacent chunks
+    :return: a list of tuples (chunk, num_tokens)
+    """
 
-def tiktoken_text_split(text: str, title: Optional[str], chunk_size: int, chunk_overlap: int) -> List[str]:
     if not text:
-        return []
+        return [], []
 
-    document_tokens = tiktoken_tokenizer.encode(text)
+    document_tokens = tokenizer.encode(text)
     document_size = len(document_tokens)
 
     # the number of chunks
@@ -30,6 +39,7 @@ def tiktoken_text_split(text: str, title: Optional[str], chunk_size: int, chunk_
     standard_chunk_number = K - shorter_chunk_number
 
     chunks = []
+    chunk_num_tokens = []
     chunk_start = 0
     for i in range(K):
         chunk_end = chunk_start + average_chunk_size
@@ -38,40 +48,56 @@ def tiktoken_text_split(text: str, title: Optional[str], chunk_size: int, chunk_
         chunk_end = min(chunk_end, document_size)
 
         # get chunk tokens
-        chunk = document_tokens[chunk_start:chunk_end]
+        chunk_tokens = document_tokens[chunk_start:chunk_end]
 
         # decode chunk tokens
-        new_chunk = tiktoken_tokenizer.decode(chunk).strip()
+        new_chunk = tokenizer.decode(chunk_tokens).strip()
         chunks.append(new_chunk)
+
+        chunk_num_tokens.append(len(chunk_tokens))
 
         # update chunk_start
         chunk_start = chunk_end - min(chunk_overlap, chunk_size)
+
+    title_num_tokens = 0
+    if title:
+        title_num_tokens = tokenizer.count_tokens(title)
 
     # append title to each chunk
     for i in range(len(chunks)):
         if title:
             chunks[i] = f"{title}\n\n{chunks[i]}"
-        # chunks[i] = f"{title}\nChunk[{i+1}]/[{len(chunks)}]\n\n{chunks[i]}"
+            chunk_num_tokens[i] += title_num_tokens
 
-    return chunks
-
-
-class TokenizerType(str, Enum):
-    TIKTOKEN = "tiktoken"
+    return chunks, chunk_num_tokens
 
 
 class TokenTextSplitter(TextSplitter):
     type: TextSplitterType = Field(
-        TextSplitterType.TOKEN, Literal=TextSplitterType.TOKEN, description="The type of the text splitter."
+        TextSplitterType.TOKEN,
+        Literal=TextSplitterType.TOKEN,
+        description="The type of the text splitter.",
     )
 
     tokenizer_type: TokenizerType = Field(
-        TokenizerType.TIKTOKEN, Literal=TokenizerType.TIKTOKEN, description="The type of the tokenizer."
+        TokenizerType.TIKTOKEN,
+        Literal=TokenizerType.TIKTOKEN,
+        description="The type of the tokenizer.",
     )
 
-    chunk_size: int = Field(200, ge=50, le=1000, description="The maximum number of tokens in each text chunk.")
+    chunk_size: int = Field(
+        200,
+        ge=50,
+        le=1000,
+        description="The maximum number of tokens in each text chunk.",
+    )
 
-    chunk_overlap: int = Field(0, ge=0, le=200, description="The number of overlapping tokens between adjacent chunks.")
+    chunk_overlap: int = Field(
+        0,
+        ge=0,
+        le=200,
+        description="The number of overlapping tokens between adjacent chunks.",
+    )
 
     # check chunk_overlap <= chunk_size/2
     @model_validator(mode="after")
@@ -80,11 +106,22 @@ class TokenTextSplitter(TextSplitter):
             raise ValueError("chunk_overlap must be less than or equal to chunk_size/2")
         return data
 
-    def split_text(self, text: str, title: Optional[str]) -> List[str]:
-        if self.tokenizer_type == TokenizerType.TIKTOKEN:
-            return tiktoken_text_split(text, title, self.chunk_size, self.chunk_overlap)
-        else:
-            raise NotImplementedError
+    def split_text(self, text: str, title: Optional[str]) -> Tuple[List[str], List[int]]:
+        """
+        Split the text into chunks.
+        :param text: the text to split
+        :param title: the title of the text. If not None, the title will be appended to the beginning of each chunk
+        :return: a list of tuples (chunk, num_tokens)
+        """
+
+        tokenizer = get_tokenizer(self.tokenizer_type)
+        return _text_split(
+            tokenizer=tokenizer,
+            text=text,
+            title=title,
+            chunk_size=self.chunk_size,
+            chunk_overlap=self.chunk_overlap,
+        )
 
     def model_dump(self, **kwargs) -> Dict[str, Any]:
         return {

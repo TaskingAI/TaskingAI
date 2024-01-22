@@ -9,6 +9,7 @@ async def create_chunk(
     collection: Collection,
     content: str,
     embedding: List[float],
+    num_tokens: int,
     metadata: Dict[str, str],
 ) -> Chunk:
     """
@@ -30,14 +31,15 @@ async def create_chunk(
 
             await conn.execute(
                 f"""
-                INSERT INTO {chunk_table} (chunk_id, collection_id, content, embedding, metadata)
-                VALUES ($1, $2, $3, $4, $5)
+                INSERT INTO {chunk_table} (chunk_id, collection_id, content, embedding, metadata, num_tokens)
+                VALUES ($1, $2, $3, $4, $5, $6)
             """,
                 new_chunk_id,
                 collection.collection_id,
                 content,
                 json.dumps(embedding),
                 json.dumps(metadata),
+                num_tokens,
             )
 
             # 2. update collection stats

@@ -11,13 +11,8 @@ def get_m_ef_construction(capacity: int, embedding_size: int):
 
     if capacity <= 1000:
         m, ef_construction = 8, 32
-    elif capacity <= 10000:
-        m, ef_construction = 16, 64
-    elif capacity <= 100000:
-        m, ef_construction = 24, 128
-    elif capacity <= 1000000:
-        m, ef_construction = 32, 192
     else:
+        # todo: support more capacity
         raise Exception("capacity is too large")
 
     m = round(m * (1 + delta_m))

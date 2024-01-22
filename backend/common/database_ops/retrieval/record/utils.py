@@ -8,38 +8,40 @@ async def insert_record_chunks(
     conn,
     collection_id: str,
     record_id: str,
-    chunk_texts: List[str],
-    chunk_embeddings: List[List[float]],
+    chunk_text_list: List[str],
+    chunk_embedding_list: List[List[float]],
+    chunk_num_tokens_list: List[int],
 ):
     """
     Insert record chunks
     :param conn:
     :param collection_id: the collection id
     :param record_id: the record id
-    :param chunk_texts: the text list of the chunks to be created
-    :param chunk_embeddings: the embedding list of the chunks to be created
+    :param chunk_text_list: the text list of the chunks to be created
+    :param chunk_embedding_list: the embedding list of the chunks to be created
     :return:
     """
 
     # prepare chunk insert sql
-    num_chunks = len(chunk_texts)
+    num_chunks = len(chunk_text_list)
     chunk_table_name = Collection.get_chunk_table_name(collection_id)
 
     # make different timestamps for each chunk
     current_timestamp = current_timestamp_int_milliseconds()
-    timestamps = [current_timestamp + i for i in range(len(chunk_texts))]
+    timestamps = [current_timestamp + i for i in range(len(chunk_text_list))]
 
     insert_values_sql = ", ".join(
         [
             f"("
-            f"${i * 8 + 1}, "
-            f"${i * 8 + 2}, "
-            f"${i * 8 + 3}, "
-            f"${i * 8 + 4}, "
-            f"${i * 8 + 5}, "
-            f"${i * 8 + 6}, "
-            f"${i * 8 + 7}, "
-            f"${i * 8 + 8}"
+            f"${i * 9 + 1}, "
+            f"${i * 9 + 2}, "
+            f"${i * 9 + 3}, "
+            f"${i * 9 + 4}, "
+            f"${i * 9 + 5}, "
+            f"${i * 9 + 6}, "
+            f"${i * 9 + 7}, "
+            f"${i * 9 + 8}, "
+            f"${i * 9 + 9}"
             f")"
             for i in range(num_chunks)
         ]
@@ -54,18 +56,19 @@ async def insert_record_chunks(
                 new_chunk_id,
                 record_id,
                 collection_id,
-                json.dumps(chunk_embeddings[i]),
-                chunk_texts[i],
+                json.dumps(chunk_embedding_list[i]),
+                chunk_text_list[i],
                 "{}",
                 timestamps[i],
                 timestamps[i],
+                chunk_num_tokens_list[i],
             ]
         )
 
     # make the final insert sql
     insert_chunks_sql = f"""
         INSERT INTO {chunk_table_name}(chunk_id, record_id, collection_id, embedding, content,
-         metadata, updated_timestamp, created_timestamp)
+         metadata, updated_timestamp, created_timestamp, num_tokens)
         VALUES {insert_values_sql};
     """
 

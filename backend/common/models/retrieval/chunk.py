@@ -13,6 +13,7 @@ class Chunk(BaseModel):
     record_id: Optional[str]
     collection_id: str
     content: str
+    num_tokens: int
     metadata: Dict
     updated_timestamp: int
     created_timestamp: int
@@ -34,6 +35,7 @@ class Chunk(BaseModel):
             record_id=row.get("record_id"),
             collection_id=row["collection_id"],
             content=row["content"],
+            num_tokens=row["num_tokens"],
             metadata=load_json_attr(row, "metadata", {}),
             score=row.get("score"),
             updated_timestamp=row["updated_timestamp"],
@@ -47,6 +49,7 @@ class Chunk(BaseModel):
             "record_id": self.record_id,
             "collection_id": self.collection_id,
             "content": self.content,
+            "num_tokens": self.num_tokens,
             "metadata": self.metadata,
             "updated_timestamp": self.updated_timestamp,
             "created_timestamp": self.created_timestamp,

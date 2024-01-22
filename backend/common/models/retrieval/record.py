@@ -12,7 +12,7 @@ __all__ = [
 
 class RecordType(str, Enum):
     TEXT = "text"
-    FILE = "file"
+    # todo: FILE = "file"
 
 
 class Record(BaseModel):

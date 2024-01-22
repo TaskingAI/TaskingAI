@@ -1,5 +1,5 @@
 from typing import List, Optional, Dict
-from common.models import Collection, Chunk, SortOrderEnum, ListResult, Model
+from common.models import Collection, Chunk, SortOrderEnum, ListResult, Model, default_tokenizer
 from common.database_ops.retrieval import chunk as db_chunk
 from common.error import ErrorCode, raise_http_error
 from common.services.model.model import get_model
@@ -186,11 +186,13 @@ async def create_chunk(
     embedding = embeddings[0]
 
     # create record
+    num_tokens = default_tokenizer().count_tokens(content)
     record = await db_chunk.create_chunk(
         collection=collection,
         content=content,
         embedding=embedding,
         metadata=metadata,
+        num_tokens=num_tokens,
     )
     return record
 
@@ -239,8 +241,8 @@ async def delete_chunk(
 async def update_chunk(
     collection_id: str,
     chunk_id: str,
-    content: str,
-    metadata: Dict[str, str],
+    content: Optional[str],
+    metadata: Optional[Dict[str, str]],
 ) -> Chunk:
     """
     Update chunk
@@ -257,23 +259,30 @@ async def update_chunk(
     # validate chunk
     chunk = await validate_and_get_chunk(collection=collection, chunk_id=chunk_id)
 
-    # Get model
-    embedding_model: Model = await get_model(collection.embedding_model_id)
+    num_tokens, embedding = None, None
 
-    # embed the document
-    embeddings = await embed_documents(
-        documents=[content],
-        embedding_model=embedding_model,
-        embedding_size=collection.embedding_size,
-    )
-    embedding = embeddings[0]
+    if content:
+        # Get model
+        embedding_model: Model = await get_model(collection.embedding_model_id)
 
-    # update chunk
+        # embed the document
+        embeddings = await embed_documents(
+            documents=[content],
+            embedding_model=embedding_model,
+            embedding_size=collection.embedding_size,
+        )
+        embedding = embeddings[0]
+
+        # update chunk
+        num_tokens = default_tokenizer().count_tokens(content)
+
     record = await db_chunk.update_chunk(
         collection=collection,
         chunk=chunk,
         content=content,
         embedding=embedding,
+        num_tokens=num_tokens,
         metadata=metadata,
     )
+
     return record

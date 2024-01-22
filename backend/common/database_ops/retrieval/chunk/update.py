@@ -10,13 +10,15 @@ async def update_chunk(
     chunk: Chunk,
     content: Optional[str],
     embedding: Optional[List[float]],
+    num_tokens: Optional[int],
     metadata: Optional[Dict],
 ):
     # build update dict
     update_dict = {}
-    if content is not None and embedding is not None:
+    if content is not None and embedding is not None and num_tokens is not None:
         update_dict["content"] = content
         update_dict["embedding"] = embedding
+        update_dict["num_tokens"] = num_tokens
     if metadata is not None:
         update_dict["metadata"] = metadata
 

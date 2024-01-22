@@ -15,9 +15,11 @@ from .tool.authentication import *
 
 # retrieval
 from .retrieval.text_splitter import *
+from .retrieval.tokenizer import *
 from .retrieval.collection import *
 from .retrieval.record import *
 from .retrieval.chunk import *
+
 
 # assistant
 from .assistant.assistant import *

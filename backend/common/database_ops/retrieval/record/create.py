@@ -8,8 +8,9 @@ from .utils import insert_record_chunks
 
 async def create_record_and_chunks(
     collection: Collection,
-    chunk_texts: List[str],
-    chunk_embeddings: List[List[float]],
+    chunk_text_list: List[str],
+    chunk_embedding_list: List[List[float]],
+    chunk_num_tokens_list: List[int],
     title: str,
     type: RecordType,
     content: str,
@@ -18,8 +19,9 @@ async def create_record_and_chunks(
     """
     Create record and its chunks
     :param collection: the collection where the record belongs to
-    :param chunk_texts: the text list of the chunks to be created
-    :param chunk_embeddings: the embedding list of the chunks to be created
+    :param chunk_text_list: the text list of the chunks to be created
+    :param chunk_embedding_list: the embedding list of the chunks to be created
+    :param chunk_num_tokens_list: the num_tokens list of the chunks to be created
     :param title: the record title
     :param type: the record type
     :param content: the record content
@@ -45,7 +47,7 @@ async def create_record_and_chunks(
                 content,
                 Status.READY.value,
                 json.dumps(metadata),
-                len(chunk_texts),
+                len(chunk_text_list),
             )
 
             # 2. insert chunks
@@ -53,8 +55,9 @@ async def create_record_and_chunks(
                 conn=conn,
                 collection_id=collection.collection_id,
                 record_id=new_record_id,
-                chunk_texts=chunk_texts,
-                chunk_embeddings=chunk_embeddings,
+                chunk_text_list=chunk_text_list,
+                chunk_embedding_list=chunk_embedding_list,
+                chunk_num_tokens_list=chunk_num_tokens_list,
             )
 
             # 3. update collection stats
@@ -65,7 +68,7 @@ async def create_record_and_chunks(
                     num_chunks = num_chunks + $1
                 WHERE collection_id = $2
             """,
-                len(chunk_texts),
+                len(chunk_text_list),
                 collection.collection_id,
             )
 
