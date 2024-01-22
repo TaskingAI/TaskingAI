@@ -40,8 +40,7 @@ async def _query_chunks_in_one_collection(
 
             # by default, use cosine distance
             sql = f"""
-                SELECT chunk_id, record_id, collection_id, content, metadata,
-                created_timestamp, updated_timestamp, 1 - (embedding <=> $1) AS score
+                SELECT *, 1 - (embedding <=> $1) AS score
                 FROM {table_name}
                 ORDER BY embedding <=> $1
                 LIMIT $2
