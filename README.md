@@ -144,7 +144,7 @@ taskingai.assistant.create_message(
 )
 
 # generate assistant response
-assistant_message: Message = taskingai.assistant.generate_message(
+assistant_message = taskingai.assistant.generate_message(
     assistant_id=assistant.assistant_id,
     chat_id=chat.chat_id,
 )
