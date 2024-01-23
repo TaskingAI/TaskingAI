@@ -9,7 +9,7 @@ services:
       - backend-inference
 
   backend-inference:
-    image: taskingai/taskingai-inference:0.1.4
+    image: taskingai/taskingai-inference:0.1.5
     environment:
       AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
     healthcheck:
