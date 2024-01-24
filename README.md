@@ -5,9 +5,6 @@
 # TaskingAI
 
 [TaskingAI](https://www.tasking.ai) brings Firebase's simplicity to **AI-native app development**. The platform enables the creation of GPTs-like multi-tenant applications using a wide range of LLMs from various providers. It features distinct, modular functions such as Inference, Retrieval, Assistant, and Tool, seamlessly integrated to enhance the development process. TaskingAI’s cohesive design ensures an efficient, intelligent, and user-friendly experience in AI application development.
-<div align="center">
-<a href="https://www.youtube.com/watch?v=4A5uQoawETU"><img src="https://img.youtube.com/vi/4A5uQoawETU/0.jpg" alt="TaskingAI Console Demo"></a>
-</div>
 
 **Key Features**:
 
@@ -92,7 +89,7 @@ A simple way to initiate self-hosted TaskingAI community edition is through [Doc
 - Git installed for cloning the repository.
 - Python environment (above Python 3.8) for running the client SDK.
 
-### Step-by-Step Guide
+### Installation
 
 First, clone the TaskingAI (community edition) repository from GitHub.
 
@@ -110,6 +107,15 @@ docker-compose -p taskingai up -d
 
 Once the service is up, access the TaskingAI console through your browser with the URL http://localhost:8080.
 The default username and password are `admin` and `TaskingAI321`.
+
+### TaskingAI UI Console
+
+<div align="center">
+<a href="https://www.youtube.com/watch?v=4A5uQoawETU"><img src="https://img.youtube.com/vi/4A5uQoawETU/0.jpg" alt="TaskingAI Console Demo"></a>
+</div>
+
+### TaskingAI Client SDK
+
 
 Once the console is up, you can programmatically interact with the TaskingAI server using the TaskingAI client SDK.
 
