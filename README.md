@@ -5,6 +5,9 @@
 # TaskingAI
 
 [TaskingAI](https://www.tasking.ai) brings Firebase's simplicity to **AI-native app development**. The platform enables the creation of GPTs-like multi-tenant applications using a wide range of LLMs from various providers. It features distinct, modular functions such as Inference, Retrieval, Assistant, and Tool, seamlessly integrated to enhance the development process. TaskingAI’s cohesive design ensures an efficient, intelligent, and user-friendly experience in AI application development.
+<div align="center">
+<a href="https://www.youtube.com/watch?v=4A5uQoawETU"><img src="https://img.youtube.com/vi/4A5uQoawETU/0.jpg" alt="TaskingAI Console Demo"></a>
+</div>
 
 **Key Features**:
 
