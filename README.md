@@ -89,7 +89,7 @@ A simple way to initiate self-hosted TaskingAI community edition is through [Doc
 - Git installed for cloning the repository.
 - Python environment (above Python 3.8) for running the client SDK.
 
-### Step-by-Step Guide
+### Installation
 
 First, clone the TaskingAI (community edition) repository from GitHub.
 
@@ -107,6 +107,16 @@ docker-compose -p taskingai up -d
 
 Once the service is up, access the TaskingAI console through your browser with the URL http://localhost:8080.
 The default username and password are `admin` and `TaskingAI321`.
+
+### TaskingAI UI Console
+
+[![TaskingAI Console Demo](https://img.youtube.com/vi/4A5uQoawETU/maxresdefault.jpg)](https://youtu.be/4A5uQoawETU)
+***<p style="text-align: center; font-size: small; ">Click the image above for TaskingAI Console Demo Video</p>***
+
+
+
+### TaskingAI Client SDK
+
 
 Once the console is up, you can programmatically interact with the TaskingAI server using the TaskingAI client SDK.
 
