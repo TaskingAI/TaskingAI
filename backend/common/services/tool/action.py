@@ -24,10 +24,16 @@ async def validate_and_get_action(action_id: str) -> Action:
 
     if not action.operation_id:
         #  renew action data
-        action = await update_action(
-            action_id=action_id,
-            openapi_schema=action.openapi_schema,
-        )
+        try:
+            action = await update_action(
+                action_id=action_id,
+                openapi_schema=action.openapi_schema,
+            )
+        except Exception as e:
+            raise_http_error(
+                ErrorCode.INVALID_REQUEST,
+                message=f"The OpenAPI schema of action {action_id} is invalid. Please update.",
+            )
 
     return action
 
