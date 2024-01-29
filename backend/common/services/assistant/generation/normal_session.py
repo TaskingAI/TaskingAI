@@ -4,7 +4,7 @@ from .utils import MessageGenerationException
 from common.models import SerializePurpose
 from common.error import raise_http_error, ErrorCode
 from common.services.assistant.chat import unlock_chat
-
+from fastapi import HTTPException
 import logging
 
 logger = logging.getLogger(__name__)
@@ -21,6 +21,8 @@ class NormalSession(Session):
             while True:
                 try:
                     chat_completion_assistant_message, chat_completion_function_calls_dict_list = await self.inference()
+                except HTTPException as e:
+                    raise MessageGenerationException(f"Error occurred in chat completion inference. {e.detail}")
                 except Exception as e:
                     raise MessageGenerationException(f"Error occurred in chat completion inference")
 

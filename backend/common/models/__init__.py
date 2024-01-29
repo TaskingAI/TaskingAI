@@ -9,6 +9,9 @@ from .model.provider import *
 from .model.model import *
 from .model.model_schema import *
 
+# inference
+from .inference import *
+
 # tool
 from .tool.action import *
 from .tool.authentication import *

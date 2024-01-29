@@ -1,11 +1,10 @@
 from common.database.postgres.pool import postgres_db_pool
-from common.models import Action, SerializePurpose
-from common.database.redis import redis_object_get_object, redis_object_set_object
+from common.models import Action
 
 
 async def get_action(action_id: str):
     # 1. get from redis
-    action: Action = await redis_object_get_object(Action, key=action_id)
+    action: Action = await Action.get_redis(action_id)
     if action:
         return action
 
@@ -21,7 +20,7 @@ async def get_action(action_id: str):
     # 3. write to redis and return
     if row:
         action = Action.build(row)
-        await redis_object_set_object(Action, key=action_id, value=action.to_dict(purpose=SerializePurpose.REDIS))
+        await action.set_redis()
         return action
 
     return None
