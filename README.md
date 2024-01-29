@@ -46,16 +46,15 @@ TaskingAI overcomes these obstacles by decoupling key modules, offering broader 
 
 Here is a comparison table among the mainstream agent development frameworks and TaskingAI:
 
-| Feature                  | LangChain               | OpenAI <br/> Assistant API | TaskingAI               |
-| ------------------------ | ----------------------- | -------------------------- | ----------------------- |
-| **Ecosystem**            | Open Source             | Proprietary                | **Open Source**         |
-| **LLM Providers**        | Multiple providers      | OpenAI only                | **Multiple providers**  |
-| **Retrieval System**     | Requires 3rd-party      | Tied with Assistant        | **Decoupled; flexible** |
-| **Tool Integration**     | Requires 3rd-party      | Tied with Assistant        | **Decoupled; flexible** |
-| **Agent Memory**         | Configurable            | Opaque                     | **Customizable**        |
-| **Development Method**   | Python-based SDK        | RESTful APIs & SDKs        | **RESTful APIs & SDKs** |
-| **Async Support**        | Selective model support | Limited to OpenAI models   | **Comprehensive**       |
-| **Multi-Tenant Support** | Complex setup           | Not available              | **Simplified setup**    |
+| Feature                  | LangChain               | TaskingAI               |
+|--------------------------|-------------------------|-------------------------|
+| **LLM Providers**        | Multiple providers      | **Multiple providers**  |
+| **Retrieval System**     | Requires 3rd-party      | **Decoupled; flexible** |
+| **Tool Integration**     | Requires 3rd-party      | **Decoupled; flexible** |
+| **Agent Memory**         | Configurable            | **Customizable**        |
+| **Development Method**   | Python-based SDK        | **RESTful APIs & SDKs** |
+| **Async Support**        | Selective model support | **Comprehensive**       |
+| **Multi-Tenant Support** | Complex setup           | **Simplified setup**    |
 
 ## Architecture
 
