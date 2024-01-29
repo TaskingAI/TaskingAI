@@ -5,7 +5,6 @@ from common.services.assistant.chat import get_chat
 from common.error import raise_http_error, ErrorCode
 from common.services.retrieval.chunk import query_chunks
 from common.models import AssistantRetrievalMethod, Chunk, AssistantTool
-from common.services.tool.openapi_utils import function_format
 from common.services.tool.action import get_action
 from common.utils import generate_random_id
 
@@ -132,8 +131,8 @@ async def fetch_tool_functions(tools: List[AssistantTool]) -> Tuple[Dict, List]:
     for tool in tools:
         if tool.type == "action":
             action = await get_action(tool.id)
-            function = function_format(action.openapi_schema)
-            tool_dict[function["name"]] = {"function": function, "type": "action", "id": tool.id}
+            function = action.function_def.model_dump()
+            tool_dict[action.function_def.name] = {"function": function, "type": "action", "id": tool.id}
 
     # Compile the list of functions from the tool dictionary
     functions = [item["function"] for item in tool_dict.values()]

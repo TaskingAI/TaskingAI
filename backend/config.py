@@ -57,7 +57,7 @@ class Config:
 
         # version
         self.VERSION = "0.1.0"
-        self.POSTGRES_SCHEMA_VERSION = 1
+        self.POSTGRES_SCHEMA_VERSION = 2
 
         # mode
         self.MODE = load_str_env("MODE", required=True)

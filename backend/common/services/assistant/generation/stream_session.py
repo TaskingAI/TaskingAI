@@ -7,6 +7,7 @@ from .utils import generate_random_event_id
 from common.services.inference.chat_completion import chat_completion_stream
 from common.services.assistant.chat import unlock_chat
 from common.models import SerializePurpose
+from fastapi import HTTPException
 
 import logging
 
@@ -40,6 +41,8 @@ class StreamSession(Session):
             function_call=None,  # todo
             functions=self.chat_completion_functions,
         ):
+            if temp_data.get("object") == "Error":
+                raise MessageGenerationException(f"{temp_data.get('message')}")
             assistant_message_dict = temp_data.get("message")
             if assistant_message_dict:
                 yield MESSAGE, assistant_message_dict
@@ -91,10 +94,7 @@ class StreamSession(Session):
                         (
                             chat_completion_assistant_message_dict,
                             chat_completion_function_calls_dict_list,
-                        ) = await self.inference(
-                            messages=self.chat_completion_messages,
-                            functions=self.chat_completion_functions,
-                        )
+                        ) = await self.inference()
 
                     if self.debug:
                         chat_completion_output_log_dict = build_chat_completion_output_log_dict(
@@ -105,6 +105,10 @@ class StreamSession(Session):
                         )
                         yield f"data: {json.dumps(chat_completion_output_log_dict)}\n\n"
 
+                except MessageGenerationException as e:
+                    raise e
+                except HTTPException as e:
+                    raise MessageGenerationException(f"Error occurred in chat completion inference. {e.detail}")
                 except Exception as e:
                     logger.error(f"Error occurred in chat completion inference: {e}")
                     raise MessageGenerationException(f"Error occurred in chat completion inference")
