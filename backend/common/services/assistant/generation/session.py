@@ -289,7 +289,7 @@ class Session(ABC):
                 # retrieval
                 query_text = arguments.get("query_text")
                 if not query_text:
-                    raise MessageGenerationException("Error occured when retrieving related documents")
+                    raise MessageGenerationException("Error occurred when retrieving related documents")
 
                 logger.debug(f"Query text: {query_text}")
                 tool_result, related_chunks = await query_retrieval_collections(
