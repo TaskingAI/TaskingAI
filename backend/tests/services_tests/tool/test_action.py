@@ -9,7 +9,9 @@ run_count = 0
 
 class TestAction:
 
-    action_list = ['object', 'action_id', 'name', 'description', 'authentication', 'openapi_schema',
+    action_list = ['object', 'action_id', 'body_param_schema', 'body_type', 'name', 'description', 'function_def',
+                   'method', 'authentication', 'openapi_schema', 'operation_id', 'url', 'path_param_schema',
+                   'query_param_schema',   'operation_id', 'path_param_schema', 'query_param_schema',
                    'created_timestamp', 'updated_timestamp']
     action_keys = set(action_list)
     action_authentication = ['type', 'secret', 'content']
@@ -147,78 +149,7 @@ class TestAction:
                     }
                 }
             }
-        },
-        {
-            "openapi_schema": {
-                "openapi": "3.0.0",
-                "info": {
-                    "title": "OpenAI Chat API",
-                    "version": "1.0.0",
-                    "description": "API for interacting with OpenAI's chat model."
-                },
-                "servers": [
-                    {
-                        "url": "https://api.openai.com/v1"
-                    }
-                ],
-                "paths": {
-                    "/chat/completions": {
-                        "post": {
-                                    "summary": "Creates a model response for the given chat conversation.",
-                                    "description": "Creates a model response for the given chat conversation.",
-                                    "operationId": "createChatCompletion",
-                                    "tags": [
-                                        "chat"
-                                    ],
-                                    "requestBody": {
-                                        "required": True,
-                                        "content": {
-                                            "application/json": {
-                                                "schema": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "model": {
-                                                            "type": "string",
-                                                            "description": "ID of the model to use."
-                                                        },
-                                                        "messages": {
-                                                            "type": "array",
-                                                            "description": "A list of messages comprising the"
-                                                                           " conversation so far."
-                                                        },
-                                                        "function_call": {
-                                                            "type": "string",
-                                                            "enum": ["auto"]
-                                                        }
-                                                    },
-                                                    "required": [
-                                                        "model",
-                                                        "messages"
-                                                    ]
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "responses": {
-                                        "200": {
-                                            "description": "A successful response.",
-                                            "content": {
-                                                "application/json": {
-                                                    "schema": {
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    }
-                                    }
-                                    }
-                                    },
-                "authentication": {
-                    "type": "bearer",
-                    "secret": OPENAI_API_KEY
-                }
-                }
+        }
     ]
     run_action_data_list = [
         {
@@ -230,21 +161,6 @@ class TestAction:
             "parameters": {
                 "lon": 120.1552,
                 "lat": 30.2741
-            }
-        },
-        {
-            "parameters": {
-                "model": "gpt-3.5-turbo",
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "You are a helpful assistant."
-                    },
-                    {
-                        "role": "user",
-                        "content": "Hello!"
-                    }
-                ]
             }
         }
         ]
