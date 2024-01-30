@@ -77,7 +77,9 @@ class Session(ABC):
         model_streaming: bool = self.model_schema.properties.get("streaming", False)
         if not model_streaming and stream:
             raise_http_error(
-                ErrorCode.INVALID_REQUEST, message=f"Assistant model {self.model.model_id} does not support streaming"
+                ErrorCode.INVALID_REQUEST,
+                message=f"Assistant model {self.model.model_id} does not support streaming. "
+                f"Please disable stream in the request.",
             )
 
         # 4. Get chat memory
