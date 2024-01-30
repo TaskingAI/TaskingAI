@@ -4,9 +4,8 @@ import {
 
 } from '@ant-design/icons';
 import './modelModal.scss'
-
+import IconComponent from '@/components/iconComponent';
 import NoModel from '../../assets/img/NO_MODEL.svg?react'
-import {imgReverse} from '@/contents/index'
 import { Modal, Pagination, Button, Spin, Input, Form } from 'antd'
 import { getAiModelsList, createModels, getAiModelsForm, getModelProviderList } from '../../axios/models'
 import { toast } from 'react-toastify'
@@ -19,7 +18,6 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         }
     }));
     const [modelTwoOpen, setModelTwoOpen] = useState(false)
-    // const [selectedSecondId, setSelectedSecondId] = useState('')
     const [formData, setFormData] = useState<formDataType>({
         properties: {},
         required: []
@@ -50,7 +48,6 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const [ModelProviderList, setModelProviderList] = useState<ModelProviderType[]>([])
 
     const handleCancel = () => {
-        // setModelOne(false)
         props.handleSetModelOne(false)
     }
 
@@ -87,11 +84,12 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         await fetchAiModelsList(0, res.data[0].provider_id)
         setOneModelLoading(false)
     }
+
     const handleNext = async () => {
         form.resetFields()
         form1.resetFields()
         setNextLoading(true)
-        await fetchFormData(providerId, 'true')
+        await fetchFormData(providerId)
         setNextLoading(false)
         setModelTwoOpen(true)
     }
@@ -121,8 +119,8 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
             })
         })
     }
-    const fetchFormData = async (providerId: string, schema: string) => {
-        const res = await getAiModelsForm(providerId, schema)
+    const fetchFormData = async (providerId: string) => {
+        const res = await getAiModelsForm(providerId)
         setFormData(res.data[0].credentials_schema)
     }
     const handleSecondCancel = () => {
@@ -138,11 +136,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const getCenterData = async (providerId: string) => {
         setProviderId(providerId)
         setCenterLoading(true)
-        // setRightLoading(true)
         await fetchAiModelsList(0, providerId)
-
-        // const res = await getModelsList()
-        // setModelProviderList(res.data)
     }
     const renderItem = (providerId: string) => {
         if (providerId === 'openai') {
@@ -156,7 +150,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
             return <span>Google Gemini</span>
         } else if (providerId === 'cohere') {
             return <span>Cohere</span>
-        } else if(providerId === 'zhipu') {
+        } else if (providerId === 'zhipu') {
             return <span>ZhiPu</span>
         } else if (providerId === 'mistralai') {
             return <span>MistralAI</span>
@@ -178,7 +172,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                             <div className='modal-provider'>Model provider</div>
                             {ModelProviderList?.map((item, index) => (
                                 <div key={index} onClick={() => getCenterData(item.provider_id)} className={`provider ${item.provider_id === providerId && 'select-provider'}`}>
-                                    {imgReverse(item.provider_id)}
+                                    <IconComponent providerId={item.provider_id} />
                                     <div className='name'>{item.name}</div>
                                 </div>
                             ))}
@@ -194,8 +188,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                             <div className='frameWrapper'>
                                                 <div className='frameDiv'>
                                                     <div className='modelproviderParent'>
-                                                        {imgReverse(item.provider_id)}
-
+                                                        <IconComponent providerId={item.provider_id} />
                                                         <div className='openaigpt4'>{item.model_schema_id}</div>
                                                     </div>
                                                 </div>
@@ -264,7 +257,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     <div className='label'>Base model</div>
                     <div className='frameParent'>
                         <div className='modelproviderParent'>
-                            {imgReverse(providerId)}
+                            <IconComponent providerId={providerId} />
                             <div className='openai'>{selectedOneId}</div>
 
                         </div>

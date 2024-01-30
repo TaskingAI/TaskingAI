@@ -158,7 +158,7 @@ function Retrieval() {
         setDrawerTitle('Edit Collection')
         setDrawerName(val.name)
         setEditDisabled(true)
-        setSelectedRows(val.embedding_model_id ? [val.name + '-' + val.embedding_model_id] : [])
+        setSelectedRows(val.name ? [val.name + '-' + val.embedding_model_id] : [val.embedding_model_id])
         setDescriptionText(val.description)
         setCollectionId(val.collection_id)
         setEmbeddingSize(val.embedding_size)

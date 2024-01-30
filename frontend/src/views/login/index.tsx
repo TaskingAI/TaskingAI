@@ -22,9 +22,7 @@ function Login() {
             toast.error(error.response.data.error.message)
         }
         setLoading(false)
-
     }
-
     return (
         <>
             <div className={style.login}>

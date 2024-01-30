@@ -1,0 +1,23 @@
+import React, { useEffect, useState } from 'react';
+import { fetchIcon } from '@/axios';
+import styles from './icon.module.scss'
+const IconComponent = ({ providerId }) => {
+    const [iconHtml, setIconHtml] = useState('');
+    useEffect(() => {
+        const fetchIcon1 = async () => {
+            const res = await fetchIcon(providerId)
+            const html = await res;
+            localStorage.setItem(providerId, html);
+            setIconHtml(html);
+        };
+        const html = localStorage.getItem(providerId);
+        if (html) {
+            setIconHtml(html);
+            return;
+        }
+        fetchIcon1();
+    }, [providerId]);
+    return <div dangerouslySetInnerHTML={{ __html: iconHtml }} className={styles.icon} />;
+};
+
+export default IconComponent;

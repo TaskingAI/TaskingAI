@@ -1,8 +1,5 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-// import env from '../../env.config.ts'
-// const baseURL = import.meta.env.VITE_BASE_URL;
-// console.log(baseURL);
 const request = axios.create({
   baseURL: '/',
   timeout: 60000

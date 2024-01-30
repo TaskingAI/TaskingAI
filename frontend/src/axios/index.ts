@@ -6,7 +6,9 @@ const verifyToken = async () => {
 
 }
 const fetchLogin = async (data:object) => {
-
     return await request.post(`${auth_base_url}/admins/login`, data)
 }
-export { verifyToken , fetchLogin }
+const  fetchIcon = async (providerId) => {
+    return await request.get(`/images/providers/icons/${providerId}.svg`)
+}
+export { verifyToken , fetchLogin,fetchIcon }

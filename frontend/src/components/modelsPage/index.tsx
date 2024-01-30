@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, ChangeEvent } from 'react'
 import { Modal, Button, Spin, Space, Input, Form, Drawer, Tooltip } from 'antd'
 import styles from './modelsPage.module.scss'
-
+import IconComponent from '@/components/iconComponent';
 // import { TKButton } from '@taskingai/taskingai-ui'
 import { getModelsList, updateModels, deleteModels, getModelsForm, getAiModelsForm } from '@/axios/models'
 import { tooltipEditTitle, tooltipDeleteTitle } from '../../contents/index.tsx'
@@ -13,7 +13,6 @@ import ModelModal from '@/components/modelModal';
 import closeIcon from '../../assets/img/x-close.svg'
 import { toast } from 'react-toastify';
 import { RecordType, ChildRefType, formDataType } from '../../contant/index.ts'
-import { imgReverse } from '../../contents/index.tsx'
 function ModelsPage() {
     const [form] = Form.useForm()
     const [form1] = Form.useForm()
@@ -44,10 +43,7 @@ function ModelsPage() {
     const [deleteValue, setDeleteValue] = useState('');
     const [providerId, setProviderId] = useState('')
     const [hasMore, setHasMore] = useState(false)
-
     const [deleteLoading, setDeleteLoading] = useState(false)
-
-
     const fetchData = async (params: Record<string, any>) => {
         try {
             setLoading(true)
@@ -163,7 +159,7 @@ function ModelsPage() {
     }
     const fetchEditFormData = async (model_id: string, provider_id: string) => {
         const res = await getModelsForm(model_id)
-        const res1 = await getAiModelsForm(provider_id, 'true')
+        const res1 = await getAiModelsForm(provider_id)
         setFormData(res1.data[0].credentials_schema)
         form.setFieldsValue(res.data.display_credentials)
     }
@@ -216,8 +212,6 @@ function ModelsPage() {
 
     return (
         <div className={styles["models-page"]}>
-            {/* <TKButton title='nihao'></TKButton> */}
-            {/* <DeleteInputModal objectName='nihao' open={true}  title="nihao" objectClassName='sadf' name='niaho' description='nihaoasdfniaho' inputTitle='name' required></DeleteInputModal> */}
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
                 <ModalTable updatePrevButton={updatePrevButton} onChildEvent={handleChildEvent} name="model" hasMore={hasMore} id='model_id' columns={columns} ifSelect={false} onOpenDrawer={handleCreateModel} dataSource={modelList} />
             </Spin>
@@ -235,7 +229,7 @@ function ModelsPage() {
                     <div className={styles['label']}>Base model</div>
                     <div className={styles['frameParent']}>
                         <div className={styles['modelproviderParent']}>
-                            {imgReverse(providerId)}
+                        <IconComponent providerId={providerId} />
                             <div className={styles['openai']}>{selectedSecondId}</div>
                         </div>
                     </div>

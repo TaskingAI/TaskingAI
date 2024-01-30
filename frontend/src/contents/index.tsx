@@ -1,15 +1,11 @@
 
 import { Tag } from 'antd';
 import { formatTimestamp } from '@/utils/util'
-import GoogleIcon from '@/assets/img/googleIcon.svg?react'
-import ModelProvider from '@/assets/img/ModelProvider.svg?react'
-import Anthropic from '@/assets/img/Anthropic.svg?react'
-import Frame from '@/assets/img/Frame.svg?react'
-import ZhiPu from '@/assets/img/Zhipu.svg'
+
 import ClipboardJS from 'clipboard';
 import { toast } from 'react-toastify';
-import CohereIcon from '@/assets/img/cohereIcon.svg?react'
-import MistralAI from '@/assets/img/MistralAI.svg?react'
+import IconComponent from '@/components/iconComponent';
+
 import CopyOutlined from '@/assets/img/copyIcon.svg?react';
 const tooltipEditTitle = <span style={{ color: '#777' }}>Edit</span>;
 const tooltipPlaygroundTitle = <span style={{ color: '#777' }}>Playground</span>;
@@ -40,19 +36,7 @@ const handleCopy = (text: string) => {
         console.log(e);
     });
 }
-const providerIcons = {
-    openai: <ModelProvider width='16px' height='16px' />,
-    anthropic: <Anthropic width='16px' height='16px' />,
-    azure_openai: <Frame width='16px' height='16px' />,
-    google_gemini: <GoogleIcon width='16px' height='16px' />,
-    mistralai: <MistralAI width='16px' height='16px' />,
-    cohere: <CohereIcon width='16px' height='16px' />,
-    zhipu: <img src={ZhiPu} style={{width:'18px',height:'18px'}}></img>
-};
 
-const imgReverse = (providerId: string) => {
-    return providerIcons[providerId] || null;
-};
 
 const typeReverse: Record<string, string> = {
     instruct_completion: 'Instruct Completion',
@@ -83,7 +67,7 @@ const modelsTableColumn: any = [
         width: 240,
         render: (text: string, record: any) =>
             <div className='img-text'>
-                {imgReverse(record.provider_id)} <span className='a'>{text}</span>
+                {<IconComponent providerId={record.provider_id} />} <span className='a'>{text}</span>
             </div>
 
         ,
@@ -377,4 +361,4 @@ const assistantTableColumn: any = [
     },
 ]
 
-export { collectionTableColumn,imgReverse, assistantTableColumn, apikeysTableColumn, actionsTableColumn, tooltipEditTitle,tooltipRecordTitle, tooltipDeleteTitle, tooltipPlaygroundTitle, tooltipShowTitle, tooltipHideTitle, modelsTableColumn };
+export { collectionTableColumn, assistantTableColumn, apikeysTableColumn, actionsTableColumn, tooltipEditTitle,tooltipRecordTitle, tooltipDeleteTitle, tooltipPlaygroundTitle, tooltipShowTitle, tooltipHideTitle, modelsTableColumn };
