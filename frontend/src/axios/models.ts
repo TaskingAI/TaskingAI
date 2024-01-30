@@ -11,9 +11,9 @@ const getAiModelsList = async (offset:number, limit:number, type:string, provide
     }
 }
 
-const getAiModelsForm = async (id:string, schema:string) => {
+const getAiModelsForm = async (id:string) => {
     const project_base_url = `api/v1`
-    return await request.get(`${project_base_url}/providers/get?provider_id=${id}&include_credentials_schema=${schema}`)
+    return await request.get(`${project_base_url}/providers/get?provider_id=${id}`)
 }
 const getModelsList = async <T extends Record<string, string | number>>(
     params: T,

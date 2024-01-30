@@ -4,7 +4,7 @@ import {
 import styles from './action.module.scss'
 import { useState, useEffect } from 'react';
 import { getFirstMethodAndEndpoint } from '../../utils/util.ts'
-import { getActionsList, updateActions, deleteActions, createActions, getActionsDetail } from '../../axios/actions.ts'
+import { getActionsList, updateActions, deleteActions, createActions} from '../../axios/actions.ts'
 import closeIcon from '../../assets/img/x-close.svg'
 import DeleteModal from '../deleteModal/index.tsx'
 import ModalTable from '../modalTable/index'
@@ -95,20 +95,19 @@ function Actions() {
 
     const handleEdit = async (val) => {
         setLoading(true)
-        const res = await getActionsDetail(val.action_id)
-        const formattedData = JSON.stringify(res.data.openapi_schema, null, 4);
+        const formattedData = JSON.stringify(val.openapi_schema, null, 4);
         setDrawerTitle('Edit Action')
         setTipSchema(false)
         setActionId(val.action_id)
         setSchema(formattedData)
-        if (res.data.authentication) {
-            if (res.data.authentication.content) {
+        if (val.authentication) {
+            if (val.authentication.content) {
                 setRadioValue('custom')
-                setCustom(Object.keys(res.data.authentication.content)[0])
-                setAuthentication(Object.values(res.data.authentication.content)[0] as string)
+                setCustom(Object.keys(val.authentication.content)[0])
+                setAuthentication(Object.values(val.authentication.content)[0] as string)
             } else {
-                setRadioValue(res.data.authentication.type)
-                setAuthentication(res.data.authentication.secret)
+                setRadioValue(val.authentication.type)
+                setAuthentication(val.authentication.secret)
             }
         } else {
             setRadioValue('none')

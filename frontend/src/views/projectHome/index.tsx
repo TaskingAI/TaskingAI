@@ -178,7 +178,8 @@ const ProjectHome = () => {
                             components: {
                                 Menu: {
                                     itemSelectedBg: '#f3f8f6',
-                                    itemSelectedColor: '#087443'
+                                    itemSelectedColor: '#087443',
+                                    itemActiveBg: '#f3f8f6'
                                 }
                             }
                         }}>
