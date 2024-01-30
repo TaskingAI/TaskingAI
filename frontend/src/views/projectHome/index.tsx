@@ -166,7 +166,7 @@ const ProjectHome = () => {
                                     <span onClick={handleBack}>Logout</span>
                                 </Menu.Item>
                                 <Menu.Item  className='version' key='/'>
-                                    <span>TaskingAI Community {config.version}</span>
+                                    <span> OptiSherpa Community {config.version}</span>
                                 </Menu.Item>
                             </Menu>
                         </ConfigProvider>
@@ -217,7 +217,7 @@ const ProjectHome = () => {
                             Confirm
                         </Button>
                     ]}>
-                    <span>Are you sure you want to log out of your TaskingAI account?</span>
+                    <span>Are you sure you want to log out of your OptiSherpa account?</span>
                 </Modal>
             </Layout>
         </Layout>
