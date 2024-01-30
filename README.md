@@ -4,6 +4,13 @@
 
 # TaskingAI
 
+[![Docs](https://img.shields.io/badge/docs-latest-brightgreen)](https://docs.tasking.ai/docs/guide/getting_started/overview/)
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/taskingai/taskingai-server?label=docker)](https://hub.docker.com/u/taskingai)
+[![GitHub License](https://img.shields.io/github/license/taskingai/taskingai)](https://github.com/TaskingAI/TaskingAI/blob/master/LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/taskingai?color=blue)](https://pypi.org/project/taskingai)
+[![X (formerly Twitter) URL](https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FTaskingAI)](https://twitter.com/TaskingAI)
+[![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCxUnOM-ZbZKmyR_Q5vAUSTA)](https://www.youtube.com/@TaskingAI)
+
 [TaskingAI](https://www.tasking.ai) brings Firebase's simplicity to **AI-native app development**. The platform enables the creation of GPTs-like multi-tenant applications using a wide range of LLMs from various providers. It features distinct, modular functions such as Inference, Retrieval, Assistant, and Tool, seamlessly integrated to enhance the development process. TaskingAI’s cohesive design ensures an efficient, intelligent, and user-friendly experience in AI application development.
 
 **Key Features**:
@@ -18,43 +25,65 @@
 <img src="static/img/console.png" alt="">
 </p>
 
-Please give us a **FREE STAR🌟** on GitHub if you find it useful.
+## What Can You Build with TaskingAI?
+
+- [x] **Interactive Application Demos**: Quickly create and deploy engaging application demos using TaskingAI's UI Console. It’s an ideal environment for demonstrating the potential of AI-native apps with real-time interaction and user engagement.
+
+- [x] **AI Agents for Enterprise Productivity**: Create AI agents that utilize collective knowledge and tools to boost teamwork and productivity. TaskingAI streamlines the development of these shared AI resources, making it easier to foster collaboration and support across your organization. Leverage our Client SDKs and REST APIs for seamless integration and customization.
+
+- [x] **Multi-Tenant AI-Native Applications for Business**: With TaskingAI, build robust, multi-tenant AI-native applications that are ready for production. It's perfectly suited for handling varied client needs while maintaining individual customization, security, and scalability. For serverless deployment, Please check out our [official website](https://www.tasking.ai) to learn more.
+
+```python
+# Easily build an agent with TaskingAI Client SDK
+assistant = taskingai.assistant.create_assistant(
+    model_id="YOUR_TASKINGAI_MODEL_ID",
+    memory=AssistantNaiveMemory(),
+    tools=[
+        AssistantTool(
+            type=AssistantToolType.ACTION,
+            id=action_id,
+        )
+    ],
+    retrievals=[
+        AssistantRetrieval(
+            type=AssistantRetrievalType.COLLECTION,
+            id=collection_id,
+        )
+    ],
+)
+```
+
+---
+
+Please give us a **FREE STAR 🌟** if you find it helpful 😇
 
 <p>
 <img src="static/img/star.gif" alt="">
 </p>
 
-## What Can You Build with TaskingAI?
-
-- [x] **Interactive Application Demos**: Quickly create and deploy engaging application demos using TaskingAI's UI Console. It’s an ideal environment for demonstrating the potential of AI-native apps with real-time interaction and user engagement.
-
-- [x] **AI Agents for Team Collaboration**: Develop AI agents that harness collective knowledge and tools, enhancing teamwork and efficiency. TaskingAI facilitates the creation of shared AI resources that streamline collaboration and support within your organization.
-
-- [x] **Multi-Tenant AI-Native Applications for Business**: With TaskingAI, build robust, multi-tenant AI-native applications that are ready for production. It's perfectly suited for handling varied client needs while maintaining individual customization, security, and scalability.
+---
 
 ## Why TaskingAI?
 
-### Problems with existing products
+### Problems with existing solutions 🙁
 
-The Assistant API from OpenAI, while robust for GPTs-like functionalities, has limitations due to its design where key functions like tools and documentation retrieval are tied to individual assistants. This structure can restrict flexibility in multi-tenant applications, where shared data is essential.
+**LangChain** is a tool framework for LLM application development, but it faces practical limitations:
 
-### How TaskingAI solves the problem
+- **Statelessness**: It lacks internal state handling, forcing reliance on the client side or external services for data management, which complicates the development lifecycle.
+- **Challenging Scalability**: Due to its stateless approach, ensuring data consistency across different user sessions is a hurdle, hindering scalability.
+- **External Dependencies**: It requires external dependencies, such as model provider SDKs, tool integration, and vector storage, which adds complexity to the setup process.
 
-TaskingAI overcomes these obstacles by decoupling key modules, offering broader model support and an open-source framework. Its adaptability makes it a superior choice for developers needing more versatile, data-sharing capable AI solutions, particularly for complex, customizable projects.
+**OpenAI's Assistant API** excels in delivering GPT-like functionalities but comes with its own constraints:
 
-### Comparisons
+- **Tied Functionalities**: Essential features are confined to individual assistants, restricting the flexibility needed for shared data scenarios.
+- **Proprietary Limitations**: Being a closed-source platform, it limits developers to OpenAI's models, which may not fit all projects.
+- **Limited Customization**: The rigid framework constrains the ability to tailor the assistant's memory and data retrieval according to specific project needs.
 
-Here is a comparison table among the mainstream agent development frameworks and TaskingAI:
+### How TaskingAI solves the problem 😃
 
-| Feature                  | LangChain               | TaskingAI               |
-|--------------------------|-------------------------|-------------------------|
-| **LLM Providers**        | Multiple providers      | **Multiple providers**  |
-| **Retrieval System**     | Requires 3rd-party      | **Decoupled; flexible** |
-| **Tool Integration**     | Requires 3rd-party      | **Decoupled; flexible** |
-| **Agent Memory**         | Configurable            | **Customizable**        |
-| **Development Method**   | Python-based SDK        | **RESTful APIs & SDKs** |
-| **Async Support**        | Selective model support | **Comprehensive**       |
-| **Multi-Tenant Support** | Complex setup           | **Simplified setup**    |
+TaskingAI addresses these challenges with a **decoupled modular design** and **extensive model compatibility**, adhering to **open-source principles**.
+
+Perfect for developers who need a scalable and customizable AI development environment, TaskingAI enhances project management with a **user-friendly UI console**. It supports development through **Client SDKs and REST APIs**, and its server efficiently stores data for various models. Importantly, TaskingAI natively supports **vector storage**, essential for the Retrieval-Augmented Generation (RAG) system, thereby facilitating a seamless progression from prototype to production.
 
 ## Architecture
 
@@ -107,15 +136,29 @@ docker-compose -p taskingai up -d
 Once the service is up, access the TaskingAI console through your browser with the URL http://localhost:8080.
 The default username and password are `admin` and `TaskingAI321`.
 
+### Upgrade
+
+If you have already installed TaskingAI with a previous version and want to upgrade to the latest version, first stop the service and remove the containers.
+
+```bash
+docker-compose -p taskingai down
+```
+
+Then upgrade to the latest version by pulling the latest image and restarting the service.
+
+```bash
+docker-compose -p taskingai pull
+docker-compose -p taskingai up -d
+```
+
+Don't worry about data loss; your data will be automatically migrated to the latest version schema if needed.
+
 ### TaskingAI UI Console
 
 [![TaskingAI Console Demo](https://img.youtube.com/vi/4A5uQoawETU/maxresdefault.jpg)](https://youtu.be/4A5uQoawETU)
-***<p style="text-align: center; font-size: small; ">Click the image above for TaskingAI Console Demo Video</p>***
-
-
+**_<p style="text-align: center; font-size: small; ">Click the image above to view the TaskingAI Console Demo Video.</p>_**
 
 ### TaskingAI Client SDK
-
 
 Once the console is up, you can programmatically interact with the TaskingAI server using the TaskingAI client SDK.
 
