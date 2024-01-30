@@ -1,12 +1,14 @@
 import styles from './playground.module.scss'
 import { useState, useEffect, useRef } from 'react'
 import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Radio, Collapse } from 'antd'
-import { PlusOutlined, RightOutlined, LoadingOutlined, Loading3QuartersOutlined } from '@ant-design/icons';
+import { PlusOutlined, RightOutlined, LoadingOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 import CopyOutlined from '../../assets/img/copyIcon.svg?react'
 import ModelModal from '../modelModal/index'
 import ErrorIcon from '../../assets/img/errorIcon.svg?react'
 import { getModelsList } from '../../axios/models.ts'
+import PlayGroundImg from '../../assets/img/selectAssistantImg.svg?react'
+import LoadingAnim from '../../assets/img/loadingAnim.svg?react'
 import CreateCollection from '../createCollection/index.tsx';
 import ModalSettingIcon from '../../assets/img/modalSettingIcon.svg?react'
 import { formatTimestamp, getFirstMethodAndEndpoint } from '@/utils/util'
@@ -28,7 +30,7 @@ import MessageSuccess from '../../assets/img/messageSuccess.svg?react'
 import ClipboardJS from 'clipboard';
 import DrawerAssistant from '../drawerAssistant/index'
 import { useLocation, useNavigate } from 'react-router-dom';
-const port =  window.location.port;
+const port = window.location.port;
 import { assistantTableColumn, modelsTableColumn, actionsTableColumn, collectionTableColumn } from '../../contents/index'
 const plainOptions = [
     { label: 'Stream', value: 1 },
@@ -949,8 +951,15 @@ function Playground() {
     }
     return (
         <Spin spinning={loading}>
-
-            <div className={styles['playground']}>
+            {!assistantId ? <div className={styles['selectAssistant']}>
+                {<PlayGroundImg className={styles.svg} />}
+                <div className={styles['select-assistant']}>Select an assistant to start.</div>
+                <div className={styles['header-news']}>
+                    <div className={styles['plusParent']}>
+                        <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleSelectAssistantID}>Select assistant</Button>
+                    </div>
+                </div>
+            </div> : <div className={styles['playground']}>
                 <div className={styles['left-content']}>
                     <div className={styles['top']}>
                         <div className={styles['select-assistant']}>Assistant</div>
@@ -971,7 +980,7 @@ function Playground() {
                         </div>
                         <div className={styles['chats']}>
                             <div className={styles['chat-message']}>
-                                {listChats.map((item, index) => (<div key={index} className={`${styles.functionaliconsParent} ${chatId === item.chat_id && styles.chatId}`} onClick={() => handleOpenChat(item.chat_id)}>
+                                {listChats?.map((item, index) => (<div key={index} className={`${styles.functionaliconsParent} ${chatId === item.chat_id && styles.chatId}`} onClick={() => handleOpenChat(item.chat_id)}>
                                     <ChatIcon className={styles['functionalicons']}></ChatIcon>
                                     <div className={styles['Parent']}>
                                         <div className={styles['son']}>{item.chat_id}</div>
@@ -1003,6 +1012,7 @@ function Playground() {
                         <div className={styles['header-left']}>
                             <span className={styles['chat']}>Chat</span>
                             <span className={styles['desc']}>{chatId}</span>
+                            <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatId)} />
                         </div>
 
                         <div className={styles['header-right']} onClick={handleDeleteChat}>
@@ -1037,19 +1047,19 @@ function Playground() {
                                     <div className={styles['message']} key={index} ref={divRef}>
                                         <div className={`${styles.subText1} ${item.role === 'user' ? 'user' : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
                                         {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text}</div>}
-                                        {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1, index1) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && 'lastItem'}`}>
+                                        {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1, index1) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && styles.lastItem}`}>
                                             {(item1.color === 'orange' && index === contentTalk.length - 1 && item1.event_step !== '') ?
                                                 (<div style={{ display: 'flex', alignItems: 'center' }}>{lottieAnimShow && (
                                                     <>
-                                                        <Spin indicator={<Loading3QuartersOutlined className={styles['loading-icon']} spin />} />
+                                                        {<LoadingAnim className={styles['loading-icon']} />}
                                                         {item1.event_step}
                                                     </>
                                                 )}
                                                 </div>) :
                                                 (
-                                                    item1.color !== 'orange' && (<div onClick={() => handleClickDebug(item1)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                                                        {(item1.event_step !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}{item1.event_step}</>)}
-                                                        {(item1.event_step === 'Error Occurred') && (<><ErrorIcon className={styles['message-success']}></ErrorIcon><span style={{ color: '#ec1943' }}>Error Occurred</span></>)}
+                                                    item1.color !== 'orange' && (<div onClick={() => handleClickDebug(item1)} style={{ display: 'flex', alignItems: 'center' }}>
+                                                        {(item1.event_step !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text' }}>{item1.event_step}</span></>)}
+                                                        {(item1.event_step === 'Error Occurred') && (<><ErrorIcon className={styles['message-success']}></ErrorIcon><span style={{ color: '#ec1943', cursor: 'pointer' }}>Error Occurred</span></>)}
                                                     </div>
                                                     )
                                                 )
@@ -1089,7 +1099,9 @@ function Playground() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>}
+
+
             <Drawer
                 closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />}
                 className={styles['assistant-drawer']}
@@ -1117,7 +1129,7 @@ function Playground() {
                 </div>
 
             ]} title='Select Collection' open={openModalTable} width={1000} onCancel={handleCloseModal} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
+                <ModalTable name='Collection' updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
             </Modal>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered footer={[
                 <div className='footer-group' key='footer'>
@@ -1221,7 +1233,7 @@ function Playground() {
                         label: collapseLabel1,
                         children: <div className={styles['content-drawer']}>
                             <div className={styles['content']}>
-                                <CopyOutlined className={styles['icon-copy']} onClick={() => handleCopy(chatCompletionCall)} />
+                                <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatCompletionCall)} />
                             </div>
                             <TextArea autoSize={true} value={chatCompletionCall} disabled />
                         </div>
@@ -1232,7 +1244,7 @@ function Playground() {
                         label: collapseLabel2,
                         children: <div className={styles['content-drawer']}>
                             <div className={styles['content']}>
-                                <CopyOutlined className={styles['icon-copy']} onClick={() => handleCopy(chatCompletionResult)} />
+                                <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatCompletionResult)} />
                             </div>
                             <TextArea autoSize={true} value={chatCompletionResult} disabled />
                         </div>

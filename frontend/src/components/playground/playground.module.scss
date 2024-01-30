@@ -4,6 +4,7 @@
     
         .ant-spin-container {
             height: 100%;
+            overflow: hidden;
         }
     }
 }
@@ -283,6 +284,8 @@ height: 100%;
             padding: 16px 24px;
 
             .header-left {
+                display: flex;
+                align-items: center;
                 .chat {
                     position: relative;
                     font-size: 18px;
@@ -299,6 +302,7 @@ height: 100%;
                     font-family: Inter;
                     color: #777;
                     text-align: left;
+                    margin-right: 5px;
                 }
             }
 
@@ -383,16 +387,16 @@ height: 100%;
                 font-family: Inter;
                 margin-top: 10px;
 
-                .loading-icon {
-                    color: #ffbb58;
+                // .loading-icon {
+                //     color: #ffbb58;
 
-                    svg {
-                        width: 18px;
-                        height: 18px;
-                    }
+                //     svg {
+                //         width: 18px;
+                //         height: 18px;
+                //     }
 
-                    margin-right: 6px;
-                }
+                //     margin-right: 6px;
+                // }
 
 
                 .green {
@@ -411,6 +415,7 @@ height: 100%;
                     font-size: 12px;
                     font-family: Inter;
                     color: var(--color-text-primary);
+                    cursor: text !important;
                 }
 
                 .subText1 {
@@ -796,3 +801,61 @@ height: 100%;
         margin-right: 10px;
     }
 }
+.selectAssistant {
+    margin: auto;
+    width: 192px;
+    margin-top:calc(50vh - 80px);
+    height: 161px;
+    .svg {
+        width: 192px;
+    }
+    .select-assistant {
+        position: relative;
+        font-size: 14px;
+        font-family: Inter;
+        color: #bfbfbf;
+        text-align: left;
+        width: 192px;
+        margin-bottom: 12px;
+    }
+
+    .header-news {
+        display: flex;
+        width: 192px;
+        justify-content: center;
+        .plusParent {
+            display: flex;
+        }
+
+        .prompt-button {
+            background-color: var(--color-positive);
+            color: white;
+            margin: 0px;
+            height: 32px;
+            padding: 2px 10px;
+        }
+        .prompt-button:hover {
+            background-color: var(--color-positive-hover);
+            color: white;
+            border: 1px solid transparent !important;
+        }
+    }
+}
+@keyframes rotate360 {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .loading-icon {
+    width: 18px;
+    height: 18px;
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+    margin-right: 6px;
+    animation: rotate360 1s linear infinite;
+  }
