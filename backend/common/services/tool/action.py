@@ -22,19 +22,6 @@ async def validate_and_get_action(action_id: str) -> Action:
     if not action:
         raise_http_error(ErrorCode.OBJECT_NOT_FOUND, message=f"Action {action_id} not found.")
 
-    if not action.operation_id:
-        #  renew action data
-        try:
-            action = await update_action(
-                action_id=action_id,
-                openapi_schema=action.openapi_schema,
-            )
-        except Exception as e:
-            raise_http_error(
-                ErrorCode.INVALID_REQUEST,
-                message=f"The OpenAPI schema of action {action_id} is invalid. Please update.",
-            )
-
     return action
 
 
@@ -136,6 +123,20 @@ async def update_action(
 
 async def get_action(action_id: str) -> Action:
     action: Action = await validate_and_get_action(action_id)
+
+    if not action.operation_id:
+        #  renew action data
+        try:
+            action = await update_action(
+                action_id=action_id,
+                openapi_schema=action.openapi_schema,
+            )
+        except Exception as e:
+            raise_http_error(
+                ErrorCode.INVALID_REQUEST,
+                message=f"The OpenAPI schema of action {action_id} is invalid. Please update.",
+            )
+
     return action
 
 
