@@ -138,15 +138,17 @@ The default username and password are `admin` and `TaskingAI321`.
 
 ### Upgrade
 
-If you have already installed TaskingAI with a previous version and want to upgrade to the latest version, first stop the service and remove the containers.
+If you have already installed TaskingAI with a previous version and want to upgrade to the latest version, first update the repository.
 
 ```bash
-docker-compose -p taskingai down
+git pull origin master
 ```
 
-Then upgrade to the latest version by pulling the latest image and restarting the service.
+Then stop current docker service, upgrade to the latest version by pulling the latest image, and finally restart the service.
 
 ```bash
+cd docker
+docker-compose -p taskingai down
 docker-compose -p taskingai pull
 docker-compose -p taskingai up -d
 ```
