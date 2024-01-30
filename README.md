@@ -69,15 +69,15 @@ Please give us a **FREE STAR 🌟** if you find it helpful 😇
 
 **LangChain** is a tool framework for LLM application development, but it faces practical limitations:
 
-- **Statelessness**: It lacks internal state handling, forcing reliance on the client side or external services for data management, which complicates the development lifecycle.
-- **Challenging Scalability**: Due to its stateless approach, ensuring data consistency across different user sessions is a hurdle, hindering scalability.
-- **External Dependencies**: It requires external dependencies, such as model provider SDKs, tool integration, and vector storage, which adds complexity to the setup process.
+- **Statelessness**: Relies on client-side or external services for data management.
+- **Scalability Challenges**: Statelessness impacts consistent data handling across sessions.
+- **External Dependencies**: Depends on outside resources like model SDKs and vector storage.
 
-**OpenAI's Assistant API** excels in delivering GPT-like functionalities but comes with its own constraints:
+**OpenAI's Assistant API** excels in delivering GPTs-like functionalities but comes with its own constraints:
 
-- **Tied Functionalities**: Essential features are confined to individual assistants, restricting the flexibility needed for shared data scenarios.
-- **Proprietary Limitations**: Being a closed-source platform, it limits developers to OpenAI's models, which may not fit all projects.
-- **Limited Customization**: The rigid framework constrains the ability to tailor the assistant's memory and data retrieval according to specific project needs.
+- **Tied Functionalities**: Integrations like tools and retrievals are tied to each assistant, not suitable for multi-tenant applications.
+- **Proprietary Limitations**: Restricted to OpenAI models, unsuitable for diverse needs.
+- **Customization Limits**: Users cannot customize agent configuration such as memory and retrieval system.
 
 ### How TaskingAI solves the problem 😃
 
