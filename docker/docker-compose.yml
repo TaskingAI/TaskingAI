@@ -1,4 +1,4 @@
-version: "v0.1.1"
+version: "3.3"
 
 services:
   frontend:
