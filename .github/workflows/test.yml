@@ -1,0 +1,71 @@
+name: Run test
+
+on:
+  push:
+    branches: [ "master" ]
+    paths-ignore:
+      - '**.md'
+
+env:
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  EKS_NAMESPACE: ${{ vars.EKS_NAMESPACE_TEST }}
+  AWS_DEFAULT_REGION: ${{ vars.AWS_REGION_TEST }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set short SHA
+      run: echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
+
+    - name: Check for git tag version
+      id: get_tag
+      run: |
+        TAG=$(git describe --tags --exact-match 2> /dev/null || echo "")
+        if [[ -n "$TAG" ]]; then
+          echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
+        fi
+    
+    - name: Build image
+      env:
+        ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+      run: |
+        docker build -t taskingai/taskingai:$IMAGE_TAG .
+        echo "Build success: taskingai/taskingai:${IMAGE_TAG}"
+
+    - name: Checkout Other Repository
+      uses: actions/checkout@v2
+      with:
+        repository: TaskingAI/TaskingAI
+        ref: master
+        path: TaskingAI
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set up Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
+    - name: Build and Start Services
+      run: |
+        cd TaskingAI/docker
+        docker-compose up -d
+
+    - name: Run Tests
+      run: |
+        echo "run your test command"
+
+    - name: Stop Services
+      run: |
+        cd TaskingAI/docker
+        docker-compose down
