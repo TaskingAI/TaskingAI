@@ -2,19 +2,19 @@ version: "3.3"
 
 services:
   frontend:
-    image: taskingai/taskingai-console:v0.1.1
+    image: taskingai/taskingai-console:v0.1.2
     depends_on:
       - backend-web
       - backend-api
       - backend-inference
 
   backend-inference:
-    image: taskingai/taskingai-inference:v0.1.6
+    image: taskingai/taskingai-inference:v0.1.7
     environment:
       AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
 
   backend-api:
-    image: taskingai/taskingai-server:v0.1.1
+    image: taskingai/taskingai-server:v0.1.2
     environment:
       POSTGRES_URL: postgres://postgres:TaskingAI321@db:5432/taskingai
       REDIS_URL: redis://:TaskingAI321@cache:6379/0
@@ -28,7 +28,7 @@ services:
       - backend-inference
 
   backend-web:
-    image: taskingai/taskingai-server:v0.1.1
+    image: taskingai/taskingai-server:v0.1.2
     environment:
       POSTGRES_URL: postgres://postgres:TaskingAI321@db:5432/taskingai
       REDIS_URL: redis://:TaskingAI321@cache:6379/0
