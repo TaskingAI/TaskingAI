@@ -802,7 +802,7 @@
 }
 
 .edit-modal-header {
-    .ant-drawer-wrapper-body {
+    :global {
         .ant-drawer-header {
             .ant-drawer-header-title {
                 display: flex;
@@ -814,4 +814,5 @@
             }
         }
     }
+
 }

@@ -49,6 +49,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const [promptList, setPromptList] = useState<promptListType[]>([])
     const [form1] = Form.useForm()
     const [ModelProviderList, setModelProviderList] = useState<ModelProviderType[]>([])
+    const [prividerName, setPrividerName] = useState('')
 
     const handleCancel = () => {
         props.handleSetModelOne(false)
@@ -84,6 +85,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         setOneModelLoading(true)
         const res = await getModelProviderList()
         setModelProviderList(res.data)
+        setPrividerName(res.data[0].name)
         await fetchAiModelsList(0, res.data[0].provider_id)
         setOneModelLoading(false)
     }
@@ -156,29 +158,13 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         })
         await fetchAiModelsList((page - 1) * 10, providerId)
     }
-    const getCenterData = async (providerId: string) => {
+    const getCenterData = async (providerId: string,name) => {
         setProviderId(providerId)
+        setPrividerName(name)
         setCenterLoading(true)
         await fetchAiModelsList(0, providerId)
     }
-    const renderItem = (providerId: string) => {
-        if (providerId === 'openai') {
-            return <span>OpenAI</span>
-        } else if (providerId === 'azure_openai') {
-            return <span>Azure OpenAI</span>
 
-        } else if (providerId === 'anthropic') {
-            return <span>Anthropic</span>
-        } else if (providerId === 'google_gemini') {
-            return <span>Google Gemini</span>
-        } else if (providerId === 'cohere') {
-            return <span>Cohere</span>
-        } else if (providerId === 'zhipu') {
-            return <span>ZhiPu</span>
-        } else if (providerId === 'mistralai') {
-            return <span>MistralAI</span>
-        }
-    }
     return (
         <div>
             <Modal title="Create Model - Base Model Selection" width={totalCount === 0 ? 1000 : 1378} centered open={props.open} footer={[
@@ -194,7 +180,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                         <div className='left'>
                             <div className='modal-provider'>Model provider</div>
                             {ModelProviderList?.map((item, index) => (
-                                <div key={index} onClick={() => getCenterData(item.provider_id)} className={`provider ${item.provider_id === providerId && 'select-provider'}`}>
+                                <div key={index} onClick={() => getCenterData(item.provider_id,item.name)} className={`provider ${item.provider_id === providerId && 'select-provider'}`}>
                                     <IconComponent providerId={item.provider_id} />
                                     <div className='name'>{item.name}</div>
                                 </div>
@@ -239,7 +225,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                             <div className='content'>
                                 <div className='label3'>Provider</div>
                                 <div className='modelproviderParent'>
-                                    <div className='openai'>{renderItem(providerId)}</div>
+                                    <div className='openai'>{prividerName}</div>
                                 </div>
                                 <div className='label3'>Type</div>
                                 <span className='modeltypetag'>

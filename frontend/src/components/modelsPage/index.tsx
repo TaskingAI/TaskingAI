@@ -233,7 +233,7 @@ function ModelsPage() {
                 <Button key="submit" loading={loading} onClick={handleConfirm} className={`next-button ${styles.button}`}>
                     Confirm
                 </Button>
-            ]} placement="right" onClose={onClose} open={drawerEditOpen} className='edit-modal-header'>
+            ]} placement="right" onClose={onClose} open={drawerEditOpen} className={styles['edit-modal-header']}>
                 <div className={styles['second-modal']}>
                     <div className={styles['label']}>Base model</div>
                     <div className={styles['frameParent']}>

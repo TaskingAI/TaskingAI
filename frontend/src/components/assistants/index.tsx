@@ -591,7 +591,7 @@ function Assistant() {
                 <ModalTable onOpenDrawer={handleCreateAction} name="Action" updatePrevButton={updateActionPrevButton} defaultSelectedRowKeys={selectedActionsRows} hangleFilterData={hangleFilterActionData} handleRecordsSelected={handleRecordsActionSelected} ifSelect={true} mode='multiple' columns={actionsTableColumn} hasMore={hasActionMore} id='action_id' dataSource={actionList} onChildEvent={handleChildActionEvent}></ModalTable>
             </Modal>
             <DeleteModal open={OpenDeleteModal} describe={`Are you sure you want to delete ${deleteValue || 'Untitled Assistant'}? This action cannot be undone and all integrations associated with the assistant will be affected.`} title='Delete Assistant' projectName={deleteValue || 'Untitled Assistant'} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
-            <Drawer closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
+            <Drawer className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
                 <div className={styles['action-drawer']}>
                     <div className={styles['label']}>
                         <span className={styles['span']}> *</span>
