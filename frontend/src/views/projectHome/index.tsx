@@ -162,10 +162,10 @@ const ProjectHome = () => {
                                     <Link to={'/project/apikeys'}>API Keys</Link>
                                 </Menu.Item>
 
-                                <Menu.Item icon={<Back className="svg-icons" />} onClick={handleBack} className='orgination' key='/Logout'>
+                                <Menu.Item icon={<Back className="svg-icons" />} onClick={handleBack} className='orgination' key='/'>
                                     <span onClick={handleBack}>Logout</span>
                                 </Menu.Item>
-                                <Menu.Item  className='version' key='/'>
+                                <Menu.Item  className='version'>
                                     <span>TaskingAI Community {config.version}</span>
                                 </Menu.Item>
                             </Menu>

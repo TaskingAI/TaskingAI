@@ -20,12 +20,11 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
     const [nextButtonDisabled, setNextButtonDisabled] = useState(false)
     const [previousButtonDisabled, setPrevButtonDisabled] = useState(true)
     const [isFirstRender, setIsFirstRender] = useState(true);
-    const [filterConfig, setFilterConfig] = useState<any>({
+    const [_filterConfig, setFilterConfig] = useState<any>({
         limit: 20,
         sort_field: 'created_timestamp',
 
     })
-    console.log(filterConfig)
     const [enterPlaceHolder, setEnterPlaceHolder] = useState('Enter Name')
     const empty = {
         ['API Key']: <NoApikey />,
@@ -33,7 +32,8 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         collection: <NoCollection />,
         model: <NoModel />,
         record: <NoRecord />,
-        action: <NoTool />
+        action: <NoTool />,
+        chunk: <NoRecord />
     }
     const [selectedRowKeys, setSelectedRowKeys] = useState((defaultSelectedRowKeys && defaultSelectedRowKeys.length) ? defaultSelectedRowKeys : []);
     useEffect(() => {
@@ -41,14 +41,14 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             let tableContainer: HTMLElement | null = document.querySelector('.ant-table-container .ant-table-body table');
             let tableContainerH: HTMLElement | null = document.querySelector('.ant-table-container');
             let modalInnerTable: HTMLElement | null = document.querySelector('.modal-inner-table');
+            let modalOpen = true;
+            if (modalInnerTable) {
+                modalOpen = getComputedStyle(modalInnerTable).display === 'none'
+            }
             let elementsWithPrefix: any = document.querySelectorAll('[class*="_drawer-inner-table"]');
             let elementsWithPrefix1: any = document.querySelectorAll('[class*="_drawer-inner-chunk"]');
             let containerWidth = 0;
             let containerHeight = 0;
-            console.log(!modalInnerTable && elementsWithPrefix.length === 0 && elementsWithPrefix1.length === 0)
-            console.log(modalInnerTable)
-            console.log(elementsWithPrefix.length !== 0)
-            console.log(elementsWithPrefix1.length === 0)
             if (!modalInnerTable && elementsWithPrefix.length === 0 && elementsWithPrefix1.length === 0) {
                 if (!tableContainer) {
                     return
@@ -59,16 +59,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                     x: containerWidth,
                     y: containerHeight - 61
                 });
-            } else if (modalInnerTable) {
-                const tableContainer: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container table');
-                const tableContainerH: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container');
-                containerWidth = tableContainer.offsetWidth;
-                containerHeight = tableContainerH.offsetHeight;
-                setScroll({
-                    x: containerWidth,
-                    y: 400,
-                });
-            } else if (elementsWithPrefix.length !== 0 && elementsWithPrefix1.length === 0) {
+            } else if (elementsWithPrefix.length !== 0 && elementsWithPrefix1.length === 0 && modalOpen) {
                 setTimeout(() => {
                     let firstElement = elementsWithPrefix[0];
                     let antDrawerBodyClassName = firstElement.querySelector('.ant-drawer-body');
@@ -80,7 +71,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                         y: containerHeight - 202,
                     });
                 }, 0)
-            } else if (elementsWithPrefix1.length !== 0 && elementsWithPrefix.length === 0) {
+            } else if (elementsWithPrefix1.length !== 0 && elementsWithPrefix.length === 0 && modalOpen) {
                 setTimeout(() => {
                     let firstElement = elementsWithPrefix1[0];
                     let antDrawerBodyClassName = firstElement.querySelector('.ant-drawer-body');
@@ -92,6 +83,17 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                         y: containerHeight - 202,
                     });
                 })
+            } else if (modalInnerTable && !modalOpen) {
+                setTimeout(() => {
+                    const tableContainer: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container table');
+                    const tableContainerH: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container');
+                    containerWidth = tableContainer.offsetWidth;
+                    containerHeight = tableContainerH.offsetHeight;
+                    setScroll({
+                        x: containerWidth,
+                        y: 400,
+                    });
+                }, 0)
             }
         };
         updateScroll();

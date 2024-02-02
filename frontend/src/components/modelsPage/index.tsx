@@ -242,20 +242,23 @@ function ModelsPage() {
                             <div className={styles['openai']}>{selectedSecondId}</div>
                         </div>
                     </div>
-                    <div className={styles['label3']} style={{marginTop:'24px'}}>Type</div>
+                    <div className={styles['label3']} style={{ marginTop: '24px' }}>Type</div>
                     <span className={styles['modeltypetag']}>
                         {typeReverse[type as keyof typeof typeReverse]}
                     </span>
-                    <div className={styles['label3']} style={{marginTop:'24px'}}>Properties</div>
+                    <div className={styles['label3']} style={{ marginTop: '24px' }}>Properties</div>
                     <div className={styles['instanceParent']}>
                         {proerties && Object.entries(proerties).map(([key, property]) => (
-                            <div className={styles['streamParent']} key={key}>
-                                <div className={styles['stream']}>{key}</div>
-                                <div className={styles['instanceChild']} />
-                                <div className={styles['on']}>{String(property)}</div>
-                            </div>
+                            property !== null ? (
+                                <div className={styles['streamParent']} key={key}>
+                                    <div className={styles['stream']}>{key}</div>
+                                    <div className={styles['instanceChild']} />
+                                    <div className={styles['on']}>{String(property)}</div>
+                                </div>
+                            ) : null
                         ))}
                     </div>
+
                     <Form layout="vertical" form={form1} autoComplete="off" className={styles['input-form']} >
                         <Form.Item rules={[
                             {
