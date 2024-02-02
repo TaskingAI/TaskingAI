@@ -42,9 +42,14 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             let tableContainerH: HTMLElement | null = document.querySelector('.ant-table-container');
             let modalInnerTable: HTMLElement | null = document.querySelector('.modal-inner-table');
             let elementsWithPrefix: any = document.querySelectorAll('[class*="_drawer-inner-table"]');
+            let elementsWithPrefix1: any = document.querySelectorAll('[class*="_drawer-inner-chunk"]');
             let containerWidth = 0;
             let containerHeight = 0;
-            if (!modalInnerTable && elementsWithPrefix.length === 0) {
+            console.log(!modalInnerTable && elementsWithPrefix.length === 0 && elementsWithPrefix1.length === 0)
+            console.log(modalInnerTable)
+            console.log(elementsWithPrefix.length !== 0)
+            console.log(elementsWithPrefix1.length === 0)
+            if (!modalInnerTable && elementsWithPrefix.length === 0 && elementsWithPrefix1.length === 0) {
                 if (!tableContainer) {
                     return
                 }
@@ -63,18 +68,31 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                     x: containerWidth,
                     y: 400,
                 });
-            } else if (elementsWithPrefix.length !== 0) {
-                let firstElement = elementsWithPrefix[0];
-                let antDrawerBodyClassName = firstElement.querySelector('.ant-drawer-body');
-                let tableClassName = firstElement.querySelector('.ant-drawer-body table')
-                containerWidth = tableClassName.offsetWidth;
-                containerHeight = antDrawerBodyClassName.offsetHeight;
-                setScroll({
-                    x: containerWidth,
-                    y: containerHeight - 202,
-                });
+            } else if (elementsWithPrefix.length !== 0 && elementsWithPrefix1.length === 0) {
+                setTimeout(() => {
+                    let firstElement = elementsWithPrefix[0];
+                    let antDrawerBodyClassName = firstElement.querySelector('.ant-drawer-body');
+                    let tableClassName = firstElement.querySelector('.ant-drawer-body table')
+                    containerWidth = tableClassName.offsetWidth;
+                    containerHeight = antDrawerBodyClassName.offsetHeight;
+                    setScroll({
+                        x: containerWidth,
+                        y: containerHeight - 202,
+                    });
+                }, 0)
+            } else if (elementsWithPrefix1.length !== 0 && elementsWithPrefix.length === 0) {
+                setTimeout(() => {
+                    let firstElement = elementsWithPrefix1[0];
+                    let antDrawerBodyClassName = firstElement.querySelector('.ant-drawer-body');
+                    let tableClassName = firstElement.querySelector('.ant-drawer-body table')
+                    containerWidth = tableClassName.offsetWidth;
+                    containerHeight = antDrawerBodyClassName.offsetHeight;
+                    setScroll({
+                        x: containerWidth,
+                        y: containerHeight - 202,
+                    });
+                })
             }
-
         };
         updateScroll();
     }, []);

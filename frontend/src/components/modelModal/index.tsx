@@ -1,12 +1,13 @@
 import closeIcon from '../../assets/img/x-close.svg'
 import {
     RightOutlined,
-
 } from '@ant-design/icons';
 import './modelModal.scss'
+// import { TKFormItemSwitch, TKFormItemInput } from '@taskingai/taskingai-ui'
 import IconComponent from '@/components/iconComponent';
 import NoModel from '../../assets/img/NO_MODEL.svg?react'
-import { Modal, Pagination, Button, Spin, Input, Form } from 'antd'
+
+import { Modal, Pagination, Button, Spin, Input, Form, Switch, ConfigProvider, InputNumber } from 'antd'
 import { getAiModelsList, createModels, getAiModelsForm, getModelProviderList } from '../../axios/models'
 import { toast } from 'react-toastify'
 import react, { useState, useImperativeHandle } from 'react'
@@ -17,6 +18,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
             fetchModelProviderList()
         }
     }));
+
     const [modelTwoOpen, setModelTwoOpen] = useState(false)
     const [formData, setFormData] = useState<formDataType>({
         properties: {},
@@ -29,6 +31,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const [centerLoading, setCenterLoading] = useState(false)
     const [proerties, setProerties] = useState('')
     const [type, setType] = useState('instruct_completion')
+    const [propertyForm] = Form.useForm()
     const [modalPagination, setModalPagination] = useState({
         current: 1,
         pageSize: 3,
@@ -88,6 +91,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const handleNext = async () => {
         form.resetFields()
         form1.resetFields()
+        propertyForm.resetFields()
         setNextLoading(true)
         await fetchFormData(providerId)
         setNextLoading(false)
@@ -95,13 +99,33 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     }
 
     const handleConfirm = async () => {
+        const function_call = propertyForm.getFieldValue('function_call')
+        if (!function_call) {
+            propertyForm.setFieldValue('function_call', false)
+        }
+        const streaming = propertyForm.getFieldValue('streaming')
+        if (!streaming) {
+            propertyForm.setFieldValue('streaming', false)
+        }
+        const values = propertyForm.getFieldsValue();
+        const numericValues = {};
+        for (const key in values) {
+            if (typeof values[key] === 'boolean') {
+                numericValues[key] = values[key];
+            } else {
+                const value = Number(values[key]);
+                numericValues[key] = isNaN(value) ? values[key] : value;
+            }
+        }
         form1.validateFields().then(async () => {
+            await propertyForm.validateFields()
             form.validateFields().then(async () => {
                 setConfirmLoading(true)
                 const params = {
                     name: form1.getFieldValue('name'),
                     model_schema_id: selectedOneId,
-                    credentials: form.getFieldsValue()
+                    credentials: form.getFieldsValue(),
+                    properties: numericValues
                 }
                 try {
                     await createModels(params)
@@ -115,7 +139,6 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                 } finally {
                     setConfirmLoading(false)
                 }
-
             })
         })
     }
@@ -224,7 +247,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                 </span>
                             </div>
                             <div className='feature'>
-                                <div className='label3'>Features</div>
+                             {proerties && <div className='label3'>Features</div>}   
                                 <div className='instanceParent'>
                                     {proerties && Object.entries(proerties).map(([key, property]) => (
                                         <div className='streamParent' key={key}>
@@ -233,8 +256,6 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                             <div className='on'>{String(property)}</div>
                                         </div>
                                     ))}
-
-
                                 </div>
                             </div>
 
@@ -262,7 +283,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
 
                         </div>
                     </div>
-                    <Form layout="vertical" form={form1} autoComplete="off" className='input-form'>
+                    <Form layout="vertical" form={form1} autoComplete="off" className='input-form' >
                         <Form.Item rules={[
                             {
                                 required: true,
@@ -274,6 +295,71 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                             </div>
                         </Form.Item>
                     </Form>
+                    {
+                        !proerties && <>
+                            <div className='hr'></div>
+                            <div className='credentials'>Properties</div>
+                            {type === 'chat_completion' && <Form layout="vertical" className='second-form' form={propertyForm}>
+                                <Form.Item label="Fucntion call" required name='function_call' valuePropName="checked">
+                                    <div className='description'>Indicates if the model supports function call.</div>
+                                    <ConfigProvider theme={{
+                                        components: {
+                                            Switch: {
+                                                colorPrimary: '#087443',
+                                                colorPrimaryHover: '#087443',
+                                            }
+                                        }
+                                    }}>
+                                        <Form.Item name='function_call' className='switch'>
+                                            <Switch />
+                                        </Form.Item>
+                                    </ConfigProvider>
+                                </Form.Item>
+                                <Form.Item label="Streaming" required name='streaming' valuePropName="checked">
+                                    <div className='description'>Indicates if the model supports streaming of text chunks.</div>
+                                    <ConfigProvider theme={{
+                                        components: {
+                                            Switch: {
+                                                colorPrimary: '#087443',
+                                                colorPrimaryHover: '#087443',
+                                            }
+                                        }
+                                    }}>
+                                        <Form.Item name='streaming' className='switch'>
+                                            <Switch />
+                                        </Form.Item>
+                                    </ConfigProvider>
+                                </Form.Item>
+                                <Form.Item label="Input max tokens" name='input_token_limit'>
+                                    <div>
+                                        <div className='description'>The maximum number of tokens that can be included in the model's input.</div>
+                                        <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder='Enter max input tokens' />
+                                    </div>
+                                </Form.Item>
+                                <Form.Item label="Output max tokens" name='output_token_limit'>
+                                    <div>
+                                        <div className='description'>The maximum number of tokens allowed in the output.</div>
+                                        <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder='Enter max output tokens' />
+                                    </div>
+                                </Form.Item>
+                            </Form>}
+                            {
+                                type === 'text_embedding' && <Form layout="vertical" className='second-form' form={propertyForm} autoComplete='off'>
+                                    <Form.Item label="Embedding size" required name='embedding_size' rules={[
+                                        {
+                                            required: true,
+                                            message: `Please input Embedding size.`,
+                                        },
+                                    ]}>
+                                        <div>
+                                            <div className='description'>The maximum number of tokens that the model can generate as output.</div>
+                                            <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder='Enter embedding size' />
+                                        </div>
+                                    </Form.Item>
+                                </Form>
+                            }
+                        </>
+                    }
                     <div className='hr'></div>
                     <div className='credentials'>Credentials</div>
                     <div className='label-desc' style={{ marginBottom: '24px' }}>

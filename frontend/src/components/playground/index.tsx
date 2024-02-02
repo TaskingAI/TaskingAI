@@ -1,6 +1,6 @@
 import styles from './playground.module.scss'
 import { useState, useEffect, useRef } from 'react'
-import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Radio, Collapse } from 'antd'
+import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Collapse } from 'antd'
 import { PlusOutlined, RightOutlined, LoadingOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 import CopyOutlined from '../../assets/img/copyIcon.svg?react'
@@ -13,7 +13,8 @@ import CreateCollection from '../createCollection/index.tsx';
 import ModalSettingIcon from '../../assets/img/modalSettingIcon.svg?react'
 import { formatTimestamp, getFirstMethodAndEndpoint } from '@/utils/util'
 import ModalTable from '../modalTable/index'
-import { ChildRefType } from '../../contant/index.ts'
+import { commonDataType } from '@/contant/assistant.ts'
+import ApiErrorResponse, { ChildRefType } from '../../contant/index.ts'
 import ChatIcon from '../../assets/img/chatIcon.svg?react'
 import { getActionsList, createActions } from '../../axios/actions.ts'
 import { getRetrievalList } from '../../axios/retrieval.ts';
@@ -23,6 +24,7 @@ import { getAssistantsList, getAssistantDetail, updateAssistant } from '@/axios/
 import closeIcon from '../../assets/img/x-close.svg'
 import ModalFooterEnd from '../modalFooterEnd/index'
 import { SSE } from "sse.js";
+import ActionDrawer from '../actionDrawer/index.tsx';
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
 import DeleteModal from '../deleteModal/index.tsx';
 import EditIcon from '../../assets/img/editIcon.svg?react'
@@ -30,7 +32,7 @@ import MessageSuccess from '../../assets/img/messageSuccess.svg?react'
 import ClipboardJS from 'clipboard';
 import DrawerAssistant from '../drawerAssistant/index'
 import { useLocation, useNavigate } from 'react-router-dom';
-const port = window.location.port;
+const origin = window.location.origin;
 import { assistantTableColumn, modelsTableColumn, actionsTableColumn, collectionTableColumn } from '../../contents/index'
 const plainOptions = [
     { label: 'Stream', value: 1 },
@@ -40,7 +42,6 @@ function Playground() {
     const navigation = useNavigate();
     const { search, pathname } = useLocation();
     const [assistantId, setAssistantId] = useState<any>()
-
     const [optionList, setOptionList] = useState([])
     const divRef = useRef();
     const settingModal = useRef<any>()
@@ -48,6 +49,7 @@ function Playground() {
     const [updateModelPrevButton, setUpdateModelPrevButton] = useState(false)
     const [updateActionPrevButton, setUpdateActionPrevButton] = useState(false)
     const [actionLimit, setActionLimit] = useState(20)
+    const [assistantLimit, setAssistantLimit] = useState(20)
     const settingIcon = useRef<any>()
     const contentRef = useRef<any>();
     const [shouldSmoothScroll, setShouldSmoothScroll] = useState(true)
@@ -74,7 +76,6 @@ function Playground() {
     const [chatId, setChatId] = useState('')
     const [tipSchema, setTipSchema] = useState(false)
     const [actionList, setActionList] = useState([])
-
     const [checkBoxValue, setCheckBoxValue] = useState([1, 2])
     const [contentValue, setContentValue] = useState('')
     const [drawerName, setDrawerName] = useState('')
@@ -133,16 +134,13 @@ function Playground() {
         clipboard.on('error', function (e) {
             console.log(e);
         });
-
     }
-
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (!(settingModal.current && settingModal.current.contains(event.target)) && !(settingIcon.current && settingIcon.current.contains(event.target))) {
                 settingModal.current.style.display = 'none';
             }
         };
-
         document.addEventListener('mousemove', handleClickOutside);
         return () => {
             document.removeEventListener('mousemove', handleClickOutside);
@@ -152,22 +150,17 @@ function Playground() {
         setCheckBoxValue([1, 2])
         initialFunction()
     }, [])
-
-
     useEffect(() => {
         if (contentRef.current) {
             if (shouldSmoothScroll) {
                 contentRef.current.scrollTop = contentRef.current.scrollHeight;
-
                 contentRef.current.scrollTo({
                     top: contentRef.current.scrollHeight,
                     behavior: 'smooth',
                 });
             }
-
         }
     }, [contentTalkLoading, contentTalk, shouldSmoothScroll]);
-
     const combineObjects = (item, arr) => {
         let updatedGroupedMessages = { ...groupedMessages };
         let str = ''
@@ -194,17 +187,15 @@ function Playground() {
         } else if (item.object === 'Message' && checkBoxValue1.indexOf(1) === -1 && checkBoxValue1.indexOf(2) !== -1) {
             updatedGroupedMessages.content.text[updatedGroupedMessages.content.text.length - 1].event_step = item.content.text;
         } else if (item.object === 'Error') {
-            // toast.error(item.message, { autoClose: 10000 })
             setErrorContent(JSON.stringify(item, null, 4))
             setGenerateButtonLoading(false)
             setLottieAnimShow(false)
             updatedGroupedMessages.content.text[updatedGroupedMessages.content.text.length - 1].event_step = 'Error Occurred';
         }
-
         return updatedGroupedMessages;
     }
     const fetchAssistantsList = async () => {
-        const res: any = await getAssistantsList({ limit: 20 })
+        const res: any = await getAssistantsList({ limit:assistantLimit || 20 })
         const data = res.data.map((item) => {
             return {
                 ...item,
@@ -269,6 +260,11 @@ function Playground() {
     }
     const handleSelectModelId = (value) => {
         setModalTableOpen(value)
+    }
+    const handleChildAssistantEvent = async (value: Record<string, any>) => {
+        await fetchAssistantsList()
+        setUpdatePrevButton(false)
+        setAssistantLimit(value.limit)
     }
     const combineObjectsWithSameMsgId = (arr) => {
         let groupedMessages = { role: 'Assistant', content: { text: '' } };
@@ -410,12 +406,12 @@ function Playground() {
             await fetchAssistantsList()
             await handleListChats()
             setOpenDrawer(false)
-
         } catch (error) {
             console.log(error)
-            toast.error(error.response.data.error.message)
+            const apiError = error as ApiErrorResponse;
+            const errorMessage: string = apiError.response.data.error.message;
+            toast.error(errorMessage)
         }
-
     }
     const handleNewChat = async () => {
         if (!assistantId) {
@@ -532,7 +528,7 @@ function Playground() {
 
         let source;
         if (stream || debug) {
-            source = new SSE(`http://localhost:${port}/${project_base_url}/assistants/${id}/chats/${chatId}/generate`, {
+            source = new SSE(`${origin}/${project_base_url}/assistants/${id}/chats/${chatId}/generate`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -543,7 +539,9 @@ function Playground() {
             source.addEventListener('error', (e) => {
                 setGenerateButtonLoading(false)
                 console.log(e)
-                toast.error(JSON.parse(e.data).error.message, { autoClose: 10000 })
+                if(e.data) {
+                    toast.error(JSON.parse(e.data).error.message, { autoClose: 10000 })
+                }
             })
         }
 
@@ -711,10 +709,10 @@ function Playground() {
     const handleActionRequest = async () => {
         if (!schema) {
             setTipSchema(true)
+
             return
         }
-        setTipSchema(false)
-        const commonData = {
+        const commonData: commonDataType = {
             openapi_schema: JSON.parse(schema),
             authentication: {
                 type: radioValue,
@@ -723,22 +721,25 @@ function Playground() {
             }
         };
         if (radioValue === 'custom') {
-            commonData.authentication.content = { [custom]: Authentication };
+            if (commonData.authentication) {
+                commonData.authentication.content = { [custom]: Authentication };
+            }
         } else {
             if (radioValue === 'none') {
                 commonData.authentication = undefined
             } else {
-                commonData.authentication.secret = Authentication;
+                if (commonData.authentication) {
+                    commonData.authentication.secret = Authentication;
+                }
             }
         }
         try {
-
             await createActions(commonData);
             const params = {
                 limit: actionLimit || 20,
             }
             await fetchActionsList(params);
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             toast.error(error.message)
         }
@@ -751,8 +752,8 @@ function Playground() {
     const handleCloseModal = () => {
         setOpenModalTable(false)
     }
-    const hangleChangeAuthorization = (e) => {
-        setAuthentication(e.target.value)
+    const hangleChangeAuthorization = (value:string) => {
+        setAuthentication(value)
     }
     const handleRecordsSelected = (value, selectedRows) => {
         setRecordsSelected(value)
@@ -771,36 +772,25 @@ function Playground() {
         setAssistantId(tag)
         setDefaultSelectedAssistant(tag)
     }
-    const handleCustom = (e) => {
-        setCustom(e.target.value)
+    const handleCustom = (value:string) => {
+        setCustom(value)
     }
     const handleCollectionSelected = (value, selectedRows) => {
         setRecordsSelected1(value)
         const tag = selectedRows.map(item => (item.name + '-' + item.collection_id))
         setSelectedRetrievalRows(tag)
     }
-
-    const titleCase = (str) => {
-        const newStr = str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase();
-        return newStr;
-    }
     const handleMemoryChange1 = (value) => {
         setMemoryValue(value)
     }
-    const handleSchemaChange = (e) => {
-        setSchema(e.target.value)
-        if (!e.target.value) {
-            setTipSchema(true)
-        } else {
-            setTipSchema(false)
-        }
+    const handleSchemaChange = (value:string) => {
+        setSchema(value)
     }
     const handleCreateAction = () => {
         setSchema('')
         setRadioValue('none')
         setAuthentication('')
         setOpenActionDrawer(true)
-
     }
     const handleAddPrompt = () => {
         if (systemPromptTemplate.length < 10) {
@@ -866,8 +856,8 @@ function Playground() {
     const handleInputValueTwo = (value) => {
         setInputValueTwo(value)
     }
-    const onRadioChange = (e) => {
-        setRadioValue(e.target.value)
+    const onRadioChange = (value:string) => {
+        setRadioValue(value)
     }
     const handleActionModalTable = () => {
         setModalActionTableOpen(true)
@@ -933,11 +923,13 @@ function Playground() {
             }
             setChatCompletionResult(JSON.stringify(item, null, 4))
             setContentDrawer(true)
-
         }
     }
     const handleCloseContentDrawer = () => {
         setContentDrawer(false)
+    }
+    const onhandleTipError = (value: boolean) => {
+        setTipSchema(value)
     }
     const handleCloseContentErrorDrawer = () => {
         setContentErrorDrawer(false)
@@ -992,10 +984,7 @@ function Playground() {
                                     <div className={styles['noPreviousChat1']}>No previous chat</div>
                                     <div className={styles['frameChild']} />
                                 </div>}
-
                             </div>
-
-
                             {loadMoreHasMore && <div className={styles['lineParent']} style={{ marginTop: '10px' }}>
                                 <div className={styles['frameChild']} />
                                 <div className={styles['formbuttoncancel']} onClick={handleLodaMore}>
@@ -1176,35 +1165,7 @@ function Playground() {
                 <ModalTable name="model" defaultSelectedRowKeys={Array.isArray(selectedRows) ? selectedRows : [selectedRows]} updatePrevButton={updateModelPrevButton} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <Drawer closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
-                <div className={styles['action-drawer']}>
-                    <div className={styles['label']}>
-                        <span className='span'> *</span>
-                        <span>Schema</span>
-
-                    </div>
-                    <div className={styles['label-description']}> The action schema, Which is compliant with the OpenAPI
-                        Specification. It should only have exactly one path and one method.</div>
-                    <TextArea className={styles['input-drawer']} autoSize={{ minRows: 10, maxRows: 20 }} value={schema}
-                        onChange={handleSchemaChange} showCount maxLength={32768}></TextArea>
-                    {/* <span onClick={handleValidate} className='valid-schema'>Valid schema</span> */}
-                    <div className={`${styles['desc-action-error']} ${tipSchema ? styles.show : ''}`}>Schema is required</div>
-                    <div className={styles['label']}>
-                        <span className={styles['span']}> *</span>
-                        <span>Authentication</span>
-
-                    </div>
-                    <div className={styles['label-description']}>Authentication Type</div>
-                    <Radio.Group onChange={onRadioChange} value={radioValue}>
-                        <Radio value='none'>None</Radio>
-                        <Radio value='basic'>Basic</Radio>
-                        <Radio value='bearer'>Bearer</Radio>
-                        <Radio value='custom'>Custom</Radio>
-                    </Radio.Group>
-                    {radioValue !== 'none' && <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '15px 0' }}>
-                        {radioValue !== 'custom' ? <span className={styles['desc-description']}>Authorization </span> : <Input placeholder='X-Custom' onChange={handleCustom} value={custom} style={{ width: '14%' }} />} <span className='desc-description'>:</span>  <Input prefix={<span style={{ color: '#999' }} >{radioValue !== 'custom' && titleCase(radioValue)}</span>} value={Authentication} placeholder='<Secret>' onChange={hangleChangeAuthorization} style={{ width: '83%' }}></Input>
-                    </div>
-                    }
-                </div>
+                <ActionDrawer showTipError={tipSchema} onhandleTipError={onhandleTipError} drawerTitle={'Bulk Create Action'} schema={schema} onSchemaChange={handleSchemaChange} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleAssistantModalClose} centered footer={[
                 <div className='footer-group' style={{ justifyContent: 'flex-end' }} key='footer'>
@@ -1223,7 +1184,7 @@ function Playground() {
                 </div>
 
             ]} title='Select Assistant' open={openAssistantModalTable} width={1000} className={`modal-inner-table ${styles.model1}`}>
-                <ModalTable name='Assistant' ifAllowNew={true} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedAssistant} handleRecordsSelected={handleRecordsAssistantSelected} ifSelect={true} columns={assistantTableColumn} hasMore={modelHasMore} id='assistant_id' dataSource={optionList} onChildEvent={handleChildModelEvent}></ModalTable>
+                <ModalTable name='Assistant' ifAllowNew={true} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedAssistant} handleRecordsSelected={handleRecordsAssistantSelected} ifSelect={true} columns={assistantTableColumn} hasMore={modelHasMore} id='assistant_id' dataSource={optionList} onChildEvent={handleChildAssistantEvent}></ModalTable>
             </Modal>
             <CreateCollection handleFetchData={() => fetchDataRetrievalData({ limit: retrievalLimit || 20 })} handleModalCloseOrOpen={() => setOpenCollectionDrawer(false)} OpenDrawer={openCollectionDrawer}></CreateCollection>
             <Drawer width={700} open={contentDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCloseContentDrawer} title='Chat Completion'>
@@ -1263,12 +1224,9 @@ function Playground() {
                             <TextArea autoSize={true} value={errorContent} disabled />
                         </div>
                     }]}></Collapse>
-
-
             </Drawer>
             <DeleteModal title='Delete Chat' projectName={chatId} open={OpenDeleteModal} describe={`Are you sure you want to delete chat ${chatId}`} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
         </Spin >
-
     );
 }
 export default Playground;

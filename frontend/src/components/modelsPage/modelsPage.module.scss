@@ -389,12 +389,77 @@
     }
 }
 
+.label3 {
+    align-self: stretch;
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.modeltypetag {
+    position: relative;
+    border-radius: 8px;
+    background-color: var(--color-invert-text);
+    border: 1px solid var(--color-divider);
+    // width: calc(100% - 24px);
+    padding: 5px 12px;
+    text-align: left;
+    font-size: 14px;
+    color: var(--color-primary);
+    font-family: Inter;
+}
+
+.stream {
+    position: relative;
+}
+
+.instanceChild {
+    align-self: stretch;
+    position: relative;
+    border-right: 1px solid var(--color-divider);
+    box-sizing: border-box;
+    width: 1px;
+}
+
+.on {
+    position: relative;
+    color: var(--color-text-primary);
+}
+
+.streamParent {
+    border-radius: 8px;
+    border: 1px solid var(--color-divider);
+    box-sizing: border-box;
+    height: 24px;
+    line-height: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0px 4px;
+    gap: 3px;
+}
+
+.instanceParent {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    text-align: left;
+    font-size: 12px;
+    color: #777;
+    font-family: Inter;
+}
 
 .second-modal {
     position: relative;
 
+    // overflow: hidden;
     .input-form {
-        height: 130px;
+        height: 100px;
         margin-top: 24px;
 
         .ant-form-item {
@@ -696,6 +761,7 @@
                 height: auto !important;
             }
         }
+
         .ant-form-item {
             margin-bottom: 0;
         }
@@ -733,4 +799,19 @@
 
 .button {
     margin-left: 15px;
+}
+
+.edit-modal-header {
+    .ant-drawer-wrapper-body {
+        .ant-drawer-header {
+            .ant-drawer-header-title {
+                display: flex;
+                flex-direction: row-reverse !important;
+
+                .ant-drawer-close {
+                    margin-inline-end: 0;
+                }
+            }
+        }
+    }
 }

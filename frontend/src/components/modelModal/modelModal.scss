@@ -134,7 +134,7 @@
                 padding: 5px 12px;
                 text-align: left;
                 font-size: 14px;
-                color:var(--color-primary);
+                color: var(--color-primary);
                 font-family: Inter;
             }
         }
@@ -374,161 +374,6 @@
     }
 
 }
-
-.second-modals {
-    position: relative;
-
-    .hr {
-        position: absolute;
-        // width: 100%;
-        left: -20px;
-        right: -20px;
-        height: 1px;
-        background-color: #eee;
-        line-height: 1;
-    }
-
-    .frameParent {
-        align-self: stretch;
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: flex-start;
-        margin: 6px 0 20px 0 !important;
-    }
-
-    .input {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .basicInformation {
-        position: relative;
-        font-size: 18px;
-        line-height: 32px;
-        font-family: Inter;
-        color: var(--color-text-primary);
-        text-align: left;
-
-    }
-
-    .label {
-        position: relative;
-        font-size: 16px;
-        line-height: 20px;
-        font-weight: 600;
-        font-family: Inter;
-        color: var(--color-text-primary);
-        text-align: left;
-    }
-
-    .modelproviderIcon {
-        position: relative;
-        width: 18px;
-        height: 18px;
-        overflow: hidden;
-        flex-shrink: 0;
-    }
-
-    .openai {
-        position: relative;
-        font-weight: 500;
-    }
-
-    .modelproviderParent {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 5px;
-    }
-
-    .frameParent {
-        flex: 1;
-        width: 100%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        text-align: left;
-        font-size: 14px;
-        color: var(--color-text-primary);
-        font-family: Inter;
-    }
-
-    .label-name {
-        position: relative;
-        font-size: 16px;
-        line-height: 20px;
-        font-weight: 600;
-        font-family: Inter;
-        text-align: left;
-        color: var(--color-text-primary);
-
-        .span {
-            color: var(--color-negative);
-        }
-    }
-
-    .label-desc {
-        width: 100%;
-        position: relative;
-        font-size: 14px;
-        line-height: 20px;
-        font-family: Inter;
-        color: #777;
-        text-align: left;
-        display: inline-block;
-    }
-
-    .credentials {
-        position: relative;
-        font-size: 18px;
-        line-height: 32px;
-        font-family: Inter;
-        color: var(--color-text-primary);
-        text-align: left;
-        margin-top: 48px;
-        display: block;
-    }
-
-    .inputWithLabel1 {
-        flex: 1;
-        width: 100%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        gap: 8px;
-        text-align: left;
-        font-size: 16px;
-        color: var(--color-text-primary);
-        font-family: Inter;
-
-        .span {
-            font-weight: 600;
-            color: var(--color-negative);
-        }
-
-        .label {
-            position: relative;
-            line-height: 20px;
-        }
-
-        .label1 {
-            align-self: stretch;
-            position: relative;
-            font-size: 14px;
-            line-height: 20px;
-            color: #777;
-        }
-    }
-}
-
-
-
 .second-form {
     .form-item {
         margin-bottom: 0;
@@ -550,49 +395,226 @@
         width: 100%;
         position: relative;
         font-size: 14px;
-        line-height: 20px;
+        line-height: 1;
         font-family: Inter;
         color: #777;
+        margin-bottom: 8px;
         text-align: left;
         display: inline-block;
     }
 }
 
+.ant-modal-wrap {
+    overflow: hidden !important;
+}
+
 .modal-content {
     .ant-modal-content {
         // max-height: 800px;
+
         // overflow: auto;
 
         .ant-modal-body {
-            // max-height: 660px;
+            max-height: 660px;
             padding: 24px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+.ant-form-item-label{
+    padding: 0;
+}
+            .second-modals {
 
-            // overflow: auto;
-            .input-form {
-                // height: 130px;
+                overflow: hidden;
+                .input-form {
+                    // height: 130px;
 
-                .ant-form-item {
-                    height: 100%;
-
-                    .ant-form-item-row {
+                    .ant-form-item {
                         // height: 100%;
-                        flex-wrap: wrap !important;
-                        width: 100%;
 
-                        .ant-form-item-control-input {
-                            height: 100%;
+                        .ant-form-item-row {
+                            // height: 100%;
+                            flex-wrap: wrap !important;
+                            width: 100%;
 
-                            .ant-form-item-control-input-content {
-                                height: 100% !important;
-                            }
+                            // .ant-form-item-control-input {
+                            //     height: 100%;
+
+                            //     .ant-form-item-control-input-content {
+                            //         height: 100% !important;
+                            //     }
+                            // }
                         }
+                    }
+
+                    .ant-form-item-required {
+                        font-size: 16px;
                     }
                 }
 
-                .ant-form-item-required {
+
+                .hr {
+                    position: absolute;
+                    // width: 100%;
+                    left: -20px;
+                    right: -20px;
+                    height: 1px;
+                    margin-top: 24px;
+                    background-color: #eee;
+                    line-height: 1;
+                }
+
+                .frameParent {
+                    align-self: stretch;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-start;
+                    justify-content: flex-start;
+                    margin: 6px 0 20px 0 !important;
+                }
+
+                .input {
+                    width: 100%;
+                    margin-bottom: 10px;
+                }
+
+                .basicInformation {
+                    position: relative;
+                    font-size: 18px;
+                    line-height: 32px;
+                    font-family: Inter;
+                    color: var(--color-text-primary);
+                    text-align: left;
+
+                }
+
+                .label {
+                    position: relative;
                     font-size: 16px;
+                    line-height: 20px;
+                    font-weight: 600;
+                    font-family: Inter;
+                    color: var(--color-text-primary);
+                    text-align: left;
+                }
+
+                .modelproviderIcon {
+                    position: relative;
+                    width: 18px;
+                    height: 18px;
+                    overflow: hidden;
+                    flex-shrink: 0;
+                }
+
+                .openai {
+                    position: relative;
+                    font-weight: 500;
+                }
+
+                .modelproviderParent {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: flex-start;
+                    gap: 5px;
+                }
+
+                .frameParent {
+                    flex: 1;
+                    width: 100%;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: flex-start;
+                    text-align: left;
+                    font-size: 14px;
+                    color: var(--color-text-primary);
+                    font-family: Inter;
+                }
+
+                .label-name {
+                    position: relative;
+                    font-size: 16px;
+                    line-height: 20px;
+                    font-weight: 600;
+                    font-family: Inter;
+                    text-align: left;
+                    color: var(--color-text-primary);
+
+                    .span {
+                        color: var(--color-negative);
+                    }
+                }
+
+                .label-desc {
+                    width: 100%;
+                    position: relative;
+                    font-size: 14px;
+                    line-height: 20px;
+                    font-family: Inter;
+                    color: #777;
+                    text-align: left;
+                    display: inline-block;
+                }
+
+                .credentials {
+                    position: relative;
+                    font-size: 18px;
+                    line-height: 32px;
+                    font-family: Inter;
+                    color: var(--color-text-primary);
+                    text-align: left;
+                    margin-top: 48px;
+                    display: block;
+                }
+
+                .inputWithLabel1 {
+                    flex: 1;
+                    width: 100%;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: flex-start;
+                    gap: 8px;
+                    text-align: left;
+                    font-size: 16px;
+                    color: var(--color-text-primary);
+                    font-family: Inter;
+
+                    .span {
+                        font-weight: 600;
+                        color: var(--color-negative);
+                    }
+
+                    .label {
+                        position: relative;
+                        line-height: 20px;
+                    }
+
+                    .label1 {
+                        align-self: stretch;
+                        position: relative;
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #777;
+                    }
                 }
             }
+        }
+    }
+}
+
+.ant-form-item {
+    margin-bottom: 8px;
+}
+.switch{
+    height: 20px;
+    .ant-row {
+        height: 20px;
+        .ant-form-item-control-input{
+            min-height: 20px !important;
         }
     }
 }

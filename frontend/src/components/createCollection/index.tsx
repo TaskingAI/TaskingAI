@@ -8,19 +8,17 @@ import ModelModal from '../modelModal/index'
 import {
     Input, Select, Modal, Button
 } from 'antd';
-
+import {createCollectionType} from '@/contant/createCollection.ts'
 import {  createRetrieval } from '../../axios/retrieval';
 import ModalTable from '../modalTable/index';
 import styles from './createCollection.module.scss'
 import { modelsTableColumn } from '../../contents/index'
 import { ChildRefType } from '../../contant/index.ts'
-
-function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData }) {
+function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData }: createCollectionType) {
     const [drawerName, setDrawerName] = useState('')
     const [descriptionText, setDescriptionText] = useState('')
     const [selectedRows, setSelectedRows] = useState([])
     const [selectValue, setSelectValue] = useState(1000)
-
     const [modelOne, setModelOne] = useState(false);
     const [recordsSelected, setRecordsSelected] = useState([])
     const [updatePrevButton, setUpdatePrevButton] = useState(false)
@@ -33,11 +31,9 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
             limit: 20,
         }
         fetchModelsList(params)
-
     }, []);
     const [modalTableOpen, setModalTableOpen] = useState(false)
     const fetchModelsList = async (params) => {
-
         try {
             const res:any = await getModelsList(params, 'text_embedding')
             const data = res.data.map((item) => {
@@ -103,7 +99,6 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
     }
     const handleModalCancel = () => {
         setModelOne(false)
-
     }
     const handleSetModelConfirmOne = () => {
         setModelOne(false)
@@ -152,7 +147,6 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
                         <span>{`Embedding model`}</span>
-
                     </div>
                     <div className={styles['label-desc']}>Enter a text embedding model ID that is available in your project.</div>
                     <Select
@@ -164,7 +158,6 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
                         maxTagCount={2} removeIcon={null}
                         value={selectedRows} onClick={handleSelectModelId}
                     >
-
                     </Select>
                     <div className={styles['hr']}></div>
 
@@ -212,7 +205,6 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
                 <ModalTable name="model" onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <ModelModal getOptionsList={fetchModelsList} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} modelType='text_embedding' handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>
-
         </div>
 
     );

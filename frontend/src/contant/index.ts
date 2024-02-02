@@ -4,6 +4,15 @@ interface projectHomeType {
     key: string;
     [key: string]: any;
 }
+interface ApiErrorResponse {
+    response: {
+      data: {
+        error: {
+          message: string;
+        };
+      };
+    };
+  }
 interface RecordType {
     name: string;
     model_id: string;
@@ -71,4 +80,5 @@ interface contentRefType {
     scrollHeight?:any;
     scrollTo?:any
 }
+export default ApiErrorResponse;
 export type {contentRefType,formDataType,settingModalProps,promptListType, projectIdType,ModelProviderType,projectHomeType,RecordType,ChildRefType,TableProps,modelModalProps}

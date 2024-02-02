@@ -13,9 +13,16 @@ import ModelModal from '@/components/modelModal';
 import closeIcon from '../../assets/img/x-close.svg'
 import { toast } from 'react-toastify';
 import { RecordType, ChildRefType, formDataType } from '../../contant/index.ts'
+const typeReverse = {
+    instruct_completion: 'Instruct Completion',
+    chat_completion: 'Chat Completion',
+    text_embedding: 'Text Embedding'
+}
 function ModelsPage() {
     const [form] = Form.useForm()
     const [form1] = Form.useForm()
+    const [type, setType] = useState('')
+    const [proerties, setProerties] = useState('')
     const [loading, setLoading] = useState(false);
     const childRef = useRef<ChildRefType | null>(null);
     const [modelOne, setModelOne] = useState(false);
@@ -159,6 +166,8 @@ function ModelsPage() {
     }
     const fetchEditFormData = async (model_id: string, provider_id: string) => {
         const res = await getModelsForm(model_id)
+        setType(res.data.type)
+        setProerties(res.data.properties)
         const res1 = await getAiModelsForm(provider_id)
         setFormData(res1.data[0].credentials_schema)
         form.setFieldsValue(res.data.display_credentials)
@@ -224,14 +233,28 @@ function ModelsPage() {
                 <Button key="submit" loading={loading} onClick={handleConfirm} className={`next-button ${styles.button}`}>
                     Confirm
                 </Button>
-            ]} placement="right" onClose={onClose} open={drawerEditOpen}>
+            ]} placement="right" onClose={onClose} open={drawerEditOpen} className='edit-modal-header'>
                 <div className={styles['second-modal']}>
                     <div className={styles['label']}>Base model</div>
                     <div className={styles['frameParent']}>
                         <div className={styles['modelproviderParent']}>
-                        <IconComponent providerId={providerId} />
+                            <IconComponent providerId={providerId} />
                             <div className={styles['openai']}>{selectedSecondId}</div>
                         </div>
+                    </div>
+                    <div className={styles['label3']} style={{marginTop:'24px'}}>Type</div>
+                    <span className={styles['modeltypetag']}>
+                        {typeReverse[type as keyof typeof typeReverse]}
+                    </span>
+                    <div className={styles['label3']} style={{marginTop:'24px'}}>Properties</div>
+                    <div className={styles['instanceParent']}>
+                        {proerties && Object.entries(proerties).map(([key, property]) => (
+                            <div className={styles['streamParent']} key={key}>
+                                <div className={styles['stream']}>{key}</div>
+                                <div className={styles['instanceChild']} />
+                                <div className={styles['on']}>{String(property)}</div>
+                            </div>
+                        ))}
                     </div>
                     <Form layout="vertical" form={form1} autoComplete="off" className={styles['input-form']} >
                         <Form.Item rules={[
