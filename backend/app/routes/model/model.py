@@ -69,6 +69,7 @@ async def api_create_model(
         name=data.name,
         model_schema_id=data.model_schema_id,
         credentials=data.credentials,
+        properties=data.properties,
     )
     return BaseSuccessDataResponse(data=model.to_dict(purpose=SerializePurpose.RESPONSE))
 
@@ -90,6 +91,7 @@ async def api_update_model(
         model_id=model_id,
         name=data.name,
         credentials=data.credentials,
+        properties=data.properties,
     )
     return BaseSuccessDataResponse(data=model.to_dict(purpose=SerializePurpose.RESPONSE))
 

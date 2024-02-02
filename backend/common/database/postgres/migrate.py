@@ -94,7 +94,7 @@ async def migrate_if_needed(
         logger.info(f"Database {db_name} is already up to date with version {current_version}")
         return
 
-    logger.debug(f"Init database {db_name} with version {current_version}")
+    logger.info(f"Init database {db_name} with version {current_version}")
     script_folder = os.path.join(os.path.dirname(__file__), migration_script_dir)
     migration_files = sorted(os.listdir(script_folder))
 

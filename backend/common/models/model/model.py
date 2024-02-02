@@ -4,7 +4,9 @@ from typing import Dict
 from common.models import SerializePurpose
 from common.utils import load_json_attr
 from common.database.redis import redis_object_pop, redis_object_set_object, redis_object_get_object
+import warnings
 
+warnings.filterwarnings("ignore", module="pydantic")
 
 __all__ = ["Model"]
 
@@ -21,6 +23,7 @@ class Model(BaseModel):
     properties: Dict
     encrypted_credentials: Dict
     display_credentials: Dict
+
     updated_timestamp: int
     created_timestamp: int
 
@@ -52,9 +55,9 @@ class Model(BaseModel):
 
         model_schema_id = row["model_schema_id"]
         model_schema = get_model_schema(model_schema_id)
-        properties = {}
+        model_schema_properties = {}
         if model_schema:
-            properties = model_schema.properties
+            model_schema_properties = model_schema.properties
         return cls(
             model_id=row["model_id"],
             model_schema_id=row["model_schema_id"],
@@ -62,7 +65,7 @@ class Model(BaseModel):
             provider_model_id=row["provider_model_id"],
             name=row["name"],
             type=row["type"],
-            properties=properties,
+            properties=load_json_attr(row, "properties", model_schema_properties),
             encrypted_credentials=load_json_attr(row, "encrypted_credentials", {}),
             display_credentials=load_json_attr(row, "display_credentials", {}),
             updated_timestamp=row["updated_timestamp"],

@@ -36,7 +36,10 @@ class ChatCompletionRequest(BaseModel):
         "By default, 'none' is selected when there are no chat_completion_functions available, "
         "and 'auto' is selected when one or more chat_completion_functions are present.",
     )
-    functions: Optional[List[ChatCompletionFunction]] = Field(None)
+    functions: Optional[List[ChatCompletionFunction]] = Field(
+        None,
+        description="The functions to be called by the model.",
+    )
 
     class Config:
         extra = Extra.forbid

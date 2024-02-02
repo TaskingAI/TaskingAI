@@ -1,8 +1,11 @@
 from enum import Enum
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict, Optional
 from common.utils import load_json_attr
 from common.models import SerializePurpose
+import warnings
+
+warnings.filterwarnings("ignore", module="pydantic")
 
 __all__ = ["ModelType", "ModelSchema"]
 
@@ -21,7 +24,7 @@ class ModelSchema(BaseModel):
     provider_model_id: str
 
     type: ModelType
-    properties: Dict
+    properties: Optional[Dict] = None
 
     @staticmethod
     def object_name():
@@ -36,7 +39,7 @@ class ModelSchema(BaseModel):
             provider_id=row["provider_id"],
             provider_model_id=row["provider_model_id"],
             type=row["type"],
-            properties=load_json_attr(row, "properties", {}),
+            properties=load_json_attr(row, "properties", None),
         )
 
     def to_dict(

@@ -10,8 +10,8 @@ default_env_values = {
     "PURPOSE": "API",
     "SERVICE_PORT": 8000,
     "POSTGRES_MAX_CONNECTIONS": 10,
-    "AES_ENCRYPTION_KEY": "1234567890123456789012345678901234567890123456789012345678901234",
-    "JWT_SECRET_KEY": "1234567890123456789012345678901234567890123456789012345678901234",
+    "AES_ENCRYPTION_KEY": "b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0",
+    "JWT_SECRET_KEY": "dbefe42f34473990a3fa903a6a3283acdc3a910beb1ae271a6463ffa5a926bfb",
     "DEFAULT_ADMIN_USERNAME": "admin",
     "DEFAULT_ADMIN_PASSWORD": "TaskingAI321",
 }
@@ -56,8 +56,8 @@ class Config:
         logger.info(f"Init Config")
 
         # version
-        self.VERSION = "0.1.1"
-        self.POSTGRES_SCHEMA_VERSION = 2
+        self.VERSION = "0.1.2"
+        self.POSTGRES_SCHEMA_VERSION = 3
 
         # mode
         self.MODE = load_str_env("MODE", required=True)

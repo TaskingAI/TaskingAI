@@ -34,6 +34,7 @@ class ModelCreateRequest(BaseModel):
     name: str = Field(..., min_length=1, max_length=256, description="The name of the model.")
     model_schema_id: str = Field(..., min_length=1, max_length=50, description="The provider_model_id of the model.")
     credentials: Dict = Field(default=None, description="The credentials of the model.")
+    properties: Optional[Dict] = Field(default=None, description="The properties of the model.")
 
 
 # ----------------------------
@@ -44,6 +45,7 @@ class ModelCreateRequest(BaseModel):
 class ModelUpdateRequest(BaseModel):
     name: Optional[str] = Field(default=None, min_length=1, max_length=255, description="The name of the model.")
     credentials: Optional[Dict] = Field(default=None, description="The credentials of the model.")
+    properties: Optional[Dict] = Field(default=None, description="The properties of the model.")
 
     @model_validator(mode="before")
     def custom_validate(cls, data: Any):

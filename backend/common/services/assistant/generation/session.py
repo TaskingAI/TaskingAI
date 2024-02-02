@@ -74,7 +74,7 @@ class Session(ABC):
         self.model = await get_model(self.assistant.model_id)
         self.model_schema = self.model.model_schema()
 
-        model_streaming: bool = self.model_schema.properties.get("streaming", False)
+        model_streaming: bool = self.model.properties.get("streaming", False)
         if not model_streaming and stream:
             raise_http_error(
                 ErrorCode.INVALID_REQUEST,
@@ -186,7 +186,7 @@ class Session(ABC):
                 else:
                     raise MessageGenerationException(
                         f"The tool {tool_name} called by the model {self.model_schema.model_id} "
-                        f"({self.model_schema.properties}/{self.model_schema.provider_model_id}) does not exist."
+                        f"({self.model_schema.provider_id}/{self.model_schema.provider_model_id}) does not exist."
                     )
 
             if log:
