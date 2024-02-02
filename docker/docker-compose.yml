@@ -12,12 +12,6 @@ services:
     image: taskingai/taskingai-inference:v0.1.6
     environment:
       AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
-    healthcheck:
-      test:
-        ["CMD", "curl", "-f", "http://backend-inference:8000/v1/health_check"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
 
   backend-api:
     image: taskingai/taskingai-server:v0.1.1
@@ -28,11 +22,6 @@ services:
       AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
       DEFAULT_ADMIN_USERNAME: admin
       DEFAULT_ADMIN_PASSWORD: TaskingAI321
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://backend-api:8000/v1/health_check"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
     depends_on:
       - db
       - cache
@@ -45,14 +34,10 @@ services:
       REDIS_URL: redis://:TaskingAI321@cache:6379/0
       TASKINGAI_INFERENCE_URL: http://backend-inference:8000
       AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
+      JWT_SECRET_KEY: dbefe42f34473990a3fa903a6a3283acdc3a910beb1ae271a6463ffa5a926bfb
       PURPOSE: WEB
       DEFAULT_ADMIN_USERNAME: admin
       DEFAULT_ADMIN_PASSWORD: TaskingAI321
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://backend-web:8000/api/v1/health_check"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
     depends_on:
       - db
       - cache

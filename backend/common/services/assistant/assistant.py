@@ -9,7 +9,6 @@ from common.models import (
     AssistantRetrievalMethod,
     Model,
     ModelType,
-    ModelSchema,
     AssistantMemory,
 )
 from common.database_ops.assistant import assistant as db_assistant
@@ -160,13 +159,12 @@ async def create_assistant(
 
     # validate chat completion model
     model: Model = await get_model(model_id)
-    model_schema: ModelSchema = model.model_schema()
-    if not model_schema.type == ModelType.CHAT_COMPLETION:
+    if not model.type == ModelType.CHAT_COMPLETION:
         raise_http_error(
             ErrorCode.REQUEST_VALIDATION_ERROR,
             message=f"Model {model_id} is not a valid chat completion model.",
         )
-    model_function_call_enabled = model_schema.properties.get("function_call", False)
+    model_function_call_enabled = model.properties.get("function_call", False)
 
     # validate tools
     if tools:
@@ -270,8 +268,7 @@ async def update_assistant(
 
     # get model properties
     model: Model = await get_model(model_id)
-    model_schema: ModelSchema = model.model_schema()
-    model_function_call_enabled = model_schema.properties.get("function_call", False)
+    model_function_call_enabled = model.properties.get("function_call", False)
 
     # validate tools
     if tools:

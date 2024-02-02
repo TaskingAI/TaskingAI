@@ -13,6 +13,7 @@ async def create_model(
     type: ModelType,
     encrypted_credentials: Dict,
     display_credentials: Dict,
+    properties: Dict,
 ):
     new_id = Model.generate_random_id()
 
@@ -28,8 +29,9 @@ async def create_model(
                 name,
                 type,
                 encrypted_credentials,
-                display_credentials
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                display_credentials,
+                properties
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         """,
             new_id,
             model_schema_id,
@@ -39,6 +41,7 @@ async def create_model(
             type.value,
             json.dumps(encrypted_credentials),
             json.dumps(display_credentials),
+            json.dumps(properties),
         )
 
     # 2. get and add to redis
