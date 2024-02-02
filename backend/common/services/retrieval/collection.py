@@ -89,7 +89,7 @@ async def create_collection(
         )
 
     # validate embedding size
-    embedding_size = embedding_model.model_schema().properties.get("embedding_size")
+    embedding_size = embedding_model.properties.get("embedding_size")
     if not embedding_size:
         raise_http_error(
             ErrorCode.REQUEST_VALIDATION_ERROR,
