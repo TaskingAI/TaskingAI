@@ -112,7 +112,15 @@ async def create_model(
     # verify model schema exists
     model_schema: ModelSchema = get_model_schema(model_schema_id)
     if not model_schema:
-        raise_http_error(ErrorCode.OBJECT_NOT_FOUND, message=f"Model schema {model_schema_id} not found.")
+        raise_http_error(
+            ErrorCode.OBJECT_NOT_FOUND,
+            message=f"Model schema {model_schema_id} not found.",
+        )
+    if model_schema.properties is None and properties is not None:
+        raise_http_error(
+            ErrorCode.REQUEST_VALIDATION_ERROR,
+            message="Properties are not allowed for this model schema.",
+        )
 
     # get provider
     provider: Provider = get_provider(model_schema.provider_id)
