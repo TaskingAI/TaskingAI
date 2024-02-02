@@ -63,17 +63,14 @@
                                 height: 100% !important;
 
                                 .ant-table-body {
-                                    min-height: 400px !important;
+                                    min-height: calc(100% - 56px) !important;
 
                                     table {
                                         height: 100% !important;
-                                        min-height: 400px !important;
-
+                                        min-height: 100% !important;
                                         .ant-table-placeholder {
                                             height: 100% !important;
-
                                         }
-
                                     }
                                 }
                             }

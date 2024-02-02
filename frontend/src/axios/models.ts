@@ -4,10 +4,8 @@ const getAiModelsList = async (offset:number, limit:number, type:string, provide
     const project_base_url = `api/v1`
     if (type) {
         return await request.get(`${project_base_url}/model_schemas?offset=${offset}&limit=${limit}&type=${type}&provider_id=${providerId}`)
-
     } else {
         return await request.get(`${project_base_url}/model_schemas?offset=${offset}&limit=${limit}&provider_id=${providerId}`)
-
     }
 }
 

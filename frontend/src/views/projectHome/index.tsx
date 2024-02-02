@@ -162,7 +162,7 @@ const ProjectHome = () => {
                                     <Link to={'/project/apikeys'}>API Keys</Link>
                                 </Menu.Item>
 
-                                <Menu.Item icon={<Back className="svg-icons" />} onClick={handleBack} className='orgination' key='/'>
+                                <Menu.Item icon={<Back className="svg-icons" />} onClick={handleBack} className='orgination' key='/Logout'>
                                     <span onClick={handleBack}>Logout</span>
                                 </Menu.Item>
                                 <Menu.Item  className='version' key='/'>

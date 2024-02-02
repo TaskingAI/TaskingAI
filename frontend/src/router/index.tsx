@@ -35,6 +35,7 @@ export const router_item = [
                 path: 'collections/:collectionId?', element: lazyLoad(lazy(() => import("@/components/retrieval/index.tsx"))), key: 'retrieval',
                 children: [
                     { path: 'records', element: lazyLoad(lazy(() => import("@/components/recordPage/index.tsx")) as React.ComponentType<object>), key: 'records', },
+                    { path: 'chunks', element: lazyLoad(lazy(() => import("@/components/chunkPage/index.tsx")) as React.ComponentType<object>), key: 'chunk', },
                 ]
             },
             {

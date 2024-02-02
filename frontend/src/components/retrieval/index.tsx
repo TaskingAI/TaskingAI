@@ -6,12 +6,13 @@ import RecordPage from '../recordPage/index';
 import { useEffect, useState, useRef } from 'react'
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
 import EditIcon from '../../assets/img/editIcon.svg?react'
+import ChunkIcon from '../../assets/img/chunkIcon.svg?react'
 import ModalTable from '../modalTable/index';
 import ModelModal from '../modelModal/index'
 // import {TKNegativeModal} from '@taskingai/taskingai-ui'
-import { modelsTableColumn, collectionTableColumn, tooltipRecordTitle } from '../../contents/index.tsx'
+import { modelsTableColumn, collectionTableColumn, tooltipRecordTitle,tooltipChunkTitle } from '../../contents/index.tsx'
 import { ChildRefType } from '../../contant/index.ts'
-
+import ChunkPage from '../chunkPage/index.tsx';
 import ModalFooterEnd from '../modalFooterEnd/index'
 import { toast } from 'react-toastify'
 import { tooltipEditTitle, tooltipDeleteTitle } from '../../contents/index.tsx'
@@ -30,12 +31,17 @@ function Retrieval() {
         title: 'Actions',
         key: 'action',
         fixed: 'right',
-        width: 157,
+        width: 200,
         render: (_: string, record: object) => (
             <Space size="middle">
-                <div className='table-edit-icon' onClick={() => handleRecord(record)}>
+                <div className='table-edit-icon' onClick={() => handleRecord(record,'Records')}>
                     <Tooltip placement='bottom' color="#fff" arrow={false} overlayClassName='table-tooltip' title={tooltipRecordTitle}>
                         <RecordIcon />
+                    </Tooltip>
+                </div>
+                <div className='table-edit-icon' onClick={() => handleRecord(record,'Chunks')}>
+                    <Tooltip placement='bottom' color="#fff" arrow={false} overlayClassName='table-tooltip' title={tooltipChunkTitle}>
+                        <ChunkIcon />
                     </Tooltip>
                 </div>
                 <div onClick={() => handleEdit(record)} className='table-edit-icon'>
@@ -78,6 +84,7 @@ function Retrieval() {
     const [editDisabled, setEditDisabled] = useState(false)
     const [collectionId, setCollectionId] = useState('')
     const [collectionRecordId, setCollectionRecordId] = useState('')
+    const [recordOrChunk, setRecordOrChunk] = useState('Records')
     const navigate = useNavigate()
     useEffect(() => {
         const params = {
@@ -148,10 +155,11 @@ function Retrieval() {
         setOpenDrawer(true)
         setEditDisabled(false)
     }
-    const handleRecord = (val: any) => {
+    const handleRecord = (val: any,recordOrChunk:string) => {
         setCollectionRecordId(val.collection_id)
         navigate(`/project/collections/${val.collection_id}/records`)
         setDrawerName(val.name || 'Untitled Collection')
+        setRecordOrChunk(recordOrChunk)
         setRecordOpen(true)
     }
     const handleEdit = (val: any) => {
@@ -364,8 +372,8 @@ function Retrieval() {
                 <ModalTable name="model" onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <DeleteModal describe={`Are you sure you want to delete ${deleteValue || 'Untitled Collection'}? This action cannot be undone and all retrieval integrations associated with the collection will be affected.`} open={OpenDeleteModal} title='Delete Collection' projectName={deleteValue || 'Untitled Collection'} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
-            <Drawer className={styles['drawer-inner-table']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleRecordCancel} placement="right" size='large' open={recordOpen} width={1000} title={`${drawerName} / Records`}>
-                <RecordPage collectionId={collectionRecordId} ></RecordPage>
+            <Drawer className={recordOrChunk !== 'Chunks' ? styles['drawer-inner-table'] : styles['drawer-inner-chunk']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleRecordCancel} placement="right" size='large' open={recordOpen} width={1000} title={`${drawerName} / ${recordOrChunk}`}>
+               {recordOrChunk === 'Chunks' ? <ChunkPage collectionId={collectionRecordId}/> : <RecordPage collectionId={collectionRecordId} ></RecordPage>} 
             </Drawer>
         </div>)
 }

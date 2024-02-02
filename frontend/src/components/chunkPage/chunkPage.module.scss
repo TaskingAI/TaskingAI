@@ -1,0 +1,59 @@
+.record-create-model {
+    min-height: 760px;
+
+    :global {
+        .ant-modal-content {
+            height: 760px;
+            padding: 0;
+
+            .ant-modal-body {
+                height: calc(100% - 115px);
+                padding: 0px;
+                overflow: auto;
+            }
+        }
+
+    }
+
+    .text-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        .text-title {
+            position: relative;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 24px 24px 0 24px;
+            font-family: Inter;
+            color: var(--color-text-primary);
+            text-align: left;
+        }
+
+        .desc {
+            width: calc(100% - 48px) !important;
+            margin: 8px 0;
+            position: relative;
+            font-size: 14px;
+            font-family: Inter;
+            color: #777;
+            padding: 0px 24px 0 24px;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .input {
+            flex: 1;
+            margin: 0 24px 32px 24px !important;
+            width: calc(100% - 48px) !important;
+            height: 500px;
+
+            :global {
+                textarea {
+                    height: 500px;
+                }
+            }
+        }
+    }
+
+}
