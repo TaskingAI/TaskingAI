@@ -859,3 +859,18 @@ height: 100%;
     margin-right: 6px;
     animation: rotate360 1s linear infinite;
   }
+  .drawerCreate {
+    :global {
+        .ant-drawer-header {
+            .ant-drawer-header-title {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-between;
+
+                .ant-drawer-close {
+                    margin-inline-end: 0;
+                }
+            }
+        }
+    }
+}

@@ -83,11 +83,13 @@
         .ant-modal-body {
             padding: 0 24px;
         }
+
         .ant-modal-footer {
             height: 70px;
             text-align: start;
         }
     }
+
     .cancelButton {
         margin-right: 10px;
     }
@@ -333,8 +335,9 @@
                 display: flex;
                 flex-direction: row-reverse;
                 justify-content: space-between;
-                .ant-drawer-close{
-                    margin-inline-end:0;
+
+                .ant-drawer-close {
+                    margin-inline-end: 0;
                 }
             }
 
@@ -362,5 +365,21 @@
         color: #777;
         background-color: var(--color-invert-text);
         left: -6px;
+    }
+}
+
+.drawerCreate {
+    :global {
+        .ant-drawer-header {
+            .ant-drawer-header-title {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-between;
+
+                .ant-drawer-close {
+                    margin-inline-end: 0;
+                }
+            }
+        }
     }
 }
