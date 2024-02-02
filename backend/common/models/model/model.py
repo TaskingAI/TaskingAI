@@ -57,7 +57,8 @@ class Model(BaseModel):
         model_schema = get_model_schema(model_schema_id)
         model_schema_properties = {}
         if model_schema:
-            model_schema_properties = model_schema.properties
+            model_schema_properties = model_schema.properties or {}
+        properties = load_json_attr(row, "properties", {}) or model_schema_properties
         return cls(
             model_id=row["model_id"],
             model_schema_id=row["model_schema_id"],
@@ -65,7 +66,7 @@ class Model(BaseModel):
             provider_model_id=row["provider_model_id"],
             name=row["name"],
             type=row["type"],
-            properties=load_json_attr(row, "properties", model_schema_properties),
+            properties=properties,
             encrypted_credentials=load_json_attr(row, "encrypted_credentials", {}),
             display_credentials=load_json_attr(row, "display_credentials", {}),
             updated_timestamp=row["updated_timestamp"],
@@ -84,6 +85,7 @@ class Model(BaseModel):
             "provider_model_id": self.provider_model_id,
             "name": self.name,
             "type": self.type,
+            "properties": self.properties,
             "updated_timestamp": self.updated_timestamp,
             "created_timestamp": self.created_timestamp,
         }
@@ -94,7 +96,6 @@ class Model(BaseModel):
 
         elif purpose == SerializePurpose.RESPONSE:
             ret["display_credentials"] = self.display_credentials
-            ret["properties"] = self.model_schema().properties
 
         return ret
 
