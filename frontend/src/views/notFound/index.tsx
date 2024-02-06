@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import illustration from '../../assets/img/Illustration.png'
-import "./notFound.scss";
+import styles from  "./notFound.module.scss";
 
 const NotFound = () => {
     const navigate = useNavigate();
@@ -13,17 +13,17 @@ const NotFound = () => {
         }
     }
   return (
-    <div className="div">
-      <div className="frame">
-        <img className="illustration-icon" src={illustration} />
-        <div className="title-section">
-          <b className="title">Page Not Found</b>
-          <div className="subtitle">
+    <div className={styles["div"]}>
+      <div className={styles["frame"]}>
+        <img className={styles["illustration-icon"]} src={illustration} />
+        <div className={styles["title-section"]}>
+          <b className={styles["title"]}>Page Not Found</b>
+          <div className={styles["subtitle"]}>
             The page you are looking for doesn’t exist or has been moved
           </div>
         </div>
-        <div className="home-button" onClick={handlerBackHome}>
-          <div className="text">Back Home</div>
+        <div className={styles["home-button"]} onClick={handlerBackHome}>
+          <div className={styles["text"]}>Back Home</div>
         </div>
       </div>
     </div>

@@ -165,7 +165,7 @@ const ProjectHome = () => {
                                 <Menu.Item icon={<Back className="svg-icons" />} onClick={handleBack} className='orgination' key='/'>
                                     <span onClick={handleBack}>Logout</span>
                                 </Menu.Item>
-                                <Menu.Item  className='version'>
+                                <Menu.Item  className='version' disabled style={{cursor:"default"}}>
                                     <span>TaskingAI Community {config.version}</span>
                                 </Menu.Item>
                             </Menu>

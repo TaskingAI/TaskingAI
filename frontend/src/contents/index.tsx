@@ -94,18 +94,59 @@ const modelsTableColumn: any = [
         width: 360,
         render: (proerties: object) => (
             <div style={{ display: 'flex' }}>
-
-                {proerties && typeof proerties === 'object' && Object.entries(proerties).map(([key, property]) => (
-                    <div className='streamParent' key={key} style={{ display: 'flex', border: '1px solid #e4e4e4', borderRadius: '8px', width: 'auto', padding: '0 4px', marginRight: '12px' }}>
-                        <span className='stream' style={{ borderRight: '1px solid #e4e4e4', paddingRight: '2px' }}>{key}</span>
-                        <span className='on' style={{ paddingLeft: '2px' }}>{String(property)}</span>
-                    </div>
-                )).slice(0, 2)}
-                {proerties && typeof proerties === 'object' && Object.entries(proerties).length > 2 && (
-                    <div className='streamParent' style={{ border: '1px solid #e4e4e4', borderRadius: '8px', width: 'auto', padding: '0 4px' }}>
-                        <span className='stream' style={{ paddingRight: '2px' }}>+{Object.entries(proerties).length - 2}</span>
-                    </div>
-                )}
+                {
+                    proerties &&
+                    typeof proerties === "object" &&
+                    Object.entries(proerties)
+                        .filter(([_key, property]) => property !== null)
+                        .map(([key, property]) => (
+                            <div
+                                className="streamParent"
+                                key={key}
+                                style={{
+                                    display: "flex",
+                                    border: "1px solid #e4e4e4",
+                                    borderRadius: "8px",
+                                    width: "auto",
+                                    padding: "0 4px",
+                                    marginRight: "12px",
+                                }}
+                            >
+                                <span
+                                    className="stream"
+                                    style={{ borderRight: "1px solid #e4e4e4", paddingRight: "2px" }}
+                                >
+                                    {key}
+                                </span>
+                                <span className="on" style={{ paddingLeft: "2px" }}>
+                                    {String(property)}
+                                </span>
+                            </div>
+                        ))
+                        .slice(0, 2)
+                }
+                {
+                    proerties &&
+                    typeof proerties === "object" &&
+                    Object.entries(proerties).filter(([_key, property]) => property !== null)
+                        .length > 2 && (
+                        <div
+                            className="streamParent"
+                            style={{
+                                border: "1px solid #e4e4e4",
+                                borderRadius: "8px",
+                                width: "auto",
+                                padding: "0 4px",
+                            }}
+                        >
+                            <span className="stream" style={{ paddingRight: "2px" }}>
+                                +
+                                {Object.entries(proerties).filter(([_key, property]) => property !== null)
+                                    .length - 2}
+                            </span>
+                        </div>
+                    )
+                }
             </div>
         ),
     },
@@ -362,4 +403,4 @@ const assistantTableColumn: any = [
     },
 ]
 
-export { collectionTableColumn,tooltipChunkTitle, assistantTableColumn, apikeysTableColumn, actionsTableColumn, tooltipEditTitle,tooltipRecordTitle, tooltipDeleteTitle, tooltipPlaygroundTitle, tooltipShowTitle, tooltipHideTitle, modelsTableColumn };
+export { collectionTableColumn, tooltipChunkTitle, assistantTableColumn, apikeysTableColumn, actionsTableColumn, tooltipEditTitle, tooltipRecordTitle, tooltipDeleteTitle, tooltipPlaygroundTitle, tooltipShowTitle, tooltipHideTitle, modelsTableColumn };

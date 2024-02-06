@@ -18,6 +18,7 @@
         position: relative;
         letter-spacing: -0.02em;
         line-height: 72px;
+        font-weight: 600;
     }
 
     .subtitle {
@@ -35,13 +36,11 @@
         justify-content: flex-start;
         gap: 24px;
     }
-
     .text {
         position: relative;
         line-height: 28px;
-        font-weight: 600;
+        color:var(--color-invert-text);
     }
-
     .frame,
     .home-button {
         display: flex;
@@ -56,10 +55,11 @@
         overflow: hidden;
         flex-direction: row;
         justify-content: center;
-        padding: 16px 32px;
+        padding: 16px 24px;
         text-align: left;
-        font-size: var(--text-lg-semibold-size);
+        font-size: 30px;
         color: var(--base-white);
+        width: 180px;
     }
 
     .frame {
