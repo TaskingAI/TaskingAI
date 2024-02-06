@@ -57,7 +57,7 @@ function RecordPage({ collectionId }) {
             key: 'content',
             ellipsis: true,
             render: (text) => (
-                <Tooltip title={text.text} placement='bottom'><span style={{ maxWidth: '480px', overflow: 'hidden', display: 'inline-block' }}>{text}</span></Tooltip>
+                <Tooltip title={text} placement='bottom'><span style={{ maxWidth: '480px', overflow: 'hidden', display: 'inline-block' }}>{text}</span></Tooltip>
             ),
         },
         {
