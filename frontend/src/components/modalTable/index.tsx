@@ -83,7 +83,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                         y: containerHeight - 202,
                     });
                 })
-            } else if (modalInnerTable && !modalOpen) {
+            } else if (modalInnerTable) {
                 setTimeout(() => {
                     const tableContainer: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container table');
                     const tableContainerH: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container');
