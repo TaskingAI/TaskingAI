@@ -1035,7 +1035,7 @@ function Playground() {
                                 {contentTalk.map((item, index) => (
                                     <div className={styles['message']} key={index} ref={divRef}>
                                         <div className={`${styles.subText1} ${item.role === 'user' ? 'user' : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
-                                        {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text}</div>}
+                                        {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`} style={{whiteSpace:"pre-line"}}>{item.content.text}</div>}
                                         {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1, index1) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && styles.lastItem}`}>
                                             {(item1.color === 'orange' && index === contentTalk.length - 1 && item1.event_step !== '') ?
                                                 (<div style={{ display: 'flex', alignItems: 'center' }}>{lottieAnimShow && (
@@ -1047,7 +1047,7 @@ function Playground() {
                                                 </div>) :
                                                 (
                                                     item1.color !== 'orange' && (<div onClick={() => handleClickDebug(item1)} style={{ display: 'flex', alignItems: 'center' }}>
-                                                        {(item1.event_step !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text' }}>{item1.event_step}</span></>)}
+                                                        {(item1.event_step !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text',whiteSpace:"pre-line" }}>{item1.event_step}</span></>)}
                                                         {(item1.event_step === 'Error Occurred') && (<><ErrorIcon className={styles['message-success']}></ErrorIcon><span style={{ color: '#ec1943', cursor: 'pointer' }}>Error Occurred</span></>)}
                                                     </div>
                                                     )
