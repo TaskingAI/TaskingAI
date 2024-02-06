@@ -56,7 +56,7 @@ class Config:
         logger.info(f"Init Config")
 
         # version
-        self.VERSION = "0.1.2"
+        self.VERSION = "0.1.3"
         self.POSTGRES_SCHEMA_VERSION = 3
 
         # mode
