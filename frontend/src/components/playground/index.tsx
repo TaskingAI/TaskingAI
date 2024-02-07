@@ -119,6 +119,7 @@ function Playground() {
     const [noPreviousChat, setNoPreviousChat] = useState(false)
     const [noPreviousMessage, setNoPreviousMessage] = useState(false)
     const [generateFlag, setGenerateFlag] = useState(false)
+    const [sendGenerateLoading, setSendGenerateLoading] = useState(false)
     const [groupedMessages, setGroupedMessages] = useState({
         role: 'Assistant',
         content: { text: [{ event_step: '', color: undefined, event_id: undefined }] },
@@ -154,6 +155,7 @@ function Playground() {
     useEffect(() => {
         if (generateFlag) {
             handleGenerateMessage('flag')
+            setGenerateButtonLoading(false)
             setGenerateFlag(false)
         }
     }, [generateFlag])
@@ -464,7 +466,11 @@ function Playground() {
             throw new Error('Please wait for the assistant to respond.');
         }
         try {
-            setSendButtonLoading(true)
+            if (flag === 'flag') {
+                setSendGenerateLoading(true)
+            } else {
+                setSendButtonLoading(true)
+            }
             let id;
             if (assistantId[0].split('-')[1]) {
                 const splitArray = assistantId[0].split('-')
@@ -491,7 +497,6 @@ function Playground() {
         }
         setSendButtonLoading(false)
     }
-
     const handleInputPromptChange = (index, newValue) => {
         setSystemPromptTemplate((prevValues) =>
             prevValues.map((item, i) =>
@@ -551,6 +556,7 @@ function Playground() {
             })
             source.addEventListener('error', (e) => {
                 setGenerateButtonLoading(false)
+                setSendGenerateLoading(false)
                 console.log(e)
                 if (e.data) {
                     toast.error(JSON.parse(e.data).error.message, { autoClose: 10000 })
@@ -574,12 +580,15 @@ function Playground() {
                 console.log(error)
             } finally {
                 setGenerateButtonLoading(false)
+                setSendGenerateLoading(false)
             }
         } else if (stream && !debug) {
             let arr = []
             source.addEventListener("message", (e) => {
                 if (e.data === '[DONE]') {
                     setGenerateButtonLoading(false)
+                    setSendGenerateLoading(false)
+
                     return
                 }
                 const exJson = JSON.parse(e.data);
@@ -595,6 +604,7 @@ function Playground() {
             source.addEventListener("message", (e) => {
                 if (e.data === '[DONE]') {
                     setGenerateButtonLoading(false)
+                    setSendGenerateLoading(false)
                     return
                 }
                 const data = JSON.parse(e.data)
@@ -611,6 +621,7 @@ function Playground() {
             source.addEventListener("message", (e) => {
                 if (e.data === '[DONE]') {
                     setGenerateButtonLoading(false)
+                    setSendGenerateLoading(false)
                     return
                 }
                 const data = JSON.parse(e.data)
@@ -826,6 +837,7 @@ function Playground() {
         }
         setContentTalk([])
         setGenerateButtonLoading(false)
+        setSendGenerateLoading(false)
         await fetchHistoryMessage(id, value, param)
         setContentTalkLoading(false)
     }
@@ -955,7 +967,7 @@ function Playground() {
         setUpdateRetrievalPrevButton(true)
     }
     const handleSendAndGenerateMessage = async () => {
-        if(sendButtonLoading || generateButtonLoading) {
+        if (sendButtonLoading || generateButtonLoading) {
             return toast.error('Please wait for the info to respond.')
         }
         try {
@@ -1087,7 +1099,7 @@ function Playground() {
                         <TextArea className={styles['textarea']} autoSize={{ minRows: 3, maxRows: 6 }} value={contentValue} onChange={(e) => setContentValue(e.target.value)}></TextArea>
                         <div className={styles['button-group']}>
                             <div style={{ display: 'flex' }}>
-                                <Button className={`next-button ${styles.button}`} onClick={handleSendAndGenerateMessage}>Send and Generate</Button>
+                                <Button className={`next-button ${styles.button}`} onClick={handleSendAndGenerateMessage} loading={sendGenerateLoading}>Send and Generate</Button>
                                 <div className={`${styles.formbuttoncancel} ${sendButtonLoading ? styles.loading : ''}`} onClick={handleCreateMessage}>
                                     {sendButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}  <div className={styles['text1']}>Send</div>
                                 </div>
