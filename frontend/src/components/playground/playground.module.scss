@@ -1,13 +1,14 @@
-:global{
+:global {
     .ant-spin-nested-loading {
         height: 100%;
-    
+
         .ant-spin-container {
             height: 100%;
             overflow: hidden;
         }
     }
 }
+
 .playground {
     display: flex;
     height: 100%;
@@ -30,6 +31,7 @@
                 margin-right: 8px;
                 // margin-bottom: 10px;
             }
+
             :global {
                 .ant-btn {
                     display: flex;
@@ -37,6 +39,7 @@
                     align-items: center;
                 }
             }
+
             .edit-button:hover {
                 border: 1px solid var(--color-divider) !important;
                 color: var(--color-text-primary) !important;
@@ -275,7 +278,8 @@
         display: flex;
         flex-direction: column;
         position: relative;
-height: 100%;
+        height: 100%;
+
         .header-top {
             display: flex;
             align-items: center;
@@ -286,6 +290,7 @@ height: 100%;
             .header-left {
                 display: flex;
                 align-items: center;
+
                 .chat {
                     position: relative;
                     font-size: 18px;
@@ -538,6 +543,9 @@ height: 100%;
                     margin-left: 12px
                 }
 
+                .button {
+                    margin-right: 12px;
+                }
 
                 .text1 {
                     position: relative;
@@ -706,7 +714,7 @@ height: 100%;
             }
         }
     }
- 
+
 }
 
 .setting-modal {
@@ -784,31 +792,38 @@ height: 100%;
 .collapse-drawer {
     margin-top: 24px
 }
+
 .cancelButton {
     margin-right: 10px;
 }
+
 .retrieval-model {
     :global {
         .ant-modal-body {
             padding: 0 24px;
         }
+
         .ant-modal-footer {
             height: 70px;
             text-align: start;
         }
     }
+
     .cancelButton {
         margin-right: 10px;
     }
 }
+
 .selectAssistant {
     margin: auto;
     width: 192px;
-    margin-top:calc(50vh - 80px);
+    margin-top: calc(50vh - 80px);
     height: 161px;
+
     .svg {
         width: 192px;
     }
+
     .select-assistant {
         position: relative;
         font-size: 14px;
@@ -823,6 +838,7 @@ height: 100%;
         display: flex;
         width: 192px;
         justify-content: center;
+
         .plusParent {
             display: flex;
         }
@@ -834,6 +850,7 @@ height: 100%;
             height: 32px;
             padding: 2px 10px;
         }
+
         .prompt-button:hover {
             background-color: var(--color-positive-hover);
             color: white;
@@ -841,25 +858,31 @@ height: 100%;
         }
     }
 }
+
 @keyframes rotate360 {
     from {
-      transform: rotate(0deg);
+        transform: rotate(0deg);
     }
+
     to {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
-  .loading-icon {
+}
+
+.loading-icon {
     width: 18px;
     height: 18px;
+
     svg {
         width: 18px;
         height: 18px;
     }
+
     margin-right: 6px;
     animation: rotate360 1s linear infinite;
-  }
-  .drawerCreate {
+}
+
+.drawerCreate {
     :global {
         .ant-drawer-header {
             .ant-drawer-header-title {
