@@ -279,7 +279,7 @@ function RecordPage({ collectionId }) {
                     <InputNumber className={styles['input-number']}  placeholder='Enter chunk overlap' value={chunkOverlap} onChange={(value) => setChunkOverlap(value)} parser={(value: string) => (isNaN(Number(value)) ? 1 : parseInt(value, 10))} min={0} max={100}></InputNumber>
                 </div>
             </Modal>
-            <DeleteModal open={OpenDeleteModal} describe={`Are you sure you want to delete reocrd ${deleteId}? This action cannot be undone and all chunks associated with the reocrd will be deleted.`} title="Delete Record" projectName={deleteId} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
+            <DeleteModal open={OpenDeleteModal} describe={`Are you sure you want to delete record ${deleteId}? This action cannot be undone and all chunks associated with the record will be deleted.`} title="Delete Record" projectName={deleteId} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
         </Spin>
     );
 }

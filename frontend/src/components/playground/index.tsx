@@ -118,6 +118,7 @@ function Playground() {
     const [collapseLabel2, setCollapseLabel2] = useState('')
     const [noPreviousChat, setNoPreviousChat] = useState(false)
     const [noPreviousMessage, setNoPreviousMessage] = useState(false)
+    const [generateFlag, setGenerateFlag] = useState(false)
     const [groupedMessages, setGroupedMessages] = useState({
         role: 'Assistant',
         content: { text: [{ event_step: '', color: undefined, event_id: undefined }] },
@@ -150,6 +151,12 @@ function Playground() {
         setCheckBoxValue([1, 2])
         initialFunction()
     }, [])
+    useEffect(() => {
+        if (generateFlag) {
+            handleGenerateMessage('flag')
+            setGenerateFlag(false)
+        }
+    }, [generateFlag])
     useEffect(() => {
         if (contentRef.current) {
             if (shouldSmoothScroll) {
@@ -195,7 +202,7 @@ function Playground() {
         return updatedGroupedMessages;
     }
     const fetchAssistantsList = async () => {
-        const res: any = await getAssistantsList({ limit:assistantLimit || 20 })
+        const res: any = await getAssistantsList({ limit: assistantLimit || 20 })
         const data = res.data.map((item) => {
             return {
                 ...item,
@@ -441,7 +448,7 @@ function Playground() {
         }
         setLoading(false)
     }
-    const handleCreateMessage = async () => {
+    const handleCreateMessage = async (flag?: any) => {
         const params = {
             role: 'user',
             content: {
@@ -450,10 +457,11 @@ function Playground() {
             metadata: {}
         }
         if (contentValue === '') {
-            return toast.error('Empty message is not allowed')
+            toast.error('Empty message is not allowed')
+            throw new Error('Empty message is not allowed');
         }
         if (sendButtonLoading) {
-            return
+            throw new Error('Please wait for the assistant to respond.');
         }
         try {
             setSendButtonLoading(true)
@@ -472,13 +480,18 @@ function Playground() {
                 userId: true,
                 flag: true
             }])
-
+            if (flag === 'flag') {
+                setGenerateFlag(true)
+            } else {
+                setGenerateFlag(false)
+            }
             setContentValue('')
         } catch (error) {
             console.log(error)
         }
         setSendButtonLoading(false)
     }
+
     const handleInputPromptChange = (index, newValue) => {
         setSystemPromptTemplate((prevValues) =>
             prevValues.map((item, i) =>
@@ -496,11 +509,11 @@ function Playground() {
         await fetchModelsList(params)
     }
 
-    const handleGenerateMessage = async () => {
+    const handleGenerateMessage = async (contentTalk1?: any) => {
         if (generateButtonLoading) {
             return toast.error('Please wait for the assistant to respond.')
         }
-        if (contentTalk[contentTalk.length - 1]?.role.toLowerCase() === 'assistant') {
+        if (contentTalk1 !== 'flag' && contentTalk[contentTalk.length - 1]?.role.toLowerCase() === 'assistant') {
             return toast.error('Please send the user message first.')
         }
         let id;
@@ -539,7 +552,7 @@ function Playground() {
             source.addEventListener('error', (e) => {
                 setGenerateButtonLoading(false)
                 console.log(e)
-                if(e.data) {
+                if (e.data) {
                     toast.error(JSON.parse(e.data).error.message, { autoClose: 10000 })
                 }
             })
@@ -752,7 +765,7 @@ function Playground() {
     const handleCloseModal = () => {
         setOpenModalTable(false)
     }
-    const hangleChangeAuthorization = (value:string) => {
+    const hangleChangeAuthorization = (value: string) => {
         setAuthentication(value)
     }
     const handleRecordsSelected = (value, selectedRows) => {
@@ -772,7 +785,7 @@ function Playground() {
         setAssistantId(tag)
         setDefaultSelectedAssistant(tag)
     }
-    const handleCustom = (value:string) => {
+    const handleCustom = (value: string) => {
         setCustom(value)
     }
     const handleCollectionSelected = (value, selectedRows) => {
@@ -783,7 +796,7 @@ function Playground() {
     const handleMemoryChange1 = (value) => {
         setMemoryValue(value)
     }
-    const handleSchemaChange = (value:string) => {
+    const handleSchemaChange = (value: string) => {
         setSchema(value)
     }
     const handleCreateAction = () => {
@@ -856,7 +869,7 @@ function Playground() {
     const handleInputValueTwo = (value) => {
         setInputValueTwo(value)
     }
-    const onRadioChange = (value:string) => {
+    const onRadioChange = (value: string) => {
         setRadioValue(value)
     }
     const handleActionModalTable = () => {
@@ -940,6 +953,16 @@ function Playground() {
     const handleSetModelConfirmOne = () => {
         setModelOne(false)
         setUpdateRetrievalPrevButton(true)
+    }
+    const handleSendAndGenerateMessage = async () => {
+        if(sendButtonLoading || generateButtonLoading) {
+            return toast.error('Please wait for the info to respond.')
+        }
+        try {
+            await handleCreateMessage('flag')
+        } catch (error) {
+            console.log(error)
+        }
     }
     return (
         <Spin spinning={loading}>
@@ -1035,7 +1058,7 @@ function Playground() {
                                 {contentTalk.map((item, index) => (
                                     <div className={styles['message']} key={index} ref={divRef}>
                                         <div className={`${styles.subText1} ${item.role === 'user' ? 'user' : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
-                                        {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`} style={{whiteSpace:"pre-line"}}>{item.content.text}</div>}
+                                        {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`} style={{ whiteSpace: "pre-line" }}>{item.content.text}</div>}
                                         {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1, index1) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && styles.lastItem}`}>
                                             {(item1.color === 'orange' && index === contentTalk.length - 1 && item1.event_step !== '') ?
                                                 (<div style={{ display: 'flex', alignItems: 'center' }}>{lottieAnimShow && (
@@ -1047,7 +1070,7 @@ function Playground() {
                                                 </div>) :
                                                 (
                                                     item1.color !== 'orange' && (<div onClick={() => handleClickDebug(item1)} style={{ display: 'flex', alignItems: 'center' }}>
-                                                        {(item1.event_step !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text',whiteSpace:"pre-line" }}>{item1.event_step}</span></>)}
+                                                        {(item1.event_step !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text', whiteSpace: "pre-line" }}>{item1.event_step}</span></>)}
                                                         {(item1.event_step === 'Error Occurred') && (<><ErrorIcon className={styles['message-success']}></ErrorIcon><span style={{ color: '#ec1943', cursor: 'pointer' }}>Error Occurred</span></>)}
                                                     </div>
                                                     )
@@ -1064,7 +1087,7 @@ function Playground() {
                         <TextArea className={styles['textarea']} autoSize={{ minRows: 3, maxRows: 6 }} value={contentValue} onChange={(e) => setContentValue(e.target.value)}></TextArea>
                         <div className={styles['button-group']}>
                             <div style={{ display: 'flex' }}>
-                                {/* <Button className='next-button button'>Send and generate</Button> */}
+                                <Button className={`next-button ${styles.button}`} onClick={handleSendAndGenerateMessage}>Send and Generate</Button>
                                 <div className={`${styles.formbuttoncancel} ${sendButtonLoading ? styles.loading : ''}`} onClick={handleCreateMessage}>
                                     {sendButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}  <div className={styles['text1']}>Send</div>
                                 </div>

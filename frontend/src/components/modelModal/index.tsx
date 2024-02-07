@@ -252,7 +252,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                 </Spin>
 
             </Modal>
-            <Modal className='modal-content' title='Create Model-Basic Information' width={1000} centered open={modelTwoOpen} footer={[
+            <Modal className='modal-content' title='Create Model - Basic Information' width={1000} centered open={modelTwoOpen} footer={[
                 <Button key="cancel" onClick={handleSecondCancel} className='cancel-button'>
                     Back
                 </Button>,
