@@ -139,10 +139,15 @@ function Playground() {
     }
     useEffect(() => {
         const handleClickOutside = (event) => {
+            // Check if settingModal and settingIcon are defined and contain the event target
             if (!(settingModal.current && settingModal.current.contains(event.target)) && !(settingIcon.current && settingIcon.current.contains(event.target))) {
-                settingModal.current.style.display = 'none';
+                // Additional check to ensure settingModal.current is defined before accessing its style
+                if (settingModal.current) {
+                    settingModal.current.style.display = 'none';
+                }
             }
         };
+    
         document.addEventListener('mousemove', handleClickOutside);
         return () => {
             document.removeEventListener('mousemove', handleClickOutside);
