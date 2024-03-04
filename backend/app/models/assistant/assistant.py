@@ -8,7 +8,7 @@ from tkhelper.utils import load_json_attr, generate_random_id
 from tkhelper.schemas.field import *
 
 from app.database import redis_conn, postgres_pool
-from .component import AssistantMemory
+from .memory import AssistantMemory
 from ..tool.tool import *
 from ..retrieval.retrieval import *
 
