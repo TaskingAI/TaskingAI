@@ -286,7 +286,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                             <div className='hr'></div>
                             <div className='credentials'>Properties</div>
                             {type === 'chat_completion' && <Form layout="vertical" className='second-form' form={propertyForm}>
-                                <Form.Item label="Fucntion call" required name='function_call' valuePropName="checked">
+                                <Form.Item label="Function call" required name='function_call' valuePropName="checked">
                                     <div className='description'>Indicates if the model supports function call.</div>
                                     <ConfigProvider theme={{
                                         components: {
