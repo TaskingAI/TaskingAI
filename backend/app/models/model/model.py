@@ -1,0 +1,137 @@
+from typing import Dict, List
+from tkhelper.models import ModelEntity, RedisOperator
+from tkhelper.models.operator.postgres_operator import PostgresModelOperator
+from tkhelper.utils import generate_random_id, load_json_attr
+
+from app.database import redis_conn, postgres_pool
+
+__all__ = ["Model", "model_ops"]
+
+
+class Model(ModelEntity):
+    model_id: str
+    model_schema_id: str
+
+    provider_id: str
+    provider_model_id: str
+
+    name: str
+    type: str
+    properties: Dict
+    encrypted_credentials: Dict
+    display_credentials: Dict
+    updated_timestamp: int
+    created_timestamp: int
+
+    def model_schema(self):
+        from app.services.model import get_model_schema
+
+        return get_model_schema(self.model_schema_id)
+
+    def provider(self):
+        from app.services.model import get_provider
+
+        return get_provider(self.provider_id)
+
+    @classmethod
+    def build(cls, row: Dict):
+        from app.services.model import get_model_schema
+
+        model_schema_id = row["model_schema_id"]
+        model_schema = get_model_schema(model_schema_id)
+        model_schema_properties = {}
+        if model_schema:
+            model_schema_properties = model_schema.properties or {}
+        properties = model_schema_properties or load_json_attr(row, "properties", {})
+
+        return cls(
+            model_id=row["model_id"],
+            model_schema_id=row["model_schema_id"],
+            provider_id=row["provider_id"],
+            provider_model_id=row["provider_model_id"],
+            name=row["name"],
+            type=row["type"],
+            properties=properties,
+            encrypted_credentials=load_json_attr(row, "encrypted_credentials", {}),
+            display_credentials=load_json_attr(row, "display_credentials", {}),
+            updated_timestamp=row["updated_timestamp"],
+            created_timestamp=row["created_timestamp"],
+        )
+
+    def to_response_dict(self) -> Dict:
+        model_schema = self.model_schema()
+        return {
+            "object": "Model",
+            "model_id": self.model_id,
+            "model_schema_id": self.model_schema_id,
+            "provider_id": model_schema.provider_id or self.provider_id,
+            "provider_model_id": model_schema.provider_model_id or self.provider_model_id,
+            "name": self.name,
+            "type": self.type,
+            "properties": model_schema.properties or self.properties,
+            "display_credentials": self.display_credentials,
+            "updated_timestamp": self.updated_timestamp,
+            "created_timestamp": self.created_timestamp,
+        }
+
+    @staticmethod
+    def object_name() -> str:
+        return "model"
+
+    @staticmethod
+    def object_plural_name() -> str:
+        return "models"
+
+    @staticmethod
+    def table_name() -> str:
+        return "model"
+
+    @staticmethod
+    def id_field_name() -> str:
+        return "model_id"
+
+    @staticmethod
+    def primary_key_fields() -> List[str]:
+        return ["model_id"]
+
+    @staticmethod
+    def generate_random_id() -> str:
+        return "Tp" + generate_random_id(6)
+
+    @staticmethod
+    def list_prefix_filter_fields() -> List[str]:
+        return ["model_id", "name"]
+
+    @staticmethod
+    def list_equal_filter_fields() -> List[str]:
+        return ["type"]
+
+    @staticmethod
+    def parent_models() -> List:
+        return []
+
+    @staticmethod
+    def parent_operator() -> List:
+        return []
+
+    @staticmethod
+    def create_fields() -> List[str]:
+        raise NotImplementedError
+
+    @staticmethod
+    def update_fields() -> List[str]:
+        return ["openapi_schema", "authentication"]
+
+    @staticmethod
+    def fields_exclude_in_response():
+        return ["encrypted_credentials"]
+
+
+model_ops = PostgresModelOperator(
+    postgres_pool=postgres_pool,
+    entity_class=Model,
+    redis=RedisOperator(
+        entity_class=Model,
+        redis_conn=redis_conn,
+    ),
+)
