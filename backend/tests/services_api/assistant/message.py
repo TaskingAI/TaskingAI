@@ -3,17 +3,18 @@ from typing import Dict
 
 from tests.common.utils import ResponseWrapper, get_headers, Token
 from tests.settings import HOST
-from config import CONFIG
+from app.config import CONFIG
 
 if CONFIG.WEB:
     BASE_URL = f"{HOST}:{CONFIG.SERVICE_PORT}{CONFIG.WEB_ROUTE_PREFIX}"
 elif CONFIG.API:
     BASE_URL = f"{HOST}:{CONFIG.SERVICE_PORT}{CONFIG.API_ROUTE_PREFIX}"
     from tests.common.utils import APIKEY
+
     Token = APIKEY
 
 
-async def create_message(assistant_id: str,  chat_id: str, payload: Dict):
+async def create_message(assistant_id: str, chat_id: str, payload: Dict):
     headers = get_headers(Token)
     async with aiohttp.ClientSession(headers=headers) as session:
         request_url = f"{BASE_URL}/assistants/{assistant_id}/chats/{chat_id}/messages"
@@ -25,7 +26,7 @@ async def list_messages(assistant_id: str, chat_id: str, payload: Dict = None):
     headers = get_headers(Token)
     async with aiohttp.ClientSession(headers=headers) as session:
         request_url = f"{BASE_URL}/assistants/{assistant_id}/chats/{chat_id}/messages"
-        response = await session.get(url=request_url,  params=payload)
+        response = await session.get(url=request_url, params=payload)
         return ResponseWrapper(response.status, await response.json())
 
 

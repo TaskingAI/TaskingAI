@@ -1,5 +1,5 @@
 import os
-from config import CONFIG, load_str_env
+from app.config import CONFIG, load_str_env
 
 HOST = "http://127.0.0.1"
 WEB_SERVICE_PORT = os.environ.get("WEB_SERVICE_PORT", CONFIG.SERVICE_PORT)

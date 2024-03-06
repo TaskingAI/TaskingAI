@@ -3,7 +3,7 @@ from typing import Dict
 
 from tests.common.utils import ResponseWrapper, get_headers, Token
 from tests.settings import HOST, WEB_SERVICE_PORT
-from config import CONFIG
+from app.config import CONFIG
 
 BASE_URL = f"{HOST}:{WEB_SERVICE_PORT}{CONFIG.WEB_ROUTE_PREFIX}"
 

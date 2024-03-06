@@ -2,13 +2,14 @@ import aiohttp
 from typing import Dict
 from tests.common.utils import ResponseWrapper, get_headers, Token
 from tests.settings import HOST
-from config import CONFIG
+from app.config import CONFIG
 
 if CONFIG.WEB:
     BASE_URL = f"{HOST}:{CONFIG.SERVICE_PORT}{CONFIG.WEB_ROUTE_PREFIX}"
 elif CONFIG.API:
     BASE_URL = f"{HOST}:{CONFIG.SERVICE_PORT}{CONFIG.API_ROUTE_PREFIX}"
     from tests.common.utils import APIKEY
+
     Token = APIKEY
 
 
