@@ -38,10 +38,8 @@ def add_tool_plugin_routes(route_prefix: str):
 
 
 def add_retrieval_routes(route_prefix: str):
-    from app.routes.retrieval.record import router as record_router
     from app.routes.retrieval.chunk import router as chunk_router
 
-    routes.include_router(record_router, prefix=route_prefix)
     routes.include_router(chunk_router, prefix=route_prefix)
 
 

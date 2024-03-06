@@ -1,9 +1,11 @@
 from fastapi import APIRouter
+from typing import List
+
 from tkhelper.error import raise_http_error, ErrorCode
 
-from typing import List
+from app.operators import collection_ops
 from app.models import Chunk, Collection, RetrievalResult, RetrievalRef, RetrievalType
-from .collection import get_collection
+
 from .chunk import query_chunks
 
 router = APIRouter()
@@ -18,7 +20,7 @@ async def verify_retrievals(retrieval_refs: List[RetrievalRef]):
     embedding_model_id = None
     for retrieval_ref in retrieval_refs:
         if retrieval_ref.type == RetrievalType.COLLECTION:
-            collection: Collection = await get_collection(collection_id=retrieval_ref.id)
+            collection: Collection = await collection_ops.get(collection_id=retrieval_ref.id)
             if embedding_model_id is None:
                 embedding_model_id = collection.embedding_model_id
             elif embedding_model_id != collection.embedding_model_id:
