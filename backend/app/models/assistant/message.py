@@ -112,7 +112,7 @@ class Message(ModelEntity):
 
     @staticmethod
     def primary_key_fields() -> List[str]:
-        return ["assistant_id", "chat_id", "created_timestamp", "message_id"]
+        return ["assistant_id", "chat_id", "message_id"]
 
     @staticmethod
     def generate_random_id() -> str:
@@ -134,7 +134,7 @@ class Message(ModelEntity):
 
     @staticmethod
     def create_fields() -> List[str]:
-        return ["max_count", "role", "content", "metadata"]
+        return ["role", "content", "metadata"]
 
     @staticmethod
     def update_fields() -> List[str]:

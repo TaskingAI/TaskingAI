@@ -6,7 +6,7 @@ from tkhelper.error import raise_request_validation_error
 
 from app.database import redis_conn, postgres_pool
 from app.models import Assistant, Model, ToolRef, RetrievalRef, RetrievalConfig, RetrievalMethod
-
+from app.schemas import AssistantCreateRequest, AssistantUpdateRequest
 
 from ..model import model_ops
 
@@ -76,18 +76,19 @@ class AssistantModelOperator(PostgresModelOperator):
 
         self._check_kwargs(object_id_required=False, **kwargs)
 
-        model_id = create_dict["model_id"]
-        name = create_dict["name"]
-        description = create_dict["description"]
-        system_prompt_template = create_dict["system_prompt_template"]
-        memory = create_dict["memory"]
-        tools = create_dict["tools"]
-        retrievals = create_dict["retrievals"]
-        retrieval_configs = create_dict["retrieval_configs"]
-        metadata = create_dict["metadata"]
+        request = AssistantCreateRequest(**create_dict)
+        model_id = request.model_id
+        name = request.name
+        description = request.description
+        system_prompt_template = request.system_prompt_template
+        memory = request.memory
+        tools = request.tools
+        retrievals = request.retrievals
+        retrieval_configs = request.retrieval_configs
+        metadata = request.metadata
 
         # validate model
-        model: Model = await model_ops.get_model(model_id=model_id)
+        model: Model = await model_ops.get(model_id=model_id)
         if not model.is_chat_completion():
             raise_request_validation_error(
                 f"Model {model_id} is not a valid chat completion model.",
@@ -137,15 +138,16 @@ class AssistantModelOperator(PostgresModelOperator):
         self._check_kwargs(object_id_required=True, **kwargs)
         assistant_id = kwargs.get("assistant_id")
 
-        model_id = update_dict["model_id"]
-        name = update_dict["name"]
-        description = update_dict["description"]
-        system_prompt_template = update_dict["system_prompt_template"]
-        memory = update_dict["memory"]
-        tools = update_dict["tools"]
-        retrievals = update_dict["retrievals"]
-        retrieval_configs = update_dict["retrieval_configs"]
-        metadata = update_dict["metadata"]
+        request = AssistantUpdateRequest(**update_dict)
+        model_id = request.model_id
+        name = request.name
+        description = request.description
+        system_prompt_template = request.system_prompt_template
+        memory = request.memory
+        tools = request.tools
+        retrievals = request.retrievals
+        retrieval_configs = request.retrieval_configs
+        metadata = request.metadata
 
         # get assistant
         assistant = await self.get(assistant_id=assistant_id)

@@ -56,6 +56,7 @@ class ChatModelOperator(PostgresModelOperator):
                 # get chat
                 chat = await self.get(
                     postgres_conn=conn,
+                    assistant_id=assistant_id,
                     chat_id=chat_id,
                 )
 
@@ -65,7 +66,7 @@ class ChatModelOperator(PostgresModelOperator):
                 # update assistant num_chats
                 await assistant_ops.update(
                     postgres_conn=conn,
-                    assistant=assistant,
+                    assistant_id=assistant_id,
                     update_dict={"num_chats": assistant.num_chats - 1},
                 )
 

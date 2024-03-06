@@ -5,6 +5,7 @@ from tkhelper.models.operator.postgres_operator import PostgresModelOperator
 
 from app.database import postgres_pool
 from app.models import Message, MessageContent, MessageRole, default_tokenizer, ChatMemory
+from app.schemas import MessageCreateRequest
 
 from .chat import chat_ops
 
@@ -25,9 +26,10 @@ class MessageModelOperator(PostgresModelOperator):
         chat_id = kwargs.get("chat_id")
 
         # attributes
-        role: MessageRole = create_dict["role"]
-        content: MessageContent = create_dict["content"]
-        metadata: Dict[str, str] = create_dict["metadata"]
+        request = MessageCreateRequest(**create_dict)
+        role: MessageRole = request.role
+        content: MessageContent = request.content
+        metadata: Dict[str, str] = request.metadata
 
         # get chat
         chat = await chat_ops.get(
