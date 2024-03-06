@@ -1,12 +1,10 @@
 from typing import Dict, List, Optional
 
-from tkhelper.models import ModelEntity, RedisOperator
-from tkhelper.models.operator.postgres_operator import PostgresModelOperator
+from tkhelper.models import ModelEntity
 from tkhelper.utils import generate_random_id
 
-from app.database import postgres_pool, redis_conn
 
-__all__ = ["Admin", "admin_ops"]
+__all__ = ["Admin"]
 
 
 class Admin(ModelEntity):
@@ -78,13 +76,3 @@ class Admin(ModelEntity):
     @staticmethod
     def fields_exclude_in_response():
         return ["password_hash", "salt"]
-
-
-admin_ops = PostgresModelOperator(
-    postgres_pool=postgres_pool,
-    entity_class=Admin,
-    redis=RedisOperator(
-        entity_class=Admin,
-        redis_conn=redis_conn,
-    ),
-)
