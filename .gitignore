@@ -163,3 +163,6 @@ frontend/node_modules/
 
 # MacOS
 **.DS_Store
+
+# auto
+backend/auto/

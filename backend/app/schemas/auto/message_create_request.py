@@ -22,4 +22,3 @@ class MessageCreateRequest(BaseModel):
     role: MessageRole = Field(...)
     content: MessageContent = Field(...)
     metadata: Dict = Field({}, min_length=0, max_length=16)
-    max_count: int = Field(0, ge=0)
