@@ -4,11 +4,11 @@ from tkhelper.models import SortOrderEnum
 from .utils import validate_list_cursors
 
 
-class BaseSuccessEmptyResponse(BaseModel):
+class BaseEmptyResponse(BaseModel):
     status: str = Field("success")
 
 
-class BaseSuccessDataResponse(BaseModel):
+class BaseDataResponse(BaseModel):
     status: str = Field("success")
     data: Optional[Any] = None
 
@@ -18,7 +18,7 @@ class BaseErrorResponse(BaseModel):
     error: Dict[str, Any]
 
 
-class BaseSuccessListResponse(BaseModel):
+class BaseListResponse(BaseModel):
     status: str = Field("success")
     data: Any
     fetched_count: int

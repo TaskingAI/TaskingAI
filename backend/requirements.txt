@@ -1,6 +1,6 @@
-Fastapi==0.109.1
+Fastapi==0.109.2
 uvicorn==0.23.2
-aiohttp==3.9.2
+aiohttp==3.9.3
 PyJWT==2.8.0
 python-multipart==0.0.7
 openapi_spec_validator==0.7.1
