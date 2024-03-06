@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field
 
 
+__all__ = ["AdminLoginRequest"]
+
 # ----------------------------
 # Login Admin
 # POST /admin/login

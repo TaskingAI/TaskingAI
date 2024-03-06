@@ -1,23 +1,8 @@
 from pydantic import BaseModel, Field
 
-
-# ----------------------------
-# Create API Key
-# POST /apikeys
-
-
-class ApikeyCreateRequest(BaseModel):
-    name: str = Field(..., min_length=1, max_length=255, description="Name of the API key.")
-
-
-# ----------------------------
-# Update API Key
-# POST /apikeys/{apikey_id}
-
-
-class ApikeyUpdateRequest(BaseModel):
-    name: str = Field(..., min_length=1, max_length=255, description="API key name.")
-
+__all__ = [
+    "ApikeyGetRequest",
+]
 
 # ----------------------------
 # Get API Key

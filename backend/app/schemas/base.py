@@ -1,6 +1,6 @@
 from typing import Optional, Any, Dict
 from pydantic import BaseModel, Field, Extra, model_validator
-from common.models import SortOrderEnum
+from tkhelper.models import SortOrderEnum
 from .utils import validate_list_cursors
 
 
