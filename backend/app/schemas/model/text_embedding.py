@@ -1,15 +1,18 @@
-from enum import Enum
 from typing import Optional, List, Union
 from pydantic import BaseModel, Field, Extra
+from app.models import TextEmbeddingInputType, TextEmbeddingOutput
 
-
-class TextEmbeddingInputType(str, Enum):
-    document = "document"
-    query = "query"
+__all__ = [
+    "TextEmbeddingRequest",
+    "TextEmbeddingResponse",
+]
 
 
 # Text Embedding
 # POST /v1/text_embedding
+# Request Params: None
+# Request: TextEmbeddingRequest
+# Response: ChatCompletionResponse
 class TextEmbeddingRequest(BaseModel):
     model_id: str = Field(
         ..., min_length=8, max_length=8, description="The text embedding model id.", examples=["abcdefgh"]
@@ -21,11 +24,6 @@ class TextEmbeddingRequest(BaseModel):
 
     class Config:
         extra = Extra.forbid
-
-
-class TextEmbeddingOutput(BaseModel):
-    index: int = Field(..., description="The index of the embedding output.", examples=[0])
-    embedding: List[float] = Field(..., description="The embedding vector.", examples=[[0.1, 0.2, 0.3, 0.4]])
 
 
 class TextEmbeddingResponse(BaseModel):

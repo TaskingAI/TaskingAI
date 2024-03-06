@@ -1,7 +1,7 @@
 from typing import Dict, List
 import re
 import json
-from common.error import raise_http_error, ErrorCode
+from tkhelper.error import raise_http_error, ErrorCode
 
 allowed_param_type = ["string", "number", "integer", "boolean"]
 MAXIMUM_PARAMETER_DESCRIPTION_LENGTH = 300
