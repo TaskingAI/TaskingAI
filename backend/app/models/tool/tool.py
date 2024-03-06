@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Dict, Union, List
 from enum import Enum
+import json
 
 __all__ = ["ToolType", "ToolRef", "Tool", "ToolInput", "ToolOutput"]
 
@@ -32,6 +33,9 @@ class Tool(BaseModel):
         ...,
         description="The function definition for chat completion function-call.",
     )
+
+    def function_name(self):
+        return self.function_def["name"]
 
     def to_response_dict(self):
         return self.model_dump()
@@ -97,3 +101,17 @@ class ToolOutput(BaseModel):
 
     def to_response_dict(self):
         return self.model_dump()
+
+    def to_function_message(self):
+        if self.status == 200:
+            return {
+                "role": "function",
+                "content": json.dumps(self.data),
+                "id": self.tool_call_id,
+            }
+        else:
+            return {
+                "role": "function",
+                "content": json.dumps({"status": self.error, "error": self.data}),
+                "id": self.tool_call_id,
+            }

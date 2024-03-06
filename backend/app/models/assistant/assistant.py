@@ -30,6 +30,7 @@ class Assistant(ModelEntity):
     retrieval_configs: RetrievalConfig = Field(...)
 
     metadata: Dict = metadata_field()
+    num_chats: int = Field(0, ge=0, description="The number of chats using this assistant", exclude=True)
 
     created_timestamp: int = created_timestamp_field()
     updated_timestamp: int = updated_timestamp_field()
@@ -47,6 +48,7 @@ class Assistant(ModelEntity):
             retrievals=load_json_attr(row, "retrievals", []),
             retrieval_configs=RetrievalConfig(**load_json_attr(row, "retrieval_configs", {})),
             metadata=load_json_attr(row, "metadata", {}),
+            num_chats=row["num_chats"],
             created_timestamp=row["created_timestamp"],
             updated_timestamp=row["updated_timestamp"],
         )
@@ -106,12 +108,32 @@ class Assistant(ModelEntity):
 
     @staticmethod
     def create_fields() -> List[str]:
-        return ["max_count", "model_id", "name", "description", "metadata"]
+        return [
+            "model_id",
+            "name",
+            "description",
+            "system_prompt_template",
+            "memory",
+            "tools",
+            "retrievals",
+            "retrieval_configs",
+            "metadata",
+        ]
 
     @staticmethod
     def update_fields() -> List[str]:
-        return ["model_id", "name", "description", "metadata"]
+        return [
+            "model_id",
+            "name",
+            "description",
+            "system_prompt_template",
+            "memory",
+            "tools",
+            "retrievals",
+            "retrieval_configs",
+            "metadata",
+        ]
 
     @staticmethod
     def fields_exclude_in_response():
-        return []
+        return ["num_chats"]

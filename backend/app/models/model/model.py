@@ -30,6 +30,15 @@ class Model(ModelEntity):
 
         return get_provider(self.provider_id)
 
+    def is_chat_completion(self):
+        return self.type == "chat_completion"
+
+    def allow_function_call(self):
+        return self.type == "chat_completion" and self.properties.get("function_call", False)
+
+    def allow_streaming(self):
+        return self.type == "chat_completion" and self.properties.get("streaming", False)
+
     @classmethod
     def build(cls, row: Dict):
         from app.services.model import get_model_schema

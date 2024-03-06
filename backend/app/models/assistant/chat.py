@@ -9,7 +9,6 @@ from tkhelper.schemas.field import *
 from app.database import redis_conn
 from .assistant import Assistant
 from .memory import ChatMemory
-from app.config import CONFIG
 
 __all__ = ["Chat"]
 
@@ -90,7 +89,7 @@ class Chat(ModelEntity):
 
     @staticmethod
     def create_fields() -> List[str]:
-        return ["max_count", "metadata"]
+        return ["metadata"]
 
     @staticmethod
     def update_fields() -> List[str]:
@@ -107,7 +106,7 @@ class Chat(ModelEntity):
         return await redis_conn.get_int(key=self.__lock_redis_key()) == 1
 
     async def lock(self):
-        await redis_conn.set_int(key=self.__lock_redis_key(), value=1, expire=CONFIG.CHAT_LOCK_TIMEOUT_SECONDS)
+        await redis_conn.set_int(key=self.__lock_redis_key(), value=1, expire=120)
 
     async def unlock(self):
         await redis_conn.pop(key=self.__lock_redis_key())
