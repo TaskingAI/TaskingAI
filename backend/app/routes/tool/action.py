@@ -1,59 +1,14 @@
-from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
-from typing import Dict, List
-from common.services.tool.action import *
-from app.schemas.tool.action import *
-from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse, BaseListRequest
-from common.models import Action, SerializePurpose
+from typing import List, Dict
+
+from app.schemas import *
+from tkhelper.schemas.base import BaseDataResponse
+from app.models import Action
+from app.services.tool import bulk_create_actions, update_action, run_action
+
+from ..utils import auth_info_required
 
 router = APIRouter()
-
-
-@router.get(
-    "/actions",
-    tags=["Tool"],
-    summary="List Actions",
-    operation_id="list_actions",
-    response_model=BaseSuccessListResponse,
-)
-async def api_list_actions(
-    request: Request,
-    data: BaseListRequest = Depends(),
-    auth_info: Dict = Depends(auth_info_required),
-):
-    actions, total, has_more = await list_actions(
-        limit=data.limit,
-        order=data.order,
-        after=data.after,
-        before=data.before,
-        offset=data.offset,
-        id_search=data.id_search,
-        name_search=data.name_search,
-    )
-    return BaseSuccessListResponse(
-        data=[action.to_dict(purpose=SerializePurpose.RESPONSE) for action in actions],
-        fetched_count=len(actions),
-        total_count=total,
-        has_more=has_more,
-    )
-
-
-@router.get(
-    "/actions/{action_id}",
-    tags=["Tool"],
-    summary="Get Action",
-    operation_id="get_action",
-    response_model=BaseSuccessDataResponse,
-)
-async def api_get_action(
-    action_id: str,
-    request: Request,
-    auth_info: Dict = Depends(auth_info_required),
-):
-    action: Action = await get_action(
-        action_id=action_id,
-    )
-    return BaseSuccessDataResponse(data=action.to_dict(purpose=SerializePurpose.RESPONSE))
 
 
 @router.post(
@@ -61,7 +16,7 @@ async def api_get_action(
     tags=["Tool"],
     summary="Bulk Create Action",
     operation_id="bulk_create_action",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
 )
 async def api_bulk_create_actions(
     request: Request,
@@ -72,8 +27,8 @@ async def api_bulk_create_actions(
         openapi_schema=data.openapi_schema,
         authentication=data.authentication,
     )
-    results = [action.to_dict(purpose=SerializePurpose.RESPONSE) for action in actions]
-    return BaseSuccessDataResponse(data=results)
+    results = [action.to_response_dict() for action in actions]
+    return BaseDataResponse(data=results)
 
 
 @router.post(
@@ -81,7 +36,7 @@ async def api_bulk_create_actions(
     tags=["Tool"],
     summary="Update Action",
     operation_id="update_action",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
 )
 async def api_update_action(
     action_id: str,
@@ -94,25 +49,7 @@ async def api_update_action(
         openapi_schema=data.openapi_schema,
         authentication=data.authentication,
     )
-    return BaseSuccessDataResponse(data=action.to_dict(purpose=SerializePurpose.RESPONSE))
-
-
-@router.delete(
-    "/actions/{action_id}",
-    tags=["Tool"],
-    summary="Delete Action",
-    operation_id="delete_action",
-    response_model=BaseSuccessEmptyResponse,
-)
-async def api_delete_action(
-    action_id: str,
-    request: Request,
-    auth_info: Dict = Depends(auth_info_required),
-):
-    await delete_action(
-        action_id=action_id,
-    )
-    return BaseSuccessEmptyResponse()
+    return BaseDataResponse(data=action.to_response_dict())
 
 
 @router.post(
@@ -120,7 +57,7 @@ async def api_delete_action(
     tags=["Tool"],
     summary="Run Action",
     operation_id="run_action",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
 )
 async def api_run_action(
     action_id: str,
@@ -131,6 +68,5 @@ async def api_run_action(
     response: Dict = await run_action(
         action_id=action_id,
         parameters=data.parameters,
-        headers=data.headers,
     )
-    return BaseSuccessDataResponse(data=response)
+    return BaseDataResponse(data=response)

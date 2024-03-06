@@ -1,38 +1,38 @@
-from app.schemas.base import BaseSuccessDataResponse, BaseSuccessListResponse
+from tkhelper.schemas.base import BaseDataResponse, BaseListResponse
 
 from ..utils import auth_info_required
 
 from fastapi import APIRouter, Depends, Request
-from typing import List, Dict
+from typing import Dict
 from app.schemas.model.model_schema import *
-from common.services.model.model_schema import *
-from common.models import SerializePurpose, Provider
-from common.error import ErrorCode, raise_http_error
+from tkhelper.error import ErrorCode, raise_http_error
+from app.services.model.model_schema import *
 
 router = APIRouter()
 
 
 @router.get(
     "/providers",
-    response_model=BaseSuccessListResponse,
+    response_model=BaseListResponse,
     tags=["Model"],
 )
 async def api_list_providers(
     request: Request,
     auth_info: Dict = Depends(auth_info_required),
 ):
-    providers: List[Provider] = await list_providers()
-    return BaseSuccessListResponse(
-        data=[provider.to_dict(purpose=SerializePurpose.RESPONSE) for provider in providers],
+    # todo
+    providers, total, has_more = list_providers(limit=100, offset=0)
+    return BaseListResponse(
+        data=[provider.to_dict(lang="en") for provider in providers],
         fetched_count=len(providers),
-        total_count=len(providers),
-        has_more=False,
+        total_count=total,
+        has_more=has_more,
     )
 
 
 @router.get(
     "/providers/get",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
     tags=["Model"],
 )
 async def api_get_provider(
@@ -46,14 +46,14 @@ async def api_get_provider(
             ErrorCode.OBJECT_NOT_FOUND,
             message=f"Provider {data.provider_id} not found.",
         )
-    return BaseSuccessDataResponse(
-        data=[provider.to_dict(purpose=SerializePurpose.RESPONSE)],
+    return BaseDataResponse(
+        data=[provider.to_dict(lang="en")],
     )
 
 
 @router.get(
     "/model_schemas",
-    response_model=BaseSuccessListResponse,
+    response_model=BaseListResponse,
     tags=["Model"],
 )
 async def api_list_model_schemas(
@@ -67,8 +67,8 @@ async def api_list_model_schemas(
         provider_id=data.provider_id,
         type=data.type,
     )
-    return BaseSuccessListResponse(
-        data=[model_schema.to_dict(purpose=SerializePurpose.RESPONSE) for model_schema in model_schemas],
+    return BaseListResponse(
+        data=[model_schema.to_dict(lang="en") for model_schema in model_schemas],
         fetched_count=len(model_schemas),
         total_count=total,
         has_more=has_more,
@@ -77,7 +77,7 @@ async def api_list_model_schemas(
 
 @router.get(
     "/model_schemas/get",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
     tags=["Model"],
 )
 async def api_get_model_schema(
@@ -91,6 +91,6 @@ async def api_get_model_schema(
             ErrorCode.OBJECT_NOT_FOUND,
             message=f"Model schema {data.model_schema_id} not found.",
         )
-    return BaseSuccessDataResponse(
-        data=[model_schema.to_dict(purpose=SerializePurpose.RESPONSE)],
+    return BaseDataResponse(
+        data=[model_schema.to_dict(lang="en")],
     )

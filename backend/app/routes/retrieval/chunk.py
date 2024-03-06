@@ -1,10 +1,12 @@
-from ..utils import auth_info_required
+from typing import List, Dict
 from fastapi import APIRouter, Request, Depends
-from common.services.retrieval.chunk import *
-from app.schemas.retrieval.chunk import *
-from app.schemas.base import BaseSuccessListResponse, BaseListRequest, BaseSuccessDataResponse, BaseSuccessEmptyResponse
-from common.models import Chunk, SerializePurpose
-from typing import List
+
+from app.schemas import *
+from tkhelper.schemas.base import BaseListResponse, BaseListRequest, BaseDataResponse, BaseEmptyResponse
+from app.models import Chunk
+from app.services.retrieval import query_chunks, create_chunk, update_chunk, delete_chunk, list_record_chunks
+
+from ..utils import auth_info_required
 
 router = APIRouter()
 
@@ -14,7 +16,7 @@ router = APIRouter()
     tags=["Retrieval"],
     summary="Query chunks",
     operation_id="query_chunks",
-    response_model=BaseSuccessListResponse,
+    response_model=BaseListResponse,
 )
 async def api_query_chunk(
     request: Request,
@@ -27,40 +29,10 @@ async def api_query_chunk(
         top_k=data.top_k,
         query_text=data.query_text,
     )
-    return BaseSuccessListResponse(
-        data=[chunk.to_dict(purpose=SerializePurpose.RESPONSE) for chunk in chunks],
+    return BaseListResponse(
+        data=[chunk.to_response_dict() for chunk in chunks],
         fetched_count=len(chunks),
     ).model_dump(exclude_none=True)
-
-
-@router.get(
-    "/collections/{collection_id}/chunks",
-    tags=["Retrieval"],
-    summary="List Collection Chunks",
-    operation_id="list_collection_chunks",
-    response_model=BaseSuccessListResponse,
-)
-async def api_list_collection_chunks(
-    request: Request,
-    collection_id: str,
-    data: BaseListRequest = Depends(),
-    auth_info: Dict = Depends(auth_info_required),
-):
-    records, total, has_more = await list_collection_chunks(
-        collection_id=collection_id,
-        limit=data.limit,
-        order=data.order,
-        after=data.after,
-        before=data.before,
-        offset=data.offset,
-        id_search=data.id_search,
-    )
-    return BaseSuccessListResponse(
-        data=[record.to_dict(purpose=SerializePurpose.RESPONSE) for record in records],
-        fetched_count=len(records),
-        total_count=total,
-        has_more=has_more,
-    )
 
 
 @router.get(
@@ -68,7 +40,7 @@ async def api_list_collection_chunks(
     tags=["Retrieval"],
     summary="List Record Chunks",
     operation_id="list_record_chunks",
-    response_model=BaseSuccessListResponse,
+    response_model=BaseListResponse,
 )
 async def api_list_record_chunks(
     request: Request,
@@ -77,42 +49,20 @@ async def api_list_record_chunks(
     data: BaseListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
 ):
-    records, total, has_more = await list_record_chunks(
+    chunks, has_more = await list_record_chunks(
         collection_id=collection_id,
         record_id=record_id,
         limit=data.limit,
         order=data.order,
-        after=data.after,
-        before=data.before,
-        offset=data.offset,
-        id_search=data.id_search,
+        after_id=data.after,
+        before_id=data.before,
+        prefix_filters=data.prefix_filters,
     )
-    return BaseSuccessListResponse(
-        data=[record.to_dict(purpose=SerializePurpose.RESPONSE) for record in records],
-        fetched_count=len(records),
-        total_count=total,
+    return BaseListResponse(
+        data=[chunk.to_response_dict() for chunk in chunks],
+        fetched_count=len(chunks),
         has_more=has_more,
     )
-
-
-@router.get(
-    "/collections/{collection_id}/chunks/{chunk_id}",
-    tags=["Retrieval"],
-    summary="Get Chunk",
-    operation_id="get_chunk",
-    response_model=BaseSuccessDataResponse,
-)
-async def api_get_chunk(
-    request: Request,
-    collection_id: str,
-    chunk_id: str,
-    auth_info: Dict = Depends(auth_info_required),
-):
-    chunk: Chunk = await get_chunk(
-        collection_id=collection_id,
-        chunk_id=chunk_id,
-    )
-    return BaseSuccessDataResponse(data=chunk.to_dict(purpose=SerializePurpose.RESPONSE))
 
 
 @router.post(
@@ -120,7 +70,7 @@ async def api_get_chunk(
     tags=["Retrieval"],
     summary="Create chunk",
     operation_id="create_chunk",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
 )
 async def api_create_chunk(
     request: Request,
@@ -133,7 +83,7 @@ async def api_create_chunk(
         content=data.content,
         metadata=data.metadata,
     )
-    return BaseSuccessDataResponse(data=chunk.to_dict(purpose=SerializePurpose.RESPONSE))
+    return BaseDataResponse(data=chunk.to_response_dict())
 
 
 @router.delete(
@@ -141,7 +91,7 @@ async def api_create_chunk(
     tags=["Retrieval"],
     summary="Delete chunk",
     operation_id="delete_chunk",
-    response_model=BaseSuccessEmptyResponse,
+    response_model=BaseEmptyResponse,
 )
 async def api_delete_chunk(
     request: Request,
@@ -153,7 +103,7 @@ async def api_delete_chunk(
         collection_id=collection_id,
         chunk_id=chunk_id,
     )
-    return BaseSuccessEmptyResponse()
+    return BaseEmptyResponse()
 
 
 @router.post(
@@ -161,7 +111,7 @@ async def api_delete_chunk(
     tags=["Retrieval"],
     summary="Update chunk",
     operation_id="update_chunk",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
 )
 async def api_update_chunk(
     request: Request,
@@ -176,4 +126,4 @@ async def api_update_chunk(
         content=data.content,
         metadata=data.metadata,
     )
-    return BaseSuccessDataResponse(data=chunk.to_dict(purpose=SerializePurpose.RESPONSE))
+    return BaseDataResponse(data=chunk.to_response_dict())
