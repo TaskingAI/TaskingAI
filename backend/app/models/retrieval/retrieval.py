@@ -3,7 +3,7 @@ from enum import Enum
 from pydantic import BaseModel, Field
 from typing import Optional
 
-__all__ = ["RetrievalMethod", "RetrievalRef", "RetrievalConfig", "RetrievalResult"]
+__all__ = ["RetrievalMethod", "RetrievalType", "RetrievalRef", "RetrievalConfig", "RetrievalResult"]
 
 
 class RetrievalMethod(str, Enum):

@@ -6,10 +6,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["Authentication", "AuthenticationType", "validate_authentication_data"]
+__all__ = ["ActionAuthentication", "ActionAuthenticationType", "validate_authentication_data"]
 
 
-class AuthenticationType(str, Enum):
+class ActionAuthenticationType(str, Enum):
     bearer = "bearer"
     basic = "basic"
     custom = "custom"
@@ -23,40 +23,40 @@ def validate_authentication_data(data: Dict):
     if "type" not in data or not data.get("type"):
         raise ValueError("Type is required for authentication.")
 
-    if data["type"] == AuthenticationType.custom:
+    if data["type"] == ActionAuthenticationType.custom:
         if "content" not in data or data["content"] is None:
             raise ValueError("Content is required for custom authentication.")
 
-    elif data["type"] == AuthenticationType.bearer:
+    elif data["type"] == ActionAuthenticationType.bearer:
         if "secret" not in data or data["secret"] is None:
             raise ValueError(f'Secret is required for {data["type"]} authentication.')
 
-    elif data["type"] == AuthenticationType.basic:
+    elif data["type"] == ActionAuthenticationType.basic:
         if "secret" not in data or data["secret"] is None:
             raise ValueError(f'Secret is required for {data["type"]} authentication.')
         # assume the secret is a base64 encoded string
 
-    elif data["type"] == AuthenticationType.none:
+    elif data["type"] == ActionAuthenticationType.none:
         data["secret"] = None
         data["content"] = None
 
     return data
 
 
-class Authentication(BaseModel):
+class ActionAuthentication(BaseModel):
     encrypted: bool = Field(False)
-    type: AuthenticationType = Field(...)
+    type: ActionAuthenticationType = Field(...)
     secret: Optional[str] = Field(None, min_length=1, max_length=1024)
     content: Optional[Dict] = Field(None)
 
     def is_encrypted(self):
-        return self.encrypted or self.type == AuthenticationType.none
+        return self.encrypted or self.type == ActionAuthenticationType.none
 
     def encrypt(self):
         # logger.debug("------------------- Encryption Start -------------------")
         # logger.debug(f"Before encryption: {self.model_dump_json()}")
 
-        if self.encrypted or self.type == AuthenticationType.none:
+        if self.encrypted or self.type == ActionAuthenticationType.none:
             return
         if self.secret is not None:
             self.secret = aes_encrypt(self.secret)
@@ -72,7 +72,7 @@ class Authentication(BaseModel):
         # logger.debug("------------------- Decryption Start -------------------")
         # logger.debug(f"Before decryption: {self.model_dump_json()}")
 
-        if not self.encrypted or self.type == AuthenticationType.none:
+        if not self.encrypted or self.type == ActionAuthenticationType.none:
             return
         if self.secret is not None:
             self.secret = aes_decrypt(self.secret)

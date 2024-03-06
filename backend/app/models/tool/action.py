@@ -1,16 +1,28 @@
 from typing import Dict, List, Optional
 from enum import Enum
 from pydantic import BaseModel
-from tkhelper.models import ModelEntity, RedisOperator
-from tkhelper.models.operator.postgres_operator import PostgresModelOperator
+from tkhelper.models import ModelEntity
 from tkhelper.utils import generate_random_id, load_json_attr
 
-from app.database import redis_conn, postgres_pool
-
-from .authentication import Authentication, AuthenticationType
+from .authentication import ActionAuthentication, ActionAuthenticationType
 from ..inference.chat_completion_function import ChatCompletionFunction
 
-__all__ = ["Action", "action_ops", "ActionMethod", "ActionBodyType", "ActionStruct", "ActionParam"]
+__all__ = ["Action", "ActionMethod", "ActionBodyType", "ActionStruct", "ActionParam", "EXAMPLE_OPENAPI_SCHEMA"]
+
+EXAMPLE_OPENAPI_SCHEMA = {
+    "openapi": "3.1.0",
+    "servers": [{"url": "https://www.example.com"}],
+    "info": {"title": "My Action", "description": "This is an action."},
+    "paths": {
+        "/": {
+            "get": {
+                "operationId": "get_data",
+                "description": "The action to get data.",
+                "responses": {"200": {"description": "OK"}},
+            }
+        }
+    },
+}
 
 
 class ActionMethod(str, Enum):
@@ -69,7 +81,7 @@ class Action(ModelEntity):
     function_def: ChatCompletionFunction
 
     openapi_schema: Dict
-    authentication: Authentication
+    authentication: ActionAuthentication
 
     updated_timestamp: int
     created_timestamp: int
@@ -78,10 +90,10 @@ class Action(ModelEntity):
     def build(row):
         authentication_dict = load_json_attr(row, "authentication", default_value={})
         if authentication_dict:
-            authentication = Authentication(**authentication_dict)
+            authentication = ActionAuthentication(**authentication_dict)
             authentication.decrypt()
         else:
-            authentication = Authentication(type=AuthenticationType.none).model_dump()
+            authentication = ActionAuthentication(type=ActionAuthenticationType.none).model_dump()
 
         method = row["method"]
         if not method:
@@ -178,13 +190,3 @@ class Action(ModelEntity):
     @staticmethod
     def fields_exclude_in_response():
         return []
-
-
-action_ops = PostgresModelOperator(
-    postgres_pool=postgres_pool,
-    entity_class=Action,
-    redis=RedisOperator(
-        entity_class=Action,
-        redis_conn=redis_conn,
-    ),
-)

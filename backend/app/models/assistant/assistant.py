@@ -2,17 +2,15 @@ from typing import Dict, List
 
 from pydantic import Field
 
-from tkhelper.models import ModelEntity, RedisOperator
-from tkhelper.models.operator.postgres_operator import PostgresModelOperator
+from tkhelper.models import ModelEntity
 from tkhelper.utils import load_json_attr, generate_random_id
 from tkhelper.schemas.field import *
 
-from app.database import redis_conn, postgres_pool
 from .memory import AssistantMemory
 from ..tool.tool import *
 from ..retrieval.retrieval import *
 
-__all__ = ["Assistant", "assistant_ops"]
+__all__ = ["Assistant"]
 
 
 class Assistant(ModelEntity):
@@ -117,13 +115,3 @@ class Assistant(ModelEntity):
     @staticmethod
     def fields_exclude_in_response():
         return []
-
-
-assistant_ops = PostgresModelOperator(
-    postgres_pool=postgres_pool,
-    entity_class=Assistant,
-    redis=RedisOperator(
-        entity_class=Assistant,
-        redis_conn=redis_conn,
-    ),
-)

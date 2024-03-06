@@ -3,18 +3,15 @@ from enum import Enum
 from pydantic import Field
 
 from tkhelper.models import Status, ModelEntity
-from tkhelper.models.operator.postgres_operator import PostgresModelOperator
 from tkhelper.utils import generate_random_id, load_json_attr
 from tkhelper.schemas.field import *
 
-from app.database import postgres_pool
-from .collection import Collection, collection_ops
+from .collection import Collection
 
 
 __all__ = [
     "RecordType",
     "Record",
-    "record_ops",
 ]
 
 
@@ -84,6 +81,8 @@ class Record(ModelEntity):
 
     @staticmethod
     def parent_operator() -> List:
+        from app.operators import collection_ops
+
         return [collection_ops]
 
     @staticmethod
@@ -97,10 +96,3 @@ class Record(ModelEntity):
     @staticmethod
     def fields_exclude_in_response():
         return []
-
-
-record_ops = PostgresModelOperator(
-    postgres_pool=postgres_pool,
-    entity_class=Record,
-    redis=None,
-)

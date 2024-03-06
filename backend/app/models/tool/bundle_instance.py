@@ -1,11 +1,10 @@
 from typing import Dict, List
-from tkhelper.models import ModelEntity, RedisOperator
-from tkhelper.models.operator.postgres_operator import PostgresModelOperator
+from tkhelper.models import ModelEntity
 from tkhelper.utils import load_json_attr
 
-from app.database import redis_conn, postgres_pool
+from .plugin import Plugin
 
-__all__ = ["BundleInstance", "bundle_instance_ops"]
+__all__ = ["BundleInstance"]
 
 
 class BundleInstance(ModelEntity):
@@ -17,12 +16,24 @@ class BundleInstance(ModelEntity):
     name: str
 
     metadata: Dict
+    plugins: List[Plugin]
+    description: str
+    icon_url: str
 
     created_timestamp: int
     updated_timestamp: int
 
     @staticmethod
     def build(row):
+        from app.services.tool import list_plugins, get_bundle
+
+        try:
+            plugins = list_plugins(bundle_id=row["bundle_id"])
+        except Exception as e:
+            plugins = []
+
+        bundle = get_bundle(row["bundle_id"])
+
         return BundleInstance(
             bundle_instance_id=row["bundle_instance_id"],
             encrypted_credentials=load_json_attr(row, "encrypted_credentials", {}),
@@ -30,11 +41,18 @@ class BundleInstance(ModelEntity):
             bundle_id=row["bundle_id"],
             name=row["name"],
             metadata=load_json_attr(row, "metadata", {}),
+            plugins=plugins,
+            description=bundle.description,
+            icon_url=bundle.icon_url,
             created_timestamp=row["created_timestamp"],
             updated_timestamp=row["updated_timestamp"],
         )
 
-    def to_response_dict(self) -> Dict:
+    def to_response_dict(self, **kwargs) -> Dict:
+        from app.services.tool import i18n_text
+
+        # todo: currently we only support en
+        lang = kwargs.get("lang", "en")
         return {
             "object": "BundleInstance",
             "bundle_instance_id": self.bundle_instance_id,
@@ -42,6 +60,9 @@ class BundleInstance(ModelEntity):
             "bundle_id": self.bundle_id,
             "name": self.name,
             "metadata": self.metadata,
+            "plugins": [plugin.to_dict(lang=lang) for plugin in self.plugins],
+            "description": i18n_text(self.bundle_id, self.description, lang),
+            "icon_url": self.icon_url,
             "created_timestamp": self.created_timestamp,
             "updated_timestamp": self.updated_timestamp,
         }
@@ -94,13 +115,3 @@ class BundleInstance(ModelEntity):
     @staticmethod
     def fields_exclude_in_response():
         return ["encrypted_credentials"]
-
-
-bundle_instance_ops = PostgresModelOperator(
-    postgres_pool=postgres_pool,
-    entity_class=BundleInstance,
-    redis=RedisOperator(
-        entity_class=BundleInstance,
-        redis_conn=redis_conn,
-    ),
-)

@@ -6,15 +6,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 from tkhelper.models import ModelEntity
-from tkhelper.models.operator.postgres_operator import PostgresModelOperator
 from tkhelper.utils import load_json_attr, generate_random_id
 from tkhelper.schemas.field import *
 
-from app.database import postgres_pool
-from .assistant import assistant_ops, Assistant
-from .chat import chat_ops, Chat
+from .assistant import Assistant
+from .chat import Chat
 
-__all__ = ["Message", "message_ops", "MessageRole", "MessageContent", "MessageGenerationLog"]
+__all__ = ["Message", "MessageRole", "MessageContent", "MessageGenerationLog"]
 
 
 class MessageRole(str, Enum):
@@ -130,6 +128,8 @@ class Message(ModelEntity):
 
     @staticmethod
     def parent_operator() -> List:
+        from app.operators import assistant_ops, chat_ops
+
         return [assistant_ops, chat_ops]
 
     @staticmethod
@@ -143,10 +143,3 @@ class Message(ModelEntity):
     @staticmethod
     def fields_exclude_in_response():
         return []
-
-
-message_ops = PostgresModelOperator(
-    postgres_pool=postgres_pool,
-    entity_class=Message,
-    redis=None,
-)
