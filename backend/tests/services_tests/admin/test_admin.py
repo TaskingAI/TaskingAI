@@ -2,11 +2,10 @@ import asyncio
 import pytest
 
 from tests.services_api.admin.admin import login, verify_token, refresh_token, logout
-from config import CONFIG
+from app.config import CONFIG
 
 
 class TestAdmin:
-
     admin_list = ["object", "admin_id", "username", "token", "created_timestamp", "updated_timestamp"]
     admin_keys = set(admin_list)
     token = None
@@ -14,7 +13,6 @@ class TestAdmin:
     @pytest.mark.asyncio
     @pytest.mark.run(order=101)
     async def test_login(self):
-
         login_data = {"username": CONFIG.DEFAULT_ADMIN_USERNAME, "password": CONFIG.DEFAULT_ADMIN_PASSWORD}
         res = await login(login_data)
         res_json = res.json()
@@ -27,7 +25,6 @@ class TestAdmin:
     @pytest.mark.run(order=102)
     @pytest.mark.asyncio
     async def test_verify_token(self):
-
         res = await verify_token(TestAdmin.token)
         res_json = res.json()
         assert res.status_code == 200
@@ -37,7 +34,6 @@ class TestAdmin:
     @pytest.mark.run(order=103)
     @pytest.mark.asyncio
     async def test_refresh_token(self):
-
         res = await refresh_token(TestAdmin.token)
         res_json = res.json()
         assert res.status_code == 200
@@ -63,7 +59,6 @@ class TestAdmin:
     @pytest.mark.run(order=104)
     @pytest.mark.asyncio
     async def test_logout(self):
-
         res = await logout(TestAdmin.token)
         res_json = res.json()
         assert res.status_code == 200
