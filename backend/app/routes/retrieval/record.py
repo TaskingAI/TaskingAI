@@ -1,61 +1,14 @@
-from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
-from common.services.retrieval.record import *
+from typing import Dict
+
 from app.schemas.retrieval.record import *
-from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse, BaseSuccessListResponse
-from common.models import Record, SerializePurpose
+from tkhelper.schemas.base import BaseEmptyResponse, BaseDataResponse
+from app.models import Record
+from app.services.retrieval import create_record, update_record, delete_record
+
+from ..utils import auth_info_required
 
 router = APIRouter()
-
-
-@router.get(
-    "/collections/{collection_id}/records",
-    tags=["Retrieval"],
-    summary="List Records",
-    operation_id="list_records",
-    response_model=BaseSuccessListResponse,
-)
-async def api_list_records(
-    request: Request,
-    collection_id: str,
-    data: RecordListRequest = Depends(),
-    auth_info: Dict = Depends(auth_info_required),
-):
-    records, total, has_more = await list_records(
-        collection_id=collection_id,
-        limit=data.limit,
-        order=data.order,
-        after=data.after,
-        before=data.before,
-        offset=data.offset,
-        id_search=data.id_search,
-    )
-    return BaseSuccessListResponse(
-        data=[record.to_dict(purpose=SerializePurpose.RESPONSE) for record in records],
-        fetched_count=len(records),
-        total_count=total,
-        has_more=has_more,
-    )
-
-
-@router.get(
-    "/collections/{collection_id}/records/{record_id}",
-    tags=["Retrieval"],
-    summary="Get Record",
-    operation_id="get_record",
-    response_model=BaseSuccessDataResponse,
-)
-async def api_get_record(
-    record_id: str,
-    request: Request,
-    collection_id: str,
-    auth_info: Dict = Depends(auth_info_required),
-):
-    record: Record = await get_record(
-        collection_id=collection_id,
-        record_id=record_id,
-    )
-    return BaseSuccessDataResponse(data=record.to_dict(purpose=SerializePurpose.RESPONSE))
 
 
 @router.post(
@@ -63,7 +16,7 @@ async def api_get_record(
     tags=["Retrieval"],
     summary="Create record",
     operation_id="create_record",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
 )
 async def api_create_records(
     request: Request,
@@ -79,11 +32,7 @@ async def api_create_records(
         text_splitter=data.text_splitter,
         metadata=data.metadata,
     )
-    return BaseSuccessDataResponse(
-        data=record.to_dict(
-            purpose=SerializePurpose.RESPONSE,
-        )
-    )
+    return BaseDataResponse(data=record.to_response_dict())
 
 
 @router.post(
@@ -91,7 +40,7 @@ async def api_create_records(
     tags=["Retrieval"],
     summary="Update Record",
     operation_id="update_record",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
 )
 async def api_update_record(
     record_id: str,
@@ -109,7 +58,7 @@ async def api_update_record(
         text_splitter=data.text_splitter,
         metadata=data.metadata,
     )
-    return BaseSuccessDataResponse(data=record.to_dict(purpose=SerializePurpose.RESPONSE))
+    return BaseDataResponse(data=record.to_response_dict())
 
 
 @router.delete(
@@ -117,7 +66,7 @@ async def api_update_record(
     tags=["Retrieval"],
     summary="Delete Record",
     operation_id="delete_record",
-    response_model=BaseSuccessEmptyResponse,
+    response_model=BaseEmptyResponse,
 )
 async def api_delete_record(
     record_id: str,
@@ -129,4 +78,4 @@ async def api_delete_record(
         collection_id=collection_id,
         record_id=record_id,
     )
-    return BaseSuccessEmptyResponse()
+    return BaseEmptyResponse()

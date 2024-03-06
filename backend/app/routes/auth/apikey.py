@@ -2,7 +2,7 @@ from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
 from typing import Dict
 from app.schemas.auth.apikey import *
-from app.schemas.base import BaseSuccessDataResponse
+from tkhelper.schemas.base import BaseDataResponse
 from app.services.auth.apikey import *
 
 router = APIRouter()
@@ -13,7 +13,7 @@ router = APIRouter()
     tags=["API Key"],
     summary="Get API Key",
     operation_id="get_apikey",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
 )
 async def api_get_apikey(
     apikey_id: str,
@@ -25,4 +25,4 @@ async def api_get_apikey(
         apikey_id=apikey_id,
         plain=data.plain,
     )
-    return BaseSuccessDataResponse(data=apikey_dict)
+    return BaseDataResponse(data=apikey_dict)

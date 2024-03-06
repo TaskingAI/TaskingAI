@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, Request
 from typing import Dict
-from ..utils import auth_info_required, check_http_error
-from app.schemas.inference.text_embedding import TextEmbeddingRequest, TextEmbeddingResponse
-from common.services.inference.text_embedding import text_embedding
-from common.services.model.model import get_model
-from common.models import Model, ModelSchema, ModelType
-from common.error import raise_http_error, ErrorCode
+from ..utils import auth_info_required
+from tkhelper.utils import check_http_error
+from app.schemas.model.text_embedding import TextEmbeddingRequest, TextEmbeddingResponse
+from app.services.inference.text_embedding import text_embedding
+from app.services.model.model import get_model
+from app.models import Model, ModelSchema, ModelType
+from tkhelper.error import raise_http_error, ErrorCode
 
 router = APIRouter()
 
@@ -39,9 +40,10 @@ async def api_text_embedding(
 
     # generate none stream response
     response = await text_embedding(
-        provider_id=model_schema.provider_id,
+        model_schema_id=model_schema.model_schema_id,
         provider_model_id=model_schema.provider_model_id,
         encrypted_credentials=model.encrypted_credentials,
+        properties=model.properties,
         input_text_list=data.input,
         input_type=data.input_type,
     )

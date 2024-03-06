@@ -2,13 +2,14 @@ from fastapi import APIRouter, Depends, Request
 import json
 from typing import Dict
 from starlette.responses import StreamingResponse
-from ..utils import auth_info_required, check_http_error
-from app.schemas.inference.chat_completion import ChatCompletionRequest
-from app.schemas.base import BaseSuccessDataResponse
-from common.services.inference.chat_completion import chat_completion, chat_completion_stream
-from common.services.model.model import get_model
-from common.models import Model, ModelSchema, ModelType
-from common.error import raise_http_error, ErrorCode
+from ..utils import auth_info_required
+from tkhelper.utils import check_http_error
+from app.schemas.model.chat_completion import ChatCompletionRequest
+from tkhelper.schemas.base import BaseDataResponse
+from app.services.inference.chat_completion import chat_completion, chat_completion_stream
+from app.services.model.model import get_model
+from app.models import Model, ModelSchema, ModelType
+from tkhelper.error import raise_http_error, ErrorCode
 
 router = APIRouter()
 
@@ -20,7 +21,7 @@ router = APIRouter()
     tags=["Inference"],
     responses={422: {"description": "Unprocessable Entity"}},
     description="Model inference for chat completion.",
-    response_model=BaseSuccessDataResponse,
+    response_model=BaseDataResponse,
 )
 async def api_chat_completion(
     request: Request,
@@ -52,10 +53,11 @@ async def api_chat_completion(
         async def generator():
             i = 0
             async for response_dict in chat_completion_stream(
-                provider_id=model_schema.provider_id,
+                model_schema_id=model_schema.model_schema_id,
                 provider_model_id=model_schema.provider_model_id,
                 messages=message_dicts,
                 encrypted_credentials=model.encrypted_credentials,
+                properties=model.properties,
                 configs=data.configs,
                 function_call=data.function_call,
                 functions=functions,
@@ -69,13 +71,14 @@ async def api_chat_completion(
     else:
         # generate none stream response
         response = await chat_completion(
-            provider_id=model_schema.provider_id,
+            model_schema_id=model_schema.model_schema_id,
             provider_model_id=model_schema.provider_model_id,
             messages=message_dicts,
             encrypted_credentials=model.encrypted_credentials,
+            properties=model.properties,
             configs=data.configs,
             function_call=data.function_call,
             functions=functions,
         )
         check_http_error(response)
-        return BaseSuccessDataResponse(data=response.json()["data"])
+        return BaseDataResponse(data=response.json()["data"])

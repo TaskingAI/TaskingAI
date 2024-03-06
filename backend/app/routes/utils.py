@@ -1,10 +1,27 @@
-from common.error import raise_http_error, ErrorCode
 from starlette.requests import Request
 from fastapi import HTTPException
-from config import CONFIG
-from typing import Dict
-from common.services.auth.admin import verify_admin_token
-from common.services.auth.apikey import verify_apikey
+from typing import Dict, Type
+from pydantic import ValidationError
+import re
+import json
+
+from tkhelper.error import raise_http_error, ErrorCode, raise_request_validation_error
+from tkhelper.models import ModelOperator, ModelEntity
+
+from app.config import CONFIG
+from app.services.auth.admin import verify_admin_token
+from app.services.auth.apikey import verify_apikey
+
+
+__all__ = [
+    "check_http_error",
+    "app_admin_auth_info_required",
+    "api_auth_info_required",
+    "auth_info_required",
+    "check_path_params",
+    "path_params_required",
+    "check_list_params",
+]
 
 
 def check_http_error(response):
@@ -58,3 +75,75 @@ async def auth_info_required(request: Request) -> Dict:
         return await api_auth_info_required(request)
 
     raise NotImplementedError("Unknown auth type")
+
+
+alphanumeric_pattern = re.compile("^[_a-zA-Z0-9]+$")
+
+
+def check_path_params(
+    model_operator: ModelOperator,
+    object_id_required: bool,
+    path_params: Dict,
+):
+    """Check if kwargs contains all the primary key fields except the id field."""
+    entity_class = model_operator.entity_class
+    id_field_name = entity_class.id_field_name()
+    primary_key_fields = entity_class.primary_key_fields()
+
+    # Only the id field is required
+    required_fields = [field for field in primary_key_fields if "id" in field]
+
+    # If the id field is required, add it to the required fields
+    for k in required_fields:
+        if k not in path_params and (k != id_field_name or object_id_required):
+            raise_request_validation_error(f"Missing path parameter: {k}")
+
+    # check all oath params are alphanumeric
+    for k, v in path_params.items():
+        if not alphanumeric_pattern.match(v):
+            raise_request_validation_error(f"Invalid path parameter: {k}")
+
+    # Check each id field
+    try:
+        entity_class.validate_path_params(path_params)
+    except ValidationError as exc:
+        detail = exc.errors()[0]
+        raise_request_validation_error(f"{detail['loc'][0]}: {detail['msg']}")
+
+    return
+
+
+async def path_params_required(request: Request) -> Dict[str, str]:
+    if len(request.path_params) > 0:
+        return request.path_params
+    return {}
+
+
+async def check_list_params(model_operator: ModelOperator, path_params: Dict, prefix_filter: str) -> Dict:
+    # check parent objects exist
+    entity_class = model_operator.entity_class
+    for parent_model, parent_operator in zip(entity_class.parent_models(), entity_class.parent_operator()):
+        parent_model: Type[ModelEntity]
+        parent_operator: ModelOperator
+        parent_id = path_params.get(parent_model.id_field_name())
+        if not parent_id:
+            raise_request_validation_error(f"Missing {parent_model.id_field_name()}")
+        parent_entity = await parent_operator.get(**path_params)
+        if not parent_entity:
+            raise_request_validation_error(f"Parent {parent_model.object_name()} not found")
+
+    # check prefix_filter keys
+    prefix_filter_dict = {}
+    if CONFIG.API and prefix_filter:
+        raise_request_validation_error("Prefix filter is not supported")
+
+    if entity_class.list_prefix_filter_fields() and prefix_filter:
+        try:
+            prefix_filter_dict = json.loads(prefix_filter)
+        except json.JSONDecodeError:
+            raise_request_validation_error("Invalid prefix filter format")
+        for k in prefix_filter_dict:
+            if k not in entity_class.list_prefix_filter_fields():
+                raise_request_validation_error(f"Invalid prefix filter: {k}")
+
+    return prefix_filter_dict

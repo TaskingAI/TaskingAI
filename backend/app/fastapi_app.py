@@ -1,54 +1,64 @@
-from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
-from app.routes import routes
-from common.error.exception_handlers import *
-import os
 import logging
+from fastapi import FastAPI
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from starlette.middleware.cors import CORSMiddleware
+from tkhelper.error.exception_handlers import *
+from tkhelper.utils import init_logger
 
-# Retrieve the log level from the environment variables (defaulting to INFO).
-log_level = os.environ.get("LOG_LEVEL", "INFO")
+from contextlib import asynccontextmanager
 
-# Create a logger object.
-logger = logging.getLogger()
-logger.setLevel(log_level)
+init_logger()
+logger = logging.getLogger(__name__)
+_scheduler = AsyncIOScheduler()
 
-# Configure the log handler and format.
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
-# Create a console handler.
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
-console_handler.setFormatter(formatter)
-logger.addHandler(console_handler)
+async def sync_data(first_sync=False):
+    from app.services.model import sync_model_schema_data
+    from app.services.tool import sync_plugin_data
+
+    try:
+        logger.info("Syncing model schema data...")
+        await sync_model_schema_data()
+        logger.info("Syncing plugin data...")
+        await sync_plugin_data()
+    except:
+        logger.error("Failed to sync model schema data.")
+        if first_sync:
+            raise
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from app.database import close_database, init_database
+    from app.services.auth.admin import create_default_admin_if_needed
+
+    try:
+        logger.info("fastapi app startup...")
+
+        logger.info("start plugin cache scheduler...")
+        _scheduler.add_job(sync_data, "interval", minutes=1)
+        _scheduler.start()
+        # first sync
+        await sync_data(first_sync=True)
+
+        await init_database()
+        await create_default_admin_if_needed()
+
+        yield
+
+    finally:
+        logger.info("fastapi app shutdown...")
+        await close_database()
 
 
 def create_app():
-    from common.database.postgres.pool import postgres_db_pool
-    from common.database.redis import redis_pool
-    from common.services.auth.admin import create_default_admin_if_needed
-    from common.services.model.model_schema import load_model_schema_data
+    from config import CONFIG
+    from app.routes import routes
 
-    app = FastAPI()
+    app = FastAPI(title="TaskingAI-Community", version=CONFIG.VERSION, lifespan=lifespan)
 
-    @app.on_event("startup")
-    async def startup_event():
-        logger.info("FastAPI app startup...")
-        await redis_pool.init_pool()
-        await postgres_db_pool.init_pool()
-        if CONFIG.WEB:
-            await create_default_admin_if_needed()
-        await load_model_schema_data()
-
-    @app.on_event("shutdown")
-    async def shutdown_event():
-        logger.info("FastAPI app shutdown...")
-        await redis_pool.close_pool()
-        await postgres_db_pool.close_pool()
-
-    app.exception_handler(HTTPException)(custom_http_exception_handler)
-    app.exception_handler(RequestValidationError)(custom_request_validation_error_handler)
-    app.exception_handler(ValidationError)(custom_validation_error_handler)
-    app.exception_handler(Exception)(custom_exception_handler)
+    # add exception handlers
+    add_exception_handlers(app)
 
     app.add_middleware(
         CORSMiddleware,
