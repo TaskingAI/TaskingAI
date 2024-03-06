@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Dict, Union, List
 from enum import Enum
 
-__all__ = ["ToolType", "ToolRef", "ToolDef", "Tool", "ToolInput", "ToolOutput"]
+__all__ = ["ToolType", "ToolRef", "Tool", "ToolInput", "ToolOutput"]
 
 
 class ToolType(str, Enum):
@@ -11,11 +11,6 @@ class ToolType(str, Enum):
 
 
 class ToolRef(BaseModel):
-    type: ToolType = Field(..., description="The tool type.")
-    id: str = Field(..., description="The tool ID.")
-
-
-class ToolDef(BaseModel):
     type: ToolType = Field(..., description="The tool type.")
     id: str = Field(..., description="The tool ID.")
 

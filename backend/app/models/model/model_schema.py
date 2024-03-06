@@ -43,7 +43,7 @@ class ModelSchema(BaseModel):
         )
 
     def to_dict(self, lang: str):
-        from app.services.model.model_schema import i18n_text
+        from app.services.model import i18n_text
 
         return {
             "object": self.object_name(),

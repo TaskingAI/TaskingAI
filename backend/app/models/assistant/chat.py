@@ -2,17 +2,16 @@ from typing import Dict, List
 
 from pydantic import Field
 
-from tkhelper.models import ModelEntity, RedisOperator
-from tkhelper.models.operator.postgres_operator import PostgresModelOperator
+from tkhelper.models import ModelEntity
 from tkhelper.utils import load_json_attr, generate_random_id
 from tkhelper.schemas.field import *
 
-from app.database import redis_conn, postgres_pool
-from .assistant import assistant_ops, Assistant
-from .component import ChatMemory
+from app.database import redis_conn
+from .assistant import Assistant
+from .memory import ChatMemory
 from app.config import CONFIG
 
-__all__ = ["Chat", "chat_ops"]
+__all__ = ["Chat"]
 
 
 class Chat(ModelEntity):
@@ -85,6 +84,8 @@ class Chat(ModelEntity):
 
     @staticmethod
     def parent_operator() -> List:
+        from app.operators import assistant_ops
+
         return [assistant_ops]
 
     @staticmethod
@@ -110,14 +111,3 @@ class Chat(ModelEntity):
 
     async def unlock(self):
         await redis_conn.pop(key=self.__lock_redis_key())
-
-
-chat_ops = PostgresModelOperator(
-    postgres_pool=postgres_pool,
-    entity_class=Chat,
-    redis=RedisOperator(
-        entity_class=Chat,
-        redis_conn=redis_conn,
-        expire=60 * 10,  # 10 minutes
-    ),
-)

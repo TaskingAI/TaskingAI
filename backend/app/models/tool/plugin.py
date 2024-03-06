@@ -1,8 +1,5 @@
-import json
-
 from pydantic import BaseModel, Field
 from typing import Any, Dict
-from app.services.sync.i18n import get_single_i18n_cache
 from enum import Enum
 from app.models import ChatCompletionFunction
 
@@ -32,6 +29,8 @@ def transform_input_schema(bundle_id, plugin_id, plugin_description, input_schem
     Transforms the input schema into the specified output format,
     retaining only 'type', 'enum', and 'description' fields in the final dict.
     """
+    from app.services.tool import i18n_text
+
     # Initialize the base structure of the output schema
     output_schema = {
         "name": "object",
@@ -46,9 +45,7 @@ def transform_input_schema(bundle_id, plugin_id, plugin_description, input_schem
 
         if filtered_value.get("description"):
             # handle i18n
-            output_schema["properties"][key]["description"] = get_single_i18n_cache(
-                bundle_id, value["description"], "en"
-            )
+            output_schema["properties"][key]["description"] = i18n_text(bundle_id, value["description"], "en")
 
         # If the original field is required, add it to the 'required' list in the output schema
         if value.get("required"):
@@ -56,7 +53,7 @@ def transform_input_schema(bundle_id, plugin_id, plugin_description, input_schem
 
     function = ChatCompletionFunction(
         name=plugin_id,
-        description=get_single_i18n_cache(bundle_id, plugin_description, "en"),
+        description=i18n_text(bundle_id, plugin_description, "en"),
         parameters=output_schema,
     )
     return function
@@ -94,11 +91,13 @@ class Plugin(BaseModel):
         )
 
     def to_dict(self, lang: str):
+        from app.services.tool import i18n_text
+
         input_schema_dict = {
             k: {
                 "type": v.type,
-                "name": get_single_i18n_cache(self.bundle_id, v.name, lang),
-                "description": get_single_i18n_cache(self.bundle_id, v.description, lang),
+                "name": i18n_text(self.bundle_id, v.name, lang),
+                "description": i18n_text(self.bundle_id, v.description, lang),
                 "required": v.required,
             }
             for k, v in self.input_schema.items()
@@ -107,8 +106,8 @@ class Plugin(BaseModel):
         output_schema_dict = {
             k: {
                 "type": v.type,
-                "name": get_single_i18n_cache(self.bundle_id, v.name, lang),
-                "description": get_single_i18n_cache(self.bundle_id, v.description, lang),
+                "name": i18n_text(self.bundle_id, v.name, lang),
+                "description": i18n_text(self.bundle_id, v.description, lang),
                 "required": v.required,
             }
             for k, v in self.output_schema.items()
@@ -118,8 +117,8 @@ class Plugin(BaseModel):
             "object": self.object_name(),
             "bundle_id": self.bundle_id,
             "plugin_id": self.plugin_id,
-            "name": get_single_i18n_cache(self.bundle_id, self.name, lang),
-            "description": get_single_i18n_cache(self.bundle_id, self.description, lang),
+            "name": i18n_text(self.bundle_id, self.name, lang),
+            "description": i18n_text(self.bundle_id, self.description, lang),
             "input_schema": input_schema_dict,
             "output_schema": output_schema_dict,
             "function_def": self.function_def,
@@ -155,10 +154,3 @@ class Plugin(BaseModel):
                     if not isinstance(value, str) or not value.startswith("http"):
                         raise ValueError(f"Expected '{key}' to be a valid file URL, got {type(value).__name__}.")
                 # Additional type checks can be added here for other types if necessary
-
-
-class PluginEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Plugin):
-            return obj.to_dict("en")
-        return json.JSONEncoder.default(self, obj)
