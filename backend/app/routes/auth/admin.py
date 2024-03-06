@@ -1,10 +1,11 @@
 from ..utils import auth_info_required
 from fastapi import APIRouter, Depends, Request
 from typing import Dict
-from common.services.auth.admin import *
 from app.schemas.auth.admin import *
 from app.schemas.base import BaseSuccessEmptyResponse, BaseSuccessDataResponse
-from common.models import Admin, SerializePurpose
+from app.services.auth.admin import *
+from app.models import Admin
+
 
 router = APIRouter()
 
@@ -25,7 +26,7 @@ async def api_login_admin(
         password=data.password,
     )
     return BaseSuccessDataResponse(
-        data=admin.to_dict(purpose=SerializePurpose.RESPONSE),
+        data=admin.to_response_dict(),
     )
 
 
@@ -75,5 +76,5 @@ async def api_refresh_admin_token(
         admin_id=auth_info["admin_id"],
     )
     return BaseSuccessDataResponse(
-        data=admin.to_dict(purpose=SerializePurpose.RESPONSE),
+        data=admin.to_response_dict(),
     )

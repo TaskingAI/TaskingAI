@@ -1,13 +1,11 @@
 from typing import Dict, List
 
-from tkhelper.models import ModelEntity, RedisOperator
-from tkhelper.models.operator.postgres_operator import PostgresModelOperator
+from tkhelper.models import ModelEntity
 from tkhelper.utils import generate_random_id
 from tkhelper.encryption.aes import aes_decrypt
 
-from app.database import postgres_pool, redis_conn
 
-__all__ = ["Apikey", "apikey_ops"]
+__all__ = ["Apikey"]
 
 
 class Apikey(ModelEntity):
@@ -64,6 +62,14 @@ class Apikey(ModelEntity):
         return generate_random_id(8)
 
     @staticmethod
+    def generate_random_apikey(apikey_id):
+        return "tk" + apikey_id + generate_random_id(22)
+
+    @staticmethod
+    def get_apikey_id_from_apikey(apikey):
+        return apikey[2:10]
+
+    @staticmethod
     def parent_models() -> List:
         return []
 
@@ -73,7 +79,7 @@ class Apikey(ModelEntity):
 
     @staticmethod
     def create_fields() -> List[str]:
-        return ["encrypted_apikey", "name"]
+        return ["name"]
 
     @staticmethod
     def update_fields() -> List[str]:
@@ -82,13 +88,3 @@ class Apikey(ModelEntity):
     @staticmethod
     def fields_exclude_in_response():
         return ["encrypted_apikey"]
-
-
-apikey_ops = PostgresModelOperator(
-    postgres_pool=postgres_pool,
-    entity_class=Apikey,
-    redis=RedisOperator(
-        entity_class=Apikey,
-        redis_conn=redis_conn,
-    ),
-)
