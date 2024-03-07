@@ -4,8 +4,7 @@ from tkhelper.models.operator.postgres_operator import PostgresModelOperator, Mo
 from tkhelper.error import raise_http_error, ErrorCode
 
 from app.database import postgres_pool
-from app.models import Record, RecordType
-from app.schemas import RecordUpdateRequest, RecordCreateRequest
+from app.models import Record, RecordType, TextSplitter
 from app.database_ops.retrieval import record as db_record
 
 from .collection import collection_ops
@@ -26,12 +25,11 @@ class RecordModelOperator(PostgresModelOperator):
         self._check_kwargs(object_id_required=None, **kwargs)
         collection_id = kwargs["collection_id"]
 
-        request = RecordCreateRequest(**create_dict)
-        type = request.type
-        title = request.title
-        content = request.content
-        text_splitter = request.text_splitter
-        metadata = request.metadata
+        type = RecordType(create_dict["type"])
+        title = create_dict["title"]
+        content = create_dict["content"]
+        text_splitter = TextSplitter(**create_dict["text_splitter"])
+        metadata = create_dict["metadata"]
 
         # validate collection
         collection = await collection_ops.get(collection_id=collection_id)
@@ -86,12 +84,11 @@ class RecordModelOperator(PostgresModelOperator):
         collection_id = kwargs["collection_id"]
         record_id = kwargs["record_id"]
 
-        request = RecordUpdateRequest(**update_dict)
-        type = request.type
-        title = request.title
-        content = request.content
-        text_splitter = request.text_splitter
-        metadata = request.metadata
+        type = RecordType(update_dict["type"])
+        title = update_dict["title"]
+        content = update_dict["content"]
+        text_splitter = TextSplitter(**update_dict["text_splitter"])
+        metadata = update_dict["metadata"]
 
         collection = await collection_ops.get(collection_id=collection_id)
         record = await self.get(collection_id=collection_id, record_id=record_id)

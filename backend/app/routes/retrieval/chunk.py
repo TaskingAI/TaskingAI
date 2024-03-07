@@ -6,7 +6,7 @@ from tkhelper.schemas.base import BaseListResponse, BaseListRequest
 from app.models import Chunk
 from app.services.retrieval import query_chunks
 from app.operators import chunk_ops
-from ..utils import auth_info_required
+from ..utils import *
 
 router = APIRouter()
 
@@ -47,15 +47,26 @@ async def api_list_record_chunks(
     collection_id: str,
     record_id: str,
     data: BaseListRequest = Depends(),
+    path_params: Dict = Depends(path_params_required),
     auth_info: Dict = Depends(auth_info_required),
 ):
+    check_path_params(
+        model_operator=chunk_ops,
+        object_id_required=False,
+        path_params=path_params,
+    )
+
+    data_prefix_filter = getattr(data, "prefix_filter", {})
+    path_params.pop("record_id")
+    prefix_filter_dict = await check_list_params(chunk_ops, path_params, data_prefix_filter)
+
     chunks, has_more = await chunk_ops.list(
         collection_id=collection_id,
         limit=data.limit,
         order=data.order,
-        after_id=data.after_id,
-        before_id=data.before_id,
-        prefix_filters=data.prefix_filters,
+        after_id=data.after,
+        before_id=data.before,
+        prefix_filters=prefix_filter_dict,
         equal_filters={"record_id": record_id},
     )
 
