@@ -72,5 +72,3 @@ async def create_record_and_chunks(
                 len(chunk_text_list),
                 collection.collection_id,
             )
-
-            await collection.pop_redis()

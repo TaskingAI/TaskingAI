@@ -1,4 +1,4 @@
-from typing import Any, Optional, Dict
+from typing import Any, Optional
 
 from pydantic import BaseModel, Extra, Field
 from tkhelper.models import SortOrderEnum
@@ -27,9 +27,6 @@ class BaseListResponse(BaseModel):
     fetched_count: int = Field(0, description="The number of objects fetched.")
     total_count: Optional[int] = Field(None, description="The total number of objects.")
     has_more: bool = Field(False, description="Whether there are more objects to fetch.")
-
-    def model_dump(self, **kwargs) -> Dict[str, Any]:
-        return self.model_dump(exclude_none=True, **kwargs)
 
 
 class BaseListRequest(BaseModel):

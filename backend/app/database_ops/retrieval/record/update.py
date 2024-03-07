@@ -73,7 +73,6 @@ async def update_record(
                     table_name="collection",
                     equal_filters={"collection_id": collection.collection_id},
                 )
-                await collection.pop_redis()
 
             # 5. update other chunk fields
             if len(update_dict) > 0:

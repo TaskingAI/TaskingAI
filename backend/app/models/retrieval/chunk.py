@@ -40,6 +40,21 @@ class Chunk(ModelEntity):
             created_timestamp=row["created_timestamp"],
         )
 
+    def to_response_dict(self) -> Dict:
+        ret = {
+            "chunk_id": self.chunk_id,
+            "record_id": self.record_id,
+            "collection_id": self.collection_id,
+            "content": self.content,
+            "num_tokens": self.num_tokens,
+            "metadata": self.metadata,
+            "updated_timestamp": self.updated_timestamp,
+            "created_timestamp": self.created_timestamp,
+        }
+        if self.score is not None:
+            ret["score"] = self.score
+        return ret
+
     @staticmethod
     def object_name():
         return "chunk"

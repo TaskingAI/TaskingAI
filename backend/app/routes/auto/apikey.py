@@ -12,7 +12,6 @@ License: Apache 2.0
 """
 
 from fastapi import APIRouter, Request, Depends
-from typing import Dict
 
 from ..utils import *
 
