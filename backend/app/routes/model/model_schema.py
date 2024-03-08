@@ -47,7 +47,7 @@ async def api_get_provider(
             message=f"Provider {data.provider_id} not found.",
         )
     return BaseDataResponse(
-        data=[provider.to_dict(lang="en")],
+        data=provider.to_dict(lang="en"),
     )
 
 
@@ -92,5 +92,5 @@ async def api_get_model_schema(
             message=f"Model schema {data.model_schema_id} not found.",
         )
     return BaseDataResponse(
-        data=[model_schema.to_dict(lang="en")],
+        data=model_schema.to_dict(lang="en"),
     )
