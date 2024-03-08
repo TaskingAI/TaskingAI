@@ -65,7 +65,7 @@ class Record(ModelEntity):
 
     @staticmethod
     def primary_key_fields() -> List[str]:
-        return ["record_id"]
+        return ["collection_id", "record_id"]
 
     @staticmethod
     def generate_random_id():

@@ -73,7 +73,7 @@ class Chunk(ModelEntity):
 
     @staticmethod
     def primary_key_fields() -> List[str]:
-        return ["chunk_id"]
+        return ["collection_id", "chunk_id"]
 
     @staticmethod
     def generate_random_id():

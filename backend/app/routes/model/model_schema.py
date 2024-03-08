@@ -18,10 +18,10 @@ router = APIRouter()
 )
 async def api_list_providers(
     request: Request,
+    data: ProviderListRequest = Depends(),
     auth_info: Dict = Depends(auth_info_required),
 ):
-    # todo
-    providers, total, has_more = list_providers(limit=100, offset=0)
+    providers, total, has_more = list_providers(limit=data.limit, offset=data.offset, type=data.type)
     return BaseListResponse(
         data=[provider.to_dict(lang="en") for provider in providers],
         fetched_count=len(providers),
