@@ -115,6 +115,7 @@ async def sync_model_schema_data():
 def list_providers(
     limit: int,
     offset: Optional[int],
+    type: Optional[ModelType],
 ) -> Tuple[List[Provider], int, bool]:
     """
     List providers.
@@ -125,19 +126,25 @@ def list_providers(
 
     # Paginate
     end_index = offset + limit
-    page = _providers[offset:end_index] or []
+
+    # Filter by type
+    _filtered_providers = _providers
+    if type:
+        _filtered_providers = [provider for provider in _providers if provider.has_model_type(type)]
+
+    page = _filtered_providers[offset:end_index]
 
     # Check if there's more
     has_more = end_index < len(_providers)
 
-    return page, len(_providers), has_more
+    return page, len(_filtered_providers), has_more
 
 
 async def list_model_schemas(
     limit: int,
     offset: Optional[int],
     provider_id: Optional[str],
-    type: Optional[str],
+    type: Optional[ModelType],
 ) -> Tuple[List[ModelSchema], int, bool]:
     """
     List model schemas.
@@ -154,7 +161,7 @@ async def list_model_schemas(
     filtered_schemas = [
         schema
         for schema in _model_schemas
-        if (provider_id is None or schema.provider_id == provider_id) and (type is None or schema.type == type)
+        if (provider_id is None or schema.provider_id == provider_id) and (type is None or schema.type == type.value)
     ]
 
     # Paginate

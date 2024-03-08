@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Dict, List
 from tkhelper.utils import load_json_attr
+from .model_schema import ModelType
 
 __all__ = ["Provider"]
 
@@ -15,6 +16,9 @@ class Provider(BaseModel):
     model_types: List[str]
     resources: Dict[str, str]
     updated_timestamp: int
+
+    def has_model_type(self, model_type: ModelType):
+        return (model_type.value in self.model_types) or (ModelType.WILDCARD.value in self.model_types)
 
     @staticmethod
     def object_name():
