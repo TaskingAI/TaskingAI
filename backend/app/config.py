@@ -53,10 +53,12 @@ class Config:
     """Backend configuration"""
 
     def __init__(self):
+        from app import __VERSION__
+
         logger.info(f"Init Config")
 
         # version
-        self.VERSION = "0.2.0"
+        self.VERSION = __VERSION__
         self.POSTGRES_SCHEMA_VERSION = 4
 
         # mode
