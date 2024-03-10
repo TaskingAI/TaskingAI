@@ -35,6 +35,7 @@ class ErrorCode(str, Enum):
     ACTION_API_REQUEST_ERROR = "ACTION_API_REQUEST_ERROR"
     OBJECT_LOCKED = "OBJECT_LOCKED"
     INVALID_REQUEST = "INVALID_REQUEST"
+    GENERATION_ERROR = "GENERATION_ERROR"
 
 
 error_messages = {
@@ -55,6 +56,7 @@ error_messages = {
     ErrorCode.ACTION_API_REQUEST_ERROR: {"status_code": 400, "message": "Action API request error."},
     ErrorCode.OBJECT_LOCKED: {"status_code": 423, "message": "Object locked."},
     ErrorCode.INVALID_REQUEST: {"status_code": 400, "message": "Invalid request."},
+    ErrorCode.GENERATION_ERROR: {"status_code": 500, "message": "Generation error occurred."},
 }
 
 assert len(error_messages) == len(ErrorCode)

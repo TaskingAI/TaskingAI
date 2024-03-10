@@ -53,7 +53,7 @@ class Session(ABC):
             metadata={},
         )
 
-    async def prepare(self, stream: bool, system_prompt_variables: Dict, retrival_log: bool = False):
+    async def prepare(self, stream: bool, system_prompt_variables: Dict, retrieval_log: bool = False):
         # 1. Get model
         self.model = await get_model(self.assistant.model_id)
 
@@ -91,7 +91,7 @@ class Session(ABC):
                 )
                 if retrieval_query_text:
                     retrieval_event_id = generate_random_event_id()
-                    if retrival_log:
+                    if retrieval_log:
                         retrieval_log_input = build_retrieval_input_log_dict(
                             session_id=self.session_id,
                             event_id=retrieval_event_id,
@@ -105,7 +105,7 @@ class Session(ABC):
                         query_text=retrieval_query_text,
                     )
 
-                    if retrival_log:
+                    if retrieval_log:
                         retrieval_log_output = build_retrieval_output_log_dict(
                             session_id=self.session_id,
                             event_id=retrieval_event_id,

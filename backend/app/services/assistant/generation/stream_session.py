@@ -19,7 +19,7 @@ MESSAGE = 3
 def error_message(message: str):
     return {
         "object": "Error",
-        "code": ErrorCode.INTERNAL_SERVER_ERROR,
+        "code": "GENERATION_ERROR",
         "message": message,
     }
 
@@ -52,13 +52,16 @@ class StreamSession(Session):
                     temp_data.update({"object": "MessageChunk"})
                     yield MESSAGE_CHUNK, temp_data
 
-    async def stream_generate(self):
-        if self.prepare_logs:
-            for log_dict in self.prepare_logs:
-                yield f"data: {json.dumps(log_dict)}\n\n"
-                await asyncio.sleep(0.1)
-
+    async def stream_generate(self, system_prompt_variables: Dict):
         try:
+            await self.prepare(True, system_prompt_variables, retrieval_log=self.debug)
+            await self.chat.lock()
+
+            if self.prepare_logs:
+                for log_dict in self.prepare_logs:
+                    yield f"data: {json.dumps(log_dict)}\n\n"
+                    await asyncio.sleep(0.1)
+
             function_calls_round_index = 0
             while True:
                 chat_completion_function_calls_dict_list = None
