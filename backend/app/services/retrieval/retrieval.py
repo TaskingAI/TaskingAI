@@ -35,7 +35,12 @@ async def verify_retrievals(retrieval_refs: List[RetrievalRef]):
             )
 
 
-async def query_retrievals(retrieval_refs: List[RetrievalRef], top_k: int, query_text: str) -> List[RetrievalResult]:
+async def query_retrievals(
+    retrieval_refs: List[RetrievalRef],
+    top_k: int,
+    max_tokens: int,
+    query_text: str,
+) -> List[RetrievalResult]:
     collection_ids = []
     for retrieval_ref in retrieval_refs:
         if retrieval_ref.type == RetrievalType.COLLECTION:
@@ -49,6 +54,7 @@ async def query_retrievals(retrieval_refs: List[RetrievalRef], top_k: int, query
     chunks: List[Chunk] = await query_chunks(
         collection_ids=collection_ids,
         top_k=top_k,
+        max_tokens=max_tokens,
         query_text=query_text,
     )
 

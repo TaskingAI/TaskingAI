@@ -1,6 +1,6 @@
 from app.database.connection import postgres_pool
 import json
-from typing import List
+from typing import List, Optional
 from app.models import Collection, Chunk
 from .utils import get_ef_search
 import logging
@@ -56,12 +56,14 @@ async def _query_chunks_in_one_collection(
 async def query_chunks(
     collections: List[Collection],
     top_k: int,
+    max_tokens: Optional[int],
     query_vector: List[float],
 ) -> List[Chunk]:
     """
     Query top_k related chunks in all collections
     :param collections: the collections where the chunks belong to
     :param top_k: the number of chunks to be returned
+    :param max_tokens: the maximum number of tokens in the chunks
     :param query_vector: the query vector
     :return: the top_k related chunks
     """

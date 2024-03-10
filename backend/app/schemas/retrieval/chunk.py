@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel, Field, Extra
 from app.models import Chunk
 
@@ -16,6 +16,7 @@ __all__ = [
 # Response: ChunkQueryResponse
 class ChunkQueryRequest(BaseModel):
     top_k: int = Field(..., ge=1, le=20, description="The number of most relevant chunks to return.", example=3)
+    max_tokens: Optional[int] = Field(None, ge=1, description="The maximum number of tokens to return.", example=100)
     query_text: str = Field(
         ...,
         min_length=1,
