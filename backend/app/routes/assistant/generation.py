@@ -3,7 +3,6 @@ from starlette.responses import StreamingResponse
 from typing import Dict
 
 from tkhelper.schemas.base import BaseDataResponse
-from tkhelper.error import ErrorCode, raise_http_error
 
 from app.services.assistant import get_assistant_and_chat, NormalSession, StreamSession
 from app.schemas.assistant.generate import MessageGenerateRequest
@@ -34,15 +33,8 @@ async def api_chat_generate(
     auth_info: Dict = Depends(auth_info_required),
 ):
     system_prompt_variables = payload.system_prompt_variables
-    stream = payload.stream
 
     assistant, chat = await get_assistant_and_chat(assistant_id, chat_id)
-
-    if await chat.is_chat_locked():
-        raise_http_error(
-            ErrorCode.OBJECT_LOCKED,
-            message="Chat is locked by another generation process.",
-        )
 
     if payload.stream or payload.debug:
         session = StreamSession(
@@ -51,15 +43,14 @@ async def api_chat_generate(
             stream=payload.stream,
             debug=payload.debug,
         )
-        await session.prepare(stream, system_prompt_variables, retrival_log=payload.debug)
-        await chat.lock()
-        return StreamingResponse(session.stream_generate(), media_type="text/event-stream")
+        return StreamingResponse(
+            session.stream_generate(system_prompt_variables),
+            media_type="text/event-stream",
+        )
 
     else:
         session = NormalSession(
             assistant=assistant,
             chat=chat,
         )
-        await session.prepare(stream, system_prompt_variables, retrival_log=False)
-        await chat.lock()
-        return await session.generate()
+        return await session.generate(system_prompt_variables)

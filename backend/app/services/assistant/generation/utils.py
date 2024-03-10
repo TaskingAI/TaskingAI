@@ -1,10 +1,9 @@
 import re
 from typing import Dict, List, Optional, Tuple
 from tkhelper.utils import generate_random_id
-from tkhelper.error import raise_http_error, ErrorCode
 
 from app.models import Assistant, RetrievalMethod, Chat, RetrievalResult
-from app.services.retrieval import query_retrievals
+from app.services.retrieval.retrieval import query_retrievals
 
 
 class MessageGenerationException(Exception):
@@ -87,18 +86,12 @@ async def get_chat_memory_messages(chat: Chat):
     if chat_memory_messages:
         last_message = chat_memory_messages[-1]
         if last_message.role == "assistant":
-            raise_http_error(
-                ErrorCode.REQUEST_VALIDATION_ERROR,
-                message="Cannot generate another assistant message after an assistant message.",
-            )
+            raise MessageGenerationException("Cannot generate another assistant message after an assistant message.")
 
     # Ensure there is at least one user message in the chat memory
     user_message_count = sum(1 for message in chat_memory_messages if message.role == "user")
     if user_message_count == 0:
-        raise_http_error(
-            ErrorCode.REQUEST_VALIDATION_ERROR,
-            message="There is no user message in the chat context.",
-        )
+        raise MessageGenerationException("There is no user message in the chat context.")
 
     message_dicts = [message.model_dump() for message in chat_memory_messages]
     return message_dicts

@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from typing import Dict
 from tkhelper.error import raise_http_error, ErrorCode
 from tkhelper.schemas import BaseDataResponse
 import logging
@@ -15,10 +16,13 @@ class NormalSession(Session):
     def __init__(self, assistant: Assistant, chat: Chat):
         super().__init__(assistant, chat)
 
-    async def generate(self):
-        function_calls_round_index = 0
-
+    async def generate(self, system_prompt_variables: Dict):
         try:
+            await self.prepare(False, system_prompt_variables, retrieval_log=False)
+            await self.chat.lock()
+
+            function_calls_round_index = 0
+
             while True:
                 try:
                     chat_completion_assistant_message, chat_completion_function_calls_dict_list = await self.inference()
@@ -53,7 +57,7 @@ class NormalSession(Session):
 
         except MessageGenerationException as e:
             logger.error(f"NormalSession.generate: MessageGenerationException error = {e}")
-            raise_http_error(ErrorCode.INTERNAL_SERVER_ERROR, message=str(e))
+            raise_http_error(ErrorCode.GENERATION_ERROR, message=str(e))
 
         except Exception as e:
             logger.error(f"NormalSession.generate: Exception error = {e}")
