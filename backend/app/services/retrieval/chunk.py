@@ -17,12 +17,14 @@ __all__ = [
 async def query_chunks(
     collection_ids: List[str],
     top_k: int,
+    max_tokens: int,
     query_text: str,
 ) -> List[Chunk]:
     """
     Query the top_k related chunks from the specified collections.
     :param collection_ids: the collection ids.
     :param top_k: the number of chunks to query.
+    :param max_tokens: the maximum number of tokens in the chunks.
     :param query_text: the query text.
     :return: the created record
     """
@@ -52,9 +54,10 @@ async def query_chunks(
     )
 
     # query related chunks
-    record = await db_chunk.query_chunks(
+    chunks = await db_chunk.query_chunks(
         collections=collections,
         top_k=top_k,
+        max_tokens=max_tokens,
         query_vector=query_vector,
     )
-    return record
+    return chunks

@@ -119,6 +119,7 @@ async def query_assistant_retrieval(
     results: List[RetrievalResult] = await query_retrievals(
         retrieval_refs=assistant.retrievals,
         top_k=assistant.retrieval_configs.top_k,
+        max_tokens=assistant.retrieval_configs.max_tokens,
         query_text=query_text,
     )
 

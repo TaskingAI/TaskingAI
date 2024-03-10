@@ -27,6 +27,7 @@ async def api_query_chunk(
     chunks: List[Chunk] = await query_chunks(
         collection_ids=[collection_id],
         top_k=data.top_k,
+        max_tokens=data.max_tokens,
         query_text=data.query_text,
     )
     return BaseListResponse(
