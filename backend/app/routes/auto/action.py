@@ -82,6 +82,7 @@ def auto_add_action_routes(router: APIRouter):
             after_id=data.after,
             before_id=data.before,
             prefix_filters=prefix_filter_dict,
+            equal_filters=equal_filter_dict,
             **path_params,
         )
         return ActionListResponse(
