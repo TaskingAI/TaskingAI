@@ -139,7 +139,7 @@ def auto_add_apikey_routes(router: APIRouter):
         )
 
         entity = await ops.update(
-            update_dict=data.model_dump(),
+            update_dict=data.model_dump(exclude_none=True),
             **path_params,
         )
         return ApikeyUpdateResponse(
