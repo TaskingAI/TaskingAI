@@ -67,8 +67,14 @@ def auto_add_collection_routes(router: APIRouter):
             path_params=path_params,
         )
 
-        data_prefix_filter = getattr(data, "prefix_filter", {})
-        prefix_filter_dict = await check_list_params(ops, path_params, data_prefix_filter)
+        data_prefix_filter = getattr(data, "prefix_filter", "")
+        data_equal_filter = getattr(data, "equal_filter", "")
+        prefix_filter_dict, equal_filter_dict = await validate_list_filter(
+            model_operator=ops,
+            path_params=path_params,
+            prefix_filter=data_prefix_filter,
+            equal_filter=data_equal_filter,
+        )
 
         entities, has_more = await ops.list(
             limit=data.limit,
@@ -133,7 +139,7 @@ def auto_add_collection_routes(router: APIRouter):
         )
 
         entity = await ops.update(
-            update_dict=data.model_dump(exclude_none=True),
+            update_dict=data.model_dump(),
             **path_params,
         )
         return CollectionUpdateResponse(
