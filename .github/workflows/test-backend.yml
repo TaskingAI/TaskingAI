@@ -20,39 +20,6 @@ jobs:
 
     environment: test
 
-    services:
-      redis:
-        image: bitnami/redis:6.2.0
-        env:
-          REDIS_PASSWORD: password
-        ports:
-          - 6379:6379
-      postgres:
-        image: docker.io/ankane/pgvector:v0.5.1
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-      inference:
-        image: taskingai/taskingai-inference:v0.2.0
-        env:
-          MODE: PROD
-        ports:
-          - 8001:8000
-      plugin:
-        image: taskingai/taskingai-plugin:v0.2.0
-        env:
-          MODE: PROD
-        ports:
-          - 8002:8000
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -85,48 +52,70 @@ jobs:
         working-directory: backend
         run: pip install -r requirements.txt
 
+      - name: Create Docker network
+        run: docker network create taskingai-network
+
+      - name: Run Docker image - Postgres
+        run: |
+          docker run --network taskingai-network -d --rm \
+          -e POSTGRES_DB=taskingai \
+          -e POSTGRES_USER=postgres \
+          -e POSTGRES_PASSWORD=TaskingAI321 \
+          --name db ankane/pgvector:v0.5.1
+
+      - name: Run Docker image - Redis
+        run: |
+          docker run --network taskingai-network -d --rm \
+          --name cache redis:7-alpine
+
+      - name: Run Docker image - Inference
+        run: docker run --network taskingai-network -d --rm -e MODE=PROD --name inference taskingai/taskingai-inference:v0.2.0
+
+      - name: Run Docker image - Plugin
+        run: docker run --network taskingai-network -d --rm -e MODE=PROD --name plugin taskingai/taskingai-plugin:v0.2.0
+
       - name: Build Docker image
         working-directory: backend
-        env:
-          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
         run: |
           docker build -t taskingai/taskingai-server:$IMAGE_TAG .
           echo "Build success: taskingai/taskingai-server:${IMAGE_TAG}"
 
-      - name: Run Docker image - API
-        working-directory: backend
-        env:
-          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
-          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
-        run: |
-          docker run --rm -d -p 8090:8000 \
-          -e PURPOSE=API \
-          -e POSTGRES_URL="postgresql+asyncpg://postgres:password@127.0.0.1:5432/test" \
-          -e REDIS_URL="redis://:password@127.0.0.1:6379/0" -e \
-          TASKINGAI_INFERENCE_URL=127.0.0.1:8001 -e \
-          TASKINGAI_PLUGIN_URL=127.0.0.1:8002 -e \
-          AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
-          taskingai/taskingai-server:$IMAGE_TAG
-
       - name: Run Docker image - WEB
         working-directory: backend
         env:
-          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           JWT_SECRET_KEY: ${{ env.JWT_SECRET_KEY }}
         run: |
-          docker run --rm -d -p 8080:8000 \
+          docker run --network taskingai-network --rm -d -p 8080:8000 \
           -e PURPOSE=WEB \
-          -e POSTGRES_URL="postgresql+asyncpg://postgres:password@127.0.0.1:5432/test" \
-          -e REDIS_URL="redis://:password@127.0.0.1:6379/0" \
-          -e TASKINGAI_INFERENCE_URL=127.0.0.1:8001 \
-          -e TASKINGAI_PLUGIN_URL=127.0.0.1:8002 \
+          -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
+          -e REDIS_URL="redis://cache:6379/0" \
+          -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
+          -e TASKINGAI_PLUGINS_URL=http://plugin:8000 \
           -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
           -e JWT_SECRET_KEY=$JWT_SECRET_KEY \
           taskingai/taskingai-server:$IMAGE_TAG
 
+      - name: Run Docker image - API
+        working-directory: backend
+        env:
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+        run: |
+          docker run --network taskingai-network --rm -d -p 8090:8000 \
+          -e PURPOSE=API \
+          -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
+          -e REDIS_URL="redis://cache:6379/0" \
+          -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
+          -e TASKINGAI_PLUGINS_URL=http://plugin:8000 \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          taskingai/taskingai-server:$IMAGE_TAG
+
       - name: Wait for service to start
         run: sleep 10
+
+      - name: Install Dependencies
+        working-directory: TaskingAI-Test
+        run: pip install -r requirements.txt
 
       - name: Run WEB Tests
         working-directory: TaskingAI-Test

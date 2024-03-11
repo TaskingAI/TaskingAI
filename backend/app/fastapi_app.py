@@ -31,6 +31,7 @@ async def sync_data(first_sync=False):
 async def lifespan(app: FastAPI):
     from app.database import close_database, init_database
     from app.services.auth.admin import create_default_admin_if_needed
+    from app.config import CONFIG
 
     try:
         logger.info("fastapi app startup...")
@@ -42,7 +43,8 @@ async def lifespan(app: FastAPI):
         await sync_data(first_sync=True)
 
         await init_database()
-        await create_default_admin_if_needed()
+        if CONFIG.WEB:
+            await create_default_admin_if_needed()
 
         yield
 
@@ -52,7 +54,7 @@ async def lifespan(app: FastAPI):
 
 
 def create_app():
-    from config import CONFIG
+    from app.config import CONFIG
     from app.routes import routes
 
     app = FastAPI(title="TaskingAI-Community", version=CONFIG.VERSION, lifespan=lifespan)
