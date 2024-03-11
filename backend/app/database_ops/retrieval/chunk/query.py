@@ -85,4 +85,15 @@ async def query_chunks(
         if len(top_k_chunks) >= top_k:
             break
 
-    return top_k_chunks
+    # select chunks whose total tokens <= max_tokens
+    total_tokens = 0
+    if max_tokens is not None:
+        result_chunks = []
+        for chunk in top_k_chunks:
+            if total_tokens + chunk.num_tokens <= max_tokens:
+                result_chunks.append(chunk)
+                total_tokens += chunk.num_tokens
+    else:
+        result_chunks = top_k_chunks
+
+    return result_chunks
