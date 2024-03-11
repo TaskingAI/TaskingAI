@@ -166,3 +166,6 @@ frontend/node_modules/
 
 # auto
 backend/auto/
+
+# docker compose
+docker/data/

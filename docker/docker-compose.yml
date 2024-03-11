@@ -2,46 +2,54 @@ version: "3.3"
 
 services:
   frontend:
-    image: taskingai/taskingai-console:v0.1.3
+    image: taskingai/taskingai-console:v0.2.0
     depends_on:
       - backend-web
       - backend-api
-      - backend-inference
 
   backend-inference:
-    image: taskingai/taskingai-inference:v0.1.7
+    image: taskingai/taskingai-inference:v0.2.0
     environment:
-      AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
+      AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0 # replace with your own
+      ICON_URL_PREFIX: http://localhost:8080 # replace with your own
+
+  backend-plugin:
+    image: taskingai/taskingai-plugin:v0.2.0
+    environment:
+      AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0 # replace with your own
+      ICON_URL_PREFIX: http://localhost:8080 # replace with your own
 
   backend-api:
-    image: taskingai/taskingai-server:v0.1.3
+    image: taskingai/taskingai-server:v0.2.0
     environment:
       POSTGRES_URL: postgres://postgres:TaskingAI321@db:5432/taskingai
       REDIS_URL: redis://:TaskingAI321@cache:6379/0
       TASKINGAI_INFERENCE_URL: http://backend-inference:8000
-      AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
-      DEFAULT_ADMIN_USERNAME: admin
-      DEFAULT_ADMIN_PASSWORD: TaskingAI321
+      TASKINGAI_PLUGIN_URL: http://backend-plugin:8000
+      AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0 # replace with your own
     depends_on:
       - db
       - cache
       - backend-inference
+      - backend-plugin
 
   backend-web:
-    image: taskingai/taskingai-server:v0.1.3
+    image: taskingai/taskingai-server:v0.2.0
     environment:
       POSTGRES_URL: postgres://postgres:TaskingAI321@db:5432/taskingai
       REDIS_URL: redis://:TaskingAI321@cache:6379/0
       TASKINGAI_INFERENCE_URL: http://backend-inference:8000
-      AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
-      JWT_SECRET_KEY: dbefe42f34473990a3fa903a6a3283acdc3a910beb1ae271a6463ffa5a926bfb
+      TASKINGAI_PLUGIN_URL: http://backend-plugin:8000
+      AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0 # replace with your own
+      JWT_SECRET_KEY: dbefe42f34473990a3fa903a6a3283acdc3a910beb1ae271a6463ffa5a926bfb # replace with your own
       PURPOSE: WEB
       DEFAULT_ADMIN_USERNAME: admin
-      DEFAULT_ADMIN_PASSWORD: TaskingAI321
+      DEFAULT_ADMIN_PASSWORD: TaskingAI321 # replace with your own
     depends_on:
       - db
       - cache
       - backend-inference
+      - backend-plugin
 
   db:
     image: ankane/pgvector:v0.5.1
@@ -50,7 +58,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: TaskingAI321
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -62,7 +70,7 @@ services:
     image: redis:7-alpine
     command: ["redis-server", "--requirepass", "TaskingAI321"]
     volumes:
-      - redis_data:/data
+      - ./data/redis:/data
     healthcheck:
       test: ["CMD", "redis-cli", "auth", "password", "ping"]
       interval: 5s
@@ -77,14 +85,8 @@ services:
       # edit this to change the port, for example to "8080:80" to use port 8080
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
-      - nginx_cache_data:/var/cache/nginx
+      - ./data/nginx_cache:/var/cache/nginx
     depends_on:
       - frontend
       - backend-web
       - backend-api
-      - backend-inference
-
-volumes:
-  postgres_data:
-  redis_data:
-  nginx_cache_data:
