@@ -57,7 +57,7 @@ async def verify_bundle_credentials(bundle: Bundle, credentials: Dict) -> Tuple[
 
     async with aiohttp.ClientSession() as session:
         response = await session.post(
-            f"{CONFIG.TASKINGAI_PLUGINS_URL}/v1/verify_credentials",
+            f"{CONFIG.TASKINGAI_PLUGIN_URL}/v1/verify_credentials",
             json={
                 "bundle_id": bundle.bundle_id,
                 "credentials": credentials,

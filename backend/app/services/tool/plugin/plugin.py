@@ -29,7 +29,7 @@ async def run_plugin(
 
     async with aiohttp.ClientSession() as session:
         response = await session.post(
-            f"{CONFIG.TASKINGAI_PLUGINS_URL}/v1/execute",
+            f"{CONFIG.TASKINGAI_PLUGIN_URL}/v1/execute",
             json={
                 "bundle_id": bundle_instance.bundle_id,
                 "plugin_id": plugin_id,

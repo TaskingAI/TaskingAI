@@ -28,7 +28,7 @@ async def sync_plugin_data():
     global _bundle_checksum, _plugin_checksum, _i18n_checksum
     async with aiohttp.ClientSession() as session:
         response = await session.get(
-            f"{CONFIG.TASKINGAI_PLUGINS_URL}/v1/cache_checksums",
+            f"{CONFIG.TASKINGAI_PLUGIN_URL}/v1/cache_checksums",
         )
         response_wrapper = ResponseWrapper(response.status, await response.json())
         check_http_error(response_wrapper)
@@ -46,7 +46,7 @@ async def sync_plugin_data():
 
     async with aiohttp.ClientSession() as session:
         response = await session.get(
-            f"{CONFIG.TASKINGAI_PLUGINS_URL}/v1/caches",
+            f"{CONFIG.TASKINGAI_PLUGIN_URL}/v1/caches",
         )
         response_wrapper = ResponseWrapper(response.status, await response.json())
         check_http_error(response_wrapper)
@@ -56,11 +56,18 @@ async def sync_plugin_data():
         plugins = [Plugin.build(plugin_data) for plugin_data in response_data["plugins"]]
         plugins.sort(key=lambda x: (x.bundle_id, x.plugin_id))
 
+        num_plugins_dict = {}
+        for plugin in plugins:
+            num_plugins_dict[plugin.bundle_id] = num_plugins_dict.get(plugin.bundle_id, 0) + 1
+
         # sort bundles by bundle_id
         bundles = [Bundle.build(bundle_data) for bundle_data in response_data["bundles"]]
         bundles.sort(key=lambda x: x.bundle_id)
 
         i18n_dict = response_data["i18n"]
+
+        for bundle in bundles:
+            bundle.num_plugins = num_plugins_dict.get(bundle.bundle_id, 0)
 
     # sort bundle by name
     bundle_dict = {bundle.bundle_id: bundle for bundle in bundles}

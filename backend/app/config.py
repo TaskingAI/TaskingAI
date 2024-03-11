@@ -83,7 +83,7 @@ class Config:
 
         # integrations
         self.TASKINGAI_INFERENCE_URL = load_str_env("TASKINGAI_INFERENCE_URL", required=True)
-        self.TASKINGAI_PLUGINS_URL = load_str_env("TASKINGAI_PLUGINS_URL", required=True)
+        self.TASKINGAI_PLUGIN_URL = load_str_env("TASKINGAI_PLUGIN_URL", required=True)
 
         # database
         self.POSTGRES_URL = load_str_env("POSTGRES_URL", required=True)
