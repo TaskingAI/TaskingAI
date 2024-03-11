@@ -26,6 +26,8 @@ function AuthRouter({ children }: AuthRouterProps) {
           }
         } catch (err) {
           console.log(err)
+          localStorage.removeItem('token');
+
         }
       } else {
         navigate('/auth/signin');

@@ -7,15 +7,10 @@ const IconComponent = ({ providerId }) => {
         const fetchIcon1 = async () => {
             const res = await fetchIcon(providerId)
             const html = await res;
-            localStorage.setItem(providerId, html);
             setIconHtml(html);
         };
-        const html = localStorage.getItem(providerId);
-        if (html) {
-            setIconHtml(html);
-            return;
-        }
-        fetchIcon1();
+
+        fetchIcon1()
     }, [providerId]);
     return <div dangerouslySetInnerHTML={{ __html: iconHtml }} className={styles.icon} />;
 };

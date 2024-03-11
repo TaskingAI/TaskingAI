@@ -1,29 +1,30 @@
 import { useEffect, useState, useRef, ChangeEvent } from 'react'
 import { Modal, Button, Spin, Space, Input, Form, Drawer, Tooltip } from 'antd'
 import styles from './modelsPage.module.scss'
-import IconComponent from '@/components/iconComponent';
-// import { TKButton } from '@taskingai/taskingai-ui'
 import { getModelsList, updateModels, deleteModels, getModelsForm, getAiModelsForm } from '@/axios/models'
-import { tooltipEditTitle, tooltipDeleteTitle } from '../../contents/index.tsx'
+import tooltipTitle from '../../contents/tooltipTitle.tsx'
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchModelsData } from '../../Redux/actions';
 import EditIcon from '../../assets/img/editIcon.svg?react'
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
-import { modelsTableColumn } from '../../contents/index.tsx'
+import CommonComponents from '../../contents/index.tsx'
 import ModalTable from '@/components/modalTable';
 import ModelModal from '@/components/modelModal';
 import closeIcon from '../../assets/img/x-close.svg'
 import { toast } from 'react-toastify';
-import { RecordType, ChildRefType, formDataType } from '../../contant/index.ts'
-const typeReverse = {
-    instruct_completion: 'Instruct Completion',
-    chat_completion: 'Chat Completion',
-    text_embedding: 'Text Embedding'
-}
+import { useTranslation } from "react-i18next";
+import IconComponent from '@/components/iconComponent';
+import { setLoading } from '../../Redux/actions.ts'
+import ApiErrorResponse, { RecordType, ChildRefType, formDataType } from '../../constant/index.ts'
 function ModelsPage() {
+    const { modelLists, loading } = useSelector((state: any) => state.model);
+    const dispatch = useDispatch()
+    const { tooltipEditTitle, tooltipDeleteTitle } = tooltipTitle();
+    const { modelsTableColumn, typeReverse } = CommonComponents();
+    const { t } = useTranslation();
     const [form] = Form.useForm()
     const [form1] = Form.useForm()
-    const [type, setType] = useState('')
-    const [proerties, setProerties] = useState('')
-    const [loading, setLoading] = useState(false);
+    const [confirmloading, setConfirmLoading] = useState(false);
     const childRef = useRef<ChildRefType | null>(null);
     const [modelOne, setModelOne] = useState(false);
     const [modelId, setModelId] = useState('');
@@ -39,6 +40,8 @@ function ModelsPage() {
         model_id: '',
         model_schema_id: '',
         provider_id: '',
+        type: '',
+        properties: {}
     });
     const [limit, setLimit] = useState(20)
     const [formShow, setFormShow] = useState(false)
@@ -50,10 +53,12 @@ function ModelsPage() {
     const [deleteValue, setDeleteValue] = useState('');
     const [providerId, setProviderId] = useState('')
     const [hasMore, setHasMore] = useState(false)
+    const [type, setType] = useState('')
     const [deleteLoading, setDeleteLoading] = useState(false)
+    const [properties, setProperties] = useState({})
+
     const fetchData = async (params: Record<string, any>) => {
         try {
-            setLoading(true)
             const res: any = await getModelsList(params)
             const data = res.data.map((item: RecordType) => {
                 return {
@@ -63,24 +68,32 @@ function ModelsPage() {
             })
             setHasMore(res.has_more)
             setModelList(data)
-
         } catch (e) {
             console.log(e)
-        } finally {
-            setLoading(false)
         }
     }
     useEffect(() => {
-        const params = {
-            limit: 20
-        }
-        fetchData(params);
-    }, [])
+        dispatch(setLoading(true));
+        if (modelLists.data.length > 0) {
+            const data = modelLists.data.map((item: RecordType) => {
+                return {
+                    ...item,
+                    key: item.model_id,
+                }
+            })
+            setModelList(data)
+            setHasMore(modelLists.has_more)
 
+        } else {
+            setModelList([])
+        }
+        dispatch(setLoading(false));
+
+    }, [modelLists])
     const columns = [...modelsTableColumn]
     columns.push(
         {
-            title: 'Actions',
+            title: `${t('projectColumnActions')}`,
             key: 'action',
             width: 118,
             fixed: 'right',
@@ -101,7 +114,6 @@ function ModelsPage() {
             )
         }
     );
-
     const handleModalCancel = () => {
         setModelOne(false)
     }
@@ -130,27 +142,22 @@ function ModelsPage() {
         const params = {
             model_id: record.model_id
         }
-        const params1 = {
-            limit: limit || 20
-        }
+ 
+        const limit1: number = limit || 20
         await deleteModels(params.model_id as string)
-        await fetchData(params1)
+        dispatch(fetchModelsData(limit1) as any);
         setDeleteLoading(false)
         setUpdatePrevButton(true)
         setOpenDeleteModal(false)
     }
-
     const handleCreateModel = async () => {
         setModelOne(true)
-
         childRef.current?.fetchAiModelsList()
     }
-
     const onClose = () => {
         setDrawerEditOpen(false);
     };
     const handleEdit = async (record: RecordType) => {
-        setLoading(true)
         setFormShow(true)
         setResetButtonShow(true)
         form1.setFieldsValue({
@@ -159,20 +166,25 @@ function ModelsPage() {
         setSelectedSecondId(record.model_schema_id)
         setSecondModalNameValue(record.name)
         setModelId(record.model_id)
+        setType(record.type)
+        setProperties(record.properties)
         setProviderId(record.provider_id)
         await fetchEditFormData(record.model_id, record.provider_id)
         setDrawerEditOpen(true)
-        setLoading(false)
     }
     const fetchEditFormData = async (model_id: string, provider_id: string) => {
-        const res = await getModelsForm(model_id)
-        setType(res.data.type)
-        setProerties(res.data.properties)
-        const res1 = await getAiModelsForm(provider_id)
-        setFormData(res1.data[0].credentials_schema)
-        form.setFieldsValue(res.data.display_credentials)
-    }
+        try {
+            const res = await getModelsForm(model_id)
+            const res1 = await getAiModelsForm(provider_id)
+            setFormData(res1.data.credentials_schema)
+            form.setFieldsValue(res.data.display_credentials)
+        } catch (e) {
+            const error = e as ApiErrorResponse
+            const errorMessage = error.response.data.error.message
+            toast.error(errorMessage)
+        }
 
+    }
     const handleConfirm = async () => {
         await form1.validateFields().then(async () => {
 
@@ -182,20 +194,20 @@ function ModelsPage() {
                     credentials: resetButtonShow ? undefined : form.getFieldsValue()
                 }
                 try {
+                    setConfirmLoading(true)
                     await updateModels(modelId, params)
-                    // setConfirmLoading(false)
-                    toast.success('Update successfully')
+                    toast.success(`${t('updateSuccessful')}`)
                     setDrawerEditOpen(false)
-                    const params1 = {
-                        limit: limit || 20
-                    }
-                    await fetchData(params1)
+             
+                    const limit1 = limit || 20
+                    dispatch(fetchModelsData(limit1) as any);
                 } catch (error) {
-                    toast.error(error.response.data.error.message)
+                    const errorType = error as ApiErrorResponse;
+                    const errorMessage: string = errorType.response.data.error.message;
+                    toast.error(errorMessage)
                 }
-
-
                 setUpdatePrevButton(true)
+                setConfirmLoading(false)
             })
         })
     }
@@ -203,8 +215,6 @@ function ModelsPage() {
         setDeleteValue('')
         setOpenDeleteModal(false)
     }
-
-
     const handleValuesChange = (changedValues: object) => {
         form.validateFields(Object.keys(changedValues));
     };
@@ -219,65 +229,65 @@ function ModelsPage() {
         await fetchData(value);
     }
 
+    const fetchData1 = async () => {
+        dispatch(fetchModelsData(20) as any);
+    }
     return (
         <div className={styles["models-page"]}>
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
                 <ModalTable updatePrevButton={updatePrevButton} onChildEvent={handleChildEvent} name="model" hasMore={hasMore} id='model_id' columns={columns} ifSelect={false} onOpenDrawer={handleCreateModel} dataSource={modelList} />
             </Spin>
-            <ModelModal getOptionsList={fetchData} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>
+            <ModelModal getOptionsList={fetchData1} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>
 
-            <Drawer title="Edit Model" width={700} closeIcon={<img src={closeIcon} alt="closeIcon" />} footer={[
+            <Drawer title={t('projectEditModel')} width={700} closeIcon={<img src={closeIcon} alt="closeIcon" />} footer={[
                 <Button key="cancel" onClick={onClose} className='cancel-button'>
-                    Cancel
+                    {t('cancel')}
                 </Button>,
-                <Button key="submit" loading={loading} onClick={handleConfirm} className={`next-button ${styles.button}`}>
-                    Confirm
+                <Button key="submit" loading={confirmloading} onClick={handleConfirm} className={`next-button ${styles.button}`}>
+                    {t('confirm')}
                 </Button>
-            ]} placement="right" onClose={onClose} open={drawerEditOpen} className={styles['edit-modal-header']}>
+            ]} placement="right" onClose={onClose} open={drawerEditOpen} className={styles['editModal']}>
                 <div className={styles['second-modal']}>
-                    <div className={styles['label']}>Base model</div>
+                    <div className={styles['label']}>{t('projectModelColumnBaseModel')}</div>
                     <div className={styles['frameParent']}>
                         <div className={styles['modelproviderParent']}>
                             <IconComponent providerId={providerId} />
                             <div className={styles['openai']}>{selectedSecondId}</div>
                         </div>
                     </div>
-                    <div className={styles['label3']} style={{ marginTop: '24px' }}>Type</div>
-                    <span className={styles['modeltypetag']}>
-                        {typeReverse[type as keyof typeof typeReverse]}
-                    </span>
-                    <div className={styles['label3']} style={{ marginTop: '24px' }}>Properties</div>
-                    <div className={styles['instanceParent']}>
-                        {proerties && Object.entries(proerties).map(([key, property]) => (
-                            property !== null ? (
-                                <div className={styles['streamParent']} key={key}>
-                                    <div className={styles['stream']}>{key}</div>
-                                    <div className={styles['instanceChild']} />
-                                    <div className={styles['on']}>{String(property)}</div>
-                                </div>
-                            ) : null
+                    <div className={styles['label']} style={{ marginTop: '24px' }}>{t('Type')}</div>
+                    <div className={styles.modeltypetag}>
+                        <div className={styles.chatCompletion}>{typeReverse[type as keyof typeof typeReverse]}</div>
+                    </div>
+                    <div className={styles['label']} style={{ marginTop: '24px' }}>{t('projectModelColumnProperties')}</div>
+                    <div className={styles.feature}>
+                        {Object.entries(properties).map(([key, property]) => (
+                            <div className={styles['streamParent']} key={key} style={{ display: 'flex', border: '1px solid #e4e4e4', borderRadius: '8px', padding: '0 4px', marginRight: '12px' }}>
+                                <span className={styles['stream']} style={{ borderRight: '1px solid #e4e4e4', paddingRight: '2px' }}>{key}</span>
+                                <span className={styles['on']} style={{ paddingLeft: '2px' }}>{String(property)}</span>
+                            </div>
                         ))}
                     </div>
 
+                    <div className={styles['hr']}></div>
                     <Form layout="vertical" form={form1} autoComplete="off" className={styles['input-form']} >
                         <Form.Item rules={[
                             {
                                 required: true,
-                                message: 'Please input name.',
+                                message: `${t('projectInputName')}`,
                             },
-                        ]} label="Model name" name="name">
-                            <Input className={styles['input-name']} placeholder='Enter model name' key={secondModalNameValue} />
+                        ]} label={t('projectModelCreateModelName')} name="name">
+                            <Input className={styles['input-name']} placeholder={t('projectModelCreatePlaceholder')} key={secondModalNameValue} />
                         </Form.Item>
                     </Form>
                     <div className={styles['hr']}></div>
-                    <div className={styles['credentials']}>Credentials</div>
+                    <div className={styles['credentials']}>{t('projectModelCredentials')}</div>
                     <div className={styles['label-desc']} style={{ marginBottom: '24px' }}>
-                        Please enter your model credentials, and we will send one token to the model provider to verify the validity of your credentials. All credentials are encrypted at rest with AES-256 and in transit with TLS 1.2. Refer to <a className='href' href='https://docs.tasking.ai/docs/guide/model/overview#required-credentials-for-model-access' target='_blank' rel='noopener noreferrer'>documentation</a> for more information.
+                        {t('projectModelCredentialsDesc')} {t('ReferTo')} <a className='href' href='https://docs.tasking.ai/docs/guide/model/overview#required-credentials-for-model-access' target='_blank' rel='noopener noreferrer'>{t('projectModelCredentialsLink')}</a> {t('projectModelCredentialsDescEnd')}
                     </div>
                     {resetButtonShow && <div className={styles['formbuttoncancel']} onClick={handleResetCredentials}>
-                        <div className={styles['text1']}>Reset credentials</div>
+                        <div className={styles['text1']}>{t('projectModelResetCredentials')}</div>
                     </div>}
-
                     <Form
                         layout="vertical"
                         autoComplete="off"
@@ -307,7 +317,7 @@ function ModelsPage() {
 
                 </div>
             </Drawer>
-            <Modal title='Delete Model'
+            <Modal title={t('projectDeleteModelTitle')}
                 onCancel={handleDeleteCancel}
                 open={openDeleteModal}
                 centered
@@ -315,15 +325,15 @@ function ModelsPage() {
                 closeIcon={<img src={closeIcon} alt="closeIcon" />}
                 footer={[
                     <Button key="cancel" onClick={handleDeleteCancel} className='cancel-button'>
-                        Cancel
+                        {t('cancel')}
                     </Button>,
                     <Button key="delete" onClick={handleDeleteConfrim} className={disabled ? 'disabled-button' : 'delete-button'} disabled={disabled} loading={deleteLoading}>
-                        Delete
+                        {t('delete')}
                     </Button>
                 ]}
             >
-                <p className={styles.desc}>Are you sure you want to delete<span className={styles.span}> {record.name}</span>? This action cannot be undone and all configurations associated with the model will be affected. </p>
-                <Input value={deleteValue} onChange={handleDeleteValue} placeholder='Enter model name to confirm'></Input>
+                <p className={styles.desc}>{t('deleteItem')}<span className={styles.span}> {record.name}</span>? {t('projectDeleteModelDesc')} </p>
+                <Input value={deleteValue} onChange={handleDeleteValue} placeholder={t('projectDeleteModelPlaceholder')}></Input>
             </Modal>
         </div>
 

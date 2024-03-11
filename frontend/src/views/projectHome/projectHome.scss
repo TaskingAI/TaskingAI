@@ -14,7 +14,6 @@
         padding: 0 12px;
         width: 226px;
         border-right: 1px solid #eee;
-        // text-align: center;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -141,12 +140,18 @@
 
         .ant-menu-item.orgination {
             position: absolute;
+            bottom: 100px;
+            background-color: white;
+            width: 92%;
+            height: 42px;
+        }
+        .ant-menu-item.taskingCloud {
+            position: absolute;
             bottom: 54px;
             background-color: white;
             width: 92%;
-            height: 40px;
+            height: 42px;
         }
-
         .ant-menu-item.version {
             position: absolute;
             bottom: 10px;
@@ -176,6 +181,15 @@
 .collapsed {
     .ant-menu-title-content {
         display: none;
+    }
+    .ant-menu-item.orgination {
+        width: 42px !important;
+    }
+    .ant-menu-item.taskingCloud {
+        width: 42px !important;
+    }
+    .ant-menu-item-disabled.version {
+        display: none !important;
     }
 }
 
@@ -225,7 +239,6 @@
 
 .collapsed {
     .ant-menu-item:hover {
-        // position: relative !important;
         overflow: visible !important;
         z-index: 100 !important;
 

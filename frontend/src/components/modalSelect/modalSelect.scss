@@ -1,0 +1,122 @@
+.collection-modal {
+    .ant-modal-body {
+        min-height: 400px;
+        padding: 0;
+        height: 600px;
+        display: flex;
+        background-color: var(--color-item-background);
+    }
+
+    .retrieval-modal-content {
+        height: 100%;
+        width: 100%;
+    }
+
+    .no-data {
+        width: 169px;
+        margin: auto;
+
+        height: 171px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .desc {
+            font-size: 14px;
+            font-family: Inter;
+            color: #bfbfbf;
+            margin-top: 5px;
+            margin-bottom: 12px;
+        }
+
+        .prompt-button {
+            background-color: var(--color-positive);
+            color: white;
+            margin-left: 10px;
+            height: 40px;
+        }
+
+        .prompt-button:hover {
+            color: var(--color-invert-text) !important;
+            cursor: pointer;
+            background-color: var(--color-positive-hover);
+            border: 1px solid transparent;
+        }
+    }
+
+    .content {
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        justify-content: space-between;
+        overflow: auto;
+        padding: 24px 24px 0 24px;
+        border-bottom: 1px solid #e4e4e4;
+        background-color: #fff;
+        height: 504px;
+
+        .retrieval-single {
+            width: 623px;
+            height: 148px;
+            margin-bottom: 24px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e4e4e4;
+            box-sizing: border-box;
+            cursor: pointer;
+
+            .top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 17px;
+
+                .name {
+                    font-size: 14px;
+                    font-weight: 600;
+                    font-family: Inter;
+                    color: #2b2b2b;
+                }
+            }
+
+            .desc {
+                margin-top: 12px;
+                margin-bottom: 12px;
+                height: 68px;
+                font-size: 14px;
+                font-family: Inter;
+                color: #777;
+            }
+
+            .bottom {
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                color: #777;
+                align-items: center;
+            }
+        }
+
+       
+
+        .selected-retrieval {
+            background-color: #fff;
+            cursor: not-allowed;
+            opacity: 0.3;
+            border: 1px solid #e4e4e4;
+
+            .text {
+                color: #087443;
+            }
+        }
+        .retrieval-selected-single {
+            outline: 2px solid #09914f;
+            opacity: 1;
+            cursor: pointer;
+
+        }
+    }
+
+}

@@ -1,10 +1,9 @@
 .actions {
-    background-color: white;
+    background-color: var(--color-item-background);
     height: 100%;
 
     .ant-spin-nested-loading {
         height: 100% !important;
-        // overflow: hidden;
     }
 
     .superchargeYourInstances1 {
@@ -26,7 +25,6 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
-        // padding: 24px;
         padding-bottom: 10px;
         text-align: left;
         font-size: 16px;
@@ -49,7 +47,6 @@
                 border-radius: 8px;
                 border: 1px solid var(--color-divider);
                 box-sizing: border-box;
-                // width: 100%;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
@@ -91,83 +88,6 @@
             }
         }
     }
-    .action-drawer {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    
-        .top {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-    
-            :global {
-                .ant-input-affix-wrapper {
-                    flex: 1
-                }
-            }
-    
-        }
-    
-    
-        .span {
-            color: var(--color-negative);
-        }
-    
-        .label {
-            position: relative;
-            font-size: 16px;
-            line-height: 20px;
-            margin-top: 10px;
-            font-family: Inter;
-            text-align: left;
-            color: var(--color-text-primary);
-        }
-    
-        .label-description {
-            width: 100%;
-            position: relative;
-            font-size: 14px;
-            line-height: 20px;
-            font-family: Inter;
-            margin: 5px 0;
-            color: #777;
-            text-align: left;
-            display: inline-block;
-        }
-    
-        .desc-description {
-            color: #777;
-        }
-    
-    
-        .error {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            color: var(--color-negative);
-    
-            &.show {
-                opacity: 1;
-            }
-        }
-    
-        .tip-error {
-            @extend .error;
-        }
-    
-        .desc-action-error {
-            @extend .error;
-        }
-    
-        .table-drawer {
-            margin-top: 10px;
-        }
-    
-        .valid-schema {
-            color: var(--color-positive);
-            cursor: pointer;
-        }
-    }
 }
 
 
@@ -185,13 +105,6 @@
         }
     }
 }
-
-// >.ant-spin-nested-loading> {
-//     padding: 0 24px;
-//     overflow: hidden;
-//     height: 100% !important;
-// }
-
 .table-custom {
     height: 100%;
 

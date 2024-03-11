@@ -1,27 +1,39 @@
 import {
-    Space, Drawer, Input, Spin, Radio, Tooltip
+    Space, Drawer, Spin, Tooltip
 } from 'antd';
 import styles from './action.module.scss'
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchActionData } from '../../Redux/actions';
+
 import { getFirstMethodAndEndpoint } from '../../utils/util.ts'
-import { getActionsList, updateActions, deleteActions, createActions} from '../../axios/actions.ts'
+import { getActionsList, updateActions, deleteActions, createActions, getActionsDetail } from '../../axios/actions.ts'
 import closeIcon from '../../assets/img/x-close.svg'
 import DeleteModal from '../deleteModal/index.tsx'
 import ModalTable from '../modalTable/index'
 import ModalFooterEnd from '../modalFooterEnd/index'
 import EditIcon from '../../assets/img/editIcon.svg?react'
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
-import { tooltipEditTitle, tooltipDeleteTitle } from '../../contents/index.tsx'
+import tooltipTitle from '../../contents/tooltipTitle.tsx'
+import CommonComponents from '../../contents/index.tsx'
+import ApiErrorResponse from '@/constant/index'
+import { commonDataType } from '@/constant/assistant.ts'
+import ActionDrawer from '../actionDrawer/index.tsx';
 import { toast } from 'react-toastify';
-import {actionsTableColumn} from '../../contents/index.tsx'
+import { useTranslation } from "react-i18next";
 function Actions() {
+    const { t } = useTranslation();
+    const { actionLists } = useSelector((state: any) => state.action);
+    const dispatch = useDispatch()
+
+    const { actionsTableColumn } = CommonComponents();
+    const { tooltipEditTitle, tooltipDeleteTitle } = tooltipTitle();
     const [loading, setLoading] = useState(false);
     const [pluginFunList, setPluginFunList] = useState([])
     const [deleteValue, setDeleteValue] = useState('')
     const [updatePrevButton, setUpdatePrevButton] = useState(false)
     const [OpenDrawer, setOpenDrawer] = useState(false)
-    const [tipSchema, setTipSchema] = useState(false)
-    const [drawerTitle, setDrawerTitle] = useState('Bulk Create Action')
+    const [drawerTitle, setDrawerTitle] = useState('')
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
     const [radioValue, setRadioValue] = useState('none')
     const [Authentication, setAuthentication] = useState<string>('')
@@ -30,20 +42,11 @@ function Actions() {
     const [limit, setLimit] = useState(20)
     const [hasMore, setHasMore] = useState(false)
     const [actionId, setActionId] = useState('')
-    const { TextArea } = Input
+    const [tipSchema, setTipSchema] = useState(false)
 
     useEffect(() => {
-        const params = {
-            limit: 20,
-        }
-        fetchData(params)
-    }, [])
-
-    const fetchData = async (params) => {
-        setLoading(true);
-        try {
-            const res:any = await getActionsList(params)
-            const data = res.data.map((item) => {
+        if (actionLists.data.length > 0) {
+            const data = actionLists.data.map((item: any) => {
                 return {
                     ...item,
                     key: item.action_id,
@@ -51,7 +54,28 @@ function Actions() {
                     endpoint: getFirstMethodAndEndpoint(item.openapi_schema)?.endpoint
                 }
             })
-   
+            setPluginFunList(data)
+            setHasMore(actionLists.has_more)
+        } else {
+            setPluginFunList([])
+        }
+    }, [actionLists])
+    const onhandleTipError = (value: boolean) => {
+        setTipSchema(value)
+    }
+    const fetchData = async (params: any) => {
+        setLoading(true);
+        try {
+            const res: any = await getActionsList(params)
+            const data = res.data.map((item: any) => {
+                return {
+                    ...item,
+                    key: item.action_id,
+                    method: getFirstMethodAndEndpoint(item.openapi_schema)?.method,
+                    endpoint: getFirstMethodAndEndpoint(item.openapi_schema)?.endpoint
+                }
+            })
+
             setPluginFunList(data)
             setHasMore(res.has_more)
         } catch (error) {
@@ -59,23 +83,22 @@ function Actions() {
         }
         setLoading(false);
     };
-    const handleCreatePrompt = async (value) => {
+    const handleCreatePrompt = async (value: boolean) => {
         setSchema('')
         setActionId('')
         setRadioValue('none')
         setAuthentication('')
-        setTipSchema(false)
-        setDrawerTitle('Bulk Create Action')
+        setDrawerTitle(`${t('projectActionEditTitle')}`)
         setOpenDrawer(value)
+        setTipSchema(false)
     }
- 
-    const columns= [...actionsTableColumn]
+    const columns = [...actionsTableColumn]
     columns.push({
-        title: 'Actions',
+        title: `${t('projectColumnActions')}`,
         key: 'action',
         fixed: 'right',
         width: 118,
-        render: (_, record) => (
+        render: (__: string, record: any) => (
             <Space size="middle">
                 <div onClick={() => handleEdit(record)} className='table-edit-icon'>
                     <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
@@ -90,24 +113,22 @@ function Actions() {
             </Space>
         ),
     },)
-    
- 
-
-    const handleEdit = async (val) => {
+    const handleEdit = async (val: any) => {
         setLoading(true)
-        const formattedData = JSON.stringify(val.openapi_schema, null, 4);
-        setDrawerTitle('Edit Action')
         setTipSchema(false)
+        const res = await getActionsDetail(val.action_id)
+        const formattedData = JSON.stringify(res.data.openapi_schema, null, 4);
+        setDrawerTitle(`${t('projectToolsEditAction')}`)
         setActionId(val.action_id)
         setSchema(formattedData)
-        if (val.authentication) {
-            if (val.authentication.content) {
+        if (res.data.authentication) {
+            if (res.data.authentication.content) {
                 setRadioValue('custom')
-                setCustom(Object.keys(val.authentication.content)[0])
-                setAuthentication(Object.values(val.authentication.content)[0] as string)
+                setCustom(Object.keys(res.data.authentication.content)[0])
+                setAuthentication(Object.values(res.data.authentication.content)[0] as string)
             } else {
-                setRadioValue(val.authentication.type)
-                setAuthentication(val.authentication.secret)
+                setRadioValue(res.data.authentication.type)
+                setAuthentication(res.data.authentication.secret)
             }
         } else {
             setRadioValue('none')
@@ -131,25 +152,28 @@ function Actions() {
             }
             JSON.parse(schemaStr)
         } catch (e) {
-            toast.error('Invalid schema')
+            toast.error(`${t('projectToolsActionInvalidSchema')}`)
             return
         }
-        setTipSchema(false)
-        const commonData = {
+        const commonData: commonDataType = {
             openapi_schema: JSON.parse(schemaStr),
             authentication: {
                 type: radioValue,
-                content:undefined,
+                content: undefined,
                 secret: undefined
             }
         };
         if (radioValue === 'custom') {
-            commonData.authentication.content = { [custom]: Authentication };
+            if (commonData.authentication) {
+                commonData.authentication.content = { [custom]: Authentication };
+            }
         } else {
             if (radioValue === 'none') {
-                commonData.authentication = undefined
+                (commonData.authentication as any).type = 'none'
             } else {
-                commonData.authentication.secret = Authentication;
+                if (commonData.authentication) {
+                    commonData.authentication.secret = Authentication;
+                }
             }
         }
         try {
@@ -158,14 +182,14 @@ function Actions() {
             } else {
                 await createActions(commonData);
             }
-            const params = {
-                limit: limit || 20
-            }
-            await fetchData(params);
+            const limit1: number = limit || 20
+            dispatch(fetchActionData(limit1) as any);
             setUpdatePrevButton(true)
         } catch (error) {
             console.error(error);
-            toast.error(error.response.data.error.message)
+            const apiError = error as ApiErrorResponse;
+            const messageError: string = apiError.response.data.error.message;
+            toast.error(messageError)
         }
 
         setOpenDrawer(false)
@@ -173,11 +197,8 @@ function Actions() {
     const onDeleteCancel = () => {
         setOpenDeleteModal(false)
     }
-    const titleCase = (str) => {
-        const newStr = str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase();
-        return newStr;
-    }
-    const handleDelete = (val) => {
+
+    const handleDelete = (val: any) => {
         setOpenDeleteModal(true)
         setDeleteValue(val.name)
         setActionId(val.action_id)
@@ -186,36 +207,29 @@ function Actions() {
     const handleCancel = () => {
         setOpenDrawer(false)
     }
-    const handleSchemaChange = (e) => {
-        setSchema(e.target.value)
-        if (!e.target.value) {
-            setTipSchema(true)
-        } else {
-            setTipSchema(false)
-        }
+    const handleSchemaChange = (value: string) => {
+        setSchema(value)
     }
-    const handleChildEvent = async (value) => {
+    const handleChildEvent = async (value: Record<string, any>) => {
         setUpdatePrevButton(false)
         setLimit(value.limit)
         await fetchData(value);
     }
-    const onRadioChange = (e) => {
-        setRadioValue(e.target.value)
+    const onRadioChange = (value: string) => {
+        setRadioValue(value)
     }
 
-    const hangleChangeAuthorization = (e) => {
-        setAuthentication(e.target.value)
+    const hangleChangeAuthorization = (value: string) => {
+        setAuthentication(value)
     }
-    const handleCustom = (e) => {
-        setCustom(e.target.value)
+    const handleCustom = (value: string) => {
+        setCustom(value)
     }
     const onDeleteConfirm = async () => {
         try {
             await deleteActions(actionId)
-            const params = {
-                limit: limit || 20,
-            }
-            await fetchData(params)
+            const limit1: number = limit || 20
+            dispatch(fetchActionData(limit1) as any);
             setUpdatePrevButton(true)
         } catch (error) {
             console.log(error)
@@ -224,57 +238,13 @@ function Actions() {
     }
     return (
         <div className={styles["actions"]}>
-        
+
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
-                <ModalTable updatePrevButton={updatePrevButton} name='action' id='action_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
+                <ModalTable loading={loading} updatePrevButton={updatePrevButton} name='action' id='action_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
-            <DeleteModal open={OpenDeleteModal} describe={`Are you sure you want to delete ${deleteValue}? This action cannot be undone and all integrations associated with the action will be affected.`} title='Delete Action' projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
+            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem')} ${deleteValue}? ${'projectActionDeleteDesc'}`} title='Delete Action' projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
             <Drawer className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
-                <div className={styles['action-drawer']}>
-                    <div className={styles['top']}>
-                        <div className={styles['label']} style={{ marginTop: 0 }}>
-                            <span className={styles['span']}> * </span>
-                            <span>Schema</span>
-
-                        </div>
-                        {drawerTitle === 'Bulk Create Action' ?
-                            <div className={styles['label-description']}>
-                                The action JSON schema is compliant with
-                                <a href="https://www.openapis.org/what-is-openapi" target="_blank" rel="noopener noreferrer" className={'href'}> the OpenAPI Specification</a>.
-                                If there are multiple paths and methods in the schema, the service will create multiple
-                                actions whose schema only has exactly one path and one method. We’ll use "operationId" and
-                                "description" fields of each endpoint method as the name and description of the tool. Check
-                                <a href="https://docs.tasking.ai/docs/guide/tool/action" target="_blank" rel="noopener noreferrer" className={'href'}> the documentation </a>
-                                to learn more.
-                            </div> :
-                            <div className={styles['label-description']}> The action schema, Which is compliant with the OpenAPI
-                                Specification. It should only have exactly one path and one method.</div>}
-
-                        <TextArea value={schema}
-                            onChange={handleSchemaChange} showCount maxLength={32768}></TextArea>
-                        <div className={`${styles['desc-action-error']} ${tipSchema ? styles.show : ''}`}>Schema is required</div>
-
-                    </div>
-                    <div className={styles['bottom']}>
-                        <div className={styles['label']}>
-                            <span className={styles['span']}> * </span>
-                            <span>Authentication</span>
-
-                        </div>
-                        <div className={styles['label-description']}>Authentication Type</div>
-                        <Radio.Group onChange={onRadioChange} value={radioValue}>
-                            <Radio value='none'>None</Radio>
-                            <Radio value='basic'>Basic</Radio>
-                            <Radio value='bearer'>Bearer</Radio>
-                            <Radio value='custom'>Custom</Radio>
-                        </Radio.Group>
-                        {radioValue !== 'none' && <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '15px 0' }}>
-                            {radioValue !== 'custom' ? <span className={styles['desc-description']}>Authorization </span> : <Input placeholder='X-Custom' onChange={handleCustom} value={custom} style={{ width: '14%' }} />} <span className={styles['desc-description']}>:</span>  <Input prefix={<span style={{ color: '#999' }} >{radioValue !== 'custom' && titleCase(radioValue)}</span>} value={Authentication} placeholder='<Secret>' onChange={hangleChangeAuthorization} style={{ width: '83%' }}></Input>
-                        </div>
-                        }
-                    </div>
-
-                </div>
+                <ActionDrawer actionId={actionId} showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>
         </div>
 

@@ -2,9 +2,10 @@
 import { Layout, Menu, ConfigProvider, Button,Modal } from 'antd';
 import { useState, useEffect } from 'react'
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { projectHomeType } from '@/contant/index'
+import { projectHomeType } from '@/constant/index'
 import CloseIcon from '@/assets/img/x-close.svg?react'
-
+import { fetchAssistantsData, fetchPluginData, fetchActionData, fetchModelsData, fetchRetrievalData, fetchApikeysData } from '../../Redux/actions';
+import TaskingCloud from '@/assets/img/taskingaiCloud.svg?react'
 import {
     QuestionCircleOutlined,
     LogoutOutlined,
@@ -15,7 +16,6 @@ import Assistant from '../../assets/img/assistantsNew.svg?react'
 import aiIcon from "../../assets/img/LOGO+TEXT.svg";
 import Retrieval from '../../assets/img/retrievalNew.svg?react';
 import Plugin from '../../assets/img/toolsNew.svg?react';
-// import Setting from '../../assets/img/settingNew.svg?react';
 import Back from '../../assets/img/backHomeNew.svg?react';
 import Apikeys from '../../assets/img/apikeysNew.svg?react';
 import TaskingAi from '../../assets/img/taskingAi.svg?react';
@@ -23,11 +23,15 @@ import ArrowIcons from '../../assets/img/ArrowIcons.svg?react';
 import RightArrow from '../../assets/img/rightarrow.svg?react';
 import Playground from '../../assets/img/playgroundNew.svg?react';
 import config from '../../../package.json'
+import { useDispatch } from 'react-redux';
+
 const { Header, Content, Sider } = Layout;
 
 
 const ProjectHome = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const location = useLocation()
     const keyReverseValue: Record<string, string> = {
         ['/project']: 'Models',
@@ -35,17 +39,20 @@ const ProjectHome = () => {
         ['/project/assistants']: 'Assistants',
         ['/project/collections']: 'Retrieval',
         ['/project/playground']: 'Playground',
-        ['/project/tools']: 'Actions',
+        ['/project/tools']: 'Plugins',
         ['/project/tools/actions']: 'Actions',
+        ['/project/tools/plugins']: 'Plugins',
         ['/project/apikeys']: 'API Keys',
     }
     const subMenuItems = [
-        { key: '/project/tools', icon: <LogoutOutlined />, text: 'Actions', path: `/project/tools/actions` },
+        { key: '/project/tools/plugins', icon: <LogoutOutlined />, text: 'Plugins', path: `/project/tools/plugins` },
+        { key: '/project/tools/actions', icon: <LogoutOutlined />, text: 'Actions', path: `/project/tools/actions` },
     ];
     const [key, setKey] = useState('')
+    const filteredKeys = [location.pathname === `/project` || location.pathname === `/project/` ? `/project/models` : location.pathname, location.pathname.includes('tools') && `/project/tools`, !location.pathname.includes('tools/actions') && location.pathname.includes('tools') && `/project/tools/plugins`]
 
-    const selectedKey = location.pathname === '/project' || location.pathname === '/project/' ? '/project/models' : location.pathname
-    const [isOpen, setOpen] = useState(selectedKey.includes('tools') || false)
+    const [selectedKey, setSelectedKey] = useState(filteredKeys.filter(item => Boolean(item)) as string[])
+    const [isOpen, setOpen] = useState(selectedKey.filter(item => typeof item === 'string').some(item => (item as string).includes('tools')))
     const [collapsed, setCollapsed] = useState(false);
     const [showTaskingAi, setShowTaskingAi] = useState(true);
     const [logoutOpen, setLogoutOpen] = useState(false)
@@ -54,21 +61,33 @@ const ProjectHome = () => {
         const key = location.pathname
         setKey(key)
     }, [location.pathname])
+    useEffect(() => {
+        dispatch(fetchAssistantsData() as any);
+        dispatch(fetchModelsData(20) as any);
+        dispatch(fetchRetrievalData(20) as any);
+        dispatch(fetchApikeysData(20) as any)
+        dispatch(fetchPluginData(20) as any)
+        dispatch(fetchActionData(20) as any)
+    }, []);
     const handleClickMenu = (e: projectHomeType) => {
         setKey(e.key)
-        if (e.key.includes('tools')) {
-            setOpen(true)
-        } else {
+        if (e.key !== `/project/tools`) {
             setOpen(false)
+            setSelectedKey([e.key])
+        } else {
+            setSelectedKey([e.key, `/project/tools/plugins`])
         }
-        if(e.key !=='/') {
+        if(e.key !=='/' && e.key !== '/taskingCloud') {
             navigate(e.key)
-
         }
+      
     }
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
     };
+    const handleSubMenuNew = ({ key }: { key: string }) => {
+        setSelectedKey([`/project/tools`, key])
+    }
     const handleSubMenu = () => {
         setOpen(true)
     }
@@ -137,13 +156,10 @@ const ProjectHome = () => {
                             }
                         }}>
                             <Menu onMouseEnter={handleMouseEnter}
-                                onMouseLeave={handleMouseLeave} className={collapsed ? 'collapsed' : ''} inlineCollapsed={collapsed} mode="vertical" theme="light" selectedKeys={[selectedKey]} onClick={handleClickMenu} >
-
-
+                                onMouseLeave={handleMouseLeave} className={collapsed ? 'collapsed' : ''} inlineCollapsed={collapsed} mode="vertical" theme="light" selectedKeys={selectedKey} onClick={handleClickMenu} >
                                 <Menu.Item key={'/project/models'} icon={<IconData className="svg-icons" />}>
                                     <Link to={'/project/models'}>Models</Link>
                                 </Menu.Item>
-
                                 <Menu.Item key={`/project/assistants`} icon={<Assistant className="svg-icons" />}>
                                     <Link to={'/project/assistants'}>Assistants</Link>
                                 </Menu.Item>
@@ -163,7 +179,11 @@ const ProjectHome = () => {
                                 </Menu.Item>
 
                                 <Menu.Item icon={<Back className="svg-icons" />} onClick={handleBack} className='orgination' key='/'>
-                                    <span onClick={handleBack}>Logout</span>
+                                    <a onClick={handleBack}>Logout</a>
+                                </Menu.Item>
+
+                                <Menu.Item icon={<TaskingCloud className="svg-icons-taskingai" />}  className='taskingCloud' key='/taskingCloud'>
+                                    <a href='http://www.tasking.ai' target='blank'>Try TaskingAI Cloud</a>
                                 </Menu.Item>
                                 <Menu.Item  className='version' disabled style={{cursor:"default"}}>
                                     <span>TaskingAI Community {config.version}</span>
@@ -183,7 +203,7 @@ const ProjectHome = () => {
                                 }
                             }
                         }}>
-                            <Menu mode="vertical" theme="light" onClick={handleSubMenuClick} selectedKeys={[selectedKey]}>
+                            <Menu mode="vertical" theme="light" onClick={handleSubMenuClick} selectedKeys={selectedKey} onSelect={handleSubMenuNew}>
                                 {subMenuItems.map(item => (
                                     <Menu.Item key={item.key}>
                                         <Link to={item.path}>{item.text}</Link>

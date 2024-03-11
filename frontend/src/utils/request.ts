@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 const request = axios.create({
-  baseURL: '/',
+  baseURL: '/api',
   timeout: 60000
 });
 request.interceptors.request.use(
@@ -27,7 +27,7 @@ request.interceptors.response.use(
     if(!error.response) {
       toast.error('Connection failed. Please retry.');
     }
-    if (error.response.status === 401 && !location.includes('/auth/signin') && error.response.data.error.message !== 'Model credentials validation failed, please check if your credentials are correct and have enough quota.') {
+    if (error.response.status === 401 && !location.includes('/auth/signin') && error.response.data.error.code === 'TOKEN_VALIDATION_FAILED') {
       localStorage.removeItem('token');
       window.location.href = '/auth/signin';
     }

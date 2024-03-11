@@ -9,20 +9,22 @@
         border: 1px solid #eee;
         flex: 1;
         border-radius: 8px;
+        background-color: white;
+        height: calc(100% - 76px);
         position: relative;
-
         .empty-table {
-            :global {
-                .ant-table-header {
-                    border-bottom: 1px solid #eee;
-                }
-            }
-
+            height: calc(100% - 76px);
         }
 
         :global {
+            .ant-table-wrapper .ant-table-thead>tr>th {
+                font-weight: 400 !important;
+                font-size: 14px !important;
+            }
+
             .ant-table-wrapper {
-                height: calc(100% - 60px);
+                height: calc(100% - 76px);
+                font-weight: 400 !important;
 
                 .ant-spin-nested-loading {
                     height: 100% !important;
@@ -39,6 +41,7 @@
                                 height: 100% !important;
 
                                 .ant-table-header {
+
                                     table {
                                         .ant-table-thead {
                                             tr {
@@ -52,6 +55,7 @@
 
                                 .ant-table-body {
                                     height: calc(100% - 60px) !important;
+                                    max-height: calc(100% - 60px) !important;
                                 }
                             }
                         }
@@ -63,14 +67,17 @@
                                 height: 100% !important;
 
                                 .ant-table-body {
-                                    min-height: calc(100% - 56px) !important;
+                                    min-height: calc(100% - 60px) !important;
 
                                     table {
                                         height: 100% !important;
                                         min-height: 100% !important;
+
                                         .ant-table-placeholder {
                                             height: 100% !important;
+                                            box-sizing: border-box
                                         }
+
                                     }
                                 }
                             }
@@ -90,9 +97,7 @@
         margin-bottom: 24px;
 
         :global {
-            .ant-select.select-name {
-                width: 150px !important;
-            }
+
 
             .ant-input {
                 flex: 1
@@ -103,6 +108,9 @@
             }
         }
 
+        .select-name {
+            width: 110px !important;
+        }
 
         .select-data {
             width: 150px !important;
@@ -128,10 +136,19 @@
                     border-top-right-radius: 0;
                     border-bottom-right-radius: 0;
                     border-right: none;
+                    border: 1px solid #e4e4e4;
+                    border-right: none !important;
+
                 }
             }
-
-
+        }
+        .select-name:hover {
+            :global {
+                .ant-select-selector {
+                    border: 1px solid #099250;
+                    border-right: 1px solid #099250 !important;
+                }
+            }
         }
     }
 
@@ -149,12 +166,20 @@
         position: absolute;
         bottom: 10px;
         display: flex;
+        background-color: white;
         padding-top: 10px;
         border-top: 1px solid #eee;
-        // margin-top:16px;
-        // margin-bottom:16px;
+
         width: 100%;
         justify-content: center;
+        align-items: center;
+
+        :global {
+            .ant-pagination {
+                display: flex;
+                align-items: center;
+            }
+        }
 
         :global {
             .ant-pagination-prev {
@@ -235,6 +260,7 @@
                         display: flex;
                         padding: 12px;
                         align-items: center;
+                        border: 1px solid #e4e4e4;
 
                         .ant-select-selection-search-input {
                             height: 100%;
@@ -253,11 +279,9 @@
 
     .footer-position {
         position: absolute;
-        // bottom: 60px;
         display: flex;
         margin-top: 16px;
-        // margin-bottom: 16px;
-        // width: calc(100% - 200px);
+
         justify-content: center;
 
         :global {
@@ -287,6 +311,8 @@
                     .ant-select-selector {
                         height: 40px;
                         width: 116px;
+                        border: 1px solid #e4e4e4;
+
                         display: flex;
                         padding: 12px;
                         align-items: center;
@@ -320,7 +346,7 @@
 .prompt-button {
     background-color: #099250;
     color: white;
-    margin: 0px;
+    margin: 0px !important;
     height: 32px;
     padding: 2px 10px;
 }

@@ -1,10 +1,14 @@
 .create-collection {
+    z-index: 10000;
+
     :global {
+    
         .ant-modal-content {
             .ant-modal-body {
                 padding: 24px 0;
                 overflow: auto;
                 max-height: 680px;
+                background-color: var(--color-item-background);
             }
         }
     }
@@ -119,7 +123,6 @@
         }
 
         .input-map {
-            // margin-bottom: 10px;
             width: 100%;
             display: flex;
             align-items: center;
@@ -140,6 +143,7 @@
     :global {
         .ant-modal-body {
             padding: 0 24px;
+            background-color: var(--color-item-background);
         }
         .ant-modal-footer {
             height: 70px;
