@@ -13,7 +13,7 @@
 
 [TaskingAI](https://www.tasking.ai) brings Firebase's simplicity to **AI-native app development**. The platform enables the creation of GPTs-like multi-tenant applications using a wide range of LLMs from various providers. It features distinct, modular functions such as Inference, Retrieval, Assistant, and Tool, seamlessly integrated to enhance the development process. TaskingAI’s cohesive design ensures an efficient, intelligent, and user-friendly experience in AI application development.
 
-**Key Features**:
+### Key Features
 
 1. **All-In-One LLM Platform**: Access hundreds of AI models with unified APIs.
 2. **Intuitive UI Console**: Simplifies project management and allows in-console workflow testing.
@@ -23,6 +23,20 @@
 
 <p>
 <img src="static/img/console.png" alt="">
+</p>
+
+### Integrations
+
+**Models**: TaskingAI connects with hundreds of LLMs from various providers, including OpenAI, Anthropic, and more. We also allow users to integrate local host models through Ollama, LM Studio and Local AI.
+
+<p>
+<img src="static/img/model_providers.png" alt="">
+</p>
+
+**Plugins**: TaskingAI supports a wide range of built-in plugins to empower your AI agents, including Google search, website reader, stoke market retrieval, and more. Users can also create custom tools to meet their specific needs.
+
+<p>
+<img src="static/img/plugins.png" alt="">
 </p>
 
 ## What Can You Build with TaskingAI?
