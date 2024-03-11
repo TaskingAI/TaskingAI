@@ -1,10 +1,9 @@
 .models-page {
     height: 100%;
     overflow: hidden;
-
+    background-color: var(--color-item-background);
     .ant-spin-nested-loading {
         height: 100% !important;
-        // overflow: hidden;
     }
 
     .usersCanSet1 {
@@ -28,7 +27,6 @@
                 border-radius: 8px;
                 border: 1px solid var(--color-divider);
                 box-sizing: border-box;
-                // width: 100%;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
@@ -226,7 +224,6 @@
         position: relative;
         border-radius: 5px;
         background-color: var(--color-invert-text);
-        // border: 1px solid var(--color-divider;
         box-sizing: border-box;
         width: 100%;
         overflow: hidden;
@@ -353,6 +350,9 @@
 
 
 .models-page {
+    margin: 0;
+    width: 100%;
+
     .spinloading {
         padding: 0 24px;
         height: 100% !important;
@@ -389,84 +389,18 @@
     }
 }
 
-.label3 {
-    align-self: stretch;
-    position: relative;
-    margin-bottom: 8px;
-}
-
-.modeltypetag {
-    position: relative;
-    border-radius: 8px;
-    background-color: var(--color-invert-text);
-    border: 1px solid var(--color-divider);
-    // width: calc(100% - 24px);
-    padding: 5px 12px;
-    text-align: left;
-    font-size: 14px;
-    color: var(--color-primary);
-    font-family: Inter;
-}
-
-.stream {
-    position: relative;
-}
-
-.instanceChild {
-    align-self: stretch;
-    position: relative;
-    border-right: 1px solid var(--color-divider);
-    box-sizing: border-box;
-    width: 1px;
-}
-
-.on {
-    position: relative;
-    color: var(--color-text-primary);
-}
-
-.streamParent {
-    border-radius: 8px;
-    border: 1px solid var(--color-divider);
-    box-sizing: border-box;
-    height: 24px;
-    line-height: 15px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0px 4px;
-    gap: 3px;
-}
-
-.instanceParent {
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 6px;
-    text-align: left;
-    font-size: 12px;
-    color: #777;
-    font-family: Inter;
-}
 
 .second-modal {
     position: relative;
 
-    // overflow: hidden;
     .input-form {
-        height: 100px;
+        height: 86px;
         margin-top: 24px;
 
         .ant-form-item {
             height: 100%;
 
             .ant-form-item-row {
-                // height: 100%;
                 flex-wrap: wrap !important;
                 width: 100%;
 
@@ -487,13 +421,10 @@
 
     .hr {
         position: absolute;
-        // width: 100%;
         left: -20px;
         right: -20px;
         height: 1px !important;
-        // top:10px;
-        // margin-top: 10px;
-        // margin-bottom: 10px;
+
         background-color: #eee !important;
         line-height: 1;
     }
@@ -610,6 +541,72 @@
         position: relative;
     }
 
+    .chatCompletion {
+        position: relative;
+        line-height: 24px;
+        font-weight: 500;
+    }
+
+    .modeltypetag {
+        position: relative;
+        border-radius: 8px;
+        background-color: #fff;
+        border: 1px solid #e4e4e4;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0px 12px;
+        text-align: left;
+        font-size: 14px;
+        width: 140px;
+        color: #087443;
+        font-family: Inter;
+        margin-top: 8px
+    }
+
+    .stream {
+        position: relative;
+    }
+
+    .instanceChild {
+        align-self: stretch;
+        width: 1px;
+        position: relative;
+        border-right: 1px solid #e4e4e4;
+        box-sizing: border-box;
+    }
+
+    .on {
+        position: relative;
+        color: #2b2b2b;
+    }
+
+    .feature {
+        display: flex;
+    }
+
+    .streamParent {
+        position: relative;
+        border-radius: 8px;
+        border: 1px solid #e4e4e4;
+        box-sizing: border-box;
+        height: 24px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0px 4px;
+        gap: 3px;
+        margin-top: 8px;
+        margin-bottom: 24px;
+        text-align: left;
+        font-size: 12px;
+        color: #777;
+        font-family: Inter;
+    }
+
     .formbuttoncancel {
         position: relative;
         border-radius: 8px;
@@ -669,7 +666,6 @@
 
 .p {
     line-height: 1;
-    // margin-left:20px;
     text-align: left;
 
     .span {
@@ -714,7 +710,6 @@
             }
 
             .ant-modal-footer {
-                // margin-top:25px
                 height: 70px;
                 display: flex;
                 margin: 0;
@@ -728,13 +723,11 @@
     }
 
     .desc {
-        // line-height: 1;
-        // margin-left:20px;
+
         margin: 0 0 24px 0;
         text-align: left;
         font-family: Inter;
         color: var(--color-text-primary);
-        // height: 39px;
         line-height: 24px !important;
 
         .span {
@@ -789,6 +782,17 @@
     margin: 0
 }
 
+.editModal {
+    :global {
+        .ant-drawer-header {
+            .ant-drawer-header-title {
+                display: flex;
+                flex-direction: row-reverse;
+            }
+        }
+    }
+}
+
 :global {
     .ant-drawer-footer {
         display: flex;
@@ -799,20 +803,4 @@
 
 .button {
     margin-left: 15px;
-}
-
-.edit-modal-header {
-    :global {
-        .ant-drawer-header {
-            .ant-drawer-header-title {
-                display: flex;
-                flex-direction: row-reverse !important;
-
-                .ant-drawer-close {
-                    margin-inline-end: 0;
-                }
-            }
-        }
-    }
-
 }

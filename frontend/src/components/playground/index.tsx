@@ -1,72 +1,77 @@
 import styles from './playground.module.scss'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, } from 'react'
 import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Collapse } from 'antd'
 import { PlusOutlined, RightOutlined, LoadingOutlined } from '@ant-design/icons';
+import PlayGroundImg from '@/assets/img/selectAssistantImg.svg?react'
 import { toast } from 'react-toastify';
+import { getPluginList } from '../../axios/plugin.ts'
+import CreatePlugin from '../createPlugin/index.tsx';
 import CopyOutlined from '../../assets/img/copyIcon.svg?react'
 import ModelModal from '../modelModal/index'
 import ErrorIcon from '../../assets/img/errorIcon.svg?react'
 import { getModelsList } from '../../axios/models.ts'
-import PlayGroundImg from '../../assets/img/selectAssistantImg.svg?react'
-import LoadingAnim from '../../assets/img/loadingAnim.svg?react'
 import CreateCollection from '../createCollection/index.tsx';
 import ModalSettingIcon from '../../assets/img/modalSettingIcon.svg?react'
 import { formatTimestamp, getFirstMethodAndEndpoint } from '@/utils/util'
 import ModalTable from '../modalTable/index'
-import { commonDataType } from '@/contant/assistant.ts'
-import ApiErrorResponse, { ChildRefType } from '../../contant/index.ts'
+import { commonDataType } from '@/constant/assistant.ts'
+import LoadingAnim from '../../assets/img/loadingAnim.svg?react'
+import ApiErrorResponse, { ChildRefType } from '../../constant/index.ts'
 import ChatIcon from '../../assets/img/chatIcon.svg?react'
 import { getActionsList, createActions } from '../../axios/actions.ts'
 import { getRetrievalList } from '../../axios/retrieval.ts';
 import PlaygroundImg from '@/assets/img/playgroundImg.svg?react'
 import { openChat, sendMessage, generateMessage, getListChats, getHistoryMessage, deleteChatItem } from '@/axios/playground'
-import { getAssistantsList, getAssistantDetail, updateAssistant } from '@/axios/assistant'
+import { getAssistantDetail, updateAssistant, getAssistantsList } from '@/axios/assistant'
 import closeIcon from '../../assets/img/x-close.svg'
 import ModalFooterEnd from '../modalFooterEnd/index'
 import { SSE } from "sse.js";
-import ActionDrawer from '../actionDrawer/index.tsx';
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
 import DeleteModal from '../deleteModal/index.tsx';
 import EditIcon from '../../assets/img/editIcon.svg?react'
 import MessageSuccess from '../../assets/img/messageSuccess.svg?react'
 import ClipboardJS from 'clipboard';
 import DrawerAssistant from '../drawerAssistant/index'
+import ActionDrawer from '../actionDrawer/index.tsx';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
+import CommonComponents from '../../contents/index'
+import { useDispatch } from 'react-redux';
 const origin = window.location.origin;
-import { assistantTableColumn, modelsTableColumn, actionsTableColumn, collectionTableColumn } from '../../contents/index'
+import { fetchAssistantsData } from '@/Redux/actions.ts'
 const plainOptions = [
     { label: 'Stream', value: 1 },
     { label: 'Debug', value: 2 },
 ]
 function Playground() {
     const navigation = useNavigate();
+    const { assistantTableColumn, modelsTableColumn, collectionTableColumn } = CommonComponents()
+    const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const [assistantLimit, setAssistantLimit] = useState(20)
     const { search, pathname } = useLocation();
     const [assistantId, setAssistantId] = useState<any>()
     const [optionList, setOptionList] = useState([])
-    const divRef = useRef();
+    const divRef: any = useRef();
     const settingModal = useRef<any>()
     const [retrievalLimit, setRetrievalLimit] = useState(20)
     const [updateModelPrevButton, setUpdateModelPrevButton] = useState(false)
-    const [updateActionPrevButton, setUpdateActionPrevButton] = useState(false)
-    const [actionLimit, setActionLimit] = useState(20)
-    const [assistantLimit, setAssistantLimit] = useState(20)
+
     const settingIcon = useRef<any>()
     const contentRef = useRef<any>();
     const [shouldSmoothScroll, setShouldSmoothScroll] = useState(true)
     const [Authentication, setAuthentication] = useState('')
-    const [modalActionTableOpen, setModalActionTableOpen] = useState(false)
-    const [selectedActionsRows, setSelectedActionsRows] = useState([])
-    const [retrievalList, setRetrievalList] = useState([])
-    const [listChats, setListChats] = useState([])
+    const [selectedActionsRows, setSelectedActionsRows] = useState<any[]>([])
+    const [retrievalList, setRetrievalList] = useState<any[]>([])
+    const [listChats, setListChats] = useState<any[]>([])
     const [OpenDrawer, setOpenDrawer] = useState(false)
     const [options, setOptions] = useState([])
     const [memoryValue, setMemoryValue] = useState('zero')
-    const [recordsSelected, setRecordsSelected] = useState([])
-    const [recordsActionSelected, setRecordsActionSelected] = useState([])
+    const [recordsSelected, setRecordsSelected] = useState<string[]>([])
     const childRef = useRef<ChildRefType | null>(null);
     const [modelLimit, setModelLimit] = useState(20)
     const [modalTableOpen, setModalTableOpen] = useState(false)
-    const [selectedRows, setSelectedRows] = useState([])
+    const [selectedRows, setSelectedRows] = useState<any[]>([])
     const [modelOne, setModelOne] = useState(false);
     const [OpenActionDrawer, setOpenActionDrawer] = useState(false)
     const [sendButtonLoading, setSendButtonLoading] = useState(false)
@@ -74,41 +79,45 @@ function Playground() {
     const [openModalTable, setOpenModalTable] = useState(false)
     const [systemPromptVariables, setSystemPromptVariable] = useState('')
     const [chatId, setChatId] = useState('')
-    const [tipSchema, setTipSchema] = useState(false)
     const [actionList, setActionList] = useState([])
+    const [tipSchema, setTipSchema] = useState(false)
     const [checkBoxValue, setCheckBoxValue] = useState([1, 2])
     const [contentValue, setContentValue] = useState('')
     const [drawerName, setDrawerName] = useState('')
     const [schema, setSchema] = useState('')
+    const [generateFlag, setGenerateFlag] = useState(false)
+    const [retrievalConfig, setRetrievalConfig] = useState('user_message')
     const [custom, setCustom] = useState('')
     const [inputValueOne, setInputValueOne] = useState(20)
     const [inputValueTwo, setInputValueTwo] = useState(200)
     const [radioValue, setRadioValue] = useState('none')
     const [openCollectionDrawer, setOpenCollectionDrawer] = useState(false)
     const [updateRetrievalPrevButton, setUpdateRetrievalPrevButton] = useState(false)
-    const [selectedRetrievalRows, setSelectedRetrievalRows] = useState([])
+    const [selectedRetrievalRows, setSelectedRetrievalRows] = useState<any[]>([])
     const [hasMore, setHasMore] = useState(false)
     const [hasActionMore, setHasActionMore] = useState(false)
     const [hasModelMore, setHasModelMore] = useState(false)
     const [drawerDesc, setDrawerDesc] = useState('')
-    const [contentTalk, setContentTalk] = useState([])
+    const [contentTalk, setContentTalk] = useState<any[]>([])
     const [contentHasMore, setContentHasMore] = useState(false)
     const [contentLoading, setContentLoading] = useState(false)
     const [contentTalkLoading, setContentTalkLoading] = useState(false)
     const [loading, setLoading] = useState(false)
     const [recordsSelected1, setRecordsSelected1] = useState([])
-    const [systemPromptTemplate, setSystemPromptTemplate] = useState([]);
+    const [systemPromptTemplate, setSystemPromptTemplate] = useState<string[]>([]);
     const [openAssistantModalTable, setOpenAssistantModalTable] = useState(false)
     const { TextArea } = Input;
+    const [sendGenerateLoading, setSendGenerateLoading] = useState(false)
+    const [bundilesList, setBundlesList] = useState([])
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
     const [errorContent, setErrorContent] = useState('')
     const [updatePrevButton, setUpdatePrevButton] = useState(false)
-    const [defaultSelectedAssistant, setDefaultSelectedAssistant] = useState([])
+    const [defaultSelectedAssistant, setDefaultSelectedAssistant] = useState<string[]>([])
     const [modelHasMore, setModelHasMore] = useState(false)
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [loadMoreHasMore, setLoadMoreHasMore] = useState(false)
-    const [debugArray1, setDebugArray1] = useState([])
-    const [debugArray2, setDebugArray2] = useState([])
+    const [debugArray1, setDebugArray1] = useState<any[]>([])
+    const [debugArray2, setDebugArray2] = useState<any[]>([])
     const [lottieAnimShow, setLottieAnimShow] = useState(false)
     const [contentDrawer, setContentDrawer] = useState(false)
     const [contentErrorDrawer, setContentErrorDrawer] = useState(false)
@@ -118,19 +127,21 @@ function Playground() {
     const [collapseLabel2, setCollapseLabel2] = useState('')
     const [noPreviousChat, setNoPreviousChat] = useState(false)
     const [noPreviousMessage, setNoPreviousMessage] = useState(false)
-    const [generateFlag, setGenerateFlag] = useState(false)
-    const [sendGenerateLoading, setSendGenerateLoading] = useState(false)
     const [groupedMessages, setGroupedMessages] = useState({
         role: 'Assistant',
-        content: { text: [{ event_step: '', color: undefined, event_id: undefined }] },
+        content: { text: [{ event_step: '', color: '', event_id: '' }] },
         useId: 'user'
     });
-    const handleCopy = (text) => {
+    const drawerAssistantRef = useRef<any>(null);
+    const [topk, setTopk] = useState(3)
+    const [maxTokens, setMaxToken] = useState(4096)
+    const [pluginModalOpen, setPluginModalOpen] = useState(false)
+    const handleCopy = (text: string) => {
         const clipboard = new ClipboardJS('.icon-copy', {
             text: () => text
         });
         clipboard.on('success', function () {
-            toast.success('Copied to clipboard')
+            toast.success(`${t('CopiedToClipboard')}`)
             clipboard.destroy()
         });
         clipboard.on('error', function (e) {
@@ -138,8 +149,7 @@ function Playground() {
         });
     }
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            // Check if settingModal and settingIcon are defined and contain the event target
+        const handleClickOutside = (event: any) => {
             if (!(settingModal.current && settingModal.current.contains(event.target)) && !(settingIcon.current && settingIcon.current.contains(event.target))) {
                 // Additional check to ensure settingModal.current is defined before accessing its style
                 if (settingModal.current) {
@@ -157,6 +167,7 @@ function Playground() {
         setCheckBoxValue([1, 2])
         initialFunction()
     }, [])
+
     useEffect(() => {
         if (generateFlag) {
             handleGenerateMessage('flag')
@@ -175,14 +186,40 @@ function Playground() {
             }
         }
     }, [contentTalkLoading, contentTalk, shouldSmoothScroll]);
-    const combineObjects = (item, arr) => {
+    const handleRetrievalConfigChange1 = (value: string) => {
+        setRetrievalConfig(value)
+    }
+    useEffect(() => {
+
+        const params1 = {
+            limit: 100,
+            offset: 0,
+            lang: 'en'
+        }
+        getBundleList(params1)
+
+    }, [])
+    const getBundleList = async (params: object) => {
+        try {
+            const res: any = await getPluginList(params)
+            setBundlesList(res.data)
+        } catch (e) {
+            const apiError = e as ApiErrorResponse;
+            const errorMessage: string = apiError.response.data.error.message;
+            toast.error(errorMessage)
+        }
+
+
+    }
+
+    const combineObjects = (item: any, arr: any) => {
         let updatedGroupedMessages = { ...groupedMessages };
         let str = ''
-        const checkBoxValue1 = JSON.parse(localStorage.getItem('checkedValues')) || [1, 2]
+        const checkBoxValue1 = JSON.parse(localStorage.getItem('checkedValues') as string) || [1, 2]
         if (item.object === 'MessageGenerationLog') {
             setLottieAnimShow(true)
             const previousItems = arr.slice(0, arr.length - 1);
-            const currentIsDuplicate = previousItems.some(existingItem => existingItem.event_id === item.event_id);
+            const currentIsDuplicate = previousItems.some((existingItem: any) => existingItem.event_id === item.event_id);
             if (!currentIsDuplicate) {
                 const indexToInsert = Math.max(updatedGroupedMessages.content.text.length - 1, 0);
                 item.color = 'orange'
@@ -210,7 +247,7 @@ function Playground() {
     }
     const fetchAssistantsList = async () => {
         const res: any = await getAssistantsList({ limit: assistantLimit || 20 })
-        const data = res.data.map((item) => {
+        const data = res.data.map((item: any) => {
             return {
                 ...item,
                 key: item.assistant_id
@@ -218,17 +255,19 @@ function Playground() {
         })
 
         setOptionList(data)
-        setModelHasMore(res.has_more)
-    }
+        const id = assistantId[0].split('-')[1] ? assistantId[0].split('-')[1] : assistantId[0]
 
+        const item1 = data.find((item: any) => (item.assistant_id === id))
+        setAssistantId([`${item1.name}-${item1.assistant_id}`])
+        setModelHasMore(res.has_more)
+   
+    }
     const initialFunction = async () => {
         fetchAssistantsList()
-
         const params = {
             limit: 20,
         }
         fetchModelsList(params)
-
         fetchActionsList(params)
         fetchDataRetrievalData(params)
         const queryParams = new URLSearchParams(search);
@@ -246,19 +285,25 @@ function Playground() {
             if (res.data[0]?.chat_id) {
                 await fetchHistoryMessage(assistantId, res.data[0]?.chat_id, param1)
             }
-
         }
     }
-    const fetchHistoryMessage = async (assistantId, chatId, param) => {
+    const fetchHistoryMessage = async (assistantId: string, chatId: string, param: any) => {
         if (param.after) {
             setShouldSmoothScroll(false)
         } else {
             setShouldSmoothScroll(true)
         }
-        const res: any = await getHistoryMessage(assistantId, chatId, param)
-        const data = res.data.reverse()
-        setContentHasMore(res.has_more)
-        setContentTalk(prevValues => [...data, ...prevValues])
+        try {
+            const res: any = await getHistoryMessage(assistantId, chatId, param)
+            const data = res.data.reverse()
+            setContentHasMore(res.has_more)
+            setContentTalk(prevValues => [...data, ...prevValues])
+        } catch (error) {
+            const apiError = error as ApiErrorResponse;
+            const errorMessage: string = apiError.response.data.error.message;
+            toast.error(errorMessage)
+        }
+
     }
     const handleSelectAssistantID = () => {
         if (assistantId) {
@@ -272,15 +317,16 @@ function Playground() {
         setOpenAssistantModalTable(true)
         setUpdatePrevButton(false)
     }
-    const handleSelectModelId = (value) => {
+    const handleMaxToken = (value: any) => {
+        setMaxToken(value)
+    }
+    const handleToks = (value: any) => {
+        setTopk(value)
+    }
+    const handleSelectModelId = (value: boolean) => {
         setModalTableOpen(value)
     }
-    const handleChildAssistantEvent = async (value: Record<string, any>) => {
-        await fetchAssistantsList()
-        setUpdatePrevButton(false)
-        setAssistantLimit(value.limit)
-    }
-    const combineObjectsWithSameMsgId = (arr) => {
+    const combineObjectsWithSameMsgId = (arr: any[]) => {
         let groupedMessages = { role: 'Assistant', content: { text: '' } };
         arr.forEach((item) => {
             if (item.object === 'MessageChunk') {
@@ -289,20 +335,18 @@ function Playground() {
         });
         return groupedMessages
     }
-
-
-    const handleModalCancel = (a) => {
-        setModelOne(a)
+    const handleModalCancel = () => {
+        setModelOne(false)
     }
-    const handleChildModelEvent = async (value) => {
+    const handleChildModelEvent = async (value: any) => {
         await fetchModelsList(value)
         setUpdateModelPrevButton(false)
         setModelLimit(value.limit)
     }
-    const fetchActionsList = async (params) => {
+    const fetchActionsList = async (params: Record<string, any>) => {
         try {
             const res: any = await getActionsList(params)
-            const data = res.data.map((item) => {
+            const data = res.data.map((item: any) => {
                 return {
                     ...item,
                     key: item.action_id,
@@ -317,11 +361,11 @@ function Playground() {
             console.log(error)
         }
     }
-    const fetchModelsList = async (params) => {
+    const fetchModelsList = async (params: Record<string, any>) => {
 
         try {
             const res: any = await getModelsList(params, 'chat_completion')
-            const data = res.data.map((item) => {
+            const data = res.data.map((item: any) => {
                 return {
                     ...item,
                     key: item.model_id
@@ -357,8 +401,8 @@ function Playground() {
         } else {
             setSystemPromptTemplate(system_prompt_template)
         }
-        setSelectedActionsRows(tools.map(item => item.id))
-        const tag = retrievals.map(item => item.id)
+        setSelectedActionsRows(tools.map((item: any) => { return { type: item.type, value: item.id } }))
+        const tag = retrievals.map((item: any) => item.id)
         setRecordsSelected1(tag)
 
         setSelectedRetrievalRows(tag)
@@ -370,44 +414,52 @@ function Playground() {
         setOpenDrawer(false)
     }
 
-    const handleDeletePromptInput = (index) => {
+    const handleDeletePromptInput = (index: number) => {
         const updatedInputValues = [...systemPromptTemplate];
         updatedInputValues.splice(index, 1);
         setSystemPromptTemplate(updatedInputValues);
     }
     const handleRequest = async () => {
-        const inputValueMap = selectedRetrievalRows?.map(item => {
-            const id = item.substr(item.indexOf('-') + 1, item.length)
+        const inputValueMap = (drawerAssistantRef.current?.getRetrievalSelectedList() || []).map((item: any) => {
             return {
-                type: 'collection', id
+                type: 'collection', id: item
             }
-        })
-        const inputPluginValues = selectedActionsRows?.map(item => {
-            const id = item.substr(item.indexOf('-') + 1, item.length)
-            return {
-                type: 'action', id
-            }
-        })
-        let systemPromptTemplate1;
-        if (systemPromptTemplate.length === 0 && systemPromptTemplate[0] === '') {
-            systemPromptTemplate1 = []
+        }).filter((item: any) => item.id)
+        const inputPluginValues = (drawerAssistantRef.current?.getActionSelectedList() || []).map((item: any) => ({ type: item.type, id: item.value })).filter((item: any) => item.id)
+
+        let systemTemplate: string[] = [];
+        if (systemPromptTemplate.length === 1 && systemPromptTemplate[0] === '') {
+            systemTemplate = []
         } else {
-            systemPromptTemplate1 = systemPromptTemplate
+            systemTemplate = systemPromptTemplate
         }
         const params = {
             model_id: Array.isArray(selectedRows) ? selectedRows[0].slice(-8) : selectedRows,
             name: drawerName || '',
             description: drawerDesc || '',
-            system_prompt_template: systemPromptTemplate1,
+            system_prompt_template: systemTemplate,
             tools: inputPluginValues,
             retrievals: inputValueMap,
             memory: {
                 type: memoryValue,
                 max_messages: Number(inputValueOne) || undefined,
                 max_tokens: Number(inputValueTwo) || undefined
+            },
+            retrieval_configs: {
+                top_k: Number(topk) || undefined,
+                method: retrievalConfig,
+                max_count: Number(maxTokens) || undefined
             }
         }
+        let count = 0
 
+        systemPromptTemplate.forEach(item => {
+            const length = item.length
+            count += length
+        })
+        if (count > 16384) {
+            return toast.error(`${t('projectAssistantSystemPromptRequired')}`)
+        }
         let id;
         if (assistantId[0].split('-')[1]) {
             const splitArray = assistantId[0].split('-')
@@ -415,25 +467,30 @@ function Playground() {
         } else {
             id = assistantId[0]
         }
+
         try {
-            await updateAssistant(id, params)
+            if (id) {
+                await updateAssistant(id, params)
+                setOpenDrawer(false)
+            }
+
             await fetchAssistantsList()
-            await handleListChats()
-            setOpenDrawer(false)
+            dispatch(fetchAssistantsData() as any)
+            setUpdatePrevButton(true)
         } catch (error) {
             console.log(error)
             const apiError = error as ApiErrorResponse;
             const errorMessage: string = apiError.response.data.error.message;
             toast.error(errorMessage)
         }
+
     }
     const handleNewChat = async () => {
         if (!assistantId) {
-            return toast.error('Please select an assistant')
+            return toast.error(`${t('projectAssistantRequired')}`)
         }
         setLoading(true)
         const params = {
-            metadata: {}
         }
         let id;
         if (assistantId[0].split('-')[1]) {
@@ -461,7 +518,6 @@ function Playground() {
             content: {
                 text: contentValue
             },
-            metadata: {}
         }
         if (contentValue === '') {
             toast.error('Empty message is not allowed')
@@ -498,19 +554,21 @@ function Playground() {
             }
             setContentValue('')
         } catch (error) {
+            const apiError = error as ApiErrorResponse;
+            const errorMessage: string = apiError.response.data.error.message;
+            toast.error(errorMessage)
             console.log(error)
         }
         setSendButtonLoading(false)
     }
-    const handleInputPromptChange = (index, newValue) => {
+    const handleInputPromptChange = (index: number, newValue: string) => {
         setSystemPromptTemplate((prevValues) =>
             prevValues.map((item, i) =>
                 i === index ? newValue : item
             )
         );
     };
-    const handleCreateModelId = async (e) => {
-        e.stopPropagation()
+    const handleCreateModelId = async () => {
         await setModelOne(true)
         childRef.current?.fetchAiModelsList()
         const params = {
@@ -533,13 +591,12 @@ function Playground() {
         } else {
             id = assistantId[0]
         }
-
         const token = localStorage.getItem('token')
-        const project_base_url = `api/v1`
+        const project_base_url = `api/api/v1`
         setGenerateButtonLoading(true)
         let stream = false
         let debug = false
-        const checkBoxValue1 = JSON.parse(localStorage.getItem('checkedValues')) || checkBoxValue
+        const checkBoxValue1 = JSON.parse(localStorage.getItem('checkedValues') as string) || checkBoxValue
         checkBoxValue1.indexOf(1) !== -1 ? stream = true : stream = false
         checkBoxValue1.indexOf(2) !== -1 ? debug = true : debug = false
 
@@ -548,7 +605,6 @@ function Playground() {
             stream: stream,
             debug: debug
         }
-
         let source;
         if (stream || debug) {
             source = new SSE(`${origin}/${project_base_url}/assistants/${id}/chats/${chatId}/generate`, {
@@ -559,7 +615,7 @@ function Playground() {
                 method: "POST",
                 payload: JSON.stringify(params)
             })
-            source.addEventListener('error', (e) => {
+            source.addEventListener('error', (e: any) => {
                 setGenerateButtonLoading(false)
                 setSendGenerateLoading(false)
                 console.log(e)
@@ -582,14 +638,17 @@ function Playground() {
                     flag: true
                 }])
             } catch (error) {
+                const apiError = error as ApiErrorResponse;
+                const errorMessage: string = apiError.response.data.error.message;
+                toast.error(errorMessage)
                 console.log(error)
             } finally {
                 setGenerateButtonLoading(false)
                 setSendGenerateLoading(false)
             }
         } else if (stream && !debug) {
-            let arr = []
-            source.addEventListener("message", (e) => {
+            let arr: any = []
+            source?.addEventListener("message", (e: any) => {
                 if (e.data === '[DONE]') {
                     setGenerateButtonLoading(false)
                     setSendGenerateLoading(false)
@@ -605,8 +664,8 @@ function Playground() {
 
             );
         } else if (!stream && debug) {
-            let arr1 = []
-            source.addEventListener("message", (e) => {
+            let arr1: any = []
+            source?.addEventListener("message", (e: any) => {
                 if (e.data === '[DONE]') {
                     setGenerateButtonLoading(false)
                     setSendGenerateLoading(false)
@@ -622,8 +681,8 @@ function Playground() {
 
             })
         } else {
-            let arr1 = []
-            source.addEventListener("message", (e) => {
+            let arr1: any = []
+            source?.addEventListener("message", (e: any) => {
                 if (e.data === '[DONE]') {
                     setGenerateButtonLoading(false)
                     setSendGenerateLoading(false)
@@ -642,39 +701,32 @@ function Playground() {
         }
         setGroupedMessages({
             role: 'Assistant',
-            content: { text: [{ event_step: '', color: undefined, event_id: undefined }] },
+            content: { text: [{ event_step: '', color: '', event_id: '' }] },
             useId: 'user'
         })
 
     }
-    const handleDescriptionChange = (value) => {
+    const handleDescriptionChange = (value: string) => {
         setDrawerDesc(value)
     }
-    const handleModalTable = (value) => {
-        setOpenModalTable(value)
-    }
+
     const handleCreateConfrim = () => {
         setOpenModalTable(false)
     }
-    const hangleFilterData = (value) => {
+    const hangleFilterData = (value: any[]) => {
         setRetrievalList(value)
     }
-    const handleChildRetrievalEvent = async (value) => {
+    const handleChildRetrievalEvent = async (value: Record<string, any>) => {
         setRetrievalLimit(value.limit)
         await fetchDataRetrievalData(value)
         setUpdateRetrievalPrevButton(false)
 
     }
-    const handleChildActionEvent = async (value) => {
-        await fetchActionsList(value)
-        setUpdateActionPrevButton(false)
-        setActionLimit(value.limit)
 
-    }
-    const fetchDataRetrievalData = async (params) => {
+    const fetchDataRetrievalData = async (params: Record<string, any>) => {
         try {
             const res: any = await getRetrievalList(params)
-            const data = res.data.map((item) => {
+            const data = res.data.map((item: any) => {
                 return {
                     ...item,
                     capacity1: item.num_chunks + '/' + item.capacity,
@@ -689,7 +741,7 @@ function Playground() {
             console.log(e)
         }
     }
-    const handleChangeName = (value) => {
+    const handleChangeName = (value: string) => {
         setDrawerName(value)
     }
     const handleModalClose = () => {
@@ -723,8 +775,7 @@ function Playground() {
         const splitArray = assistantId[0].split('-')
         const id = splitArray.slice(-1)[0]
         navigation(`${pathname}?assistant_id=${id}`)
-        // setAssistantId(tempAssistantId)
-        // console.log(tempAssistantId)
+
         setConfirmLoading(true)
         try {
             await handleListChats()
@@ -763,13 +814,15 @@ function Playground() {
             }
         }
         try {
+
             await createActions(commonData);
             const params = {
-                limit: actionLimit || 20,
+                limit: 20,
             }
             await fetchActionsList(params);
         } catch (error: any) {
             console.error(error);
+
             toast.error(error.message)
         }
 
@@ -784,49 +837,50 @@ function Playground() {
     const hangleChangeAuthorization = (value: string) => {
         setAuthentication(value)
     }
-    const handleRecordsSelected = (value, selectedRows) => {
-        setRecordsSelected(value)
+    const handleRecordsSelected = (_value: any[], selectedRows: any[]) => {
         const tag = selectedRows.map(item => (item.name + '-' + item.model_id))
         setSelectedRows(tag)
     }
-    const handleActionRecordsSelected = (value, selectedRows) => {
-        setRecordsSelected(value)
-        const tag = selectedRows.map(item => (item.name + '-' + item.action_id))
-        setRecordsActionSelected(tag)
-        setSelectedActionsRows(tag)
-    }
-    const handleRecordsAssistantSelected = (_value, selectedRows) => {
+
+    const handleRecordsAssistantSelected = (_value: string[], selectedRows: any[]) => {
         setRecordsSelected(selectedRows)
-        const tag = selectedRows.map(item => (item.name + '-' + item.assistant_id))
+        const tag = selectedRows.map((item: any) => {
+            if (item.name) {
+                return item.name + '-' + item.assistant_id
+            } else {
+                return item.assistant_id
+            }
+        })
         setAssistantId(tag)
         setDefaultSelectedAssistant(tag)
     }
     const handleCustom = (value: string) => {
         setCustom(value)
     }
-    const handleCollectionSelected = (value, selectedRows) => {
+    const handleCollectionSelected = (value: any, selectedRows: any[]) => {
         setRecordsSelected1(value)
         const tag = selectedRows.map(item => (item.name + '-' + item.collection_id))
         setSelectedRetrievalRows(tag)
     }
-    const handleMemoryChange1 = (value) => {
+
+    const handleMemoryChange1 = (value: string) => {
         setMemoryValue(value)
     }
     const handleSchemaChange = (value: string) => {
         setSchema(value)
     }
-    const handleCreateAction = () => {
-        setSchema('')
-        setRadioValue('none')
-        setAuthentication('')
-        setOpenActionDrawer(true)
-    }
+
     const handleAddPrompt = () => {
         if (systemPromptTemplate.length < 10) {
             setSystemPromptTemplate((prevValues => [...prevValues, '']))
         }
     }
-    const handleOpenChat = async (value) => {
+    const handleChildAssistantEvent = async (value: Record<string, any>) => {
+        await fetchAssistantsList()
+        setUpdatePrevButton(false)
+        setAssistantLimit(value.limit)
+    }
+    const handleOpenChat = async (value: string) => {
         setChatId(value)
         setContentTalkLoading(true)
         let id;
@@ -842,7 +896,6 @@ function Playground() {
         }
         setContentTalk([])
         setGenerateButtonLoading(false)
-        setSendGenerateLoading(false)
         await fetchHistoryMessage(id, value, param)
         setContentTalkLoading(false)
     }
@@ -880,23 +933,17 @@ function Playground() {
         fetchHistoryMessage(assistantId, chatId, params)
         setContentLoading(false)
     }
-    const handleInputValueOne = (value) => {
+    const handleInputValueOne = (value: number) => {
         setInputValueOne(value)
     }
-    const handleInputValueTwo = (value) => {
+    const handleInputValueTwo = (value: number) => {
         setInputValueTwo(value)
     }
     const onRadioChange = (value: string) => {
         setRadioValue(value)
     }
-    const handleActionModalTable = () => {
-        setModalActionTableOpen(true)
-        setRecordsActionSelected(selectedActionsRows)
-    }
-    const handleActionModalClose = () => {
-        setModalActionTableOpen(false)
-    }
-    const handleChangeCheckbox = (checkedValues) => {
+
+    const handleChangeCheckbox = (checkedValues: any) => {
         localStorage.setItem('checkedValues', JSON.stringify(checkedValues))
     }
     const onDeleteCancel = () => {
@@ -921,45 +968,70 @@ function Playground() {
                 limit: 20
             }
             if (res.data[0]?.chat_id) {
-                await fetchHistoryMessage(assistantId, res.data[0]?.chat_id, param1)
+                await fetchHistoryMessage(id, res.data[0]?.chat_id, param1)
             }
 
         } catch (error) {
-            console.log(error)
+            const apiError = error as ApiErrorResponse;
+            const errorMessage: string = apiError.response.data.error.message;
+            toast.error(errorMessage)
         }
         setOpenDeleteModal(false)
     }
-    const handleClickDebug = (item) => {
+
+    const handleConfirmRequest = async () => {
+        getBundleList({ limit: 20 })
+    }
+    const handleClickDebug = (item: any) => {
         if (item.event_step === 'Error Occurred') {
             setContentErrorDrawer(true)
         } else {
             delete item.color
-            setCollapseLabel2(item.event_step)
+            const event1 = item.event.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+            const event2 = item.event_step.charAt(0).toUpperCase() + item.event_step.slice(1)
+            setCollapseLabel2(`${event1}: ${event2}`)
             if (!item.event_id) return
             const data1 = debugArray1.find(item1 => (item1.event_id === item.event_id))
-            const data2 = debugArray2.find(item1 => (item1.event_id === item.event_id))
+            const data2: any = debugArray2.find(item1 => (item1.event_id === item.event_id))
             if (data1) {
                 delete data1.color
                 const data3 = JSON.stringify(data1, null, 4)
                 setChatCompletionCall(data3)
-                const label = data1.event_step
-                setCollapseLabel1(label)
+                const label = data1.event_step.charAt(0).toUpperCase() + data1.event_step.slice(1)
+                const lable1 = data1.event.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                setCollapseLabel1(`${lable1}: ${label}`)
             } else if (data2) {
                 delete data2.color
                 const data4 = JSON.stringify(data2, null, 4)
-                const label = data2.event_step
-                setCollapseLabel1(label)
+                const label = data2.event_step.charAt(0).toUpperCase() + data2.event_step.slice(1)
+                const lable1 = data2.event.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                setCollapseLabel1(`${lable1}: ${label}`)
                 setChatCompletionCall(data4)
             }
             setChatCompletionResult(JSON.stringify(item, null, 4))
             setContentDrawer(true)
+
         }
     }
     const handleCloseContentDrawer = () => {
         setContentDrawer(false)
     }
-    const onhandleTipError = (value: boolean) => {
-        setTipSchema(value)
+    const handleNewActionModal = () => {
+        setOpenActionDrawer(true)
+    }
+
+    const handleSendAndGenerateMessage = async () => {
+        if (sendButtonLoading || generateButtonLoading) {
+            return toast.error('Please wait for the info to respond.')
+        }
+        try {
+            await handleCreateMessage('flag')
+        } catch (error) {
+            const apiError = error as ApiErrorResponse;
+            const errorMessage: string = apiError.response.data.error.message;
+            toast.error(errorMessage)
+            console.log(error)
+        }
     }
     const handleCloseContentErrorDrawer = () => {
         setContentErrorDrawer(false)
@@ -971,31 +1043,35 @@ function Playground() {
         setModelOne(false)
         setUpdateRetrievalPrevButton(true)
     }
-    const handleSendAndGenerateMessage = async () => {
-        if (sendButtonLoading || generateButtonLoading) {
-            return toast.error('Please wait for the info to respond.')
-        }
-        try {
-            await handleCreateMessage('flag')
-        } catch (error) {
-            console.log(error)
-        }
+    const handleClosePluginModal = () => {
+        setPluginModalOpen(false)
+    }
+    const onhandleTipError = (value: boolean) => {
+        setTipSchema(value)
+    }
+
+    const handleNewCollection = (value: boolean) => {
+        setOpenCollectionDrawer(value)
+    }
+
+    const handleNewBundle = () => {
+        setPluginModalOpen(true)
     }
     return (
         <Spin spinning={loading}>
             {!assistantId ? <div className={styles['selectAssistant']}>
                 {<PlayGroundImg className={styles.svg} />}
-                <div className={styles['select-assistant']}>Select an assistant to start.</div>
+                <div className={styles['select-assistant']}>{t('projectPlaygroundSelectAssistantDesc')}</div>
                 <div className={styles['header-news']}>
                     <div className={styles['plusParent']}>
-                        <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleSelectAssistantID}>Select assistant</Button>
+                        <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleSelectAssistantID}>{t('projectPlaygroundSelectAssistant')}</Button>
                     </div>
                 </div>
             </div> : <div className={styles['playground']}>
                 <div className={styles['left-content']}>
                     <div className={styles['top']}>
-                        <div className={styles['select-assistant']}>Assistant</div>
-                        {!assistantId && <div className={styles['select-desc']}>Select or enter a valid assistant ID to start chatting</div>}
+                        <div className={styles['select-assistant']}>{t('projectAssistant')}</div>
+                        {!assistantId && <div className={styles['select-desc']}>{t('projectPlaygroundSelectAssistantInfo')}</div>}
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <Select open={false} suffixIcon={<RightOutlined />} onClick={handleSelectAssistantID} value={assistantId} className={styles['select']} removeIcon={null}>
                             </Select>
@@ -1004,10 +1080,10 @@ function Playground() {
                     </div>
                     <div className={styles['bottom']}>
                         <div className={styles['bottom-chats']}>
-                            <div>Chats</div>
+                            <div>{t('projectPlaygroundChats')}</div>
                             <div className={styles['actionbuttondownload']} onClick={handleNewChat}>
                                 <PlusOutlined />
-                                <div className={styles['text1']}>New chat</div>
+                                <div className={styles['text1']}>{t('projectPlaygroundNewChat')}</div>
                             </div>
                         </div>
                         <div className={styles['chats']}>
@@ -1021,37 +1097,36 @@ function Playground() {
                                 </div>))}
                                 {(!loadMoreHasMore && noPreviousChat) && <div className={styles['lineParent']}>
                                     <div className={styles['frameChild']} />
-                                    <div className={styles['noPreviousChat1']}>No previous chat</div>
+                                    <div className={styles['noPreviousChat1']}>{t('projectPlaygroundNoPreviousChat')}</div>
                                     <div className={styles['frameChild']} />
                                 </div>}
                             </div>
                             {loadMoreHasMore && <div className={styles['lineParent']} style={{ marginTop: '10px' }}>
                                 <div className={styles['frameChild']} />
                                 <div className={styles['formbuttoncancel']} onClick={handleLodaMore}>
-                                    <div className={styles['text1']}>Load more</div>
+                                    <div className={styles['text1']}>{t('projectPlaygroundLoadMore')}</div>
                                 </div>
                                 <div className={styles['frameChild']} />
                             </div>}
                         </div>
-
                     </div>
                 </div>
                 <div className={styles['right-content']}>
                     <div className={styles['header-top']}>
                         <div className={styles['header-left']}>
-                            <span className={styles['chat']}>Chat</span>
+                            <span className={styles['chat']}>{t('projectPlaygroundChat')}</span>
                             <span className={styles['desc']}>{chatId}</span>
                             <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatId)} />
                         </div>
 
                         <div className={styles['header-right']} onClick={handleDeleteChat}>
-                            <Button icon={<DeleteIcon />} className='cancel-button'>Delete chat</Button>
+                            <Button icon={<DeleteIcon />} className='cancel-button'>{t('projectPlaygroundDeleteChat')}</Button>
                         </div>
                     </div>
                     {!chatId && <div className={styles['content-center']}>
                         <div className={styles['content-img']}>
                             <PlaygroundImg />
-                            <div className={styles['waiting-for-configuration']}>Waiting for Configuration</div>
+                            <div className={styles['waiting-for-configuration']}>{t('projectPlaygroundWaitingForConfiguration')}</div>
                         </div>
                     </div>}
                     {chatId &&
@@ -1062,13 +1137,13 @@ function Playground() {
                                 </div>
                                 {(!contentHasMore && noPreviousMessage) && <div className={styles['lineParent']}>
                                     <div className={styles['frameChild']} />
-                                    <div className={styles['noPreviousChat1']}>No previous message </div>
+                                    <div className={styles['noPreviousChat1']}>{t('projectPlaygroundNoPreviousMessage')} </div>
                                     <div className={styles['frameChild']} />
                                 </div>}
                                 {contentHasMore && <div className={styles['lineParent']} style={{ marginTop: '10px' }}>
                                     <div className={styles['frameChild']} />
                                     <div className={styles['formbuttoncancel']} onClick={handleContentLodaMore}>
-                                        <div className={styles['text1']}>Load more</div>
+                                        <div className={styles['text1']}>{t('projectPlaygroundLoadMore')}</div>
                                     </div>
                                     <div className={styles['frameChild']} />
                                 </div>}
@@ -1076,7 +1151,7 @@ function Playground() {
                                     <div className={styles['message']} key={index} ref={divRef}>
                                         <div className={`${styles.subText1} ${item.role === 'user' ? 'user' : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
                                         {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`} style={{ whiteSpace: "pre-line" }}>{item.content.text}</div>}
-                                        {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1, index1) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && styles.lastItem}`}>
+                                        {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1: any, index1: number) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && styles.lastItem}`}>
                                             {(item1.color === 'orange' && index === contentTalk.length - 1 && item1.event_step !== '') ?
                                                 (<div style={{ display: 'flex', alignItems: 'center' }}>{lottieAnimShow && (
                                                     <>
@@ -1087,7 +1162,7 @@ function Playground() {
                                                 </div>) :
                                                 (
                                                     item1.color !== 'orange' && (<div onClick={() => handleClickDebug(item1)} style={{ display: 'flex', alignItems: 'center' }}>
-                                                        {(item1.event_step !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text', whiteSpace: "pre-line" }}>{item1.event_step}</span></>)}
+                                                        {(item1.event_step !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text', whiteSpace: 'pre-wrap' }}>{item1.event_step}</span></>)}
                                                         {(item1.event_step === 'Error Occurred') && (<><ErrorIcon className={styles['message-success']}></ErrorIcon><span style={{ color: '#ec1943', cursor: 'pointer' }}>Error Occurred</span></>)}
                                                     </div>
                                                     )
@@ -1099,17 +1174,16 @@ function Playground() {
                             </div>
                         </Spin>
                     }
-
                     <div className={`${styles['content-bottom']} ${!chatId ? styles.none : ''}`}>
                         <TextArea className={styles['textarea']} autoSize={{ minRows: 3, maxRows: 6 }} value={contentValue} onChange={(e) => setContentValue(e.target.value)}></TextArea>
                         <div className={styles['button-group']}>
                             <div style={{ display: 'flex' }}>
                                 <Button className={`next-button ${styles.button}`} onClick={handleSendAndGenerateMessage} loading={sendGenerateLoading}>Send and Generate</Button>
                                 <div className={`${styles.formbuttoncancel} ${sendButtonLoading ? styles.loading : ''}`} onClick={handleCreateMessage}>
-                                    {sendButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}  <div className={styles['text1']}>Send</div>
+                                    {sendButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}  <div className={styles['text1']}>{t('projectPlaygroundSend')}</div>
                                 </div>
                                 <div className={`${styles.formbuttoncancel} ${styles.button1} ${generateButtonLoading ? styles.loading : ''}`} onClick={handleGenerateMessage}>
-                                    {generateButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}<div className={styles['text1']}>Generate</div>
+                                    {generateButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}<div className={styles['text1']}>{t('projectPlaygroundChatGenerate')}</div>
                                 </div>
                             </div>
                             <div className={styles['actionbuttonedit']} onMouseEnter={handleMouseEnter} ref={settingIcon}>
@@ -1118,10 +1192,10 @@ function Playground() {
                         </div>
                         <div className={styles['setting-modal']} ref={settingModal} style={{ display: 'none' }}>
                             <div className={styles['generation-options']}>
-                                Generation options
+                                {t('projectPlaygroundGenerationOptions')}
                             </div>
-                            <div className={styles['desc']}>Select the type of messages that will be returned to the frontend.</div>
-                            <Checkbox.Group onChange={handleChangeCheckbox} options={plainOptions} defaultValue={JSON.parse(localStorage.getItem('checkedValues')) || checkBoxValue} />
+                            <div className={styles['desc']}>{t('projectPlaygroundGenerationOptionsDesc')}</div>
+                            <Checkbox.Group onChange={handleChangeCheckbox} options={plainOptions} defaultValue={JSON.parse(localStorage.getItem('checkedValues') as string) || checkBoxValue} />
                             <div className={styles['select-assistant']}>Prompt variables</div>
                             <TextArea style={{ height: '300px' }} placeholder={`{\n   key: value\n}`}
                                 value={systemPromptVariables} onChange={(e) => setSystemPromptVariable(e.target.value)}></TextArea>
@@ -1129,112 +1203,105 @@ function Playground() {
                     </div>
                 </div>
             </div>}
-
-
             <Drawer
                 closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />}
                 className={styles['assistant-drawer']}
-                onClose={handleCancel} title='Edit Assistant' placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
-                <DrawerAssistant selectedActionsRows={selectedActionsRows} memoryValue={memoryValue} inputValue1={inputValueOne} handleMemoryChange1={handleMemoryChange1} inputValue2={inputValueTwo} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} handleAddPromptInput={handleAddPrompt} handleActionModalTable={handleActionModalTable} drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} selectedRows={selectedRows} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange} handleModalTable={handleModalTable} selectedRetrievalRows={selectedRetrievalRows}></DrawerAssistant>
+                width={1280}
+                onClose={handleCancel} title={t('projectEditAssistant')} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
+                <DrawerAssistant handleNewBundle={handleNewBundle} retrievalConfig={retrievalConfig} topk={topk} maxTokens={maxTokens} handleMaxToken={handleMaxToken} handleToks={handleToks} bundilesList={bundilesList} handleNewActionModal={handleNewActionModal} handleNewCollection={handleNewCollection} selectedCollectionList={selectedRetrievalRows} actionHasMore={hasActionMore} actionList={actionList} collectionHasMore={hasMore} ref={drawerAssistantRef}
+                    handleRetrievalConfigChange1={handleRetrievalConfigChange1} retrievalList={retrievalList} selectedActionsRows={selectedActionsRows} inputValue1={inputValueOne} inputValue2={inputValueTwo} handleMemoryChange1={handleMemoryChange1} memoryValue={memoryValue} handleAddPromptInput={handleAddPrompt} drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} selectedRows={selectedRows} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange} selectedRetrievalRows={selectedRetrievalRows}></DrawerAssistant>
             </Drawer>
             <ModelModal handleSetModelConfirmOne={handleSetModelConfirmOne} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} getOptionsList={fetchModelsList} modelType='chat_completion'></ModelModal>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} centered footer={[
                 <div className='footer-group' key='footer-group'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleNewModal} className='cancel-button'>
-                        New Collection
+                        {t('projectRetrievalNew')}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected1.length}  {recordsSelected1.length > 1 ? 'items' : 'item'} selected
+                            {recordsSelected1.length}  {recordsSelected1.length > 1 ? `${t('projectItemsSelected')}` : `${t('projectItemSelected')}`}
                         </span>
                         <Button key="cancel" onClick={handleCloseModal} className={`cancel-button ${styles.cancelButton}`}>
-                            Cancel
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleCreateConfrim} className='next-button'>
-                            Confirm
+                            {t('confirm')}
                         </Button>
                     </div>
-
                 </div>
-
-            ]} title='Select Collection' open={openModalTable} width={1000} onCancel={handleCloseModal} className={`modal-inner-table ${styles['retrieval-model']}`}>
+            ]} title={t('projectAssistantRetrievalPlaceHolder')} open={openModalTable} width={1000} onCancel={handleCloseModal} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable name='Collection' updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
             </Modal>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered footer={[
+            {/* <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered footer={[
                 <div className='footer-group' key='footer'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateAction} className='cancel-button'>
-                        New Action
+                        {t('projectNewAction')}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            {recordsActionSelected.length}  {recordsActionSelected.length > 1 ? 'items' : 'item'} selected
+                            {recordsActionSelected.length}  {recordsActionSelected.length > 1 ? `${t('projectItemsSelected')}` : `${t('projectItemSelected')}`} selected
                         </span>
                         <Button key="cancel" onClick={handleActionModalClose} className={`cancel-button ${styles.cancelButton}`}>
-                            Cancel
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleActionModalClose} className='next-button'>
-                            Confirm
+                            {t('confirm')}
                         </Button>
                     </div>
-
                 </div>
-
-            ]} title='Select Action' open={modalActionTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`} onCancel={handleActionModalClose}>
+            ]} title={t('projectSelectAction')} open={modalActionTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`} onCancel={handleActionModalClose}>
                 <ModalTable updatePrevButton={updateActionPrevButton} defaultSelectedRowKeys={selectedActionsRows} mode='multiple' handleRecordsSelected={handleActionRecordsSelected} ifSelect={true} columns={actionsTableColumn} hasMore={hasActionMore} id='action_id' dataSource={actionList} onChildEvent={handleChildActionEvent}></ModalTable>
-            </Modal>
+            </Modal> */}
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='group'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
-                        New model
+                        {t('projectNewModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            1 item selected
+                            1 {t('projectItemSelected')}
                         </span>
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
-                            Cancel
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleModalClose} className='next-button'>
-                            Confirm
+                            {t('confirm')}
                         </Button>
                     </div>
-
                 </div>
-
-            ]} title='Select Model' open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
+            ]} title={t('projectSelectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable name="model" defaultSelectedRowKeys={Array.isArray(selectedRows) ? selectedRows : [selectedRows]} updatePrevButton={updateModelPrevButton} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <Drawer className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
-                <ActionDrawer showTipError={tipSchema} onhandleTipError={onhandleTipError} drawerTitle={'Bulk Create Action'} schema={schema} onSchemaChange={handleSchemaChange} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
+                <ActionDrawer showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleAssistantModalClose} centered footer={[
                 <div className='footer-group' style={{ justifyContent: 'flex-end' }} key='footer'>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected.length} item selected
+                            {recordsSelected.length} {t('projectItemSelected')}
                         </span>
                         <Button key="cancel" onClick={handleAssistantModalClose} className={`cancel-button ${styles.cancelButton}`}>
-                            Cancel
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleAssistantModalClose1} className='next-button' loading={confirmLoading}>
-                            Confirm
+                            {t('confirm')}
                         </Button>
                     </div>
 
                 </div>
-
-            ]} title='Select Assistant' open={openAssistantModalTable} width={1000} className={`modal-inner-table ${styles.model1}`}>
+            ]} title={t('projectPlaygroundSelectAssistant')} open={openAssistantModalTable} width={1000} className={`modal-inner-table ${styles.model1}`}>
                 <ModalTable name='Assistant' ifAllowNew={true} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedAssistant} handleRecordsSelected={handleRecordsAssistantSelected} ifSelect={true} columns={assistantTableColumn} hasMore={modelHasMore} id='assistant_id' dataSource={optionList} onChildEvent={handleChildAssistantEvent}></ModalTable>
             </Modal>
             <CreateCollection handleFetchData={() => fetchDataRetrievalData({ limit: retrievalLimit || 20 })} handleModalCloseOrOpen={() => setOpenCollectionDrawer(false)} OpenDrawer={openCollectionDrawer}></CreateCollection>
-            <Drawer width={700} open={contentDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCloseContentDrawer} title='Chat Completion'>
+            <Drawer width={700} open={contentDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCloseContentDrawer} title={t('projectPlaygroundChatCompletion')}>
                 <Collapse expandIconPosition='end' items={[
                     {
                         key: '1',
                         label: collapseLabel1,
                         children: <div className={styles['content-drawer']}>
                             <div className={styles['content']}>
-                                <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatCompletionCall)} />
+                                <CopyOutlined className={styles['icon-copy']} onClick={() => handleCopy(chatCompletionCall)} />
                             </div>
                             <TextArea autoSize={true} value={chatCompletionCall} disabled />
                         </div>
@@ -1245,7 +1312,7 @@ function Playground() {
                         label: collapseLabel2,
                         children: <div className={styles['content-drawer']}>
                             <div className={styles['content']}>
-                                <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatCompletionResult)} />
+                                <CopyOutlined className={styles['icon-copy']} onClick={() => handleCopy(chatCompletionResult)} />
                             </div>
                             <TextArea autoSize={true} value={chatCompletionResult} disabled />
                         </div>
@@ -1265,7 +1332,8 @@ function Playground() {
                         </div>
                     }]}></Collapse>
             </Drawer>
-            <DeleteModal title='Delete Chat' projectName={chatId} open={OpenDeleteModal} describe={`Are you sure you want to delete chat ${chatId}`} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
+            <CreatePlugin bundilesList={bundilesList} handleConfirmRequest={handleConfirmRequest} open={pluginModalOpen} handleCloseModal={handleClosePluginModal}></CreatePlugin>
+            <DeleteModal title={t('projectPlaygroundDeleteChatUpper')} projectName={chatId} open={OpenDeleteModal} describe={`${'deleteItem'} ${t('projectPlaygroundChatLow')} ${chatId}`} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
         </Spin >
     );
 }

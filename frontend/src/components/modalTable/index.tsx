@@ -1,5 +1,5 @@
-import { Table, Select, Input, Button, Pagination, Empty } from 'antd';
-import { useState, useEffect } from 'react';
+import { Table, Select, Input, Button, Pagination, Empty,ConfigProvider } from 'antd';
+import { useState, useEffect, ChangeEvent } from 'react';
 import styles from './modalTable.module.scss'
 import { PlusOutlined } from '@ant-design/icons';
 import NoApikey from '../../assets/img/NO_APIKEY.svg?react'
@@ -8,32 +8,32 @@ import NoCollection from '../../assets/img/NO_COLLECTION.svg?react'
 import NoModel from '../../assets/img/NO_MODEL.svg?react'
 import NoRecord from '../../assets/img/NO_RECORD_2.svg?react'
 import NoTool from '../../assets/img/NO_TOOL.svg?react'
-import { TableProps } from '../../contant/index'
+import { TableProps } from '../../constant/index'
 function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSelectedRowKeys, updatePrevButton, ifHideFooter, dataSource, mode, ifSelect, onChildEvent, id, hasMore, onOpenDrawer, name, handleRecordsSelected }: TableProps) {
     const [selectedValue, setSelectedValue] = useState('name_search')
     const [inputValue, setInputValue] = useState('')
     const [scroll, setScroll] = useState({ x: 0, y: 0 });
     const [ifClickPageSizeLimit, setIfClickPageSizeLimit] = useState(false)
     const [flagPrev, setFlagPrev] = useState(false)
-    const [originalDataSource, setOriginalDataSource] = useState([]);
+    const [originalDataSource, setOriginalDataSource] = useState<any[]>([]);
     const [flagNext, setFlagNext] = useState(false)
     const [nextButtonDisabled, setNextButtonDisabled] = useState(false)
     const [previousButtonDisabled, setPrevButtonDisabled] = useState(true)
     const [isFirstRender, setIsFirstRender] = useState(true);
-    const [_filterConfig, setFilterConfig] = useState<any>({
+    const [filterConfig, setFilterConfig] = useState<any>({
         limit: 20,
         sort_field: 'created_timestamp',
-
     })
+    console.log(filterConfig)
     const [enterPlaceHolder, setEnterPlaceHolder] = useState('Enter Name')
-    const empty = {
-        ['API Key']: <NoApikey />,
-        assistant: <NoAssistant />,
-        collection: <NoCollection />,
-        model: <NoModel />,
-        record: <NoRecord />,
-        action: <NoTool />,
-        chunk: <NoRecord />
+    const empty: Record<string, any> = {
+        ['API Key']: <NoApikey style={{ width: '158px', height: '100px' }} />,
+        assistant: <NoAssistant style={{ width: '158px', height: '100px' }} />,
+        collection: <NoCollection style={{ width: '158px', height: '100px' }} />,
+        model: <NoModel style={{ width: '158px', height: '100px' }} />,
+        record: <NoRecord style={{ width: '158px', height: '100px' }} />,
+        action: <NoTool style={{ width: '158px', height: '100px' }} />,
+        plugins: <NoTool style={{ width: '158px', height: '100px' }} />
     }
     const [selectedRowKeys, setSelectedRowKeys] = useState((defaultSelectedRowKeys && defaultSelectedRowKeys.length) ? defaultSelectedRowKeys : []);
     useEffect(() => {
@@ -50,16 +50,20 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             let containerWidth = 0;
             let containerHeight = 0;
             if (!modalInnerTable && elementsWithPrefix.length === 0 && elementsWithPrefix1.length === 0) {
-                if (!tableContainer) {
-                    return
-                }
-                containerWidth = tableContainer.offsetWidth;
-                containerHeight = tableContainerH.offsetHeight;
-                setScroll({
-                    x: containerWidth,
-                    y: containerHeight - 61
-                });
+                setTimeout(() => {
+                    if (!tableContainer) {
+                        return
+                    }
+                    containerWidth = tableContainer.offsetWidth;
+
+                    containerHeight = tableContainerH?.offsetHeight as any;
+                    setScroll({
+                        x: containerWidth,
+                        y: containerHeight - 61
+                    });
+                }, 0)
             } else if (elementsWithPrefix.length !== 0 && elementsWithPrefix1.length === 0 && modalOpen) {
+
                 setTimeout(() => {
                     let firstElement = elementsWithPrefix[0];
                     let antDrawerBodyClassName = firstElement.querySelector('.ant-drawer-body');
@@ -70,6 +74,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                         x: containerWidth,
                         y: containerHeight - 202,
                     });
+
                 }, 0)
             } else if (elementsWithPrefix1.length !== 0 && elementsWithPrefix.length === 0 && modalOpen) {
                 setTimeout(() => {
@@ -87,8 +92,8 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                 setTimeout(() => {
                     const tableContainer: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container table');
                     const tableContainerH: HTMLElement | null = document.querySelector('.modal-inner-table .ant-table-container');
-                    containerWidth = tableContainer.offsetWidth;
-                    containerHeight = tableContainerH.offsetHeight;
+                    containerWidth = tableContainer?.offsetWidth as any;
+                    containerHeight = tableContainerH?.offsetHeight as any;
                     setScroll({
                         x: containerWidth,
                         y: 400,
@@ -99,18 +104,16 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         updateScroll();
     }, []);
     useEffect(() => {
-        setOriginalDataSource(dataSource)
+        setOriginalDataSource(dataSource as any[])
     }, [])
     useEffect(() => {
         if (defaultSelectedRowKeys && defaultSelectedRowKeys.length) {
-            const tag = defaultSelectedRowKeys.map(item => item.split('-').pop())
+            const tag = defaultSelectedRowKeys.map(item => item.split('-').pop()) as any[]
             setSelectedRowKeys(tag)
         } else {
             setSelectedRowKeys([])
         }
     }, [defaultSelectedRowKeys])
-
-
     useEffect(() => {
         if (flagNext) {
             setPrevButtonDisabled(false)
@@ -200,25 +203,28 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             label: 'ID',
         }
     ]
-    const handleSelectFrontChange = (value) => {
+    const handleSelectFrontChange = (value: string) => {
         if (value === 'name') {
             setSelectedValue('name_search')
         } else {
             setSelectedValue('id_search')
         }
     }
-    const handleSelectEndChange = (value) => {
-        if (value === 'Selected Records') {
-            const filteredRows = originalDataSource.filter(row => selectedRowKeys.includes(row.key));
-            hangleFilterData(filteredRows)
-        } else {
-            hangleFilterData(originalDataSource)
+    const handleSelectEndChange = (value: string) => {
+        const filteredRows = value === 'Selected Records'
+            ? originalDataSource.filter(row => selectedRowKeys.includes(row.key))
+            : originalDataSource;
+        if (hangleFilterData) {
+            hangleFilterData(filteredRows);
         }
-    }
-    const onSelectChange = (newSelectedRowKeys, selectedRows) => {
-        handleRecordsSelected(newSelectedRowKeys, selectedRows)
     };
-    const onSelectChange1 = (record) => {
+    const onSelectChange = (newSelectedRowKeys: any, selectedRows: any) => {
+        if (handleRecordsSelected) {
+            handleRecordsSelected(newSelectedRowKeys, selectedRows)
+
+        }
+    };
+    const onSelectChange1 = (record: any) => {
         const key = record.key;
         const isSelected = selectedRowKeys.includes(key);
         let newSelectedRowKeys
@@ -232,7 +238,6 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                 : [key]
         }
         setSelectedRowKeys(newSelectedRowKeys);
-
     }
     const rowSelection: any = {
         selectedRowKeys,
@@ -240,7 +245,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         onChange: onSelectChange,
         onSelect: onSelectChange1,
         columnTitle: ' ',
-        getCheckboxProps: (record) => ({
+        getCheckboxProps: (record: any) => ({
             checked: selectedRowKeys.includes(record.key),
         }),
         type: mode === 'multiple' ? 'checkbox' : 'radio',
@@ -248,7 +253,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
     };
     const handleSearch = () => {
         setIfClickPageSizeLimit(true)
-        setFilterConfig(prevFilterConfig => {
+        setFilterConfig((prevFilterConfig: any) => {
             const newFilterConfig = {
                 ...prevFilterConfig,
                 [selectedValue]: inputValue
@@ -270,25 +275,29 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
                     delete newFilterConfig.id_search
                 }
             }
-            onChildEvent(newFilterConfig);
+            if (onChildEvent) {
+                onChildEvent(newFilterConfig);
+            }
             return newFilterConfig;
         });
         setPrevButtonDisabled(true)
     }
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value)
     }
     const handlePrevious = () => {
         setIfClickPageSizeLimit(false)
 
-        setFilterConfig(prevFilterConfig => {
+        setFilterConfig((prevFilterConfig: any) => {
 
             const newFilterConfig = {
                 ...prevFilterConfig,
-                before: dataSource[0][id],
+                before: dataSource && dataSource[0][id as string],
             };
             delete newFilterConfig.after
-            onChildEvent(newFilterConfig);
+            if (onChildEvent) {
+                onChildEvent(newFilterConfig);
+            }
             setFlagPrev(true)
             setFlagNext(false)
             return newFilterConfig;
@@ -298,13 +307,15 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
     const handleNext = () => {
 
         setIfClickPageSizeLimit(false)
-        setFilterConfig(prevFilterConfig => {
+        setFilterConfig((prevFilterConfig: any) => {
             const newFilterConfig = {
                 ...prevFilterConfig,
-                after: dataSource[dataSource.length - 1][id],
+                after: dataSource && dataSource[dataSource.length - 1][id as string],
             };
             delete newFilterConfig.before
-            onChildEvent(newFilterConfig);
+            if (onChildEvent) {
+                onChildEvent(newFilterConfig);
+            }
             setFlagNext(true)
             setFlagPrev(false)
             return newFilterConfig;
@@ -312,45 +323,52 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
 
     }
     const handleCreatePrompt = () => {
-        onOpenDrawer(true)
+        if (onOpenDrawer) {
+            onOpenDrawer(true)
+        }
     }
-    const handleRowClick = (record) => {
-
-        // const checkboxProps = rowSelection.getCheckboxProps(record);
+    const handleRowClick = (record: any) => {
         if (!ifSelect) {
             return
         }
         const key = record.key;
 
         const isSelected = selectedRowKeys.includes(key);
-        let newSelectedRowKeys
+        let newSelectedRowKeys: any
         if (mode === 'multiple') {
             newSelectedRowKeys = isSelected
                 ? selectedRowKeys.filter((selectedKey) => selectedKey !== key)
                 : [...selectedRowKeys, key];
-            const data = dataSource.filter(row => newSelectedRowKeys.includes(row.key));
-            handleRecordsSelected(newSelectedRowKeys, data)
+            const data = dataSource?.filter(row => newSelectedRowKeys.includes(row.key)) as any[];
+            if (handleRecordsSelected) {
+                handleRecordsSelected(newSelectedRowKeys, data)
+
+            }
         } else {
             newSelectedRowKeys = isSelected
                 ? []
                 : [key]
-            handleRecordsSelected(newSelectedRowKeys, [record])
-
+            if (handleRecordsSelected) {
+                handleRecordsSelected(newSelectedRowKeys, [record])
+            }
         }
         setSelectedRowKeys(newSelectedRowKeys);
     };
 
-    const handleChangePageLimit = (_value, pageSize) => {
+    const handleChangePageLimit = (_value: number, pageSize: number) => {
         setIfClickPageSizeLimit(true)
         setPrevButtonDisabled(true)
-        setFilterConfig(prevFilterConfig => {
+        setFilterConfig((prevFilterConfig: any) => {
             const newFilterConfig = {
                 ...prevFilterConfig,
                 limit: pageSize,
             };
             delete newFilterConfig.before
             delete newFilterConfig.after
-            onChildEvent(newFilterConfig);
+            if (onChildEvent) {
+                onChildEvent(newFilterConfig);
+
+            }
             return newFilterConfig;
         });
     };
@@ -368,57 +386,76 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
     ]
     const customEmptyText = (
         <Empty
-            image={empty[name]}
+            image={empty[name as string]}
             description={
-                <div>
+                <>
                     <p style={{ color: '#bfbfbf', fontSize: '14px' }}>No {name}</p>
                     {!ifAllowNew && <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>New {name}</Button>}
-
-                </div>
+                </>
             }
         />
     );
     return (
-        <div className={styles['modal-table']}>
-            {!ifHideFooter ? <div className={styles['header-table']}>
-                <Select defaultValue={ifOnlyId ? 'ID' : 'name'} onChange={handleSelectFrontChange} options={ifOnlyId ? optionsFront1 : optionsFront} className={styles['select-name']} />
-                <Input placeholder={enterPlaceHolder} className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
-                <Button className='cancel-button' onClick={handleSearch}>Search</Button>
-                {(ifSelect && mode === 'multiple') && <Select defaultValue="All records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />}
-                {!ifSelect && <div className={styles['header-new']}>
+
+        <div className={styles['modal-table']} key={name}>
+            {!ifHideFooter ? (
+                <div className={styles['header-table']}>
+                    <Select defaultValue={ifOnlyId ? 'ID' : 'name'} onChange={handleSelectFrontChange} options={ifOnlyId ? optionsFront1 : optionsFront} className={styles['select-name']} />
+                    <Input placeholder={enterPlaceHolder} className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
+                    <Button className='cancel-button' onClick={handleSearch}>Search</Button>
+                    {(ifSelect && mode === 'multiple') && <Select defaultValue="All records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />}
+                    {!ifSelect && (
+                        <div className={styles['header-new']}>
+                            <div className={styles['plusParent']}>
+                                <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>New {name}</Button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <div className={styles['header-news']}>
                     <div className={styles['plusParent']}>
                         <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>New {name}</Button>
                     </div>
-                </div>}
-            </div> : <div className={styles['header-news']}>
-                <div className={styles['plusParent']}>
-                    <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>New {name}</Button>
                 </div>
-            </div>}
-
+            )}
             <div className={styles['table-border']}>
-                <Table scroll={scroll} columns={columns} dataSource={dataSource} pagination={false}
-                    {...(ifSelect ? { rowSelection: rowSelection } : null)}
-                    onRow={(record) => {
-                        return {
-                            onClick: () => {
-                                handleRowClick(record)
-                            }
+                <ConfigProvider theme={{
+                    components: {
+                        Table: {
+                            headerBg: 'white',
+                            headerColor: '#2b2b2b'
                         }
-
-                    }}
-                    locale={{
-                        emptyText: customEmptyText
-                    }}
-                    className={`${dataSource.length === 0 && styles['empty-table']}`}
-                />
-                {!ifHideFooter && <div className={`${styles.footer} ${ifSelect ? styles['footer-position'] : ''}`}>
-                    <Button className={styles['previous-button']} style={{ borderRight: 'none' }} onClick={handlePrevious} disabled={previousButtonDisabled}>Previous</Button>
-                    <Button className={styles['next-button-group']} onClick={handleNext} disabled={nextButtonDisabled}>Next</Button>
-                    <Pagination defaultPageSize={20} showQuickJumper={false} showSizeChanger={true} onChange={handleChangePageLimit} />
-                </div>}
+                    }
+                }}>
+                    <Table
+                        scroll={scroll}
+                        columns={columns}
+                        dataSource={dataSource}
+                        pagination={false}
+                        {...(ifSelect ? { rowSelection: rowSelection } : null)}
+                        onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    handleRowClick(record)
+                                }
+                            }
+                        }}
+                        locale={{
+                            emptyText: customEmptyText
+                        }}
+                        className={`${dataSource?.length === 0 && styles['empty-table']}`}
+                    />
+                </ConfigProvider>
+                {!ifHideFooter && (
+                    <div className={`${styles.footer} ${ifSelect ? styles['footer-position'] : ''}`}>
+                        <Button className={styles['previous-button']} style={{ borderRight: 'none' }} onClick={handlePrevious} disabled={previousButtonDisabled}>Previous</Button>
+                        <Button className={styles['next-button-group']} onClick={handleNext} disabled={nextButtonDisabled}>Next</Button>
+                        <Pagination defaultPageSize={20} showQuickJumper={false} showSizeChanger={true} onChange={handleChangePageLimit} />
+                    </div>
+                )}
             </div>
         </div>
-    )
+    );
 }
 export default ModalTable;

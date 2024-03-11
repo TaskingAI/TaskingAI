@@ -5,9 +5,17 @@ const getAssistantsList = async  <T extends Record<string, any>>(
 ) => {
     const project_base_url = `api/v1`
     let str = ''
-    if (params) {
-        Object.keys(params).forEach(key => {
-            str += `${key}=${params[key]}&`
+    const data = params
+    if (data.hasOwnProperty('name_search')) {
+        str += `prefix_filter={"name":"${data.name_search}"}&`
+        delete data.name_search
+    } else if (data.hasOwnProperty('id_search')) {
+        str += `prefix_filter={"assistant_id":"${data.id_search}"}&`
+        delete data.id_search
+    }
+    if (data) {
+        Object.keys(data).forEach(key => {
+            str += `${key}=${data[key]}&`
         })
         str = str.substring(0, str.length - 1)
     }

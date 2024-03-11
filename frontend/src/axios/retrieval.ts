@@ -5,14 +5,21 @@ const getRetrievalList = async <T extends Record<string,string | number>>(
     )=> {
 
     const project_base_url = `api/v1`
+    const data = params
     let str = ''
-    if (params) {
-        Object.keys(params).forEach(key => {
-            str += `${key}=${params[key]}&`
+    if (data.hasOwnProperty('name_search')) {
+        str += `prefix_filter={"name":"${data.name_search}"}&`
+        delete data.name_search
+    } else if (data.hasOwnProperty('id_search')) {
+        str += `prefix_filter={"collection_id":"${data.id_search}"}&`
+        delete data.id_search
+    }
+    if (data) {
+        Object.keys(data).forEach(key => {
+            str += `${key}=${data[key]}&`
         })
         str = str.substring(0, str.length - 1)
     }
-
     return await request.get(`${project_base_url}/collections?${str}`)
 }
 const createRetrieval = async (params:object) => {

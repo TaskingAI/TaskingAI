@@ -29,7 +29,6 @@
             .select {
                 width: 85%;
                 margin-right: 8px;
-                // margin-bottom: 10px;
             }
 
             :global {
@@ -86,7 +85,6 @@
                     background-color: var(--color-invert-text);
                     border: 1px solid var(--color-divider);
                     box-sizing: border-box;
-                    // width: 100%;
                     height: 34px;
                     overflow: hidden;
                     flex-shrink: 0;
@@ -205,10 +203,8 @@
             }
 
             .functionaliconsParent {
-                // overflow: auto;
                 width: 100%;
                 cursor: pointer;
-                // height: calc(100% - 100px);
                 position: relative;
                 border-radius: 8px;
                 margin-top: 10px;
@@ -326,13 +322,6 @@
                     }
                 }
 
-
-                // .disabled {
-                //     background-color: #eee;
-                //     color: #bfbfbf !important;
-                //     background-color: #eee !important;
-                //     border: 1px solid var(--color-divider !important;
-                // }
             }
         }
 
@@ -374,9 +363,7 @@
             height: 100%;
             box-sizing: border-box;
             height: calc(100% - 40px);
-            // max-height: 580px;
 
-            // border:1px solid #eee;
             .message {
                 width: 100%;
                 position: relative;
@@ -392,16 +379,6 @@
                 font-family: Inter;
                 margin-top: 10px;
 
-                // .loading-icon {
-                //     color: #ffbb58;
-
-                //     svg {
-                //         width: 18px;
-                //         height: 18px;
-                //     }
-
-                //     margin-right: 6px;
-                // }
 
 
                 .green {
@@ -616,6 +593,7 @@
     :global {
         .ant-drawer-body {
             padding: 0;
+            background-color: var(--color-item-background);
             overflow-x: hidden;
         }
     }
@@ -711,6 +689,7 @@
             .ant-modal-body {
                 padding: 0 24px;
                 overflow: auto;
+                background-color: var(--color-item-background);
             }
         }
     }
@@ -801,6 +780,7 @@
     :global {
         .ant-modal-body {
             padding: 0 24px;
+            background-color: var(--color-item-background);
         }
 
         .ant-modal-footer {

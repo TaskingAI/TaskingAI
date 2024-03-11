@@ -51,8 +51,13 @@ const findRouteByPath = (path:string, routes:any) => {
   }
   const formatTimestamp = (timestamp:number) => {
     const date = new Date(timestamp);
-    // const now = new Date();
     const options: Intl.DateTimeFormatOptions  = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,month: 'short', day: 'numeric', year: 'numeric' };
+    return new Intl.DateTimeFormat('en-US', options).format(date);
+  }
+  const formatTime = (timestamp: number) => {
+    const date = new Date(timestamp);
+  
+    const options: any = { month: 'short', day: 'numeric', year: 'numeric' };
     return new Intl.DateTimeFormat('en-US', options).format(date);
   }
   const parseAndRenderText = (text:string) => {
@@ -69,5 +74,5 @@ const findRouteByPath = (path:string, routes:any) => {
     }
   };
 
-  export { findRouteByPath, getFirstMethodAndEndpoint,formatTimestamp,parseAndRenderText };
+  export { findRouteByPath, getFirstMethodAndEndpoint,formatTimestamp,parseAndRenderText,formatTime };
   

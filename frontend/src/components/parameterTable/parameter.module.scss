@@ -1,0 +1,36 @@
+.table {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 30% 20% 10% 40%;
+  }
+  
+  .header {
+    padding-bottom: 5px;
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid #e4e4e4;
+  }
+  
+  .headerName {
+    width: 350px;
+  }
+  
+  .headerType {
+    width: 220px;
+  }
+  
+  .headerRequired {
+    width: 112px;
+  }
+  
+  .headerDescription {
+    width: 460px;
+  }
+  
+  .cell {
+    padding: 5px;
+  }
+  
+  .required {
+    margin-left: 20px
+  }
+  

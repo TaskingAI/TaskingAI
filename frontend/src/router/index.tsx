@@ -39,10 +39,11 @@ export const router_item = [
                 ]
             },
             {
-                path: 'tools', element: lazyLoad(lazy(() => import("@/components/plugins/index.tsx"))), key: 'plugins',
+                path: 'tools', element: lazyLoad(lazy(() => import("@/components/tools/index.tsx"))), key: 'tools',
                 children: [
-                    { path: '', element: lazyLoad(lazy(() => import("@/components/actions/index.tsx"))), key: 'actions' },
+                    { path: '', element: lazyLoad(lazy(() => import("@/components/plugins/index.tsx"))), key: 'plugins' },
                     { path: 'actions', element: lazyLoad(lazy(() => import("@/components/actions/index.tsx"))), key: 'actions' },
+                    { path: 'plugins', element: lazyLoad(lazy(() => import("@/components/plugins/index.tsx"))), key: 'plugins' },
                 ]
             },
             { path: 'apikeys', element: lazyLoad(lazy(() => import("@/components/apiKey/index.tsx"))), key: 'apiKeys' },

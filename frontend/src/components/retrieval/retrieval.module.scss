@@ -1,5 +1,5 @@
 .retrieval {
-    background-color: white;
+    background-color: var(--color-item-background);
     height: 100%;
 
     .ant-spin-nested-loading {
@@ -8,7 +8,6 @@
     }
 
     .craftingThePerfect1 {
-        // width: 100%;
         padding: 20px;
         position: relative;
         font-size: 16px;
@@ -22,50 +21,7 @@
         border-bottom: 1px solid var(--color-divider);
     }
 
-    // .header-prompts {
-    //     display: flex;
-    //     justify-content: flex-end;
-    //     margin-top: 24px;
-    //     // .form {
-    //     //     display: flex;
-    //     // }
-
-    //     .plusParent {
-    //         display: flex;
-    //         margin-bottom: 24px;
-    //         margin-right: 24px;
-
-    //         .arrowSyncParent {
-    //             height: 100%;
-    //             position: relative;
-    //             border-radius: 8px;
-    //             border: 1px solid --color-divider;
-    //             box-sizing: border-box;
-    //             // width: 100%;
-    //             display: flex;
-    //             flex-direction: row;
-    //             align-items: center;
-    //             justify-content: center;
-    //             padding: 12px;
-    //             cursor: pointer;
-    //         }
-    //         .arrowSyncParent:hover {
-    //             background-color: #f5f5f5;
-    //         }
-    //         .prompt-button {
-    //             background-color: --color-positive;
-    //             color: white;
-    //             margin-left: 10px;
-    //             height: 40px;
-    //         }
-    //         .prompt-button:hover{
-    //             color: --color-invert-text !important;
-    //             cursor: pointer;
-    //             background-color: --color-positive-hover;
-    //             border:1px solid transparent;
-    //         }
-    //     }
-    // }
+   
 
 
 }
@@ -74,19 +30,12 @@
     :global {
         .ant-modal-body {
             padding: 0 24px;
+            background-color: var(--color-item-background);
         }
 
         .ant-modal-footer {
-            // padding: 0 24px;
             height: 70px;
-            // display: block;
             text-align: start;
-
-            // div{
-            //     display: flex;
-            //     align-items: center;
-            //     justify-content: space-between;
-            // }
         }
     }
 
@@ -114,6 +63,7 @@
         .ant-drawer-body {
             padding: 0px;
             overflow-x: hidden;
+            background-color: var(--color-item-background);
         }
 
         .ant-drawer-footer {
@@ -235,7 +185,6 @@
         }
 
         .input-map {
-            // margin-bottom: 10px;
             width: 100%;
             display: flex;
             align-items: center;
@@ -346,7 +295,7 @@
             padding-top: 0 !important;
             padding-bottom: 0 !important;
             overflow: hidden !important;
-
+            background-color: var(--color-item-background);
             .ant-spin-nested-loading {
                 height: 100% !important;
 
@@ -358,7 +307,5 @@
             }
         }
     }
-
-
 
 }

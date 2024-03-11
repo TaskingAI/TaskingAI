@@ -2,13 +2,21 @@ import { request } from '../utils/index'
 
 const getRecordsList = async <T extends Record<string,string>>(collectionId:string,params:T)=> {
 const project_base_url = `api/v1`
-    let str = ''
-    if(params){
-        Object.keys(params).forEach(key => {
-            str+=`${key}=${params[key]}&`
-         })
-         str = str.substring(0,str.length-1)
-    }
+const data = params
+let str = ''
+if (data.hasOwnProperty('name_search')) {
+    str += `prefix_filter={"name":"${data.name_search}"}&`
+    delete data.name_search
+} else if (data.hasOwnProperty('id_search')) {
+    str += `prefix_filter={"record_id":"${data.id_search}"}&`
+    delete data.id_search
+}
+if (data) {
+    Object.keys(data).forEach(key => {
+        str += `${key}=${data[key]}&`
+    })
+    str = str.substring(0, str.length - 1)
+}
     return await request.get(`${project_base_url}/collections/${collectionId}/records?${str}`)
 }
 const createRecord = async (collectionId:string,params:object) => {

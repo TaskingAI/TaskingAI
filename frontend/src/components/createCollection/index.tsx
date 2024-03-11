@@ -1,26 +1,36 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import closeIcon from '../../assets/img/x-close.svg'
 import ModalFooterEnd from '../modalFooterEnd/index'
 import { RightOutlined, PlusOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 import { getModelsList } from '../../axios/models'
+import {  useDispatch } from 'react-redux';
+
 import ModelModal from '../modelModal/index'
+import { fetchModelsData } from '../../Redux/actions';
+
 import {
     Input, Select, Modal, Button
 } from 'antd';
-import {createCollectionType} from '@/contant/createCollection.ts'
-import {  createRetrieval } from '../../axios/retrieval';
+import { createCollectionType } from '@/constant/createCollection.ts'
+import { createRetrieval } from '../../axios/retrieval';
 import ModalTable from '../modalTable/index';
 import styles from './createCollection.module.scss'
-import { modelsTableColumn } from '../../contents/index'
-import { ChildRefType } from '../../contant/index.ts'
-function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData }: createCollectionType) {
+import CommonComponents from '../../contents/index'
+import ApiErrorResponse, { ChildRefType } from '../../constant/index.ts'
+import { useTranslation } from "react-i18next";
+function CreateCollection(props: createCollectionType) {
+    const { t } = useTranslation();
+    const dispatch = useDispatch();
+
+    const { modelsTableColumn } = CommonComponents();
+    const { OpenDrawer, handleModalCloseOrOpen, handleFetchData } = props
     const [drawerName, setDrawerName] = useState('')
     const [descriptionText, setDescriptionText] = useState('')
-    const [selectedRows, setSelectedRows] = useState([])
+    const [selectedRows, setSelectedRows] = useState<string[]>([])
     const [selectValue, setSelectValue] = useState(1000)
     const [modelOne, setModelOne] = useState(false);
-    const [recordsSelected, setRecordsSelected] = useState([])
+    const [recordsSelected, setRecordsSelected] = useState<string[]>([])
     const [updatePrevButton, setUpdatePrevButton] = useState(false)
     const [defaultSelectedRowKeys, setDefaultSelectedRowKeys] = useState([])
     const [modelHasMore, setModelHasMore] = useState(false)
@@ -33,10 +43,13 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
         fetchModelsList(params)
     }, []);
     const [modalTableOpen, setModalTableOpen] = useState(false)
-    const fetchModelsList = async (params) => {
+    const fetchModelsList = async (params: Record<string, string | number>,type?: string) => {
+        if(type) {
+            dispatch(fetchModelsData(20) as any);
+        }
         try {
-            const res:any = await getModelsList(params, 'text_embedding')
-            const data = res.data.map((item) => {
+            const res: any = await getModelsList(params, 'text_embedding')
+            const data = res.data.map((item: any) => {
                 return {
                     ...item,
                     key: item.model_id,
@@ -58,28 +71,27 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
         setDefaultSelectedRowKeys([])
         setUpdatePrevButton(false)
     }
-    const handleNameChange = (e) => {
+    const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setDrawerName(e.target.value)
     }
     const handleSelectModelId = () => {
         setModalTableOpen(true)
         setUpdatePrevButton(false)
     }
-    const handleSelectValue = (value) => {
+    const handleSelectValue = (value: number) => {
         setSelectValue(value)
     }
     const handleRequest = async () => {
-        if (!selectedRows  || !selectValue) {
-            return toast.error('Missing required parameters')
+        if (!selectedRows || !selectValue) {
+            return toast.error(`${t('missingRequiredParameters')}`)
         }
         try {
             const params = {
                 capacity: Number(selectValue),
                 embedding_model_id: selectedRows[0].slice(-8),
-        
+
                 name: drawerName || '',
                 description: descriptionText || '',
-                metadata: {}
             }
             await createRetrieval(params)
             handleFetchData()
@@ -94,7 +106,9 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
 
         } catch (error) {
             console.log(error)
-            toast.error(error.response.data.error.message)
+            const apiError = error as ApiErrorResponse;
+            const Response: string = apiError.response.data.error.message;
+            toast.error(Response)
         }
     }
     const handleModalCancel = () => {
@@ -108,7 +122,7 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
         setModalTableOpen(false)
         setUpdatePrevButton(false)
     }
-    const handleRecordsSelected = (value, selectedRows) => {
+    const handleRecordsSelected = (value: string[], selectedRows: any[]) => {
         setRecordsSelected(value)
         const tag = selectedRows.map(item => (item.name + '-' + item.model_id))
         if (value.length === 0) {
@@ -121,36 +135,36 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
         setModelOne(true)
         childRef.current?.fetchAiModelsList()
     }
-    const handleChildModelEvent = async (value) => {
+    const handleChildModelEvent = async (value: any) => {
         await fetchModelsList(value)
     }
     return (
-        <div>
-            <Modal onCancel={handleCancel} className={styles['create-collection']} width={1000} centered closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />}  title='Create Collection'  open={OpenDrawer} footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
+        <>
+            <Modal zIndex={10000}  onCancel={handleCancel} className={styles['create-collection']} width={1000} centered closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} title='Create Collection' open={OpenDrawer} footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <div className={styles['drawer-retrieval']}>
                     <div className={styles['name-prompt']}>
-                        Name
+                        {t('projectModelColumnName')}
                     </div>
                     <Input value={drawerName} onChange={handleNameChange} className={styles['input']}></Input>
                     <div className={styles['desc-prompt']}>
-                        Description
+                        {t('projectAssistantsColumnDescription')}
                     </div>
                     <div className={styles['label-desc']}>
-                        Add a description to the collection you created.
+                    {t('projectRetrievalCreateDesc')}
                     </div>
-                    <Input.TextArea className={styles['input']}  autoSize={{ minRows: 3, maxRows: 10 }} showCount
-                        placeholder='Enter description'
+                    <Input.TextArea className={styles['input']} autoSize={{ minRows: 3, maxRows: 10 }} showCount
+                         placeholder={t('projectRecordEnterDescription')}
                         value={descriptionText}
                         onChange={(e) => setDescriptionText(e.target.value)}
                         maxLength={200} />
                     <div className={styles['hr']}></div>
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
-                        <span>{`Embedding model`}</span>
+                        <span>{t('projectRetrievalEmbeddingModel')}</span>
                     </div>
-                    <div className={styles['label-desc']}>Enter a text embedding model ID that is available in your project.</div>
+                    <div className={styles['label-desc']}>{t('projectRetrievalEmbeddingModelDesc')}</div>
                     <Select
-                        placeholder='Select a model'
+                       placeholder={t('projectSelectModel')}
                         open={false}
                         mode="multiple"
                         className={styles['input']}
@@ -158,19 +172,19 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
                         maxTagCount={2} removeIcon={null}
                         value={selectedRows} onClick={handleSelectModelId}
                     >
+
                     </Select>
                     <div className={styles['hr']}></div>
 
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
-                        <span>{`Capacity`}</span>
+                        <span>{t('projectRetrievalColumnCapacity')}</span>
                     </div>
                     <div className={styles['label-desc']}>
-                        {`Capacity refers to the maximum number of chunks the collection can store. Please choose a capacity value that best fits your needs. Note that pricing varies with capacity, and we now only offer free plan in beta.`}
-                  
+                    {t('projectRetrievalCapacityDesc')}
                     </div>
                     <Select
-                        placeholder="Choose a capacity"
+                       placeholder={t('projectRetrievalCapacityPlaceholder')}
                         onChange={handleSelectValue}
                         value={selectValue}
                         className={styles['input']}
@@ -182,31 +196,30 @@ function CreateCollection({ OpenDrawer, handleModalCloseOrOpen, handleFetchData 
                         ]} />
                 </div>
             </Modal>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleModalClose} centered footer={[
+            <Modal zIndex={10001} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleModalClose} centered footer={[
                 <div className='footer-group' key='footer'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
-                        New Model
+                        {t('projectNewModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected.length} {recordsSelected.length > 1 ? 'items' : 'item'} selected
+                            {recordsSelected.length} {recordsSelected.length > 1 ? `${t('projectItemsSelected')}` : `${t('projectItemSelected')}`}
                         </span>
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
-                            Cancel
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleModalClose} className='next-button'>
-                            Confirm
+                            {t('confirm')}
                         </Button>
                     </div>
 
                 </div>
 
-            ]} title='Select Model' open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
+            ]} title={t('projectSelectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable name="model" onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
-            <ModelModal getOptionsList={fetchModelsList} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} modelType='text_embedding' handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>
-        </div>
-
+            <ModelModal type='text_embedding'  getOptionsList={fetchModelsList} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} modelType='text_embedding' handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>
+        </>
     );
 }
 export default CreateCollection;

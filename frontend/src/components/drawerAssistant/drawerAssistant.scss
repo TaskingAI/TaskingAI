@@ -1,8 +1,60 @@
+.ant-drawer-body {
+    overflow: hidden;
+    background-color: var(--color-item-background);
+}
+
 .drawer-assistant {
     width: 100%;
+    display: flex;
+    height: 100%;
+    overflow: auto;
+    overflow: hidden;
+
+    .left-assistant {
+        border-right: 1px solid #e4e4e4;
+        width: 640px;
+        padding-bottom: 24px;
+        overflow: auto;
+
+    }
+
+    .left-assistant::-webkit-scrollbar {
+        display: none;
+    }
+
+    .right-assistant {
+        width: 640px;
+        overflow: auto;
+
+        .hr {
+            border-bottom: 1px solid var(--color-divider);
+            margin: 24px -10px 0 0;
+            height: 1px;
+        }
+
+        .retrieval-list {
+            display: flex;
+            padding: 0 24px;
+            margin-bottom: 10px;
+
+            .retrieval-type {
+                width: 130px;
+            }
+        }
+    }
+
+    .right-assistant::-webkit-scrollbar {
+        display: none;
+    }
+
+    .basic-information {
+        color: #2b2b2b;
+        font-size: 18px;
+        font-weight: 600;
+        margin: 24px;
+    }
 
     .name-prompt {
-        // font-weight: bold;
         font-size: 16px;
         font-family: Inter;
         color: var(--color-text-primary);
@@ -25,9 +77,18 @@
         justify-content: space-between;
         margin: 8px 24px 0 24px;
 
-        .ant-input-number {
-            width: 49%;
+        .input-children {
+            width: calc(50% - 12px);
+            display: flex;
         }
+
+        .input-children1 {
+            width: calc(50% - 12px);
+            display: flex;
+            justify-content: flex-end;
+        }
+
+
     }
 
     .ant-select {
@@ -35,7 +96,6 @@
     }
 
     .desc-retrieval {
-        // font-weight: bold;
         color: var(--color-text-primary);
         margin: 24px 24px 3px 24px;
         font-size: 16px;
@@ -53,7 +113,6 @@
         position: relative;
         font-size: 16px;
         line-height: 20px;
-        // font-weight: 600;
         font-family: Inter;
         text-align: left;
         color: var(--color-text-primary);
@@ -75,16 +134,17 @@
         .referToThe {
             text-decoration: underline;
         }
+    }
 
-        .referToTheDocumentationFor {
-            color: #777777;
-        }
+    .referToTheDocumentationFor {
+        color: #777777;
+        text-decoration: underline;
 
     }
 
     .hr {
         border-bottom: 1px solid var(--color-divider);
-        margin: 24px -10px 0 0;
+        margin: 24px 0px 0 0;
         height: 1px;
     }
 
@@ -96,35 +156,36 @@
         display: flex;
         justify-content: space-between;
         margin: 10px 24px 0 24px;
-
         .ant-btn {
-            width: 50px;
-            padding: 0 !important;
+            width: 63px;
+            padding: 0 6px !important;
+            height: 30px;
             border: none;
-box-shadow: none;
+            box-shadow: none;
+            background-color: var(--color-item-background) !important;
+
+            div {
+                display: none;
+            }
+
             .ant-btn-icon {
-                // margin-inline-end: 0 !important;
                 margin-right: 6px;
             }
         }
 
         .ant-btn:hover {
-            // background-color: white !important;
-            border: none !important;
-            color: var(--color-primary) !important;
+            border: none;
+            color: var(--color-primary);
+
         }
 
-        .ant-btn:focus {
-            background-color: white !important;
-            border-color: var(--color-primary) !important;
-            box-shadow: none !important;
-            outline: none !important;
-            color: var(--color-text-primary) !important;
-        }
 
-        .ant-btn:visited {
-            background-color: white !important;
-            border: none !important;
+    }
+
+    .disabled-button {
+        .ant-btn:hover {
+            border: none;
+            color: rgba(0, 0, 0, 0.25);
         }
     }
 
@@ -153,3 +214,44 @@ box-shadow: none;
         }
     }
 }
+
+.memory-type {
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+
+    .select-input {
+
+        .ant-select-selector {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+}
+
+.button-type {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none !important;
+    background-color: #fff;
+    width: 120px;
+    flex-shrink: 0;
+    text-align: left;
+
+    div {
+        display: none;
+    }
+}
+
+.button-type:hover {
+    border-color: #e4e4e4 !important;
+    color: #2b2b2b !important;
+}
+
+.ant-input-number {
+    border-top-left-radius: 0;
+    flex: 1;
+    border-bottom-left-radius: 0;
+}
+
+

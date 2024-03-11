@@ -6,7 +6,7 @@ import {
 } from 'antd';
 import styles from './chunkPage.module.scss'
 import { toast } from 'react-toastify';
-import { tooltipDeleteTitle,tooltipEditTitle } from '../../contents/index.tsx'
+import tooltipTitle from '../../contents/tooltipTitle.tsx'
 import DeleteModal from '../deleteModal/index.tsx';
 import CopyOutlined from '../../assets/img/copyIcon.svg?react'
 import { getRecordsList, createRecord, deleteRecord, updateRecord, getRecord } from '../../axios/chunk.ts'
@@ -15,13 +15,16 @@ import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
 import closeIcon from '../../assets/img/x-close.svg'
 import EditIcon from '../../assets/img/editIcon.svg?react'
 import ClipboardJS from 'clipboard';
-function ChunkPage({ collectionId }) {
-    const handleCopy = (text) => {
+import { useTranslation } from 'react-i18next';
+function ChunkPage({ collectionId }: { collectionId: string }) {
+    const { t } = useTranslation();
+    const { tooltipEditTitle, tooltipDeleteTitle } = tooltipTitle();
+    const handleCopy = (text: string) => {
         const clipboard = new ClipboardJS('.icon-copy', {
             text: () => text
         });
         clipboard.on('success', function () {
-            toast.success('Copied to clipboard')
+            toast.success(`${t('CopiedToClipboard')}`)
             clipboard.destroy()
         });
         clipboard.on('error', function (e) {
@@ -30,62 +33,62 @@ function ChunkPage({ collectionId }) {
     }
     const columns = [
         {
-            title: 'ID',
+            title: `${t('projectModelID')}`,
             dataIndex: 'chunk_id',
             key: 'chunk_id',
             width: 240,
             fixed: 'left',
-            render: (text) =>
+            render: (text: string) =>
                 <div style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
                     <span style={{ fontSize: '12px', color: '#777' }}>{text}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(text)} />
                 </div>
             ,
         },
         {
-            title: 'Content',
+            title: `${t('projectChunkColumnContent')}`,
             width: 480,
             dataIndex: 'content',
             key: 'content',
             ellipsis: true,
-            render: (text) => (
-                <Tooltip overlayClassName='content-tooltip' title={text} placement='bottom'><span style={{ maxWidth: '480px', overflow: 'hidden', display: 'inline-block' }}>{text}</span></Tooltip>
+            render: (text: any) => (
+                <Tooltip title={text.text} placement='bottom'><span style={{ maxWidth: '480px', overflow: 'hidden', display: 'inline-block' }}>{text}</span></Tooltip>
             ),
         },
         {
-            title: 'Record',
+            title: t('record'),
             dataIndex: 'record_id',
             key: 'record_id',
             width: 180,
-            render: (text) => (
+            render: (text: string) => (
                 <div>
                     {text}
                 </div>
             )
         },
         {
-            title: '# Tokens',
+            title: `# ${t('projectChunkColumnTokens')}`,
             dataIndex: 'num_tokens',
             key: 'num_tokens',
             width: 180,
-            render: (text) => (
+            render: (text: string) => (
                 <div>
                     {text}
                 </div>
             )
         },
         {
-            title: 'Created at',
+            title: `${t('projectModelColumnCreatedAt')} `,
             width: 180,
             dataIndex: 'created_timestamp',
             key: 'created_timestamp',
-            render: (time) => <div>{formatTimestamp(time)}</div>
+            render: (time: number) => <div>{formatTimestamp(time)}</div>
         },
         {
-            title: 'Actions',
+            title: `${t('projectColumnActions')}`,
             key: 'action',
             width: 118,
             fixed: 'right',
-            render: (_, record) => (
+            render: (__: string, record: any) => (
                 <Space size="middle">
                     <div onClick={() => handleEdit(record)} className='table-edit-icon' style={{ height: '34px', width: '34px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
@@ -111,9 +114,9 @@ function ChunkPage({ collectionId }) {
     const [recordId, setRecordId] = useState('')
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
-    const [drawerTitle, setDrawerTitle] = useState('Create Record')
+    const [drawerTitle, setDrawerTitle] = useState(`${t('projectChunkCreateChunk')}`)
     const [deleteId, setDeleteId] = useState('')
-    const handleChildEvent = async (value) => {
+    const handleChildEvent = async (value: any) => {
         setLimit(value.limit)
         setUpdatePrevButton(false)
         await fetchData(collectionId, value);
@@ -144,8 +147,8 @@ function ChunkPage({ collectionId }) {
     };
     const handleCreatePrompt = () => {
         setContentValue('')
-
-        setDrawerTitle('Create Record')
+        setRecordId('')
+        setDrawerTitle(`${t('projectChunkCreateChunk')}`)
         setCreateOpenModal(true)
     }
     const handleCancel = () => {
@@ -176,7 +179,7 @@ function ChunkPage({ collectionId }) {
         setOpenDeleteModal(false)
     }
     const handleEdit = async (record: any) => {
-        setDrawerTitle('Edit Chunk')
+        setDrawerTitle(`${t('projectChunkEditChunk')}`)
         setRecordId(record.chunk_id)
         setCreateOpenModal(true)
         const res = await getRecord(collectionId, record.chunk_id)
@@ -184,7 +187,7 @@ function ChunkPage({ collectionId }) {
     }
     const handleConfirm = async () => {
         if (!contentValue) {
-            toast.error('Please enter content')
+            toast.error(`${t('projectChunkContentRequired')}`)
             return
         }
         setConfirmLoading(true)
@@ -192,12 +195,11 @@ function ChunkPage({ collectionId }) {
             const params = {
                 content: contentValue,
             }
-            if (drawerTitle === 'Create Record') {
+            if (!recordId) {
                 await createRecord(collectionId, params)
             } else {
                 const param1 = {
                     ...params,
-                    metadata: {}
                 }
                 await updateRecord(collectionId, recordId, param1)
             }
@@ -220,19 +222,19 @@ function ChunkPage({ collectionId }) {
             <ModalTable ifOnlyId={true} onOpenDrawer={handleCreatePrompt} onChildEvent={handleChildEvent} updatePrevButton={updatePrevButton} dataSource={recordList} ifSelect={false} name="chunk" columns={columns} hasMore={hasMore} id="chunk_id"></ModalTable>
             <Modal footer={[
                 <Button key="cancel" onClick={handleCancel} className='cancel-button'>
-                    Cancel
+                   {t('cancel')}
                 </Button>,
                 <Button key="submit" onClick={() => handleConfirm()} className='next-button' loading={confirmLoading}>
-                    Confirm
+                 {t('confirm')}
                 </Button>
             ]} title={drawerTitle} centered className={styles['record-create-model']} open={createOpenModal} width={720} onCancel={handleCancel} closeIcon={<img src={closeIcon} alt="closeIcon" />}>
                 <div className={styles['text-content']}>
-                    <div className={styles['text-title']}>Text content</div>
-                    <div className={styles['desc']}>The text content of the chunk. Once created, it is converted into a computation-manageable vector via the collection's embedding model.</div>
-                    <Input.TextArea placeholder='Enter text content' showCount minLength={0} maxLength={4096} value={contentValue} onChange={handleContentChange} className={styles['input']}></Input.TextArea>
+                    <div className={styles['text-title']}>{t('projectChunkTextContent')}</div>
+                    <div className={styles['desc']}>{t('projectChunkTextContentDesc')}</div>
+                    <Input.TextArea placeholder={t('projectChunkPlaceholder')} showCount minLength={0} maxLength={4096} value={contentValue} onChange={handleContentChange} className={styles['input']}></Input.TextArea>
                 </div>
             </Modal>
-            <DeleteModal open={OpenDeleteModal} describe={`Are you sure you want to delete record ${deleteId}? This action cannot be undone and all chunks associated with the record will be deleted.`} title="Delete Record" projectName={deleteId} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
+            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem')} ${t('projectChunk')} ${deleteId}? ${t('projectDeleteChunkDesc')}`} title={t('projectDeleteChunkTitle')} projectName={deleteId} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
         </Spin>
     );
 }
