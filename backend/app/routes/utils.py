@@ -1,6 +1,6 @@
 from starlette.requests import Request
 from fastapi import HTTPException
-from typing import Dict, Type
+from typing import Dict, Type, Tuple
 from pydantic import ValidationError
 import re
 import json
@@ -20,7 +20,7 @@ __all__ = [
     "auth_info_required",
     "check_path_params",
     "path_params_required",
-    "check_list_params",
+    "validate_list_filter",
 ]
 
 
@@ -119,7 +119,12 @@ async def path_params_required(request: Request) -> Dict[str, str]:
     return {}
 
 
-async def check_list_params(model_operator: ModelOperator, path_params: Dict, prefix_filter: str) -> Dict:
+async def validate_list_filter(
+    model_operator: ModelOperator,
+    path_params: Dict,
+    prefix_filter: str = "",
+    equal_filter: str = "",
+) -> Tuple[Dict, Dict]:
     # check parent objects exist
     entity_class = model_operator.entity_class
     for parent_model, parent_operator in zip(entity_class.parent_models(), entity_class.parent_operator()):
@@ -132,11 +137,16 @@ async def check_list_params(model_operator: ModelOperator, path_params: Dict, pr
         if not parent_entity:
             raise_request_validation_error(f"Parent {parent_model.object_name()} not found")
 
-    # check prefix_filter keys
     prefix_filter_dict = {}
-    if CONFIG.API and prefix_filter:
-        raise_request_validation_error("Prefix filter is not supported")
+    equal_filter_dict = {}
 
+    if CONFIG.API:
+        if prefix_filter:
+            raise_request_validation_error("Prefix filter is not supported")
+        if equal_filter:
+            raise_request_validation_error("Equal filter is not supported")
+
+    # check prefix_filter keys
     if entity_class.list_prefix_filter_fields() and prefix_filter:
         try:
             prefix_filter_dict = json.loads(prefix_filter)
@@ -146,4 +156,14 @@ async def check_list_params(model_operator: ModelOperator, path_params: Dict, pr
             if k not in entity_class.list_prefix_filter_fields():
                 raise_request_validation_error(f"Invalid prefix filter: {k}")
 
-    return prefix_filter_dict
+    # check equal_filter keys
+    if entity_class.list_equal_filter_fields() and equal_filter:
+        try:
+            equal_filter_dict = json.loads(equal_filter)
+        except json.JSONDecodeError:
+            raise_request_validation_error("Invalid equal filter format")
+        for k in equal_filter_dict:
+            if k not in entity_class.list_equal_filter_fields():
+                raise_request_validation_error(f"Invalid equal filter: {k}")
+
+    return prefix_filter_dict, equal_filter_dict
