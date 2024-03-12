@@ -51,7 +51,7 @@ function ChunkPage({ collectionId }: { collectionId: string }) {
             key: 'content',
             ellipsis: true,
             render: (text: any) => (
-                <Tooltip title={text.text} placement='bottom'><span style={{ maxWidth: '480px', overflow: 'hidden', display: 'inline-block' }}>{text}</span></Tooltip>
+                <Tooltip title={text} placement='bottom'><span style={{ maxWidth: '480px', overflow: 'hidden', display: 'inline-block' }}>{text}</span></Tooltip>
             ),
         },
         {

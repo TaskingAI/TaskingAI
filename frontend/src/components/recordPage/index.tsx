@@ -58,8 +58,8 @@ function RecordPage({ collectionId }: { collectionId: string }) {
             dataIndex: 'content',
             key: 'content',
             ellipsis: true,
-            render: (text: Record<string, any>) => (
-                <Tooltip title={text.text} placement='bottom'><span style={{ maxWidth: '480px', overflow: 'hidden', display: 'inline-block' }}>{text.text}</span></Tooltip>
+            render: (text: string) => (
+                <Tooltip title={text} placement='bottom'><span style={{ maxWidth: '480px', overflow: 'hidden', display: 'inline-block' }}>{text}</span></Tooltip>
             ),
         },
         {
