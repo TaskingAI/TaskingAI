@@ -2,7 +2,7 @@ from tkhelper.models import RedisOperator, ModelEntity
 from tkhelper.models.operator.postgres_operator import PostgresModelOperator
 from tkhelper.error import raise_request_validation_error
 from tkhelper.utils import check_http_error
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
 from app.database import redis_conn, postgres_pool
 from app.models import Model, ModelSchema, Provider, ModelType
@@ -43,10 +43,10 @@ def _build_display_credentials(original_credentials: Dict, credential_schema: Di
 
 async def verify_model_credentials(
     model_schema_id: str,
-    provider_model_id: str,
-    model_type: str,
+    provider_model_id: Optional[str],
+    model_type: Optional[str],
     credentials: Dict,
-    properties: Dict,
+    properties: Optional[Dict],
 ) -> Tuple[str, str, str, Dict, Dict, Dict]:
     """
     Verify model credentials
@@ -122,9 +122,9 @@ class ModelModelOperator(PostgresModelOperator):
         ) = await verify_model_credentials(
             model_schema_id=model_schema_id,
             provider_model_id=create_dict.get("provider_model_id"),
-            model_type=create_dict.get("model_type"),
+            model_type=create_dict.get("type"),
             credentials=create_dict["credentials"],
-            properties=create_dict["properties"],
+            properties=create_dict.get("properties"),
         )
 
         # create model
@@ -183,7 +183,7 @@ class ModelModelOperator(PostgresModelOperator):
             ) = await verify_model_credentials(
                 model_schema_id=update_dict.get("model_schema_id") or model.model_schema_id,
                 provider_model_id=update_dict.get("provider_model_id") or model.provider_model_id,
-                model_type=update_dict.get("model_type") or model.type,
+                model_type=update_dict.get("type") or model.type,
                 credentials=update_dict.get("credentials") or model.credentials,
                 properties=update_dict.get("properties") or model.properties,
             )
