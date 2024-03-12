@@ -54,7 +54,7 @@ class StreamSession(Session):
 
     async def stream_generate(self, system_prompt_variables: Dict):
         try:
-            await self.prepare(True, system_prompt_variables, retrieval_log=self.debug)
+            await self.prepare(self.stream, system_prompt_variables, retrieval_log=self.debug)
             await self.chat.lock()
 
             if self.prepare_logs:
