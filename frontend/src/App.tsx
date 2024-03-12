@@ -12,7 +12,7 @@ function App() {
         <AuthRouter>
             <GetRouters/>
         </AuthRouter>
-        <ToastContainer autoClose={2000} />
+        <ToastContainer autoClose={2000} className="custom-toast-container" />
       </BrowserRouter>
     </>
 

@@ -60,7 +60,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const handleCancel = () => {
         setOpenModalOne(false)
     }
-  
+
     const fetchAiModelsList = async (offset: number, providerId: string) => {
         try {
             const res: any = await getAiModelsList(offset, 100, props.modelType as string, providerId)
@@ -89,7 +89,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         setDiscription(item.description)
         setType(item.type)
     }
-    const fetchModelProviderList = async (type?:any) => {
+    const fetchModelProviderList = async (type?: any) => {
         setModelOneLoading(true)
         const res: Record<string, any> = await getModelProviderList(type)
         setModelProviderList(res.data)
@@ -146,14 +146,13 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
             }
         }
         for (const key in wildcardValues) {
-            if (typeof values[key] === 'boolean') {
-                numericValues1[key] = values[key];
+            if (typeof wildcardValues[key] === 'boolean') {
+                numericValues1[key] = wildcardValues[key];
             } else {
-                const value = Number(values[key]);
-                numericValues1[key] = isNaN(value) ? values[key] : value;
+                const value = Number(wildcardValues[key]);
+                numericValues1[key] = isNaN(value) ? wildcardValues[key] : value;
             }
         }
-     
         form1.validateFields().then(async () => {
             await propertyForm.validateFields()
             await wildcardForm.validateFields()
@@ -164,7 +163,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     model_schema_id: selectedOneId,
                     credentials: form.getFieldsValue(),
                     properties: numericValues,
-                 
+
                 }
                 const wildcardParams = {
                     name: form1.getFieldValue('name'),
@@ -217,7 +216,6 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         setNextLoading1(true)
         try {
             const res: any = await getAiModelsList(0, 100, props.modelType as string, providerId)
-            console.log(res)
             if (res.data.length !== 0) {
                 setPromptList(res.data)
                 setSelectedOneId(res.data[0].model_schema_id)
@@ -242,7 +240,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     }
     return (
         <div>
-            <Modal zIndex={10001} title={openModalOne ? t('projectModelBaseModelSelection') : (!props.type ? t('projectProviderSelection') : (props.type ==='chat_completion' ? 'Provider Selection - Chat Completion' : 'Provider Selection - Text Embedding')) } onCancel={handleCancel1} footer={
+            <Modal zIndex={10001} title={openModalOne ? t('projectModelBaseModelSelection') : (!props.type ? t('projectProviderSelection') : (props.type === 'chat_completion' ? 'Provider Selection - Chat Completion' : 'Provider Selection - Text Embedding'))} onCancel={handleCancel1} footer={
                 <>
                     {openModalOne ? <>
                         <Button key="cancel" onClick={handleCancel} className='cancel-button'>
@@ -265,15 +263,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                 </>} centered width={1280} open={props.open} closeIcon={<img src={closeIcon} alt="closeIcon" />} className={openModalOne ? 'create-model-one' : 'create-models'}>
                 {openModalOne ?
                     <div className='create-model'>
-                        {/* <div className='left'>
-                            <div className='modal-provider'>Model provider</div>
-                            {ModelProviderList?.map((item, index) => (
-                                <div key={index} onClick={() => getCenterData(item.provider_id, item.name)} className={`provider ${item.provider_id === providerId && 'select-provider'}`}>
-                                    <IconComponent providerId={item.provider_id} />
-                                    <div className='name'>{item.name}</div>
-                                </div>
-                            ))}
-                        </div> */}
+                    
                         <div className='center'>
                             <Spin spinning={centerLoading}>
                                 <div className='inputWithLabel1'>
@@ -298,7 +288,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                     </div>))}
                                 </div>
                                 }
-                           
+
                             </Spin>
 
                         </div>
@@ -348,7 +338,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                                 <RightArrow />
                                             </div>
                                             <div className='desc'><span>{item.description}</span></div>
-                                        {!props.type && <div className='choices'>{item.num_model_schemas} {item.num_model_schemas <= 1 ? t('projectModelLow') : t('projectModelLows')}</div>}    
+                                            {!props.type && <div className='choices'>{item.num_model_schemas} {item.num_model_schemas <= 1 ? t('projectModelLow') : t('projectModelLows')}</div>}
                                             {/* <div className='chat-text-type'>
                                         <span className='type-single'>Chat Completion</span>
                                     </div> */}
@@ -376,7 +366,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     </Spin>
                 }
             </Modal>
-      
+
             <Modal zIndex={10001} className='modal-content' title={t('projectModelCreateModalOneTitle')} width={1000} centered open={modelTwoOpen} footer={[
                 <Button key="cancel" onClick={handleSecondCancel} className='cancel-button'>
                     {t('back')}
@@ -386,118 +376,134 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                 </Button>
             ]} closeIcon={<img src={closeIcon} alt="closeIcon" />} onCancel={handleSecondCancel}>
                 <div className='second-modals'>
-                    <div className='label' style={{marginTop:'24px'}}>{t('projectModelColumnBaseModel')}</div>
+                    <div className='base-model' style={{ marginTop: '24px' }}>{t('projectModelColumnBaseModel')}</div>
                     <div className='frameParent'>
                         <div className='modelproviderParent'>
                             <IconComponent providerId={providerId} />
                             <div className='openai'>{selectedOneId}</div>
                         </div>
                     </div>
-                    <Form layout="vertical" form={form1} autoComplete="off" className='input-form' >
-                        <Form.Item label={t('projectModelCreateModelName')} name="name">
-                            <div>
-                                <Input className='input-name' placeholder={t('projectModelCreatePlaceholder')} />
-                            </div>
-                        </Form.Item>
-                        { type === 'wildcard' && <Form.Item rules={[
-                            {
-                                required: true,
-                                message: 'please enter provider model ID',
-                            },
-                        ]} label='Provider model ID' name="provider_model_id">
-                            <div>
-                                <Input className='input-name' placeholder='Enter provider model ID' />
-                            </div>
-                        </Form.Item>}
-                      
-                    </Form>
+                    <ConfigProvider theme={{
+                        components: {
+                            Form: {
+                                labelFontSize: 16, labelColor: '#2b2b2b'
+                            }
+                        }
+                    }}>
+                        <Form layout="vertical" form={form1} autoComplete="off" className='input-form' >
+                            <Form.Item label={t('projectModelCreateModelName')} name="name">
+                                <div>
+                                    <Input className='input-name' placeholder={t('projectModelCreatePlaceholder')} />
+                                </div>
+                            </Form.Item>
+                            {type === 'wildcard' && <Form.Item rules={[
+                                {
+                                    required: true,
+                                    message: 'please enter provider model ID',
+                                },
+                            ]} label='Provider model ID' name="provider_model_id">
+                                <div>
+                                    <Input className='input-name' placeholder='Enter provider model ID' />
+                                </div>
+                            </Form.Item>}
+
+                        </Form>
+                    </ConfigProvider>
                     {
                         type === 'wildcard' && <>
                             <div className='hr'></div>
                             <div className='credentials'>{t('projectModelColumnProperties')}</div>
-                            <Form layout="vertical" className='second-form' form={wildcardForm}>
-                                <Form.Item label='Model type' required>
-                                    <Select placeholder='Select model type' options={[{
-                                        label: 'Text Embedding',
-                                        value: 'text_embedding'
-                                    }, {
-                                        label: 'Chat Completion',
-                                        value: 'chat_completion'
+                            <ConfigProvider theme={{
+                                components: {
+                                    Form: {
+                                        labelFontSize: 16, labelColor: '#2b2b2b'
                                     }
-                                    ]} onChange={handleModelTypes} value={modelTypes}>
+                                }
+                            }}>
+                                <Form layout="vertical" className='second-form' form={wildcardForm}>
+                                    <Form.Item label='Model type' required>
+                                        <Select placeholder='Select model type' options={[{
+                                            label: 'Text Embedding',
+                                            value: 'text_embedding'
+                                        }, {
+                                            label: 'Chat Completion',
+                                            value: 'chat_completion'
+                                        }
+                                        ]} onChange={handleModelTypes} value={modelTypes}>
 
-                                    </Select>
-                                </Form.Item>
-                                {modelTypes === 'text_embedding' && <>
-                                    <Form.Item label={t('projectModelEmbeddingSize')} required name='embedding_size' rules={[
-                                        {
-                                            required: true,
-                                            message: `${t('projectModelEmbeddingSizeRequired')}`,
-                                        },
-                                    ]}>
-                                        <div>
-                                            <div className='description'>{t('projectModelEmbeddingSizeDesc')}</div>
-                                            <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('projectModelEmbeddingSizePlaceholder')} />
-                                        </div>
+                                        </Select>
                                     </Form.Item>
-                                    <Form.Item label={t('projectModelInputMaxTokens')} name='input_token_limit'>
-                                        <div>
-                                            <div className='description'>{t('projectModelInputMaxTokensDesc')}</div>
-                                            <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('projectModelInputMaxTokensPlaceholder')} />
-                                        </div>
-                                    </Form.Item>
-                                    <Form.Item label={'Max batch size'} name='max_batch_size'>
-                                        <div>
-                                            <div className='description'>The maximum number of text chunks that a provider's API can process in one call. Default value is 512.</div>
-                                            <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={'Enter batch size'} />
-                                        </div>
-                                    </Form.Item>
-                                </>}
-                                {modelTypes === 'chat_completion' && <>
-                                    <Form.Item label="Function call" required name='function_call' valuePropName="checked">
-                                        <div className='description'>{t('projectModelProoertiesDesc')}</div>
-                                        <ConfigProvider theme={{
-                                            components: {
-                                                Switch: {
-                                                    colorPrimary: '#087443',
-                                                    colorPrimaryHover: '#087443',
+                                    {modelTypes === 'text_embedding' && <>
+                                        <Form.Item label={t('projectModelEmbeddingSize')} required name='embedding_size' rules={[
+                                            {
+                                                required: true,
+                                                message: `${t('projectModelEmbeddingSizeRequired')}`,
+                                            },
+                                        ]}>
+                                            <div>
+                                                <div className='description'>{t('projectModelEmbeddingSizeDesc')}</div>
+                                                <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('projectModelEmbeddingSizePlaceholder')} />
+                                            </div>
+                                        </Form.Item>
+                                        <Form.Item label={t('projectModelInputMaxTokens')} name='input_token_limit'>
+                                            <div>
+                                                <div className='description'>{t('projectModelInputMaxTokensDesc')}</div>
+                                                <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('projectModelInputMaxTokensPlaceholder')} />
+                                            </div>
+                                        </Form.Item>
+                                        <Form.Item label={'Max batch size'} name='max_batch_size'>
+                                            <div>
+                                                <div className='description'>The maximum number of text chunks that a provider's API can process in one call. Default value is 512.</div>
+                                                <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={'Enter batch size'} />
+                                            </div>
+                                        </Form.Item>
+                                    </>}
+                                    {modelTypes === 'chat_completion' && <>
+                                        <Form.Item label="Function call" required name='function_call' valuePropName="checked">
+                                            <div className='description'>{t('projectModelProoertiesDesc')}</div>
+                                            <ConfigProvider theme={{
+                                                components: {
+                                                    Switch: {
+                                                        colorPrimary: '#087443',
+                                                        colorPrimaryHover: '#087443',
+                                                    }
                                                 }
-                                            }
-                                        }}>
-                                            <Form.Item name='function_call' className='switch'>
-                                                <Switch />
-                                            </Form.Item>
-                                        </ConfigProvider>
-                                    </Form.Item>
-                                    <Form.Item label="Streaming" required name='streaming' valuePropName="checked">
-                                        <div className='description'>{t('projectModelStreamingDesc')}</div>
-                                        <ConfigProvider theme={{
-                                            components: {
-                                                Switch: {
-                                                    colorPrimary: '#087443',
-                                                    colorPrimaryHover: '#087443',
+                                            }}>
+                                                <Form.Item name='function_call' className='switch'>
+                                                    <Switch />
+                                                </Form.Item>
+                                            </ConfigProvider>
+                                        </Form.Item>
+                                        <Form.Item label="Streaming" required name='streaming' valuePropName="checked">
+                                            <div className='description'>{t('projectModelStreamingDesc')}</div>
+                                            <ConfigProvider theme={{
+                                                components: {
+                                                    Switch: {
+                                                        colorPrimary: '#087443',
+                                                        colorPrimaryHover: '#087443',
+                                                    }
                                                 }
-                                            }
-                                        }}>
-                                            <Form.Item name='streaming' className='switch'>
-                                                <Switch />
-                                            </Form.Item>
-                                        </ConfigProvider>
-                                    </Form.Item>
-                                    <Form.Item label={t('projectModelInputMaxTokens')} name='input_token_limit'>
-                                        <div>
-                                            <div className='description'>{t('projectModelInputMaxTokensDesc')}</div>
-                                            <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('projectModelInputMaxTokensPlaceholder')} />
-                                        </div>
-                                    </Form.Item>
-                                    <Form.Item label="Output max tokens" name='output_token_limit'>
-                                        <div>
-                                            <div className='description'>{t('projectModelOutputMaxTokensDesc')}</div>
-                                            <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('projectModelOutputMaxTokensPlaceholder')} />
-                                        </div>
-                                    </Form.Item>
-                                </>}
-                            </Form>
+                                            }}>
+                                                <Form.Item name='streaming' className='switch'>
+                                                    <Switch />
+                                                </Form.Item>
+                                            </ConfigProvider>
+                                        </Form.Item>
+                                        <Form.Item label={t('projectModelInputMaxTokens')} name='input_token_limit'>
+                                            <div>
+                                                <div className='description'>{t('projectModelInputMaxTokensDesc')}</div>
+                                                <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('projectModelInputMaxTokensPlaceholder')} />
+                                            </div>
+                                        </Form.Item>
+                                        <Form.Item label="Output max tokens" name='output_token_limit'>
+                                            <div>
+                                                <div className='description'>{t('projectModelOutputMaxTokensDesc')}</div>
+                                                <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('projectModelOutputMaxTokensPlaceholder')} />
+                                            </div>
+                                        </Form.Item>
+                                    </>}
+                                </Form>
+                            </ConfigProvider>
                         </>
                     }
                     {
@@ -571,7 +577,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     <div className='hr'></div>
                     <div className='credentials'>{t('projectModelCredentials')}</div>
                     <div className='label-desc' style={{ marginBottom: '24px' }}>
-                        We will send one token to the model provider to verify the validity of your credentials. All credentials are encrypted at rest with AES-256 and in transit with TLS 1.2.
+                        We will send a request to the provider to verify your credentials. All credentials are encrypted at rest with AES-256 and in transit with TLS 1.2.
                     </div>
                     <Form
                         layout="vertical"
@@ -600,7 +606,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                         ))}
                     </Form>
                     {providerUrl && <div className='label-desc' style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', marginTop: '15px', lineHeight: 1 }} >
-                        <QuestionCircleOutlined /> Have probelm configure the model?  <a href={providerUrl} target="_blank" rel="noreferrer" className='href'> See documentation to learn more.</a>
+                        <QuestionCircleOutlined style={{marginRight: '4px'}} />  Having trouble configuring the model?   <a href={providerUrl} target="_blank" rel="noreferrer" className='href' style={{marginLeft:'4px'}}>  See the documentation to learn more.</a>
                     </div>}
                 </div>
             </Modal>
