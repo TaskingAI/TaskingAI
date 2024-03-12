@@ -113,7 +113,7 @@ TaskingAI's architecture is designed with modularity and flexibility at its core
 
 **Backend ([Python](https://www.python.org/) + [FastAPI](https://fastapi.tiangolo.com/))**: The backend, engineered with Python and FastAPI, offers high performance stemming from its asynchronous design. It manages business logic, data processing, and serves as the conduit between the frontend and AI inference services. Python's widespread use invites broader contributions, fostering a collaborative environment for continuous improvement and innovation.
 
-**[TaskingAI-Inference](https://github.com/taskingai/taskingai-inference)**: Dedicated to AI model inference, this component adeptly handles tasks such as response generation and natural language input processing. It's another standout project within TaskingAI's suite of open-source offerings.
+**TaskingAI-Inference**: Dedicated to AI model inference, this component adeptly handles tasks such as response generation and natural language input processing. It's another standout project within TaskingAI's suite of open-source offerings.
 
 **TaskingAI Core Services**: Comprises various services including Model, Assistant, Retrieval, and Tool, each integral to the platform's operation.
 

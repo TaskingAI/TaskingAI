@@ -6,7 +6,7 @@ from tkhelper.error import raise_http_error, ErrorCode
 
 from app.schemas import CollectionCreateRequest
 from app.database import redis_conn, postgres_pool
-from app.models import Collection, ModelType
+from app.models import Collection
 from app.database_ops.retrieval import collection as db_collection
 
 
@@ -25,8 +25,7 @@ async def _verify_embedding_model(embedding_model_id: str) -> int:
 
     # validate embedding model
     embedding_model = await get_model(embedding_model_id)
-    model_schema = embedding_model.model_schema()
-    if not model_schema.type == ModelType.TEXT_EMBEDDING:
+    if not embedding_model.is_text_embedding():
         raise_http_error(
             ErrorCode.REQUEST_VALIDATION_ERROR,
             message=f"Model {embedding_model_id} is not a valid embedding model.",
