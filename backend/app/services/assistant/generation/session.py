@@ -7,7 +7,6 @@ from app.services.model import get_model
 from app.services.tool import run_tools, fetch_tools
 from app.services.inference.chat_completion import chat_completion
 from tkhelper.utils import check_http_error
-from tkhelper.error import ErrorCode, raise_http_error
 import logging
 
 logger = logging.getLogger(__name__)
@@ -54,15 +53,16 @@ class Session(ABC):
         )
 
     async def prepare(self, stream: bool, system_prompt_variables: Dict, retrieval_log: bool = False):
+        # check chat lock
+        if await self.chat.is_chat_locked():
+            raise MessageGenerationException(f"Chat {self.chat.chat_id} is locked. Please try again later.")
+
         # 1. Get model
         self.model = await get_model(self.assistant.model_id)
 
         # 2. model streaming
         if not self.model.allow_streaming() and stream:
-            raise_http_error(
-                ErrorCode.REQUEST_VALIDATION_ERROR,
-                message=f"Assistant model {self.model.model_id} does not support streaming. ",
-            )
+            raise MessageGenerationException(f"Assistant model {self.model.model_id} does not support streaming. ")
 
         # 3. Get chat memory
         self.chat_memory_messages = await get_chat_memory_messages(self.chat)
