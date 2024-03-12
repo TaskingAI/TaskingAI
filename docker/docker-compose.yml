@@ -8,13 +8,13 @@ services:
       - backend-api
 
   backend-inference:
-    image: taskingai/taskingai-inference:v0.2.1
+    image: taskingai/taskingai-inference:v0.2.2
     environment:
       AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0 # replace with your own
       ICON_URL_PREFIX: http://localhost:8080 # replace with your own
 
   backend-plugin:
-    image: taskingai/taskingai-plugin:v0.2.0
+    image: taskingai/taskingai-plugin:v0.2.1
     environment:
       AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0 # replace with your own
       ICON_URL_PREFIX: http://localhost:8080 # replace with your own
