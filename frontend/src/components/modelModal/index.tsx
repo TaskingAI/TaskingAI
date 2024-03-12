@@ -391,7 +391,12 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                         }
                     }}>
                         <Form layout="vertical" form={form1} autoComplete="off" className='input-form' >
-                            <Form.Item label={t('projectModelCreateModelName')} name="name">
+                            <Form.Item rules={[
+                                {
+                                    required: true,
+                                    message: 'please enter name',
+                                },
+                            ]} label={t('projectModelCreateModelName')} name="name">
                                 <div>
                                     <Input className='input-name' placeholder={t('projectModelCreatePlaceholder')} />
                                 </div>

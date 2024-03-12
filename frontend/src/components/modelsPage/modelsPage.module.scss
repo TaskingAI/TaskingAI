@@ -593,6 +593,7 @@
         border: 1px solid #e4e4e4;
         box-sizing: border-box;
         height: 24px;
+        background-color: white;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -789,6 +790,9 @@
                 display: flex;
                 flex-direction: row-reverse;
             }
+        }
+        .ant-drawer-body{
+            background-color: var(--color-item-background);
         }
     }
 }
