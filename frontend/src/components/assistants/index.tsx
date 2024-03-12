@@ -518,7 +518,6 @@ function Assistant() {
         setTopk(value)
     }
     const handleNewBundle = () => {
-        console.log('new bundle')
         setPluginModalOpen(true)
     }
     return (

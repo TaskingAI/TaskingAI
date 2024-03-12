@@ -420,15 +420,14 @@
             overflow-x: hidden;
             position: relative;
             background-color: var(--color-item-background);
-
-            .ant-form-item-label {
-                padding: 0;
-            }
-
             .second-modals {
                 background-color: var(--color-item-background);
                 overflow: hidden;
-
+                .base-model {
+                    font-size: 16px;
+                    font-weight: 400;
+                    margin-left: 24px;
+                }
                 .input-form {
                     padding: 0 24px;
                     .ant-form-item {

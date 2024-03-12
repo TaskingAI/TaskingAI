@@ -283,7 +283,7 @@ function ModelsPage() {
                     <div className={styles['hr']}></div>
                     <div className={styles['credentials']}>{t('projectModelCredentials')}</div>
                     <div className={styles['label-desc']} style={{ marginBottom: '24px' }}>
-                        {t('projectModelCredentialsDesc')} {t('ReferTo')} <a className='href' href='https://docs.tasking.ai/docs/guide/model/overview#required-credentials-for-model-access' target='_blank' rel='noopener noreferrer'>{t('projectModelCredentialsLink')}</a> {t('projectModelCredentialsDescEnd')}
+                        {t('projectModelCredentialsDesc')} {t('referTo')} <a className='href' href='https://docs.tasking.ai/docs/guide/model/overview#required-credentials-for-model-access' target='_blank' rel='noopener noreferrer'>{t('projectModelCredentialsLink')}</a> {t('projectModelCredentialsDescEnd')}
                     </div>
                     {resetButtonShow && <div className={styles['formbuttoncancel']} onClick={handleResetCredentials}>
                         <div className={styles['text1']}>{t('projectModelResetCredentials')}</div>

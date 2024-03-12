@@ -32,7 +32,7 @@ function CreatePlugin(props: any) {
     const [cachedImages, setCachedImages] = useState({});
 
     useEffect(() => {
-  
+
         const params1 = {
             limit: 100,
             offset: 0,
@@ -42,7 +42,7 @@ function CreatePlugin(props: any) {
     }, [])
     const getBundleList = async (params: object) => {
         const res: any = await bundleList(params)
-        const selectedItem:any = res.data.find((item: any) => item.registered === false) || []
+        const selectedItem: any = res.data.find((item: any) => item.registered === false) || []
         setBundleId(selectedItem.bundle_id)
         setBundleName(selectedItem.name)
         setBundlesList(res.data)
@@ -275,7 +275,7 @@ function CreatePlugin(props: any) {
                 </div>
                 <div className={styles['credentials']}>{t('projectModelCredentials')}</div>
                 <div className={styles['label-desc']} style={{ marginBottom: '24px' }}>
-                    Please enter your model credentials, and we will send one token to the model provider to verify the validity of your credentials. All credentials are encrypted at rest with AES-256 and in transit with TLS 1.2. Refer to <a className='href' href='https://docs.tasking.ai/docs/guide/model/overview#required-credentials-for-model-access' target='_blank' rel='noopener noreferrer'>documentation</a> for more information.
+                    All plugin credentials are encrypted at rest with AES-256 and in transit with TLS 1.2. Refer to <a className='href' href='https://docs.tasking.ai/docs/guide/tool/plugin/create-bundles-and-plugins' target='_blank' rel='noopener noreferrer'>documentation</a> for more information.
                 </div>
 
                 <Form
