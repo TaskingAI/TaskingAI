@@ -33,6 +33,9 @@ class Model(ModelEntity):
     def is_chat_completion(self):
         return self.type == "chat_completion"
 
+    def is_text_embedding(self):
+        return self.type == "text_embedding"
+
     def allow_function_call(self):
         return self.type == "chat_completion" and self.properties.get("function_call", False)
 
