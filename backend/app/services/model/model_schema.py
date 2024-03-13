@@ -78,7 +78,7 @@ async def sync_model_schema_data():
                         model_schema.type
                         for model_schema in model_schemas
                         if model_schema.provider_id == provider_data["provider_id"]
-                        and model_schema.type != ModelType.WILDCARD
+                        # and model_schema.type != ModelType.WILDCARD
                     ]
                 )
             )
