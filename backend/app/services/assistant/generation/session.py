@@ -58,7 +58,10 @@ class Session(ABC):
             raise MessageGenerationException(f"Chat {self.chat.chat_id} is locked. Please try again later.")
 
         # 1. Get model
-        self.model = await get_model(self.assistant.model_id)
+        try:
+            self.model = await get_model(self.assistant.project_id, self.assistant.model_id)
+        except Exception as e:
+            raise MessageGenerationException(f"Failed to load model {self.assistant.model_id}.")
 
         # 2. model streaming
         if not self.model.allow_streaming() and stream:
