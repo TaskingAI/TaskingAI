@@ -1,4 +1,10 @@
 import os
+import aiohttp
+from aiohttp.client_exceptions import ClientConnectorError, ClientResponseError
+import logging
+import urllib.parse
+import json
+
 from typing import Dict, Optional
 from app.models import (
     ActionAuthentication,
@@ -7,10 +13,6 @@ from app.models import (
     ActionBodyType,
     ActionParam,
 )
-import aiohttp
-from aiohttp.client_exceptions import ClientConnectorError
-import logging
-import urllib.parse
 
 logger = logging.getLogger(__name__)
 
@@ -141,10 +143,34 @@ async def call_action_api(
 
             async with session.request(method.value, url, **request_kwargs) as response:
                 response_content_type = response.headers.get("Content-Type", "").lower()
+
+                bytes_read = 0
+                max_size = 64 * 1024
+                data_chunks = []
+
+                # check the size of the response
+                async for chunk in response.content.iter_any():
+                    bytes_read += len(chunk)
+                    if bytes_read > max_size:
+                        raise ClientResponseError(
+                            response.request_info,
+                            response.history,
+                            message="Response too large",
+                            status=response.status,
+                        )
+                    data_chunks.append(chunk)
+
+                data_bytes = b"".join(data_chunks)
                 if "application/json" in response_content_type:
-                    data = await response.json()
+                    try:
+                        # Assuming the response is JSON and decode here
+                        data = json.loads(data_bytes.decode("utf-8"))
+                    except json.JSONDecodeError:
+                        # Handle non-JSON response or decode error
+                        return {"status": 500, "data": {"error": "Failed to decode the action response"}}
                 else:
-                    data = {"result": await response.text()}
+                    data = {"result": data_bytes.decode("utf-8")}
+
                 if response.status != 200:
                     error_message = f"API call failed with status {response.status}"
                     if data:
@@ -153,7 +179,22 @@ async def call_action_api(
                 return {"status": response.status, "data": data}
 
     except ClientConnectorError as e:
-        return {"status": 500, "data": {"error": f"Failed to connect to {url}"}}
+        return {
+            "status": 500,
+            "data": {"error": f"Failed to connect to {url}"},
+        }
+
+    except ClientResponseError as e:
+        if e.message == "Response too large":
+            return {
+                "status": e.status,
+                "data": {"error": f"Response data is too large. Maximum character length is {max_size}."},
+            }
+        else:
+            return {"status": e.status, "data": {"error": f"API call failed with status {e.status}"}}
 
     except Exception as e:
-        return {"status": 500, "error": {"error": "Failed to make the API call"}}
+        return {
+            "status": 500,
+            "error": {"error": "Failed to make the API call"},
+        }
