@@ -129,7 +129,7 @@ class Model(ModelEntity):
 
     @staticmethod
     def update_fields() -> List[str]:
-        return ["openapi_schema", "authentication"]
+        raise NotImplementedError
 
     @staticmethod
     def fields_exclude_in_response():
