@@ -100,3 +100,42 @@ class PostgresDatabasePool:
             logger.info(f"Postgres database {self.db_name} clean done.")
 
         await self._migration_if_needed()
+
+    # -- log connection info --
+
+    async def log_connection_info(self):
+        if self.db_pool is None:
+            logger.warning(f"log_connection_info: Postgres database {self.db_name} pool is not initialized")
+            return
+
+        # get server connections
+        async with self.get_db_connection() as conn:
+            server_connections = await conn.fetchval("SELECT COUNT(*) FROM pg_stat_activity;")
+            server_max_connections = await conn.fetchval(
+                "SELECT setting FROM pg_settings WHERE name=$1;", "max_connections"
+            )
+
+        # get client connections
+        client_connections = self.db_pool.get_size()
+        max_client_connections = self.db_pool.get_max_size()
+
+        logger.info(
+            f"db[{self.db_name}]: "
+            f"client pool size = {client_connections}/{max_client_connections}, "
+            f"server connections = {server_connections}/{server_max_connections}"
+        )
+
+    # -- health check --
+    async def health_check(self) -> bool:
+        """Check if postgres database is healthy"""
+        if self.db_pool is None:
+            logger.error("Postgres health check failed: db pool is not initialized")
+            return False
+
+        try:
+            async with self.get_db_connection() as conn:
+                await conn.fetchval("SELECT 1")
+                return True
+        except Exception as e:
+            logger.error(f"Postgres[{self.db_name}]] health check failed: error={e}")
+            return False

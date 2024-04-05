@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from tkhelper.schemas.base import BaseEmptyResponse, BaseDataResponse
 from app.config import CONFIG
 from app.services.auth.admin import create_default_admin_if_needed
@@ -17,6 +17,12 @@ router = APIRouter()
     response_model=BaseEmptyResponse,
 )
 async def api_health_check():
+    from app.database import redis_conn, postgres_pool
+
+    if not await redis_conn.health_check():
+        raise HTTPException(status_code=500, detail="Redis health check failed.")
+    if not await postgres_pool.health_check():
+        raise HTTPException(status_code=500, detail="Postgres health check failed.")
     return BaseEmptyResponse()
 
 
