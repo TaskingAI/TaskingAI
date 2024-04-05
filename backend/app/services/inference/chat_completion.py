@@ -75,10 +75,11 @@ async def chat_completion_stream(
                     if buffer.endswith("\n\n"):
                         lines = buffer.strip().split("\n")
                         event_data = lines[0][len("data: ") :]
-                        try:
-                            data = json.loads(event_data)
-                            yield data
-                        except json.decoder.JSONDecodeError:
-                            print("JSONDecodeError")
-                            continue
+                        if event_data != "[DONE]":
+                            try:
+                                data = json.loads(event_data)
+                                yield data
+                            except json.decoder.JSONDecodeError:
+                                logger.error(f"Failed to parse json: {event_data}")
+                                continue
                         buffer = ""
