@@ -1,9 +1,13 @@
+import json
 from typing import Dict, List
-from app.models import BundleInstance
-from app.operators import bundle_instance_ops
 import aiohttp
-from app.config import CONFIG
+from aiohttp.client_exceptions import ClientResponseError
+
 from tkhelper.utils import ResponseWrapper
+
+from app.models import BundleInstance
+from app.config import CONFIG
+from app.operators import bundle_instance_ops
 
 __all__ = [
     "run_plugin",
@@ -27,22 +31,58 @@ async def run_plugin(
         bundle_instance_id=bundle_instance_id,
     )
 
-    async with aiohttp.ClientSession() as session:
-        response = await session.post(
-            f"{CONFIG.TASKINGAI_PLUGIN_URL}/v1/execute",
-            json={
-                "bundle_id": bundle_instance.bundle_id,
-                "plugin_id": plugin_id,
-                "input_params": parameters,
-                "encrypted_credentials": bundle_instance.encrypted_credentials,
-            },
-        )
-        response_wrapper = ResponseWrapper(response.status, await response.json())
-        if response.status == 200:
-            data = response_wrapper.json().get("data")
-            return {"status": data["status"], "data": data["data"]}
+    try:
+        async with aiohttp.ClientSession() as session:
+            response = await session.post(
+                f"{CONFIG.TASKINGAI_PLUGIN_URL}/v1/execute",
+                json={
+                    "bundle_id": bundle_instance.bundle_id,
+                    "plugin_id": plugin_id,
+                    "input_params": parameters,
+                    "encrypted_credentials": bundle_instance.encrypted_credentials,
+                },
+            )
 
-        return {"status": response.status, "data": response_wrapper.json().get("error")}
+            bytes_read = 0
+            max_size = 64 * 1024
+            data_chunks = []
+
+            # check the size of the response
+            async for chunk in response.content.iter_any():
+                bytes_read += len(chunk)
+                if bytes_read > max_size:
+                    raise ClientResponseError(
+                        response.request_info, response.history, message="Response too large", status=response.status
+                    )
+                data_chunks.append(chunk)
+
+            data_bytes = b"".join(data_chunks)
+            try:
+                # Assuming the response is JSON and decode here
+                data_dict = json.loads(data_bytes.decode("utf-8"))
+            except json.JSONDecodeError:
+                # Handle non-JSON response or decode error
+                return {"status": 500, "data": {"error": "Failed to decode the plugin response"}}
+
+            response_wrapper = ResponseWrapper(response.status, data_dict)
+
+            if response.status == 200:
+                data = response_wrapper.json().get("data")
+                return {"status": data["status"], "data": data["data"]}
+
+            return {"status": response.status, "data": response_wrapper.json().get("error")}
+
+    except ClientResponseError as e:
+        if "Response too large" in e.message:
+            return {
+                "status": e.status,
+                "data": {"error": f"Response data is too large. Maximum character length is {max_size}."},
+            }
+        else:
+            return {"status": e.status, "data": {"error": f"API call failed with status {e.status}"}}
+
+    except Exception as e:
+        return {"status": 500, "data": {"error": "Failed to execute the plugin"}}
 
 
 async def get_bundle_registered_dict(
