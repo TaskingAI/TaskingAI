@@ -59,8 +59,8 @@ async def api_list_record_chunks(
 
     data_prefix_filter = getattr(data, "prefix_filter", {})
     path_params.pop("record_id")
-    prefix_filter_dict = await validate_list_filter(chunk_ops, path_params, data_prefix_filter)
-
+    prefix_filter_dict, equal_filter_dict = await validate_list_filter(chunk_ops, path_params, data_prefix_filter)
+    equal_filter_dict.update({"record_id": record_id})
     chunks, has_more = await chunk_ops.list(
         collection_id=collection_id,
         limit=data.limit,
@@ -68,7 +68,7 @@ async def api_list_record_chunks(
         after_id=data.after,
         before_id=data.before,
         prefix_filters=prefix_filter_dict,
-        equal_filters={"record_id": record_id},
+        equal_filters=equal_filter_dict,
     )
 
     return BaseListResponse(

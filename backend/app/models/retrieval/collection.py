@@ -15,8 +15,8 @@ class Collection(ModelEntity):
     collection_id: str = id_field("collection", length_range=(1, 50))
     name: str = name_field()
     description: str = description_field()
-    num_records: int = Field(..., ge=0, description="Number of records in the collection", examples=[10])
-    num_chunks: int = Field(..., ge=0, description="Number of chunks in the collection", examples=[20])
+    num_records: int = Field(..., description="Number of records in the collection", examples=[10])
+    num_chunks: int = Field(..., description="Number of chunks in the collection", examples=[20])
     capacity: int = Field(..., ge=0, description="The maximum number of chunks the collection can hold", examples=[100])
     embedding_model_id: str = Field(
         ..., min_length=8, max_length=8, description="The id of the embedding model", example="model123"

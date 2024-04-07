@@ -77,16 +77,27 @@ async def insert_record_chunks(
     await conn.execute(insert_chunks_sql, *params)
 
 
-async def delete_record_chunks(conn, collection_id: str, record_id: str):
+async def delete_record_chunks(conn, collection_id: str, record_id: str) -> int:
     """
     Delete record chunks
     :param conn:
     :param collection_id: the collection id
     :param record_id: the record id
-    :return:
+    :return: the content_bytes sum of chunks, and the number of chunks
     """
 
     chunk_table_name = Collection.get_chunk_table_name(collection_id)
+
+    # count chunks and the content_bytes sum of chunks
+    result = await conn.fetchrow(
+        f"""
+        SELECT COUNT(*)
+        FROM {chunk_table_name}
+        WHERE record_id = $1
+    """,
+        record_id,
+    )
+    num_chunks = result[0] or 0
 
     await conn.execute(
         f"""
@@ -95,3 +106,5 @@ async def delete_record_chunks(conn, collection_id: str, record_id: str):
     """,
         record_id,
     )
+
+    return num_chunks

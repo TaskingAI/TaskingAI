@@ -84,20 +84,23 @@ class RecordModelOperator(PostgresModelOperator):
         collection_id = kwargs["collection_id"]
         record_id = kwargs["record_id"]
 
-        type = RecordType(update_dict["type"])
-        title = update_dict["title"]
-        content = update_dict["content"]
-        text_splitter = TextSplitter(**update_dict["text_splitter"])
-        metadata = update_dict["metadata"]
+        type_str = update_dict.get("type")
+        title = update_dict.get("title")
+        content = update_dict.get("content")
+        metadata = update_dict.get("metadata")
 
         collection = await collection_ops.get(collection_id=collection_id)
         record = await self.get(collection_id=collection_id, record_id=record_id)
-        new_type = type if type is not None else record.type
-        new_title = title if title is not None else record.title
 
         chunk_text_list, num_tokens_list, embeddings = None, None, None
 
-        if content is not None:
+        new_type = None
+        if content is not None or title is not None:
+            new_type = RecordType(type_str) if type_str is not None else record.type
+            new_title = title if title is not None else record.title
+            text_splitter = TextSplitter(**update_dict["text_splitter"])
+            content = content if content is not None else record.content
+
             # validate model
             embedding_model = await model_ops.get(model_id=collection.embedding_model_id)
 
@@ -122,7 +125,7 @@ class RecordModelOperator(PostgresModelOperator):
             collection=collection,
             record=record,
             title=title,
-            type=type,
+            type=new_type,
             content=content,
             chunk_text_list=chunk_text_list,
             chunk_num_tokens_list=num_tokens_list,
