@@ -59,7 +59,7 @@ class Session(ABC):
 
         # 1. Get model
         try:
-            self.model = await get_model(self.assistant.project_id, self.assistant.model_id)
+            self.model = await get_model(self.assistant.model_id)
         except Exception as e:
             raise MessageGenerationException(f"Failed to load model {self.assistant.model_id}.")
 
