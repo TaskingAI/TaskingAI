@@ -30,6 +30,9 @@ class Collection(ModelEntity):
     def has_available_capacity(self, capacity: int):
         return (self.capacity - self.num_chunks) >= capacity
 
+    def rest_capacity(self):
+        return self.capacity - self.num_chunks
+
     @staticmethod
     def get_chunk_table_name(collection_id: str):
         """

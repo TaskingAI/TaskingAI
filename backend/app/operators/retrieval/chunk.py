@@ -1,6 +1,7 @@
 from typing import Dict, Optional, List
 
 from tkhelper.models import SortOrderEnum
+from tkhelper.error import raise_http_error, ErrorCode
 from tkhelper.models.operator.postgres_operator import PostgresModelOperator, ModelEntity
 from tkhelper.database.postgres import ops as postgres_ops
 
@@ -37,6 +38,13 @@ class ChunkModelOperator(PostgresModelOperator):
 
         # Get model
         embedding_model = await model_ops.get(model_id=collection.embedding_model_id)
+
+        # check if collection has available capacity
+        if not collection.has_available_capacity(1):
+            raise_http_error(
+                ErrorCode.RESOURCE_LIMIT_REACHED,
+                message=f"Collection {collection_id} has no available capacity to store new chunks.",
+            )
 
         # embed the document
         embeddings = await embed_documents(

@@ -54,6 +54,10 @@ class CollectionModelOperator(PostgresModelOperator):
         name = request.name
         description = request.description
         capacity = request.capacity
+        allowed_capacity = [1000]
+        if capacity not in allowed_capacity:
+            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, message=f"Capacity must be one of {allowed_capacity}.")
+
         embedding_model_id = request.embedding_model_id
         metadata = request.metadata
 
