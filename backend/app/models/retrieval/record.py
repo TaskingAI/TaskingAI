@@ -23,7 +23,7 @@ class Record(ModelEntity):
     object: str = "Record"
     record_id: str = id_field("record", length_range=(1, 50))
     collection_id: str = id_field("collection", length_range=(1, 50))
-    title: str = name_field()
+    title: str = Field("", description="The title of the record", examples=["Record 1"])
     status: Status = Field(..., description="The status of the record", examples=["ready"])
     num_chunks: int = Field(..., ge=0, description="Number of chunks in the record", examples=[20])
     type: RecordType = Field(..., description="The type of the record", examples=["text"])
