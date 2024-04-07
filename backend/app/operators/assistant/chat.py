@@ -32,9 +32,9 @@ class ChatModelOperator(PostgresModelOperator):
                 chat = await self._create_entity(conn, create_dict, **kwargs)
 
                 # update assistant num_chats
-                assistant_ops.update(
+                await assistant_ops.update(
                     postgres_conn=conn,
-                    assistant=assistant,
+                    assistant_id=assistant_id,
                     update_dict={"num_chats": assistant.num_chats + 1},
                 )
 

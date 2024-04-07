@@ -53,17 +53,17 @@ class NormalSession(Session):
                     break
 
             message = await self.create_assistant_message(chat_completion_assistant_message["content"])
+            await self.chat.unlock()
             return BaseDataResponse(data=message.to_response_dict())
 
         except MessageGenerationException as e:
+            await self.chat.unlock()
             logger.error(f"NormalSession.generate: MessageGenerationException error = {e}")
             raise_http_error(ErrorCode.GENERATION_ERROR, message=str(e))
 
         except Exception as e:
+            await self.chat.unlock()
             logger.error(f"NormalSession.generate: Exception error = {e}")
             raise_http_error(
                 ErrorCode.INTERNAL_SERVER_ERROR, message=str("Assistant message not generated due to an unknown error.")
             )
-
-        finally:
-            await self.chat.unlock()
