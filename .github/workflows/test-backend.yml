@@ -69,6 +69,7 @@ jobs:
           --name cache redis:7-alpine
 
       - name: Run Docker image - Inference
+
         run: docker run --network taskingai-network -d --rm -e MODE=PROD --name inference taskingai/taskingai-inference:v0.2.5
 
       - name: Run Docker image - Plugin
@@ -116,6 +117,10 @@ jobs:
       - name: Install Dependencies
         working-directory: TaskingAI-Test
         run: pip install -r requirements.txt
+
+      - name: Start API Service
+        working-directory: TaskingAI-Test
+        run: python ./common/api_service.py &
 
       - name: Run WEB Tests
         working-directory: TaskingAI-Test
