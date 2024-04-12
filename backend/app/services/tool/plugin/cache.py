@@ -52,6 +52,10 @@ async def sync_plugin_data():
         check_http_error(response_wrapper)
         response_data = response_wrapper.json()["data"]
 
+        # sync i18n
+        global _i18n_dict
+        _i18n_dict = response_data["i18n"]
+
         # sort plugins by bundle_id, name
         plugins = [Plugin.build(plugin_data) for plugin_data in response_data["plugins"]]
         plugins.sort(key=lambda x: (x.bundle_id, x.plugin_id))
@@ -63,8 +67,6 @@ async def sync_plugin_data():
         # sort bundles by bundle_id
         bundles = [Bundle.build(bundle_data) for bundle_data in response_data["bundles"]]
         bundles.sort(key=lambda x: x.bundle_id)
-
-        i18n_dict = response_data["i18n"]
 
         for bundle in bundles:
             bundle.num_plugins = num_plugins_dict.get(bundle.bundle_id, 0)
@@ -82,13 +84,12 @@ async def sync_plugin_data():
         bundle_plugin_dict[bundle_id].sort(key=lambda x: x.plugin_id)
 
     # update data
-    global _bundles, _plugins, _bundle_dict, _plugin_dict, _i18n_dict, _bundle_plugin_dict
+    global _bundles, _plugins, _bundle_dict, _plugin_dict, _bundle_plugin_dict
     _bundles = bundles
     _plugins = plugins
     _bundle_dict = bundle_dict
     _plugin_dict = plugin_dict
     _bundle_plugin_dict = bundle_plugin_dict
-    _i18n_dict = i18n_dict
 
     # update checksum
     _bundle_checksum = bundle_checksum

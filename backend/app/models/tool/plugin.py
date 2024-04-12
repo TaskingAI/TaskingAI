@@ -11,8 +11,12 @@ class ParameterType(str, Enum):
     INTEGER = "integer"  # int
     NUMBER = "number"  # float
     BOOLEAN = "boolean"  # bool
-    OBJECT = "object"  # dict, only for output
-    ARRAY = "array"  # list, only for output
+    # OBJECT = "object" # dict, only for output
+    # ARRAY = "array" # list, only for output
+    STRING_ARRAY = "string_array"  # list of str
+    INTEGER_ARRAY = "integer_array"  # list of int
+    NUMBER_ARRAY = "number_array"  # list of float
+    BOOLEAN_ARRAY = "boolean_array"  # list of bool
     IMAGE_URL = "image_url"  # str
     FILE_URL = "file_url"  # str
 
@@ -42,6 +46,11 @@ def transform_input_schema(bundle_id, plugin_id, plugin_description, input_schem
         # Copy only 'type', 'enum', and 'description' fields to the new schema
         filtered_value = {k: v for k, v in value.items() if k in ["type", "enum", "description"]}
         output_schema["properties"][key] = filtered_value
+
+        if "array" in filtered_value.get("type", ""):
+            array_type = filtered_value["type"].replace("_array", "")
+            output_schema["properties"][key]["type"] = "array"
+            output_schema["properties"][key]["items"] = {"type": array_type}
 
         if filtered_value.get("description"):
             # handle i18n
