@@ -2,14 +2,14 @@
     overflow: hidden;
     background-color: var(--color-item-background);
 }
-
 .drawer-assistant {
     width: 100%;
     display: flex;
     height: 100%;
     overflow: auto;
-    overflow: hidden;
+    background-color: var(--color-item-background);
 
+    overflow: hidden;
     .left-assistant {
         border-right: 1px solid #e4e4e4;
         width: 640px;
@@ -17,15 +17,12 @@
         overflow: auto;
 
     }
-
-    .left-assistant::-webkit-scrollbar {
-        display: none;
-    }
-
+.left-assistant::-webkit-scrollbar {
+    display: none;
+}
     .right-assistant {
         width: 640px;
         overflow: auto;
-
         .hr {
             border-bottom: 1px solid var(--color-divider);
             margin: 24px -10px 0 0;
@@ -42,11 +39,9 @@
             }
         }
     }
-
     .right-assistant::-webkit-scrollbar {
         display: none;
     }
-
     .basic-information {
         color: #2b2b2b;
         font-size: 18px;
@@ -55,6 +50,7 @@
     }
 
     .name-prompt {
+        // font-weight: bold;
         font-size: 16px;
         font-family: Inter;
         color: var(--color-text-primary);
@@ -81,14 +77,19 @@
             width: calc(50% - 12px);
             display: flex;
         }
-
         .input-children1 {
             width: calc(50% - 12px);
             display: flex;
             justify-content: flex-end;
         }
-
-
+        // .ant-input-number {
+        //     width: 49%;
+        // }
+        .ant-input-number {
+            border-top-left-radius: 0;
+           flex:1;
+            border-bottom-left-radius: 0;
+        }
     }
 
     .ant-select {
@@ -96,6 +97,7 @@
     }
 
     .desc-retrieval {
+        // font-weight: bold;
         color: var(--color-text-primary);
         margin: 24px 24px 3px 24px;
         font-size: 16px;
@@ -113,6 +115,7 @@
         position: relative;
         font-size: 16px;
         line-height: 20px;
+        // font-weight: 600;
         font-family: Inter;
         text-align: left;
         color: var(--color-text-primary);
@@ -156,6 +159,7 @@
         display: flex;
         justify-content: space-between;
         margin: 10px 24px 0 24px;
+
         .ant-btn {
             width: 63px;
             padding: 0 6px !important;
@@ -169,6 +173,7 @@
             }
 
             .ant-btn-icon {
+                // margin-inline-end: 0 !important;
                 margin-right: 6px;
             }
         }
@@ -225,6 +230,7 @@
         .ant-select-selector {
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
+            // border-left:0;
         }
     }
 }
@@ -237,7 +243,6 @@
     width: 120px;
     flex-shrink: 0;
     text-align: left;
-
     div {
         display: none;
     }
@@ -247,11 +252,4 @@
     border-color: #e4e4e4 !important;
     color: #2b2b2b !important;
 }
-
-.ant-input-number {
-    border-top-left-radius: 0;
-    flex: 1;
-    border-bottom-left-radius: 0;
-}
-
 

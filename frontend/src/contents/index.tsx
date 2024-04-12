@@ -1,13 +1,16 @@
 
 import { Tag } from 'antd';
 import { formatTimestamp } from '@/utils/util'
+import ModelIcon from '@/commonComponent/modelIcon/index';
 
 import ClipboardJS from 'clipboard';
 import { toast } from 'react-toastify';
 import CopyOutlined from '@/assets/img/copyIcon.svg?react';
 import { useTranslation } from 'react-i18next';
 import IconComponent from '@/components/iconComponent';
-
+import ChatCompletionIcon from '@/assets/img/chatCompletion.svg?react'
+import TextEmbeddingIcon from '@/assets/img/textEmbedding.svg?react'
+import WildCardIcon from '@/assets/img/wildcard.svg?react'
 function CommonComponents() {
     const { t } = useTranslation()
     const statusReverse = {
@@ -18,6 +21,11 @@ function CommonComponents() {
         Inviting: 'orange',
         Active: 'green',
         Rejected: 'red'
+    }
+    const typeIcon = {
+        chat_completion: <ChatCompletionIcon />,
+        text_embedding: <TextEmbeddingIcon />,
+        wildcard: <WildCardIcon />
     }
     const revereseLabel: Record<string, any> = {
         naive: 'Naive',
@@ -53,9 +61,8 @@ function CommonComponents() {
             render: (text: string, record: any) =>
                 <div>
                     <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Model'}</p>
-                    <p style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
-                        <span style={{ fontSize: '12px', color: '#777' }}>{record.model_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.model_id)} />
-
+                    <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
+                        <span style={{ fontSize: '12px', color: '#777', lineHeight: '18px' }}>{record.model_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.model_id)} />
                     </p>
                 </div>
             ,
@@ -67,7 +74,7 @@ function CommonComponents() {
             width: 240,
             render: (text: string, record: any) =>
                 <div className='img-text'>
-                       <IconComponent providerId={record.provider_id} /> <span className='a'>{text}</span>
+                    <IconComponent providerId={record.provider_id} /> <span className='a'>{text}</span>
                 </div>
 
             ,
@@ -79,10 +86,11 @@ function CommonComponents() {
             width: 240,
             render: (type: string) => (
                 <>
-
-                    <Tag color='green'>
-                        {typeReverse[type]}
-                    </Tag>
+                    <div className='model-types'>
+                        <div className={type}>
+                            {typeIcon[type as keyof typeof typeIcon]}{type}
+                        </div>
+                    </div>
                 </>
             ),
         },
@@ -92,65 +100,7 @@ function CommonComponents() {
             key: 'properties',
             width: 360,
             render: (proerties: object) => (
-
-<div style={{ display: 'flex',width: '328px',flexWrap: 'wrap',alignItems: 'center' }}>
-                {
-                    proerties &&
-                    typeof proerties === "object" &&
-                    Object.entries(proerties)
-                        .filter(([_key, property]) => Boolean(property))
-                        .map(([key, property]) => (
-                            <div
-                                className="streamParent"
-                                key={key}
-                                style={{
-                                    display: "flex",
-                                    border: "1px solid #e4e4e4",
-                                    borderRadius: "8px",
-                                    width: "auto",
-                                    padding: "0 4px",
-                                    alignContent: "space-between",
-                                    marginRight: "6px",
-                                    marginBottom: "6px",
-                                }}
-                            >
-                                <span
-                                    className="stream"
-                                    style={{ borderRight: "1px solid #e4e4e4", paddingRight: "2px" }}
-                                >
-                                    {key}
-                                </span>
-                                <span className="on" style={{ paddingLeft: "2px" }}>
-                                    {String(property)}
-                                </span>
-                            </div>
-                        ))
-                        .slice(0, 2)
-                }
-                {
-                    proerties &&
-                    typeof proerties === "object" &&
-                    Object.entries(proerties).filter(([_key, property]) => Boolean(property))
-                        .length > 2 && (
-                        <div
-                            className="streamParent"
-                            style={{
-                                border: "1px solid #e4e4e4",
-                                borderRadius: "8px",
-                                width: "auto",
-                                padding: "0 4px",
-                                marginBottom: "6px",
-                            }}
-                        >
-                            <span className="stream" style={{ paddingRight: "2px" }}>
-                                +
-                                {Object.entries(proerties).filter(([_key, property]) => property !== null)
-                                    .length - 2}
-                            </span>
-                        </div>
-                    )
-                }
-            </div>
+                <ModelIcon properties={proerties} />
             ),
         },
         {

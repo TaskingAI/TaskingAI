@@ -5,11 +5,13 @@
         height: 600px;
         display: flex;
         background-color: var(--color-item-background);
+
     }
 
     .retrieval-modal-content {
         height: 100%;
         width: 100%;
+        background-color: var(--color-item-background);
     }
 
     .no-data {
@@ -52,6 +54,7 @@
         align-content: flex-start;
         justify-content: space-between;
         overflow: auto;
+        background-color: var(--color-item-background) !important;
         padding: 24px 24px 0 24px;
         border-bottom: 1px solid #e4e4e4;
         background-color: #fff;
@@ -64,6 +67,7 @@
             padding: 12px;
             border-radius: 8px;
             border: 1px solid #e4e4e4;
+            background-color: white;
             box-sizing: border-box;
             cursor: pointer;
 
@@ -112,7 +116,7 @@
             }
         }
         .retrieval-selected-single {
-            outline: 2px solid #09914f;
+            outline: 2.5px solid #087443;
             opacity: 1;
             cursor: pointer;
 

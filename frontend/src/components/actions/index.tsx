@@ -2,7 +2,7 @@ import {
     Space, Drawer, Spin, Tooltip
 } from 'antd';
 import styles from './action.module.scss'
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchActionData } from '../../Redux/actions';
 
@@ -25,7 +25,7 @@ function Actions() {
     const { t } = useTranslation();
     const { actionLists } = useSelector((state: any) => state.action);
     const dispatch = useDispatch()
-
+    const actionDrawerRef = useRef(null)
     const { actionsTableColumn } = CommonComponents();
     const { tooltipEditTitle, tooltipDeleteTitle } = tooltipTitle();
     const [loading, setLoading] = useState(false);
@@ -43,7 +43,12 @@ function Actions() {
     const [hasMore, setHasMore] = useState(false)
     const [actionId, setActionId] = useState('')
     const [tipSchema, setTipSchema] = useState(false)
-
+    // useEffect(() => {
+    //     const params = {
+    //         limit: 20,
+    //     }
+    //     fetchData(params)
+    // }, [])
     useEffect(() => {
         if (actionLists.data.length > 0) {
             const data = actionLists.data.map((item: any) => {
@@ -138,7 +143,7 @@ function Actions() {
         setOpenDrawer(true)
     }
     const handleRequest = async () => {
-
+      
         if (!schema) {
             setTipSchema(true)
             return
@@ -178,6 +183,7 @@ function Actions() {
         }
         try {
             if (actionId) {
+                (actionDrawerRef.current as any).getResetButtonState() && (commonData.authentication = undefined) 
                 await updateActions(actionId, commonData);
             } else {
                 await createActions(commonData);
@@ -240,11 +246,11 @@ function Actions() {
         <div className={styles["actions"]}>
 
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
-                <ModalTable loading={loading} updatePrevButton={updatePrevButton} name='action' id='action_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
+                <ModalTable title='New action' loading={loading} updatePrevButton={updatePrevButton} name='action' id='action_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
             <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem')} ${deleteValue}? ${'projectActionDeleteDesc'}`} title='Delete Action' projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
             <Drawer className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
-                <ActionDrawer actionId={actionId} showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
+                <ActionDrawer ref={actionDrawerRef} actionId={actionId} showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} open={OpenDrawer} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>
         </div>
 

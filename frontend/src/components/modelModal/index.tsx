@@ -5,11 +5,17 @@ import {
 import './modelModal.scss'
 import QuestionCircleOutlined from '../../assets/img/questionCircleOutlined.svg?react'
 import RightArrow from '../../assets/img/rightarrow.svg?react'
-
 import IconComponent from '@/components/iconComponent';
+import ModelIcon from '@/commonComponent/modelIcon/index'
+import ChatCompletionIcon from '../../assets/img/chatCompletion.svg?react'
+import TextEmbeddingIcon from '../../assets/img/textEmbedding.svg?react'
+import WildCardIcon from '../../assets/img/wildcard.svg?react'
 import NoModel from '../../assets/img/NO_MODEL.svg?react'
 import ApiErrorResponse from '../../constant/index';
-
+import WebSite from '../../assets/img/website.svg?react'
+import Docs from '../../assets/img/docs1.svg?react'
+import ApiKeysIcon from '../../assets/img/apikeysIcon.svg?react'
+import Dollar from '../../assets/img/dollar.svg?react'
 import { Modal, Button, Spin, Input, Form, Switch, ConfigProvider, InputNumber, Select } from 'antd'
 import { getAiModelsList, createModels, getAiModelsForm, getModelProviderList } from '../../axios/models'
 import { toast } from 'react-toastify'
@@ -36,8 +42,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const [modelTypes, setModelTypes] = useState('chat_completion')
     const [name, setName] = useState('')
     const [centerLoading, setCenterLoading] = useState(false)
-    const [proerties, setProerties] = useState('')
-
+    const [properties, setProerties] = useState('')
     const [type, setType] = useState('')
     const [propertyForm] = Form.useForm()
     const [wildcardForm] = Form.useForm()
@@ -47,6 +52,11 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         text_embedding: 'Text Embedding',
         wildcard: 'Wildcard',
     }
+    const typeIcon = {
+        chat_completion: <ChatCompletionIcon />,
+        text_embedding: <TextEmbeddingIcon />,
+        wildcard: <WildCardIcon />
+    }
     const [form] = Form.useForm()
     const [selectedOneId, setSelectedOneId] = useState('')
     const [providerId, setProviderId] = useState('')
@@ -55,15 +65,25 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const [form1] = Form.useForm()
     const [ModelProviderList, setModelProviderList] = useState<ModelProviderType[]>([])
     const [prividerName, setPrividerName] = useState('')
+    const [prividerDesc, setPrividerDesc] = useState('')
     const [openModalOne, setOpenModalOne] = useState(false)
+    const [modelTypesList, setModelTypesList] = useState<string[]>([])
     const [discription, setDiscription] = useState('')
+    const [resourcesList, setResourcesList] = useState<any>([])
     const handleCancel = () => {
         setOpenModalOne(false)
     }
-
+    const resourcesType = {
+        taskingai_documentation_url: { name: 'Documentation', icon: <Docs /> },
+        official_site_url: { name: 'Official website', icon: <WebSite /> },
+        official_credentials_url: { name: 'API keys', icon: <ApiKeysIcon /> },
+        official_pricing_url: { name: 'Pricing', icon: <Dollar /> }
+    }
+    const resourceListOrder = ['taskingai_documentation_url', 'official_site_url', 'official_credentials_url', 'official_pricing_url']
     const fetchAiModelsList = async (offset: number, providerId: string) => {
         try {
-            const res: any = await getAiModelsList(offset, 100, props.modelType as string, providerId)
+            console.log(props.modelType)
+            const res: any = await getAiModelsList(offset, 100, providerId, props.modelType as string,)
             if (res.data.length !== 0) {
                 setPromptList(res.data)
                 setSelectedOneId(res.data[0].model_schema_id)
@@ -71,7 +91,6 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                 setType(res.data[0].type)
                 setProerties(res.data[0].properties)
                 setDiscription(res.data[0].description)
-
                 setProviderId(res.data[0].provider_id)
             }
 
@@ -92,8 +111,19 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const fetchModelProviderList = async (type?: any) => {
         setModelOneLoading(true)
         const res: Record<string, any> = await getModelProviderList(type)
+        const data = resourceListOrder.map(key => {
+            if (key in res.data[0].resources && res.data[0].resources[key] !== '') {
+                return {
+                    [key]: res.data[0].resources[key]
+                }
+            }
+            return null
+        }).filter(item => item !== null)
         setModelProviderList(res.data)
         setPrividerName(res.data[0].name)
+        setPrividerDesc(res.data[0].description)
+        setResourcesList(data)
+        setModelTypesList(res.data[0].model_types)
         setProviderUrl(res.data[0].resources.taskingai_documentation_url)
         await fetchAiModelsList(0, res.data[0].provider_id)
         setModelOneLoading(false)
@@ -163,7 +193,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     model_schema_id: selectedOneId,
                     credentials: form.getFieldsValue(),
                     properties: numericValues,
-
+                    host_type: 'provider'
                 }
                 const wildcardParams = {
                     name: form1.getFieldValue('name'),
@@ -171,7 +201,8 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     provider_model_id: form1.getFieldValue('provider_model_id'),
                     credentials: form.getFieldsValue(),
                     properties: numericValues1,
-                    type: modelTypes
+                    type: modelTypes,
+                    host_type: 'provider'
                 }
                 try {
                     await createModels(type === 'wildcard' ? wildcardParams : params)
@@ -203,7 +234,18 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     }
 
     const getCenterData = async (providerId: string, name: string, item: any) => {
+        const data = resourceListOrder.map(key => {
+            if (key in item.resources && item.resources[key] !== '') {
+                return {
+                    [key]: item.resources[key]
+                }
+            }
+            return null
+        }).filter(item => item !== null)
         setProviderId(providerId)
+        setPrividerDesc(item.description)
+        setResourcesList(data)
+        setModelTypesList(item.model_types)
         setPrividerName(name)
         setProviderUrl(item.resources.taskingai_documentation_url)
         setCenterLoading(true)
@@ -215,7 +257,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const handleNext1 = async () => {
         setNextLoading1(true)
         try {
-            const res: any = await getAiModelsList(0, 100, props.modelType as string, providerId)
+            const res: any = await getAiModelsList(0, 100, providerId, props.modelType as string)
             if (res.data.length !== 0) {
                 setPromptList(res.data)
                 setSelectedOneId(res.data[0].model_schema_id)
@@ -225,8 +267,6 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                 setDiscription(res.data[0].description)
 
                 setProviderId(res.data[0].provider_id)
-            } else {
-                setPromptList([])
             }
             setCenterLoading(false)
 
@@ -263,7 +303,6 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                 </>} centered width={1280} open={props.open} closeIcon={<img src={closeIcon} alt="closeIcon" />} className={openModalOne ? 'create-model-one' : 'create-models'}>
                 {openModalOne ?
                     <div className='create-model'>
-                    
                         <div className='center'>
                             <Spin spinning={centerLoading}>
                                 <div className='inputWithLabel1'>
@@ -288,38 +327,29 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                     </div>))}
                                 </div>
                                 }
-
                             </Spin>
 
                         </div>
-                        {promptList.length !== 0 ? <div className='right'>
+                        {promptList.length !== 0 && <div className='right'>
                             <div className='chat-name'>{name}</div>
                             <div className='content'>
-                                <div className='label3'>{t('projectModelProvider')}</div>
-                                <div className='modelproviderParent'>
-                                    <div className='openai'>{prividerName}</div>
-                                </div>
-                                <div className='label3'>{t('projectModelColumnType')}</div>
-                                <span className='modeltypetag'>
-                                    {typeReverse[type as keyof typeof typeReverse]}
-                                </span>
-                                <div className='label3' style={{ marginTop: '22px' }}>{t('projectAssistantsColumnDescription')}</div>
+                    
+                                <div className='label3'>{t('projectAssistantsColumnDescription')}</div>
                                 <div className='desc-info'>{discription}</div>
+                                <div className='label3' style={{ marginTop: '22px' }}>{t('projectModelColumnType')}</div>
+                      
+                                <div className='model-types'>
+                                    <div className={type}>
+                                        {typeIcon[type as keyof typeof typeIcon]} {type}
+                                    </div>
+                                </div>
                             </div>
                             <div className='feature'>
-                                {proerties && <div className='label3'>{t('projectModelFeatures')}</div>}
-                                <div className='instanceParent'>
-                                    {proerties && Object.entries(proerties).map(([key, property]) => (
-                                        <div className='streamParent' key={key}>
-                                            <div className='stream'>{key}</div>
-                                            <div className='instanceChild' />
-                                            <div className='on'>{String(property)}</div>
-                                        </div>
-                                    ))}
-                                </div>
+                                {properties && <div className='label3' style={{ marginBottom: '8px' }}>{t('projectModelFeatures')}</div>}
+                                <ModelIcon properties={properties} />
                             </div>
 
-                        </div> : null}
+                        </div>}
                     </div>
                     : <Spin spinning={modelOneLoading}>
                         <div className='content'>
@@ -327,41 +357,61 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                 <div className='title'>
                                     {t('projectSelectProvider')}
                                 </div>
-                                <div className='content-list'>
-                                    {ModelProviderList.map((item, index) => (
-                                        <div key={index} onClick={() => getCenterData(item.provider_id, item.name, item)} className={`openai-card ${item.provider_id === providerId && 'select-provider'}`}>
-                                            <div className='card-top'>
-                                                <div className='provider'>
-                                                    <IconComponent providerId={item.provider_id} />
-                                                    <div className='name'>{item.name}</div>
+                                <div style={{ height: '676px', overflow: 'auto' }} className='content-parent'>
+                                    <div className='content-list'>
+                                        {ModelProviderList.map((item, index) => (
+                                            <div key={index} onClick={() => getCenterData(item.provider_id, item.name, item)} className={`openai-card ${item.provider_id === providerId && 'select-provider'}`}>
+                                                <div className='card-top'>
+                                                    <div className='provider'>
+                                                        <IconComponent providerId={item.provider_id} />
+                                                        <div className='name'>{item.name}</div>
+                                                    </div>
+                                                    <RightArrow />
                                                 </div>
-                                                <RightArrow />
+                                                <div style={{display:'flex',width:'88%',alignItems:'center',justifyContent:'space-between',position:'absolute',bottom:'12px'}}>
+                                                    <div className='model-types'>
+                                                        {item.model_types.map((item, index) => (
+                                                            <div key={index} style={{marginRight:'4px'}}>
+                                                                {typeIcon[item as keyof typeof typeIcon]}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    {!props.type && <div className='choices'>{item.num_model_schemas} {item.num_model_schemas <= 1 ? t('projectModelLow') : t('projectModelLows')}</div>}
+
+                                                </div>
+
                                             </div>
-                                            <div className='desc'><span>{item.description}</span></div>
-                                            {!props.type && <div className='choices'>{item.num_model_schemas} {item.num_model_schemas <= 1 ? t('projectModelLow') : t('projectModelLows')}</div>}
-                                            {/* <div className='chat-text-type'>
-                                        <span className='type-single'>Chat Completion</span>
-                                    </div> */}
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='right'>
+                                <div className='chat-name'>{prividerName}</div>
+                                <div className='label3' style={{ marginTop: '22px' }}>{t('projectAssistantsColumnDescription')}</div>
+                                <div className='desc-info'>{prividerDesc}</div>
+                                <div className='label3' style={{ marginTop: '22px' }}>Available Model Types</div>
+                                <div className='model-types' style={{ margin: '0 24px 24px 24px' }}>
+                                    {modelTypesList.map((item, index) => (
+                                        <div key={index} className={item}>
+                                            {typeIcon[item as keyof typeof typeIcon]} {item}
                                         </div>
                                     ))}
                                 </div>
-                                {/* <Paginations hasMore={hasMore} onFetchData={fetchModelProviderList}></Paginations> */}
+                                <div className='resources-list'>
+                                    <div className='resource'>Resources</div>
+                                    <div className='list'>
+                                        {resourcesList.map((item: any) => {
+                                            const key = Object.keys(item)[0];
+                                            const value = item[key];
+                                            return (
+                                                <div key={key} className='item'>
+                                                    {resourcesType[key as keyof typeof resourcesType].icon}  <a href={value as string} target='black'>{resourcesType[key as keyof typeof resourcesType].name}</a>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
                             </div>
-                            {/* <div className='right'>
-                        <div className='right-title'>
-                            <IconComponent providerId={providerId} />
-                            <span className='openAI'>{prividerName}</span>
-                        </div>
-                        <div className='desc'>OpenAI is a research organization that focuses on developing and promoting artificial intelligence (AI) in a manner that is safe and beneficial for humanity.</div>
-                        <div className='resources'>
-                            <div className='resource-title'>{t('projectModelResources')}</div>
-                            {
-                                resources.map((item, index) => (
-                                    <div key={index} className='official-website'>{item.icon} <span style={{ marginLeft: '8px' }}>{item.name}</span></div>
-                                ))
-                            }
-                        </div>
-                    </div> */}
                         </div>
                     </Spin>
                 }
@@ -396,7 +446,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                     required: true,
                                     message: 'please enter name',
                                 },
-                            ]} label={t('projectModelCreateModelName')} name="name">
+                            ]} label={t('projectModelCreateModelName')} name="name" >
                                 <div>
                                     <Input className='input-name' placeholder={t('projectModelCreatePlaceholder')} />
                                 </div>
@@ -414,6 +464,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
 
                         </Form>
                     </ConfigProvider>
+
                     {
                         type === 'wildcard' && <>
                             <div className='hr'></div>
@@ -512,7 +563,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                         </>
                     }
                     {
-                        !proerties && <>
+                        !properties && <>
                             {type !== 'wildcard' && <>
                                 <div className='hr'></div>
                                 <div className='credentials'>{t('projectModelColumnProperties')}</div>
@@ -520,7 +571,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
 
                             {type === 'chat_completion' && <Form layout="vertical" className='second-form' form={propertyForm}>
                                 <Form.Item label="Function call" required name='function_call' valuePropName="checked">
-                                    <div className='description'>Indicates if the model supports function call.</div>
+                                    <div className='description'>{t('projectModelProoertiesDesc')}</div>
                                     <ConfigProvider theme={{
                                         components: {
                                             Switch: {
@@ -582,7 +633,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     <div className='hr'></div>
                     <div className='credentials'>{t('projectModelCredentials')}</div>
                     <div className='label-desc' style={{ marginBottom: '24px' }}>
-                        We will send a request to the provider to verify your credentials. All credentials are encrypted at rest with AES-256 and in transit with TLS 1.2.
+                        We will send one token to the model provider to verify the validity of your credentials. All credentials are encrypted at rest with AES-256 and in transit with TLS 1.2.
                     </div>
                     <Form
                         layout="vertical"
@@ -611,7 +662,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                         ))}
                     </Form>
                     {providerUrl && <div className='label-desc' style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', marginTop: '15px', lineHeight: 1 }} >
-                        <QuestionCircleOutlined style={{marginRight: '4px'}} />  Having trouble configuring the model?   <a href={providerUrl} target="_blank" rel="noreferrer" className='href' style={{marginLeft:'4px'}}>  See the documentation to learn more.</a>
+                        <QuestionCircleOutlined />  Having trouble configuring the model?  <a href={providerUrl} target="_blank" rel="noreferrer" className='href' style={{ marginLeft: '4px' }}> See the documentation to learn more.</a>
                     </div>}
                 </div>
             </Modal>

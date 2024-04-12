@@ -29,8 +29,13 @@ function PluginComponent(props: any) {
     const handleRetrievlConfirm = () => {
         setSelectedPluginList((prev: any) => {
             const newData = [...prev, pluginId]
-            handleSelectedItem(pluginId, newData, bundleItem)
-            return newData
+            if(pluginId[0]) {
+                handleSelectedItem(pluginId, newData, bundleItem)
+                return newData
+            } else {
+                return prev
+            }
+          
         })
         handleClose()
     }
@@ -87,36 +92,6 @@ function PluginComponent(props: any) {
 
                 </Collapse>
             })}
-            {/* {bundleList.map((item: any) => {
-                return <Collapse key={item.bundle_instance_id} collapsible="header" className={styles.pluginCollapse}>
-                    <Collapse.Panel showArrow={false} header={<div className={styles.bundle} >
-                        <img className={styles.img} loading="lazy" src={item.icon_url} alt="" />
-                        <div className={styles.right}>
-                            <div className={styles.name}><span>
-                                {item.name}
-                            </span> <RightArrow /></div>
-                            <div className={styles.desc}>{item.description}</div>
-                            <div className={styles.time}>{formatTime(item.created_timestamp)}</div>
-                        </div>
-                    </div>} key={item.bundle_id}>
-                        <div className={styles['plugin-list']}>
-                            {item.plugins.map((plugin: any) => (
-                                <div className={`${styles['pluginSingle']} ${plugin.plugin_id === pluginId && styles['selectItem']} ${selectedPluginList.includes(plugin.plugin_id) && styles['selectedItem']}`} onClick={selectedPluginList.includes(plugin.plugin_id) ? undefined : () => handleClickPlugin(plugin,item)}>
-                                    <div className={styles.pluginName}>
-                                        {plugin.name}
-                                        {selectedPluginList.includes(plugin.plugin_id) ? <span className={styles.selectedName}>Selected</span> : <Radio checked={plugin.plugin_id === pluginId} />}
-                                    </div>
-                                    <div className={styles.pluginDesc}>
-                                        {plugin.description}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </Collapse.Panel>
-
-                </Collapse>
-            })} */}
-
         </div>
 
         <Paginations />

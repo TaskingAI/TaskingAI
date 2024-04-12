@@ -10,7 +10,7 @@ import './modalSelect.scss'
 import { useTranslation } from 'react-i18next';
 function ModalSelect(prop: any) {
     const { t } = useTranslation()
-    const { retrievalList, collectionSelectedId, hasMore, handleNewModal, id, nameTitle, newTitle, handleSelectedItem, retrievalSelectedList, retrievalModal, handleClose } = prop
+    const { retrievalList, collectionSelectedId, hasMore, handleNewModal, id, nameTitle,title, newTitle, handleSelectedItem, retrievalSelectedList, retrievalModal, handleClose } = prop
     const [collectionId, setCollectionId] = useState(collectionSelectedId !== undefined ? collectionSelectedId : '')
     const [collectionItem, setCollectionItem] = useState('')
     const empty: Record<string, any> = {
@@ -29,7 +29,9 @@ function ModalSelect(prop: any) {
     }
     const handleRetrievlConfirm = () => {
         const collectionItems = retrievalList.find((item: any) => item[id] === collectionId)
-        handleSelectedItem(collectionItem || collectionItems)
+        if (collectionItem || collectionItems){
+            handleSelectedItem(collectionItem || collectionItems)
+        }
         setCollectionId('')
         handleClose()
     }
@@ -66,7 +68,7 @@ function ModalSelect(prop: any) {
                     {retrievalList.map((item: any, index: number) => (
                         <div className={`retrieval-single ${retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) && 'selected-retrieval'} ${item[id] === collectionId && 'retrieval-selected-single'}`} key={index} onClick={retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) ? undefined : () => handleSelectCollection(item)}>
                             <div className='top'>
-                                <span className='name'>{item.name}</span>
+                                <span className='name'>{item.name || `Untitled ${title}`}</span>
                                 {retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) && item[id] !== collectionId ? <span className='text'>Selected</span> : <Radio checked={item[id] === collectionId}></Radio>}
                             </div>
                             <div className='desc'>

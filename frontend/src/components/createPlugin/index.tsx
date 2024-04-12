@@ -32,13 +32,16 @@ function CreatePlugin(props: any) {
     const [cachedImages, setCachedImages] = useState({});
 
     useEffect(() => {
-
+        // const params = {
+        //     limit: 20,
+        // }
         const params1 = {
             limit: 100,
             offset: 0,
             lang: 'en'
         }
         getBundleList(params1)
+        // fetchData(params)
     }, [])
     const getBundleList = async (params: object) => {
         const res: any = await bundleList(params)
@@ -59,6 +62,7 @@ function CreatePlugin(props: any) {
                     reader.readAsDataURL(blob);
                 });
         });
+        // setBundlesHasMore(res.has_more)
         setCredentialsSchema(selectedItem.credentials_schema)
         const res1 = await getPluginDetail(res.data[0].bundle_id)
         setPluginListData(res1.data)
@@ -133,7 +137,8 @@ function CreatePlugin(props: any) {
         setBundleId(bundleId)
         setPluginInfoLoading(true)
         setBundleName(bundelName)
-
+        // setBundleDesc(item.description)
+        // const res = await getPluginDetail(bundleId)
         setPluginListData(item.plugins)
         setPluginId(item.plugins[0].plugin_id)
         setCredentialsSchema(item.credentials_schema)
@@ -206,36 +211,39 @@ function CreatePlugin(props: any) {
                 </div></div> : <div className={styles.modalContent}>
                 <div className={styles.left}>
                     <div className={styles.selectBundleDesc}>{t('projectBundleDesc')}</div>
-                    <div className={styles.content}>
-                        {bundilesList.map((item: any, index: number) => (
-                            <div key={index} className={`${styles.frameParent} ${item.bundle_id === bundleId && styles.activeframeParent} ${item.registered && styles.registeredItem}`} onClick={item.registered ? undefined : () => { handleClickBundle(item.bundle_id, item.name, item) }}>
-                                <div className={styles.logoParent}>
-                                    <img src={(cachedImages as any)[item.bundle_id]} alt="" className={styles.img} />
-                                    <div className={styles.frameWrapper}>
+                    <div className={styles['content-modal']}>
+                        <div className={styles.content}>
+                            {bundilesList.map((item: any, index: number) => (
+                                <div key={index} className={`${styles.frameParent} ${item.bundle_id === bundleId && styles.activeframeParent} ${item.registered && styles.registeredItem}`} onClick={item.registered ? undefined : () => { handleClickBundle(item.bundle_id, item.name, item) }}>
+                                    <div className={styles.logoParent}>
+                                        <img src={(cachedImages as any)[item.bundle_id]} alt="" className={styles.img} />
                                         <div className={styles.frameWrapper}>
-                                            <div className={styles.frameDiv}>
-                                                <div className={styles.frameChild} />
+                                            <div className={styles.frameWrapper}>
+                                                <div className={styles.frameDiv}>
+                                                    <div className={styles.frameChild} />
+                                                </div>
                                             </div>
                                         </div>
+                                        {item.registered ? <div className={styles.registered}>Registered</div> : <RightArrow />}
                                     </div>
-                                    {item.registered ? <div className={styles.registered}>Registered</div> : <RightArrow />}
-                                </div>
-                                <div className={styles.googleWebSearch}>{item.name}</div>
-                                <div className={styles.label}>{item.description}</div>
+                                    <div className={styles.googleWebSearch}>{item.name}</div>
+                                    <div className={styles.label}>{item.description}</div>
 
-                                <div className={styles.frameGroup}>
-                                    <div className={styles.functionaliconsParent}>
-                                        <ToolsNew />
-                                        <div className={styles.webSearch}>{item.num_plugins} {item.num_plugins > 1 ? t('projectToolsTitle') : 'Tool'}</div>
-                                    </div>
-                                    <div className={styles.taskingaiWrapper}>
-                                        <div className={styles.taskingai}>{item.developer}</div>
+                                    <div className={styles.frameGroup}>
+                                        <div className={styles.functionaliconsParent}>
+                                            <ToolsNew />
+                                            <div className={styles.webSearch}>{item.num_plugins} {item.num_plugins > 1 ? t('projectToolsTitle') : 'Tool'}</div>
+                                        </div>
+                                        <div className={styles.taskingaiWrapper}>
+                                            <div className={styles.taskingai}>{item.developer}</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
 
+                        </div>
                     </div>
+
                 </div>
                 <Spin spinning={pluginInfoLoading}>
                     <div className={styles.popupbodynormal}>

@@ -9,8 +9,8 @@
             .ant-modal-body {
                 height: calc(100% - 115px);
                 padding: 0px;
-                overflow: auto;
                 background-color: var(--color-item-background);
+                overflow: auto;
             }
         }
 
@@ -25,9 +25,15 @@
             font-size: 16px;
             font-weight: 500;
             padding: 24px 24px 0 24px;
+            line-height: 1;
             font-family: Inter;
             color: var(--color-text-primary);
             text-align: left;
+        }
+
+        .urlInput {
+            margin: 0px 24px 24px 24px !important;
+            width: calc(100% - 48px) !important;
         }
 
         .desc {
@@ -35,6 +41,7 @@
             margin: 8px 0;
             position: relative;
             font-size: 14px;
+            line-height: 20px;
             font-family: Inter;
             color: #777;
             padding: 0px 24px 0 24px;
@@ -44,17 +51,19 @@
 
         .input {
             flex: 1;
-            margin:0 24px 32px 24px !important;
+            margin: 0 24px 32px 24px !important;
             width: calc(100% - 48px) !important;
             height: 500px;
+
             :global {
                 textarea {
                     height: 500px;
                 }
             }
         }
-        .input1{
-            margin:10px 24px 0px 24px !important;
+
+        .input1 {
+            margin: 10px 24px 0px 24px !important;
             width: calc(100% - 48px) !important;
         }
     }
@@ -63,6 +72,7 @@
         position: relative;
         font-size: 16px;
         line-height: 20px;
+        font-weight: 500;
         font-family: Inter;
         text-align: left;
         color: var(--color-text-primary);
@@ -84,14 +94,18 @@
         display: inline-block;
         margin: 0 24px 10px 24px;
     }
+
     .input-number1 {
-        margin:0 24px 0px 24px !important;
+        margin: 0 24px 0px 24px !important;
+        border-radius: 6px;
 
         width: calc(100% - 48px) !important;
 
     }
+
     .input-number {
-        margin:0 24px 24px 24px !important;
+        border-radius: 6px;
+        margin: 0 24px 24px 24px !important;
         width: calc(100% - 48px) !important;
     }
 
@@ -103,7 +117,33 @@
         color: var(--color-text-primary);
         text-align: left;
         padding: 24px 0 0 24px;
-        border-top:1px solid var(--color-divider);
+        border-top: 1px solid var(--color-divider);
     }
 
+    :global {
+        .ant-upload-wrapper {
+            padding: 24px 24px 24px 24px;
+            box-sizing: border-box;
+
+            .ant-upload-drag:not(.ant-upload-disabled):hover {
+                border: 1px dashed #d9d9d9 !important;
+            }
+
+            .ant-upload-drag-hover:not(.ant-upload-disabled) {
+                border: 3px solid var(--color-primary) !important;
+            }
+        }
+
+        .ant-upload-hint {
+            margin-top: 0;
+        }
+    }
+
+}
+
+.red-span {
+    display: flex;
+    align-items: center;
+    margin-right: 4px;
+    color: var(--color-negative);
 }

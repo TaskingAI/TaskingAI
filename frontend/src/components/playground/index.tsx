@@ -6,7 +6,7 @@ import PlayGroundImg from '@/assets/img/selectAssistantImg.svg?react'
 import { toast } from 'react-toastify';
 import { getPluginList } from '../../axios/plugin.ts'
 import CreatePlugin from '../createPlugin/index.tsx';
-
+import { setPlaygroundSelect, setPlaygroundAssistantId, } from '@/Redux/actions/playground.ts'
 import CopyOutlined from '../../assets/img/copyIcon.svg?react'
 import ModelModal from '../modelModal/index'
 import ErrorIcon from '../../assets/img/errorIcon.svg?react'
@@ -15,6 +15,7 @@ import CreateCollection from '../createCollection/index.tsx';
 import ModalSettingIcon from '../../assets/img/modalSettingIcon.svg?react'
 import { formatTimestamp, getFirstMethodAndEndpoint } from '@/utils/util'
 import ModalTable from '../modalTable/index'
+import PlaygroundModel from '../playgroundModel/index.tsx';
 import { commonDataType } from '@/constant/assistant.ts'
 import LoadingAnim from '../../assets/img/loadingAnim.svg?react'
 import ApiErrorResponse, { ChildRefType } from '../../constant/index.ts'
@@ -37,12 +38,12 @@ import ActionDrawer from '../actionDrawer/index.tsx';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import CommonComponents from '../../contents/index'
-import { useDispatch } from 'react-redux';
 import { fetchAssistantsData } from '@/Redux/actions.ts'
 const plainOptions = [
     { label: 'Stream', value: 1 },
     { label: 'Debug', value: 2 },
 ]
+import { useDispatch, useSelector } from 'react-redux';
 const origin = window.location.origin;
 function Playground() {
     const navigation = useNavigate();
@@ -57,7 +58,9 @@ function Playground() {
     const settingModal = useRef<any>()
     const [retrievalLimit, setRetrievalLimit] = useState(20)
     const [updateModelPrevButton, setUpdateModelPrevButton] = useState(false)
-  
+    const { assistantPlaygroundId } = useSelector((state: any) => state.assistantId)
+
+    const { playgroundType } = useSelector((state: any) => state.playgroundType)
     const settingIcon = useRef<any>()
     const contentRef = useRef<any>();
     const [shouldSmoothScroll, setShouldSmoothScroll] = useState(true)
@@ -151,6 +154,15 @@ function Playground() {
             console.log(e);
         });
     }
+    useEffect(() => {
+        console.log(playgroundType)
+        const queryParams = new URLSearchParams(search);
+        if (queryParams.get('assistant_id')) {
+            dispatch(setPlaygroundSelect('assistant'))
+        } else if (queryParams.get('model_id')) {
+            dispatch(setPlaygroundSelect('chat_completion'))
+        }
+    }, [search])
     useEffect(() => {
         const handleClickOutside = (event: any) => {
             if (!(settingModal.current && settingModal.current.contains(event.target)) && !(settingIcon.current && settingIcon.current.contains(event.target))) {
@@ -261,32 +273,67 @@ function Playground() {
         const item1 = data.find((item: any) => (item.assistant_id === id))
         setAssistantId([`${item1.name}-${item1.assistant_id}`])
         setModelHasMore(res.has_more)
-     
+
     }
     const initialFunction = async () => {
-        fetchAssistantsList()
+        const queryParams = new URLSearchParams(search);
+        const assistantId = queryParams.get('assistant_id')
         const params = {
             limit: 20,
         }
+        if (assistantId) {
+            setAssistantId([assistantId])
+            dispatch(setPlaygroundAssistantId(assistantId))
+            console.log(assistantId, assistantPlaygroundId)
+            try {
+                const listChats: any = localStorage.getItem('listChats')
+                const chatsHasMore: any = localStorage.getItem('chatsHasMore')
+                const chatId: any = localStorage.getItem('chatId') as string
+                if (listChats && assistantId === assistantPlaygroundId) {
+                    setListChats(JSON.parse(listChats))
+                    setLoadMoreHasMore(JSON.parse(chatsHasMore))
+                    if (chatId === 'undefined') {
+                        setChatId(undefined)
+                    } else {
+                        setChatId(chatId)
+                    }
+
+                } else {
+                    const res: any = await getListChats(assistantId, params)
+                    setListChats(res.data)
+                    localStorage.setItem('listChats', JSON.stringify(res.data))
+                    setLoadMoreHasMore(res.has_more)
+                    setChatId(res.data[0]?.chat_id)
+                    const param1 = {
+                        order: 'desc',
+                        limit: 20
+                    }
+                    if (res.data.length > 0) {
+                        fetchHistoryMessage(assistantId, res.data[0]?.chat_id, param1)
+                    }
+                }
+                const contentTalk: any = localStorage.getItem('contentTalk')
+                const contentHasMore: any = localStorage.getItem('contentHasMore')
+                if (contentTalk && assistantId === assistantPlaygroundId) {
+                    setContentTalk(JSON.parse(contentTalk))
+                    if (contentHasMore === 'true') {
+                        setContentHasMore(true)
+                    } else {
+                        setContentHasMore(false)
+                    }
+                }
+            } catch (e) {
+                console.log(e)
+                const apiError = e as ApiErrorResponse
+                const message = apiError.response.data.error.message
+                toast.error(message)
+            }
+
+        }
+        fetchAssistantsList()
         fetchModelsList(params)
         fetchActionsList(params)
         fetchDataRetrievalData(params)
-        const queryParams = new URLSearchParams(search);
-        const assistantId = queryParams.get('assistant_id')
-        if (assistantId) {
-            setAssistantId([assistantId])
-            const res: any = await getListChats(assistantId, params)
-            setListChats(res.data)
-            setLoadMoreHasMore(res.has_more)
-            setChatId(res.data[0]?.chat_id)
-            const param1 = {
-                order: 'desc',
-                limit: 20
-            }
-            if (res.data[0]?.chat_id) {
-                await fetchHistoryMessage(assistantId, res.data[0]?.chat_id, param1)
-            }
-        }
     }
     const fetchHistoryMessage = async (assistantId: string, chatId: string, param: any) => {
         if (param.after) {
@@ -298,6 +345,9 @@ function Playground() {
             const res: any = await getHistoryMessage(assistantId, chatId, param)
             const data = res.data.reverse()
             setContentHasMore(res.has_more)
+            const contentTalk1: any = localStorage.getItem('contentTalk')
+            localStorage.setItem('contentHasMore', JSON.stringify(res.has_more))
+            localStorage.setItem('contentTalk', JSON.stringify([...data, ...JSON.parse(contentTalk1)]) as any)
             setContentTalk(prevValues => [...data, ...prevValues])
         } catch (error) {
             const apiError = error as ApiErrorResponse;
@@ -325,6 +375,7 @@ function Playground() {
         setTopk(value)
     }
     const handleSelectModelId = (value: boolean) => {
+
         setModalTableOpen(value)
     }
     const combineObjectsWithSameMsgId = (arr: any[]) => {
@@ -468,13 +519,13 @@ function Playground() {
         } else {
             id = assistantId[0]
         }
-  
+
         try {
             if (id) {
                 await updateAssistant(id, params)
                 setOpenDrawer(false)
             }
-      
+
             await fetchAssistantsList()
             dispatch(fetchAssistantsData() as any)
             setUpdatePrevButton(true)
@@ -503,9 +554,13 @@ function Playground() {
         try {
             const res = await openChat(id, params)
             const { data } = res
+            localStorage.setItem('listChats', JSON.stringify([{ chat_id: data.chat_id, created_timestamp: data.created_timestamp }, ...listChats]))
             setListChats(prevValues => [{ chat_id: data.chat_id, created_timestamp: data.created_timestamp }, ...prevValues])
             setChatId(data.chat_id)
+            localStorage.setItem('chatId', JSON.stringify(data.chat_id))
             setContentTalk([])
+            localStorage.setItem('contentTalk', JSON.stringify([]))
+            localStorage.setItem('contentHasMore', JSON.stringify(false))
             setContentHasMore(false)
             setGenerateButtonLoading(false)
         } catch (error) {
@@ -520,46 +575,96 @@ function Playground() {
                 text: contentValue
             },
         }
-        if (contentValue === '') {
-            toast.error('Empty message is not allowed')
-            throw new Error('Empty message is not allowed');
+        let id;
+        if (assistantId[0].split('-')[1]) {
+            const splitArray = assistantId[0].split('-')
+            id = splitArray.slice(-1)[0]
+        } else {
+            id = assistantId[0]
         }
-        if (sendButtonLoading) {
-            throw new Error('Please wait for the assistant to respond.');
+        const lastData = Array.isArray(contentTalk[contentTalk.length - 1]?.content.text)
+        let lastMessage: boolean = false
+        if (lastData) {
+            const lastMessage1 = contentTalk[contentTalk.length - 1].content.text[contentTalk[contentTalk.length - 1].content.text.length - 1]
+            if (lastMessage1.event === 'Error Occurred') {
+                lastMessage = true
+            } else {
+                lastMessage = false
+            }
+        } else {
+            lastMessage = false
+            if (contentTalk[contentTalk.length - 1]?.role.toLowerCase() === 'user') {
+                lastMessage = true
+            }
         }
-        try {
-            if (flag === 'flag') {
-                setSendGenerateLoading(true)
-            } else {
-                setSendButtonLoading(true)
+        if (flag === 'flag' && lastMessage) {
+            setSendGenerateLoading(true)
+            if (contentValue) {
+                const res = await sendMessage(id, chatId, params)
+                const { data } = res
+                setContentTalk(prevValues => [...prevValues, {
+                    role: 'user',
+                    content: { text: data.content.text },
+                    userId: true,
+                    flag: true
+                }])
+                const contentTalk1: any = localStorage.getItem('contentTalk')
+                localStorage.setItem('contentTalk', JSON.stringify([...JSON.parse(contentTalk1), {
+                    role: 'user',
+                    content: { text: data.content.text },
+                    userId: true,
+                    flag: true
+                }]))
+
             }
-            let id;
-            if (assistantId[0].split('-')[1]) {
-                const splitArray = assistantId[0].split('-')
-                id = splitArray.slice(-1)[0]
-            } else {
-                id = assistantId[0]
-            }
-            const res = await sendMessage(id, chatId, params)
-            const { data } = res
-            setContentTalk(prevValues => [...prevValues, {
-                role: 'user',
-                content: { text: data.content.text },
-                userId: true,
-                flag: true
-            }])
-            if (flag === 'flag') {
-                setGenerateFlag(true)
-            } else {
-                setGenerateFlag(false)
-            }
+            setGenerateFlag(true)
             setContentValue('')
-        } catch (error) {
-            const apiError = error as ApiErrorResponse;
-            const errorMessage: string = apiError.response.data.error.message;
-            toast.error(errorMessage)
-            console.log(error)
+
+        } else {
+            if (contentValue === '') {
+                toast.error('Empty message is not allowed')
+                throw new Error('Empty message is not allowed');
+            }
+            if (sendButtonLoading) {
+                throw new Error('Please wait for the assistant to respond.');
+            }
+            try {
+                if (flag === 'flag') {
+                    setSendGenerateLoading(true)
+                } else {
+                    setSendButtonLoading(true)
+                }
+
+                const res = await sendMessage(id, chatId, params)
+                const { data } = res
+                setContentTalk(prevValues => [...prevValues, {
+                    role: 'user',
+                    content: { text: data.content.text },
+                    userId: true,
+                    flag: true
+                }])
+                const contentTalk1: any = localStorage.getItem('contentTalk')
+                localStorage.setItem('contentTalk', JSON.stringify([...JSON.parse(contentTalk1), {
+                    role: 'user',
+                    content: { text: data.content.text },
+                    userId: true,
+                    flag: true
+                }]))
+                if (flag === 'flag') {
+                    setGenerateFlag(true)
+                } else {
+                    setGenerateFlag(false)
+                }
+                setContentValue('')
+            } catch (error) {
+                const apiError = error as ApiErrorResponse;
+                const errorMessage: string = apiError.response.data.error.message;
+                toast.error(errorMessage)
+                console.log(error)
+            }
         }
+
+
         setSendButtonLoading(false)
     }
     const handleInputPromptChange = (index: number, newValue: string) => {
@@ -638,6 +743,15 @@ function Playground() {
                     userId: false,
                     flag: true
                 }])
+                const contentTalk1: any = localStorage.getItem('contentTalk')
+                localStorage.setItem('contentTalk', JSON.stringify([...JSON.parse(contentTalk1), {
+                    role: 'Assistant',
+                    content: {
+                        text: data.content.text
+                    },
+                    userId: false,
+                    flag: true
+                }]))
             } catch (error) {
                 const apiError = error as ApiErrorResponse;
                 const errorMessage: string = apiError.response.data.error.message;
@@ -661,6 +775,8 @@ function Playground() {
                 const comb = combineObjectsWithSameMsgId(arr)
                 const binedArr = [...contentTalk, comb]
                 setContentTalk(binedArr)
+                localStorage.setItem('contentTalk', JSON.stringify(binedArr))
+
             }
 
             );
@@ -679,6 +795,7 @@ function Playground() {
                 arr1.push(data)
                 const binedArr = [...contentTalk, combineObjects(data, arr1)]
                 setContentTalk(binedArr)
+                localStorage.setItem('contentTalk', JSON.stringify(binedArr))
 
             })
         } else {
@@ -697,6 +814,7 @@ function Playground() {
                 arr1.push(data)
                 const binedArr = [...contentTalk, combineObjects(data, arr1)]
                 setContentTalk(binedArr)
+                localStorage.setItem('contentTalk', JSON.stringify(binedArr))
 
             })
         }
@@ -762,27 +880,35 @@ function Playground() {
         const splitArray = assistantId[0].split('-')
         const id = splitArray.slice(-1)[0]
         const res = await getListChats(id, { limit: 20 })
+        localStorage.setItem('listChats', JSON.stringify(res.data))
         setListChats(res.data)
         setChatId(res.data[0]?.chat_id)
+        localStorage.setItem('chatId', res.data[0]?.chat_id)
         const param = {
             order: 'asc',
         }
         if (res.data[0]) {
-            const res1 = await getHistoryMessage(id, res.data[0]?.chat_id, param)
-            setContentTalk(res1.data)
+            try {
+                const res1 = await getHistoryMessage(id, res.data[0]?.chat_id, param)
+                localStorage.setItem('contentTalk', JSON.stringify(res1.data))
+                setContentTalk(res1.data)
+            } catch (e) {
+                const apiResponse = e as ApiErrorResponse
+                const message = apiResponse.response.data.error.message
+                toast.error(message)
+            }
+
         }
     }
     const handleAssistantModalClose1 = async () => {
         const splitArray = assistantId[0].split('-')
         const id = splitArray.slice(-1)[0]
         navigation(`${pathname}?assistant_id=${id}`)
+        dispatch(setPlaygroundAssistantId(id))
 
         setConfirmLoading(true)
-        try {
             await handleListChats()
-        } catch (e) {
-            console.log(e)
-        }
+    
         setDefaultSelectedAssistant(id)
         setOpenAssistantModalTable(false)
         setConfirmLoading(false)
@@ -882,6 +1008,7 @@ function Playground() {
     }
     const handleOpenChat = async (value: string) => {
         setChatId(value)
+        localStorage.setItem('chatId', value)
         setContentTalkLoading(true)
         let id;
         if (assistantId[0].split('-')[1]) {
@@ -895,6 +1022,7 @@ function Playground() {
             limit: 20
         }
         setContentTalk([])
+        localStorage.setItem('contentTalk', JSON.stringify([]))
         setGenerateButtonLoading(false)
         await fetchHistoryMessage(id, value, param)
         setContentTalkLoading(false)
@@ -919,6 +1047,8 @@ function Playground() {
         }
         setNoPreviousChat(true)
         const res: any = await getListChats(id, params)
+        localStorage.setItem('listChats', JSON.stringify([...listChats, ...res.data]))
+        localStorage.setItem('chatsHasMore', JSON.stringify(res.has_more))
         setListChats(prevValues => [...prevValues, ...res.data])
         setLoadMoreHasMore(res.has_more)
     }
@@ -961,8 +1091,11 @@ function Playground() {
             await deleteChatItem(id, chatId)
             const res: any = await getListChats(id, { limit: 20 })
             setListChats(res.data)
+            localStorage.setItem('listChats', JSON.stringify(res.data))
+            localStorage.setItem('chatsHasMore', JSON.stringify(res.has_more))
             setLoadMoreHasMore(res.has_more)
             setChatId(res.data[0]?.chat_id)
+            localStorage.setItem('chatId', JSON.stringify(res.data[0]?.chat_id))
             const param1 = {
                 order: 'desc',
                 limit: 20
@@ -1058,151 +1191,155 @@ function Playground() {
         setPluginModalOpen(true)
     }
     return (
-        <Spin spinning={loading}>
-            {!assistantId ? <div className={styles['selectAssistant']}>
-                {<PlayGroundImg className={styles.svg} />}
-                <div className={styles['select-assistant']}>{t('projectPlaygroundSelectAssistantDesc')}</div>
-                <div className={styles['header-news']}>
-                    <div className={styles['plusParent']}>
-                        <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleSelectAssistantID}>{t('projectPlaygroundSelectAssistant')}</Button>
-                    </div>
-                </div>
-            </div> : <div className={styles['playground']}>
-                <div className={styles['left-content']}>
-                    <div className={styles['top']}>
-                        <div className={styles['select-assistant']}>{t('projectAssistant')}</div>
-                        {!assistantId && <div className={styles['select-desc']}>{t('projectPlaygroundSelectAssistantInfo')}</div>}
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Select open={false} suffixIcon={<RightOutlined />} onClick={handleSelectAssistantID} value={assistantId} className={styles['select']} removeIcon={null}>
-                            </Select>
-                            {assistantId && <Button icon={<EditIcon />} onClick={handleEditAssistant} className={styles['edit-button']}></Button>}
+        <>
+        {playgroundType === 'assistant' ?    <Spin spinning={loading}>
+                {!assistantId ? <div className={styles['selectAssistant']}>
+                    {<PlayGroundImg className={styles.svg} />}
+                    <div className={styles['select-assistant']}>{t('projectPlaygroundSelectAssistantDesc')}</div>
+                    <div className={styles['header-news']}>
+                        <div className={styles['plusParent']}>
+                            <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleSelectAssistantID}>{t('projectPlaygroundSelectAssistant')}</Button>
                         </div>
                     </div>
-                    <div className={styles['bottom']}>
-                        <div className={styles['bottom-chats']}>
-                            <div>{t('projectPlaygroundChats')}</div>
-                            <div className={styles['actionbuttondownload']} onClick={handleNewChat}>
-                                <PlusOutlined />
-                                <div className={styles['text1']}>{t('projectPlaygroundNewChat')}</div>
+                </div> : <div className={styles['playground']}>
+                    <div className={styles['left-content']}>
+                        <div className={styles['top']}>
+                            <div className={styles['select-assistant']}>{t('projectAssistant')}</div>
+                            {!assistantId && <div className={styles['select-desc']}>{t('projectPlaygroundSelectAssistantInfo')}</div>}
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Select open={false} suffixIcon={<RightOutlined />} onClick={handleSelectAssistantID} value={assistantId} className={styles['select']} removeIcon={null}>
+                                </Select>
+                                {assistantId && <Button icon={<EditIcon />} onClick={handleEditAssistant} className={styles['edit-button']}></Button>}
                             </div>
                         </div>
-                        <div className={styles['chats']}>
-                            <div className={styles['chat-message']}>
-                                {listChats?.map((item, index) => (<div key={index} className={`${styles.functionaliconsParent} ${chatId === item.chat_id && styles.chatId}`} onClick={() => handleOpenChat(item.chat_id)}>
-                                    <ChatIcon className={styles['functionalicons']}></ChatIcon>
-                                    <div className={styles['Parent']}>
-                                        <div className={styles['son']}>{item.chat_id}</div>
-                                        <div className={styles['son1']}>{formatTimestamp(item.created_timestamp)}</div>
-                                    </div>
-                                </div>))}
-                                {(!loadMoreHasMore && noPreviousChat) && <div className={styles['lineParent']}>
-                                    <div className={styles['frameChild']} />
-                                    <div className={styles['noPreviousChat1']}>{t('projectPlaygroundNoPreviousChat')}</div>
-                                    <div className={styles['frameChild']} />
-                                </div>}
+                        <div className={styles['bottom']}>
+                            <div className={styles['bottom-chats']}>
+                                <div>{t('projectPlaygroundChats')}</div>
+                                <div className={styles['actionbuttondownload']} onClick={handleNewChat}>
+                                    <PlusOutlined />
+                                    <div className={styles['text1']}>{t('projectPlaygroundNewChat')}</div>
+                                </div>
                             </div>
-                            {loadMoreHasMore && <div className={styles['lineParent']} style={{ marginTop: '10px' }}>
-                                <div className={styles['frameChild']} />
-                                <div className={styles['formbuttoncancel']} onClick={handleLodaMore}>
-                                    <div className={styles['text1']}>{t('projectPlaygroundLoadMore')}</div>
+                            <div className={styles['chats']}>
+                                <div className={styles['chat-message']}>
+                                    {listChats?.map((item, index) => (<div key={index} className={`${styles.functionaliconsParent} ${chatId === item.chat_id && styles.chatId}`} onClick={() => handleOpenChat(item.chat_id)}>
+                                        <ChatIcon className={styles['functionalicons']}></ChatIcon>
+                                        <div className={styles['Parent']}>
+                                            <div className={styles['son']}>{item.chat_id}</div>
+                                            <div className={styles['son1']}>{formatTimestamp(item.created_timestamp)}</div>
+                                        </div>
+                                    </div>))}
+                                    {(!loadMoreHasMore && noPreviousChat) && <div className={styles['lineParent']}>
+                                        <div className={styles['frameChild']} />
+                                        <div className={styles['noPreviousChat1']}>{t('projectPlaygroundNoPreviousChat')}</div>
+                                        <div className={styles['frameChild']} />
+                                    </div>}
                                 </div>
-                                <div className={styles['frameChild']} />
-                            </div>}
-                        </div>
-                    </div>
-                </div>
-                <div className={styles['right-content']}>
-                    <div className={styles['header-top']}>
-                        <div className={styles['header-left']}>
-                            <span className={styles['chat']}>{t('projectPlaygroundChat')}</span>
-                            <span className={styles['desc']}>{chatId}</span>
-                            <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatId)} />
-                        </div>
-
-                        <div className={styles['header-right']} onClick={handleDeleteChat}>
-                            <Button icon={<DeleteIcon />} className='cancel-button'>{t('projectPlaygroundDeleteChat')}</Button>
-                        </div>
-                    </div>
-                    {!chatId && <div className={styles['content-center']}>
-                        <div className={styles['content-img']}>
-                            <PlaygroundImg />
-                            <div className={styles['waiting-for-configuration']}>{t('projectPlaygroundWaitingForConfiguration')}</div>
-                        </div>
-                    </div>}
-                    {chatId &&
-                        <Spin spinning={contentTalkLoading}>
-                            <div className={styles['content-talk']} ref={contentRef}>
-                                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <Spin spinning={contentLoading} />
-                                </div>
-                                {(!contentHasMore && noPreviousMessage) && <div className={styles['lineParent']}>
+                                {loadMoreHasMore && <div className={styles['lineParent']} style={{ marginTop: '10px' }}>
                                     <div className={styles['frameChild']} />
-                                    <div className={styles['noPreviousChat1']}>{t('projectPlaygroundNoPreviousMessage')} </div>
-                                    <div className={styles['frameChild']} />
-                                </div>}
-                                {contentHasMore && <div className={styles['lineParent']} style={{ marginTop: '10px' }}>
-                                    <div className={styles['frameChild']} />
-                                    <div className={styles['formbuttoncancel']} onClick={handleContentLodaMore}>
+                                    <div className={styles['formbuttoncancel']} onClick={handleLodaMore}>
                                         <div className={styles['text1']}>{t('projectPlaygroundLoadMore')}</div>
                                     </div>
                                     <div className={styles['frameChild']} />
                                 </div>}
-                                {contentTalk.map((item, index) => (
-                                    <div className={styles['message']} key={index} ref={divRef}>
-                                        <div className={`${styles.subText1} ${item.role === 'user' ? 'user' : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
-                                        {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`} style={{ whiteSpace: "pre-line" }}>{item.content.text}</div>}
-                                        {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1: any, index1: number) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && styles.lastItem}`}>
-                                            {(item1.color === 'orange' && index === contentTalk.length - 1) ?
-                                                (<div style={{ display: 'flex', alignItems: 'center',marginTop: '5px' }}>{lottieAnimShow && (
-                                                    <>
-                                                        {<LoadingAnim className={styles['loading-icon']} />}
-                                                         {item1.event}
-                                                    </>
-                                                )}
-                                                </div>) :
-                                                (
-                                                    item1.color !== 'orange' && (<div onClick={() => handleClickDebug(item1)} style={{ display: 'flex', alignItems: 'center',marginTop: '5px' }}>
-                                                        {(item1.event !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text', whiteSpace: 'pre-wrap' }}>{item1.event}</span></>)}
-                                                        {(item1.event === 'Error Occurred') && (<><ErrorIcon className={styles['message-success']}></ErrorIcon><span style={{ color: '#ec1943', cursor: 'pointer' }}>Error Occurred</span></>)}
-                                                    </div>
-                                                    )
-                                                )
-
-                                            }</div>))}</div>}
-                                    </div>
-                                ))}
                             </div>
-                        </Spin>
-                    }
-                    <div className={`${styles['content-bottom']} ${!chatId ? styles.none : ''}`}>
-                        <TextArea className={styles['textarea']} autoSize={{ minRows: 3, maxRows: 6 }} value={contentValue} onChange={(e) => setContentValue(e.target.value)}></TextArea>
-                        <div className={styles['button-group']}>
-                            <div style={{ display: 'flex' }}>
-                                <Button className={`next-button ${styles.button}`} onClick={handleSendAndGenerateMessage} loading={sendGenerateLoading}>Send and Generate</Button>
-                                <div className={`${styles.formbuttoncancel} ${sendButtonLoading ? styles.loading : ''}`} onClick={handleCreateMessage}>
-                                    {sendButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}  <div className={styles['text1']}>{t('projectPlaygroundSend')}</div>
-                                </div>
-                                <div className={`${styles.formbuttoncancel} ${styles.button1} ${generateButtonLoading ? styles.loading : ''}`} onClick={handleGenerateMessage}>
-                                    {generateButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}<div className={styles['text1']}>{t('projectPlaygroundChatGenerate')}</div>
-                                </div>
-                            </div>
-                            <div className={styles['actionbuttonedit']} onMouseEnter={handleMouseEnter} ref={settingIcon}>
-                                <ModalSettingIcon className={styles['functionalicons']} />
-                            </div>
-                        </div>
-                        <div className={styles['setting-modal']} ref={settingModal} style={{ display: 'none' }}>
-                            <div className={styles['generation-options']}>
-                                {t('projectPlaygroundGenerationOptions')}
-                            </div>
-                            <div className={styles['desc']}>{t('projectPlaygroundGenerationOptionsDesc')}</div>
-                            <Checkbox.Group onChange={handleChangeCheckbox} options={plainOptions} defaultValue={JSON.parse(localStorage.getItem('checkedValues') as string) || checkBoxValue} />
-                            <div className={styles['select-assistant']}>Prompt variables</div>
-                            <TextArea style={{ height: '300px' }} placeholder={`{\n   key: value\n}`}
-                                value={systemPromptVariables} onChange={(e) => setSystemPromptVariable(e.target.value)}></TextArea>
                         </div>
                     </div>
-                </div>
-            </div>}
+                    <div className={styles['right-content']}>
+                        <div className={styles['header-top']}>
+                            <div className={styles['header-left']}>
+                                <span className={styles['chat']}>{t('projectPlaygroundChat')}</span>
+                                <span className={styles['desc']}>{chatId}</span>
+                                <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatId)} />
+                            </div>
+
+                            <div className={styles['header-right']} onClick={handleDeleteChat}>
+                                <Button icon={<DeleteIcon />} className='cancel-button'>{t('projectPlaygroundDeleteChat')}</Button>
+                            </div>
+                        </div>
+                        {!chatId && <div className={styles['content-center']}>
+                            <div className={styles['content-img']}>
+                                <PlaygroundImg />
+                                <div className={styles['waiting-for-configuration']}>{t('projectPlaygroundWaitingForConfiguration')}</div>
+                            </div>
+                        </div>}
+                        {chatId &&
+                            <Spin spinning={contentTalkLoading}>
+                                <div className={styles['content-talk']} ref={contentRef}>
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <Spin spinning={contentLoading} />
+                                    </div>
+                                    {(!contentHasMore && noPreviousMessage) && <div className={styles['lineParent']}>
+                                        <div className={styles['frameChild']} />
+                                        <div className={styles['noPreviousChat1']}>{t('projectPlaygroundNoPreviousMessage')} </div>
+                                        <div className={styles['frameChild']} />
+                                    </div>}
+                                    {contentHasMore && <div className={styles['lineParent']} style={{ marginTop: '10px' }}>
+                                        <div className={styles['frameChild']} />
+                                        <div className={styles['formbuttoncancel']} onClick={handleContentLodaMore}>
+                                            <div className={styles['text1']}>{t('projectPlaygroundLoadMore')}</div>
+                                        </div>
+                                        <div className={styles['frameChild']} />
+                                    </div>}
+                                    {contentTalk.map((item, index) => (
+                                        <div className={styles['message']} key={index} ref={divRef}>
+                                            <div className={`${styles.subText1} ${item.role === 'user' ? 'user' : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
+                                            {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`} style={{ whiteSpace: "pre-line" }}>{item.content.text}</div>}
+                                            {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1: any, index1: number) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && styles.lastItem}`}>
+                                                {(item1.color === 'orange' && index === contentTalk.length - 1) ?
+                                                    (<div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>{lottieAnimShow && (
+                                                        <>
+                                                            {<LoadingAnim className={styles['loading-icon']} />}
+                                                            {item1.event}
+                                                        </>
+                                                    )}
+                                                    </div>) :
+                                                    (
+                                                        item1.color !== 'orange' && (<div onClick={() => handleClickDebug(item1)} style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
+                                                            {(item1.event !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text', whiteSpace: 'pre-wrap' }}>{item1.event}</span></>)}
+                                                            {(item1.event === 'Error Occurred') && (<><ErrorIcon className={styles['message-success']}></ErrorIcon><span style={{ color: '#ec1943', cursor: 'pointer' }}>Error Occurred</span></>)}
+                                                        </div>
+                                                        )
+                                                    )
+
+                                                }</div>))}</div>}
+                                        </div>
+                                    ))}
+                                </div>
+                            </Spin>
+                        }
+                        <div className={`${styles['content-bottom']} ${!chatId ? styles.none : ''}`}>
+                            <TextArea className={styles['textarea']} autoSize={{ minRows: 3, maxRows: 6 }} value={contentValue} onChange={(e) => setContentValue(e.target.value)}></TextArea>
+                            <div className={styles['button-group']}>
+                                <div style={{ display: 'flex' }}>
+                                    <Button className={`next-button ${styles.button}`} onClick={handleSendAndGenerateMessage} loading={sendGenerateLoading}>Send and Generate</Button>
+                                    <div className={`${styles.formbuttoncancel} ${sendButtonLoading ? styles.loading : ''}`} onClick={handleCreateMessage}>
+                                        {sendButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}  <div className={styles['text1']}>{t('projectPlaygroundSend')}</div>
+                                    </div>
+                                    <div className={`${styles.formbuttoncancel} ${styles.button1} ${generateButtonLoading ? styles.loading : ''}`} onClick={handleGenerateMessage}>
+                                        {generateButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}<div className={styles['text1']}>{t('projectPlaygroundChatGenerate')}</div>
+                                    </div>
+                                </div>
+                                <div className={styles['actionbuttonedit']} onMouseEnter={handleMouseEnter} ref={settingIcon}>
+                                    <ModalSettingIcon className={styles['functionalicons']} />
+                                </div>
+                            </div>
+                            <div className={styles['setting-modal']} ref={settingModal} style={{ display: 'none' }}>
+                                <div className={styles['generation-options']}>
+                                    {t('projectPlaygroundGenerationOptions')}
+                                </div>
+                                <div className={styles['desc']}>{t('projectPlaygroundGenerationOptionsDesc')}</div>
+                                <Checkbox.Group onChange={handleChangeCheckbox} options={plainOptions} defaultValue={JSON.parse(localStorage.getItem('checkedValues') as string) || checkBoxValue} />
+                                <div className={styles['select-assistant']}>Prompt variables</div>
+                                <TextArea style={{ height: '300px' }} placeholder={`{\n   key: value\n}`}
+                                    value={systemPromptVariables} onChange={(e) => setSystemPromptVariable(e.target.value)}></TextArea>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+
+            </Spin > : <PlaygroundModel />}
+         
             <Drawer
                 closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />}
                 className={styles['assistant-drawer']}
@@ -1232,7 +1369,7 @@ function Playground() {
             ]} title={t('projectAssistantRetrievalPlaceHolder')} open={openModalTable} width={1000} onCancel={handleCloseModal} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable name='Collection' updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
             </Modal>
-         
+
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='group'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
@@ -1282,7 +1419,7 @@ function Playground() {
                         label: collapseLabel1,
                         children: <div className={styles['content-drawer']}>
                             <div className={styles['content']}>
-                                <CopyOutlined className={styles['icon-copy']} onClick={() => handleCopy(chatCompletionCall)} />
+                                <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatCompletionCall)} />
                             </div>
                             <TextArea autoSize={true} value={chatCompletionCall} disabled />
                         </div>
@@ -1293,7 +1430,7 @@ function Playground() {
                         label: collapseLabel2,
                         children: <div className={styles['content-drawer']}>
                             <div className={styles['content']}>
-                                <CopyOutlined className={styles['icon-copy']} onClick={() => handleCopy(chatCompletionResult)} />
+                                <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatCompletionResult)} />
                             </div>
                             <TextArea autoSize={true} value={chatCompletionResult} disabled />
                         </div>
@@ -1315,7 +1452,8 @@ function Playground() {
             </Drawer>
             <CreatePlugin bundilesList={bundilesList} handleConfirmRequest={handleConfirmRequest} open={pluginModalOpen} handleCloseModal={handleClosePluginModal}></CreatePlugin>
             <DeleteModal title={t('projectPlaygroundDeleteChatUpper')} projectName={chatId} open={OpenDeleteModal} describe={`${'deleteItem'} ${t('projectPlaygroundChatLow')} ${chatId}`} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
-        </Spin >
+        </>
+
     );
 }
 export default Playground;
