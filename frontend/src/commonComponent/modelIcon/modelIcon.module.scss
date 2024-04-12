@@ -1,0 +1,26 @@
+.model-icon {
+    display: flex;
+    flex-wrap: wrap;
+    .modelIcon {
+        display: flex;
+        margin-right: 8px;
+        border-radius: 8px;
+        background-color: #fafafa;
+        padding: 4px;
+        align-items: center;
+        margin-bottom: 4px;
+        line-height: 12px;
+
+        .name {
+            color: #777;
+            font-size: 10px;
+            margin-left: 4px;
+        }
+
+        .value {
+            color: #777;
+            font-size: 10px;
+        
+        }
+    }
+}

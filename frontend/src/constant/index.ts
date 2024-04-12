@@ -32,6 +32,7 @@ interface RecordType {
   provider_id: string;
   type: string;
   properties: any;
+  provider_model_id: string;
 }
 interface projectIdType {
   name: string;
@@ -60,7 +61,8 @@ interface ModelProviderType {
   provider_id: string;
   name: string;
   num_model_schemas:number,
-  description: string
+  description: string,
+  model_types: string[],
 }
 interface modelModalProps {
   handleSetModelOne: (value: any) => void;
@@ -78,6 +80,7 @@ interface TableProps {
   defaultSelectedRowKeys?: string[];
   updatePrevButton?: boolean;
   ifHideFooter?: boolean;
+  ifHideLeftHeader?: boolean;
   dataSource?: any[];
   loading?: boolean;
   mode?: string;
@@ -87,7 +90,9 @@ interface TableProps {
   hasMore?: boolean;
   onOpenDrawer?: (value: any) => void;
   name?: string;
+  title?: string;
   handleRecordsSelected?: (selectedRowKeys: string[], selectedRows: RecordType[]) => void;
+  isShowNewCreateButton?: boolean;
 }
 interface deleteProjectType {
   title: string;

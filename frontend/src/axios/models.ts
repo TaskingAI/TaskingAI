@@ -1,6 +1,6 @@
 import { request } from '../utils/index'
 
-const getAiModelsList = async (offset: number, limit: number, type: string, providerId: string) => {
+const getAiModelsList = async (offset: number, limit: number, providerId: string, type?: string,) => {
     const project_base_url = `api/v1`
     if (type) {
         return await request.get(`${project_base_url}/model_schemas?offset=${offset}&limit=${limit}&type=${type}&provider_id=${providerId}`)
@@ -12,6 +12,10 @@ const getAiModelsList = async (offset: number, limit: number, type: string, prov
 const getAiModelsForm = async (id: string) => {
     const project_base_url = `api/v1`
     return await request.get(`${project_base_url}/providers/get?provider_id=${id}`)
+}
+const getModelSchema = async (modelSchemaId: string) => {
+    const url = `api/v1`
+    return await request.get(`${url}/model_schemas/get?model_schema_id=${modelSchemaId}`)
 }
 const getModelsList = async <T extends Record<string, string | number>>(
     params: T,
@@ -64,4 +68,4 @@ const getModelProviderList = async (type: string) => {
         return await request.get(`${project_base_url}/providers?limit=100`)
     }
 }
-export { getAiModelsList, getModelsList, updateModels, deleteModels, createModels, getAiModelsForm, getModelsForm, getModelProviderList }
+export { getAiModelsList,getModelSchema, getModelsList, updateModels, deleteModels, createModels, getAiModelsForm, getModelsForm, getModelProviderList }

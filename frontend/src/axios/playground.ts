@@ -49,4 +49,8 @@ const getHistoryMessage = async  <T extends Record<string, string>>(
     return await request.get(`${project_base_url}/assistants/${assistantsId}/chats/${chatId}/messages?${str}`)
 
 }
-export { openChat, sendMessage, generateMessage, getListChats, getHistoryMessage,deleteChatItem }
+const modalGenerate = async (params:object) => {
+    const project_base_url =`api/v1`
+    return await request.post(`${project_base_url}/inference/chat_completion`, params)
+}
+export { openChat, sendMessage,modalGenerate, generateMessage, getListChats, getHistoryMessage,deleteChatItem }

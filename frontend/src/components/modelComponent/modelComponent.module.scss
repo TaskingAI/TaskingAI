@@ -1,0 +1,17 @@
+.retrieval-model {
+    :global {
+        .ant-modal-body {
+            padding: 0 24px;
+            background-color: var(--color-item-background);
+        }
+
+        .ant-modal-footer {
+            height: 70px;
+            text-align: start;
+        }
+    }
+
+    .cancelButton {
+        margin-right: 10px;
+    }
+}

@@ -1,4 +1,4 @@
-import { Table, Select, Input, Button, Pagination, Empty,ConfigProvider } from 'antd';
+import { Table, Select, Input, Button, Pagination, Empty, ConfigProvider } from 'antd';
 import { useState, useEffect, ChangeEvent } from 'react';
 import styles from './modalTable.module.scss'
 import { PlusOutlined } from '@ant-design/icons';
@@ -8,9 +8,10 @@ import NoCollection from '../../assets/img/NO_COLLECTION.svg?react'
 import NoModel from '../../assets/img/NO_MODEL.svg?react'
 import NoRecord from '../../assets/img/NO_RECORD_2.svg?react'
 import NoTool from '../../assets/img/NO_TOOL.svg?react'
+import NoProject from '../../assets/img/NO_PROJECT.svg?react'
 import { TableProps } from '../../constant/index'
-function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSelectedRowKeys, updatePrevButton, ifHideFooter, dataSource, mode, ifSelect, onChildEvent, id, hasMore, onOpenDrawer, name, handleRecordsSelected }: TableProps) {
-    const [selectedValue, setSelectedValue] = useState('name_search')
+function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreateButton=true, ifOnlyId, defaultSelectedRowKeys, updatePrevButton,ifHideLeftHeader, ifHideFooter=false, dataSource, mode, ifSelect, onChildEvent, id, hasMore, onOpenDrawer, name, handleRecordsSelected }: TableProps) {
+    const [selectedValue, setSelectedValue] = useState('id_search')
     const [inputValue, setInputValue] = useState('')
     const [scroll, setScroll] = useState({ x: 0, y: 0 });
     const [ifClickPageSizeLimit, setIfClickPageSizeLimit] = useState(false)
@@ -20,11 +21,10 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
     const [nextButtonDisabled, setNextButtonDisabled] = useState(false)
     const [previousButtonDisabled, setPrevButtonDisabled] = useState(true)
     const [isFirstRender, setIsFirstRender] = useState(true);
-    const [filterConfig, setFilterConfig] = useState<any>({
+    const [_filterConfig, setFilterConfig] = useState<any>({
         limit: 20,
         sort_field: 'created_timestamp',
     })
-    console.log(filterConfig)
     const [enterPlaceHolder, setEnterPlaceHolder] = useState('Enter Name')
     const empty: Record<string, any> = {
         ['API Key']: <NoApikey style={{ width: '158px', height: '100px' }} />,
@@ -33,7 +33,9 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
         model: <NoModel style={{ width: '158px', height: '100px' }} />,
         record: <NoRecord style={{ width: '158px', height: '100px' }} />,
         action: <NoTool style={{ width: '158px', height: '100px' }} />,
-        plugins: <NoTool style={{ width: '158px', height: '100px' }} />
+        plugin: <NoTool style={{ width: '158px', height: '100px' }} />,
+        Invoice: <NoRecord style={{ width: '158px', height: '100px' }} />,
+        project: <NoProject style={{ width: '158px', height: '100px' }} />,
     }
     const [selectedRowKeys, setSelectedRowKeys] = useState((defaultSelectedRowKeys && defaultSelectedRowKeys.length) ? defaultSelectedRowKeys : []);
     useEffect(() => {
@@ -187,11 +189,6 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
 
     }, [onChildEvent, hasMore])
     const optionsFront = [
-
-        {
-            value: 'name',
-            label: 'Name',
-        },
         {
             value: 'id',
             label: 'ID',
@@ -390,7 +387,7 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
             description={
                 <>
                     <p style={{ color: '#bfbfbf', fontSize: '14px' }}>No {name}</p>
-                    {!ifAllowNew && <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>New {name}</Button>}
+                    {!ifAllowNew && <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>{title}</Button>}
                 </>
             }
         />
@@ -398,24 +395,24 @@ function ModalTable({ columns, ifAllowNew, hangleFilterData, ifOnlyId, defaultSe
     return (
 
         <div className={styles['modal-table']} key={name}>
-            {!ifHideFooter ? (
+            {!ifHideLeftHeader ? (
                 <div className={styles['header-table']}>
-                    <Select defaultValue={ifOnlyId ? 'ID' : 'name'} onChange={handleSelectFrontChange} options={ifOnlyId ? optionsFront1 : optionsFront} className={styles['select-name']} />
+                    <Select defaultValue={'ID' } onChange={handleSelectFrontChange} options={ifOnlyId ? optionsFront1 : optionsFront} className={styles['select-name']} />
                     <Input placeholder={enterPlaceHolder} className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
                     <Button className='cancel-button' onClick={handleSearch}>Search</Button>
                     {(ifSelect && mode === 'multiple') && <Select defaultValue="All records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />}
                     {!ifSelect && (
                         <div className={styles['header-new']}>
                             <div className={styles['plusParent']}>
-                                <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>New {name}</Button>
+                                <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>{title}</Button>
                             </div>
                         </div>
                     )}
                 </div>
             ) : (
-                <div className={styles['header-news']}>
+                isShowNewCreateButton && <div className={styles['header-news']}>
                     <div className={styles['plusParent']}>
-                        <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>New {name}</Button>
+                        <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>{title}</Button>
                     </div>
                 </div>
             )}

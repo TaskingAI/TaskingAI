@@ -7,8 +7,9 @@
           }
         .ant-modal-body {
             padding:  0px;
-            height: 772px;
             background-color: var(--color-item-background);
+            height: 605px;
+            background-color: #FAFAFA;
             overflow: auto;
         }
         .ant-collapse {
@@ -68,7 +69,7 @@
     }
 }
 .content {
-    height: 674px;
+    height: 509px;
     padding: 24px 24px 0 24px;
     border-bottom: 1px solid #e4e4e4;
     overflow: auto;
@@ -163,7 +164,7 @@
     }
 
     .selectItem {
-        outline: 2px solid #09914f;
+        outline: 2.5px solid #087443;
     }
 
     .selectedItem {

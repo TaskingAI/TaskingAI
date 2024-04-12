@@ -6,7 +6,6 @@ import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { ChangeEvent, useImperativeHandle, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
-
 import PluginComponent from '../pluginComponent/index'
 const DrawerAssistant = forwardRef((props: any, ref: any) => {
     const { t } = useTranslation()
@@ -19,7 +18,6 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
     const [actionSelectedId, setActionSelectedid] = useState('')
     const [selectedPluginList, setSelectedPluginList] = useState([])
     const retrievalFormList1 = selectedCollectionList.map((item: any) => ({ collection_id: item })) || ['']
-
     const [retrievalSelectedList, setRetrievalSelectedList] = useState<any[]>(retrievalFormList1)
     const [actionSelectedList, setActionSelectedList] = useState<any[]>([''])
     const [pluginActionList, setPluginActionList] = useState<any[]>(selectedActionsRows)
@@ -56,6 +54,7 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
         handleChangeName(e.target.value)
     }
     const handleSelectedItem = (value: any) => {
+
         setRetrievalSelectedList((prev) => {
             const newRetrievalSelectedList = [...prev, value]
             return newRetrievalSelectedList
@@ -182,7 +181,6 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
             const newRetrievalFormList = [...prev, { type: 'plugin', value: '' }]
             return newRetrievalFormList
         })
-  
     }
     const handleClosePluginModal = () => {
         setPluginModal(false)
@@ -237,7 +235,6 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
             newActionFormList[index].value = ''
             return newActionFormList
         })
-
     }
     const handleCreateBundle = () => {
         handleNewBundle()
@@ -274,11 +271,10 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                 </Select>
                 <div className='label'>
                     <span>{t('projectSystemPromptTemplate')}</span>
-
                 </div>
                 <div className='label-desc'>{t('projectSystemPromptTemplateDesc')}
-                    <a className='referToTheDocumentationFor href' href="https://docs.tasking.ai/docs/guide/assistant/components/system-prompt-template" target="_blank">
-                        <span className='referToThe'>{t('projectSystemPromptTemplateLink')}</span>
+                &nbsp; <a className='referToTheDocumentationFor href' href="https://docs.tasking.ai/docs/guide/assistant/components/system-prompt-template" target="_blank">
+                       <span className='referToThe'>{t('projectSystemPromptTemplateLink')}</span>
                     </a>
                 </div>
                 {systemPromptTemplate?.map((value: any, index: number) => (
@@ -366,7 +362,7 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                         <Select options={[
                             { value: 'Collecion', label: 'Collection' }
                         ]} defaultValue='Collection' className='retrieval-type'></Select>
-                        <Select className='input' placeholder={!item.collection_id && t('projectAssistantRetrievalPlaceHolder')} onClick={() => handleCollectionModal(index, item.collection_id)} suffixIcon={<RightOutlined />} open={false} value={item.collection_id ? item.collection_id : undefined} removeIcon={null} />
+                        <Select className='input' placeholder={!item?.collection_id && t('projectAssistantRetrievalPlaceHolder')} onClick={() => handleCollectionModal(index, item.collection_id)} suffixIcon={<RightOutlined />} open={false} value={item.collection_id ? item.collection_id : undefined} removeIcon={null} />
                         <div> <DeleteInputIcon onClick={() => handleDeleteRetrieval(item.collection_id,index)} style={{ marginTop: '8px' }} /></div>
                     </div>
                 ))}
@@ -452,9 +448,9 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                     <span>{pluginActionList.length}/10</span>
                 </div>
             </div>
-            {collectionModal && <ModalSelect collectionSelectedId={collectionSelectedId} id='collection_id' handleNewModal={handleNewCollection1} nameTitle='Select Collection' newTitle='New collection' hasMore={collectionHasMore} handleSelectedItem={handleSelectedItem} retrievalModal={collectionModal} retrievalSelectedList={retrievalSelectedList} retrievalList={retrievalList} handleClose={handleCancelCollectionModal}></ModalSelect>}
-            {actionModal && <ModalSelect id='action_id' collectionSelectedId={actionSelectedId} nameTitle='Select Action' handleNewModal={handleNewAction} newTitle='New action' hasMore={actionHasMore} handleSelectedItem={handleActionItem} retrievalModal={actionModal} retrievalSelectedList={actionSelectedList} retrievalList={actionList} handleClose={handleCancelActionModal}></ModalSelect>}
-            {pluginModal && <PluginComponent selectedData={selectedPluginList} handleSelectedItem={handlePluginConfirm} open={pluginModal} handleCreateBundle={handleCreateBundle} bundleList={bundilesList} handleClose={handleClosePluginModal}></PluginComponent>}
+            {collectionModal && <ModalSelect collectionSelectedId={collectionSelectedId} id='collection_id' handleNewModal={handleNewCollection1} title='Collection' nameTitle='Select Collection' newTitle='New collection' hasMore={collectionHasMore} handleSelectedItem={handleSelectedItem} retrievalModal={collectionModal} retrievalSelectedList={retrievalSelectedList} retrievalList={retrievalList} handleClose={handleCancelCollectionModal}></ModalSelect>}
+            {actionModal && <ModalSelect id='action_id' collectionSelectedId={actionSelectedId} nameTitle='Select Action' handleNewModal={handleNewAction} title='Action' newTitle='New action' hasMore={actionHasMore} handleSelectedItem={handleActionItem} retrievalModal={actionModal} retrievalSelectedList={actionSelectedList} retrievalList={actionList} handleClose={handleCancelActionModal}></ModalSelect>}
+            {pluginModal && <PluginComponent  selectedData={selectedPluginList} handleSelectedItem={handlePluginConfirm} open={pluginModal} handleCreateBundle={handleCreateBundle} bundleList={bundilesList} handleClose={handleClosePluginModal}></PluginComponent>}
         </div >
     );
 })

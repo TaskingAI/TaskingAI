@@ -7,8 +7,8 @@
             .ant-modal-body {
                 padding: 24px 0;
                 overflow: auto;
-                max-height: 680px;
                 background-color: var(--color-item-background);
+                max-height: 680px;
             }
         }
     }
@@ -123,6 +123,7 @@
         }
 
         .input-map {
+            // margin-bottom: 10px;
             width: 100%;
             display: flex;
             align-items: center;

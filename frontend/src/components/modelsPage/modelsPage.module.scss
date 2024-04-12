@@ -2,8 +2,10 @@
     height: 100%;
     overflow: hidden;
     background-color: var(--color-item-background);
+
     .ant-spin-nested-loading {
         height: 100% !important;
+        // overflow: hidden;
     }
 
     .usersCanSet1 {
@@ -27,6 +29,7 @@
                 border-radius: 8px;
                 border: 1px solid var(--color-divider);
                 box-sizing: border-box;
+                // width: 100%;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
@@ -224,6 +227,7 @@
         position: relative;
         border-radius: 5px;
         background-color: var(--color-invert-text);
+        // border: 1px solid var(--color-divider;
         box-sizing: border-box;
         width: 100%;
         overflow: hidden;
@@ -347,7 +351,11 @@
         gap: 24px;
     }
 }
-
+.typeDisabled {
+    cursor: not-allowed !important;
+    background-color: #FAFAFA;
+    opacity: 0.3;
+}
 
 .models-page {
     margin: 0;
@@ -389,18 +397,70 @@
     }
 }
 
+.ant-form-item {
+    margin-bottom: 20px;
+}
+
+.ant-form-item.switch {
+    margin-bottom: 0;
+
+}
+
+.input-form {
+    padding: 0 24px;
+
+    :global {
+        .ant-form-item {
+            .ant-form-item-row {
+                flex-wrap: wrap !important;
+                width: 100%;
+
+            }
+        }
+
+        .ant-form-item-required {
+            font-size: 16px;
+        }
+    }
+
+}
+
+
+.hr {
+    position: relative;
+    height: 1px;
+    margin-top: 24px;
+    background-color: #eee;
+    line-height: 1;
+}
+
+.switch {
+    height: 20px;
+    margin-bottom: 0 !important;
+
+    :global {
+        .ant-row {
+            height: 20px;
+
+            .ant-form-item-control-input {
+                min-height: 20px !important;
+            }
+        }
+    }
+
+}
 
 .second-modal {
     position: relative;
-
+    overflow-x: hidden;
     .input-form {
-        height: 86px;
         margin-top: 24px;
 
         .ant-form-item {
             height: 100%;
 
             .ant-form-item-row {
+                // height: 100%;
                 flex-wrap: wrap !important;
                 width: 100%;
 
@@ -417,26 +477,6 @@
         .ant-form-item-required {
             font-size: 16px;
         }
-    }
-
-    .hr {
-        position: absolute;
-        left: -20px;
-        right: -20px;
-        height: 1px !important;
-
-        background-color: #eee !important;
-        line-height: 1;
-    }
-
-    .frameParent {
-        align-self: stretch;
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: flex-start;
-        gap: 12px;
-        margin: 7px 0 !important;
     }
 
     .input {
@@ -458,7 +498,8 @@
         position: relative;
         font-size: 16px;
         line-height: 20px;
-        font-weight: 600;
+        padding: 24px 0 8px 24px;
+        font-weight: 400;
         font-family: Inter;
         color: var(--color-text-primary);
         text-align: left;
@@ -494,6 +535,7 @@
         align-items: flex-start;
         justify-content: flex-start;
         text-align: left;
+        margin: 0 0 24px 24px !important;
         font-size: 14px;
         color: var(--color-text-primary);
         font-family: Inter;
@@ -514,8 +556,8 @@
     }
 
     .label-desc {
-        width: 100%;
         position: relative;
+        margin: 0 24px;
         font-size: 14px;
         line-height: 20px;
         font-family: Inter;
@@ -528,7 +570,8 @@
     .credentials {
         position: relative;
         font-size: 18px;
-        line-height: 32px;
+        line-height: 1;
+        margin-left: 24px;
         font-family: Inter;
         color: var(--color-text-primary);
         font-weight: 600;
@@ -591,9 +634,10 @@
         position: relative;
         border-radius: 8px;
         border: 1px solid #e4e4e4;
+        background-color: white;
         box-sizing: border-box;
         height: 24px;
-        background-color: white;
+        // width: 130px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -608,6 +652,10 @@
         font-family: Inter;
     }
 
+    .streamBooleanFalse {
+        opacity: 0.5;
+    }
+
     .formbuttoncancel {
         position: relative;
         border-radius: 8px;
@@ -618,6 +666,7 @@
         overflow: hidden;
         display: flex;
         margin-bottom: 24px;
+        margin-left: 24px;
         cursor: pointer;
         flex-direction: row;
         align-items: center;
@@ -667,6 +716,7 @@
 
 .p {
     line-height: 1;
+    // margin-left:20px;
     text-align: left;
 
     .span {
@@ -711,6 +761,7 @@
             }
 
             .ant-modal-footer {
+                // margin-top:25px
                 height: 70px;
                 display: flex;
                 margin: 0;
@@ -724,11 +775,13 @@
     }
 
     .desc {
-
+        // line-height: 1;
+        // margin-left:20px;
         margin: 0 0 24px 0;
         text-align: left;
         font-family: Inter;
         color: var(--color-text-primary);
+        // height: 39px;
         line-height: 24px !important;
 
         .span {
@@ -747,6 +800,7 @@
 }
 
 .second-form {
+    margin: 24px;
     :global {
         .ant-form-item-control-input {
             height: auto !important;
@@ -757,7 +811,7 @@
         }
 
         .ant-form-item {
-            margin-bottom: 0;
+            margin-bottom: 24px;
         }
     }
 
@@ -779,9 +833,6 @@
     }
 }
 
-.table-text {
-    margin: 0
-}
 
 .editModal {
     :global {
@@ -791,8 +842,14 @@
                 flex-direction: row-reverse;
             }
         }
-        .ant-drawer-body{
+        .ant-drawer-body {
             background-color: var(--color-item-background);
+            padding: 0 !important;
+        }
+        .ant-form-item {
+            .ant-form-item {
+                margin-bottom: 0;
+            }
         }
     }
 }

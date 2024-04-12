@@ -1,3 +1,89 @@
+.actions {
+    background-color: var(--color-item-background);
+    height: 100%;
+
+    .ant-spin-nested-loading {
+        height: 100% !important;
+    }
+
+    .superchargeYourInstancesWitParent {
+        width: 100%;
+        position: relative;
+        background-color: var(--color-invert-text);
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        box-sizing: border-box;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding-bottom: 10px;
+        text-align: left;
+        font-size: 16px;
+        color: #777;
+        font-family: Inter;
+    }
+
+    .header-prompts {
+        display: flex;
+        justify-content: flex-end;
+        margin: 24px;
+
+        .plusParent {
+            display: flex;
+            cursor: pointer;
+
+            .arrowSyncParent {
+                height: 100%;
+                position: relative;
+                border-radius: 8px;
+                border: 1px solid var(--color-divider);
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .arrowSyncParent:hover {
+                background-color: #f5f5f5;
+            }
+
+            .prompt-button {
+                background-color: var(--color-positive);
+                color: white;
+                margin-left: 10px;
+                height: 40px;
+            }
+
+            .prompt-button:hover {
+                color: var(--color-invert-text) !important;
+                cursor: pointer;
+                background-color: var(--color-positive-hover);
+                border: 1px solid transparent;
+            }
+        }
+    }
+
+}
+
+.actions {
+    .spinloading {
+        padding: 0 24px;
+        overflow: hidden;
+        height: 100% !important;
+
+        :global {
+            .ant-spin-container {
+
+                height: 100% !important;
+            }
+        }
+    }
+}
+
 .drawerCreate {
     :global {
         .ant-spin-nested-loading{
@@ -180,14 +266,14 @@
         }
 
         .frameParent {
-            width: 270px;
+            // width: 270px;
             height: 210px;
             position: relative;
             border: 1px solid #e4e4e4;
             box-sizing: border-box;
             display: flex;
-            margin-right: 24px;
-            margin-bottom: 24px;
+            // margin-right: 24px;
+            // margin-bottom: 24px;
             background-color: white;
             flex-direction: column;
             align-items: flex-start;
@@ -207,24 +293,35 @@
         }
 
         .activeframeParent {
-            outline: 2px solid #087443;
+            outline: 2.5px solid #087443;
         }
-
-        .content {
-            display: flex;
-            flex-wrap: wrap;
-            align-content: flex-start;
-            overflow: auto;
-            margin-top: 24px;
-            padding-top: 2px;
-            padding-left: 2px;
+        .content-modal{
+            height: 672px;
+            padding-top: 24px;
             height: 663px;
+            overflow: auto;
         }
-
-        .content::-webkit-scrollbar {
+        .content-modal::-webkit-scrollbar{
             display: none;
-        }
 
+        }
+        .content {
+            display: grid;
+            gap: 24px;
+            grid-template-columns: repeat(auto-fill,minmax(270px,1fr));
+            // flex-wrap: wrap;
+            // align-content: flex-start;
+            overflow: auto;
+            padding-top: 3px;
+            padding-left: 3px;
+            padding-right: 24px;
+            padding-bottom: 24px;
+        }
+        @media (max-width:(270px * 3+ 24px * 2)) {
+            .content {
+                grid-template-columns: repeat(auto-fit,minmax(270px,1fr));
+            }
+        }
         .left {
             width: 920px;
         }
@@ -239,7 +336,8 @@
 
         .popupbodynormal {
             height: 100%;
-            width: 335px;
+            min-width: 335px;
+            max-width: 335px;
             flex: 1;
             position: relative;
             border-left: 1px solid #e4e4e4;
@@ -292,6 +390,11 @@
         }
     }
 }
+
+
+
+
+
 .componentsData {
     background-color: white;
     .label {

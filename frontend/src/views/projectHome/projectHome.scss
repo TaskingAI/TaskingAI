@@ -67,7 +67,6 @@
         display: flex;
         align-items: center;
     }
-
     .right-header {
         flex: 1;
         display: flex;
@@ -77,8 +76,15 @@
         margin-right: 20px;
         align-items: center;
 
+        .button-group-href {
+            display: flex;
+        }
+
         .document-button {
             height: 30px;
+            display: flex;
+            margin-left: 10px;
+            align-items: center;
         }
     }
 

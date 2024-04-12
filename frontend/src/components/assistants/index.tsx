@@ -10,6 +10,7 @@ import { fetchPluginData } from '../../Redux/actions';
 import ModalTable from '../modalTable/index'
 import tooltipTitle from '../../contents/tooltipTitle.tsx'
 import { fetchAssistantsData } from '@/Redux/actions.ts'
+import {setPlaygroundSelect} from '@/Redux/actions/playground.ts'
 import CreateCollection from '../createCollection/index.tsx';
 import { getActionsList, createActions } from '../../axios/actions.ts'
 import EditIcon from '../../assets/img/editIcon.svg?react'
@@ -99,6 +100,7 @@ function Assistant() {
     const [retrievalConfig,setRetrievalConfig] = useState('user_message')
     const [OpenActionDrawer, setOpenActionDrawer] = useState(false)
     const [actionList, setActionList] = useState([])
+    const [editLoading,setLoading] = useState(false)
     const childRef = useRef<ChildRefType | null>(null);
     const [hasModelMore, setHasModelMore] = useState(false)
     const [custom, setCustom] = useState('')
@@ -120,13 +122,13 @@ function Assistant() {
         const params = {
             limit: 20,
         }
-       
 
         fetchActionsList(params)
         fetchModelsList()
         fetchDataRetrievalData()
     }, []);
     useEffect(() => {
+        // setLoading(true);
         if (users.data.length > 0) {
             const data = users.data.map((item: any) => {
                 return {
@@ -155,7 +157,7 @@ function Assistant() {
         setBundlesList(pluginLists.data)
         setHasMore(retrievalLists.has_more)
     }, [users, retrievalLists,pluginLists]);
- 
+
     const fetchData = async (params: object) => {
         try {
             const res: any = await getAssistantsList(params)
@@ -176,7 +178,9 @@ function Assistant() {
             console.log(error)
         }
     };
-    const handleJump = (value) => {
+    const handleJump = (value: assistantListType) => {
+        dispatch(setPlaygroundSelect('assistant'))
+
         navigate(`/project/playground?assistant_id=${value.assistant_id}`)
     }
     const handleModalClose = () => {
@@ -228,6 +232,7 @@ function Assistant() {
     const fetchDataRetrievalData = async () => {
         try {
             dispatch(fetchRetrievalData(20) as any);
+
         } catch (e) {
             console.log(e)
         }
@@ -269,7 +274,7 @@ function Assistant() {
             console.log(error)
         }
     }
-   
+ 
     const handleCreateModelId = async () => {
         await setModelOne(true)
         childRef.current?.fetchAiModelsList()
@@ -286,15 +291,20 @@ function Assistant() {
         setSelectedRows([])
         setMemoryValue('zero')
         setDrawerDesc('')
+        setRecordsSelected([])
         setOpenDrawer(true)
     }
     const handleEdit = (val: assistantListType) => {
+        console.log(val)
         setDrawerTitle(`${t('projectEditAssistant')}`)
         const tag = val.retrievals.map(item => item.id)
         setSelectedRetrievalRows(tag)
         setSelectedActionsRows(val.tools.map(item => {return {type: item.type, value: item.id}}))
         setDrawerName(val.name)
         setDrawerDesc(val.description)
+        setRetrievalConfig(val.retrieval_configs.method || 'user_message')
+        setTopk(val.retrieval_configs.top_k || 3)
+        setMaxToken(val.retrieval_configs.max_tokens || 4096)
         setInputValueOne(val.max_messages)
         setInputValueTwo(val.max_tokens)
         setMemoryValue(val.memory)
@@ -323,6 +333,7 @@ function Assistant() {
 
         try {
             await deleteAssistant(assistantId)
+            dispatch(fetchAssistantsData() as any)
             await fetchData(params)
             setOpenDeleteModal(false)
 
@@ -343,7 +354,7 @@ function Assistant() {
             }
         }).filter((item: any) => item.id)
         const inputPluginValues = (drawerAssistantRef.current?.getActionSelectedList() || []).map((item: any) => ({ type: item.type, id: item.value })).filter((item: any) => item.id)
-       
+
         let systemTemplate: string[] = [];
         if (systemPromptTemplate.length === 1 && systemPromptTemplate[0] === '') {
             systemTemplate = []
@@ -384,6 +395,7 @@ function Assistant() {
             return toast.error(`${t('projectAssistantModelIDRequired')}`)
         }
         try {
+            setLoading(true)
             if (assistantId) {
                 await updateAssistant(assistantId, params)
                 setOpenDrawer(false)
@@ -402,6 +414,9 @@ function Assistant() {
             const apiError = error as ApiErrorResponse;
             const errorMessage: string = apiError.response.data.error.message;
             toast.error(errorMessage)
+        } finally {
+            setLoading(false)
+
         }
 
     }
@@ -432,6 +447,7 @@ function Assistant() {
         setOpenDrawer(false)
     }
 
+
     const handleChildEvent = async (value: valueLimit) => {
         setLimit(value.limit)
         setUpdatePrevButton(false)
@@ -458,9 +474,9 @@ function Assistant() {
     }
 
     const handleSelectModelId = (value: boolean) => {
+
         setModalTableOpen(value)
     }
-
 
     const handleChildModelEvent = async (value: valueLimit) => {
         setModelLimit(value.limit)
@@ -481,7 +497,7 @@ function Assistant() {
     const handleDescriptionChange = (value: string) => {
         setDrawerDesc(value)
     }
-    
+
     const onRadioChange = (value: string) => {
         setRadioValue(value)
     }
@@ -494,11 +510,10 @@ function Assistant() {
         setSelectedRows(tag)
     }
 
-   
     const handleCustom = (value: string) => {
         setCustom(value)
     }
-  
+
     const onhandleTipError = (value: boolean) => {
         setTipSchema(value)
     }
@@ -524,7 +539,7 @@ function Assistant() {
         <div className={styles["assistants"]}>
 
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
-                <ModalTable loading={loading} updatePrevButton={updatePrevButton} hasMore={assistantHasMore} id="assistant_id" ifSelect={false} columns={columns} name="assistant" dataSource={assistantsList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
+                <ModalTable title='New assistant' loading={loading} updatePrevButton={updatePrevButton} hasMore={assistantHasMore} id="assistant_id" ifSelect={false} columns={columns} name="assistant" dataSource={assistantsList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
             <Drawer
                 className={styles['drawer-assistants']}
@@ -534,14 +549,14 @@ function Assistant() {
                     <Button key="cancel" onClick={handleCancel} className='cancel-button'>
                         {t('cancel')}
                     </Button>,
-                    <Button key="submit" onClick={handleRequest} className={`next-button ${styles['button']}`}>
+                    <Button key="submit" loading={editLoading} onClick={handleRequest} className={`next-button ${styles['button']}`}>
                         {t('confirm')}
                     </Button>
                 ]}>
                 <DrawerAssistant handleNewBundle={handleNewBundle} retrievalConfig={retrievalConfig} topk={topk} maxTokens={maxTokens} handleMaxToken={handleMaxToken} handleToks={handleToks} bundilesList={bundilesList} handleNewActionModal={handleNewActionModal} handleNewCollection={handleNewCollection}  selectedCollectionList={selectedRetrievalRows} actionHasMore={hasActionMore} actionList={actionList} collectionHasMore={hasMore} ref={drawerAssistantRef} 
                  handleRetrievalConfigChange1={handleRetrievalConfigChange1}  retrievalList={retrievalList} selectedActionsRows={selectedActionsRows} inputValue1={inputValueOne} inputValue2={inputValueTwo} handleMemoryChange1={handleMemoryChange1} memoryValue={memoryValue} handleAddPromptInput={handleAddPrompt}  drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} selectedRows={selectedRows} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange}  ></DrawerAssistant>
             </Drawer>
-            
+
             <ModelModal type='chat_completion' ref={childRef} open={modelOne} handleSetModelConfirmOne={handleSetModelConfirmOne} handleSetModelOne={handleModalCancel} getOptionsList={fetchModelsList} modelType='chat_completion'></ModelModal>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='footer1'>
@@ -559,11 +574,9 @@ function Assistant() {
                             {t('confirm')}
                         </Button>
                     </div>
-
                 </div>
-
             ]} title={t('projectSelectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable onOpenDrawer={handleCreateModelId} name="model" updatePrevButton={updateModelPrevButton} defaultSelectedRowKeys={selectedRows} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
+                <ModalTable title='New model' onOpenDrawer={handleCreateModelId} name="model" updatePrevButton={updateModelPrevButton} defaultSelectedRowKeys={selectedRows} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
 
             <CreatePlugin bundilesList={bundilesList} handleConfirmRequest={handleConfirmRequest} open={pluginModalOpen} handleCloseModal={handleClosePluginModal}></CreatePlugin>

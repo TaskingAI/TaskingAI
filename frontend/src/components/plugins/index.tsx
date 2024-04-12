@@ -64,7 +64,6 @@ function Plugins() {
     const [isShowBundle, setIsShowBundle] = useState(true)
     const [cachedImages, setCachedImages] = useState({});
     useEffect(() => {
-    
         const params1 = {
             limit: 100,
             offset: 0,
@@ -130,9 +129,6 @@ function Plugins() {
     }
     const getBundleList = async (params: object) => {
         const res: any = await bundleList(params)
-        setBundleId(res.data[0].bundle_id)
-        setBundleName(res.data[0].name)
-        setBundleDesc(res.data[0].description)
         const imagesData: any = {};
         res.data.forEach((image: any) => {
             fetch(image.icon_url)
@@ -147,19 +143,6 @@ function Plugins() {
                 });
         });
         setBundlesList(res.data)
-
-        setCredentialsSchema(res.data[0].credentials_schema)
-        const res1 = await getPluginDetail(res.data[0].bundle_id)
-        setPluginListData(res1.data)
-        setPluginId(res1.data[0].plugin_id)
-        setPluginName(res1.data[0].name)
-        setPluginDesc(res1.data[0].description)
-        const inputSchematemp = res1.data[0].input_schema
-        const arr: any[] = []
-        Object.values(inputSchematemp).forEach((item: any) => {
-            arr.push(item)
-        })
-        setInputSchema(arr)
     }
     const columns = [...bundleTableColumn]
     columns.push({
@@ -191,6 +174,7 @@ function Plugins() {
         setFormDisabled(true)
         setBundleId(record.bundle_id)
         const data: any = (bundilesList.find((item: any) => item.bundle_id === record.bundle_id) as any)
+        console.log(record)
         setBundleName(data.name)
         setCredentialsSchema(data.credentials_schema)
         form.setFieldsValue(record.display_credentials)
@@ -199,9 +183,13 @@ function Plugins() {
 
     }
     const handleTools = async (record: any) => {
+        console.log(record)
         setLoading(true)
         try {
             setPluginListData(record.plugins)
+            setPluginName(record.plugins[0].name)
+            setPluginDesc(record.plugins[0].description)
+            setBundleName(record.name)
             setPluginId(record.plugins[0].plugin_id)
             const inputSchematemp = record.plugins[0].input_schema
             const arr: any[] = []
@@ -249,7 +237,6 @@ function Plugins() {
     const onDeleteConfirm = async () => {
         try {
             await deletePlugin(bundleId)
-
             const limit1: number = limit || 20
             dispatch(fetchPluginData(limit1) as any);
             setUpdatePrevButton(true)
@@ -305,7 +292,6 @@ function Plugins() {
         form.validateFields(Object.keys(changedValues));
     };
     const handleNext1 = async () => {
-
         if (JSON.stringify(credentialsSchema) === '{}') {
             const params = {
                 name: bundleName,
@@ -407,7 +393,6 @@ function Plugins() {
 
                             </div>
                             <div className={styles.pluginDesc}>{pluginDesc}</div>
-                            {/* <div className={styles.inputParams}>{t('projectInputParameters')}</div> */}
                             <div style={{ marginLeft: '24px' }}>
                                 <ParameterTable parameters={inputSchema} />
                             </div>
@@ -502,7 +487,7 @@ function Plugins() {
     return (
         <div className={styles["actions"]}>
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
-                <ModalTable loading={loading} updatePrevButton={updatePrevButton} name='plugins' id='bundle_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
+                <ModalTable loading={loading} title='New plugin' updatePrevButton={updatePrevButton} name='plugin' id='bundle_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
             <Modal footer={[
                 <>
@@ -526,7 +511,8 @@ function Plugins() {
                     <div className={styles.modalContent}>
                         <div className={styles.left}>
                             <div className={styles.selectBundleDesc}>{t('projectBundleDesc')}</div>
-                            <div className={styles.content}>
+                           <div className={styles['content-modal']}>
+                           <div className={styles.content}>
                                 {bundilesList.map((item: any, index) => (
                                     <div key={index} className={`${styles.frameParent} ${item.bundle_id === bundleId && styles.activeframeParent} ${item.registered && styles.registeredItem}`} onClick={item.registered ? undefined : () => { handleClickBundle(item.bundle_id, item.name, item) }}>
                                         <div className={styles.logoParent}>
@@ -543,9 +529,7 @@ function Plugins() {
                                         </div>
                                         <div className={styles.googleWebSearch}>{item.name}</div>
                                         <div className={styles.label}>{item.description}</div>
-                                        {/* <div className={styles.webSearchWrapper}>
-                                        <div className={styles.webSearch}>Web Search</div>
-                                    </div> */}
+                               
                                         <div className={styles.frameGroup}>
                                             <div className={styles.functionaliconsParent}>
                                                 <ToolsNew />
@@ -559,7 +543,7 @@ function Plugins() {
                                 ))}
 
                             </div>
-                            {/* <Paginations hasMore={bundlesHasMore} onFetchData={getBundleList}></Paginations> */}
+                           </div>
                         </div>
                         <>
                             <div className={styles.popupbodynormal}>
@@ -583,16 +567,6 @@ function Plugins() {
                 </Spin>
                 }
             </Modal>
-            {/* <Modal footer={[
-                <Button icon={<LeftOutlined />} key="cancel" onClick={handleCancel1} className='cancel-button'>
-                    {t('back')}
-                </Button>,
-                <Button key="submit" onClick={handleNext1} className='next-button'>
-                    {t('confirm')}
-                </Button>
-            ]} width={1280} onCancel={handleCancel1} className={styles.createModal2} open={openCreateModal2} centered title={t('projectPluginCreate')} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} >
-                <ComponentsData />
-            </Modal> */}
             <Modal footer={[
                 <Button key="cancel" onClick={handleCancel2} className='cancel-button'>
                     {t('cancel')}
@@ -610,7 +584,7 @@ function Plugins() {
                 <Button key="submit" loading={confirmLoading} onClick={handleEditCancel} className={`next-button ${styles.button}`}>
                     {t('confirm')}
                 </Button>
-            ]} width={1280} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleEditCancel} open={openEditDrawer} title={`${t('projectBundleTitle')} ${t('projectModelColumnName')}/${t('projectPluginsTitle')}`} className={styles.openEditDrawer}>
+            ]} width={1280} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleEditCancel} open={openEditDrawer} title={bundleName + ' / ' + t('projectPluginsTitle')} className={styles.openLookDrawer}>
                 <ComponentsData />
             </Drawer>
             <Drawer title={t('projectPluginEditPlugin')} footer={[

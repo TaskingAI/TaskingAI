@@ -74,4 +74,28 @@
         color: var(--color-positive);
         cursor: pointer;
     }
+    .resetBackground {
+        opacity: 0.3;
+    }
+    .formbuttoncancel {
+        position: relative;
+        border-radius: 8px;
+        background-color: var(--color-invert-text);
+        border: 1px solid var(--color-divider);
+        box-sizing: border-box;
+        width: 163px;
+        overflow: hidden;
+        display: flex;
+        margin-bottom: 8px;
+        margin-left: 0;
+        cursor: pointer;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        text-align: left;
+        font-size: 14px;
+        color: var(--color-text-primary);
+        font-family: Inter;
+    }
 }
