@@ -27,20 +27,31 @@ class ChatCompletionFunctionCall(BaseModel):
         examples=["plus_a_and_b"],
     )
 
-
-class ChatCompletionFunctionParametersProperty(BaseModel):
+class ChatCompletionFunctionParametersPropertyItems(BaseModel):
     type: str = Field(
         ...,
         pattern="^(string|number|integer|boolean)$",
+        description="The type of the item.",
+    )
+
+class ChatCompletionFunctionParametersProperty(BaseModel):
+    # type in ["string", "number", "integer", "boolean"]
+    type: str = Field(
+        ...,
+        pattern="^(string|number|integer|boolean|array|object)$",
         description="The type of the parameter.",
     )
 
-    description: str = Field(
-        "",
-        max_length=256,
-        description="The description of the parameter.",
+    # items only used in array
+    items: Optional[ChatCompletionFunctionParametersPropertyItems] = Field(
+        None,
+        description="The items of the parameter. Which is only allowed when type is 'array'.",
     )
 
+    # description should not more than MAXIMUM_PARAMETER_DESCRIPTION_LENGTH characters
+    description: str = Field("", max_length=512, description="The description of the parameter.")
+
+    # optional enum
     enum: Optional[List[str]] = Field(
         None,
         description="The enum list of the parameter. Which is only allowed when type is 'string'.",
