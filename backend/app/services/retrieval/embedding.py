@@ -40,10 +40,8 @@ async def embed_query(query: str, embedding_model: Model, embedding_size: int):
         return _generate_random_unit_vector(query, embedding_size)
 
     response = await text_embedding(
-        model_schema_id=embedding_model.model_schema_id,
-        provider_model_id=embedding_model.provider_model_id,
+        model=embedding_model,
         encrypted_credentials=embedding_model.encrypted_credentials,
-        properties=embedding_model.properties,
         input_text_list=[query],
         input_type="query",
     )
@@ -64,10 +62,8 @@ async def embed_documents(documents: List[str], embedding_model: Model, embeddin
         return [_generate_random_unit_vector(text, embedding_size) for text in documents]
 
     response = await text_embedding(
-        model_schema_id=embedding_model.model_schema_id,
-        provider_model_id=embedding_model.provider_model_id,
+        model=embedding_model,
         encrypted_credentials=embedding_model.encrypted_credentials,
-        properties=embedding_model.properties,
         input_text_list=documents,
         input_type="document",
     )

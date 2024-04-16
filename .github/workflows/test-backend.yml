@@ -115,7 +115,9 @@ jobs:
 
       - name: Install Dependencies
         working-directory: TaskingAI-Test
-        run: pip install -r requirements.txt
+        run: |
+          echo "machine github.com login ${{ secrets.GH_PAT_TKHELPER }}" > ~/.netrc
+          pip install -r requirements.txt
 
       - name: Start API Service
         working-directory: TaskingAI-Test

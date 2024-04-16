@@ -32,11 +32,9 @@ class StreamSession(Session):
 
     async def stream_inference(self):
         async for temp_data in chat_completion_stream(
-            model_schema_id=self.model.model_schema_id,
-            provider_model_id=self.model.provider_model_id,
+            model=self.model,
             messages=self.chat_completion_messages,
             encrypted_credentials=self.model.encrypted_credentials,
-            properties=self.model.properties,
             configs={},
             function_call=None,  # todo
             functions=self.chat_completion_functions,
