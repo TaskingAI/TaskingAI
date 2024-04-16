@@ -1,7 +1,9 @@
 import aiohttp
 from typing import List, Dict, Optional
 from tkhelper.utils import ResponseWrapper
+from tkhelper.error import raise_http_error, ErrorCode
 from app.config import CONFIG
+from app.models import ModelSchema, ModelType, Model
 import json
 import logging
 
@@ -14,17 +16,38 @@ __all__ = [
 ]
 
 
+async def __validate_model(model: Model):
+    if not model.is_chat_completion():
+        raise_http_error(
+            ErrorCode.REQUEST_VALIDATION_ERROR,
+            message=f"Model {model.model_id} is not a chat completion model.",
+        )
+
+    model_schema: ModelSchema = model.model_schema()
+    if model_schema.type == ModelType.WILDCARD:
+        provider_model_id = model.provider_model_id
+        properties = model.properties
+    elif model.is_custom_host():
+        provider_model_id = model_schema.provider_model_id
+        properties = model.properties
+    else:
+        provider_model_id = model_schema.provider_model_id
+        properties = model_schema.properties
+
+    return provider_model_id, properties
+
+
 # For POST /v1/chat_completion
 async def chat_completion(
-    model_schema_id: str,
-    provider_model_id: Optional[str],
+    model: Model,
     messages: List[Dict],
     encrypted_credentials: Dict,
-    properties: Optional[Dict],
     configs: Dict,
     function_call: Optional[str] = None,
     functions: Optional[List[Dict]] = None,
 ) -> ResponseWrapper:
+    model_schema_id = model.model_schema_id
+    provider_model_id, properties = await __validate_model(model)
     request_url = f"{CONFIG.TASKINGAI_INFERENCE_URL}/v1/chat_completion"
     payload = {
         "model_schema_id": model_schema_id,
@@ -44,15 +67,15 @@ async def chat_completion(
 
 
 async def chat_completion_stream(
-    model_schema_id: str,
-    provider_model_id: Optional[str],
+    model: Model,
     messages: List[Dict],
     encrypted_credentials: Dict,
-    properties: Optional[Dict],
     configs: Dict,
     function_call: Optional[str] = None,
     functions: Optional[List[Dict]] = None,
 ):
+    model_schema_id = model.model_schema_id
+    provider_model_id, properties = await __validate_model(model)
     request_url = f"{CONFIG.TASKINGAI_INFERENCE_URL}/v1/chat_completion"
     payload = {
         "model_schema_id": model_schema_id,
