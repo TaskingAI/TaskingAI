@@ -6,7 +6,7 @@ python-multipart==0.0.7
 openapi_spec_validator==0.7.1
 APScheduler==3.10.4
 python-dotenv==1.0.0
-gunicorn==21.2.0
+gunicorn==22.0.0
 asyncio==3.4.3
 python_dateutil==2.8.2
 pycryptodome==3.20.0
