@@ -20,7 +20,7 @@ services:
       ICON_URL_PREFIX: http://localhost:8080 # replace with your own
 
   backend-api:
-    image: taskingai/taskingai-server:v0.2.2
+    image: taskingai/taskingai-server:v0.2.3-beta-1
     environment:
       POSTGRES_URL: postgres://postgres:TaskingAI321@db:5432/taskingai
       REDIS_URL: redis://:TaskingAI321@cache:6379/0
@@ -34,7 +34,7 @@ services:
       - backend-plugin
 
   backend-web:
-    image: taskingai/taskingai-server:v0.2.2
+    image: taskingai/taskingai-server:v0.2.3-beta-1
     environment:
       POSTGRES_URL: postgres://postgres:TaskingAI321@db:5432/taskingai
       REDIS_URL: redis://:TaskingAI321@cache:6379/0
