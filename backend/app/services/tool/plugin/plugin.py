@@ -40,6 +40,7 @@ async def run_plugin(
                     "plugin_id": plugin_id,
                     "input_params": parameters,
                     "encrypted_credentials": bundle_instance.encrypted_credentials,
+                    "project_id": "taskingai"
                 },
             )
 

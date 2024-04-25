@@ -26,6 +26,13 @@ def validate_authentication_data(data: Dict):
     if data["type"] == ActionAuthenticationType.custom:
         if "content" not in data or data["content"] is None:
             raise ValueError("Content is required for custom authentication.")
+        if data["content"] and not isinstance(data["content"], dict):
+            raise ValueError("Content should be a dict for custom authentication.")
+        for key in data["content"]:
+            if not isinstance(key, str) or not key:
+                raise ValueError("Key in content should be a string.")
+            if not isinstance(data["content"][key], str) or not data["content"][key]:
+                raise ValueError("Value in content should be a string.")
 
     elif data["type"] == ActionAuthenticationType.bearer:
         if "secret" not in data or data["secret"] is None:
@@ -96,7 +103,7 @@ class ActionAuthentication(BaseModel):
 
         if self.content:
             for key in self.content:
-                if len(self.content[key]) > 4:
+                if self.content[key] and len(self.content[key]) > 4:
                     model_dict["content"][key] = f"{self.content[key][:2]}****{self.content[key][-2:]}"
 
         return model_dict
