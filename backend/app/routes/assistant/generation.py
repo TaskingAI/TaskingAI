@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, Request
-from starlette.responses import StreamingResponse
 from typing import Dict
 
 from tkhelper.schemas.base import BaseDataResponse
+from tkhelper.utils import sse_stream_response
 
 from app.services.assistant import get_assistant_and_chat, NormalSession, StreamSession
 from app.schemas.assistant.generate import MessageGenerateRequest
@@ -43,10 +43,8 @@ async def api_chat_generate(
             stream=payload.stream,
             debug=payload.debug,
         )
-        return StreamingResponse(
-            session.stream_generate(system_prompt_variables),
-            media_type="text/event-stream",
-        )
+        response = await sse_stream_response(session.stream_generate(system_prompt_variables))
+        return response
 
     else:
         session = NormalSession(

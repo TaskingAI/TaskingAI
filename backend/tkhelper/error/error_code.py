@@ -36,6 +36,8 @@ class ErrorCode(str, Enum):
     OBJECT_LOCKED = "OBJECT_LOCKED"
     INVALID_REQUEST = "INVALID_REQUEST"
     GENERATION_ERROR = "GENERATION_ERROR"
+    PROVIDER_ERROR = "PROVIDER_ERROR"
+    CREDENTIALS_VALIDATION_ERROR = "CREDENTIALS_VALIDATION_ERROR"
 
 
 error_messages = {
@@ -57,6 +59,8 @@ error_messages = {
     ErrorCode.OBJECT_LOCKED: {"status_code": 423, "message": "Object locked."},
     ErrorCode.INVALID_REQUEST: {"status_code": 400, "message": "Invalid request."},
     ErrorCode.GENERATION_ERROR: {"status_code": 500, "message": "Generation error occurred."},
+    ErrorCode.PROVIDER_ERROR: {"status_code": 400, "message": "External provider error."},
+    ErrorCode.CREDENTIALS_VALIDATION_ERROR: {"status_code": 401, "message": "Credentials validation error."},
 }
 
 assert len(error_messages) == len(ErrorCode)
