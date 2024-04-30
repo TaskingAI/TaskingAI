@@ -1,5 +1,4 @@
 import asyncio
-import json
 from .session import Session
 from .utils import *
 from .log import *
@@ -57,7 +56,7 @@ class StreamSession(Session):
 
             if self.prepare_logs:
                 for log_dict in self.prepare_logs:
-                    yield f"data: {json.dumps(log_dict)}\n\n"
+                    yield log_dict
                     await asyncio.sleep(0.1)
 
             function_calls_round_index = 0
@@ -75,14 +74,14 @@ class StreamSession(Session):
                             messages=self.chat_completion_messages,
                             functions=self.chat_completion_functions,
                         )
-                        yield f"data: {json.dumps(chat_completion_input_log_dict)}\n\n"
+                        yield chat_completion_input_log_dict
 
                     if self.stream:
                         logger.debug(f"completion start inference, stream = {self.stream}")
                         async for t, data in self.stream_inference():
                             logger.debug(f"completion streaming, {t}: {data}")
                             if t == MESSAGE_CHUNK:
-                                yield f"data: {json.dumps(data)}\n\n"
+                                yield data
                             elif t == MESSAGE:
                                 chat_completion_assistant_message_dict = data
                                 function_calls = data.get("function_calls")
@@ -104,7 +103,7 @@ class StreamSession(Session):
                             model=self.model,
                             message=chat_completion_assistant_message_dict,
                         )
-                        yield f"data: {json.dumps(chat_completion_output_log_dict)}\n\n"
+                        yield chat_completion_output_log_dict
 
                 except MessageGenerationException as e:
                     raise e
@@ -128,7 +127,7 @@ class StreamSession(Session):
                         if self.debug:
                             for tool_action_call_log_dict in tool_action_call_logs:
                                 logger.debug(f"tool_action_call_log_dict = {tool_action_call_log_dict}")
-                                yield f"data: {json.dumps(tool_action_call_log_dict)}\n\n"
+                                yield tool_action_call_log_dict
 
                         # run tools
 
@@ -137,7 +136,7 @@ class StreamSession(Session):
                                 function_calls=chat_completion_function_calls_dict_list, log=True
                             ):
                                 logger.debug(f"tool_action_result_log_dict = {tool_action_result_log_dict}")
-                                yield f"data: {json.dumps(tool_action_result_log_dict)}\n\n"
+                                yield tool_action_result_log_dict
                         else:
                             async for _ in self.run_tools(chat_completion_function_calls_dict_list):
                                 pass
@@ -159,18 +158,15 @@ class StreamSession(Session):
             # raise MessageGenerationException("Manually raise error to test")
             message = await self.create_assistant_message(chat_completion_assistant_message_dict["content"])
             message_dict = message.to_response_dict()
-            yield f"data: {json.dumps(message_dict)}\n\n"
-            yield f"data: [DONE]\n\n"
+            yield message_dict
 
         except MessageGenerationException as e:
             err_dict = error_message(str(e))
-            yield f"data: {json.dumps(err_dict)}\n\n"
-            yield f"data: [DONE]\n\n"
+            yield err_dict
 
         except Exception as e:
             err_dict = error_message("Assistant message not generated due to an unknown error.")
-            yield f"data: {json.dumps(err_dict)}\n\n"
-            yield f"data: [DONE]\n\n"
+            yield err_dict
 
         finally:
             await self.chat.unlock()

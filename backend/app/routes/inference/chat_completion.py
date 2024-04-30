@@ -1,17 +1,25 @@
 from fastapi import APIRouter, Depends, Request
-import json
 from typing import Dict
-from starlette.responses import StreamingResponse
-from ..utils import auth_info_required
-from tkhelper.utils import check_http_error
-from app.schemas.model.chat_completion import ChatCompletionRequest
+from tkhelper.utils import check_http_error, sse_stream_response
+from tkhelper.error import raise_request_validation_error
 from tkhelper.schemas.base import BaseDataResponse
+
+from app.schemas.model.chat_completion import ChatCompletionRequest
 from app.services.inference.chat_completion import chat_completion, chat_completion_stream
 from app.services.model.model import get_model
 from app.models import Model
-from tkhelper.error import raise_request_validation_error
+
+from ..utils import auth_info_required
 
 router = APIRouter()
+
+
+def error_message(code, message: str):
+    return {
+        "object": "Error",
+        "code": code,
+        "message": message,
+    }
 
 
 @router.post(
@@ -47,21 +55,18 @@ async def api_chat_completion(
         if not model.allow_streaming():
             raise_request_validation_error(f"Model {model.model_id} does not support streaming.")
 
-        async def generator():
-            i = 0
-            async for response_dict in chat_completion_stream(
+        response = await sse_stream_response(
+            chat_completion_stream(
                 model=model,
                 messages=message_dicts,
                 encrypted_credentials=model.encrypted_credentials,
                 configs=data.configs,
                 function_call=data.function_call,
                 functions=functions,
-            ):
-                yield f"data: {json.dumps(response_dict)}\n\n"
-                i += 1
-            yield f"data: [DONE]\n\n"
+            )
+        )
 
-        return StreamingResponse(generator(), media_type="text/event-stream")
+        return response
 
     else:
         # generate none stream response

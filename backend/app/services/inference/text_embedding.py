@@ -19,7 +19,7 @@ async def __validate_model(model: Model):
         )
 
     model_schema: ModelSchema = model.model_schema()
-    if model_schema.type == ModelType.WILDCARD:
+    if model_schema is None or model_schema.type == ModelType.WILDCARD:
         provider_model_id = model.provider_model_id
         properties = model.properties
     elif model.is_custom_host():
