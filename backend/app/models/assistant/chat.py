@@ -20,6 +20,7 @@ class Chat(ModelEntity):
 
     metadata: Dict = metadata_field()
     memory: ChatMemory = Field(...)
+    name: str = name_field("chat")
 
     created_timestamp: int = created_timestamp_field()
     updated_timestamp: int = updated_timestamp_field()
@@ -33,6 +34,7 @@ class Chat(ModelEntity):
             # data
             memory=load_json_attr(row, "memory", {}),
             metadata=load_json_attr(row, "metadata", {}),
+            name=row.get("name") or "",
             # timestamps
             created_timestamp=row["created_timestamp"],
             updated_timestamp=row["updated_timestamp"],
@@ -45,6 +47,7 @@ class Chat(ModelEntity):
             "chat_id": self.chat_id,
             "metadata": self.metadata,
             "memory": self.memory,
+            "name": self.name,
             "created_timestamp": self.created_timestamp,
             "updated_timestamp": self.updated_timestamp,
         }
@@ -89,11 +92,11 @@ class Chat(ModelEntity):
 
     @staticmethod
     def create_fields() -> List[str]:
-        return ["metadata"]
+        return ["metadata", "name"]
 
     @staticmethod
     def update_fields() -> List[str]:
-        return ["metadata"]
+        return ["metadata", "name"]
 
     @staticmethod
     def fields_exclude_in_response():

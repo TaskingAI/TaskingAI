@@ -13,11 +13,12 @@ __all__ = ["chat_ops"]
 class ChatModelOperator(PostgresModelOperator):
     async def create(self, create_dict: Dict, **kwargs) -> ModelEntity:
         kwargs = self._check_kwargs(object_id_required=None, **kwargs)
+        assistant_id = kwargs.get("assistant_id")
+        name = create_dict.get("name", "")
+        metadata = create_dict.get("metadata", {})
 
         async with self.postgres_pool.get_db_connection() as conn:
             async with conn.transaction():
-                assistant_id = kwargs.get("assistant_id")
-
                 # validate assistant
                 assistant: Assistant = await assistant_ops.get(
                     postgres_conn=conn,
@@ -26,10 +27,17 @@ class ChatModelOperator(PostgresModelOperator):
 
                 # initialize chat memory
                 chat_memory: ChatMemory = assistant.memory.init_chat_memory()
-                create_dict["memory"] = chat_memory.model_dump()
 
                 # create chat
-                chat = await self._create_entity(conn, create_dict, **kwargs)
+                chat = await self._create_entity(
+                    conn,
+                    create_dict={
+                        "memory": chat_memory.model_dump(),
+                        "name": name,
+                        "metadata": metadata,
+                    },
+                    **kwargs,
+                )
 
                 # update assistant num_chats
                 await assistant_ops.update(
