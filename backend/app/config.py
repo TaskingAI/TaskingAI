@@ -59,7 +59,7 @@ class Config:
 
         # version
         self.VERSION = __VERSION__
-        self.POSTGRES_SCHEMA_VERSION = 4
+        self.POSTGRES_SCHEMA_VERSION = 5
 
         # mode
         self.MODE = load_str_env("MODE", required=True)
