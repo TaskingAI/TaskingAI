@@ -12,6 +12,7 @@ class TextSplitterType(str, Enum):
     """TextSplitterType enum."""
 
     TOKEN = "token"
+    SEPARATOR = "separator"
 
 
 class TextSplitter(BaseModel):
@@ -33,6 +34,13 @@ class TextSplitter(BaseModel):
         description="The number of overlapping tokens between adjacent chunks.",
     )
 
+    separators: Optional[List[str]] = Field(
+        None,
+        min_items=1,
+        max_items=16,
+        description="The list of separators to split the text.",
+    )
+
     def split_text(self, text: str, title: Optional[str]) -> Tuple[List[str], List[int]]:
         """
         Split the text into chunks.
@@ -42,10 +50,23 @@ class TextSplitter(BaseModel):
         """
 
         from .token_handler import split_text_by_token
+        from .separator_handler import split_text_by_separator
 
         if self.type == TextSplitterType.TOKEN:
             return split_text_by_token(
-                text=text, title=title, chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap
+                text=text,
+                title=title,
+                chunk_size=self.chunk_size,
+                chunk_overlap=self.chunk_overlap,
+            )
+
+        if self.type == TextSplitterType.SEPARATOR:
+            return split_text_by_separator(
+                text=text,
+                title=title,
+                separators=self.separators,
+                chunk_size=self.chunk_size,
+                chunk_overlap=self.chunk_overlap,
             )
 
         else:
@@ -60,7 +81,25 @@ class TextSplitter(BaseModel):
             if data.chunk_size is None:
                 raise ValueError("The chunk_size field is required for the token text splitter.")
 
-            if data.chunk_overlap > data.chunk_size / 2:
-                raise ValueError("chunk_overlap must be less than or equal to chunk_size/2")
+        if data.type == TextSplitterType.SEPARATOR:
+            if data.separators is None or len(data.separators) == 0:
+                raise ValueError("The separators cannot be empty for the separator text splitter.")
+
+            # ensure no empty separator
+            if any(not sep for sep in data.separators):
+                raise ValueError("The separators field cannot contain empty strings.")
+
+            # ensure each separator is not a substring of another separator
+            for i, sep in enumerate(data.separators):
+                for j, other_sep in enumerate(data.separators):
+                    if i != j and sep in other_sep:
+                        raise ValueError(f"Separator '{sep}' is a substring of '{other_sep}'.")
+
+            # ensure the length of each separator is less than 50
+            if any(len(sep) >= 50 for sep in data.separators):
+                raise ValueError("The length of each separator must be less than 50.")
+
+        if data.chunk_overlap is not None and data.chunk_size is not None and data.chunk_overlap > data.chunk_size / 2:
+            raise ValueError("chunk_overlap must be less than or equal to chunk_size/2")
 
         return data
