@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from tkhelper.error import ErrorCode, raise_http_error
 
@@ -17,7 +17,8 @@ __all__ = [
 async def query_chunks(
     collection_ids: List[str],
     top_k: int,
-    max_tokens: int,
+    max_tokens: Optional[int],
+    score_threshold: Optional[float],
     query_text: str,
 ) -> List[Chunk]:
     """
@@ -25,6 +26,7 @@ async def query_chunks(
     :param collection_ids: the collection ids.
     :param top_k: the number of chunks to query.
     :param max_tokens: the maximum number of tokens in the chunks.
+    :param score_threshold: the minimum score threshold to return the chunks.
     :param query_text: the query text.
     :return: the created record
     """
@@ -58,6 +60,7 @@ async def query_chunks(
         collections=collections,
         top_k=top_k,
         max_tokens=max_tokens,
+        score_threshold=score_threshold,
         query_vector=query_vector,
     )
     return chunks

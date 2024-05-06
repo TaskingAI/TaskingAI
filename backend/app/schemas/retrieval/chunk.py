@@ -24,6 +24,9 @@ class ChunkQueryRequest(BaseModel):
         description="The query text. Retrieval service will find and return the most relevant chunks to this text.",
         examples=["What is machine learning?"],
     )
+    score_threshold: Optional[float] = Field(
+        None, ge=0.0, le=1.0, description="The minimum score threshold to return the chunks.", examples=[0.5]
+    )
 
     class Config:
         extra = Extra.forbid

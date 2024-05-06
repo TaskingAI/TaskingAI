@@ -113,6 +113,7 @@ async def query_assistant_retrieval(
         retrieval_refs=assistant.retrievals,
         top_k=assistant.retrieval_configs.top_k,
         max_tokens=assistant.retrieval_configs.max_tokens,
+        score_threshold=assistant.retrieval_configs.score_threshold,
         query_text=query_text,
     )
 
