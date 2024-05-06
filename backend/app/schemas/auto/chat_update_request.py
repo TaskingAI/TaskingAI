@@ -19,3 +19,4 @@ __all__ = ["ChatUpdateRequest"]
 
 class ChatUpdateRequest(BaseModel):
     metadata: Optional[Dict] = Field(None, min_length=0, max_length=16)
+    name: Optional[str] = Field(None, min_length=0, max_length=127)
