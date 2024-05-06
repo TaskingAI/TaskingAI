@@ -12,12 +12,14 @@ logger = logging.getLogger(__name__)
 async def _query_chunks_in_one_collection(
     collection: Collection,
     top_k: int,
+    score_threshold: Optional[float],
     query_vector: List[float],
 ):
     """
     Query top_k related chunks in one collection
     :param collection: the collection where the chunks belong to
     :param top_k: the number of chunks to be returned
+    :param score_threshold: the minimum score threshold to return the chunks
     :param query_vector: the query vector
     :return: the top_k related chunks
     """
@@ -38,15 +40,24 @@ async def _query_chunks_in_one_collection(
             """
             )
 
-            # by default, use cosine distance
-            sql = f"""
-                SELECT *, 1 - (embedding <=> $1) AS score
-                FROM {table_name}
-                ORDER BY embedding <=> $1
-                LIMIT $2
-            """
-
-            rows = await conn.fetch(sql, json.dumps(query_vector), top_k)
+            if score_threshold is not None:
+                sql = f"""
+                    SELECT *, 1 - (embedding <=> $1) AS score
+                    FROM {table_name}
+                    WHERE 1 - (embedding <=> $1) >= $3
+                    ORDER BY score DESC
+                    LIMIT $2
+                """
+                rows = await conn.fetch(sql, json.dumps(query_vector), top_k, score_threshold)
+            else:
+                # by default, use cosine distance
+                sql = f"""
+                    SELECT *, 1 - (embedding <=> $1) AS score
+                    FROM {table_name}
+                    ORDER BY score DESC
+                    LIMIT $2
+                """
+                rows = await conn.fetch(sql, json.dumps(query_vector), top_k)
 
     chunks = [Chunk.build(row) for row in rows]
 
@@ -57,13 +68,15 @@ async def query_chunks(
     collections: List[Collection],
     top_k: int,
     max_tokens: Optional[int],
+    score_threshold: Optional[float],
     query_vector: List[float],
 ) -> List[Chunk]:
     """
-    Query top_k related chunks in all collections
+    Query top_k related chunks
     :param collections: the collections where the chunks belong to
     :param top_k: the number of chunks to be returned
     :param max_tokens: the maximum number of tokens in the chunks
+    :param score_threshold: the minimum score threshold to return the chunks
     :param query_vector: the query vector
     :return: the top_k related chunks
     """
@@ -74,6 +87,7 @@ async def query_chunks(
         chunks = await _query_chunks_in_one_collection(
             collection=collection,
             top_k=top_k,
+            score_threshold=score_threshold,
             query_vector=query_vector,
         )
         results.append(chunks)

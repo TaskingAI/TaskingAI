@@ -35,14 +35,19 @@ class RetrievalConfig(BaseModel):
     max_tokens: Optional[int] = Field(
         None,
         ge=1,
-        le=8192,
         description="Specifies the maximum token number of relevant text chunks to retrieve.",
         examples=[1000],
     )
 
-    method: RetrievalMethod = Field(
-        RetrievalMethod.MEMORY, description="The retrieval method.", examples=["function_call"]
+    score_threshold: Optional[float] = Field(
+        None,
+        ge=0.0,
+        le=1.0,
+        description="Specifies the minimum score threshold for relevant text chunks to retrieve.",
+        examples=[0.5],
     )
+
+    method: RetrievalMethod = Field(RetrievalMethod.MEMORY, description="The retrieval method.", examples=["memory"])
 
     function_description: Optional[str] = Field(
         None,
