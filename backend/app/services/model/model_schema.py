@@ -161,7 +161,7 @@ async def list_model_schemas(
     filtered_schemas = [
         schema
         for schema in _model_schemas
-        if (provider_id is None or schema.provider_id == provider_id) and (type is None or schema.type == type.value)
+        if (provider_id is None or schema.provider_id == provider_id) and (type is None or schema.type == type.value or schema.type == ModelType.WILDCARD.value)
     ]
 
     # Paginate
