@@ -105,6 +105,8 @@ jobs:
           -e PURPOSE=API \
           -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
           -e REDIS_URL="redis://cache:6379/0" \
+          -e PATH_TO_VOLUME="./storage" \
+          -e PROJECT_ID="taskingai" \
           -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
           -e TASKINGAI_PLUGIN_URL=http://plugin:8000 \
           -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \

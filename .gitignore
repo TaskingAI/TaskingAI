@@ -169,3 +169,6 @@ backend/auto/
 
 # docker compose
 docker/data/
+
+# vscode
+backend/.vscode/*

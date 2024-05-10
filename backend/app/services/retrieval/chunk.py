@@ -3,7 +3,6 @@ from typing import List, Optional
 from tkhelper.error import ErrorCode, raise_http_error
 
 from app.models import Collection, Chunk, Model
-from app.operators import collection_ops
 from app.database_ops.retrieval import chunk as db_chunk
 from app.services.model.model import get_model
 
@@ -30,6 +29,7 @@ async def query_chunks(
     :param query_text: the query text.
     :return: the created record
     """
+    from app.operators import collection_ops
 
     # fetch all collections
     collections = []

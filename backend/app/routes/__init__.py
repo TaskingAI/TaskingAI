@@ -57,6 +57,14 @@ def add_assistant_routes(route_prefix: str):
     routes.include_router(generation_router, prefix=route_prefix)
 
 
+def add_file_routes(route_prefix: str):
+    from app.routes.file.file import router as file_router
+    from app.routes.file.image import router as image_router
+
+    routes.include_router(file_router, prefix=route_prefix)
+    routes.include_router(image_router, prefix=route_prefix)
+
+
 if CONFIG.WEB:
     add_manage_routes(CONFIG.WEB_ROUTE_PREFIX)
     add_auth_routes(CONFIG.WEB_ROUTE_PREFIX)
@@ -66,6 +74,7 @@ if CONFIG.WEB:
     add_retrieval_routes(CONFIG.WEB_ROUTE_PREFIX)
     add_inference_routes(CONFIG.WEB_ROUTE_PREFIX)
     add_assistant_routes(CONFIG.WEB_ROUTE_PREFIX)
+    add_file_routes(CONFIG.WEB_ROUTE_PREFIX)
 
     from app.routes.auto import *
 
@@ -89,6 +98,7 @@ elif CONFIG.API:
     add_retrieval_routes(CONFIG.API_ROUTE_PREFIX)
     add_inference_routes(CONFIG.API_ROUTE_PREFIX)
     add_assistant_routes(CONFIG.API_ROUTE_PREFIX)
+    add_file_routes(CONFIG.API_ROUTE_PREFIX)
 
     from app.routes.auto import *
 

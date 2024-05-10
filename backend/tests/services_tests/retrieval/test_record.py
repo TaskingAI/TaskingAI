@@ -107,7 +107,104 @@ class TestRecord(Retrieval):
                 else:
                     assert get_res_json.get("data").get(key) == create_record_data[key]
 
+    @pytest.mark.run(order=141)
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("upload_file_data", upload_file_list[:2])
+    async def test_create_record_with_file(self, upload_file_data):
 
+        res = await upload_file(upload_file_data)
+        assert res.status_code == 200, res.json()
+        assert res.json()["status"] == "success"
+        file_id = res.json()["data"]["file_id"]
+        assert file_id is not None
+
+        create_record_data = {
+            "type": "file",
+            "file_id": file_id,
+            "text_splitter": {"type": "token", "chunk_size": 200, "chunk_overlap": 100}
+        }
+
+        res = await create_record(Retrieval.collection_id, create_record_data)
+        res_json = res.json()
+        assert res.status_code == 200, res.json()
+        assert res_json.get("status") == "success"
+        for key in create_record_data:
+            if key in ["text_splitter"]:
+                continue
+            elif key == "file_id":
+                assert file_id in res_json.get("data").get("content")
+                assert int(res_json.get("data").get("content").split('\"file_size\":')[-1].strip("}").strip()) > 0
+            else:
+                assert res_json.get("data").get(key) == create_record_data[key]
+        assert res_json.get("data").get("collection_id") == Retrieval.collection_id
+        assert res_json.get("data").get("status") == "ready"
+
+        record_id = res_json.get("data").get("record_id")
+
+        get_res = await get_record(Retrieval.collection_id, record_id)
+        get_res_json = get_res.json()
+        assert get_res.status_code == 200, get_res.json()
+        assert get_res_json.get("status") == "success"
+        assert get_res_json.get("data").get("record_id") == record_id
+        assert get_res_json.get("data").get("collection_id") == Retrieval.collection_id
+        assert get_res_json.get("data").get("status") == "ready"
+
+        for key in create_record_data:
+            if key in ["text_splitter"]:
+                continue
+            elif key == "file_id":
+                assert file_id in get_res_json.get("data").get("content")
+                assert int(res_json.get("data").get("content").split('\"file_size\":')[-1].strip("}").strip()) > 0
+            else:
+                assert get_res_json.get("data").get(key) == create_record_data[key]
+
+    @pytest.mark.run(order=141)
+    @pytest.mark.asyncio
+    async def test_create_record_with_web(self):
+
+        create_record_data = {
+            "type": "web",
+
+            "url": "https://doc.adaprox.io/user-manuals/adfb0301-en",
+            "text_splitter": {
+                "type": "token",
+                "chunk_size": 150,
+                "chunk_overlap": 20
+            }
+        }
+
+        res = await create_record(Retrieval.collection_id, create_record_data)
+        res_json = res.json()
+
+        assert res.status_code == 200, res.json()
+        assert res_json.get("status") == "success"
+        for key in create_record_data:
+            if key in ["text_splitter"]:
+                continue
+            elif key == "url":
+                assert create_record_data["url"] in res_json.get("data").get("content")
+            else:
+                assert res_json.get("data").get(key) == create_record_data[key]
+        assert res_json.get("data").get("collection_id") == Retrieval.collection_id
+        assert res_json.get("data").get("status") == "ready"
+
+        record_id = res_json.get("data").get("record_id")
+
+        get_res = await get_record(Retrieval.collection_id, record_id)
+        get_res_json = get_res.json()
+        assert get_res.status_code == 200, get_res.json()
+        assert get_res_json.get("status") == "success"
+        assert get_res_json.get("data").get("record_id") == record_id
+        assert get_res_json.get("data").get("collection_id") == Retrieval.collection_id
+        assert get_res_json.get("data").get("status") == "ready"
+
+        for key in create_record_data:
+            if key in ["text_splitter"]:
+                continue
+            elif key == "url":
+                assert create_record_data["url"] in get_res_json.get("data").get("content")
+            else:
+                assert get_res_json.get("data").get(key) == create_record_data[key]
 
     @pytest.mark.run(order=142)
     @pytest.mark.asyncio
@@ -157,7 +254,7 @@ class TestRecord(Retrieval):
                 for key in prefix_filter_dict:
                     assert list_records_res_json.get("data")[0].get(key).startswith(prefix_filter_dict.get(key))
 
-    @pytest.mark.run(order=146)
+    @pytest.mark.run(order=144)
     @pytest.mark.asyncio
     async def test_update_record(self):
 
@@ -238,7 +335,7 @@ class TestRecord(Retrieval):
             res = await update_record(Retrieval.collection_id, Retrieval.record_id, update_record_data)
             res_json = res.json()
 
-            assert res.status_code == 200,  res.json()
+            assert res.status_code == 200, res.json()
             assert res_json.get("status") == "success"
             assert res_json.get("data").get("record_id") == Retrieval.record_id
             assert res_json.get("data").get("collection_id") == Retrieval.collection_id
@@ -252,7 +349,7 @@ class TestRecord(Retrieval):
 
             get_res = await get_record(Retrieval.collection_id, Retrieval.record_id)
             get_res_json = get_res.json()
-            assert get_res.status_code == 200,  get_res.json()
+            assert get_res.status_code == 200, get_res.json()
             assert get_res_json.get("status") == "success"
             assert get_res_json.get("data").get("record_id") == Retrieval.record_id
             assert get_res_json.get("data").get("collection_id") == Retrieval.collection_id
@@ -263,6 +360,122 @@ class TestRecord(Retrieval):
                     continue
                 else:
                     assert get_res_json.get("data").get(key) == update_record_data[key]
+
+    @pytest.mark.run(order=145)
+    @pytest.mark.asyncio
+    async def test_update_record_with_web(self):
+
+        update_record_data = {
+            "type": "web",
+            # "title": "test create record with web",
+            "url": "https://doc.adaprox.io/user-manuals/adfb0301-en",
+            "text_splitter": {
+                "type": "token",
+                "chunk_size": 150,
+                "chunk_overlap": 20
+            }
+        }
+
+        res = await update_record(Retrieval.collection_id, Retrieval.record_id, update_record_data)
+        res_json = res.json()
+
+        assert res.status_code == 200, res.json()
+        assert res_json.get("status") == "success"
+        for key in update_record_data:
+            if key in ["text_splitter"]:
+                continue
+            elif key == "url":
+                assert update_record_data["url"] in res_json.get("data").get("content")
+            else:
+                assert res_json.get("data").get(key) == update_record_data[key]
+        assert res_json.get("data").get("collection_id") == Retrieval.collection_id
+        assert res_json.get("data").get("status") == "ready"
+
+        record_id = res_json.get("data").get("record_id")
+
+        get_res = await get_record(Retrieval.collection_id, record_id)
+        get_res_json = get_res.json()
+        assert get_res.status_code == 200, get_res.json()
+        assert get_res_json.get("status") == "success"
+        assert get_res_json.get("data").get("record_id") == record_id
+        assert get_res_json.get("data").get("collection_id") == Retrieval.collection_id
+        assert get_res_json.get("data").get("status") == "ready"
+
+        for key in update_record_data:
+            if key in ["text_splitter"]:
+                continue
+            elif key == "url":
+                assert update_record_data["url"] in get_res_json.get("data").get("content")
+            else:
+                assert get_res_json.get("data").get(key) == update_record_data[key]
+
+    @pytest.mark.run(order=146)
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("upload_file_data", upload_file_list[2:3])
+    async def test_update_record_with_file(self, upload_file_data):
+
+        res = await upload_file(upload_file_data)
+        assert res.status_code == 200, res.json()
+        assert res.json()["status"] == "success"
+        file_id = res.json()["data"]["file_id"]
+        assert file_id is not None
+
+        update_record_data = {
+            "type": "file",
+            "file_id": file_id,
+            "text_splitter": {"type": "token", "chunk_size": 200, "chunk_overlap": 100}
+        }
+
+        res = await update_record(Retrieval.collection_id, Retrieval.record_id, update_record_data)
+        res_json = res.json()
+        assert res.status_code == 200, res.json()
+        assert res_json.get("status") == "success"
+        for key in update_record_data:
+            if key in ["text_splitter"]:
+                continue
+            elif key == "file_id":
+                assert file_id in res_json.get("data").get("content")
+                assert int(res_json.get("data").get("content").split('\"file_size\":')[-1].strip("}").strip()) > 0
+            else:
+                assert res_json.get("data").get(key) == update_record_data[key]
+        assert res_json.get("data").get("collection_id") == Retrieval.collection_id
+        assert res_json.get("data").get("status") == "ready"
+
+        record_id = res_json.get("data").get("record_id")
+
+        get_res = await get_record(Retrieval.collection_id, record_id)
+        get_res_json = get_res.json()
+        assert get_res.status_code == 200, get_res.json()
+        assert get_res_json.get("status") == "success"
+        assert get_res_json.get("data").get("record_id") == record_id
+        assert get_res_json.get("data").get("collection_id") == Retrieval.collection_id
+        assert get_res_json.get("data").get("status") == "ready"
+
+        for key in update_record_data:
+            if key in ["text_splitter"]:
+                continue
+            elif key == "file_id":
+                assert file_id in get_res_json.get("data").get("content")
+                assert int(res_json.get("data").get("content").split('\"file_size\":')[-1].strip("}").strip()) > 0
+            else:
+                assert get_res_json.get("data").get(key) == update_record_data[key]
+
+        update_record_data = {
+            "type": "web",
+            "url": "https://doc.adaprox.io/user-manuals/adfb0301-en",
+            "text_splitter": {
+                "type": "token",
+                "chunk_size": 150,
+                "chunk_overlap": 20
+            }
+        }
+
+        res = await update_record(Retrieval.collection_id, Retrieval.record_id, update_record_data)
+        res_json = res.json()
+
+        assert res.status_code == 400, res.json()
+        assert res_json.get("status") == "error"
+        assert res_json.get("error").get("code") == "REQUEST_VALIDATION_ERROR"
 
 
     @pytest.mark.run(order=229)
