@@ -3,7 +3,6 @@ from typing import List, Optional
 
 from tkhelper.error import raise_http_error, ErrorCode
 
-from app.operators import collection_ops
 from app.models import Chunk, Collection, RetrievalResult, RetrievalRef, RetrievalType
 
 from .chunk import query_chunks
@@ -17,6 +16,8 @@ __all__ = [
 
 
 async def verify_retrievals(retrieval_refs: List[RetrievalRef]):
+    from app.operators import collection_ops
+
     embedding_model_id = None
     for retrieval_ref in retrieval_refs:
         if retrieval_ref.type == RetrievalType.COLLECTION:

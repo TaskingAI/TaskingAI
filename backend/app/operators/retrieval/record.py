@@ -1,7 +1,8 @@
 from typing import Dict
 
+from app.config import CONFIG
 from tkhelper.models.operator.postgres_operator import PostgresModelOperator, ModelEntity
-from tkhelper.error import raise_http_error, ErrorCode
+from tkhelper.error import raise_http_error, ErrorCode, raise_request_validation_error
 
 from app.database import postgres_pool
 from app.models import Record, RecordType, TextSplitter, Collection
@@ -17,16 +18,22 @@ async def process_content(
     collection: Collection,
     type: RecordType,
     title: str,
-    content: str,
     text_splitter: TextSplitter,
     max_num_chunks: int,
+    content: Optional[str] = None,
+    file_id: Optional[str] = None,
+    url: Optional[str] = None,
 ):
     from app.services.retrieval.embedding import embed_documents
 
     # split content into chunks
-    if not type == RecordType.TEXT:
-        raise NotImplementedError(f"Record type {type} is not supported yet.")
-    db_content, content_to_split = content, content.strip()
+    db_content, content_to_split = await load_content(
+        project_id=CONFIG.PROJECT_ID,
+        record_type=type,
+        content=content,
+        file_id=file_id,
+        url=url,
+    )
 
     # embed the documents
     chunk_text_list, num_tokens_list = text_splitter.split_text(text=content_to_split, title=title)
@@ -74,6 +81,8 @@ class RecordModelOperator(PostgresModelOperator):
             type=type,
             title=title,
             content=create_dict.get("content"),
+            file_id=create_dict.get("file_id"),
+            url=create_dict.get("url"),
             text_splitter=text_splitter,
             max_num_chunks=collection.rest_capacity(),
         )
@@ -88,7 +97,7 @@ class RecordModelOperator(PostgresModelOperator):
             chunk_num_tokens_list=num_tokens_list,
             title=title,
             type=type,
-            content=content,
+            content=db_content,
             metadata=metadata,
         )
 
@@ -111,6 +120,9 @@ class RecordModelOperator(PostgresModelOperator):
         collection = await collection_ops.get(collection_id=collection_id)
         record: Record = await self.get(collection_id=collection_id, record_id=record_id)
 
+        if record.type == RecordType.FILE:
+            raise_request_validation_error("Cannot update a file record. Please delete and create a new record.")
+
         chunk_text_list, num_tokens_list, embeddings, db_content = None, None, None, None
         new_type, new_title = None, None
         if (
@@ -129,6 +141,8 @@ class RecordModelOperator(PostgresModelOperator):
                 type=new_type,
                 title=new_title,
                 content=new_content,
+                file_id=update_dict.get("file_id"),
+                url=update_dict.get("url"),
                 text_splitter=text_splitter,
                 max_num_chunks=record.num_chunks + collection.rest_capacity(),
             )

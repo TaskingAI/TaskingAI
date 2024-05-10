@@ -99,5 +99,12 @@ class Config:
         # currently only support en
         self.DEFAULT_LANG = "en"
 
+        # storage
+        self.S3_BUCKET_NAME=load_str_env("S3_BUCKET_NAME")
+        self.S3_ACCESS_KEY_ID=load_str_env("S3_ACCESS_KEY_ID")
+        self.S3_ACCESS_KEY_SECRET=load_str_env("S3_ACCESS_KEY_SECRET")
+        self.S3_ENDPOINT=load_str_env("S3_ENDPOINT")
+        self.PATH_TO_VOLUME=load_str_env("PATH_TO_VOLUME", required=True)
+        self.PROJECT_ID=load_str_env("PROJECT_ID", required=True)
 
 CONFIG = Config()
