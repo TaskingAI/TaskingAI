@@ -28,7 +28,7 @@ async def api_upload_file(
 
     purpose_info = file_purpose_dict.get(purpose)
 
-    file_size_limit_mb = 50
+    file_size_limit_mb = 15
 
     if file.size > file_size_limit_mb * 1024 * 1024:
         raise_request_validation_error("File size is too large.")

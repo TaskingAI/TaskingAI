@@ -1,6 +1,7 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 from enum import Enum
 from pydantic import Field
+import json
 
 from tkhelper.models import Status, ModelEntity
 from tkhelper.utils import generate_random_id, load_json_attr
@@ -17,6 +18,8 @@ __all__ = [
 
 class RecordType(str, Enum):
     TEXT = "text"
+    FILE = "file"
+    WEB = "web"
 
 
 class Record(ModelEntity):
@@ -31,6 +34,20 @@ class Record(ModelEntity):
     metadata: Dict = metadata_field()
     updated_timestamp: int = updated_timestamp_field()
     created_timestamp: int = created_timestamp_field()
+
+    def file_id(self) -> Optional[str]:
+        try:
+            content_dict = json.loads(self.content)
+            return content_dict.get("file_id")
+        except Exception:
+            return None
+
+    def url(self) -> Optional[str]:
+        try:
+            content_dict = json.loads(self.content)
+            return content_dict.get("url")
+        except Exception:
+            return None
 
     @staticmethod
     def build(row: Dict):

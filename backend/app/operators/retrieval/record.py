@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from app.config import CONFIG
 from tkhelper.models.operator.postgres_operator import PostgresModelOperator, ModelEntity
@@ -7,6 +7,7 @@ from tkhelper.error import raise_http_error, ErrorCode, raise_request_validation
 from app.database import postgres_pool
 from app.models import Record, RecordType, TextSplitter, Collection
 from app.database_ops.retrieval import record as db_record
+from app.services.retrieval.content_loader import load_content
 
 from .collection import collection_ops
 from ..model import model_ops
