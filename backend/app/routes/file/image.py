@@ -27,7 +27,7 @@ async def upload_image(
 
     purpose_info = image_purpose_dict.get(purpose)
 
-    image_size_limit_mb = 50
+    image_size_limit_mb = 5
 
     if image.size > image_size_limit_mb * 1024 * 1024:
         raise_request_validation_error("image size is too large.")

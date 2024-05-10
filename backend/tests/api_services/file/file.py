@@ -3,7 +3,7 @@ from typing import Dict
 from backend.tests.common.utils import ResponseWrapper, get_headers, get_file_name
 from backend.tests.common.config import CONFIG
 
-FILE_BASE_URL = f"{CONFIG.WEB_BASE_URL}/files"
+FILE_BASE_URL = f"{CONFIG.BASE_URL}/files"
 
 async def upload_file(payload: Dict):
     headers = get_headers(CONFIG.Authentication)

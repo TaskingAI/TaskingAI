@@ -14,9 +14,18 @@ bcrypt==4.0.1
 asyncpg==0.28.0
 aioredis==2.0.1
 tiktoken==0.5.2
-numpy==1.26.3
+numpy==1.26.4
 aioboto3==12.4.0
 aiofiles==23.2.1
+
+# for record loader
+pypdf==4.1.0
+python-docx==0.8.11
+pymupdf==1.23.3
+unstructured==0.12.6
+beautifulsoup4==4.12.3
+langchain-community==0.0.28
+markdown==3.6
 
 # tests
 pytest==7.4.3
