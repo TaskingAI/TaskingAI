@@ -2,3 +2,6 @@
 extend-ignore-words-re = [
     "\\bba\\b"
 ]
+
+[files]
+extend-exclude = ["i18n/*"]

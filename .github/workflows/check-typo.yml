@@ -19,3 +19,5 @@ jobs:
 
       - name: Check spelling of repo
         uses: crate-ci/typos@master
+        with:
+          config: .typos.toml
