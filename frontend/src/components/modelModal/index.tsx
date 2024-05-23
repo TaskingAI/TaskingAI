@@ -42,7 +42,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const [modelTypes, setModelTypes] = useState('chat_completion')
     const [name, setName] = useState('')
     const [centerLoading, setCenterLoading] = useState(false)
-    const [properties, setProerties] = useState('')
+    const [properties, setProperties] = useState('')
     const [type, setType] = useState('')
     const [propertyForm] = Form.useForm()
     const [wildcardForm] = Form.useForm()
@@ -68,7 +68,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const [prividerDesc, setPrividerDesc] = useState('')
     const [openModalOne, setOpenModalOne] = useState(false)
     const [modelTypesList, setModelTypesList] = useState<string[]>([])
-    const [discription, setDiscription] = useState('')
+    const [description, setDescription] = useState('')
     const [resourcesList, setResourcesList] = useState<any>([])
     const handleCancel = () => {
         setOpenModalOne(false)
@@ -89,8 +89,8 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                 setSelectedOneId(res.data[0].model_schema_id)
                 setName(res.data[0].name)
                 setType(res.data[0].type)
-                setProerties(res.data[0].properties)
-                setDiscription(res.data[0].description)
+                setProperties(res.data[0].properties)
+                setDescription(res.data[0].description)
                 setProviderId(res.data[0].provider_id)
             }
 
@@ -104,8 +104,8 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const handleClickModel = (item: projectIdType) => () => {
         setName(item.name)
         setSelectedOneId(item.model_schema_id)
-        setProerties(item.properties)
-        setDiscription(item.description)
+        setProperties(item.properties)
+        setDescription(item.description)
         setType(item.type)
     }
     const fetchModelProviderList = async (type?: any) => {
@@ -263,8 +263,8 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                 setSelectedOneId(res.data[0].model_schema_id)
                 setName(res.data[0].name)
                 setType(res.data[0].type)
-                setProerties(res.data[0].properties)
-                setDiscription(res.data[0].description)
+                setProperties(res.data[0].properties)
+                setDescription(res.data[0].description)
 
                 setProviderId(res.data[0].provider_id)
             }
@@ -335,7 +335,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                             <div className='content'>
                     
                                 <div className='label3'>{t('projectAssistantsColumnDescription')}</div>
-                                <div className='desc-info'>{discription}</div>
+                                <div className='desc-info'>{description}</div>
                                 <div className='label3' style={{ marginTop: '22px' }}>{t('projectModelColumnType')}</div>
                       
                                 <div className='model-types'>
@@ -516,7 +516,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                     </>}
                                     {modelTypes === 'chat_completion' && <>
                                         <Form.Item label="Function call" required name='function_call' valuePropName="checked">
-                                            <div className='description'>{t('projectModelProoertiesDesc')}</div>
+                                            <div className='description'>{t('projectModelPropertiesDesc')}</div>
                                             <ConfigProvider theme={{
                                                 components: {
                                                     Switch: {
@@ -571,7 +571,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
 
                             {type === 'chat_completion' && <Form layout="vertical" className='second-form' form={propertyForm}>
                                 <Form.Item label="Function call" required name='function_call' valuePropName="checked">
-                                    <div className='description'>{t('projectModelProoertiesDesc')}</div>
+                                    <div className='description'>{t('projectModelPropertiesDesc')}</div>
                                     <ConfigProvider theme={{
                                         components: {
                                             Switch: {

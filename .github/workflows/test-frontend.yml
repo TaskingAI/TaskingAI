@@ -1,0 +1,36 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches: ["master"]
+    paths:
+      - "frontend/**"
+      - "!**.md"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    environment: test
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set short SHA
+        run: echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
+
+      - name: Check for git tag version
+        id: get_tag
+        run: |
+          TAG=$(git describe --tags --exact-match 2> /dev/null || echo "")
+          if [[ -n "$TAG" ]]; then
+            echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
+          fi
+          
+      - name: Check spelling of repo
+        uses: crate-ci/typos@master
+      

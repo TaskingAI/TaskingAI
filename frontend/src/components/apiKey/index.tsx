@@ -165,7 +165,7 @@ function ApiKeys() {
             setDisabled(true)
         }
     }
-    const handleCreateConfrim = async () => {
+    const handleCreateConfirm = async () => {
         if (id) {
             form1.validateFields().then(async () => {
                 setLoading(true);
@@ -225,7 +225,7 @@ function ApiKeys() {
     const handleChangeNameValue = (e: ChangeEvent<HTMLInputElement>) => {
         setCreateNameValue(e.target.value)
     }
-    const handleDeleteConfrim = async () => {
+    const handleDeleteConfirm = async () => {
         setDeleteLoading(true)
 
         await deleteApiKeys(record.apikey_id)
@@ -252,7 +252,7 @@ function ApiKeys() {
                     <Button key="cancel" onClick={handleModalCancel} className='cancel-button'>
                         {t('cancel')}
                     </Button>,
-                    <Button key="submit" loading={loading} onClick={handleCreateConfrim} className='next-button'>
+                    <Button key="submit" loading={loading} onClick={handleCreateConfirm} className='next-button'>
                         {t('confirm')}
                     </Button>
                 ]}
@@ -273,7 +273,7 @@ function ApiKeys() {
                     <Button key="cancel" onClick={handleCreateCancel} className='cancel-button'>
                         {t('cancel')}
                     </Button>,
-                    <Button key="submit" loading={confirmLoading} onClick={handleCreateConfrim} className='next-button'>
+                    <Button key="submit" loading={confirmLoading} onClick={handleCreateConfirm} className='next-button'>
                         {t('confirm')}
                     </Button>
                 ]}
@@ -294,14 +294,14 @@ function ApiKeys() {
                     <Button key="cancel" onClick={handleDeleteCancel} className='cancel-button'>
                         {t('cancel')}
                     </Button>,
-                    <Button key="delete" onClick={handleDeleteConfrim} className={disabled ? 'disabled-button' : 'delete-button'} disabled={disabled} loading={deleteLoading}>
+                    <Button key="delete" onClick={handleDeleteConfirm} className={disabled ? 'disabled-button' : 'delete-button'} disabled={disabled} loading={deleteLoading}>
                         {t('delete')}
                     </Button>
                 ]}
             >
                 <p className={styles['p']}>{t('deleteItem')}<span className={styles['span']}> {record.name}</span>? {t('projectDeleteDesc')} </p>
                 <Form layout='vertical' className={styles['edit-form']} form={deleteForm}>
-                    <Form.Item label={t('projectAPIKeyName')} name="name" rules={[{ required: true, message: `${t('projectAPIKeyVaildate')}` }]}>
+                    <Form.Item label={t('projectAPIKeyName')} name="name" rules={[{ required: true, message: `${t('projectAPIKeyValidate')}` }]}>
                         <Input onChange={handleDeleteValue} className={styles['edit-instance-modal']} placeholder={t('projectAPIKeyDeletePlaceholder')}></Input>
                     </Form.Item>
                 </Form>

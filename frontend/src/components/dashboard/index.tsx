@@ -8,7 +8,7 @@ import ToolGreenIcon from '@/assets/img/toolGreenIcon.svg?react'
 import AssistantGreenIcon from '@/assets/img/assistantGreenIcon.svg?react'
 import RetrievalGreenIcon from '@/assets/img/retrievalGreenIcon.svg?react'
 import ForwardIcon from '@/assets/img/forwardIcon.svg?react'
-import ApiRefrence from '../../assets/img/restApisIcon.svg?react'
+import ApiReference from '../../assets/img/restApisIcon.svg?react'
 import PythonIcon from '@/assets/img/pythonIcon.svg?react'
 import NodeIcon from '@/assets/img/jsIcon.svg?react'
 import OpenaiIcon from '@/assets/img/openaiIcon.svg?react'
@@ -136,7 +136,7 @@ import taskingai
 taskingai.init(api_key="YOUR_API_KEY")
 
 
-# authentication with OpenAI-compatiable APIs
+# authentication with OpenAI-compatible APIs
 from openai import OpenAI
 
 client = OpenAI(
@@ -155,7 +155,7 @@ client = OpenAI(
                 <div className={styles['card-bottom']}>
                     <div className={styles['card-bottom-item']}>
                         <div className={styles['card-header']}>
-                            <ApiRefrence />
+                            <ApiReference />
                             <span className={styles['card-bottom-title']}>REST APIs</span>
                         </div>
                         <div>
@@ -176,7 +176,7 @@ client = OpenAI(
                     <div className={styles['card-bottom-item']}>
                         <div className={styles['card-header']}>
                             <OpenaiIcon />
-                            <span className={styles['card-bottom-title']}>OpenAI Compatiable APIs</span>
+                            <span className={styles['card-bottom-title']}>OpenAI compatible APIs</span>
                         </div>
                         <div style={{ display: 'flex', gap: '12px' }}>
                             <Button onClick={()=>window.open('https://platform.openai.com/docs/guides/text-generation/chat-completions-api')} className='cancel-button'>OpenAI</Button>

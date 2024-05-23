@@ -27,7 +27,7 @@ function CommonComponents() {
         text_embedding: <TextEmbeddingIcon />,
         wildcard: <WildCardIcon />
     }
-    const revereseLabel: Record<string, any> = {
+    const reverseLabel: Record<string, any> = {
         naive: 'Naive',
         zero: 'Zero',
         [`message_window`]: 'Message Window',
@@ -99,8 +99,8 @@ function CommonComponents() {
             dataIndex: 'properties',
             key: 'properties',
             width: 360,
-            render: (proerties: object) => (
-                <ModelIcon properties={proerties} />
+            render: (properties: object) => (
+                <ModelIcon properties={properties} />
             ),
         },
         {
@@ -409,7 +409,7 @@ function CommonComponents() {
             width: 180,
             dataIndex: 'memory',
             render: (_: any) => (
-                <div>{revereseLabel[_]}</div>
+                <div>{reverseLabel[_]}</div>
 
             )
         },
