@@ -21,7 +21,7 @@ class MessageGenerateRequest(BaseModel):
         min_length=0,
         max_length=16,
         description="The variables that fit the system prompt template.",
-        examples=[{"langauge": "English"}],
+        examples=[{"language": "English"}],
     )
     stream: bool = Field(
         False,

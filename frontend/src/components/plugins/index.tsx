@@ -261,9 +261,9 @@ function Plugins() {
         setFormDisabled(false)
 
     }
-    const handleClickBundle = async (bundleId: string, bundelName: string, item: any) => {
+    const handleClickBundle = async (bundleId: string, bundleName: string, item: any) => {
         setBundleId(bundleId)
-        setBundleName(bundelName)
+        setBundleName(bundleName)
         setBundleDesc(item.description)
         setPluginListData(item.plugins)
         setPluginId(item.plugins[0].plugin_id)

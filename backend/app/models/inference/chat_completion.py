@@ -61,7 +61,7 @@ class ChatCompletionAssistantMessage(ChatCompletionMessage):
 
     function_calls: Optional[List[ChatCompletionFunctionCall]] = Field(
         None,
-        description="The funcion calls requested by the assistant.",
+        description="The function calls requested by the assistant.",
     )
 
 

@@ -829,7 +829,7 @@ function Playground() {
         setDrawerDesc(value)
     }
 
-    const handleCreateConfrim = () => {
+    const handleCreateConfirm = () => {
         setOpenModalTable(false)
     }
     const hangleFilterData = (value: any[]) => {
@@ -1131,14 +1131,14 @@ function Playground() {
                 const data3 = JSON.stringify(data1, null, 4)
                 setChatCompletionCall(data3)
                 const label = data1.event_step?.charAt(0).toUpperCase() + data1.event_step?.slice(1)
-                const lable1 = data1.event.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-                setCollapseLabel1(`${lable1}: ${label}`)
+                const label1 = data1.event.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                setCollapseLabel1(`${label1}: ${label}`)
             } else if (data2) {
                 delete data2.color
                 const data4 = JSON.stringify(data2, null, 4)
                 const label = data2.event_step?.charAt(0).toUpperCase() + data2.event_step?.slice(1)
-                const lable1 = data2.event.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-                setCollapseLabel1(`${lable1}: ${label}`)
+                const label1 = data2.event.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                setCollapseLabel1(`${label1}: ${label}`)
                 setChatCompletionCall(data4)
             }
             setChatCompletionResult(JSON.stringify(item, null, 4))
@@ -1361,7 +1361,7 @@ function Playground() {
                         <Button key="cancel" onClick={handleCloseModal} className={`cancel-button ${styles.cancelButton}`}>
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleCreateConfrim} className='next-button'>
+                        <Button key="submit" onClick={handleCreateConfirm} className='next-button'>
                             {t('confirm')}
                         </Button>
                     </div>

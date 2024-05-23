@@ -133,10 +133,10 @@ function CreatePlugin(props: any) {
         })
         setInputSchema(arr)
     }
-    const handleClickBundle = async (bundleId: string, bundelName: string, item: any) => {
+    const handleClickBundle = async (bundleId: string, bundleName: string, item: any) => {
         setBundleId(bundleId)
         setPluginInfoLoading(true)
-        setBundleName(bundelName)
+        setBundleName(bundleName)
         // setBundleDesc(item.description)
         // const res = await getPluginDetail(bundleId)
         setPluginListData(item.plugins)

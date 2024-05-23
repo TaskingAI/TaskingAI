@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import './projectHome.scss';
 import Forum from '../../assets/img/Forum.svg?react'
-import ApiRefrence from '../../assets/img/apiRefrenceNew.svg?react'
+import ApiReference from '../../assets/img/apiReferenceNew.svg'
 import { setPlaygroundSelect } from '@/Redux/actions/playground'
 import IconData from '../../assets/img/modelNew.svg?react'
 import Assistant from '../../assets/img/assistantsNew.svg?react'
@@ -144,7 +144,7 @@ const ProjectHome = () => {
     const handleModalCancel = () => {
         setLogoutOpen(false)
     }
-    const handleCreateConfrim = () => {
+    const handleCreateConfirm = () => {
         localStorage.removeItem('token')
         navigate('/auth/signin')
         setLogoutOpen(false)
@@ -194,7 +194,7 @@ const ProjectHome = () => {
                             Forum
                         </Button>
                         <Button
-                            icon={<ApiRefrence />}
+                            icon={<ApiReference />}
                             className='document-button cancel-button'
                             onClick={() => window.open('https://docs.tasking.ai/api/', '_blank')}
                         >
@@ -304,7 +304,7 @@ const ProjectHome = () => {
                         <Button key="cancel" onClick={handleModalCancel} className='cancel-button'>
                             Cancel
                         </Button>,
-                        <Button key="submit" onClick={handleCreateConfrim} className='delete-button'>
+                        <Button key="submit" onClick={handleCreateConfirm} className='delete-button'>
                             Confirm
                         </Button>
                     ]}>

@@ -158,7 +158,7 @@ function ModelsPage() {
             setDisabled(true)
         }
     }
-    const handleDeleteConfrim = async () => {
+    const handleDeleteConfirm = async () => {
         setDeleteLoading(true)
         const params = {
             model_id: record.model_id
@@ -443,7 +443,7 @@ function ModelsPage() {
                                         </>}
                                         {type === 'chat_completion' && <>
                                             <Form.Item label="Function call" required name='function_call' valuePropName="checked">
-                                                <div className={styles['description']}>{t('projectModelProoertiesDesc')}</div>
+                                                <div className={styles['description']}>{t('projectModelPropertiesDesc')}</div>
                                                 <ConfigProvider theme={{
                                                     components: {
                                                         Switch: {
@@ -498,7 +498,7 @@ function ModelsPage() {
 
                                 {modelType === 'chat_completion' && <Form layout="vertical" className='second-form' form={propertyForm}>
                                     <Form.Item label="Function call" required name='function_call' valuePropName="checked">
-                                        <div className={styles['description']}>{t('projectModelProoertiesDesc')}</div>
+                                        <div className={styles['description']}>{t('projectModelPropertiesDesc')}</div>
                                         <ConfigProvider theme={{
                                             components: {
                                                 Switch: {
@@ -609,7 +609,7 @@ function ModelsPage() {
                     <Button key="cancel" onClick={handleDeleteCancel} className='cancel-button'>
                         {t('cancel')}
                     </Button>,
-                    <Button key="delete" onClick={handleDeleteConfrim} className={disabled ? 'disabled-button' : 'delete-button'} disabled={disabled} loading={deleteLoading}>
+                    <Button key="delete" onClick={handleDeleteConfirm} className={disabled ? 'disabled-button' : 'delete-button'} disabled={disabled} loading={deleteLoading}>
                         {t('delete')}
                     </Button>
                 ]}

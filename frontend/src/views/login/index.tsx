@@ -30,7 +30,7 @@ function Login() {
                     <img src={aiIcon} alt="social-icon"></img>
                     <Beta style={{ marginLeft: '12px' }} />
                 </div>
-                <div className={style["welCome-font"]}>Welcome back</div>
+                <div className={style["welcome-font"]}>Welcome back</div>
                 <Form layout="vertical" onFinish={onFinish}>
                     <Form.Item
                         label="Username"
@@ -58,7 +58,7 @@ function Login() {
                     >
                         <Input placeholder="Enter your password" type="password" className={style["input-edit"]} />
                     </Form.Item>
-                    <div className={style.rememeber}>
+                    <div className={style.remember}>
 
 
                     </div>
