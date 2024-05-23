@@ -5,18 +5,18 @@
 
     .left {
         width: 360px;
-        border-right: 1px solid #eee;
+        border-right: 1px solid var(--color-clear-button-hover);
         height: 100%;
 
         .leftTop {
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--color-clear-button-hover);
             padding-bottom: 16px;
             padding: 24px 24px 16px 24px;
 
             .modal {
                 font-size: 16px;
                 font-weight: 500;
-                color: #2b2b2b;
+                color: var( --color-text-primary );
                 margin-bottom: 12px;
 
             }
@@ -28,7 +28,7 @@
                 .modelName {
                     font-size: 14px;
                     font-weight: 500;
-                    color: #2b2b2b;
+                    color: var( --color-text-primary );
                     margin-left: 5px;
                 }
             }
@@ -39,39 +39,45 @@
         }
 
         .leftBottom {
-            padding: 16px 24px 0 24px;
+            padding: 0px;
+
+            .generateOptions {
+                padding: 16px 24px;
+                border-bottom: 1px solid var(--color-divider);
+            }
 
             .configuration {
                 font-weight: 500;
-                color: #2b2b2b;
+                color: var( --color-text-primary );
                 font-size: 16px;
-                margin-bottom: 12px;
             }
 
             .responseStream {
-                color: #2b2b2b;
+                color: var( --color-text-primary );
                 font-size: 14px;
-                margin-bottom: 8px;
+                margin-left: 4px;
+                font-weight: 500;
+                // margin-bottom: 8px;
             }
 
             .temperature {
                 height: 24px;
                 font-size: 14px;
-                color: #2b2b2b;
+                color: var( --color-text-primary );
                 line-height: 24px;
                 display: flex;
                 justify-content: space-between;
-                margin: 12px 0;
+                // margin-bottom: 12px;
                 align-items: center;
                 justify-content: space-between;
-             
+
 
                 .code-input {
                     flex-basis: 70px !important;
                     text-align: right;
                     padding-right: 4px;
                     font-size: 14px;
-                    border: 1px solid #e4e4e4;
+                    border: 1px solid var(--color-divider);
                     box-sizing: border-box;
                     cursor: pointer;
                     box-shadow: none;
@@ -79,7 +85,7 @@
 
                 .code-input:hover {
                     border-radius: 8px;
-                    outline: 1px solid #e4e4e4;
+                    outline: 1px solid var(--color-divider);
                 }
             }
 
@@ -112,7 +118,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border-bottom: 1px solid #eee;
+                border-bottom: 1px solid var(--color-clear-button-hover);
                 padding: 12px 0;
             }
 
@@ -179,7 +185,7 @@
 
     .input:focus,
     .select:focus {
-        border: 1px solid #e4e4e4;
+        border: 1px solid var(--color-divider);
         box-shadow: none !important;
         transition: none !important;
 
@@ -205,7 +211,7 @@
         .ant-select-focused .ant-select-selector,
         .ant-select-selector:focus,
         .ant-select-selector:active {
-            border: 1px solid #e4e4e4 !important;
+            border: 1px solid var(--color-divider) !important;
         }
     }
 
@@ -217,7 +223,7 @@
 
         :global {
             .ant-select-selector {
-                border: 1px solid #e4e4e4 !important;
+                border: 1px solid var(--color-divider) !important;
                 transition: none !important;
 
             }
@@ -269,7 +275,7 @@
         position: relative;
         font-size: 14px;
         font-family: Inter;
-        color: #bfbfbf;
+        color: var( --color-text-disable );
         text-align: center !important;
         width: 265px;
         margin-bottom: 12px;
@@ -296,8 +302,13 @@
     }
 
 }
+
 :global {
-    .ant-input-number {
-        width: 60px !important;
+    // .ant-input-number {
+    //     width: 60px;
+    // }
+
+    .ant-slider {
+        margin-left: 0;
     }
 }

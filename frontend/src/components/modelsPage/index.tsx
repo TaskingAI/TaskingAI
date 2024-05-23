@@ -16,7 +16,7 @@ import closeIcon from '../../assets/img/x-close.svg'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from "react-i18next";
-import IconComponent from '@/components/iconComponent';
+import IconComponent from '@/commonComponent/iconComponent/index.jsx';
 import { setLoading } from '../../Redux/actions.ts'
 import ApiErrorResponse, { RecordType, ChildRefType, formDataType } from '../../constant/index.ts'
 function ModelsPage() {

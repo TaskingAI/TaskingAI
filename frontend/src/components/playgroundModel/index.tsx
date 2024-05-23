@@ -1,8 +1,8 @@
-import { Spin, Select, Switch, Slider, Input, ConfigProvider, Button, InputNumber } from 'antd'
+import { Spin, Select, Slider, Input, ConfigProvider, Button, InputNumber, Checkbox } from 'antd'
 import { useState, useEffect, useRef } from 'react'
 import styles from './playgroundModal.module.scss'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { setPlaygroundModelId, setPlaygroundModelName } from '@/Redux/actions/playground'
+import { setPlaygroundModelId, setPlaygroundModelName,setTemperatureData, setMaxTokenData, setTopPData, setTopKData, setStopSequencesData } from '@/Redux/actions/playground'
 import { useDispatch } from 'react-redux';
 import { getModelSchema, getModelsForm } from '@/axios/models'
 import { RightOutlined, PlusOutlined } from '@ant-design/icons';
@@ -11,8 +11,10 @@ import NoModel from '@/assets/img/NO_MODEL.svg?react'
 import ModelComponent from '../modelComponent';
 import { modalGenerate } from '@/axios/playground'
 import { SSE } from "sse.js";
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 const origin = window.location.origin;
+import IconComponent from '@/commonComponent/iconComponent/index.jsx';
 function PlaygroundModel() {
     const [loading, setLoading] = useState(false)
     const { search, pathname } = useLocation();
@@ -21,20 +23,29 @@ function PlaygroundModel() {
         name: ''
     }])
     const navigation = useNavigate();
+    const { modelReduxId } = useSelector((state: any) => state.modelId)
+    const {temperatureRedux,maxTokenRedux,topPValueRedux,topKValueRedux,stopSequenceValueRedux }= useSelector((state: any) => state.playgroundModelRedux)
     const dispatch = useDispatch();
     const [systemContent, setSystemContent] = useState('')
     const [temperatureValue, setTemperatureValue] = useState(0.8)
     const [maxTokenValue, setMaxTokenValue] = useState(4096)
     const [topValue, setTopValue] = useState(0.1)
-    const [topkValue, setTopkValue] = useState(20)
+    const [topkValue, setTopkValue] = useState(5)
+    const [providerId, setProviderId] = useState('')
     const [generateLoading, setGenerateLoading] = useState(false)
     const [streamSwitch, setStreamSwitch] = useState(true)
     const [open, setOpen] = useState(false)
-    const [stopSequences, setStopSequences] = useState()
+    const [stopSequences, setStopSequences] = useState<any>()
     const [allowedConfigs, setAllowedConfigs] = useState<any>([])
     const [selectedData, setSelectedData] = useState<any>([])
     const [streamShow, setStreamShow] = useState(false)
     const contentListRef = useRef(null);
+    const [temperatureCheckbox, setTemperatureCheckbox] = useState(false)
+    const [maxTokenCheckbox, setMaxTokenCheckbox] = useState(false)
+    const [stopSequencesCheckbox, setStopSequenceCheckbox] = useState(false)
+    const [topPCheckbox, setTopPCheckbox] = useState(false)
+    const [topKCheckbox, setTopKCheckbox] = useState(false)
+    const [modelSchemaId, setModelSchemaId] = useState('')
     const [contentList, setContentList] = useState([{
         role: 'user',
         content: ''
@@ -48,35 +59,52 @@ function PlaygroundModel() {
                     top: list.scrollHeight,
                     behavior: 'smooth'
                 });
-            }, 0); 
+            }, 0);
         }
     }, [contentList]);
+    // useEffect(()=> {
+    //     console.log(temperatureRedux)
+    //     setTemperatureCheckbox(temperatureRedux)
+    //     setMaxTokenCheckbox(maxTokenRedux)
+    //     setTopPCheckbox(topPValueRedux)
+    //     setTopKCheckbox(topKValueRedux)
+    //     setStopSequenceCheckbox(stopSequenceValueRedux)
+    // },[temperatureRedux,maxTokenRedux,topPValueRedux,topKValueRedux,stopSequenceValueRedux])
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
             const queryParams = new URLSearchParams(search);
             const modelSchemaId = localStorage.getItem('modelSchemaId')
-            if (modelSchemaId) {
-                const allowedConfigs = JSON.parse(localStorage.getItem('allowedConfigs') as any)
-                if (allowedConfigs) {
+            const providerId = localStorage.getItem('providerId')
+            if (modelSchemaId && providerId) {
+                setModelSchemaId(modelSchemaId)
+                setProviderId(providerId)
+                const modelId = queryParams.get('model_id');
+                if (modelReduxId === modelId && modelId) {
+                    dispatch(setPlaygroundModelId(modelId))
+                    const allowedConfigs = JSON.parse(localStorage.getItem('allowedConfigs') as any)
+                    const streaming = JSON.parse(localStorage.getItem('streaming') as any)
+                    const contentModelList = JSON.parse(localStorage.getItem('modelContentList') as any)
+                    setContentList(contentModelList)
+                    setStreamShow(streaming)
                     setAllowedConfigs(allowedConfigs)
-                } else {
+                    setSelectedData([modelId])
+                    setMaxTokenCheckbox(maxTokenRedux)
+                    setTemperatureCheckbox(temperatureRedux)
+                    setTopPCheckbox(topPValueRedux)
+                    setTopKCheckbox(topKValueRedux)
+                    setStopSequenceCheckbox(stopSequenceValueRedux)
+                } else if (modelId) {
                     const res = await getModelSchema(modelSchemaId)
                     setAllowedConfigs(res.data.allowed_configs || [])
+                    dispatch(setPlaygroundModelId(modelId))
                     localStorage.setItem('allowedConfigs', JSON.stringify(res.data.allowed_configs))
-                }
-                const modelId = queryParams.get('model_id');
-                if (modelId) {
                     setSelectedData([modelId])
-                    const streaming = JSON.parse(localStorage.getItem('streaming') as any)
-                    if (streaming) {
-                        setStreamShow(streaming)
-                    } else {
-                        const res1 = await getModelsForm(modelId)
 
-                        setStreamShow(res1.data.properties.streaming)
-                        localStorage.setItem('streaming', JSON.stringify(res1.data.properties.streaming))
-                    }
+                    const res1 = await getModelsForm(modelId)
+
+                    setStreamShow(res1.data.properties.streaming)
+                    localStorage.setItem('streaming', JSON.stringify(res1.data.properties.streaming))
                 }
             }
             setLoading(false)
@@ -102,6 +130,10 @@ function PlaygroundModel() {
     const handleAddData = () => {
         setContentList((prev) => {
             const last = prev.length ? prev[prev.length - 1] : { role: 'assistant', content: '' }
+            localStorage.setItem('modelContentList', JSON.stringify([...prev, {
+                role: last.role === 'user' ? 'assistant' : 'user',
+                content: ''
+            }]))
             return [...prev, {
                 role: last.role === 'user' ? 'assistant' : 'user',
                 content: ''
@@ -111,6 +143,7 @@ function PlaygroundModel() {
     const handleDeletedata = (item: any) => {
         setContentList((prev) => {
             prev.splice(item, 1)
+            localStorage.setItem('modelContentList', JSON.stringify([...prev]))
             return [...prev]
         })
     }
@@ -120,6 +153,7 @@ function PlaygroundModel() {
     const handleChangeValue = (value: any, index: number) => {
         setContentList((prev) => {
             prev[index].content = value
+            localStorage.setItem('modelContentList', JSON.stringify([...prev]))
             return [...prev]
         })
     }
@@ -138,26 +172,28 @@ function PlaygroundModel() {
         })
         return hasError ? null : generateData
     }
-    const handleModalConfirm = async (data: any, detailData: any) => {
+    const handleModalConfirm = async (detailData: any) => {
         setLoading(true)
-        const item = data[0].split('-')
         setSelectedModel([{
-            id: item[1],
-            name: item[0]
-
+            id: detailData.model_id,
+            name: detailData.name
         }])
         const res = await getModelSchema(detailData.model_schema_id)
+        console.log(res)
         localStorage.setItem('modelSchemaId', detailData.model_schema_id)
-        const res1 = await getModelsForm(item[1])
+        setModelSchemaId(detailData.model_schema_id)
+        setProviderId(detailData.provider_id)
+        localStorage.setItem('providerId', detailData.provider_id)
+        const res1 = await getModelsForm(detailData.model_id)
         setOpen(false)
-   
+
         localStorage.setItem('streaming', JSON.stringify(res1.data.properties.streaming))
         localStorage.setItem('allowedConfigs', JSON.stringify(res.data.allowed_configs))
         setStreamShow(res1.data.properties.streaming)
         setAllowedConfigs(res.data.allowed_configs || [])
-        dispatch(setPlaygroundModelId(item[1]))
-        dispatch(setPlaygroundModelName(item[0]))
-        navigation(`${pathname}?model_id=${item[1]}&model_name=${item[0]}`)
+        dispatch(setPlaygroundModelId(detailData.model_id))
+        dispatch(setPlaygroundModelName(detailData.name))
+        navigation(`${pathname}?model_id=${detailData.model_id}&model_name=${detailData.name}`)
         setLoading(false)
     }
     const handleGenerate = async () => {
@@ -175,15 +211,15 @@ function PlaygroundModel() {
             return toast.error('Last message should not be assistant message')
         }
         const configs = allowedConfigs.reduce((acc: any, key: any) => {
-            if (key === 'temperature' && temperatureValue !== undefined) {
+            if (key === 'temperature' && temperatureValue !== undefined && temperatureCheckbox) {
                 acc[key] = temperatureValue;
-            } else if (key === 'max_tokens' && maxTokenValue !== undefined) {
+            } else if (key === 'max_tokens' && maxTokenValue !== undefined && maxTokenCheckbox) {
                 acc[key] = maxTokenValue;
-            } else if (key === 'stop' && stopSequences !== undefined) {
-                acc[key] = stopSequences || undefined;
-            } else if (key === 'top_p' && topValue !== undefined) {
+            } else if (key === 'stop' && stopSequences !== undefined && stopSequencesCheckbox) {
+                acc[key] = stopSequences;
+            } else if (key === 'top_p' && topValue !== undefined && topPCheckbox) {
                 acc[key] = topValue;
-            } else if (key === 'top_k' && topkValue !== undefined) {
+            } else if (key === 'top_k' && topkValue !== undefined && topKCheckbox) {
                 acc[key] = topkValue;
             }
             return acc;
@@ -192,7 +228,7 @@ function PlaygroundModel() {
         const params = {
             model_id: selectedModel[0].id,
             configs: configs,
-            stream: streamSwitch,
+            stream: streamShow && streamSwitch,
             messages: contentListNew
 
         }
@@ -200,9 +236,11 @@ function PlaygroundModel() {
 
 
         let arr: any[] = []
-        if (streamSwitch) {
+        if (streamShow && streamSwitch) {
+            const spaceId = localStorage.getItem('spaceId')
+            const projectId = localStorage.getItem('projectId')
             const token = localStorage.getItem('token')
-            const project_base_url = `api/v1`
+            const project_base_url = `api/v1/${spaceId}/projects/${projectId}`
             let source;
             source = new SSE(`${origin}/${project_base_url}/inference/chat_completion`, {
                 headers: {
@@ -216,6 +254,11 @@ function PlaygroundModel() {
             source.addEventListener("message", (event: any) => {
                 if (event.data === '[DONE]') {
                     setGenerateLoading(false)
+                    setContentList((prev) => {
+                        localStorage.setItem('modelContentList', JSON.stringify([...prev, { role: 'user', content: '' }]))
+                        return [...prev, { role: 'user', content: '' }]
+                    }
+                    )
                     return
                 }
                 const data = JSON.parse(event.data)
@@ -223,10 +266,12 @@ function PlaygroundModel() {
                 const comb = combineObject(arr)
                 if (comb) {
                     const bindArr = [...contentList, comb]
+                    localStorage.setItem('modelContentList', JSON.stringify(bindArr))
                     setContentList(bindArr)
 
                 } else {
                     const bindArr = [...contentList]
+                    localStorage.setItem('modelContentList', JSON.stringify(bindArr))
                     setContentList(bindArr)
                 }
             })
@@ -241,11 +286,16 @@ function PlaygroundModel() {
             try {
                 const res: any = await modalGenerate(params)
                 setContentList((prev) => {
-                    const data = {
+                    const data = [{
                         content: res.data.message.content,
                         role: res.data.message.role
-                    }
-                    return [...prev, data]
+                    },
+                    {
+                        content: '',
+                        role: 'user'
+                    }]
+                    localStorage.setItem('modelContentList', JSON.stringify([...prev, ...data]))
+                    return [...prev, ...data]
                 })
             } catch (e) {
                 const apiError = e as any
@@ -270,17 +320,41 @@ function PlaygroundModel() {
     const handleTopkValue = (value: any) => {
         setTopkValue(value)
     }
-    const handleStreamSwitch = (value: any) => {
-        setStreamSwitch(value)
+    // const handleStopSequences = (e: any) => {
+    //     setStopSequences(e.target.value)
+    // }
+    const handleStreamSwitch = (e: any) => {
+        setStreamSwitch(e.target.checked)
     }
     const handleRoleChange = (value: any, index: number) => {
         setContentList((prev) => {
             prev[index].role = value
+            localStorage.setItem('modelContentList', JSON.stringify([...prev]))
             return [...prev]
         })
     }
     const handleChangeContentValue = (value: any) => {
         setSystemContent(value)
+    }
+    const handleTemperatureCheckbox = (e:any) => {
+        setTemperatureCheckbox(e.target.checked)
+        dispatch(setTemperatureData(e.target.checked))
+    }
+    const handleMaxTokenCheckbox = (e:any) => {
+        setMaxTokenCheckbox(e.target.checked)
+        dispatch(setMaxTokenData(e.target.checked))
+    }
+    const handleStopSequencesCheckbox = (e:any) => {
+        setStopSequenceCheckbox(e.target.checked)
+        dispatch(setStopSequencesData(e.target.checked))
+    }
+    const handleTopPCheckbox = (e:any) => {
+        setTopPCheckbox(e.target.checked)
+        dispatch(setTopPData(e.target.checked))
+    }
+    const handleTopKCheckbox = (e:any) => {
+        setTopKCheckbox(e.target.checked)
+        dispatch(setTopKData(e.target.checked))
     }
     return (
         <Spin spinning={loading}>
@@ -294,14 +368,22 @@ function PlaygroundModel() {
                             className={styles['select-model']}
                             suffixIcon={<RightOutlined />}
                             removeIcon={null}
+                            style={{caretColor: 'transparent'}}
                             value={selectedModel[0].name} onClick={handleSelectModel}
                         >
                         </Select>
                     </div>
                     <div className={styles.leftBottom}>
-                        <div className={styles.configuration}>Configuration</div>
-                        <div className={styles.responseStream}>Response in stream</div>
-                        <ConfigProvider theme={{
+                        <div className={styles.generateOptions}>
+                            <div className={styles.configuration}>Generation options</div>
+                            <div style={{ display: 'flex', margin: '12px 0 0 0' }}>
+                                <IconComponent providerId={providerId} />  <div className={styles.responseStream}>{modelSchemaId}</div>
+                            </div>
+
+                            {streamShow && <div style={{ marginTop: '12px' }}><Checkbox value={streamSwitch} defaultChecked={true} onChange={(e) => handleStreamSwitch(e)} /><span style={{ marginLeft: '8px' }}>Stream</span></div>}
+                        </div>
+
+                        {/* <ConfigProvider theme={{
                             components: {
                                 Switch: {
                                     colorPrimary: '#099250',
@@ -310,61 +392,86 @@ function PlaygroundModel() {
                             }
                         }}>
                             {streamShow && <Switch value={streamSwitch} onChange={handleStreamSwitch} />}
-                        </ConfigProvider>
-                        <ConfigProvider theme={{
-                            components: {
-                                Slider: {
-                                    dotActiveBorderColor: '#099250',
-                                    handleColor: '#099250',
-                                    handleActiveColor: '#099250',
-                                    trackBg: '#099250',
-                                    trackHoverBg: '#099250',
+                        </ConfigProvider> */}
+                        <div style={{ margin: '24px' }}>
+                            <div className={styles.configuration}>Configuration</div>
+                            <ConfigProvider theme={{
+                                components: {
+                                    Slider: {
+                                        dotActiveBorderColor: '#099250',
+                                        handleColor: '#099250',
+                                        handleActiveColor: '#099250',
+                                        trackBg: '#099250',
+                                        trackHoverBg: '#099250',
+                                    }
+                                },
+                                token: {
+                                    colorPrimaryBorderHover: '#099250',
                                 }
-                            },
-                            token: {
-                                colorPrimaryBorderHover: '#099250',
-                            }
-                        }}>
-                            {allowedConfigs.includes('temperature') && <>
-                                <div className={styles.temperature}>
-                                   <span>Temperature</span> 
-                                    <InputNumber 
-   className={styles['code-input']} step={0.01} onChange={(value: number | null) => setTemperatureValue(value as number)} min={0} max={1}  value={temperatureValue}></InputNumber>
-                                </div>
-                                <Slider max={1} min={0} step={0.01} value={temperatureValue} onChange={handleTemperatureValue} />
-                            </>}
-                            {allowedConfigs.includes('max_tokens') && <>
-                                <div className={styles.temperature}>
-                                   <span>Max Tokens</span> 
-                                    
-                                    <InputNumber   parser={(value:any) => {
-        const parsedValue = parseInt(value, 10);
-        return isNaN(parsedValue) ? 1 : Math.max(parsedValue, 1);
-      }}  className={styles['code-input']} step={1} value={maxTokenValue}  onChange={(value: number | null) => setMaxTokenValue(value as number)} min={1} max={8192}></InputNumber>
-                                </div>
-                                <Slider max={8192} min={1} step={1} value={maxTokenValue} onChange={handleMaxTokenValue}></Slider>
-                            </>}
-                            {allowedConfigs.includes('stop') && <>
-                                <div className={styles.temperature}>
-                                    Stop sequences
-                                </div>
-                                <Input className={styles['code-input']}  onChange={(e:any)=>setStopSequences(e.target.value)} value={stopSequences}></Input>
-                            </>}
-                            {allowedConfigs.includes('top_p') && <>
-                                <div className={styles.temperature}>Top P
-                                <InputNumber 
-  parser={(value:any) => value.replace(/\$\s?|(,*)/g, '')} className={styles['code-input']} step={0.01} value={topValue} onChange={(value: number | null) => setTopValue(value as number)} min={0} max={1}></InputNumber>
-                                </div>
-                                <Slider max={1} step={0.01}  value={topValue} onChange={handleTopPValue}></Slider>
-                            </>}
-                            {allowedConfigs.includes('top_k') && <>
-                                <div className={styles.temperature}>Top K
-                                <InputNumber parser={(value:any) => value.replace(/\\B(?=(\d{3})+(?!\d))/g, '').replace(/,/g, '')}   className={styles['code-input']} step={1} value={topkValue} onChange={(value: number | null) => setTopkValue(value as number)} min={0} max={2048}></InputNumber>
-                                </div>
-                                <Slider max={2048} min={0} step={1} value={topkValue} onChange={handleTopkValue}></Slider>
-                            </>}
+                            }}>
+                                {allowedConfigs.includes('temperature') && <div style={{ display: 'flex', alignItems: 'center', marginTop: '12px' }}>
+                                    <Checkbox value={temperatureCheckbox} defaultChecked={temperatureCheckbox} onChange={handleTemperatureCheckbox} />
+                                    <div style={{ flex: 1, marginLeft: '12px' }}>
+                                        <div className={styles.temperature}>
+                                            <span style={{ color: temperatureCheckbox ? '#2B2B2B' : '#BFBFBF' }}>Temperature</span>
+                                            {temperatureCheckbox && <InputNumber
+                                                className={styles['code-input']} step={0.01} onChange={(value: number | null) => setTemperatureValue(value as number)} min={0} max={1} value={temperatureValue}></InputNumber>}
+                                        </div>
+                                        {temperatureCheckbox && <Slider max={1} min={0} step={0.01} value={temperatureValue} onChange={handleTemperatureValue} />}
 
-                        </ConfigProvider>
+                                    </div>
+
+                                </div>}
+                                {allowedConfigs.includes('max_tokens') && <div style={{ display: 'flex', alignItems: 'center', marginTop: '12px' }}>
+                                    <Checkbox value={maxTokenCheckbox} defaultChecked={maxTokenCheckbox} onChange={handleMaxTokenCheckbox} />
+                                    <div style={{ flex: 1, marginLeft: '12px' }}>
+                                        <div className={styles.temperature}>
+                                            <span style={{ color: maxTokenCheckbox ? '#2B2B2B' : '#BFBFBF' }}>Max Tokens</span>
+                                            {maxTokenCheckbox && <InputNumber parser={(value: any) => {
+                                                const parsedValue = parseInt(value, 10);
+                                                return isNaN(parsedValue) ? 1 : Math.max(parsedValue, 1);
+                                            }} className={styles['code-input']} step={1} value={maxTokenValue} onChange={(value: number | null) => setMaxTokenValue(value as number)} min={1} max={8192}></InputNumber>}
+
+                                        </div>
+                                        {maxTokenCheckbox && <Slider max={8192} min={1} step={1} value={maxTokenValue} onChange={handleMaxTokenValue}></Slider>}
+
+                                    </div>
+                                </div>}
+                                {allowedConfigs.includes('stop') && <div style={{ display: 'flex', alignItems: 'center', marginTop: '12px' }}>
+                                    <Checkbox value={stopSequencesCheckbox} defaultChecked={stopSequencesCheckbox} onChange={handleStopSequencesCheckbox} />
+                                    <div style={{ flex: 1, marginLeft: '12px' }}>
+                                        <div className={styles.temperature} style={{ color: stopSequencesCheckbox ? '#2B2B2B' : '#BFBFBF' }}>
+                                            Stop sequences
+                                        </div>
+                                        {stopSequencesCheckbox && <Input className={styles['code-input']} onChange={(e: any) => setStopSequences([e.target.value])} value={stopSequences}></Input>}
+                                    </div>
+                                </div>}
+                                {allowedConfigs.includes('top_p') && <div style={{ display: 'flex', alignItems: 'center', marginTop: '12px' }}>
+                                    <Checkbox value={topPCheckbox} defaultChecked={topPCheckbox} onChange={handleTopPCheckbox} />
+                                    <div style={{ flex: 1, marginLeft: '12px' }}>
+                                        <div className={styles.temperature}>
+                                            <span style={{ color: topPCheckbox ? '#2B2B2B' : '#BFBFBF' }}>Top P</span>
+                                            {topPCheckbox && <InputNumber
+                                                parser={(value: any) => value.replace(/\$\s?|(,*)/g, '')} className={styles['code-input']} step={0.01} value={topValue} onChange={(value: number | null) => setTopValue(value as number)} min={0} max={1}></InputNumber>}
+                                        </div>
+                                        {topPCheckbox && <Slider max={1} step={0.01} value={topValue} onChange={handleTopPValue}></Slider>}
+                                    </div>
+                                </div>}
+                                {allowedConfigs.includes('top_k') && <div style={{ display: 'flex', alignItems: 'center', marginTop: '12px' }}>
+                                    <Checkbox value={topKCheckbox} defaultChecked={topKCheckbox} onChange={handleTopKCheckbox} />
+                                    <div style={{ flex: 1, marginLeft: '12px' }}>
+                                        <div className={styles.temperature}>
+                                            <span style={{ color: topKCheckbox ? '#2B2B2B' : '#BFBFBF' }}>Top K</span>
+                                            {topKCheckbox && <InputNumber parser={(value: any) => value.replace(/\\B(?=(\d{3})+(?!\d))/g, '').replace(/,/g, '')} className={styles['code-input']} step={1} value={topkValue} onChange={(value: number | null) => setTopkValue(value as number)} min={0} max={2048}></InputNumber>}
+                                        </div>
+                                        {topKCheckbox && <Slider max={2048} min={0} step={1} value={topkValue} onChange={handleTopkValue}></Slider>}
+                                    </div>
+
+                                </div>}
+
+                            </ConfigProvider>
+                        </div>
+
                     </div>
                 </div>
                 <div className={styles.right} >
