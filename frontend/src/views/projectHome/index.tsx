@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import './projectHome.scss';
 import Forum from '../../assets/img/Forum.svg?react'
-import ApiReference from '../../assets/img/apiReferenceNew.svg'
+import ApiReference from '../../assets/img/apiReferenceNew.svg?react'
 import { setPlaygroundSelect } from '@/Redux/actions/playground'
 import IconData from '../../assets/img/modelNew.svg?react'
 import Assistant from '../../assets/img/assistantsNew.svg?react'
@@ -66,10 +66,10 @@ const ProjectHome = () => {
     useEffect(() => {
         const queryParams: any = new URLSearchParams(search);
         const assistantId = queryParams.get('assistant_id')
-  
+
         if (location.pathname === `/project/playground` && assistantId && playgroundType === 'assistant') {
             setAssistantParams(`assistant_id=${assistantId}`)
-        }else if(playgroundType === 'chat_completion' && modelId){
+        } else if (playgroundType === 'chat_completion' && modelId) {
             setAssistantParams(`model_id=${modelId}&model_name=${modelName}`)
         }
         const key = location.pathname
@@ -103,10 +103,10 @@ const ProjectHome = () => {
         }
         if (e.key === `/project/playground`) {
             navigate(`${e.key}?${assistantParams}`)
-        } else if(e.key !== '/' && e.key !== '/taskingCloud') {
+        } else if (e.key !== '/' && e.key !== '/taskingCloud') {
             navigate(e.key)
 
-        }else {
+        } else {
             navigate(null)
         }
 
@@ -226,13 +226,16 @@ const ProjectHome = () => {
                             <Menu onMouseEnter={handleMouseEnter}
                                 onMouseLeave={handleMouseLeave} className={collapsed ? 'collapsed' : ''} inlineCollapsed={collapsed} mode="vertical" theme="light" selectedKeys={selectedKey} onClick={handleClickMenu} >
                                 <Menu.Item key={`/project/home`} icon={<HomeIcon className="svg-icons" />}>
-                                        <Link to={`/project/home`}>Home</Link>
-                                    </Menu.Item>
+                                    <Link to={`/project/home`}>Home</Link>
+                                </Menu.Item>
+                                <Menu.Item key={'/project/playground'} icon={<Playground className="svg-icons" />}>
+                                    <Link to={'/project/playground'}>Playground</Link>
+                                </Menu.Item>
+
+                                <Menu.Item key='/hr1' className='menu-hr' style={{ borderBottom: '1px solid #E4e4e4', borderRadius: 'none', height: '8px', width: '100%', margin: 0, marginBottom: '8px' }} >
+                                </Menu.Item>
                                 <Menu.Item key={'/project/models'} icon={<IconData className="svg-icons" />}>
                                     <Link to={'/project/models'}>Models</Link>
-                                </Menu.Item>
-                                <Menu.Item key={`/project/assistants`} icon={<Assistant className="svg-icons" />}>
-                                    <Link to={'/project/assistants'}>Assistants</Link>
                                 </Menu.Item>
                                 <Menu.Item key={'/project/collections'} icon={<Retrieval className="svg-icons" />}>
                                     <Link to={'/project/collections'}>Retrieval</Link>
@@ -240,12 +243,16 @@ const ProjectHome = () => {
                                 <Menu.Item key={'/project/tools'} icon={<Plugin className="svg-icons" />} onClick={handleSubMenu}>
                                     <Link to={'/project/tools'}>Tools</Link>
                                 </Menu.Item>
-
-                                <Menu.Item key={'/project/playground'} icon={<Playground className="svg-icons" />}>
-                                    <Link to={'/project/playground'}>Playground</Link>
-
+                                <Menu.Item key='/hr2' className='menu-hr' style={{ borderBottom: '1px solid #E4e4e4', borderRadius: 'none', height: '8px', width: '100%', margin: 0, marginBottom: '8px' }}>
                                 </Menu.Item>
-                                <Menu.Item key={'/project/apikeys'} icon={<Apikeys className="svg-icons" />}>
+                                <Menu.Item key={`/project/assistants`} icon={<Assistant className="svg-icons" />}>
+                                    <Link to={'/project/assistants'}>Assistants</Link>
+                                </Menu.Item>
+                                <Menu.Item key='/hr3' className='menu-hr' style={{ borderBottom: '1px solid #E4e4e4', borderRadius: 'none', height: '8px', width: '100%', margin: 0, marginBottom: '8px' }}>
+                                </Menu.Item>
+                                <Menu.Item key='/hr4' className='menu-hr border-hr' style={{ borderBottom: '1px solid #E4e4e4', borderRadius: 'none', height: '8px', margin: 0, marginBottom: '8px' }}>
+                                </Menu.Item>
+                                <Menu.Item key={'/project/apikeys'} className='api-key-menu' icon={<Apikeys className="svg-icons" />}>
                                     <Link to={'/project/apikeys'}>API Keys</Link>
                                 </Menu.Item>
 
