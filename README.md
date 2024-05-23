@@ -11,15 +11,28 @@
 [![X (formerly Twitter) URL](https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FTaskingAI)](https://twitter.com/TaskingAI)
 [![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCxUnOM-ZbZKmyR_Q5vAUSTA)](https://www.youtube.com/@TaskingAI)
 
-[TaskingAI](https://www.tasking.ai) brings Firebase's simplicity to **AI-native app development**. The platform enables the creation of GPTs-like multi-tenant applications using a wide range of LLMs from various providers. It features distinct, modular functions such as Inference, Retrieval, Assistant, and Tool, seamlessly integrated to enhance the development process. TaskingAI’s cohesive design ensures an efficient, intelligent, and user-friendly experience in AI application development.
+<p align="center">
+  <a href="./README.md"><img alt="Readme (English)" src="https://img.shields.io/badge/English-827B83"></a>
+  <a href="./i18n/README.de.md"><img alt="Readme (Deutsch)" src="https://img.shields.io/badge/Deutsch-827B83"></a>
+  <a href="./i18n/README.fr.md"><img alt="Readme (Français)" src="https://img.shields.io/badge/Français-827B83"></a>
+  <a href="./i18n/README.es.md"><img alt="Readme (Español)" src="https://img.shields.io/badge/Español-827B83"></a>
+  <a href="./i18n/README.pt.md"><img alt="Readme (Português)" src="https://img.shields.io/badge/Português-827B83"></a>
+  <a href="./i18n/README.zh-cn.md"><img alt="Readme (简体中文)" src="https://img.shields.io/badge/简体中文-827B83"></a>
+  <a href="./i18n/README.zh-tw.md"><img alt="Readme (繁體中文)" src="https://img.shields.io/badge/繁體中文-827B83"></a>
+  <a href="./i18n/README.jp.md"><img alt="Readme (日本語)" src="https://img.shields.io/badge/日本語-827B83"></a>
+  <a href="./i18n/README.kr.md"><img alt="Readme (한국어)" src="https://img.shields.io/badge/한국어-827B83"></a>
+</p>
+
+[TaskingAI](https://www.tasking.ai) is a BaaS (Backend as a Service) platform for **LLM-based Agent Development and Deployment**. It unified the integration of hundreds of LLM models, and provides an intuitive user interface for managing your LLM application's functional modules, including tools, RAG systems, assistants, conversation history, and more.
 
 ### Key Features
 
 1. **All-In-One LLM Platform**: Access hundreds of AI models with unified APIs.
-2. **Intuitive UI Console**: Simplifies project management and allows in-console workflow testing.
+2. **Abundant enhancement**: Enhance LLM agent performance with hundreds of customizable built-in **tools** and advanced **Retrieval-Augmented Generation** (RAG) system
 3. **BaaS-Inspired Workflow**: Separate AI logic (server-side) from product development (client-side), offering a clear pathway from console-based prototyping to scalable solutions using RESTful APIs and client SDKs.
-4. **Customizable Integration**: Enhance LLM functionalities with customizable **tools** and advanced **Retrieval-Augmented Generation** (RAG) system
+4. **One-Click to Production**: Deploy your AI agents with a single click to production stage, and scale them with ease. Let TaskingAI handle the rest.
 5. **Asynchronous Efficiency**: Harness Python FastAPI's asynchronous features for high-performance, concurrent computation, enhancing the responsiveness and scalability of the applications.
+6. **Intuitive UI Console**: Simplifies project management and allows in-console workflow testing.
 
 <p>
 <img src="static/img/console.png" alt="">
@@ -30,49 +43,13 @@
 **Models**: TaskingAI connects with hundreds of LLMs from various providers, including OpenAI, Anthropic, and more. We also allow users to integrate local host models through Ollama, LM Studio and Local AI.
 
 <p>
-<img src="static/img/model_providers.png" alt="">
+<img src="./static/img/model_providers.png" alt="">
 </p>
 
-**Plugins**: TaskingAI supports a wide range of built-in plugins to empower your AI agents, including Google search, website reader, stoke market retrieval, and more. Users can also create custom tools to meet their specific needs.
+**Plugins**: TaskingAI supports a wide range of built-in plugins to empower your AI agents, including Google search, website reader, stock market retrieval, and more. Users can also create custom tools to meet their specific needs.
 
 <p>
-<img src="static/img/plugins.png" alt="">
-</p>
-
-## What Can You Build with TaskingAI?
-
-- [x] **Interactive Application Demos**: Quickly create and deploy engaging application demos using TaskingAI's UI Console. It’s an ideal environment for demonstrating the potential of AI-native apps with real-time interaction and user engagement.
-
-- [x] **AI Agents for Enterprise Productivity**: Create AI agents that utilize collective knowledge and tools to boost teamwork and productivity. TaskingAI streamlines the development of these shared AI resources, making it easier to foster collaboration and support across your organization. Leverage our Client SDKs and REST APIs for seamless integration and customization.
-
-- [x] **Multi-Tenant AI-Native Applications for Business**: With TaskingAI, build robust, multi-tenant AI-native applications that are ready for production. It's perfectly suited for handling varied client needs while maintaining individual customization, security, and scalability. For serverless deployment, Please check out our [official website](https://www.tasking.ai) to learn more.
-
-```python
-# Easily build an agent with TaskingAI Client SDK
-assistant = taskingai.assistant.create_assistant(
-    model_id="YOUR_TASKINGAI_MODEL_ID",
-    memory=AssistantNaiveMemory(),
-    tools=[
-        AssistantTool(
-            type=AssistantToolType.ACTION,
-            id=action_id,
-        )
-    ],
-    retrievals=[
-        AssistantRetrieval(
-            type=AssistantRetrievalType.COLLECTION,
-            id=collection_id,
-        )
-    ],
-)
-```
-
----
-
-Please give us a **FREE STAR 🌟** if you find it helpful 😇
-
-<p>
-<img src="static/img/star.gif" alt="">
+<img src="./static/img/plugins.png" alt="">
 </p>
 
 ---
@@ -95,31 +72,26 @@ Please give us a **FREE STAR 🌟** if you find it helpful 😇
 
 ### How TaskingAI solves the problem 😃
 
-TaskingAI addresses these challenges with a **decoupled modular design** and **extensive model compatibility**, adhering to **open-source principles**.
+- **Supports both stateful and stateless usages**: Whether to keep track of and manage the message histories and agent conversation sessions, or just make stateless chat completion requests, TaskingAI has them both covered.
+- **Decoupled modular management**: Decoupled the management of tools, RAGs systems, language models from the agent. And allows free combination of these modules to build a powerful AI agent.
+- **Multi-tenant support**: TaskingAI supports fast deployment after development, and can be used in multi-tenant scenarios. No need to worry about the cloud services, just focus on the AI agent development.
+- **Unified API**: TaskingAI provides unified APIs for all the modules, including tools, RAGs systems, language models, and more. Super easy to manage and change the AI agent's configurations.
 
-Perfect for developers who need a scalable and customizable AI development environment, TaskingAI enhances project management with a **user-friendly UI console**. It supports development through **Client SDKs and REST APIs**, and its server efficiently stores data for various models. Importantly, TaskingAI natively supports **vector storage**, essential for the Retrieval-Augmented Generation (RAG) system, thereby facilitating a seamless progression from prototype to production.
+## What Can You Build with TaskingAI?
 
-## Architecture
+- [x] **Interactive Application Demos**
+- [x] **AI Agents for Enterprise Productivity**
+- [x] **Multi-Tenant AI-Native Applications for Business**
 
-TaskingAI's architecture is designed with modularity and flexibility at its core, enabling compatibility with a wide spectrum of LLMs. This adaptability allows it to effortlessly support a variety of applications, from straightforward demos to sophisticated, multi-tenant AI systems. Constructed on a foundation of open-source principles, TaskingAI incorporates numerous open-source tools, ensuring that the platform is not only versatile but also customizable.
+---
+
+Please give us a **FREE STAR 🌟** if you find it helpful 😇
 
 <p>
-<img src="static/img/architecture.png" alt="">
+<img src="static/img/star.gif" alt="">
 </p>
 
-**[Nginx](https://www.nginx.com/)**: Functions as the frontend web server, efficiently routing traffic to the designated services within the architecture.
-
-**Frontend ([TypeScript](https://www.typescriptlang.org/) + [React](https://react.dev/))**: This interactive and responsive user interface is built with TypeScript and React, allowing users to smoothly interact with backend APIs.
-
-**Backend ([Python](https://www.python.org/) + [FastAPI](https://fastapi.tiangolo.com/))**: The backend, engineered with Python and FastAPI, offers high performance stemming from its asynchronous design. It manages business logic, data processing, and serves as the conduit between the frontend and AI inference services. Python's widespread use invites broader contributions, fostering a collaborative environment for continuous improvement and innovation.
-
-**TaskingAI-Inference**: Dedicated to AI model inference, this component adeptly handles tasks such as response generation and natural language input processing. It's another standout project within TaskingAI's suite of open-source offerings.
-
-**TaskingAI Core Services**: Comprises various services including Model, Assistant, Retrieval, and Tool, each integral to the platform's operation.
-
-**[PostgreSQL](https://www.postgresql.org/) + [PGVector](https://github.com/pgvector/pgvector)**: Serves as the primary database, with PGVector enhancing vector operations for embedding comparisons, crucial for AI functionalities.
-
-**[Redis](https://www.redis.com/)**: Delivers high-performance data caching, crucial for expediting response times and bolstering data retrieval efficiency.
+---
 
 ## Quickstart with Docker
 
@@ -140,15 +112,28 @@ git clone https://github.com/taskingai/taskingai.git
 cd taskingai
 ```
 
-Inside the cloned repository, go to the docker directory and launch the services using Docker Compose.
+Inside the cloned repository, go to the docker directory.
 
 ```bash
 cd docker
-docker-compose -p taskingai up -d
 ```
 
-Once the service is up, access the TaskingAI console through your browser with the URL http://localhost:8080.
-The default username and password are `admin` and `TaskingAI321`.
+1. **Copy `.env.example` to `.env`**:
+
+   ```sh
+   cp .env.example .env
+   ```
+
+2. **Edit the `.env` file**:
+   Open the `.env` file in your favorite text editor and update the necessary configurations. Ensure all required environment variables are set correctly.
+
+3. **Start Docker Compose**:
+   Run the following command to start all services:
+   ```sh
+   docker-compose -p taskingai --env-file .env up -d
+   ```
+
+Once the service is up, access the TaskingAI console through your browser with the URL http://localhost:8080. The default username and password are `admin` and `TaskingAI321`.
 
 ### Upgrade
 
@@ -158,13 +143,13 @@ If you have already installed TaskingAI with a previous version and want to upgr
 git pull origin master
 ```
 
-Then stop current docker service, upgrade to the latest version by pulling the latest image, and finally restart the service.
+Then stop the current docker service, upgrade to the latest version by pulling the latest image, and finally restart the service.
 
 ```bash
 cd docker
 docker-compose -p taskingai down
 docker-compose -p taskingai pull
-docker-compose -p taskingai up -d
+docker-compose -p taskingai --env-file .env up -d
 ```
 
 Don't worry about data loss; your data will be automatically migrated to the latest version schema if needed.
@@ -189,14 +174,13 @@ Here is a client code example:
 
 ```python
 import taskingai
-from taskingai.assistant.memory import AssistantNaiveMemory
 
 taskingai.init(api_key='YOUR_API_KEY', host='http://localhost:8080')
 
 # Create a new assistant
 assistant = taskingai.assistant.create_assistant(
     model_id="YOUR_MODEL_ID",
-    memory=AssistantNaiveMemory(),
+    memory="naive",
 )
 
 # Create a new chat
