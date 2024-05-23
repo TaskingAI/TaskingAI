@@ -111,22 +111,19 @@ jobs:
           taskingai/taskingai-server:$IMAGE_TAG
 
       - name: Wait for service to start
-        run: sleep 10
-
-      - name: Install Dependencies
-        working-directory: TaskingAI-Test
+        env:
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+          INFERENCE_PROVIDER_CREDENTIALS: ${{ secrets.INFERENCE_PROVIDER_CREDENTIALS }}
+          PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
         run: |
-          echo "machine github.com login ${{ secrets.GH_PAT_TKHELPER }}" > ~/.netrc
-          pip install -r requirements.txt
-
-      - name: Start API Service
-        working-directory: TaskingAI-Test
-        run: python ./common/api_service.py &
+          echo "$INFERENCE_PROVIDER_CREDENTIALS" > .env
+          echo "$PLUGIN_BUNDLE_CREDENTIALS" >> .env
+          sleep 10
 
       - name: Run WEB Tests
-        working-directory: TaskingAI-Test
-        run: bash ./community_app/run_test.sh
+        working-directory: backend
+        run: bash ./run_web_test.sh
 
       - name: Run API Tests
-        working-directory: TaskingAI-Test
-        run: bash ./community_api/run_test.sh
+        working-directory: backend
+        run: bash ./run_api_test.sh
