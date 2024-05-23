@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@taskingai/taskingai-markdown": "^0.1.2",
     "antd": "^5.12.8",
     "axios": "^1.6.5",
     "clipboard": "^2.0.11",
