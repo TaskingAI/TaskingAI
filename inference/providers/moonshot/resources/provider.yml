@@ -1,0 +1,21 @@
+provider_id: moonshot
+name: "i18n:moonshot_name"
+description: "i18n:moonshot_description"
+updated_timestamp: 1711074909
+
+credentials_schema:
+  type: object
+  properties:
+    MOONSHOT_API_KEY:
+      type: string
+      description: "i18n:moonshot_api_key_description"
+      secret: true
+  required:
+    - MOONSHOT_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/moonshot"
+  official_site_url: "https://www.moonshot.cn/"
+  official_pricing_url: "https://platform.moonshot.cn/docs/pricing"
+  official_credentials_url: "https://platform.moonshot.cn/console/api-keys"

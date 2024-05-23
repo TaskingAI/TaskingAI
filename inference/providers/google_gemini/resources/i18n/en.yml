@@ -1,0 +1,17 @@
+google_gemini_name: "Google Gemini"
+google_gemini_description: "Integrate with Google Gemini for cutting-edge language model capabilities."
+
+google_gemini_api_key_description: "Your Google Gemini API Key for authentication."
+google_gemini_api_version_description: "The version of the Google Gemini API being used."
+
+gemini_pro_name: "Gemini Pro"
+gemini_pro_description: "Gemini Pro offers advanced chat completion capabilities with extensive input and output token limits for comprehensive interactions."
+
+gemini_pro_vision_name: "Gemini Pro Vision"
+gemini_pro_vision_description: "Gemini Pro Vision offers vision-enabled chat completion capabilities with extensive input and output token limits for comprehensive interactions."
+
+gemini_1_5_pro_latest_name: "Gemini 1.5 Pro"
+gemini_1_5_pro_latest_description: "Gemini 1.5 Pro offers 1048576 input tokens and 8192 output tokens for advanced chat completion capabilities."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Google Gemini with custom configurations."

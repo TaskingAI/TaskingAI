@@ -1,0 +1,9 @@
+config_id: presence_penalty
+name: "i18n:model_config_presence_penalty_name"
+description: "i18n:model_config_presence_penalty_description"
+schema:
+  type: float
+  default: 0.0
+  min: 0.0
+  max: 1.0
+  step: 0.01

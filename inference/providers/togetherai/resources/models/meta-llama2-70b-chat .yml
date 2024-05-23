@@ -1,0 +1,24 @@
+model_schema_id: togetherai/meta-llama/Llama-2-70b-chat-hf
+provider_model_id: meta-llama/Llama-2-70b-chat-hf
+type: chat_completion
+name: "i18n:llama_2_70b_chat_hf_name"
+description: "i18n:llama_2_70b_chat_hf_description"
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 4096
+  output_token_limit: 4096
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+  - config_id: top_k
+
+pricing:
+  input_token: 0.9
+  output_token: 0.9
+  unit: 1000000
+  currency: USD

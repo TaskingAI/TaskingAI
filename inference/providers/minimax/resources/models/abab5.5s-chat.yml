@@ -1,0 +1,23 @@
+model_schema_id: minimax/abab5.5s-chat
+provider_model_id: abab5.5s-chat
+type: chat_completion
+name: "i18n:abab5_5s_chat_name"
+description: "i18n:abab5_5s_chat_description"
+default_endpoint_url: https://api.minimax.chat/v1/text/chatcompletion_v2
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 8192
+  output_token_limit: 8192
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+
+pricing:
+  input_token: 0.005
+  output_token: 0.005
+  unit: 1000
+  currency: CNY

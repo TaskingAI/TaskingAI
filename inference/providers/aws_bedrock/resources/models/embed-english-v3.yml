@@ -1,0 +1,18 @@
+model_schema_id: aws_bedrock/cohere/embed-english-v3
+provider_model_id: cohere.embed-english-v3
+type: text_embedding
+name: "i18n:embed_english_v3_name"
+description: "i18n:embed_english_v3_description"
+default_endpoint_url: https://bedrock-runtime.{aws_region}.amazonaws.com/model/ai21.j2-ultra-v1/invoke
+
+properties:
+  embedding_size: 1024
+  input_token_limit: 512
+
+config_schemas:
+
+pricing:
+  input_token: 0.0001
+  output_token: 0.0001
+  unit: 1000
+  currency: USD

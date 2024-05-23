@@ -1,0 +1,21 @@
+model_schema_id: baichuan/baichuan2-turbo
+provider_model_id: baichuan2-turbo
+type: chat_completion
+name: "i18n:baichuan2_turbo_name"
+description: "i18n:baichuan2_turbo_description"
+default_endpoint_url: http://api.baichuan-ai.com/v1/chat/completions
+
+properties:
+  function_call: false
+  streaming: true
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: top_k
+
+pricing:
+  input_token: 0.008
+  output_token: 0.008
+  unit: 1000
+  currency: CNY

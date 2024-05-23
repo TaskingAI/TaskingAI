@@ -1,0 +1,26 @@
+model_schema_id: debug/debug-error
+provider_model_id: debug-error
+type: chat_completion
+name: "i18n:debug_error_name"
+description: "i18n:debug_error_description"
+default_endpoint_url:
+
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 8096
+  output_token_limit: 8096
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+  - config_id: top_k
+
+pricing:
+  input_token: 0
+  output_token: 0
+  unit: 1000
+  currency: USD

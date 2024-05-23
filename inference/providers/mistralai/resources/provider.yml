@@ -1,0 +1,21 @@
+provider_id: mistralai
+name: "i18n:mistralai_name"
+description: "i18n:mistralai_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    MISTRAL_API_KEY:
+      type: string
+      description: "i18n:mistral_api_key_description"
+      secret: true
+  required:
+    - MISTRAL_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/mistralai"
+  official_site_url: "https://mistral.ai/"
+  official_pricing_url: "https://docs.mistral.ai/platform/pricing/"
+  official_credentials_url: "https://console.mistral.ai/api-keys/"

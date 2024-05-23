@@ -1,0 +1,25 @@
+provider_id: openai
+name: "i18n:openai_name"
+description: "i18n:openai_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    OPENAI_API_KEY:
+      type: string
+      description: "i18n:openai_api_key_description"
+      secret: true
+    OPENAI_ORG_ID:
+      type: string
+      description: "i18n:openai_org_id_description"
+      secret: true
+  required:
+    - OPENAI_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/openai"
+  official_site_url: "https://openai.com/"
+  official_pricing_url: "https://openai.com/pricing"
+  official_credentials_url: "https://platform.openai.com/api-keys"

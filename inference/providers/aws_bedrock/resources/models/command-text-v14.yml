@@ -1,0 +1,23 @@
+model_schema_id: aws_bedrock/cohere/command-text-v14
+provider_model_id: cohere.command-text-v14
+type: chat_completion
+name: "i18n:command_text_v14_name"
+description: "i18n:command_text_v14_description"
+default_endpoint_url: https://bedrock-runtime.{aws_region}.amazonaws.com/model/ai21.j2-ultra-v1/invoke
+
+properties:
+  function_call: false
+  streaming: false
+  input_token_limit: 4000
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: top_k
+  - config_id: max_tokens
+
+pricing:
+  input_token: 0.0015
+  output_token: 0.0020
+  unit: 1000
+  currency: USD

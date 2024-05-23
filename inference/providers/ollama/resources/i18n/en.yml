@@ -1,0 +1,7 @@
+ollama_name: "Ollama"
+ollama_description: "Ollama is a powerful framework designed for deploying LLM in Docker containers. We support version 0.1.24 or later."
+
+ollama_host_description: "Your Ollama host URL"
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Ollama with custom configurations."

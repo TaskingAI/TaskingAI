@@ -1,0 +1,7 @@
+llama_api_name: "Llama API"
+llama_api_description: "Llama API is an easy-to-use API for llama models."
+
+llama_api_api_key_description: "Your Llama API Token for authentication. Get it from https://www.llama-api.com/account/api-token"
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Llama API with custom configurations."

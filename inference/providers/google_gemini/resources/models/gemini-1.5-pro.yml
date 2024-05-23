@@ -1,0 +1,25 @@
+model_schema_id: google_gemini/gemini-1.5-pro
+provider_model_id: gemini-1.5-pro-latest
+type: chat_completion
+name: "i18n:gemini_1_5_pro_latest_name"
+description: "i18n:gemini_1_5_pro_latest_description"
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 1048576
+  output_token_limit: 8192
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: top_k
+  - config_id: max_tokens
+  - config_id: stop
+
+
+pricing:
+  input_token: 0.007
+  output_token: 0.021
+  unit: 1000
+  currency: USD

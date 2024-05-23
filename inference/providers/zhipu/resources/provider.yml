@@ -1,0 +1,20 @@
+provider_id: zhipu
+name: "i18n:zhipu_name"
+description: "i18n:zhipu_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    ZHIPU_API_KEY:
+      type: string
+      description: "i18n:zhipu_api_key_description"
+      secret: true
+  required:
+    - ZHIPU_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/zhipu"
+  official_site_url: "https://open.bigmodel.cn/"
+  official_pricing_url: "https://open.bigmodel.cn/dev/api#product-billing"
+  official_credentials_url: "https://open.bigmodel.cn/usercenter/apikeys"

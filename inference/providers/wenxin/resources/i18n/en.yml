@@ -1,0 +1,17 @@
+wenxin_name: "ERNIE"
+wenxin_description: "ERNIE is a large-scale artificial intelligence language model product developed by Baidu."
+
+wenxin_api_key_description: "Your ERNIE Bot API Key for authentication."
+wenxin_secret_key_description: "Your ERNIE Bot Secret Key for authentication."
+
+ernie_bot_name: "ERNIE-Bot"
+ernie_bot_description: "ERNIE-Bot is a large language model independently developed by Baidu, covering a vast amount of Chinese data. It possesses stronger capabilities in dialogue, question answering, and content creation generation."
+
+ernie_bot_4_name: "ERNIE-Bot-4"
+ernie_bot_4_description: "ERNIE-Bot 4.0 is Baidu's latest self-developed large language model, which has achieved a comprehensive upgrade of the basic model with significant improvements in understanding, generation, logic, and memory capabilities. It supports 5K inputs and 2K outputs."
+
+ernie_bot_8k_name: "ERNIE-Bot-8k"
+ernie_bot_8k_description: "ERNIE-Bot-8K is a large language model independently developed by Baidu, covering a vast amount of Chinese data. It possesses stronger capabilities in dialogue, question answering, and content creation, supporting 5K inputs and 2K outputs."
+
+ernie_bot_turbo_name: "ERNIE-Bot-Turbo"
+ernie_bot_turbo_description: "ERNIE-Bot-turbo is a highly efficient language model independently developed by Baidu. Based on the training of massive high-quality data, it possesses stronger capabilities in text understanding, content creation, dialogue, and question answering."

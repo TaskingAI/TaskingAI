@@ -1,0 +1,24 @@
+model_schema_id: aws_bedrock/anthropic/claude-v2.1
+provider_model_id: anthropic.claude-v2:1
+type: chat_completion
+name: "i18n:claude_v2_1_name"
+description: "i18n:claude_v2_1_description"
+default_endpoint_url: https://bedrock-runtime.{aws_region}.amazonaws.com/model/anthropic.claude-v2:1/invoke
+
+properties:
+  function_call: false
+  streaming: false
+  input_token_limit: 200000
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: top_k
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.008
+  output_token: 0.024
+  unit: 1000
+  currency: USD

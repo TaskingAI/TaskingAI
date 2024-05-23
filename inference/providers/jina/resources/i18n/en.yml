@@ -1,0 +1,31 @@
+jina_name: "Jina AI"
+jina_description: "Jina AI is a company that focueses on text embedding models."
+
+jina_api_key_description: "Your Jina API key for authentication."
+
+jina_embeddings_v2_base_en_name: "jina-embeddings-v2-base-en"
+jina_embeddings_v2_base_en_description: "The jina-embeddings-v2-base-en is an English BERT-based model with 137 million parameters, pre-trained on the C4 dataset and enhanced with over 400 million sentence pairs, designed for processing long documents and supporting up to 8192 sequence lengths."
+
+jina_embeddings_v2_small_en_name: "jina-embeddings-v2-small-en"
+jina_embeddings_v2_small_en_description: "The jina-embeddings-v2-small-en model is an English BERT-based embedding model pre-trained on the C4 dataset and further enhanced with over 400 million sentence pairs for improved performance in processing long documents across various domains."
+
+jina_embeddings_v2_base_de_name: "jina-embeddings-v2-base-de"
+jina_embeddings_v2_base_de_description: "The jina-embeddings-v2-base-de model is a bilingual German/English BERT-based text embedding model designed for both monolingual and cross-lingual applications, supporting mixed German-English inputs up to 8192 sequence lengths."
+
+jina_embeddings_v2_base_zh_name: "jina-embeddings-v2-base-zh"
+jina_embeddings_v2_base_zh_description: "The jina-embeddings-v2-base-zh model is a bilingual Chinese/English BERT-based text embedding model optimized for high performance in both monolingual and cross-lingual tasks, accommodating mixed Chinese-English inputs up to 8192 sequence lengths."
+
+jina_embeddings_v2_base_code_name: "jina-embeddings-v2-base-code"
+jina_embeddings_v2_base_code_description: "The jina-embeddings-v2-base-code model is a multilingual embedding model for English and 30 programming languages with 137 million parameters, trained on over 150 million coding Q&A and source code pairs, ideal for technical Q&A and code search up to 8192 sequence lengths."
+
+jina_reranker_v1_base_en_name: "jina-reranker-v1-base-en"
+jina_reranker_v1_base_en_description: "Improves search accuracy with 137M parameters, supports 512-token queries, 8192-token documents, and 2048 candidates. Achieves top scores in LlamaIndex RAG, BEIR, MTEB, and LoCo evaluations."
+
+jina_reranker_v1_turbo_en_name: "jina-reranker-v1-turbo-en"
+jina_reranker_v1_turbo_en_description: "Features a six-layer, 37.8M parameter architecture, tripling the base model's speed while maintaining 95% accuracy in BEIR tests. Suitable for fast, resource-efficient applications."
+
+jina_reranker_v1_tiny_en_name: "jina-reranker-v1-tiny-en"
+jina_reranker_v1_tiny_en_description: "Optimized for performance with 30M parameters, four-layer architecture, and five times the speed of the base model. Ideal for low-cost, high-speed processing via knowledge distillation."
+
+jina_colbert_v1_en_name: "jina-colbert-v1-en"
+jina_colbert_v1_en_description: "Improved ColBERT with 8K-token length for embedding and reranking tasks."

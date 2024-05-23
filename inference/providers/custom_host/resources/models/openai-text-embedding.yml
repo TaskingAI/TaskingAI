@@ -1,0 +1,13 @@
+model_schema_id: custom_host/openai-text-embedding
+provider_model_id: openai-text-embedding
+type: text_embedding
+name: "i18n:openai_text_embedding_name"
+description: "i18n:openai_text_embedding_description"
+
+config_schemas:
+
+pricing:
+  input_token: 0
+  output_token: 0
+  unit: 0
+  currency: USD

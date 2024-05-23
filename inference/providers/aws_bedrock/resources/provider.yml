@@ -1,0 +1,29 @@
+provider_id: aws_bedrock
+name: "i18n:aws_bedrock_name"
+description: "i18n:aws_bedrock_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    AWS_ACCESS_KEY_ID:
+      type: string
+      description: "i18n:aws_bedrock_access_key_id_description"
+      secret: true
+    AWS_SECRET_ACCESS_KEY:
+      type: string
+      description: "i18n:aws_bedrock_secret_access_key_description"
+      secret: true
+    AWS_REGION:
+      type: string
+      description: "i18n:aws_bedrock_region_description"
+  required:
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - AWS_REGION
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/aws-bedrock"
+  official_site_url: "https://aws.amazon.com/bedrock/"
+  official_pricing_url: "https://aws.amazon.com/bedrock/pricing"
+  official_credentials_url: "https://console.aws.amazon.com/iam/home?#/security_credentials$access_key"

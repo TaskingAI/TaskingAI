@@ -1,0 +1,21 @@
+provider_id: debug
+name: "i18n:debug_name"
+description: "i18n:debug_description"
+updated_timestamp: 1711074909
+
+credentials_schema:
+  type: object
+  properties:
+    DEBUG_API_KEY:
+      type: string
+      description: "i18n:debug_api_key_description"
+      secret: true
+  required:
+    - DEBUG_API_KEY
+
+
+resources:
+  taskingai_documentation_url: ""
+  official_site_url: ""
+  official_pricing_url: ""
+  official_credentials_url: ""

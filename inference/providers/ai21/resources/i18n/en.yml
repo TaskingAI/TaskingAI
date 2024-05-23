@@ -1,0 +1,9 @@
+ai21_name: "AI21"
+ai21_description: "AI21 is a leading AI research lab that focuses on developing human-like AI models. AI21's models are known for their ability to generate human-like text and are used in a variety of applications, including chatbots, content generation, and more."
+ai21_api_key_description: "API key for AI21."
+
+jurassic_2_ultra_name: "Jurassic-2 Ultra"
+jurassic_2_ultra_description: "Jurassic-2 Ultra is AI21 Labs' state-of-the-art language model, offering powerful natural language understanding and generation for a wide range of applications and industries."
+
+ai21_embedding_name: "AI21 Text Embedding"
+ai21_embedding_description: "AI21 Text Embedding is a model that converts text into a dense vector representation."

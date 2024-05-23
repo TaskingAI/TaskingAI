@@ -1,0 +1,20 @@
+provider_id: cohere
+name: "i18n:cohere_name"
+description: "i18n:cohere_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    COHERE_API_KEY:
+      type: string
+      description: "i18n:cohere_api_key_description"
+      secret: true
+  required:
+    - COHERE_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/embedding_models/cohere"
+  official_site_url: "https://cohere.com/"
+  official_pricing_url: "https://cohere.com/pricing"
+  official_credentials_url: "https://dashboard.cohere.com/api-keys"

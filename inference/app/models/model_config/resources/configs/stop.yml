@@ -1,0 +1,12 @@
+config_id: stop
+name: "i18n:model_config_stop_name"
+description: "i18n:model_config_stop_description"
+schema:
+  type: array
+  default: []
+  items:
+    type: string
+    min_length: 1
+    max_length: 100
+  min_items: 0
+  max_items: 4

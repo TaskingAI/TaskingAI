@@ -1,0 +1,21 @@
+provider_id: groq
+name: "i18n:groq_name"
+description: "i18n:groq_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    GROQ_API_KEY:
+      type: string
+      description: "i18n:groq_api_key_description"
+      secret: true
+  required:
+    - GROQ_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/groq"
+  official_site_url: "https://groq.com/"
+  official_pricing_url: "https://wow.groq.com/pricing"
+  official_credentials_url: "https://console.groq.com/keys"

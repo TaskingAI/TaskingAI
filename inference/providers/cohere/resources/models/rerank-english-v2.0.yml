@@ -1,0 +1,11 @@
+model_schema_id: cohere/rerank-english-v2.0
+provider_model_id: rerank-english-v2.0
+type: rerank
+name: "i18n:rerank_english_v2_0_name"
+description: "i18n:rerank_english_v2_0_description"
+default_endpoint_url: https://api.cohere.ai/v1/rerank
+
+properties:
+  input_token_limit: 512
+
+pricing:

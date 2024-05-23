@@ -1,0 +1,21 @@
+provider_id: replicate
+name: "i18n:replicate_name"
+description: "i18n:replicate_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    REPLICATE_API_KEY:
+      type: string
+      description: "i18n:replicate_api_key_description"
+      secret: true
+  required:
+    - REPLICATE_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/replicate"
+  official_site_url: "https://replicate.ai/"
+  official_pricing_url: "https://replicate.ai/pricing"
+  official_credentials_url: "https://replicate.com/account/api-tokens"

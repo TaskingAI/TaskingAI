@@ -1,0 +1,24 @@
+model_schema_id: zhipu/glm-3-turbo
+provider_model_id: glm-3-turbo
+type: chat_completion
+name: "i18n:glm_3_turbo_name"
+description: "i18n:glm_3_turbo_description"
+default_endpoint_url: https://open.bigmodel.cn/api/paas/v4/chat/completions
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 128000
+  # output_token_limit: TODO
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.005
+  output_token: 0.005
+  unit: 1000
+  currency: CNY

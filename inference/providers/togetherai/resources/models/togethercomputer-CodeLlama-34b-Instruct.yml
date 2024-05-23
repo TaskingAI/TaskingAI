@@ -1,0 +1,23 @@
+model_schema_id: togetherai/togethercomputer/CodeLlama-34b-Instruct
+provider_model_id: togethercomputer/CodeLlama-34b-Instruct
+type: chat_completion
+name: "i18n:codeLlama_34b_Instruct_name"
+description: "i18n:codeLlama_34b_Instruct_description"
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 16384
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+  - config_id: top_k
+
+pricing:
+  input_token: 0.776
+  output_token: 0.776
+  unit: 1000000
+  currency: USD

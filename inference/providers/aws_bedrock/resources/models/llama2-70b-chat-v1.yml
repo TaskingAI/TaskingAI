@@ -1,0 +1,22 @@
+model_schema_id: aws_bedrock/meta/llama2-70b-chat-v1
+provider_model_id: meta.llama2-70b-chat-v1
+type: chat_completion
+name: "i18n:llama2_70b_chat_v1_name"
+description: "i18n:llama2_70b_chat_v1_description"
+default_endpoint_url: https://bedrock-runtime.{aws_region}.amazonaws.com/model/ai21.j2-mid-v1/invoke
+
+properties:
+  function_call: false
+  streaming: false
+  input_token_limit: 4096
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+
+pricing:
+  input_token: 0.00195
+  output_token: 0.00256
+  unit: 1000
+  currency: USD

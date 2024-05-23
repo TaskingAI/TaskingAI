@@ -1,0 +1,23 @@
+provider_id: anthropic
+name: "i18n:anthropic_name"
+description: "i18n:anthropic_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    ANTHROPIC_API_KEY:
+      type: string
+      description: "i18n:anthropic_api_key_description"
+      secret: true
+    ANTHROPIC_API_VERSION:
+      type: string
+      description: "i18n:anthropic_api_version_description"
+  required:
+    - ANTHROPIC_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/anthropic"
+  official_site_url: "https://anthropic.com/"
+  official_pricing_url: "https://anthropic.com/pricing"
+  official_credentials_url: "https://console.anthropic.com/settings/keys"

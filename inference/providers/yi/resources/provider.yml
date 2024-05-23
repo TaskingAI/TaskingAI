@@ -1,0 +1,21 @@
+provider_id: yi
+name: "i18n:yi_name"
+description: "i18n:yi_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    YI_API_KEY:
+      type: string
+      description: "i18n:yi_api_key_description"
+      secret: true
+  required:
+    - YI_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/yi"
+  official_site_url: "https://www.lingyiwanwu.com/"
+  official_pricing_url: "https://platform.lingyiwanwu.com/docs"
+  official_credentials_url: "https://platform.lingyiwanwu.com/apikeys"

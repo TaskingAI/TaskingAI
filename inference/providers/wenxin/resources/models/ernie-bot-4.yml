@@ -1,0 +1,24 @@
+model_schema_id: wenxin/ernie-bot-4
+provider_model_id: ernie-bot-4
+type: chat_completion
+name: "i18n:ernie_bot_4_name"
+description: "i18n:ernie_bot_4_description"
+default_endpoint_url: https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro
+
+properties:
+  function_call: true
+  streaming: false
+  input_token_limit: 5000
+  output_token_limit: 2048
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.15
+  output_token: 0.3
+  unit: 1000
+  currency: CNY

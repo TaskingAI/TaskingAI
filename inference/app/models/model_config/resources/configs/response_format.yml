@@ -1,0 +1,9 @@
+config_id: response_format
+name: "i18n:model_config_response_format_name"
+description: "i18n:model_config_response_format_description"
+schema:
+  type: string
+  default: "text"
+  enum:
+    - "text"
+    - "json_object"

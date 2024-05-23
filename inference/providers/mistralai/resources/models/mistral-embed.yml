@@ -1,0 +1,17 @@
+model_schema_id: mistralai/mistral-embed
+provider_model_id: mistral-embed
+type: text_embedding
+name: "i18n:mistral_embed_name"
+description: "i18n:mistral_embed_description"
+
+properties:
+  embedding_size: 1024
+  input_token_limit: 512
+  max_batch_size: 512
+
+config_schemas:
+
+pricing:
+  input_token: 0.1
+  unit: 1000000
+  currency: USD

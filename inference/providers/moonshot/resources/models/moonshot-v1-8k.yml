@@ -1,0 +1,25 @@
+model_schema_id: moonshot/moonshot-v1-8k
+provider_model_id: moonshot-v1-8k
+type: chat_completion
+name: "i18n:moonshot_v1_8k_name"
+description: "i18n:moonshot_v1_8k_description"
+default_endpoint_url: https://api.moonshot.cn/v1/chat/completions
+
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 8096
+  output_token_limit: 8096
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 12.00
+  output_token: 12.00
+  unit: 1000000
+  currency: CNY

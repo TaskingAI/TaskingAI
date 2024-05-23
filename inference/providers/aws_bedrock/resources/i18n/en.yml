@@ -1,0 +1,45 @@
+aws_bedrock_name: "AWS Bedrock"
+aws_bedrock_description: "Amazon Bedrock is a fully managed service that offers a choice of high-performing foundation models (FMs) from leading AI companies like AI21 Labs, Anthropic, Cohere, Meta, Stability AI, and Amazon via a single API, along with a broad set of capabilities you need to build generative AI applications with security, privacy, and responsible AI."
+
+aws_bedrock_access_key_id_description: "Your AWS Bedrock Access Key ID. It can be found on your security credentials page."
+aws_bedrock_secret_access_key_description: "Your AWS Bedrock Secret Access Key. It can be found on your security credentials page."
+aws_bedrock_region_description: "The AWS region where your AWS Bedrock model is hosted."
+
+claude_v2_1_name: "Claude-v2.1"
+claude_v2_1_description: "Claude 2.1 increased accuracy, doubled context window, introduced experimental features, and emphasized honesty and detailed engagement."
+
+claude_v2_name: "Claude-v2"
+claude_v2_description: "Claude 2 enhanced user interaction, improved in coding, math, logical reasoning, handled 100K tokens, and focused on safety and performance."
+
+claude_instant_v1_name: "Claude Instant 1.2"
+claude_instant_v1_description: "Claude Instant 1.2 is a smaller, faster, and more efficient version of Claude 2.1, designed for real-time applications."
+
+j2_ultra_v1_name: "Jurassic-2 Ultra"
+j2_ultra_v1_description: "Jurassic-2 Ultra is AI21 Labs' state-of-the-art language model, offering powerful natural language understanding and generation for a wide range of applications and industries."
+
+j2_mid_v1_name: "Jurassic-2 Mid"
+j2_mid_v1_description: "A versatile, mid-sized language model from AI21 Labs, designed for efficient, high-quality natural language processing tasks across various domains."
+
+command_text_v14_name: "Command Text v14"
+command_text_v14_description: "Cohere's Command Text v14 is a robust AI model designed for complex text processing, enabling advanced understanding and generation for demanding applications."
+
+command_light_text_v14_name: "Command Light Text v14"
+command_light_text_v14_description: "Command Light Text v14, by Cohere, offers a lightweight, efficient AI model for text processing, ideal for resource-constrained environments and applications."
+
+embed_english_v3_name: "Embed English v3"
+embed_english_v3_description: "Cohere's Embed English v3 model provides advanced text embedding capabilities, enhancing natural language understanding and applications in English-specific contexts."
+
+embed_multilingual_v3_name: "Embed Multilingual v3"
+embed_multilingual_v3_description: "Cohere's Embed Multilingual v3 model offers robust text embedding across multiple languages, supporting global applications and enhancing cross-lingual understanding."
+
+llama2_13b_chat_v1_name: "Llama2 13B Chat v1"
+llama2_13b_chat_v1_description: "A versatile AI chat model by Meta, designed for efficient and effective conversational understanding and generation across diverse topics."
+
+llama2_70b_chat_v1_name: "Llama2 70B Chat v1"
+llama2_70b_chat_v1_description: "An advanced version of Meta's AI chat model, offering deeper insights and more nuanced conversation capabilities with its 70 billion parameter design."
+
+titan_text_express_v1_name: "Titan Text Express v1"
+titan_text_express_v1_description: "Titan Text Express v1 is a robust text generation AI, designed for efficient, high-quality content creation across diverse applications with speed and accuracy."
+
+titan_text_lite_v1_name: "Titan Text Lite v1"
+titan_text_lite_v1_description: "Titan Text Lite v1 offers a streamlined, cost-effective solution for text generation, ideal for lightweight applications needing fast, reliable AI-generated content."

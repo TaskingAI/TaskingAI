@@ -1,0 +1,25 @@
+provider_id: wenxin
+name: "i18n:wenxin_name"
+description: "i18n:wenxin_description"
+updated_timestamp: 1708236934318
+
+credentials_schema:
+  type: object
+  properties:
+    WENXIN_API_KEY:
+      type: string
+      description: "i18n:wenxin_api_key_description"
+      secret: true
+    WENXIN_SECRET_KEY:
+      type: string
+      description: "i18n:wenxin_secret_key_description"
+      secret: true
+  required:
+    - WENXIN_API_KEY
+    - WENXIN_SECRET_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/wenxin"
+  official_site_url: "https://cloud.baidu.com/wenxin.html"
+  official_pricing_url: "https://console.bce.baidu.com/qianfan/chargemanage/list"
+  official_credentials_url: "https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application"

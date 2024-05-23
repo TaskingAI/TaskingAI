@@ -1,0 +1,22 @@
+model_schema_id: wenxin/ernie-bot-turbo
+provider_model_id: ernie-bot-turbo
+type: chat_completion
+name: "i18n:ernie_bot_turbo_name"
+description: "i18n:ernie_bot_turbo_description"
+default_endpoint_url: https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant
+
+properties:
+  function_call: false
+  streaming: false
+  input_token_limit: 7000
+  output_token_limit: 2048
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+
+pricing:
+  input_token: 0.008
+  output_token: 0.008
+  unit: 1000
+  currency: CNY

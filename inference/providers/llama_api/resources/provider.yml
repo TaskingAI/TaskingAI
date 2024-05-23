@@ -1,0 +1,21 @@
+provider_id: llama_api
+name: "i18n:llama_api_name"
+description: "i18n:llama_api_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    LLAMA_API_API_KEY:
+      type: string
+      description: "i18n:llama_api_api_key_description"
+      secret: true
+  required:
+    - LLAMA_API_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/llama_api"
+  official_site_url: "https://www.llama-api.com/"
+  official_pricing_url: "https://www.llama-api.com/account/usage"
+  official_credentials_url: "https://www.llama-api.com/account/api-token"

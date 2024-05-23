@@ -1,0 +1,23 @@
+model_schema_id: togetherai/mistralai/Mixtral-8x7B-Instruct-v0.1
+provider_model_id: mistralai/Mixtral-8x7B-Instruct-v0.1
+type: chat_completion
+name: "i18n:mixtral_8x7b_instruct_v0_1_name"
+description: "i18n:mixtral_8x7b_instruct_v0_1_description"
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 32768
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+  - config_id: top_k
+
+pricing:
+  input_token: 0.6
+  output_token: 0.6
+  unit: 1000000
+  currency: USD

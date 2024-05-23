@@ -1,0 +1,21 @@
+provider_id: localai
+name: "i18n:localai_name"
+description: "i18n:localai_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    LOCALAI_HOST:
+      type: string
+      description: "i18n:localai_host_description"
+      secret: false
+  required:
+    - LOCALAI_HOST
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/localai"
+  official_site_url: "https://localai.io/"
+  official_pricing_url: ""
+  official_credentials_url: ""

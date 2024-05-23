@@ -1,0 +1,10 @@
+baichuan_name: "BaiChuan"
+baichuan_description: "BaiChuan is an AI company that provides a wide range of AI services, including chat completion, image recognition, and more."
+
+baichuan_api_key_description: "Your BaiChuan API Key for authentication."
+
+baichuan2_turbo_name: "BaiChuan 2 Turbo"
+baichuan2_turbo_description: "BaiChuan 2 Turbo is a high-performance chat completion model from Baichuan."
+
+baichuan2_turbo_192k_name: "BaiChuan 2 Turbo 192K"
+baichuan2_turbo_192k_description: "BaiChuan 2 Turbo 192K is a high-performance chat completion model from Baichuan with a 192K token limit."

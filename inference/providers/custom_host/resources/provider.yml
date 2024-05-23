@@ -1,0 +1,30 @@
+provider_id: custom_host
+name: "i18n:custom_host_name"
+description: "i18n:custom_host_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    CUSTOM_HOST_ENDPOINT_URL:
+      type: string
+      description: "i18n:custom_host_endpoint_url_description"
+      secret: false
+    CUSTOM_HOST_MODEL_ID:
+      type: string
+      description: "i18n:custom_host_model_id_description"
+      secret: false
+    CUSTOM_HOST_API_KEY:
+      type: string
+      description: "i18n:custom_host_api_key_description"
+      secret: true
+  required:
+    - CUSTOM_HOST_ENDPOINT_URL
+    - CUSTOM_HOST_MODEL_ID
+    - CUSTOM_HOST_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/custom-host"
+  official_site_url: ""
+  official_pricing_url: ""
+  official_credentials_url: ""

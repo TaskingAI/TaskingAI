@@ -1,0 +1,52 @@
+cohere_name: "Cohere AI"
+cohere_description: "Cohere is a Canadian startup that provides natural language processing models to help companies improve human-computer interaction."
+
+cohere_api_key_description: "Your Cohere API key for authentication."
+
+embed_english_light_v2_0_name: "embed-english-light-v2.0"
+embed_english_light_v2_0_description: "A smaller, faster version of embed-english-v2.0. Almost as capable, but a lot faster. English only.	"
+
+embed_multilingual_v2_0_name: "embed-multilingual-v2.0"
+embed_multilingual_v2_0_description: "Provides multilingual classification and embedding support."
+
+embed_english_v3_0_name: "embed-english-v3.0"
+embed_english_v3_0_description: "A model that allows for text to be classified or turned into embeddings. English only."
+
+embed_multilingual_v3_0_name: "embed-multilingual-v3.0"
+embed_multilingual_v3_0_description: "Provides multilingual classification and embedding support."
+
+embed_english_light_v3_0_name: "embed-english-light-v3.0"
+embed_english_light_v3_0_description: "A smaller, faster version of embed-english-v3.0. Almost as capable, but a lot faster. English only."
+
+embed_multilingual_light_v3_0_name: "embed-multilingual-light-v3.0"
+embed_multilingual_light_v3_0_description: "A smaller, faster version of embed-multilingual-v3.0. Almost as capable, but a lot faster. Supports multiple languages."
+
+command_light_name: "command-light"
+command_light_description: "A smaller, faster version of command. Almost as capable, but a lot faster."
+
+command_name: "command"
+command_description: "An instruction-following conversational model that performs language tasks with high quality, more reliably and with a longer context than our base generative models."
+
+command_light_nightly_name: "command-light-nightly"
+command_light_nightly_description: "To reduce the time between major releases, Cohere put out nightly versions of command models. For command-light, that is command-light-nightly."
+
+command_nightly_name: "command-nightly"
+command_nightly_description: "To reduce the time between major releases, Cohere put out nightly versions of command models. For command, that is command-nightly."
+
+command_r_name: "Command R"
+command_r_description: "Command R boasts high precision on retrieval augmented generation (RAG) and tool use tasks, low latency and high throughput, a long 128,000-token context length, and strong capabilities across 10 key languages."
+
+command_r_plus_name: "Command R+"
+command_r_plus_description: "Command R+ is Cohere's newest large language model, optimized for conversational interaction and long-context tasks."
+
+rerank_multilingual_v3_0_name: "rerank-multilingual-v3.0"
+rerank_multilingual_v3_0_description: "A model for documents and semi-structure data (JSON) that are not in English. This model has a context length of 4096 tokens."
+
+rerank_english_v3_0_name: "rerank-english-v3.0"
+rerank_english_v3_0_description: "A model that allows for re-ranking English Language documents and semi-structured data (JSON). This model has a context length of 4096 tokens."
+
+rerank_multilingual_v2_0_name: "rerank-multilingual-v2.0"
+rerank_multilingual_v2_0_description: "A model for documents that are not in English. This model has a context length of 512 tokens."
+
+rerank_english_v2_0_name: "rerank-english-v2.0"
+rerank_english_v2_0_description: "A model that allows for re-ranking English language documents. This model has a context length of 512 tokens."
