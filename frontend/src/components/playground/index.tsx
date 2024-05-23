@@ -1,7 +1,7 @@
 import styles from './playground.module.scss'
 import { useState, useEffect, useRef, } from 'react'
-import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Collapse } from 'antd'
-import { PlusOutlined, RightOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Collapse,Space } from 'antd'
+import { PlusOutlined, RightOutlined, LoadingOutlined,SearchOutlined } from '@ant-design/icons';
 import PlayGroundImg from '@/assets/img/selectAssistantImg.svg?react'
 import { toast } from 'react-toastify';
 import { getPluginList } from '../../axios/plugin.ts'
@@ -23,7 +23,7 @@ import ChatIcon from '../../assets/img/chatIcon.svg?react'
 import { getActionsList, createActions } from '../../axios/actions.ts'
 import { getRetrievalList } from '../../axios/retrieval.ts';
 import PlaygroundImg from '@/assets/img/playgroundImg.svg?react'
-import { openChat, sendMessage, generateMessage, getListChats, getHistoryMessage, deleteChatItem } from '@/axios/playground'
+import { openChat, sendMessage, generateMessage, getListChats, getHistoryMessage,getChatItem, deleteChatItem } from '@/axios/playground'
 import { getAssistantDetail, updateAssistant, getAssistantsList } from '@/axios/assistant'
 import closeIcon from '../../assets/img/x-close.svg'
 import ModalFooterEnd from '../modalFooterEnd/index'
@@ -83,6 +83,8 @@ function Playground() {
     const [openModalTable, setOpenModalTable] = useState(false)
     const [systemPromptVariables, setSystemPromptVariable] = useState('')
     const [chatId, setChatId] = useState('')
+    const [searchChatID, setSearchChatID] = useState('')
+    
     const [actionList, setActionList] = useState([])
     const [tipSchema, setTipSchema] = useState(false)
     const [checkBoxValue, setCheckBoxValue] = useState([1, 2])
@@ -1182,13 +1184,40 @@ function Playground() {
     const onhandleTipError = (value: boolean) => {
         setTipSchema(value)
     }
+    const handleSearchChatId = async () => {
+        let id;
+        if (assistantId[0].split('-')[1]) {
+            const splitArray = assistantId[0].split('-')
+            id = splitArray.slice(-1)[0]
+        } else {
+            id = assistantId[0]
+        }
+        if (searchChatID) {
+            try {
+                const res = await getChatItem(id, searchChatID)
+                setListChats([res.data])
+                localStorage.setItem('listChats', JSON.stringify([{ chat_id: res.data.chat_id, created_timestamp: res.data.created_timestamp }]))
+            } catch (error) {
+                const apiError = error as ApiErrorResponse;
+                const errorMessage: string = apiError.response.data.error.message;
+                toast.error(errorMessage)
+            }
+        } else {
+            const res = await getListChats(id, { limit: 20 })
+            setListChats(res.data)
+            localStorage.setItem('listChats', JSON.stringify(res.data))
+        }
 
+    }
     const handleNewCollection = (value: boolean) => {
         setOpenCollectionDrawer(value)
     }
 
     const handleNewBundle = () => {
         setPluginModalOpen(true)
+    }
+    const handleChangeSearchChatID = (e: any) => {
+        setSearchChatID(e.target.value)
     }
     return (
         <>
@@ -1220,6 +1249,10 @@ function Playground() {
                                     <div className={styles['text1']}>{t('projectPlaygroundNewChat')}</div>
                                 </div>
                             </div>
+                            <Space.Compact>
+                                <Input readOnly className={styles['id-input']} style={{ width: '20%', borderRight: 0 }} defaultValue="ID" />
+                                <Input style={{ width: '73%' }} onPressEnter={handleSearchChatId} value={searchChatID} onChange={(e) => handleChangeSearchChatID(e)} placeholder='Enter chat_id' suffix={<SearchOutlined onClick={handleSearchChatId} style={{ color: 'rgba(0,0,0,.45)' }} />} />
+                            </Space.Compact>
                             <div className={styles['chats']}>
                                 <div className={styles['chat-message']}>
                                     {listChats?.map((item, index) => (<div key={index} className={`${styles.functionaliconsParent} ${chatId === item.chat_id && styles.chatId}`} onClick={() => handleOpenChat(item.chat_id)}>
