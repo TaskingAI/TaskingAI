@@ -1,0 +1,18 @@
+model_schema_id: openai/text-embedding-ada-002
+provider_model_id: text-embedding-ada-002
+type: text_embedding
+name: "i18n:text_embedding_ada_002_name"
+description: "i18n:text_embedding_ada_002_description"
+default_endpoint_url: https://api.openai.com/v1/embeddings
+
+properties:
+  embedding_size: 1536
+  input_token_limit: 8192
+  max_batch_size: 2048
+
+config_schemas:
+
+pricing:
+  input_token: 0.00010
+  unit: 1000
+  currency: USD

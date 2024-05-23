@@ -1,0 +1,9 @@
+yi_name: "Yi"
+yi_description: "01.AI's global ambition is to build cutting-edge large language model technology and software applications."
+yi_api_key_description: "Your Yi API Key for authentication."
+
+yi_34b_chat_200k_name: "Yi 34B Chat 200K"
+yi_34b_chat_200k_description: "Ultra-long context. Support for up to 200K allows for the processing of approximately 300,000 Chinese characters (≈ 1 copy of 'The Three-Body Problem') or 300,000 English words, suitable for understanding multiple document contents, massive data analysis and mining, and cross-domain knowledge integration."
+
+yi_34b_chat_0205_name: "Yi 34B Chat 0205"
+yi_34b_chat_0205_description: "Based on the open-source version yi-34b-chat-1123, numerous performance improvements have been made, especially in command adherence ability (increased by nearly 30%), and the latency of model responses has been reduced. Context length is 4k."

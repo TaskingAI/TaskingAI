@@ -1,0 +1,20 @@
+model_schema_id: mistralai/mistral-medium-latest
+provider_model_id: mistral-medium-latest
+type: chat_completion
+name: "i18n:mistral_medium_latest_name"
+description: "i18n:mistral_medium_latest_description"
+
+properties:
+  function_call: false
+  streaming: true
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+
+pricing:
+  input_token: 2.7
+  output_token: 8.1
+  unit: 1000000
+  currency: USD

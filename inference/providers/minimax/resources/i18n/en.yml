@@ -1,0 +1,18 @@
+minimax_name: "Minimax"
+minimax_description: "MiniMax, founded in December 2021, is a leading general artificial intelligence technology company dedicated to co-creating intelligence with users. MiniMax has independently developed various large-scale models across different modalities, including a trillion-parameter MoE text model, a speech model, and an image model."
+minimax_api_key_description: "Your Minimax API Key for authentication."
+
+abab5_5_chat_name: "ABAB 5.5 Chat"
+abab5_5_chat_description: "ABAB 5.5 is a large-scale language model developed by MiniMax. The total tokens limit for input and output is 16,384 tokens. Suitable for productivity scenarios."
+
+abab5_5s_chat_name: "ABAB 5.5s Chat"
+abab5_5s_chat_description: "ABAB 5.5s is a smaller version of the ABAB 5.5 model developed by MiniMax. The total tokens limit for input and output is 8,192 tokens. Suitable for character setting."
+
+abab6_chat_name: "ABAB 6 Chat"
+abab6_chat_description: "ABAB 6 is a large-scale language model developed by MiniMax. The total tokens limit for input and output is 32,768 tokens. Suitable for more complex formatted text generation."
+
+abab6_5_chat_name: "ABAB 6.5 Chat"
+abab6_5_chat_description: "ABAB 6.5 is a large-scale language model developed by MiniMax. The total tokens limit for input and output is 8,192 tokens. Suitable for more complex formatted text generation."
+
+abab6_5s_chat_name: "ABAB 6.5s Chat"
+abab6_5s_chat_description: "ABAB 6.5s is a smaller version of the ABAB 6.5 model developed by MiniMax. The total tokens limit for input and output is 245,760 tokens. Suitable for character setting."

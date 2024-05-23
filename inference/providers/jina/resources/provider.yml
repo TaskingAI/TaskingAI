@@ -1,0 +1,21 @@
+provider_id: jina
+name: "i18n:jina_name"
+description: "i18n:jina_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    JINA_API_KEY:
+      type: string
+      description: "i18n:jina_api_key_description"
+      secret: true
+  required:
+    - JINA_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/embedding_models/jina"
+  official_site_url: "https://jina.ai/"
+  official_pricing_url: "https://jina.ai/"
+  official_credentials_url: "https://jina.ai/"

@@ -1,0 +1,18 @@
+model_schema_id: ai21/ai21_embedding
+provider_model_id: ai21_embedding
+type: text_embedding
+name: "i18n:ai21_embedding_name"
+description: "i18n:ai21_embedding_description"
+default_endpoint_url: https://api.ai21.com/studio/v1/embed
+
+properties:
+  embedding_size: 1024
+  input_token_limit: 400
+  max_batch_size: 200
+
+config_schemas:
+
+pricing:
+  input_token: 0.0001
+  unit: 1000
+  currency: USD

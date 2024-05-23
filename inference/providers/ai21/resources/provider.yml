@@ -1,0 +1,20 @@
+provider_id: ai21
+name: "i18n:ai21_name"
+description: "i18n:ai21_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    AI21_API_KEY:
+      type: string
+      description: "i18n:ai21_api_key_description"
+      secret: true
+  required:
+    - AI21_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/ai21"
+  official_site_url: "https://www.ai21.com/studio"
+  official_pricing_url: "https://www.ai21.com/studio/pricing"
+  official_credentials_url: "https://studio.ai21.com/account/api-key"

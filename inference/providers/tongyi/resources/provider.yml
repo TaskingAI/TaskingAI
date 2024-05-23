@@ -1,0 +1,21 @@
+provider_id: tongyi
+name: "i18n:tongyi_name"
+description: "i18n:tongyi_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    TONGYI_API_KEY:
+      type: string
+      description: "i18n:tongyi_api_key_description"
+      secret: true
+  required:
+    - TONGYI_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/tongyi"
+  official_site_url: "https://tongyi.aliyun.com/"
+  official_pricing_url: "https://help.aliyun.com/zh/dashscope/developer-reference/tongyi-thousand-questions-metering-and-billing"
+  official_credentials_url: "https://dashscope.console.aliyun.com/apiKey"

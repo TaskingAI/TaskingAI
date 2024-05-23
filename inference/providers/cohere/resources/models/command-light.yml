@@ -1,0 +1,23 @@
+model_schema_id: cohere/command-light
+provider_model_id: command-light
+type: chat_completion
+name: "i18n:command_light_name"
+description: "i18n:command_light_description"
+default_endpoint_url: https://api.cohere.com/v1/messages
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 4096
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: top_k
+  - config_id: max_tokens
+
+pricing:
+  input_token: 0.30
+  output_token: 0.60
+  unit: 1000000
+  currency: USD

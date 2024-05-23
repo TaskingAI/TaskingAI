@@ -1,0 +1,25 @@
+replicate_name: "Replicate"
+replicate_description: "Access cutting-edge machine learning models through Replicate."
+
+replicate_api_key_description: "Your Replicate API Token for authentication."
+
+llama_2_70b_chat_name: "Llama 2 70B Chat"
+llama_2_70b_chat_description: "Engage in deep and meaningful conversations with the power of Llama 2 70B Chat model."
+
+llama_2_70b_name: "Llama 2 70B"
+llama_2_70b_description: "Harness the capability of Llama 2 70B for comprehensive language understanding and generation."
+
+llama_2_13b_chat_name: "Llama 2 13B Chat"
+llama_2_13b_chat_description: "Interactive chat model with the efficiency and scalability of Llama 2 13B."
+
+llama_2_7b_chat_name: "Llama 2 7B Chat"
+llama_2_7b_chat_description: "A compact yet powerful chat model, offering fast and reliable responses."
+
+llama_2_7b_name: "Llama 2 7B"
+llama_2_7b_description: "Llama 2 7B delivers advanced NLP capabilities in a more accessible model size."
+
+llama_2_13b_name: "Llama 2 13B"
+llama_2_13b_description: "Balancing performance and efficiency, Llama 2 13B is ideal for a range of NLP tasks."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Replicate with custom configurations."

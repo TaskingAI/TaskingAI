@@ -1,0 +1,23 @@
+provider_id: google_gemini
+name: "i18n:google_gemini_name"
+description: "i18n:google_gemini_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    GOOGLE_GEMINI_API_KEY:
+      type: string
+      description: "i18n:google_gemini_api_key_description"
+      secret: true
+    GOOGLE_GEMINI_API_VERSION:
+      type: string
+      description: "i18n:google_gemini_api_version_description"
+  required:
+    - GOOGLE_GEMINI_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/google-gemini"
+  official_site_url: "https://ai.google.dev/"
+  official_pricing_url: "https://ai.google.dev/pricing"
+  official_credentials_url: "https://aistudio.google.com/app/apikey"

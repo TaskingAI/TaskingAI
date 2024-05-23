@@ -1,0 +1,21 @@
+provider_id: lm_studio
+name: "i18n:lm_studio_name"
+description: "i18n:lm_studio_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    LM_STUDIO_HOST:
+      type: string
+      description: "i18n:lm_studio_host_description"
+      secret: false
+  required:
+    - LM_STUDIO_HOST
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/lm-studio"
+  official_site_url: "https://lmstudio.ai/"
+  official_pricing_url: ""
+  official_credentials_url: ""

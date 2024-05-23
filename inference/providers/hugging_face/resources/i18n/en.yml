@@ -1,0 +1,19 @@
+hugging_face_name: "Hugging Face Inference API (Serverless)"
+hugging_face_description: "Hugging Face is a company that specializes in natural language processing technology and provides an open-source platform for building, training, and deploying machine learning models, particularly those focused on NLP and transformer architectures."
+
+hugging_face_api_key_description: "Your Hugging Face API Token for authentication."
+
+microsoft_dialogpt_large_name: "Microsoft DialoGPT Large"
+microsoft_dialogpt_large_description: "A large-scale, powerful conversational model by Microsoft."
+
+microsoft_dialogpt_medium_name: "Microsoft DialoGPT Medium"
+microsoft_dialogpt_medium_description: "A medium-scale conversational model offering a balance between performance and resources."
+
+microsoft_dialogpt_small_name: "Microsoft DialoGPT Small"
+microsoft_dialogpt_small_description: "A smaller, more efficient conversational model by Microsoft for quick interactions."
+
+facebook_blenderbot_400m_distill_name: "Facebook Blenderbot 400M Distill"
+facebook_blenderbot_400m_distill_description: "A distilled version of Facebook's Blenderbot, optimized for efficient conversation."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Hugging Face's model hub with custom configurations."

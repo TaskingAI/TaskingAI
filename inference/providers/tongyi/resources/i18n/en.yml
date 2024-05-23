@@ -1,0 +1,18 @@
+tongyi_name: "Tongyi"
+tongyi_description: "Tongyi Qwen, developed by Alibaba's Damo Academy, leverages natural language understanding and semantic analysis to provide specialized assistance across various domains."
+tongyi_api_key_description: "Your Tongyi API Key for authentication."
+
+qwen_turbo_name: "QWEN-Turbo"
+qwen_turbo_description: "A universal large-scale language model, QWEN-Turbo supports input in multiple languages including Chinese and English. It offers a context limit of 8k tokens, with an API input restriction of 6k tokens to ensure smooth operation and output."
+
+qwen_plus_name: "QWEN-Plus"
+qwen_plus_description: "An enhanced version of the universal large-scale language model, QWEN-Plus supports multiple languages including Chinese and English. It offers an extended context limit of 32k tokens, with an API input restriction of 30k tokens to ensure proper functionality."
+
+qwen_max_name: "QWEN-Max"
+qwen_max_description: "QWEN-Max is a hundred-billion-scale universal large-scale language model that supports multiple languages including Chinese and English. With ongoing updates for improvements, QWEN-Max provides a context limit of 8k tokens and restricts API input to 6k tokens for optimal use. For a stable version, users are advised to use QWEN-Max-1201."
+
+qwen_max_1201_name: "QWEN-Max-1201"
+qwen_max_1201_description: "A snapshot stable version of the hundred-billion-scale universal large-scale language model, QWEN-Max-1201 supports multiple languages including Chinese and English. It maintains a context limit of 8k tokens with an API input restriction of 6k tokens. This model is expected to be supported until one month after the release of the next snapshot version."
+
+qwen_max_longcontext_name: "QWEN-Max-LongContext"
+qwen_max_longcontext_description: "Part of the hundred-billion-scale universal large-scale language model series, QWEN-Max-LongContext supports multiple languages including Chinese and English. It is designed to handle an extended context limit of 30k tokens to ensure comprehensive and detailed interactions."

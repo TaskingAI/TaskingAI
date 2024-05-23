@@ -1,0 +1,7 @@
+lm_studio_name: "LM Studio"
+lm_studio_description: "LM Studio is a development environment designed to provide a feature-rich platform for developers working with large language models."
+
+lm_studio_host_description: "Your LM Studio host URL"
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from LM Studio with custom configurations."

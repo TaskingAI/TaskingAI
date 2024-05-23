@@ -1,0 +1,29 @@
+mistralai_name: "MistralAI"
+mistralai_description: "A French startup that develops fast, open-source and secure language models."
+
+mistral_api_key_description: "Your Mistral API Key for authentication."
+
+open_mistral_7b_name: "open-mistral-7b"
+open_mistral_7b_description: "The first dense model released September 2023 from Mistral AI."
+
+open_mixtral_8x7b_name: "open-mixtral-8x7b"
+open_mixtral_8x7b_description: "The first sparse mixture-of-experts released December 2023 from Mistral AI."
+
+open_mixtral_8x22b_name: "open-mixtral-8x22b"
+open_mixtral_8x22b_description: "The best open source model to date released April 2024 from Mistral AI."
+
+mistral_small_latest_name: "mistral-small-latest"
+mistral_small_latest_description: "Higher reasoning capabilities and more capabilities. The model supports English, French, German, Italian, and Spanish and can produce and reason about code. Currently powered Mixtral-8X7B-v0.1, a sparse mixture of experts model with 12B active parameters."
+
+mistral_medium_latest_name: "mistral-medium"
+mistral_medium_latest_description: "Mistral AI's medium-sized model. Supports a context window of 32k tokens (around 24,000 words) and is stronger than Mixtral-8x7b and Mistral-7b on benchmarks across the board."
+
+mistral_embed_name: "mistral-embed"
+mistral_embed_description: "The model outputs vectors in 1024 dimensions. It achieves a retrieval score of 55.26 on MTEB."
+
+
+mistral_large_latest_name: "mistral-large"
+mistral_large_latest_description: "Mistral AI's most powerful model. Supports a context window of 32k tokens (around 24,000 words) and is stronger than Mistral-Medium, Mixtral-8x7b and Mistral-7b on benchmarks across the board."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Mistral AI with custom configurations."

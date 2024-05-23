@@ -1,0 +1,30 @@
+debug_name: "Debug"
+debug_description: "Debug provider for testing purposes."
+debug_api_key_description: "debug"
+
+debug_chat_completion_name: "Debug Chat Completion"
+debug_chat_completion_description: "Debug chat completion model for testing purposes."
+
+debug_error_name: "Debug Error"
+debug_error_description: "Debug error model for testing purposes."
+
+debug_text_embedding_256_name: "Debug Text Embedding 256"
+debug_text_embedding_256_description: "Debug text embedding model with 256 dimensions for testing purposes."
+
+debug_text_embedding_384_name: "Debug Text Embedding 384"
+debug_text_embedding_384_description: "Debug text embedding model with 384 dimensions for testing purposes."
+
+debug_text_embedding_512_name: "Debug Text Embedding 512"
+debug_text_embedding_512_description: "Debug text embedding model with 512 dimensions for testing purposes."
+
+debug_text_embedding_768_name: "Debug Text Embedding 768"
+debug_text_embedding_768_description: "Debug text embedding model with 768 dimensions for testing purposes."
+
+debug_text_embedding_1024_name: "Debug Text Embedding 1024"
+debug_text_embedding_1024_description: "Debug text embedding model with 1024 dimensions for testing purposes."
+
+debug_text_embedding_1536_name: "Debug Text Embedding 1536"
+debug_text_embedding_1536_description: "Debug text embedding model with 1536 dimensions for testing purposes."
+
+debug_wildcard_name: "Debug Wildcard"
+debug_wildcard_description: "Debug wildcard model for testing purposes."

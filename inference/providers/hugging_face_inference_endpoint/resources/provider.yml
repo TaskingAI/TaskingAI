@@ -1,0 +1,26 @@
+provider_id: hugging_face_inference_endpoint
+name: "i18n:hugging_face_inference_endpoint_name"
+description: "i18n:hugging_face_inference_endpoint_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    HUGGING_FACE_API_KEY:
+      type: string
+      description: "i18n:hugging_face_api_key_description"
+      secret: true
+    HUGGING_INFERENCE_ENDPOINT_URL:
+      type: string
+      description: "i18n:hugging_face_inference_endpoint_url_description"
+      secret: true
+  required:
+    - HUGGING_FACE_API_KEY
+    - HUGGING_INFERENCE_ENDPOINT_URL
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/hugging-face-inference-endpoint"
+  official_site_url: "https://huggingface.co/"
+  official_pricing_url: "https://huggingface.co/pricing"
+  official_credentials_url: "https://huggingface.co/settings/tokens"

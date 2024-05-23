@@ -1,0 +1,34 @@
+provider_id: azure_openai
+name: "i18n:azure_openai_name"
+description: "i18n:azure_openai_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    AZURE_OPENAI_RESOURCE_NAME:
+      type: string
+      description: "i18n:azure_openai_resource_name_description"
+      secret: true
+    AZURE_OPENAI_DEPLOYMENT_ID:
+      type: string
+      description: "i18n:azure_openai_deployment_id_description"
+      secret: true
+    AZURE_OPENAI_API_KEY:
+      type: string
+      description: "i18n:azure_openai_api_key_description"
+      secret: true
+    AZURE_OPENAI_API_VERSION:
+      type: string
+      description: "i18n:azure_openai_api_version_description"
+      secret: false
+  required:
+    - AZURE_OPENAI_RESOURCE_NAME
+    - AZURE_OPENAI_DEPLOYMENT_ID
+    - AZURE_OPENAI_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/azure-openai"
+  official_site_url: "https://azure.microsoft.com/en-us/products/ai-services/openai-service"
+  official_pricing_url: "https://azure.microsoft.com/en-us/pricing/#product-pricing"
+  official_credentials_url: "https://azure.microsoft.com/en-us/products/ai-services/openai-service"

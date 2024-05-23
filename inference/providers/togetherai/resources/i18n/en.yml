@@ -1,0 +1,19 @@
+togetherai_name: "Together AI"
+togetherai_description: "The Together API simplifies accessing and fine-tuning leading open-source models like Llama-2, RedPajama, Falcon, Alpaca, and Stable Diffusion XL with minimal code."
+
+togetherai_api_key_description: "Your TogetherAI API Key for authentication."
+
+mixtral_8x7b_instruct_v0_1_name: "Mixtral-8x7B-Instruct-v0.1"
+mixtral_8x7b_instruct_v0_1_description: "Harness the power of Mixtral-8x7B-Instruct-v0.1 for enhanced chat completion tasks, featuring high input token limits and streaming capabilities."
+
+mistral_7b_instruct_v0_1_name: "Mistral-7B-Instruct-v0.1"
+mistral_7b_instruct_v0_1_description: "Leverage the capabilities of Mistral-7B-Instruct-v0.1 for chat completion tasks."
+
+codeLlama_34b_Instruct_name: "CodeLlama-34b-Instruct"
+codeLlama_34b_Instruct_description: "Empower your chat completion tasks with the capabilities of CodeLlama-34b-Instruct, featuring function call and streaming capabilities."
+
+llama_2_70b_chat_hf_name: "Llama-2-70B-Chat-HF"
+llama_2_70b_chat_hf_description: "Developed by Meta, it is one of the most popular open-source large language models, based on the Llama-2 architecture with 70 billion parameters."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from TogetherAI with custom configurations."

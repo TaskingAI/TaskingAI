@@ -1,0 +1,21 @@
+provider_id: ollama
+name: "i18n:ollama_name"
+description: "i18n:ollama_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    OLLAMA_HOST:
+      type: string
+      description: "i18n:ollama_host_description"
+      secret: false
+  required:
+    - OLLAMA_HOST
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/ollama"
+  official_site_url: "https://ollama.com/"
+  official_pricing_url: ""
+  official_credentials_url: ""

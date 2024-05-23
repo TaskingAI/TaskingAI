@@ -1,0 +1,25 @@
+model_schema_id: anthropic/claude-3-haiku
+provider_model_id: claude-3-haiku-20240307
+type: chat_completion
+name: "i18n:claude_3_haiku_name"
+description: "i18n:claude_3_haiku_description"
+default_endpoint_url: https://api.anthropic.com/v1/messages
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 200000
+  output_token_limit: 4096
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: top_k
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.25
+  output_token: 1.25
+  unit: 1000000
+  currency: USD

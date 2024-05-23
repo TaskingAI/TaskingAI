@@ -1,0 +1,7 @@
+localai_name: "LocalAI"
+localai_description: "LocalAI is the free, Open Source OpenAI alternative. LocalAI act as a drop-in replacement REST API that’s compatible with OpenAI API specifications for local inferencing."
+
+localai_host_description: "Your LocalAI host URL"
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from LocalAI with custom configurations."

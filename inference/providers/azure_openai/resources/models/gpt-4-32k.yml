@@ -1,0 +1,23 @@
+model_schema_id: azure_openai/gpt-4-32k
+provider_model_id: gpt-4-32k
+type: chat_completion
+name: "i18n:gpt_4_32k_name"
+description: "i18n:gpt_4_32k_description"
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 32768
+  output_token_limit: 4096
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.06
+  output_token: 0.12
+  unit: 1000
+  currency: USD

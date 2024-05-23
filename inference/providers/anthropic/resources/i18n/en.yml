@@ -1,0 +1,26 @@
+anthropic_name: "Anthropic"
+anthropic_description: "Anthropic is an AI safety and research company focused on developing reliable, interpretable, and steerable artificial intelligence systems."
+
+anthropic_api_key_description: "Your Anthropic API Key for authentication."
+anthropic_api_version_description: "The version of the Anthropic API being used."
+
+claude_2_1_name: "Claude 2.1"
+claude_2_1_description: "Claude 2.1 increased accuracy, doubled context window, introduced experimental features, and emphasized honesty and detailed engagement."
+
+claude_2_0_name: "Claude 2.0"
+claude_2_0_description: "Claude 2.0 enhanced user interaction, improved in coding, math, logical reasoning, handled 100K tokens, and focused on safety and performance."
+
+claude_instant_1_2_name: "Claude Instant 1.2"
+claude_instant_1_2_description: "Claude Instant 1.2 is a smaller, faster, and more efficient version of Claude 2.1, designed for real-time applications."
+
+claude_3_opus_name: "Claude 3 Opus"
+claude_3_opus_description: "Most powerful model for highly complex tasks."
+
+claude_3_sonnet_name: "Claude 3 Sonnet"
+claude_3_sonnet_description: "Ideal balance of intelligence and speed for enterprise workloads."
+
+claude_3_haiku_name: "Claude 3 Haiku"
+claude_3_haiku_description: "Fast and efficient model for simple tasks."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Anthropic with custom configurations."

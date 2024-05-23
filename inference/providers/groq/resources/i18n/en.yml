@@ -1,0 +1,21 @@
+groq_name: "Groq"
+groq_description: "Groq is an AI solutions company delivering ultra-low latency inference with the first ever LPU Inference Engine."
+groq_api_key_description: "Your Groq API Key for authentication."
+
+llama2_70b_name: "Llama2 70B"
+llama2_70b_description: "The LLaMA2-70b model, developed by Meta, features a 4,096 token context window, showcasing excellence in natural language understanding and generation tasks."
+
+mixtral_8x7b_name: "Mixtral 8x7B"
+mixtral_8x7b_description: "Mixtral-8x7B is a large language model with a 32,768 token context window, produced by Mistral AI, excelling in natural language understanding and generation tasks."
+
+gemma_7b_name: "Gemma 7B"
+gemma_7b_description: "Gemma-7B is a LLM developed by Google, featuring a 8,192 token context window."
+
+llama3_70b_name: "Llama3 70B"
+llama3_70b_description: "Meta has launched Llama 3, a new generation of its open-source large language model featuring enhanced capabilities like reasoning and coding. The model has a 8,192 token context window."
+
+llama3_8b_name: "Llama3 8B"
+llama3_8b_description: "A smaller version of the Llama3 model, with a 8,192 token context window."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Groq with custom configurations."

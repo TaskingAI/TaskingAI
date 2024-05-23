@@ -1,0 +1,23 @@
+model_schema_id: cohere/command-r
+provider_model_id: command-r
+type: chat_completion
+name: "i18n:command_r_name"
+description: "i18n:command_r_description"
+default_endpoint_url: https://api.cohere.com/v1/messages
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 128000
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: top_k
+  - config_id: max_tokens
+
+pricing:
+  input_token: 0.5
+  output_token: 1.5
+  unit: 1000000
+  currency: USD

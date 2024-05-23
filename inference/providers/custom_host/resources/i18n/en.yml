@@ -1,0 +1,15 @@
+custom_host_name: "Custom Host"
+custom_host_description: "Configure your custom model hosting with Custom Host."
+
+custom_host_endpoint_url_description: "The url to your model endpoint."
+custom_host_model_id_description: "The model id to use for your endpoint."
+custom_host_api_key_description: "Your API Key for authentication."
+
+openai_function_call_name: "OpenAI Function Call Model"
+openai_function_call_description: "Supports chat models compatible with the OpenAI API schema, with 'function_call'. Hosted on custom endpoints."
+
+openai_tool_calls_name: "OpenAI Tool Call Model"
+openai_tool_calls_description: "Supports chat models compatible with the OpenAI API schema, with 'tool_calls'. Hosted on custom endpoints."
+
+openai_text_embedding_name: "OpenAI Text Embedding Model"
+openai_text_embedding_description: "Supports text embedding models compatible with the OpenAI API schema. Hosted on custom endpoints."

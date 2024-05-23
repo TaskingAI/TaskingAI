@@ -1,0 +1,20 @@
+model_schema_id: hugging_face_inference_endpoint/wildcard
+provider_model_id:
+type: wildcard
+name: "i18n:wildcard_name"
+description: "i18n:wildcard_description"
+
+properties:
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+  - config_id: top_k
+
+pricing:
+  input_token: 0
+  output_token: 0
+  unit: 0
+  currency: USD

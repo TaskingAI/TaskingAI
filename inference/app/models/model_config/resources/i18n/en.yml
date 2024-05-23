@@ -1,0 +1,26 @@
+model_config_max_tokens_name: "Max Tokens"
+model_config_max_tokens_description: "max_tokens is the maximum number of tokens to generate. The model will stop generating tokens once this number is reached."
+
+model_config_stop_name: "Stop"
+model_config_stop_description: "stop is a string of tokens at which to stop generation. The model will stop generating tokens once one of the tokens in the list is generated."
+
+model_config_temperature_name: "Temperature"
+model_config_temperature_description: "temperature is a value between 0 and 1 that controls the randomness of the generated tokens. Lower temperatures make the model more deterministic and repetitive, while higher temperatures make the model more creative and varied."
+
+model_config_top_k_name: "Top K"
+model_config_top_k_description: "top_k is an integer that controls the diversity of the generated tokens. The model will only consider the top k tokens when sampling from the output distribution. Higher values of top_k will result in more diverse and creative outputs, while lower values will result in more repetitive and safe outputs."
+
+model_config_top_p_name: "Top P"
+model_config_top_p_description: "top_p is a value between 0 and 1 that controls the diversity of the generated tokens. The model will only consider the cumulative probability of the top tokens until the probability mass exceeds p. Higher values of top_p will result in more diverse and creative outputs, while lower values will result in more repetitive and safe outputs."
+
+model_config_frequency_penalty_name: "Frequency Penalty"
+model_config_frequency_penalty_description: "frequency_penalty penalizes the model for generating the same token multiple times in a row. Lower values will result in more repetitive outputs, while higher values will result in more diverse outputs."
+
+model_config_presence_penalty_name: "Presence Penalty"
+model_config_presence_penalty_description: "presence_penalty penalizes the model for generating tokens that are already present in the input prompt. Lower values will result in more repetitive outputs, while higher values will result in more diverse outputs."
+
+model_config_seed_name: "Seed"
+model_config_seed_description: "seed is an integer that controls the randomness of the generated tokens. Setting a seed will make the generated tokens reproducible across runs."
+
+model_config_response_format_name: "Response Format"
+model_config_response_format_description: "response_format is a string that controls the format of the generated response."

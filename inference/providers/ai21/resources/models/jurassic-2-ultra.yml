@@ -1,0 +1,23 @@
+model_schema_id: ai21/j2-ultra
+provider_model_id: j2-ultra
+type: chat_completion
+name: "i18n:jurassic_2_ultra_name"
+description: "i18n:jurassic_2_ultra_description"
+default_endpoint_url: https://api.ai21.com/studio/v1/j2-ultra/chat
+
+properties:
+  function_call: false
+  streaming: false
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: top_k
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.015
+  output_token: 0.015
+  unit: 1000
+  currency: USD

@@ -1,0 +1,23 @@
+model_schema_id: groq/llama3-8b
+provider_model_id: llama3-8b-8192
+type: chat_completion
+name: "i18n:llama3_8b_name"
+description: "i18n:llama3_8b_description"
+default_endpoint_url: https://api.groq.com/openai/v1/chat/completions
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 8192
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.05
+  output_token: 0.1
+  unit: 1000000
+  currency: USD

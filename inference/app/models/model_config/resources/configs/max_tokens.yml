@@ -1,0 +1,9 @@
+config_id: max_tokens
+name: "i18n:model_config_max_tokens_name"
+description: "i18n:model_config_max_tokens_description"
+schema:
+  type: int
+  default: 8192
+  min: 1
+  max: 8192
+  step: 1

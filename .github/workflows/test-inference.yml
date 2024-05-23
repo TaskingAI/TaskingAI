@@ -1,0 +1,85 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches: ["master"]
+    paths:
+      - 'inference/**'
+      - '!**.md'
+      - '!**.svg'
+      - '!**.jpg'
+      - '!**.png'
+
+
+env:
+  ECR_REGISTRY: inference
+  ECR_REPOSITORY: inference
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Check spelling of repo
+        uses: crate-ci/typos@master
+
+      - name: Get list of changed files
+        id: files
+        run: |
+          git fetch origin +${{ github.event.pull_request.base.sha }}:refs/remotes/origin/pr-base +${{ github.event.pull_request.head.sha }}:refs/remotes/origin/pr-head
+          git diff --name-only origin/pr-base origin/pr-head > /tmp/changed_files.txt
+          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
+          cat /tmp/changed_files.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "::set-output name=changed_files::$(cat /tmp/changed_files.txt)"
+
+      - name: Set short SHA for image tag
+        run: echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
+
+      - name: Check for git tag version
+        run: |
+          TAG=$(git describe --tags --exact-match 2> /dev/null || echo "")
+          if [[ -n "$TAG" ]]; then
+            echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install Dependencies
+        working-directory: inference
+        run: pip install -r requirements.txt
+
+      - name: Build Docker image
+        working-directory: inference
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          echo "Build success: ${ECR_REGISTRY}/$ECR_REPOSITORY:${IMAGE_TAG}"
+
+      - name: Run Docker image
+        working-directory: inference
+        env:
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+          INFERENCE_PROVIDER_CREDENTIALS: ${{ secrets.INFERENCE_PROVIDER_CREDENTIALS }}
+          AES_SECRET_KEY: ${{ secrets.AES_SECRET_KEY }}
+        run: |
+          echo "$INFERENCE_PROVIDER_CREDENTIALS" > .env
+          echo "$AES_SECRET_KEY" >> .env
+          docker run -d --name test_container --network=host --env-file .env -e MODE=test -e PROVIDER_URL_BLACK_LIST="tasking.ai" $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          sleep 10 # Wait for service to start
+
+      - name: Run Tests
+        working-directory: inference
+        run: |
+          export PROVIDER_URL_BLACK_LIST="tasking.ai"
+          bash ./test/run_test.sh /tmp/changed_files.txt

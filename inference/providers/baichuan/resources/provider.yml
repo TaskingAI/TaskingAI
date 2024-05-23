@@ -1,0 +1,20 @@
+provider_id: baichuan
+name: "i18n:baichuan_name"
+description: "i18n:baichuan_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    BAICHUAN_API_KEY:
+      type: string
+      description: "i18n:baichuan_api_key_description"
+      secret: true
+  required:
+    - BAICHUAN_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/baichuan"
+  official_site_url: "https://www.baichuan-ai.com/home"
+  official_pricing_url: "https://platform.baichuan-ai.com/price"
+  official_credentials_url: "https://platform.baichuan-ai.com/console/apikey"

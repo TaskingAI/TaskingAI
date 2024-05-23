@@ -1,0 +1,28 @@
+azure_openai_name: "Azure OpenAI"
+azure_openai_description: "Azure OpenAI Service offers businesses access to advanced AI models, including GPT-3, Codex, and DALL·E, integrating cutting-edge AI capabilities into applications and workflows."
+
+azure_openai_resource_name_description: "The name of your Azure OpenAI Resource."
+azure_openai_deployment_id_description: "The deployment name you chose when you deployed the model."
+azure_openai_api_key_description: "Your Azure OpenAI API Key for authentication."
+azure_openai_api_version_description: "(Optional) The Azure API version follows the YYYY-MM-DD format."
+
+gpt_3_5_turbo_name: "GPT-3.5-Turbo"
+gpt_3_5_turbo_description: "A model that improves on GPT-3.5 and can understand as well as generate natural language or code."
+
+gpt_3_5_turbo_16k_name: "GPT-3.5-Turbo-16K"
+gpt_3_5_turbo_16k_description: "A legacy gpt-3.5-turbo model that providers 16k context window."
+
+gpt_4_name: "GPT-4"
+gpt_4_description: "A model that improves on GPT-3.5 and can understand as well as generate natural language or code."
+
+gpt_4_32k_name: "GPT-4-32K"
+gpt_4_32k_description: "A model that improves on GPT-3.5 and can understand as well as generate natural language or code. It provides a 32k context window."
+
+gpt_4_turbo_name: "GPT-4-Turbo"
+gpt_4_turbo_description: "GPT-4 Turbo model featuring improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more."
+
+gpt_4_vision_name: "GPT-4-Turbo-Vision"
+gpt_4_vision_description: "GPT-4 with the ability to understand images, in addition to all other GPT-4 Turbo capabilities."
+
+text_embedding_ada_002_name: "text-embedding-ada-002"
+text_embedding_ada_002_description: "Stronger performance. It outperforms all the old embedding models on text search, code search, and sentence similarity tasks and gets comparable performance on text classification."

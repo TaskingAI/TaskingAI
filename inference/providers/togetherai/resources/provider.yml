@@ -1,0 +1,21 @@
+provider_id: togetherai
+name: "i18n:togetherai_name"
+description: "i18n:togetherai_description"
+updated_timestamp: 1707152831000
+
+credentials_schema:
+  type: object
+  properties:
+    TOGETHERAI_API_KEY:
+      type: string
+      description: "i18n:togetherai_api_key_description"
+      secret: true
+  required:
+    - TOGETHERAI_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/togetherai"
+  official_site_url: "https://www.together.ai/"
+  official_pricing_url: "https://www.together.ai/pricing"
+  official_credentials_url: "https://api.together.xyz/settings/api-keys"

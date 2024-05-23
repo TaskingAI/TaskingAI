@@ -1,0 +1,9 @@
+hugging_face_inference_endpoint_name: "Hugging Face Inference Endpoint (Dedicated)"
+hugging_face_inference_endpoint_description: "Hugging Face is a company that specializes in natural language processing technology and provides an open-source platform for building, training, and deploying machine learning models, particularly those focused on NLP and transformer architectures."
+
+hugging_face_api_key_description: "Your Hugging Face API Token for authentication."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Hugging Face's model hub with custom configurations."
+
+hugging_face_inference_endpoint_url_description: "Your Hugging Face Inference Endpoint URL."

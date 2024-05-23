@@ -1,0 +1,23 @@
+model_schema_id: azure_openai/gpt-4-turbo
+provider_model_id: gpt-4-turbo
+type: chat_completion
+name: "i18n:gpt_4_turbo_name"
+description: "i18n:gpt_4_turbo_description"
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 128000
+  output_token_limit: 4096
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.01
+  output_token: 0.03
+  unit: 1000
+  currency: USD
