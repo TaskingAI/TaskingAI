@@ -16,7 +16,7 @@ function Login() {
         try {
             const res = await fetchLogin(val)
             localStorage.setItem('token', res.data.token)
-            await navigate('/project/models')
+            await navigate('/project/home')
             toast.success('Signin successful')
         } catch (error) {
             toast.error(error.response.data.error.message)

@@ -1,0 +1,115 @@
+.dashboardContent {
+    display: flex;
+    overflow: auto;
+}
+.dashboard {
+    padding: 24px;
+    background-color: var(--color-item-background);
+    overflow: auto;
+    margin: auto;
+    width: 1328px;
+    .title {
+        font-size: 24px;
+        line-height: 30px;
+        font-weight: 600;
+        margin-bottom: 72px;
+    }
+
+    .second-title {
+        font-size: 18px;
+        line-height: 22px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .desc {
+        font-size: 14px;
+        line-height: 17px;
+        font-weight: 400;
+        color: #777;
+    }
+
+    .content {
+        display: flex;
+        gap: 48px;
+        align-items: center;
+        justify-content: space-between;
+        height: 250px;
+        margin-bottom: 72px;
+        margin-top: 24px;
+
+      
+    }
+    .son-content {
+        .group-button {
+            display: flex;
+            gap: 10px;
+        }
+    }
+    .card-group {
+        display: flex;
+        gap: 12px;
+        height: 180px;
+        margin-bottom: 72px;
+        .card-item {
+            border: 1px solid var(--color-divider);
+            background-color: white;
+            padding: 12px;
+            display: flex;
+            border-radius: 8px;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 275px;
+            height: 178px;
+            .card-top {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                .card-header {
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+
+                }
+            }
+            .card-name {
+                font-size: 16px;
+                line-height: 20px;
+                font-weight: 500;
+            }
+            .button-group {
+                display: flex;
+                gap: 16px;
+            }
+        }
+    }
+    .card-bottom {
+        display: flex;
+        gap: 12px;
+        .card-bottom-item {
+            width: 300px;
+            display: flex;
+            gap: 16px;
+            flex-direction: column;
+            .card-header {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                .card-bottom-title {
+                    font-size: 16px;
+                    line-height: 20px;
+                    height: 20px;
+                    font-weight: 500;
+                }
+            }
+        }
+
+    }
+}
+.dashboard::-webkit-scrollbar {
+    display: none;
+}
+.dashboardContent::-webkit-scrollbar {
+    display: none;
+
+}

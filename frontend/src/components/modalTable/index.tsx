@@ -404,7 +404,7 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
                     {!ifSelect && (
                         <div className={styles['header-new']}>
                             <div className={styles['plusParent']}>
-                                <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>{title}</Button>
+                                <Button type='primary' icon={<PlusOutlined />} className={`${styles['prompt-button']} next-button`} onClick={handleCreatePrompt}>{title}</Button>
                             </div>
                         </div>
                     )}

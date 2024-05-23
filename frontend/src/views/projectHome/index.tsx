@@ -1,4 +1,3 @@
-
 import { Layout, Menu, ConfigProvider, Button, Modal, Select } from 'antd';
 import { useState, useEffect } from 'react'
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
@@ -14,7 +13,6 @@ import './projectHome.scss';
 import Forum from '../../assets/img/Forum.svg?react'
 import ApiRefrence from '../../assets/img/apiRefrenceNew.svg?react'
 import { setPlaygroundSelect } from '@/Redux/actions/playground'
-
 import IconData from '../../assets/img/modelNew.svg?react'
 import Assistant from '../../assets/img/assistantsNew.svg?react'
 import aiIcon from "../../assets/img/LOGO+TEXT.svg";
@@ -27,11 +25,9 @@ import ArrowIcons from '../../assets/img/ArrowIcons.svg?react';
 import RightArrow from '../../assets/img/rightarrow.svg?react';
 import Playground from '../../assets/img/playgroundNew.svg?react';
 import config from '../../../package.json'
+import HomeIcon from '@/assets/img/homeIcon.svg?react'
 import { useDispatch, useSelector } from 'react-redux';
-
 const { Header, Content, Sider } = Layout;
-
-
 const ProjectHome = () => {
     const { search, pathname } = useLocation();
 
@@ -42,8 +38,9 @@ const ProjectHome = () => {
     const location = useLocation()
     const { modelName, modelId } = useSelector((state: any) => state.modelId)
     const keyReverseValue: Record<string, string> = {
-        ['/project']: 'Models',
+        ['/project']: 'Home',
         ['/project/models']: 'Models',
+        ['/project/home']: 'Home',
         ['/project/assistants']: 'Assistants',
         ['/project/collections']: 'Retrieval',
         ['/project/playground']: 'Playground',
@@ -57,7 +54,7 @@ const ProjectHome = () => {
         { key: '/project/tools/actions', icon: <LogoutOutlined />, text: 'Actions', path: `/project/tools/actions` },
     ];
     const [key, setKey] = useState('')
-    const filteredKeys = [location.pathname === `/project` || location.pathname === `/project/` ? `/project/models` : location.pathname, location.pathname.includes('tools') && `/project/tools`, !location.pathname.includes('tools/actions') && location.pathname.includes('tools') && `/project/tools/plugins`]
+    const filteredKeys = [location.pathname === `/project` || location.pathname === `/project/` ? `/project/home` : location.pathname, location.pathname.includes('tools') && `/project/tools`, !location.pathname.includes('tools/actions') && location.pathname.includes('tools') && `/project/tools/plugins`]
 
     const [selectedKey, setSelectedKey] = useState(filteredKeys.filter(item => Boolean(item)) as string[])
     const [isOpen, setOpen] = useState(selectedKey.filter(item => typeof item === 'string').some(item => (item as string).includes('tools')))
@@ -228,6 +225,9 @@ const ProjectHome = () => {
                         }}>
                             <Menu onMouseEnter={handleMouseEnter}
                                 onMouseLeave={handleMouseLeave} className={collapsed ? 'collapsed' : ''} inlineCollapsed={collapsed} mode="vertical" theme="light" selectedKeys={selectedKey} onClick={handleClickMenu} >
+                                <Menu.Item key={`/project/home`} icon={<HomeIcon className="svg-icons" />}>
+                                        <Link to={`/project/home`}>Home</Link>
+                                    </Menu.Item>
                                 <Menu.Item key={'/project/models'} icon={<IconData className="svg-icons" />}>
                                     <Link to={'/project/models'}>Models</Link>
                                 </Menu.Item>
