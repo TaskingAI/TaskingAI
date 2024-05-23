@@ -20,7 +20,7 @@ function ModelComponent(props: any) {
     const dispatch = useDispatch();
     const { modelsTableColumn,  } = CommonComponents();
     const [recordsSelected, setRecordsSelected] = useState([])
-
+    const [confirmLoading, setConfirmLoading] = useState(false)
     const [modelOne, setModelOne] = useState(false);
     const childRef = useRef<ChildRefType | null>(null);
     const [updateModelPrevButton, setUpdateModelPrevButton] = useState(false)
@@ -78,14 +78,15 @@ function ModelComponent(props: any) {
         await fetchModelsList(value)
     }
     const handleRecordsSelected = (value: any, selectedRows: any[]) => {
-        console.log(value,selectedRows)
         setRecordsSelected(value)
         setDetailSelectedRowInfo(selectedRows)
         const tag = selectedRows.map(item => (item.name + '-' + item.model_id))
         setSelectedRows(tag)
     }
-    const handleModalConfirm = () => {
-        props.handleModalConfirm(selectedRows, ...detailSelectedRowInfo)
+    const handleModalConfirm =async () => {
+        setConfirmLoading(true)
+        await props.handleModalConfirm(...detailSelectedRowInfo)
+        setConfirmLoading(false)
     }
     return (
         <>
@@ -101,7 +102,7 @@ function ModelComponent(props: any) {
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleModalConfirm} className='next-button'>
+                        <Button key="submit" onClick={handleModalConfirm} className='next-button' loading={confirmLoading}>
                             {t('confirm')}
                         </Button>
                     </div>

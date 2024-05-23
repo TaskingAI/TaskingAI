@@ -6,12 +6,13 @@
     flex-direction: column;
 
     .table-border {
-        border: 1px solid #eee;
+        border: 1px solid var(--color-clear-button-hover);
         flex: 1;
         border-radius: 8px;
         background-color: white;
         height: calc(100% - 76px);
         position: relative;
+
         .empty-table {
             height: calc(100% - 76px);
         }
@@ -32,8 +33,6 @@
                     .ant-spin-container {
                         height: 100% !important;
 
-
-
                         .ant-table {
                             height: 100% !important;
 
@@ -41,7 +40,6 @@
                                 height: 100% !important;
 
                                 .ant-table-header {
-
                                     table {
                                         .ant-table-thead {
                                             tr {
@@ -77,7 +75,6 @@
                                             height: 100% !important;
                                             box-sizing: border-box
                                         }
-
                                     }
                                 }
                             }
@@ -97,8 +94,6 @@
         margin-bottom: 24px;
 
         :global {
-
-
             .ant-input {
                 flex: 1
             }
@@ -113,7 +108,7 @@
         }
 
         .select-data {
-            width: 150px !important;
+            width: 160px !important;
         }
 
         .header-new {
@@ -136,12 +131,13 @@
                     border-top-right-radius: 0;
                     border-bottom-right-radius: 0;
                     border-right: none;
-                    border: 1px solid #e4e4e4;
+                    border: 1px solid var(--color-divider);
                     border-right: none !important;
 
                 }
             }
         }
+
         .select-name:hover {
             :global {
                 .ant-select-selector {
@@ -168,8 +164,7 @@
         display: flex;
         background-color: white;
         padding-top: 10px;
-        border-top: 1px solid #eee;
-
+        border-top: 1px solid var(--color-clear-button-hover);
         width: 100%;
         justify-content: center;
         align-items: center;
@@ -199,14 +194,14 @@
             }
 
             .ant-btn-default:hover {
-                color: #2B2B2B;
+                color: var( --color-text-primary );
                 border: 1px solid var(--color-divider);
 
             }
 
             .ant-btn-default:disabled {
                 border: 1px solid var(--color-divider);
-                color: #bfbfbf;
+                color: var( --color-text-disable );
             }
 
         }
@@ -219,7 +214,7 @@
             border-right: none;
             width: 96px;
             height: 40px;
-            color: #bfbfbf;
+            color: var( --color-text-disable );
             background-color: white;
             border: 1px solid var(--color-divider);
 
@@ -234,7 +229,7 @@
             border-top-left-radius: 0;
             width: 96px;
             height: 40px;
-            color: #bfbfbf;
+            color: var( --color-text-disable );
             background-color: white;
 
             border: 1px solid var(--color-divider);
@@ -260,7 +255,7 @@
                         display: flex;
                         padding: 12px;
                         align-items: center;
-                        border: 1px solid #e4e4e4;
+                        border: 1px solid var(--color-divider);
 
                         .ant-select-selection-search-input {
                             height: 100%;
@@ -281,7 +276,6 @@
         position: absolute;
         display: flex;
         margin-top: 16px;
-
         justify-content: center;
 
         :global {
@@ -311,7 +305,7 @@
                     .ant-select-selector {
                         height: 40px;
                         width: 116px;
-                        border: 1px solid #e4e4e4;
+                        border: 1px solid var(--color-divider);
 
                         display: flex;
                         padding: 12px;
@@ -346,7 +340,7 @@
 .prompt-button {
     background-color: #099250;
     color: white;
-    margin: 0px !important;
+    margin: 0px;
     height: 32px;
     padding: 2px 10px;
 }
@@ -354,8 +348,38 @@
 .prompt-button:hover {
     color: var(--color-invert-text) !important;
     cursor: pointer;
-    background-color: var(--color-positive-hover);
+    background-color: var(--color-positive-hover) !important;
     border: 1px solid transparent !important;
     outline: none;
     box-shadow: none;
+}
+
+:global {
+    .ant-table-body {
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+    }
+
+    .ant-table-body:hover {
+        scrollbar-color: #bbb transparent;
+    }
+
+    .ant-table-body::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .ant-table-body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .ant-table-body::-webkit-scrollbar-thumb {
+        background: transparent;
+    }
+
+    .ant-table-body:hover::-webkit-scrollbar-thumb {
+        background: #bbb;
+        height: 6px;
+        width: 3px;
+    }
+
 }

@@ -7,7 +7,7 @@ import ClipboardJS from 'clipboard';
 import { toast } from 'react-toastify';
 import CopyOutlined from '@/assets/img/copyIcon.svg?react';
 import { useTranslation } from 'react-i18next';
-import IconComponent from '@/components/iconComponent';
+import IconComponent from '@/commonComponent/iconComponent';
 import ChatCompletionIcon from '@/assets/img/chatCompletion.svg?react'
 import TextEmbeddingIcon from '@/assets/img/textEmbedding.svg?react'
 import WildCardIcon from '@/assets/img/wildcard.svg?react'

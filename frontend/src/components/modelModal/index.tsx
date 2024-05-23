@@ -5,7 +5,7 @@ import {
 import './modelModal.scss'
 import QuestionCircleOutlined from '../../assets/img/questionCircleOutlined.svg?react'
 import RightArrow from '../../assets/img/rightarrow.svg?react'
-import IconComponent from '@/components/iconComponent';
+import IconComponent from '@/commonComponent/iconComponent';
 import ModelIcon from '@/commonComponent/modelIcon/index'
 import ChatCompletionIcon from '../../assets/img/chatCompletion.svg?react'
 import TextEmbeddingIcon from '../../assets/img/textEmbedding.svg?react'
