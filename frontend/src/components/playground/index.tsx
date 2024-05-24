@@ -1,7 +1,7 @@
 import styles from './playground.module.scss'
 import { useState, useEffect, useRef, } from 'react'
-import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Collapse, Space, Upload } from 'antd'
-import { PlusOutlined, RightOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons';
+import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Collapse, Space, Upload, Image } from 'antd'
+import { PlusOutlined, RightOutlined, LoadingOutlined, SearchOutlined, EyeOutlined } from '@ant-design/icons';
 import PlayGroundImg from '@/assets/img/selectAssistantImg.svg?react'
 import { FullApiResponse } from '@/constant/index.ts'
 import type { GetProp, UploadProps } from 'antd';
@@ -18,7 +18,6 @@ import CreateCollection from '../createCollection/index.tsx';
 import ModalSettingIcon from '../../assets/img/modalSettingIcon.svg?react'
 import { formatTimestamp, getFirstMethodAndEndpoint } from '@/utils/util'
 import ModalTable from '../modalTable/index'
-// import env from '../../../env.config.js'
 import { commonDataType } from '@/constant/assistant.ts'
 import LoadingAnim from '../../assets/img/loadingAnim.svg?react'
 import ApiErrorResponse, { ChildRefType } from '../../constant/index.ts'
@@ -30,8 +29,8 @@ import { openChat, sendMessage, generateMessage, getListChats, getHistoryMessage
 import { getAssistantDetail, updateAssistant, getAssistantsList } from '@/axios/assistant'
 import closeIcon from '../../assets/img/x-close.svg'
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-// import AnimLoadingImg from '@/assets/img/loadingAnimImg.svg?react'
-// import RemoveIcon from '../../assets/img/removeIcon.svg?react'
+import AnimLoadingImg from '@/assets/img/loadingAnimImg.svg?react'
+import RemoveIcon from '../../assets/img/removeIcon.svg?react'
 import UploadImg from '@/assets/img/uploadImg.svg?react'
 import ModalFooterEnd from '../modalFooterEnd/index'
 import { SSE } from "sse.js";
@@ -49,6 +48,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import './index.css'
 import { fetchAssistantsData } from '@/Redux/actions.ts'
 import MarkdownMessageBlock from '@taskingai/taskingai-markdown'
+const origin = window.location.origin;
 const plainOptions = [
     { label: 'Stream', value: 1 },
     { label: 'Debug', value: 2 },
@@ -57,6 +57,7 @@ const plainOptions = [
 function Playground() {
     const navigation = useNavigate();
     const { assistantTableColumn, modelsTableColumn, collectionTableColumn } = CommonComponents()
+    const uploadUrl = `${origin}/api/v1/images`
     const { assistantPlaygroundId } = useSelector((state: any) => state.assistantId)
     const { playgroundType } = useSelector((state: any) => state.playgroundType)
     const { t } = useTranslation();
@@ -124,7 +125,6 @@ function Playground() {
     const { TextArea } = Input;
     const [sendGenerateLoading, setSendGenerateLoading] = useState(false)
     const [bundilesList, setBundlesList] = useState([])
-    // const [showMarkdown, setShowMarkdown] = useState(JSON.parse(localStorage.getItem('checkedValues') as string) || checkBoxValue)
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
     const [errorContent, setErrorContent] = useState('')
     const [updatePrevButton, setUpdatePrevButton] = useState(false)
@@ -145,6 +145,7 @@ function Playground() {
     const [noPreviousMessage, setNoPreviousMessage] = useState(false)
     const [searchChatID, setSearchChatID] = useState('')
     const [assistantName, setAssistantName] = useState('')
+    const [imgList, setImgList] = useState<any[]>([])
 
     const [groupedMessages, setGroupedMessages] = useState({
         role: 'Assistant',
@@ -631,6 +632,7 @@ function Playground() {
             localStorage.setItem('chatId', data.chat_id)
             setContentTalk([])
             setContentValue('')
+            setImgList([])
             localStorage.setItem('contentTalk', JSON.stringify([]))
             localStorage.setItem('contentHasMore', JSON.stringify(false))
             setContentHasMore(false)
@@ -644,11 +646,16 @@ function Playground() {
         setLoading(false)
     }
     const handleCreateMessage = async (flag?: any) => {
-    
+        const imgLoading = imgList.some(item => item.loadingAnim)
+        if (imgLoading) {
+            return toast.error('The image is still uploading, please wait.')
+        }
         const params = {
             role: 'user',
             content: {
-                text: contentValue
+                text: contentValue && imgList.length ?
+                    contentValue + imgList.map(item => `![${item.name}](${item.url})`).join('') :
+                    contentValue
             },
         }
         let id;
@@ -680,14 +687,14 @@ function Playground() {
                 const { data } = res
                 setContentTalk(prevValues => [...prevValues, {
                     role: 'user',
-                    content: { text:  data.content.text },
+                    content: { text: imgList.length ? (contentValue + '\n' + imgList.map(item => `![${item.name}](${item.url})`).join('') + '\n') : data.content.text },
                     userId: true,
                     flag: true
                 }])
                 const contentTalk1: any = localStorage.getItem('contentTalk')
                 localStorage.setItem('contentTalk', JSON.stringify([...JSON.parse(contentTalk1), {
                     role: 'user',
-                    content: { text: data.content.text },
+                    content: { text: imgList.length ? (contentValue + '\n' + imgList.map(item => `![${item.name}](${item.url})`).join('') + '\n') : data.content.text },
                     userId: true,
                     flag: true
                 }]))
@@ -695,9 +702,10 @@ function Playground() {
             }
             setGenerateFlag(true)
             setContentValue('')
+            setImgList([])
 
         } else {
-            if (contentValue === '') {
+            if (contentValue === '' && imgList.length === 0) {
                 toast.error('Empty message is not allowed')
                 throw new Error('Empty message is not allowed');
             }
@@ -714,14 +722,14 @@ function Playground() {
                 const { data } = res
                 setContentTalk(prevValues => [...prevValues, {
                     role: 'user',
-                    content: { text: data.content.text },
+                    content: { text: imgList.length ? (contentValue + '\n' + imgList.map(item => `![${item.name}](${item.url})`).join('') + '\n') : data.content.text },
                     userId: true,
                     flag: true
                 }])
                 const contentTalk1: any = localStorage.getItem('contentTalk')
                 localStorage.setItem('contentTalk', JSON.stringify([...JSON.parse(contentTalk1), {
                     role: 'user',
-                    content: { text: data.content.text },
+                    content: { text: imgList.length ? (contentValue + '\n' + imgList.map(item => `![${item.name}](${item.url})`).join('') + '\n') : data.content.text },
                     userId: true,
                     flag: true
                 }]))
@@ -731,6 +739,7 @@ function Playground() {
                     setGenerateFlag(false)
                 }
                 setContentValue('')
+                setImgList([])
             } catch (error) {
                 const apiError = error as ApiErrorResponse;
                 const errorMessage: string = apiError.response.data.error.message;
@@ -757,10 +766,6 @@ function Playground() {
         }
         await fetchModelsList(params)
     }
-    // const ifShowMarkDown = () => {
-    //     console.log('test')
-    //     return checkBoxValue.indexOf(4) !== -1;
-    // }
     const handleSearchChatId = async () => {
         let id;
         if (assistantId[0].split('-')[1]) {
@@ -787,7 +792,10 @@ function Playground() {
 
     }
     const handleGenerateMessage = async (contentTalk1?: any) => {
-  
+        const imgLoading = imgList.some(item => item.loadingAnim)
+        if (imgLoading) {
+            return toast.error('The image is still uploading, please wait.')
+        }
         const lastData = Array.isArray(contentTalk[contentTalk.length - 1]?.content.text)
         let lastMessage: boolean = false
         if (lastData) {
@@ -1256,6 +1264,7 @@ function Playground() {
             }
             setContentTalk([])
             setContentValue('')
+            setImgList([])
             if (res.data[0]?.chat_id) {
                 await fetchHistoryMessage(id, res.data[0]?.chat_id, param1)
             }
@@ -1346,8 +1355,57 @@ function Playground() {
         setPluginModalOpen(true)
     }
 
-    
+    const customRequest = (options: any) => {
+        const { file } = options;
 
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('purpose', 'user_message_image');
+        fetch(uploadUrl, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.data || !data.data.url) {
+                    setImgList(prev => prev.filter((item) => item.uid !== file.uid))
+
+                    throw new Error('URL not found in response');
+                }
+                setImgList(prev => prev.map((item, index) => {
+                    (index === prev.length - 1 ? { ...item, url: data.data.url } : item)
+                    if (item.uid === file.uid) {
+                        return { ...item, url: data.data.url, loadingAnim: false };
+                    }
+                    return item;
+                }));
+            })
+    };
+    const handleRemoveCloseIcon = (url: string) => {
+        setImgList(imgList.filter((item) => item.url !== url))
+    }
+    const handleChange: any = async ({ fileList: newFileList, file }: any) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj as FileType);
+        }
+        setImgList(newFileList.map((item: any) => {
+            if (item.uid === file.uid) {
+                return { ...item, loadingAnim: true };
+            }
+            return item;
+        }));
+
+    }
+    const getBase64 = (file: FileType): Promise<string> =>
+        new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (error) => reject(error);
+        });
     return (
         <>
             {playgroundType === 'assistant' ? <Spin spinning={loading}>
@@ -1479,7 +1537,21 @@ function Playground() {
                             </Spin>
                         }
                         <div className={`${styles['content-bottom']} ${!chatId ? styles.none : ''}`}>
-                     
+                            {imgList.length > 0 && <div className={styles['upload-list']}>
+                                {imgList.map((item, index) => (
+                                    <div key={index} className={styles['upload-item']}>
+                                        {item.loadingAnim && <AnimLoadingImg className='anim-loading' />}
+                                        <Image style={{
+                                            filter: item.loadingAnim ? 'brightness(50%)' : 'brightness(100%)'
+                                        }} src={item.preview} alt={item.name} preview={{
+                                            mask: (
+                                                <EyeOutlined />
+                                            ),
+                                        }}></Image>
+                                        <RemoveIcon className={styles['close-icon']} onClick={() => handleRemoveCloseIcon(item.url)} />
+                                    </div>
+                                ))}
+                            </div>}
                             <TextArea className={styles['textarea']} autoSize={{ minRows: 3, maxRows: 6 }} value={contentValue} onChange={(e) => setContentValue(e.target.value)}></TextArea>
                             <div className={styles['button-group']}>
                                 <div style={{ display: 'flex' }}>
@@ -1490,6 +1562,12 @@ function Playground() {
                                     <div className={`${styles.formbuttoncancel} ${styles.button1} ${generateButtonLoading ? styles.loading : ''}`} onClick={handleGenerateMessage}>
                                         {generateButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}<div className={styles['text1']}>{t('projectPlaygroundChatGenerate')}</div>
                                     </div>
+
+                                    <Upload onChange={handleChange} disabled={imgList.length === 4 ? true : false} accept=".png,.jpg" fileList={imgList} customRequest={customRequest} >
+                                        <div className={styles['upload-img']}>
+                                            <UploadImg />
+                                        </div>
+                                    </Upload>
 
                                 </div>
                                 <div className={styles['actionbuttonedit']} onMouseEnter={handleMouseEnter} ref={settingIcon}>
