@@ -153,10 +153,10 @@ function CreatePlugin(props: any) {
         })
         setInputSchema(arr)
     }
-    const handleClickBundle = async (bundleId: string, bundelName: string, item: any) => {
+    const handleClickBundle = async (bundleId: string, bundleName: string, item: any) => {
         setBundleId(bundleId)
         setPluginInfoLoading(true)
-        setBundleName(bundelName)
+        setBundleName(bundleName)
         setDescription(item.description)
         setPluginListData(item.plugins)
         setPluginId(item.plugins[0].plugin_id)
@@ -272,7 +272,7 @@ function CreatePlugin(props: any) {
                         </div>
                         <div className={styles['description-bundle']}>
                             <div className={styles['desc-title']}>Description</div>
-                            <div className={styles['desciption-detail']}>{description}</div>
+                            <div className={styles['description-detail']}>{description}</div>
                         </div>
                         <div className={styles['description-bundle']}>
                             <div className={styles['desc-title']}>Plugins</div>

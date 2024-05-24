@@ -15,7 +15,7 @@ function PluginComponent(props: any) {
     const [inputValue, setInputValue] = useState('')
     const [bundleItem, setBundleItem] = useState(bundleSelectedItem !== undefined ? bundleSelectedItem : {})
     const { t } = useTranslation()
-    const [bundelListData, setBundleListData] = useState(bundleList)
+    const [bundleListData, setBundleListData] = useState(bundleList)
     useEffect(() => {
         setBundleListData(bundleList)
     }, [bundleList])
@@ -103,11 +103,11 @@ function PluginComponent(props: any) {
                 <Select defaultValue="All Records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />
 
             </div>
-            {bundelListData.length === 0 ? <div className={styles['no-data']}>
+            {bundleListData.length === 0 ? <div className={styles['no-data']}>
                 <NoTool />
                 <div className={styles['desc']}>New Bundle</div>
                 <Button icon={<PlusOutlined />} type='primary' className={`${styles['prompt-button']} next-button`} onClick={handleNewBundle}>New Bundle</Button>
-            </div> : bundelListData.map((item: any) => {
+            </div> : bundleListData.map((item: any) => {
                 return <Collapse key={item.bundle_instance_id} collapsible="header" className={styles.pluginCollapse}>
                     <Collapse.Panel showArrow={false} header={<div className={styles.bundle} >
                         <img className={styles.img} loading="lazy" src={item.icon_url} alt="" />

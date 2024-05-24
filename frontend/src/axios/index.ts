@@ -11,4 +11,7 @@ const fetchLogin = async (data:object) => {
 const  fetchIcon = async (providerId) => {
     return await request.get(`/images/providers/icons/${providerId}.svg`)
 }
-export { verifyToken , fetchLogin,fetchIcon }
+const getViewCode = async (module: string) => {
+    return await request.get(`api/v1/ui/template_codes/get_code?module=${module}`)
+}
+export { verifyToken , fetchLogin, fetchIcon, getViewCode }

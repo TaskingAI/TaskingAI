@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 const request = axios.create({
-  baseURL: "/api",
+  baseURL: "/",
   timeout: 60000,
 });
 request.interceptors.request.use(

@@ -395,7 +395,7 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                 {retrievalFormList.map((item: any, index: number) => (
                     <div className='retrieval-list' key={item.collection_id}>
                         <Select options={[
-                            { value: 'Collecion', label: 'Collection' }
+                            { value: 'Collection', label: 'Collection' }
                         ]} defaultValue='Collection'   className='retrieval-type'></Select>
                         <Select className='input' mode="multiple" placeholder={!item.name && t('projectAssistantRetrievalPlaceHolder')} style={{caretColor:'transparent'}} onClick={() => handleCollectionModal(index, item.collection_id)} suffixIcon={<RightOutlined />} open={false} value={item.name ? item.name : undefined} removeIcon={null} />
                         <div> <DeleteInputIcon onClick={() => handleDeleteRetrieval(item.collection_id,index)} style={{ marginTop: '8px' }} /></div>
