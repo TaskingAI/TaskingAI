@@ -142,6 +142,7 @@
                 width: 42px !important;
             }
             .ant-menu-item.menu-hr {
+                pointer-events: none;
                 border-radius: 0%;
             }
             .ant-menu-item.menu-hr:hover {
@@ -166,6 +167,7 @@
         }
         .ant-menu-item.menu-hr {
             border-radius: 0%;
+            pointer-events: none;
         }
         .ant-menu-item.menu-hr:hover {
             background-color: white !important;

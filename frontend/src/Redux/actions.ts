@@ -125,7 +125,7 @@ export const fetchAssistantsData = () => {
     const project_base_url = 'api/v1'
 
     dispatch(fetchAssistantRequest());
-    request.get(`${project_base_url}/ui/assistants?limit=20`)
+    request.get(`${project_base_url}/assistants?limit=20`)
       .then(response => {
         dispatch(fetchAssistantSuccess(response));
       })
@@ -179,7 +179,7 @@ export const fetchRetrievalData = (params: any) => {
         })
         str = str.substring(0, str.length - 1)
     }
-    request.get(`${project_base_url}/ui/collections?${str}`)
+    request.get(`${project_base_url}/collections?${str}`)
       .then(response => {
         dispatch(fetchRetrievalSuccess(response));
       })
