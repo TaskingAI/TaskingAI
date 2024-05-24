@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 
 interface ApiErrorResponse {
   response: {
@@ -107,6 +108,11 @@ interface ModalFooterEndProps {
   onCancel: () => void;
   handleOk: () => void;
 }
+interface FullApiResponse extends AxiosResponse {
+  data: any[];
+  message: string;
+  has_more: boolean;
+}
 interface CreateAssistantProps {}
-export type { MenuClickEvent,CreateAssistantProps, ModalFooterEndProps, deleteProjectType, modelModalProps, TableProps, promptListType, ModelProviderType, ProjectType, editUserProfileType, projectHomeType, RecordType, projectIdType, ChildRefType, formDataType }
+export type { MenuClickEvent,FullApiResponse,CreateAssistantProps, ModalFooterEndProps, deleteProjectType, modelModalProps, TableProps, promptListType, ModelProviderType, ProjectType, editUserProfileType, projectHomeType, RecordType, projectIdType, ChildRefType, formDataType }
 export default ApiErrorResponse

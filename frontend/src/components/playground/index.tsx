@@ -1,12 +1,15 @@
 import styles from './playground.module.scss'
 import { useState, useEffect, useRef, } from 'react'
-import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Collapse,Space } from 'antd'
-import { PlusOutlined, RightOutlined, LoadingOutlined,SearchOutlined } from '@ant-design/icons';
+import { Select, Button, Checkbox, Input, Drawer, Spin, Modal, Collapse, Space, Upload } from 'antd'
+import { PlusOutlined, RightOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons';
 import PlayGroundImg from '@/assets/img/selectAssistantImg.svg?react'
+import { FullApiResponse } from '@/constant/index.ts'
+import type { GetProp, UploadProps } from 'antd';
 import { toast } from 'react-toastify';
 import { getPluginList } from '../../axios/plugin.ts'
 import CreatePlugin from '../createPlugin/index.tsx';
 import { setPlaygroundSelect, setPlaygroundAssistantId, } from '@/Redux/actions/playground.ts'
+import PlaygroundModel from '../playgroundModel/index.tsx';
 import CopyOutlined from '../../assets/img/copyIcon.svg?react'
 import ModelModal from '../modelModal/index'
 import ErrorIcon from '../../assets/img/errorIcon.svg?react'
@@ -15,7 +18,7 @@ import CreateCollection from '../createCollection/index.tsx';
 import ModalSettingIcon from '../../assets/img/modalSettingIcon.svg?react'
 import { formatTimestamp, getFirstMethodAndEndpoint } from '@/utils/util'
 import ModalTable from '../modalTable/index'
-import PlaygroundModel from '../playgroundModel/index.tsx';
+// import env from '../../../env.config.js'
 import { commonDataType } from '@/constant/assistant.ts'
 import LoadingAnim from '../../assets/img/loadingAnim.svg?react'
 import ApiErrorResponse, { ChildRefType } from '../../constant/index.ts'
@@ -23,9 +26,13 @@ import ChatIcon from '../../assets/img/chatIcon.svg?react'
 import { getActionsList, createActions } from '../../axios/actions.ts'
 import { getRetrievalList } from '../../axios/retrieval.ts';
 import PlaygroundImg from '@/assets/img/playgroundImg.svg?react'
-import { openChat, sendMessage, generateMessage, getListChats, getHistoryMessage,getChatItem, deleteChatItem } from '@/axios/playground'
+import { openChat, sendMessage, generateMessage, getListChats, getHistoryMessage, getChatItem, deleteChatItem } from '@/axios/playground'
 import { getAssistantDetail, updateAssistant, getAssistantsList } from '@/axios/assistant'
 import closeIcon from '../../assets/img/x-close.svg'
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+// import AnimLoadingImg from '@/assets/img/loadingAnimImg.svg?react'
+// import RemoveIcon from '../../assets/img/removeIcon.svg?react'
+import UploadImg from '@/assets/img/uploadImg.svg?react'
 import ModalFooterEnd from '../modalFooterEnd/index'
 import { SSE } from "sse.js";
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
@@ -38,29 +45,30 @@ import ActionDrawer from '../actionDrawer/index.tsx';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import CommonComponents from '../../contents/index'
+import { useDispatch, useSelector } from 'react-redux';
+import './index.css'
 import { fetchAssistantsData } from '@/Redux/actions.ts'
+import MarkdownMessageBlock from '@taskingai/taskingai-markdown'
 const plainOptions = [
     { label: 'Stream', value: 1 },
     { label: 'Debug', value: 2 },
+    { label: 'Markdown content', value: 4 }
 ]
-import { useDispatch, useSelector } from 'react-redux';
-const origin = window.location.origin;
 function Playground() {
     const navigation = useNavigate();
     const { assistantTableColumn, modelsTableColumn, collectionTableColumn } = CommonComponents()
+    const { assistantPlaygroundId } = useSelector((state: any) => state.assistantId)
+    const { playgroundType } = useSelector((state: any) => state.playgroundType)
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const [assistantLimit, setAssistantLimit] = useState(20)
     const { search, pathname } = useLocation();
     const [assistantId, setAssistantId] = useState<any>()
-    const [optionList, setOptionList] = useState([])
+    const [optionList, setOptionList] = useState<any>([])
     const divRef: any = useRef();
     const settingModal = useRef<any>()
     const [retrievalLimit, setRetrievalLimit] = useState(20)
     const [updateModelPrevButton, setUpdateModelPrevButton] = useState(false)
-    const { assistantPlaygroundId } = useSelector((state: any) => state.assistantId)
-
-    const { playgroundType } = useSelector((state: any) => state.playgroundType)
     const settingIcon = useRef<any>()
     const contentRef = useRef<any>();
     const [shouldSmoothScroll, setShouldSmoothScroll] = useState(true)
@@ -75,25 +83,26 @@ function Playground() {
     const childRef = useRef<ChildRefType | null>(null);
     const [modelLimit, setModelLimit] = useState(20)
     const [modalTableOpen, setModalTableOpen] = useState(false)
-    const [selectedRows, setSelectedRows] = useState<any[]>([])
+    const [selectedModelRows, setSelectedRows] = useState<any[]>([])
+    const [originalModelData, setOriginalModelData] = useState<any[]>()
     const [modelOne, setModelOne] = useState(false);
     const [OpenActionDrawer, setOpenActionDrawer] = useState(false)
     const [sendButtonLoading, setSendButtonLoading] = useState(false)
     const [generateButtonLoading, setGenerateButtonLoading] = useState(false)
     const [openModalTable, setOpenModalTable] = useState(false)
     const [systemPromptVariables, setSystemPromptVariable] = useState('')
-    const [chatId, setChatId] = useState('')
-    const [searchChatID, setSearchChatID] = useState('')
-    
+    const [chatId, setChatId] = useState<any>('')
     const [actionList, setActionList] = useState([])
     const [tipSchema, setTipSchema] = useState(false)
-    const [checkBoxValue, setCheckBoxValue] = useState([1, 2])
+    const [checkBoxValue, setCheckBoxValue] = useState([1, 2, 4])
     const [contentValue, setContentValue] = useState('')
     const [drawerName, setDrawerName] = useState('')
     const [schema, setSchema] = useState('')
     const [generateFlag, setGenerateFlag] = useState(false)
     const [retrievalConfig, setRetrievalConfig] = useState('user_message')
     const [custom, setCustom] = useState('')
+    const [selectedPluginGroup, setSelectedPluginGroup] = useState<any>([])
+    const [selectedActionsSelected, setSelectedActionSelected] = useState<any[]>([])
     const [inputValueOne, setInputValueOne] = useState(20)
     const [inputValueTwo, setInputValueTwo] = useState(200)
     const [radioValue, setRadioValue] = useState('none')
@@ -115,7 +124,7 @@ function Playground() {
     const { TextArea } = Input;
     const [sendGenerateLoading, setSendGenerateLoading] = useState(false)
     const [bundilesList, setBundlesList] = useState([])
-
+    // const [showMarkdown, setShowMarkdown] = useState(JSON.parse(localStorage.getItem('checkedValues') as string) || checkBoxValue)
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
     const [errorContent, setErrorContent] = useState('')
     const [updatePrevButton, setUpdatePrevButton] = useState(false)
@@ -134,11 +143,15 @@ function Playground() {
     const [collapseLabel2, setCollapseLabel2] = useState('')
     const [noPreviousChat, setNoPreviousChat] = useState(false)
     const [noPreviousMessage, setNoPreviousMessage] = useState(false)
+    const [searchChatID, setSearchChatID] = useState('')
+    const [assistantName, setAssistantName] = useState('')
+
     const [groupedMessages, setGroupedMessages] = useState({
         role: 'Assistant',
         content: { text: [{ event: '', color: '', event_id: '' }] },
         useId: 'user'
     });
+    const [modelName, setModelName] = useState<any>('')
     const drawerAssistantRef = useRef<any>(null);
     const [topk, setTopk] = useState(3)
     const [maxTokens, setMaxToken] = useState(4096)
@@ -152,19 +165,7 @@ function Playground() {
             toast.success(`${t('CopiedToClipboard')}`)
             clipboard.destroy()
         });
-        clipboard.on('error', function (e) {
-            console.log(e);
-        });
     }
-    useEffect(() => {
-        console.log(playgroundType)
-        const queryParams = new URLSearchParams(search);
-        if (queryParams.get('assistant_id')) {
-            dispatch(setPlaygroundSelect('assistant'))
-        } else if (queryParams.get('model_id')) {
-            dispatch(setPlaygroundSelect('chat_completion'))
-        }
-    }, [search])
     useEffect(() => {
         const handleClickOutside = (event: any) => {
             if (!(settingModal.current && settingModal.current.contains(event.target)) && !(settingIcon.current && settingIcon.current.contains(event.target))) {
@@ -179,10 +180,24 @@ function Playground() {
         };
     }, []);
     useEffect(() => {
-        setCheckBoxValue([1, 2])
         initialFunction()
     }, [])
+    // useEffect(() => {
+    //     setAssistantPlaygroundNewId(assistantPlaygroundId)
+    // }, [assistantPlaygroundId])
 
+    useEffect(() => {
+        const storedValues = JSON.parse(localStorage.getItem('checkedValues') as string) || [1, 2, 4];
+        setCheckBoxValue(storedValues);
+    }, []);
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search);
+        if (queryParams.get('assistant_id')) {
+            dispatch(setPlaygroundSelect('assistant'))
+        } else if (queryParams.get('model_id')) {
+            dispatch(setPlaygroundSelect('chat_completion'))
+        }
+    }, [search])
     useEffect(() => {
         if (generateFlag) {
             handleGenerateMessage('flag')
@@ -205,7 +220,6 @@ function Playground() {
         setRetrievalConfig(value)
     }
     useEffect(() => {
-
         const params1 = {
             limit: 100,
             offset: 0,
@@ -224,6 +238,9 @@ function Playground() {
         }
 
 
+    }
+    const handleChangeSearchChatID = (e: any) => {
+        setSearchChatID(e.target.value)
     }
     const combineObjects = (item: any, arr: any) => {
         let updatedGroupedMessages = { ...groupedMessages };
@@ -262,8 +279,14 @@ function Playground() {
         }
         return updatedGroupedMessages;
     }
-    const fetchAssistantsList = async () => {
-        const res: any = await getAssistantsList({ limit: assistantLimit || 20 })
+    const fetchAssistantsList = async (value?: any) => {
+        let res;
+        if (value) {
+            res = await getAssistantsList(value) as FullApiResponse
+        } else {
+            res = await getAssistantsList({ limit: assistantLimit || 20 }) as FullApiResponse
+        }
+        // const res: any = await getAssistantsList({ limit: assistantLimit || 20})
         const data = res.data.map((item: any) => {
             return {
                 ...item,
@@ -271,9 +294,11 @@ function Playground() {
             }
         })
         setOptionList(data)
-        const id = assistantId[0].split('-')[1] ? assistantId[0].split('-')[1] : assistantId[0]
-        const item1 = data.find((item: any) => (item.assistant_id === id))
-        setAssistantId([`${item1.name}-${item1.assistant_id}`])
+        if (assistantId) {
+            const id = assistantId[0].split('-')[1] ? assistantId[0].split('-')[1] : assistantId[0]
+            const item1 = data.find((item: any) => (item.assistant_id === id))
+            setAssistantId([`${item1.name}-${item1.assistant_id}`])
+        }
         setModelHasMore(res.has_more)
 
     }
@@ -283,15 +308,15 @@ function Playground() {
         const params = {
             limit: 20,
         }
-        if (assistantId) {
+        if (assistantId && assistantId === assistantPlaygroundId) {
+            setLoading(true)
             setAssistantId([assistantId])
-            dispatch(setPlaygroundAssistantId(assistantId))
-            console.log(assistantId, assistantPlaygroundId)
+            setAssistantName(localStorage.getItem('assistantName') || 'Untitled Assistant')
             try {
                 const listChats: any = localStorage.getItem('listChats')
                 const chatsHasMore: any = localStorage.getItem('chatsHasMore')
-                const chatId: any = localStorage.getItem('chatId') as string
-                if (listChats && assistantId === assistantPlaygroundId) {
+                let chatId = localStorage.getItem('chatId')
+                if (listChats) {
                     setListChats(JSON.parse(listChats))
                     setLoadMoreHasMore(JSON.parse(chatsHasMore))
                     if (chatId === 'undefined') {
@@ -300,23 +325,10 @@ function Playground() {
                         setChatId(chatId)
                     }
 
-                } else {
-                    const res: any = await getListChats(assistantId, params)
-                    setListChats(res.data)
-                    localStorage.setItem('listChats', JSON.stringify(res.data))
-                    setLoadMoreHasMore(res.has_more)
-                    setChatId(res.data[0]?.chat_id)
-                    const param1 = {
-                        order: 'desc',
-                        limit: 20
-                    }
-                    if (res.data.length > 0) {
-                        fetchHistoryMessage(assistantId, res.data[0]?.chat_id, param1)
-                    }
                 }
                 const contentTalk: any = localStorage.getItem('contentTalk')
                 const contentHasMore: any = localStorage.getItem('contentHasMore')
-                if (contentTalk && assistantId === assistantPlaygroundId) {
+                if (contentTalk) {
                     setContentTalk(JSON.parse(contentTalk))
                     if (contentHasMore === 'true') {
                         setContentHasMore(true)
@@ -330,12 +342,44 @@ function Playground() {
                 const message = apiError.response.data.error.message
                 toast.error(message)
             }
+            setLoading(false)
+        } else if (assistantId) {
+            setLoading(true)
+            try {
+                const assistantDetail = await getAssistantDetail(assistantId)
+                setAssistantName(assistantDetail.data.name ? assistantDetail.data.name : 'Untitled Assistant')
+                setAssistantId([assistantId])
+                dispatch(setPlaygroundAssistantId(assistantId))
+                const res2: any = await getListChats(assistantId, params)
+                setListChats(res2.data)
+                localStorage.setItem('listChats', JSON.stringify(res2.data))
+                setLoadMoreHasMore(res2.has_more)
+                setChatId(res2.data[0]?.chat_id)
+                localStorage.setItem('chatId', res2.data[0]?.chat_id)
+                const param = {
+                    order: 'desc',
+                }
+                if (res2.data.length > 0) {
+                    const res: any = await getHistoryMessage(assistantId, res2.data[0]?.chat_id, param)
+                    const data = res.data.reverse()
+                    setContentHasMore(res.has_more)
+                    localStorage.setItem('contentHasMore', JSON.stringify(res.has_more))
+                    setContentTalk(data)
+                    localStorage.setItem('contentTalk', JSON.stringify(data))
+                }
+                setLoading(false)
 
+            } catch (e) {
+                navigation(`/project/playground`)
+                console.log(e)
+                setLoading(false)
+            }
         }
         fetchAssistantsList()
         fetchModelsList(params)
         fetchActionsList(params)
         fetchDataRetrievalData(params)
+
     }
     const fetchHistoryMessage = async (assistantId: string, chatId: string, param: any) => {
         if (param.after) {
@@ -377,7 +421,6 @@ function Playground() {
         setTopk(value)
     }
     const handleSelectModelId = (value: boolean) => {
-
         setModalTableOpen(value)
     }
     const combineObjectsWithSameMsgId = (arr: any[]) => {
@@ -413,6 +456,9 @@ function Playground() {
             setHasActionMore(res.has_more)
         } catch (error) {
             console.log(error)
+            const apiResponse = error as ApiErrorResponse
+            const message = apiResponse.response.data.error.message
+            toast.error(message)
         }
     }
     const fetchModelsList = async (params: Record<string, any>) => {
@@ -429,6 +475,9 @@ function Playground() {
             setHasModelMore(res.has_more)
         } catch (error) {
             console.log(error)
+            const apiResponse = error as ApiErrorResponse
+            const message = apiResponse.response.data.error.message
+            toast.error(message)
         }
     }
 
@@ -443,10 +492,22 @@ function Playground() {
         }
         const res = await getAssistantDetail(id)
         const { data } = res
-        const { name, description, model_id, system_prompt_template, tools, retrievals, memory } = data
+        const { name, description, model_name, model_id, system_prompt_template, tools, retrievals, memory, retrieval_configs } = data
         setDrawerName(name)
         setDrawerDesc(description)
         setSelectedRows(model_id)
+        setOriginalModelData(model_id)
+        setModelName(model_name)
+        setSelectedActionSelected(tools.filter((item: any) => item.type === 'action').map((item: any) => {
+            return {
+                action_id: item.id,
+                name: item.name
+            }
+        }))
+        setSelectedPluginGroup(tools?.filter((item: any) => item.type === 'plugin').map((item: any) => item.id?.split('/')[1]));
+        setRetrievalConfig(retrieval_configs.method || 'user_message')
+        setTopk(retrieval_configs.top_k || 3)
+        setMaxToken(retrieval_configs.max_tokens || 4096)
         setMemoryValue(memory.type)
         setInputValueOne(memory.max_messages)
         setInputValueTwo(memory.max_tokens)
@@ -455,8 +516,13 @@ function Playground() {
         } else {
             setSystemPromptTemplate(system_prompt_template)
         }
-        setSelectedActionsRows(tools.map((item: any) => { return { type: item.type, value: item.id } }))
-        const tag = retrievals.map((item: any) => item.id)
+        setSelectedActionsRows(tools.map((item: any) => { return { type: item.type, value: item.id, name: item.name } }))
+        const tag = retrievals.map((item: any) => {
+            return {
+                collection_id: item.id,
+                name: item.name || 'Untitled Collection'
+            }
+        })
         setRecordsSelected1(tag)
 
         setSelectedRetrievalRows(tag)
@@ -488,7 +554,7 @@ function Playground() {
             systemTemplate = systemPromptTemplate
         }
         const params = {
-            model_id: Array.isArray(selectedRows) ? selectedRows[0].slice(-8) : selectedRows,
+            model_id: Array.isArray(originalModelData) ? originalModelData[0].slice(-8) : originalModelData,
             name: drawerName || '',
             description: drawerDesc || '',
             system_prompt_template: systemTemplate,
@@ -502,7 +568,7 @@ function Playground() {
             retrieval_configs: {
                 top_k: Number(topk) || undefined,
                 method: retrievalConfig,
-                max_count: Number(maxTokens) || undefined
+                max_tokens: Number(maxTokens) || undefined
             }
         }
         let count = 0
@@ -525,6 +591,7 @@ function Playground() {
         try {
             if (id) {
                 await updateAssistant(id, params)
+                setAssistantName(drawerName)
                 setOpenDrawer(false)
             }
 
@@ -532,7 +599,6 @@ function Playground() {
             dispatch(fetchAssistantsData() as any)
             setUpdatePrevButton(true)
         } catch (error) {
-            console.log(error)
             const apiError = error as ApiErrorResponse;
             const errorMessage: string = apiError.response.data.error.message;
             toast.error(errorMessage)
@@ -542,6 +608,9 @@ function Playground() {
     const handleNewChat = async () => {
         if (!assistantId) {
             return toast.error(`${t('projectAssistantRequired')}`)
+        }
+        if (sendButtonLoading || sendGenerateLoading || generateButtonLoading) {
+            return toast.error('Cannot switch chat during message generation')
         }
         setLoading(true)
         const params = {
@@ -559,18 +628,23 @@ function Playground() {
             localStorage.setItem('listChats', JSON.stringify([{ chat_id: data.chat_id, created_timestamp: data.created_timestamp }, ...listChats]))
             setListChats(prevValues => [{ chat_id: data.chat_id, created_timestamp: data.created_timestamp }, ...prevValues])
             setChatId(data.chat_id)
-            localStorage.setItem('chatId', JSON.stringify(data.chat_id))
+            localStorage.setItem('chatId', data.chat_id)
             setContentTalk([])
+            setContentValue('')
             localStorage.setItem('contentTalk', JSON.stringify([]))
             localStorage.setItem('contentHasMore', JSON.stringify(false))
             setContentHasMore(false)
             setGenerateButtonLoading(false)
         } catch (error) {
+            const apiResponse = error as ApiErrorResponse
+            const message = apiResponse.response.data.error.message
+            toast.error(message)
             console.log(error)
         }
         setLoading(false)
     }
     const handleCreateMessage = async (flag?: any) => {
+    
         const params = {
             role: 'user',
             content: {
@@ -606,7 +680,7 @@ function Playground() {
                 const { data } = res
                 setContentTalk(prevValues => [...prevValues, {
                     role: 'user',
-                    content: { text: data.content.text },
+                    content: { text:  data.content.text },
                     userId: true,
                     flag: true
                 }])
@@ -636,7 +710,6 @@ function Playground() {
                 } else {
                     setSendButtonLoading(true)
                 }
-
                 const res = await sendMessage(id, chatId, params)
                 const { data } = res
                 setContentTalk(prevValues => [...prevValues, {
@@ -684,12 +757,53 @@ function Playground() {
         }
         await fetchModelsList(params)
     }
+    // const ifShowMarkDown = () => {
+    //     console.log('test')
+    //     return checkBoxValue.indexOf(4) !== -1;
+    // }
+    const handleSearchChatId = async () => {
+        let id;
+        if (assistantId[0].split('-')[1]) {
+            const splitArray = assistantId[0].split('-')
+            id = splitArray.slice(-1)[0]
+        } else {
+            id = assistantId[0]
+        }
+        if (searchChatID) {
+            try {
+                const res = await getChatItem(id, searchChatID)
+                setListChats([res.data])
+                localStorage.setItem('listChats', JSON.stringify([{ chat_id: res.data.chat_id, created_timestamp: res.data.created_timestamp }]))
+            } catch (error) {
+                const apiError = error as ApiErrorResponse;
+                const errorMessage: string = apiError.response.data.error.message;
+                toast.error(errorMessage)
+            }
+        } else {
+            const res = await getListChats(id, { limit: 20 })
+            setListChats(res.data)
+            localStorage.setItem('listChats', JSON.stringify(res.data))
+        }
 
+    }
     const handleGenerateMessage = async (contentTalk1?: any) => {
+  
+        const lastData = Array.isArray(contentTalk[contentTalk.length - 1]?.content.text)
+        let lastMessage: boolean = false
+        if (lastData) {
+            const lastMessage1 = contentTalk[contentTalk.length - 1].content.text[contentTalk[contentTalk.length - 1].content.text.length - 1]
+            if (lastMessage1.event === 'Error Occurred') {
+                lastMessage = true
+            } else {
+                lastMessage = false
+            }
+        } else {
+            lastMessage = false
+        }
         if (generateButtonLoading) {
             return toast.error('Please wait for the assistant to respond.')
         }
-        if (contentTalk1 !== 'flag' && contentTalk[contentTalk.length - 1]?.role.toLowerCase() === 'assistant') {
+        if (contentTalk1 !== 'flag' && contentTalk[contentTalk.length - 1]?.role.toLowerCase() === 'assistant' && !lastMessage) {
             return toast.error('Please send the user message first.')
         }
         let id;
@@ -726,7 +840,6 @@ function Playground() {
             source.addEventListener('error', (e: any) => {
                 setGenerateButtonLoading(false)
                 setSendGenerateLoading(false)
-                console.log(e)
                 if (e.data) {
                     toast.error(JSON.parse(e.data).error.message, { autoClose: 10000 })
                 }
@@ -778,7 +891,6 @@ function Playground() {
                 const binedArr = [...contentTalk, comb]
                 setContentTalk(binedArr)
                 localStorage.setItem('contentTalk', JSON.stringify(binedArr))
-
             }
 
             );
@@ -792,7 +904,11 @@ function Playground() {
                 }
                 const data = JSON.parse(e.data)
                 if (data.object === 'MessageGenerationLog') {
-                    setDebugArray1(prevValues => [...prevValues, data])
+                    setDebugArray1(prevValues => {
+                        const updatedValues = [...prevValues, data];
+                        localStorage.setItem('inputResult', JSON.stringify(updatedValues));
+                        return updatedValues;
+                    });
                 }
                 arr1.push(data)
                 const binedArr = [...contentTalk, combineObjects(data, arr1)]
@@ -811,7 +927,11 @@ function Playground() {
                 const data = JSON.parse(e.data)
 
                 if (data.object === 'MessageGenerationLog') {
-                    setDebugArray2(prevValues => [...prevValues, data])
+                    setDebugArray2(prevValues => {
+                        const updatedValues = [...prevValues, data];
+                        localStorage.setItem('outputResult', JSON.stringify(updatedValues));
+                        return updatedValues;
+                    });
                 }
                 arr1.push(data)
                 const binedArr = [...contentTalk, combineObjects(data, arr1)]
@@ -843,7 +963,6 @@ function Playground() {
         setUpdateRetrievalPrevButton(false)
 
     }
-
     const fetchDataRetrievalData = async (params: Record<string, any>) => {
         try {
             const res: any = await getRetrievalList(params)
@@ -859,23 +978,46 @@ function Playground() {
             setUpdateRetrievalPrevButton(true)
 
         } catch (e) {
+            const apiResponse = e as ApiErrorResponse
+            const message = apiResponse.response.data.error.message
+            toast.error(message)
             console.log(e)
         }
     }
     const handleChangeName = (value: string) => {
         setDrawerName(value)
     }
+    const handleModalCloseConfirm = () => {
+        if (selectedModelRows) {
+            let str = selectedModelRows[0];
+            let index = str.lastIndexOf('-');
+            if (index !== -1) {
+                let result = str.substring(0, index);
+                setModelName(result)
+            }
+            setOriginalModelData(selectedModelRows)
+        }
+        setModalTableOpen(false)
+    }
     const handleModalClose = () => {
+        setOriginalModelData((prev: any) => prev)
+        setSelectedRows(originalModelData as any)
         setModalTableOpen(false)
     }
     const handleAssistantModalClose = () => {
         const queryParams = new URLSearchParams(search);
-        const assistantId = queryParams.get('assistant_id')
-        if (!assistantId) {
-            setAssistantId('')
+        const data = queryParams.get('assistant_id')
+        const assistantData = optionList.find((item: any) => item.assistant_id === data)
+        if(assistantData) {
+            if (assistantData.name) {
+                setAssistantName(assistantData.name)
+                localStorage.setItem('assistantName', assistantData.name)
+            } else {
+                setAssistantName('Untitled Assistant')
+                localStorage.setItem('assistantName', 'Untitled Assistant')
+            }
+            setAssistantId([assistantData.assistant_id])
         }
-        setDefaultSelectedAssistant([])
-
         setOpenAssistantModalTable(false)
     }
     const handleListChats = async () => {
@@ -887,12 +1029,13 @@ function Playground() {
         setChatId(res.data[0]?.chat_id)
         localStorage.setItem('chatId', res.data[0]?.chat_id)
         const param = {
-            order: 'asc',
+            order: 'desc',
         }
         if (res.data[0]) {
             try {
                 const res1 = await getHistoryMessage(id, res.data[0]?.chat_id, param)
-                localStorage.setItem('contentTalk', JSON.stringify(res1.data))
+                const data = res1.data.reverse()
+                localStorage.setItem('contentTalk', JSON.stringify(data))
                 setContentTalk(res1.data)
             } catch (e) {
                 const apiResponse = e as ApiErrorResponse
@@ -907,10 +1050,8 @@ function Playground() {
         const id = splitArray.slice(-1)[0]
         navigation(`${pathname}?assistant_id=${id}`)
         dispatch(setPlaygroundAssistantId(id))
-
         setConfirmLoading(true)
-            await handleListChats()
-    
+        await handleListChats()
         setDefaultSelectedAssistant(id)
         setOpenAssistantModalTable(false)
         setConfirmLoading(false)
@@ -935,7 +1076,7 @@ function Playground() {
             }
         } else {
             if (radioValue === 'none') {
-                commonData.authentication = undefined
+                (commonData.authentication as any).type = 'none'
             } else {
                 if (commonData.authentication) {
                     commonData.authentication.secret = Authentication;
@@ -950,12 +1091,10 @@ function Playground() {
             }
             await fetchActionsList(params);
         } catch (error: any) {
-            console.error(error);
-
-            toast.error(error.message)
+            console.log(error)
         }
 
-        setOpenDrawer(false)
+        setOpenActionDrawer(false)
     }
     const handleNewModal = () => {
         setOpenCollectionDrawer(true)
@@ -969,13 +1108,18 @@ function Playground() {
     const handleRecordsSelected = (_value: any[], selectedRows: any[]) => {
         const tag = selectedRows.map(item => (item.name + '-' + item.model_id))
         setSelectedRows(tag)
+        // setOriginalModelData(tag)
+        // setModelName(selectedRows.map(item => item.name))
     }
     const handleRecordsAssistantSelected = (_value: string[], selectedRows: any[]) => {
         setRecordsSelected(selectedRows)
         const tag = selectedRows.map((item: any) => {
             if (item.name) {
+                setAssistantName(item.name)
+                localStorage.setItem('assistantName', item.name)
                 return item.name + '-' + item.assistant_id
             } else {
+                setAssistantName('Untitled Assistant')
                 return item.assistant_id
             }
         })
@@ -997,18 +1141,20 @@ function Playground() {
     const handleSchemaChange = (value: string) => {
         setSchema(value)
     }
-
     const handleAddPrompt = () => {
         if (systemPromptTemplate.length < 10) {
             setSystemPromptTemplate((prevValues => [...prevValues, '']))
         }
     }
     const handleChildAssistantEvent = async (value: Record<string, any>) => {
-        await fetchAssistantsList()
+        await fetchAssistantsList(value)
         setUpdatePrevButton(false)
         setAssistantLimit(value.limit)
     }
     const handleOpenChat = async (value: string) => {
+        if (sendButtonLoading || sendGenerateLoading || generateButtonLoading) {
+            return toast.error('Cannot switch chat during message generation')
+        }
         setChatId(value)
         localStorage.setItem('chatId', value)
         setContentTalkLoading(true)
@@ -1074,9 +1220,15 @@ function Playground() {
     const onRadioChange = (value: string) => {
         setRadioValue(value)
     }
-
     const handleChangeCheckbox = (checkedValues: any) => {
+        setCheckBoxValue(checkedValues)
         localStorage.setItem('checkedValues', JSON.stringify(checkedValues))
+        // if (checkedValues.includes(4)) {
+        //     setShowMarkdown(true)
+        // } else {
+        //     setShowMarkdown(false)
+
+        // }
     }
     const onDeleteCancel = () => {
         setOpenDeleteModal(false)
@@ -1097,11 +1249,13 @@ function Playground() {
             localStorage.setItem('chatsHasMore', JSON.stringify(res.has_more))
             setLoadMoreHasMore(res.has_more)
             setChatId(res.data[0]?.chat_id)
-            localStorage.setItem('chatId', JSON.stringify(res.data[0]?.chat_id))
+            localStorage.setItem('chatId', res.data[0]?.chat_id)
             const param1 = {
                 order: 'desc',
                 limit: 20
             }
+            setContentTalk([])
+            setContentValue('')
             if (res.data[0]?.chat_id) {
                 await fetchHistoryMessage(id, res.data[0]?.chat_id, param1)
             }
@@ -1118,6 +1272,8 @@ function Playground() {
         getBundleList({ limit: 20 })
     }
     const handleClickDebug = (item: any) => {
+        const inputResult: any = debugArray1.length ? debugArray1 : JSON.parse(localStorage.getItem('inputResult') as any)
+        const outputResult: any = debugArray2.length ? debugArray2 : JSON.parse(localStorage.getItem('outputResult') as any)
         if (item.event === 'Error Occurred') {
             setContentErrorDrawer(true)
         } else {
@@ -1126,8 +1282,9 @@ function Playground() {
             const event2 = item.event_step?.charAt(0).toUpperCase() + item.event_step?.slice(1)
             setCollapseLabel2(`${event1}: ${event2}`)
             if (!item.event_id) return
-            const data1 = debugArray1.find(item1 => (item1.event_id === item.event_id))
-            const data2: any = debugArray2.find(item1 => (item1.event_id === item.event_id))
+
+            const data1 = inputResult?.find((item1: any) => (item1.event_id === item.event_id))
+            const data2: any = outputResult?.find((item1: any) => (item1.event_id === item.event_id))
             if (data1) {
                 delete data1.color
                 const data3 = JSON.stringify(data1, null, 4)
@@ -1159,19 +1316,15 @@ function Playground() {
         if (sendButtonLoading || generateButtonLoading) {
             return toast.error('Please wait for the info to respond.')
         }
-        try {
-            await handleCreateMessage('flag')
-        } catch (error) {
-            const apiError = error as ApiErrorResponse;
-            const errorMessage: string = apiError.response.data.error.message;
-            toast.error(errorMessage)
-            console.log(error)
-        }
+        await handleCreateMessage('flag')
     }
     const handleCloseContentErrorDrawer = () => {
         setContentErrorDrawer(false)
     }
     const handleDeleteChat = async () => {
+        if (sendButtonLoading || sendGenerateLoading || generateButtonLoading) {
+            return toast.error('Cannot switch chat during message generation')
+        }
         setOpenDeleteModal(true)
     }
     const handleSetModelConfirmOne = () => {
@@ -1184,31 +1337,7 @@ function Playground() {
     const onhandleTipError = (value: boolean) => {
         setTipSchema(value)
     }
-    const handleSearchChatId = async () => {
-        let id;
-        if (assistantId[0].split('-')[1]) {
-            const splitArray = assistantId[0].split('-')
-            id = splitArray.slice(-1)[0]
-        } else {
-            id = assistantId[0]
-        }
-        if (searchChatID) {
-            try {
-                const res = await getChatItem(id, searchChatID)
-                setListChats([res.data])
-                localStorage.setItem('listChats', JSON.stringify([{ chat_id: res.data.chat_id, created_timestamp: res.data.created_timestamp }]))
-            } catch (error) {
-                const apiError = error as ApiErrorResponse;
-                const errorMessage: string = apiError.response.data.error.message;
-                toast.error(errorMessage)
-            }
-        } else {
-            const res = await getListChats(id, { limit: 20 })
-            setListChats(res.data)
-            localStorage.setItem('listChats', JSON.stringify(res.data))
-        }
 
-    }
     const handleNewCollection = (value: boolean) => {
         setOpenCollectionDrawer(value)
     }
@@ -1216,12 +1345,12 @@ function Playground() {
     const handleNewBundle = () => {
         setPluginModalOpen(true)
     }
-    const handleChangeSearchChatID = (e: any) => {
-        setSearchChatID(e.target.value)
-    }
+
+    
+
     return (
         <>
-        {playgroundType === 'assistant' ?    <Spin spinning={loading}>
+            {playgroundType === 'assistant' ? <Spin spinning={loading}>
                 {!assistantId ? <div className={styles['selectAssistant']}>
                     {<PlayGroundImg className={styles.svg} />}
                     <div className={styles['select-assistant']}>{t('projectPlaygroundSelectAssistantDesc')}</div>
@@ -1236,10 +1365,18 @@ function Playground() {
                             <div className={styles['select-assistant']}>{t('projectAssistant')}</div>
                             {!assistantId && <div className={styles['select-desc']}>{t('projectPlaygroundSelectAssistantInfo')}</div>}
                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Select open={false} suffixIcon={<RightOutlined />} onClick={handleSelectAssistantID} value={assistantId} className={styles['select']} removeIcon={null}>
+                                <Select open={false} suffixIcon={<RightOutlined />} onClick={handleSelectAssistantID} value={assistantName} className={styles['select']} removeIcon={null}>
                                 </Select>
                                 {assistantId && <Button icon={<EditIcon />} onClick={handleEditAssistant} className={styles['edit-button']}></Button>}
                             </div>
+                        </div>
+                        <div className={styles['selected-modal']}>
+                            <div className={styles['generation-options']}>
+                                {t('projectPlaygroundGenerationOptions')}
+                                {/* <QuestionIcon /> */}
+                            </div>
+                            <div className={styles['desc']}></div>
+                            <Checkbox.Group onChange={handleChangeCheckbox} options={plainOptions} defaultValue={JSON.parse(localStorage.getItem('checkedValues') as string) || checkBoxValue} />
                         </div>
                         <div className={styles['bottom']}>
                             <div className={styles['bottom-chats']}>
@@ -1282,13 +1419,13 @@ function Playground() {
                         <div className={styles['header-top']}>
                             <div className={styles['header-left']}>
                                 <span className={styles['chat']}>{t('projectPlaygroundChat')}</span>
-                                <span className={styles['desc']}>{chatId}</span>
-                                <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatId)} />
+                                {listChats.length > 0 && <span className={styles['desc']}>{chatId}</span>}
+                                {listChats.length > 0 && <CopyOutlined className='icon-copy' onClick={() => handleCopy(chatId)} />}
                             </div>
 
-                            <div className={styles['header-right']} onClick={handleDeleteChat}>
+                            {listChats.length > 0 && <div className={styles['header-right']} onClick={handleDeleteChat}>
                                 <Button icon={<DeleteIcon />} className='cancel-button'>{t('projectPlaygroundDeleteChat')}</Button>
-                            </div>
+                            </div>}
                         </div>
                         {!chatId && <div className={styles['content-center']}>
                             <div className={styles['content-img']}>
@@ -1298,7 +1435,7 @@ function Playground() {
                         </div>}
                         {chatId &&
                             <Spin spinning={contentTalkLoading}>
-                                <div className={styles['content-talk']} ref={contentRef}>
+                                <div className={`${styles['content-talk']} playground-content-markdown`} ref={contentRef}>
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                                         <Spin spinning={contentLoading} />
                                     </div>
@@ -1316,21 +1453,21 @@ function Playground() {
                                     </div>}
                                     {contentTalk.map((item, index) => (
                                         <div className={styles['message']} key={index} ref={divRef}>
-                                            <div className={`${styles.subText1} ${item.role === 'user' ? 'user' : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
-                                            {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`} style={{ whiteSpace: "pre-line" }}>{item.content.text}</div>}
+                                            <div className={`${styles.subText1} ${item.role === 'user' ? styles.user : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
+                                            {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`} style={{ whiteSpace: "pre-line" }}>{checkBoxValue.indexOf(4) !== -1 ? <MarkdownMessageBlock message={item.content.text} /> : item.content.text}</div>}
                                             {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1: any, index1: number) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && styles.lastItem}`}>
-                                                {(item1.color === 'orange' && index === contentTalk.length - 1) ?
+                                                {(item1.color === 'orange' && index === contentTalk.length - 1 && item1.event_step !== '') ?
                                                     (<div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>{lottieAnimShow && (
                                                         <>
                                                             {<LoadingAnim className={styles['loading-icon']} />}
-                                                            {item1.event}
+                                                            <span style={{ fontSize: '14px', lineHeight: '20px' }}>{item1.event}</span>
                                                         </>
                                                     )}
                                                     </div>) :
                                                     (
                                                         item1.color !== 'orange' && (<div onClick={() => handleClickDebug(item1)} style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
-                                                            {(item1.event !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text', whiteSpace: 'pre-wrap' }}>{item1.event}</span></>)}
-                                                            {(item1.event === 'Error Occurred') && (<><ErrorIcon className={styles['message-success']}></ErrorIcon><span style={{ color: '#ec1943', cursor: 'pointer' }}>Error Occurred</span></>)}
+                                                            {(item1.event !== 'Error Occurred') && (<> {index1 !== item.content.text.length - 1 && <MessageSuccess className={styles['message-success']} />}<span style={{ cursor: index1 !== item.content.text.length - 1 ? 'pointer' : 'text', whiteSpace: 'pre-wrap' }}>{checkBoxValue.indexOf(4) !== -1 ? <MarkdownMessageBlock message={item1.event} styles={{ marginBottom: 0 }} /> : item1.event}</span></>)}
+                                                            {(item1.event === 'Error Occurred') && (<><ErrorIcon className={styles['message-success']}></ErrorIcon><span style={{ color: '#ec1943', cursor: 'pointer', lineHeight: '20px', fontSize: '14px' }}>Error Occurred</span></>)}
                                                         </div>
                                                         )
                                                     )
@@ -1342,6 +1479,7 @@ function Playground() {
                             </Spin>
                         }
                         <div className={`${styles['content-bottom']} ${!chatId ? styles.none : ''}`}>
+                     
                             <TextArea className={styles['textarea']} autoSize={{ minRows: 3, maxRows: 6 }} value={contentValue} onChange={(e) => setContentValue(e.target.value)}></TextArea>
                             <div className={styles['button-group']}>
                                 <div style={{ display: 'flex' }}>
@@ -1352,34 +1490,29 @@ function Playground() {
                                     <div className={`${styles.formbuttoncancel} ${styles.button1} ${generateButtonLoading ? styles.loading : ''}`} onClick={handleGenerateMessage}>
                                         {generateButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}<div className={styles['text1']}>{t('projectPlaygroundChatGenerate')}</div>
                                     </div>
+
                                 </div>
                                 <div className={styles['actionbuttonedit']} onMouseEnter={handleMouseEnter} ref={settingIcon}>
                                     <ModalSettingIcon className={styles['functionalicons']} />
                                 </div>
                             </div>
                             <div className={styles['setting-modal']} ref={settingModal} style={{ display: 'none' }}>
-                                <div className={styles['generation-options']}>
-                                    {t('projectPlaygroundGenerationOptions')}
-                                </div>
-                                <div className={styles['desc']}>{t('projectPlaygroundGenerationOptionsDesc')}</div>
-                                <Checkbox.Group onChange={handleChangeCheckbox} options={plainOptions} defaultValue={JSON.parse(localStorage.getItem('checkedValues') as string) || checkBoxValue} />
+
                                 <div className={styles['select-assistant']}>Prompt variables</div>
                                 <TextArea style={{ height: '300px' }} placeholder={`{\n   key: value\n}`}
                                     value={systemPromptVariables} onChange={(e) => setSystemPromptVariable(e.target.value)}></TextArea>
                             </div>
                         </div>
                     </div>
-                </div>}
-
+                </div >}
             </Spin > : <PlaygroundModel />}
-         
             <Drawer
                 closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />}
                 className={styles['assistant-drawer']}
                 width={1280}
                 onClose={handleCancel} title={t('projectEditAssistant')} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
-                <DrawerAssistant handleNewBundle={handleNewBundle} retrievalConfig={retrievalConfig} topk={topk} maxTokens={maxTokens} handleMaxToken={handleMaxToken} handleToks={handleToks} bundilesList={bundilesList} handleNewActionModal={handleNewActionModal} handleNewCollection={handleNewCollection} selectedCollectionList={selectedRetrievalRows} actionHasMore={hasActionMore} actionList={actionList} collectionHasMore={hasMore} ref={drawerAssistantRef}
-                    handleRetrievalConfigChange1={handleRetrievalConfigChange1} retrievalList={retrievalList} selectedActionsRows={selectedActionsRows} inputValue1={inputValueOne} inputValue2={inputValueTwo} handleMemoryChange1={handleMemoryChange1} memoryValue={memoryValue} handleAddPromptInput={handleAddPrompt} drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} selectedRows={selectedRows} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange} selectedRetrievalRows={selectedRetrievalRows}></DrawerAssistant>
+                <DrawerAssistant modelName={modelName} drawerTitle={t('projectEditAssistant')} openDrawer={OpenDrawer} selectedActionsSelected={selectedActionsSelected} selectedPluginGroup={selectedPluginGroup} handleNewBundle={handleNewBundle} retrievalConfig={retrievalConfig} topk={topk} maxTokens={maxTokens} handleMaxToken={handleMaxToken} handleToks={handleToks} bundilesList={bundilesList} handleNewActionModal={handleNewActionModal} handleNewCollection={handleNewCollection} selectedCollectionList={selectedRetrievalRows} actionHasMore={hasActionMore} actionList={actionList} collectionHasMore={hasMore} ref={drawerAssistantRef}
+                    handleRetrievalConfigChange1={handleRetrievalConfigChange1} retrievalList={retrievalList} selectedActionsRows={selectedActionsRows} inputValue1={inputValueOne} inputValue2={inputValueTwo} handleMemoryChange1={handleMemoryChange1} memoryValue={memoryValue} handleAddPromptInput={handleAddPrompt} drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} selectedRows={originalModelData} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange} selectedRetrievalRows={selectedRetrievalRows}></DrawerAssistant>
             </Drawer>
             <ModelModal handleSetModelConfirmOne={handleSetModelConfirmOne} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} getOptionsList={fetchModelsList} modelType='chat_completion'></ModelModal>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} centered footer={[
@@ -1400,9 +1533,8 @@ function Playground() {
                     </div>
                 </div>
             ]} title={t('projectAssistantRetrievalPlaceHolder')} open={openModalTable} width={1000} onCancel={handleCloseModal} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable name='Collection' updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
+                <ModalTable title='New collection' name='collection' updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
             </Modal>
-
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='group'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
@@ -1415,15 +1547,15 @@ function Playground() {
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleModalClose} className='next-button'>
+                        <Button key="submit" onClick={handleModalCloseConfirm} className='next-button'>
                             {t('confirm')}
                         </Button>
                     </div>
                 </div>
             ]} title={t('projectSelectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable name="model" defaultSelectedRowKeys={Array.isArray(selectedRows) ? selectedRows : [selectedRows]} updatePrevButton={updateModelPrevButton} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
+                <ModalTable title='New model' name="model" defaultSelectedRowKeys={Array.isArray(selectedModelRows) ? selectedModelRows : [selectedModelRows]} updatePrevButton={updateModelPrevButton} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
-            <Drawer className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
+            <Drawer zIndex={10001} className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
                 <ActionDrawer showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleAssistantModalClose} centered footer={[
@@ -1442,7 +1574,7 @@ function Playground() {
 
                 </div>
             ]} title={t('projectPlaygroundSelectAssistant')} open={openAssistantModalTable} width={1000} className={`modal-inner-table ${styles.model1}`}>
-                <ModalTable name='Assistant' ifAllowNew={true} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedAssistant} handleRecordsSelected={handleRecordsAssistantSelected} ifSelect={true} columns={assistantTableColumn} hasMore={modelHasMore} id='assistant_id' dataSource={optionList} onChildEvent={handleChildAssistantEvent}></ModalTable>
+                <ModalTable name='assistant' title='New assistant' ifAllowNew={true} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedAssistant} handleRecordsSelected={handleRecordsAssistantSelected} ifSelect={true} columns={assistantTableColumn} hasMore={modelHasMore} id='assistant_id' dataSource={optionList} onChildEvent={handleChildAssistantEvent}></ModalTable>
             </Modal>
             <CreateCollection handleFetchData={() => fetchDataRetrievalData({ limit: retrievalLimit || 20 })} handleModalCloseOrOpen={() => setOpenCollectionDrawer(false)} OpenDrawer={openCollectionDrawer}></CreateCollection>
             <Drawer width={700} open={contentDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCloseContentDrawer} title={t('projectPlaygroundChatCompletion')}>
@@ -1483,10 +1615,9 @@ function Playground() {
                         </div>
                     }]}></Collapse>
             </Drawer>
-            <CreatePlugin bundilesList={bundilesList} handleConfirmRequest={handleConfirmRequest} open={pluginModalOpen} handleCloseModal={handleClosePluginModal}></CreatePlugin>
-            <DeleteModal title={t('projectPlaygroundDeleteChatUpper')} projectName={chatId} open={OpenDeleteModal} describe={`${'deleteItem'} ${t('projectPlaygroundChatLow')} ${chatId}`} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
+            <CreatePlugin handleConfirmRequest={handleConfirmRequest} open={pluginModalOpen} handleCloseModal={handleClosePluginModal}></CreatePlugin>
+            <DeleteModal title={t('projectPlaygroundDeleteChatUpper')} projectName={chatId} open={OpenDeleteModal} describe={`${t('deleteItem')} ${t('projectPlaygroundChatLow')} ${chatId}`} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
         </>
-
     );
 }
 export default Playground;
