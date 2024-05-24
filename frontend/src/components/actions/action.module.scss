@@ -19,7 +19,7 @@
         position: relative;
         background-color: var(--color-invert-text);
         padding: 20px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--color-clear-button-hover);
         box-sizing: border-box;
         overflow: hidden;
         display: flex;
@@ -115,7 +115,7 @@
         height: 100% !important;
     }
 
-    border: 1px solid #eee !important;
+    border: 1px solid var(--color-clear-button-hover) !important;
     border-radius: 8px !important;
     margin-bottom: 30px;
 
@@ -123,7 +123,7 @@
 
 .ant-table-empty {
     .ant-table-content {
-        border: 1px solid #eee;
+        border: 1px solid var(--color-clear-button-hover);
         border-radius: 8px;
     }
 

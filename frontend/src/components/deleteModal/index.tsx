@@ -5,10 +5,12 @@ import {
 } from 'antd';
 import styles from './deleteMoal.module.scss'
 import closeIcon from '../../assets/img/x-close.svg'
-
-const DeleteModal = (props) => {
+import { deleteProjectType } from '@/constant/index'
+import { useTranslation } from "react-i18next";
+const DeleteModal = (props: deleteProjectType) => {
+    const { t } = useTranslation();
     const [deleteLoading, setDeleteLoading] = useState(false)
-    const { title, projectName, open, onDeleteConfirm, onDeleteCancel, describe } = props
+    const { title, projectName, open, onDeleteConfirm, onDeleteCancel, describe, buttonType = 'delete-button' } = props
     const parts = describe.split(new RegExp(`(${projectName})`, 'i'))
     const handleOk = async () => {
         await setDeleteLoading(true)
@@ -23,10 +25,10 @@ const DeleteModal = (props) => {
     const customFooter = (
         <div>
             <Button key="back" onClick={handleCancel} className='cancel-button'>
-                Cancel
+                {t('cancel')}
             </Button>
-            <Button key="submit" type="primary" onClick={handleOk} danger loading={deleteLoading} className={`delete-button ${styles.button}`}>
-                Delete
+            <Button key="submit"  onClick={handleOk} loading={deleteLoading} className={`${buttonType} ${styles.button}`}>
+                {buttonType === 'delete-button' ? t('delete') : 'Confirm'}
             </Button>
         </div>
     );

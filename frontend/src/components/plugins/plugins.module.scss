@@ -12,7 +12,7 @@
         position: relative;
         background-color: var(--color-invert-text);
         padding: 20px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--color-clear-button-hover);
         box-sizing: border-box;
         overflow: hidden;
         display: flex;
@@ -197,11 +197,11 @@
             align-items: flex-start;
             justify-content: flex-start;
             padding: 24px 0px 24px 24px;
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid var(--color-divider);
             box-sizing: border-box;
             text-align: left;
             font-size: 18px;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             font-family: Inter;
         }
 
@@ -212,7 +212,7 @@
 
             .left {
                 height: calc(100% - 26px);
-                border-right: 1px solid #e4e4e4;
+                border-right: 1px solid var(--color-divider);
                 padding: 14px 4px;
                 min-width: 160px;
                 flex-shrink: 0;
@@ -232,17 +232,17 @@
 
                 .pluginName:hover {
                     background-color: #fbfbfb;
-                    color: #2b2b2b;
+                    color: var( --color-text-primary );
                 }
 
                 .pluginId {
-                    background-color: #f3f8f6;
-                    color: #087443;
+                    background-color: var(--color-menu-background);
+                    color: var(--color-positive);
                 }
 
                 .pluginId:hover {
-                    background-color: #f3f8f6;
-                    color: #087443;
+                    background-color: var(--color-menu-background);
+                    color: var(--color-positive);
                 }
             }
 
@@ -270,7 +270,7 @@
                 .pluginDesc {
                     color: var(--color-text-secondary);
                     font-size: 14px;
-                    border-top: 1px solid #e4e4e4;
+                    border-top: 1px solid var(--color-divider);
                     padding: 12px 29px;
                     line-height: 1;
                 }
@@ -279,7 +279,7 @@
                     font-size: 16px;
                     line-height: 24px;
                     font-weight: 500;
-                    color: #2b2b2b !important;
+                    color: var( --color-text-primary ) !important;
                     text-align: left;
                     display: inline-block;
                 }
@@ -305,7 +305,7 @@
             line-height: 20px;
             font-weight: 600;
             font-family: Inter;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             text-align: left;
             // margin-bottom: 24px;
             margin-top: 24px;
@@ -366,7 +366,7 @@
         .googleWebSearch {
             position: relative;
             font-weight: 600;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
         }
 
         .label {
@@ -387,12 +387,12 @@
             width: calc(100% - 48px);
             align-items: center;
             padding: 24px;
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid var(--color-divider);
         }
 
         .googleWebSearch1 {
             font-size: 14px;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             font-family: Inter;
             font-weight: 600;
             margin-left: 10px;
@@ -400,7 +400,7 @@
 
         .webSearchWrapper {
             border-radius: 8px;
-            border: 1px solid #e4e4e4;
+            border: 1px solid var(--color-divider);
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -452,7 +452,7 @@
             // width: 270px;
             height: 210px;
             position: relative;
-            border: 1px solid #e4e4e4;
+            border: 1px solid var(--color-divider);
             background-color: white;
             box-sizing: border-box;
             display: flex;
@@ -476,7 +476,7 @@
         }
 
         .activeframeParent {
-            outline: 2.5px solid #087443;
+            outline: 2.5px solid var(--color-positive);
         }
 .content-modal{
     height: 672px;
@@ -526,7 +526,7 @@
             flex: 1;
             // flex-shrink: 0;
             position: relative;
-            border-left: 1px solid #e4e4e4;
+            border-left: 1px solid var(--color-divider);
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -534,7 +534,7 @@
             justify-content: flex-start;
             text-align: left;
             font-size: 14px;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             font-family: Inter;
         }
 
@@ -554,13 +554,13 @@
             font-size: 14px;
             line-height: 24px;
             font-weight: 500;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             text-align: left;
             display: inline-block;
         }
 
         .pluginContent {
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid var(--color-divider);
             box-sizing: border-box;
             display: flex;
             width: 100%;
@@ -571,7 +571,7 @@
             gap: 4px;
             text-align: left;
             font-size: 14px;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             font-family: Inter;
         }
     }
@@ -583,8 +583,8 @@
     opacity: 0.3;
 
     svg {
-        fill: #bfbfbf;
-        stroke: #bfbfbf;
+        fill: var( --color-text-disable );
+        stroke: var( --color-text-disable );
     }
 }
 
@@ -600,7 +600,7 @@
 
     .bundleTitle {
         padding: 24px;
-        border-bottom: 1px solid #e4e4e4;
+        border-bottom: 1px solid var(--color-divider);
     }
 
     .label {
@@ -711,6 +711,7 @@
 .openLookDrawer {
     :global {
         .ant-drawer-header {
+            border-bottom: 1px solid var(--color-divider);
             .ant-drawer-header-title {
                 display: flex;
                 flex-direction: row-reverse;
@@ -821,11 +822,11 @@
             align-items: flex-start;
             justify-content: flex-start;
             padding: 24px 0px 24px 24px;
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid var(--color-divider);
             box-sizing: border-box;
             text-align: left;
             font-size: 18px;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             font-family: Inter;
         }
 
@@ -836,7 +837,7 @@
 
             .left {
                 height: calc(100% - 26px);
-                border-right: 1px solid #e4e4e4;
+                border-right: 1px solid var(--color-divider);
                 padding: 14px 4px;
                 min-width: 160px;
                 flex-shrink: 0;
@@ -856,23 +857,23 @@
 
                 .pluginName:hover {
                     background-color: #fbfbfb;
-                    color: #2b2b2b;
+                    color: var( --color-text-primary );
                 }
 
                 .pluginId {
-                    background-color: #f3f8f6;
-                    color: #087443;
+                    background-color: var(--color-menu-background);
+                    color: var(--color-positive);
                 }
 
                 .pluginId:hover {
-                    background-color: #f3f8f6;
-                    color: #087443;
+                    background-color: var(--color-menu-background);
+                    color: var(--color-positive);
                 }
             }
 
             .right {
                 overflow-x: hidden;
-
+                background-color: white;
                 .topContent {
                     display: flex;
                     align-items: center;
@@ -894,7 +895,7 @@
                 .pluginDesc {
                     color: var(--color-text-secondary);
                     font-size: 14px;
-                    border-top: 1px solid #e4e4e4;
+                    border-top: 1px solid var(--color-divider);
                     padding: 12px 29px;
                     line-height: 1;
                 }
@@ -903,7 +904,7 @@
                     font-size: 16px;
                     line-height: 24px;
                     font-weight: 500;
-                    color: #2b2b2b !important;
+                    color: var( --color-text-primary ) !important;
                     text-align: left;
                     display: inline-block;
                 }
@@ -956,6 +957,6 @@
     cursor: not-allowed !important;
 
     .registered {
-        color: #087443;
+        color: var(--color-positive);
     }
 }

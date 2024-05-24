@@ -9,6 +9,7 @@
     }
 
     .craftingThePerfect1 {
+        // width: 100%;
         padding: 20px;
         position: relative;
         font-size: 16px;
@@ -26,7 +27,9 @@
         display: flex;
         justify-content: flex-end;
         margin-top: 24px;
-  
+        // .form {
+        //     display: flex;
+        // }
 
         .plusParent {
             display: flex;
@@ -39,6 +42,7 @@
                 border-radius: 8px;
                 border: 1px solid var(--color-divider);
                 box-sizing: border-box;
+                // width: 100%;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
@@ -128,14 +132,14 @@
         height: 100% !important;
     }
 
-    border: 1px solid #eee !important;
+    border: 1px solid var(--color-clear-button-hover) !important;
     border-radius: 8px !important;
     margin-bottom: 30px;
 }
 
 .ant-table-empty {
     .ant-table-content {
-        border: 1px solid #eee;
+        border: 1px solid var(--color-clear-button-hover);
         border-radius: 8px;
     }
 
@@ -200,6 +204,25 @@
         background-color: var(--color-invert-text);
         left: -6px;
     }
+}
+.popover-eidt {
+    cursor: pointer;
+    margin: 0;
+    padding: 10px;
+    border-radius: 8px;
+
+}
+.popover-eidt:hover,.popover-delete:hover {
+    background-color: var(--color-clear-button-hover);
+
+} 
+.popover-delete {
+    cursor: pointer;
+    margin: 0;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 4px;
+    color: var(--color-negative);
 }
 
 .drawer-action {

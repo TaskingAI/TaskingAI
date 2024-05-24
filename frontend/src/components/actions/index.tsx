@@ -5,7 +5,6 @@ import styles from './action.module.scss'
 import { useState, useEffect,useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchActionData } from '../../Redux/actions';
-
 import { getFirstMethodAndEndpoint } from '../../utils/util.ts'
 import { getActionsList, updateActions, deleteActions, createActions, getActionsDetail } from '../../axios/actions.ts'
 import closeIcon from '../../assets/img/x-close.svg'
@@ -43,12 +42,6 @@ function Actions() {
     const [hasMore, setHasMore] = useState(false)
     const [actionId, setActionId] = useState('')
     const [tipSchema, setTipSchema] = useState(false)
-    // useEffect(() => {
-    //     const params = {
-    //         limit: 20,
-    //     }
-    //     fetchData(params)
-    // }, [])
     useEffect(() => {
         if (actionLists.data.length > 0) {
             const data = actionLists.data.map((item: any) => {
@@ -248,7 +241,7 @@ function Actions() {
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
                 <ModalTable title='New action' loading={loading} updatePrevButton={updatePrevButton} name='action' id='action_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
-            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem')} ${deleteValue}? ${'projectActionDeleteDesc'}`} title='Delete Action' projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
+            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem')} ${deleteValue}? ${t('projectActionDeleteDesc')}`} title='Delete Action' projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
             <Drawer className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <ActionDrawer ref={actionDrawerRef} actionId={actionId} showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} open={OpenDrawer} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>

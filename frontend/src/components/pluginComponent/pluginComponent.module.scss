@@ -39,7 +39,7 @@
 .no-data {
     width: 169px;
     margin: auto;
-    margin-top: 250px;
+    margin-top: 170px;
     height: 171px;
     display: flex;
     flex-direction: column;
@@ -49,7 +49,7 @@
     .desc {
         font-size: 14px;
         font-family: Inter;
-        color: #bfbfbf;
+        color: var( --color-text-disable );
         margin-top: 5px;
         margin-bottom: 12px;
     }
@@ -71,8 +71,69 @@
 .content {
     height: 509px;
     padding: 24px 24px 0 24px;
-    border-bottom: 1px solid #e4e4e4;
+    border-bottom: 1px solid var(--color-divider);
     overflow: auto;
+ 
+    .header-table {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+
+        :global {
+            .ant-input {
+                flex: 1
+            }
+
+            .ant-btn {
+                margin: 0 10px;
+            }
+        }
+
+        .select-name {
+            width: 110px !important;
+        }
+
+        .select-data {
+            width: 150px !important;
+        }
+
+        .header-new {
+            display: flex;
+            justify-content: flex-end;
+
+            .plusParent {
+                display: flex;
+            }
+        }
+
+        .input-name {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .select-name {
+            :global {
+                .ant-select-selector {
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                    border-right: none;
+                    border: 1px solid var(--color-divider);
+                    border-right: none !important;
+
+                }
+            }
+        }
+
+        .select-name:hover {
+            :global {
+                .ant-select-selector {
+                    border: 1px solid #099250;
+                    border-right: 1px solid #099250 !important;
+                }
+            }
+        }
+    }
 }
 .content::-webkit-scrollbar {
     display: none;
@@ -105,7 +166,7 @@
             line-height: 17px;
             font-weight: 600;
             font-family: Inter;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             line-height: 17px;
             margin-bottom: 12px;
         }
@@ -141,7 +202,7 @@
         box-sizing: border-box;
         height: 66px;
         padding: 12px 12px 12px 60px;
-        outline: 1px solid #e4e4e4;
+        outline: 1px solid var(--color-divider);
         
 
         .pluginName {
@@ -150,10 +211,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
 
             .selectedName {
-                color: #087443;
+                color: var(--color-positive);
             }
         }
 
@@ -163,13 +224,15 @@
         }
     }
 
-    .selectItem {
-        outline: 2.5px solid #087443;
-    }
 
     .selectedItem {
         background-color: #FAFAFA;
         opacity: 0.3;
+        pointer-events: none;
         cursor: not-allowed;
+    }
+
+    .selectItem {
+        outline: 2.5px solid var(--color-positive);
     }
 }
