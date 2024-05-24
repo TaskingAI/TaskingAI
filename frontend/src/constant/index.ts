@@ -100,7 +100,8 @@ interface deleteProjectType {
   open: boolean;
   onDeleteConfirm: () => void;
   onDeleteCancel: () => void;
-  describe: string
+  describe: string;
+  buttonType?: string
 }
 interface ModalFooterEndProps {
   onCancel: () => void;

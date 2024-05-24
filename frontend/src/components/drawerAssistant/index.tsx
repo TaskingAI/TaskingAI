@@ -9,22 +9,25 @@ import { useState, useEffect } from 'react';
 import PluginComponent from '../pluginComponent/index'
 const DrawerAssistant = forwardRef((props: any, ref: any) => {
     const { t } = useTranslation()
-    const { handleAddPromptInput, handleNewBundle, handleNewActionModal, topk, maxTokens, bundilesList, handleMaxToken, handleToks, handleNewCollection, selectedCollectionList, collectionHasMore, actionHasMore, retrievalList, actionList, handleMemoryChange1, handleRetrievalConfigChange1, retrievalConfig, inputValue1, memoryValue, handleInputValueOne, handleInputValueTwo, inputValue2, selectedActionsRows, drawerName, systemPromptTemplate, handleDeletePromptInput, handleInputPromptChange, selectedRows, handleSelectModelId, handleChangeName, drawerDesc, handleDescriptionChange } = props
+    const { handleAddPromptInput, handleNewBundle,modelName,drawerTitle,openDrawer,selectedPluginGroup,selectedActionsSelected, handleNewActionModal, topk, maxTokens, bundilesList, handleMaxToken, handleToks, handleNewCollection, selectedCollectionList, collectionHasMore, actionHasMore, retrievalList, actionList, handleMemoryChange1, handleRetrievalConfigChange1, retrievalConfig, inputValue1, memoryValue, handleInputValueOne, handleInputValueTwo, inputValue2, selectedActionsRows, drawerName, systemPromptTemplate, handleDeletePromptInput, handleInputPromptChange, handleSelectModelId, handleChangeName, drawerDesc, handleDescriptionChange } = props
     const [collectionModal, setCollectionModal] = useState(false)
     const [actionModal, setActionModal] = useState(false)
     const [pluginModal, setPluginModal] = useState(false)
+   
     const [pluginIndex, setPluginIndex] = useState(0)
     const [collectionSelectedId, setCollectionSelectedId] = useState('')
+    const [pluginSelectedId, setPluginSelectedId] = useState('')
+    const [bundleSelectedItem, setBundleSelectedItem] = useState({})
     const [actionSelectedId, setActionSelectedid] = useState('')
-    const [selectedPluginList, setSelectedPluginList] = useState([])
-    const retrievalFormList1 = selectedCollectionList.map((item: any) => ({ collection_id: item })) || ['']
-    const [retrievalSelectedList, setRetrievalSelectedList] = useState<any[]>(retrievalFormList1)
-    const [actionSelectedList, setActionSelectedList] = useState<any[]>([''])
+    const [selectedPluginList, setSelectedPluginList] = useState(selectedPluginGroup)
+    const [retrievalSelectedList, setRetrievalSelectedList] = useState<any[]>(selectedCollectionList)
+    const [actionSelectedList, setActionSelectedList] = useState<any[]>(selectedActionsSelected)
     const [pluginActionList, setPluginActionList] = useState<any[]>(selectedActionsRows)
     const [isShowRetrievalConfig, setIsShowRetrievalConfig] = useState(false)
-    const [retrievalFormList, setRetrievalFormList] = useState<any[]>(retrievalFormList1)
+    const [retrievalFormList, setRetrievalFormList] = useState<any[]>(selectedCollectionList.map((item: any) => ({ collection_id: item.collection_id,name:item.name })) || [''])
     const [indexCollection, setIndexCollection] = useState(0)
     const [indexAction, setIndexAction] = useState(0)
+
     useEffect(() => {
         const data = retrievalFormList.filter((item: any) => Boolean(item.collection_id)).length
         if (data === 0) {
@@ -37,10 +40,24 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
         }
     }, [retrievalFormList])
     useEffect(() => {
-        const retrievalFormList1 = selectedCollectionList.map((item: any) => ({ collection_id: item })).length > 0 ? selectedCollectionList.map((item: any) => ({ collection_id: item })) : ['']
-        setRetrievalSelectedList(retrievalFormList1)
-        setRetrievalFormList(retrievalFormList1)
-    }, [selectedCollectionList])
+        setSelectedPluginList(selectedPluginGroup)
+    }, [selectedPluginGroup])
+    useEffect(() => {
+        if(drawerTitle === 'Create Assistant' && openDrawer) {
+            setSelectedPluginList([]) 
+            setActionSelectedList([])
+            setRetrievalSelectedList([])
+            setPluginActionList([])
+            setRetrievalFormList([''])
+        } else if(drawerTitle === 'Edit Assistant' && openDrawer) {
+            const retrievalFormList1 = selectedCollectionList.map((item: any) => ({ collection_id: item.collection_id,name: item.name })).length > 0 ? selectedCollectionList.map((item: any) => ({ collection_id: item.collection_id,name: item.name })) : ['']
+            setRetrievalSelectedList(retrievalFormList1)
+            setRetrievalFormList(retrievalFormList1)
+            setSelectedPluginList(selectedPluginGroup)
+            setActionSelectedList(selectedActionsSelected)
+            setPluginActionList(selectedActionsRows)
+        }
+    }, [drawerTitle,openDrawer])
     useEffect(() => {
     
         setPluginActionList(selectedActionsRows.length ? selectedActionsRows : [{ type: 'plugin', value: '' }])
@@ -54,14 +71,17 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
         handleChangeName(e.target.value)
     }
     const handleSelectedItem = (value: any) => {
-
+        const data = value
+        if(!data.name) {
+          data.name = 'Untitled Collection'
+        }
         setRetrievalSelectedList((prev) => {
-            const newRetrievalSelectedList = [...prev, value]
+            const newRetrievalSelectedList = [...prev, data]
             return newRetrievalSelectedList
         })
         setRetrievalFormList((prev) => {
             const newRetrievalFormList = [...prev]
-            newRetrievalFormList[indexCollection] = value
+            newRetrievalFormList[indexCollection] = data
             return newRetrievalFormList
         })
     }
@@ -71,7 +91,7 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
             return newActionSelectedList
         })
         setPluginActionList((prev) => {
-            const item = { type: 'action', value: value.action_id }
+            const item = { type: 'action', value: value.action_id,name: value.name }
 
             prev[indexAction] = item
             return prev
@@ -106,7 +126,7 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
         if (actionId) {
             setActionSelectedid(actionId)
             setActionSelectedList((prev) => {
-                const newRetrievalSelectedList = prev.filter(item => item.value !== actionId)
+                const newRetrievalSelectedList = prev.filter(item => item.action_id !== actionId)
                 return newRetrievalSelectedList
             })
         } else {
@@ -121,8 +141,17 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
     const handleNewAction = () => {
         handleNewActionModal(true)
     }
-    const handleSelectPlugins = (index: any) => {
-
+    const handleSelectPlugins = (index: any,value:string) => {
+        if(value) {
+            setPluginSelectedId(value.split('/')[1])
+            setBundleSelectedItem({bundle_id: value.split('/')[0]})
+            setSelectedPluginList((prev: any) => {
+                const newActionFormList = prev.filter((item: any) => item !== value.split('/')[1])
+                return newActionFormList
+            })
+        }else {
+            setPluginSelectedId('')
+        }
         setPluginIndex(index)
         setPluginModal(true)
     }
@@ -198,7 +227,6 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
             setCollectionSelectedId('')
 
         }
-
     }
     const handleMemoryChange = (value: string) => {
         handleMemoryChange1(value)
@@ -206,14 +234,15 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
     const handleRetrievalConfigChange = (value: string) => {
         handleRetrievalConfigChange1(value)
     }
-    const handlePluginConfirm = (pluginId: any, _pluginList: string[], data: any) => {
+    const handlePluginConfirm = (pluginId: any, data: any) => {
+        const pluginName = data.plugins.find((item:any)=>item.plugin_id === pluginId).name
         setSelectedPluginList((prev: any) => {
             const newActionFormList: any = [...prev, pluginId]
             return newActionFormList
         })
         setPluginActionList((prev) => {
             const newActionFormList = [...prev]
-            const item = { type: 'plugin', value: `${data.bundle_instance_id}/${pluginId}` }
+            const item = { type: 'plugin', value: `${data.bundle_id}/${pluginId}`,name: `${data.name}/${pluginName}` }
             newActionFormList[pluginIndex] = item
             return newActionFormList
         })
@@ -248,11 +277,14 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                 <div className='name-prompt'>
                     {t('projectModelColumnName')}
                 </div>
-                <Input value={drawerName} onChange={handleChangeNames} className='input'></Input>
+                <Input value={drawerName} onChange={handleChangeNames} className='input' placeholder='Enter name'></Input>
                 <div className='label'>
                     {t('projectAssistantsColumnDescription')}
                 </div>
-                <Input.TextArea className='input' autoSize={{ minRows: 3, maxRows: 10 }} showCount
+                <div className='label-desc'>
+                The description should serve as an internal note to clarify the purpose of the assistant; it will not be used as a system prompt.
+                </div>
+                <Input.TextArea placeholder='Enter description' className='input' autoSize={{ minRows: 3, maxRows: 10 }} showCount
                     maxLength={200} value={drawerDesc} onChange={(e) => handleDescriptionChanges(e as any)} />
                 <div className='hr'></div>
                 <div className='label'>
@@ -263,18 +295,20 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                 <Select
                     placeholder={t('projectSelectModel')}
                     open={false}
+                    mode="multiple"
                     suffixIcon={<RightOutlined />}
                     removeIcon={null}
+                    style={{caretColor:'transparent'}}
                     className='input'
-                    value={selectedRows} onClick={handleSelectModelIds}
+                    value={modelName} onClick={handleSelectModelIds}
                 >
                 </Select>
                 <div className='label'>
                     <span>{t('projectSystemPromptTemplate')}</span>
                 </div>
-                <div className='label-desc'>{t('projectSystemPromptTemplateDesc')}
-                &nbsp; <a className='referToTheDocumentationFor href' href="https://docs.tasking.ai/docs/guide/assistant/components/system-prompt-template" target="_blank">
-                       <span className='referToThe'>{t('projectSystemPromptTemplateLink')}</span>
+                <div className='label-desc'>A system prompt is the initial instruction that guides assistant’s response.  Prompt variables can be defined using double curly brackets, like {"{{language}}"}. Those variables are then populated during the generation process. 
+                &nbsp;<a className='referToTheDocumentationFor href' href="https://docs.tasking.ai/docs/guide/product_modules/assistant/components/system-prompt-template" target="_blank">
+                        <span className='referToThe'>Learn more</span>
                     </a>
                 </div>
                 {systemPromptTemplate?.map((value: any, index: number) => (
@@ -298,9 +332,9 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                     <span>{t('projectAssistantsColumnMemory')}</span>
 
                 </div>
-                <div className='label-desc'>{t('projectMemoryDesc')}
-                    <a className='referToTheDocumentationFor href' href="https://docs.tasking.ai/docs/guide/assistant/components/memory" target="_blank">
-                        <span className='referToThe'>{t('projectMemoryLink')}</span>
+                <div className='label-desc'>The context memory allows the assistant to remember past conversations, thereby enabling stateful invocations. 
+                &nbsp;<a className='referToTheDocumentationFor href'   href="https://docs.tasking.ai/docs/guide/product_modules/assistant/components/memory" target="_blank">
+                         <span className='referToThe'>Learn more</span>
                     </a>
                 </div>
                 <div className='memory-type'>
@@ -308,6 +342,7 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                     <Select
                         onChange={handleMemoryChange}
                         value={memoryValue}
+                       
                         className='select-input'
                         options={[
                             {
@@ -355,14 +390,14 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                     {t('projectRetrievalTitle')}
                 </div>
                 <div className='label-desc'>
-                    Incorporate retrieval sources into your assistant to facilitate effective retrieval-augmented generation. <a href="https://docs.tasking.ai/docs/guide/assistant/components/retrievals" className='referToTheDocumentationFor'>Check the documentation to learn more.</a>
+                    Incorporate retrieval sources into your assistant to facilitate effective retrieval-augmented generation. <a href="https://docs.tasking.ai/docs/guide/product_modules/retrieval/overview" target='_blank'  className='referToTheDocumentationFor'>Learn more</a>
                 </div>
                 {retrievalFormList.map((item: any, index: number) => (
                     <div className='retrieval-list' key={item.collection_id}>
                         <Select options={[
-                            { value: 'Collection', label: 'Collection' }
-                        ]} defaultValue='Collection' className='retrieval-type'></Select>
-                        <Select className='input' placeholder={!item?.collection_id && t('projectAssistantRetrievalPlaceHolder')} onClick={() => handleCollectionModal(index, item.collection_id)} suffixIcon={<RightOutlined />} open={false} value={item.collection_id ? item.collection_id : undefined} removeIcon={null} />
+                            { value: 'Collecion', label: 'Collection' }
+                        ]} defaultValue='Collection'   className='retrieval-type'></Select>
+                        <Select className='input' mode="multiple" placeholder={!item.name && t('projectAssistantRetrievalPlaceHolder')} style={{caretColor:'transparent'}} onClick={() => handleCollectionModal(index, item.collection_id)} suffixIcon={<RightOutlined />} open={false} value={item.name ? item.name : undefined} removeIcon={null} />
                         <div> <DeleteInputIcon onClick={() => handleDeleteRetrieval(item.collection_id,index)} style={{ marginTop: '8px' }} /></div>
                     </div>
                 ))}
@@ -421,7 +456,7 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                     Tools
                 </div>
                 <div className='label-desc'>
-                    Integrate tools into your assistant to extend its capabilities to address different user needs. <a href="https://docs.tasking.ai/docs/guide/assistant/components/tools" className='referToTheDocumentationFor'>Check the documentation to learn more.</a>
+                    Integrate tools into your assistant to extend its capabilities to address different user needs. <a href="https://docs.tasking.ai/docs/guide/product_modules/tool/overview" target='_blank' className='referToTheDocumentationFor'> Learn more</a>
                 </div>
                 {pluginActionList.map((item: any, index: number) => {
                     return (
@@ -434,9 +469,11 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                                 placeholder={item.type === 'plugin' ? 'Select a plugin' : 'Select a action'}
                                 open={false}
                                 removeIcon={null}
+                                mode="multiple"
+                                style={{caretColor:'transparent'}}
                                 className='input'
                                 suffixIcon={<RightOutlined />}
-                                value={item.value ? item.value : undefined} onClick={item.type === 'action' ? () => handleSelectActions(index, item.value) : () => handleSelectPlugins(index)}
+                                value={item.name ? item.name : undefined} onClick={item.type === 'action' ? () => handleSelectActions(index, item.value) : () => handleSelectPlugins(index,item.value)}
                             >
                             </Select>
                             <div> <DeleteInputIcon onClick={() => handleDeleteTool(item,index)} style={{ marginTop: '8px' }} /></div>
@@ -450,7 +487,7 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
             </div>
             {collectionModal && <ModalSelect collectionSelectedId={collectionSelectedId} id='collection_id' handleNewModal={handleNewCollection1} title='Collection' nameTitle='Select Collection' newTitle='New collection' hasMore={collectionHasMore} handleSelectedItem={handleSelectedItem} retrievalModal={collectionModal} retrievalSelectedList={retrievalSelectedList} retrievalList={retrievalList} handleClose={handleCancelCollectionModal}></ModalSelect>}
             {actionModal && <ModalSelect id='action_id' collectionSelectedId={actionSelectedId} nameTitle='Select Action' handleNewModal={handleNewAction} title='Action' newTitle='New action' hasMore={actionHasMore} handleSelectedItem={handleActionItem} retrievalModal={actionModal} retrievalSelectedList={actionSelectedList} retrievalList={actionList} handleClose={handleCancelActionModal}></ModalSelect>}
-            {pluginModal && <PluginComponent  selectedData={selectedPluginList} handleSelectedItem={handlePluginConfirm} open={pluginModal} handleCreateBundle={handleCreateBundle} bundleList={bundilesList} handleClose={handleClosePluginModal}></PluginComponent>}
+            {pluginModal && <PluginComponent bundleSelectedItem={bundleSelectedItem} pluginSelectedId={pluginSelectedId}  selectedData={selectedPluginList} handleSelectedItem={handlePluginConfirm} open={pluginModal} handleCreateBundle={handleCreateBundle} bundleList={bundilesList} handleClose={handleClosePluginModal}></PluginComponent>}
         </div >
     );
 })

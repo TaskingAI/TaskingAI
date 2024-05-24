@@ -2,21 +2,16 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-
     .top {
         flex: 1;
         display: flex;
         flex-direction: column;
-
         :global {
             .ant-input-affix-wrapper {
                 flex: 1
             }
         }
-
     }
-
-
     .span {
         color: var(--color-negative);
     }
@@ -46,8 +41,6 @@
     .desc-description {
         color: #777;
     }
-
-
     .error {
         opacity: 0;
         transition: opacity 0.5s ease;
@@ -57,7 +50,6 @@
             opacity: 1;
         }
     }
-
     .tip-error {
         @extend .error;
     }
@@ -76,6 +68,8 @@
     }
     .resetBackground {
         opacity: 0.3;
+        pointer-events: none;
+        cursor: not-allowed;
     }
     .formbuttoncancel {
         position: relative;

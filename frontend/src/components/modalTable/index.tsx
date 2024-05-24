@@ -133,7 +133,6 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
                 setPrevButtonDisabled(true)
             } else {
                 setPrevButtonDisabled(false)
-
             }
         }
     }, [flagPrev])
@@ -387,7 +386,7 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
             description={
                 <>
                     <p style={{ color: '#bfbfbf', fontSize: '14px' }}>No {name}</p>
-                    {!ifAllowNew && <Button icon={<PlusOutlined />} className={`${styles['prompt-button']} next-button`} onClick={handleCreatePrompt}>{title}</Button>}
+                    {!ifAllowNew && <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>{title}</Button>}
                 </>
             }
         />
@@ -400,11 +399,11 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
                     <Select defaultValue={'ID' } onChange={handleSelectFrontChange} options={ifOnlyId ? optionsFront1 : optionsFront} className={styles['select-name']} />
                     <Input placeholder={enterPlaceHolder} className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
                     <Button className='cancel-button' onClick={handleSearch}>Search</Button>
-                    {(ifSelect && mode === 'multiple') && <Select defaultValue="All records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />}
+                    {(ifSelect && mode === 'multiple') && <Select defaultValue="All Records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />}
                     {!ifSelect && (
                         <div className={styles['header-new']}>
                             <div className={styles['plusParent']}>
-                                <Button type='primary' icon={<PlusOutlined />} className={`${styles['prompt-button']} next-button`} onClick={handleCreatePrompt}>{title}</Button>
+                                <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>{title}</Button>
                             </div>
                         </div>
                     )}

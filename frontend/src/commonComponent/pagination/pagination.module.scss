@@ -1,9 +1,9 @@
 .footer {
     display: flex;
-    padding-top: 16px;
+    padding-top: 15px;
     width: 100%;
     background-color: #fff;
-    padding-bottom: 14px;
+    padding-bottom: 15px;
     justify-content: center;
     :global {
         .ant-pagination  {
@@ -22,12 +22,12 @@
             display: none;
         }
         .ant-btn-default:hover {
-            color: #2B2B2B !important;
+            color: var( --color-text-primary ) !important;
             border: 1px solid var(--color-divider) !important;
          }
         .ant-btn-default:disabled {
             border: 1px solid var(--color-divider) !important;
-            color: #bfbfbf !important;
+            color: var( --color-text-disable ) !important;
         }
     }
     .previous-button {
@@ -37,7 +37,7 @@
         border-right: none;
         width: 96px;
         height: 40px;
-        color: #bfbfbf;
+        color: var( --color-text-disable );
         background-color: white;
         border: 1px solid var(--color-divider);
 
@@ -49,7 +49,7 @@
         border-top-left-radius: 0;
         width: 96px;
         height: 40px;
-        color: #bfbfbf;
+        color: var( --color-text-disable );
         background-color: white;
 
         border: 1px solid var(--color-divider);

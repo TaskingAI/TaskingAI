@@ -11,7 +11,7 @@
 
     overflow: hidden;
     .left-assistant {
-        border-right: 1px solid #e4e4e4;
+        border-right: 1px solid var(--color-divider);
         width: 640px;
         padding-bottom: 24px;
         overflow: auto;
@@ -43,7 +43,7 @@
         display: none;
     }
     .basic-information {
-        color: #2b2b2b;
+        color: var( --color-text-primary );
         font-size: 18px;
         font-weight: 600;
         margin: 24px;
@@ -59,6 +59,7 @@
 
     .input {
         margin: 0 24px;
+       
         width: calc(100% - 48px) !important;
     }
 
@@ -249,7 +250,7 @@
 }
 
 .button-type:hover {
-    border-color: #e4e4e4 !important;
-    color: #2b2b2b !important;
+    border-color: var(--color-divider) !important;
+    color: var( --color-text-primary ) !important;
 }
 

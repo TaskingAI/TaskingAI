@@ -91,7 +91,9 @@ const ProjectHome = () => {
     useEffect(() => {
         dispatch(fetchAssistantsData() as any);
         dispatch(fetchModelsData(20) as any);
-        dispatch(fetchRetrievalData(20) as any);
+        dispatch(fetchRetrievalData({
+            limit: 20
+        }) as any);
         dispatch(fetchApikeysData(20) as any)
         dispatch(fetchPluginData(20) as any)
         dispatch(fetchActionData(20) as any)

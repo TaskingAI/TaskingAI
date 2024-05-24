@@ -125,7 +125,7 @@ export const fetchAssistantsData = () => {
     const project_base_url = 'api/v1'
 
     dispatch(fetchAssistantRequest());
-    request.get(`${project_base_url}/assistants?limit=20`)
+    request.get(`${project_base_url}/ui/assistants?limit=20`)
       .then(response => {
         dispatch(fetchAssistantSuccess(response));
       })
@@ -160,11 +160,26 @@ export const fetchApikeysData = (limit: number) => {
       });
   };
 };
-export const fetchRetrievalData = (limit: number) => {
+export const fetchRetrievalData = (params: any) => {
   return (dispatch: any) => {
-    const project_base_url ='api/v1'
+    const project_base_url = 'api/v1'
     dispatch(fetchRetrievalRequest());
-    request.get(`${project_base_url}/collections?limit=${limit}`)
+    const data = params
+    let str = ''
+    if (data.hasOwnProperty('name_search')) {
+        str += `prefix_filter={"name":"${data.name_search}"}&`
+        delete data.name_search
+    } else if (data.hasOwnProperty('id_search')) {
+        str += `prefix_filter={"collection_id":"${data.id_search}"}&`
+        delete data.id_search
+    }
+    if (data) {
+        Object.keys(data).forEach(key => {
+            str += `${key}=${data[key]}&`
+        })
+        str = str.substring(0, str.length - 1)
+    }
+    request.get(`${project_base_url}/ui/collections?${str}`)
       .then(response => {
         dispatch(fetchRetrievalSuccess(response));
       })

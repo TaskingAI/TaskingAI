@@ -19,7 +19,7 @@ const getAssistantsList = async  <T extends Record<string, any>>(
         })
         str = str.substring(0, str.length - 1)
     }
-    return await request.get(`${project_base_url}/assistants?${str}`)
+    return await request.get(`${project_base_url}/ui/assistants?${str}`)
 }
 const createAssistant = async (params:object) => {
     const project_base_url = `api/v1`
@@ -36,6 +36,6 @@ const updateAssistant = async (id:string, params:object) => {
 }
 const getAssistantDetail = async (id:string) => {
     const project_base_url = `api/v1`
-    return await request.get(`${project_base_url}/assistants/${id}`)
+    return await request.get(`${project_base_url}/ui/assistants/${id}`)
 }
 export { getAssistantsList, createAssistant, deleteAssistant, updateAssistant, getAssistantDetail }

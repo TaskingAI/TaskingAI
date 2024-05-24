@@ -15,6 +15,7 @@ interface assistantListType {
     memory: string,
     system_prompt_template: string[],
     model_id: string,
+    model_name: string,
 }
 interface authenticationType {
     type: string

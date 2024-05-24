@@ -6,8 +6,11 @@ function TooltipTitle() {
     const tooltipDeleteTitle = <span style={{ color: '#777' }}>{t('delete')}</span>;
     const tooltipShowTitle = <span style={{ color: '#777' }}>{t('show')}</span>
     const tooltipHideTitle = <span style={{ color: '#777' }}>{t('hide')}</span>
-    const tooltipRecordTitle = <span style={{ color: '#777' }}>{t('record')}</span>
+    const tooltipRecordTitle = <span style={{ color: '#777' }}>Records</span>
     const tooltipChunkTitle = <span style={{ color: '#777' }}>{t('chunk')}</span>
+    const tooltipPluginTitle = <span style={{ color: '#777' }}>Details</span>
+    const tooltipCodeTitle = <span style={{ color: '#777' }}>Code</span>
+    const tooltipMoreTitle = <span style={{ color: '#777' }}>More</span>
     return {
         tooltipEditTitle,
         tooltipPlaygroundTitle,
@@ -15,7 +18,10 @@ function TooltipTitle() {
         tooltipShowTitle,
         tooltipHideTitle,
         tooltipRecordTitle,
-        tooltipChunkTitle
+        tooltipChunkTitle,
+        tooltipPluginTitle,
+        tooltipCodeTitle,
+        tooltipMoreTitle
     }
 }
 export default TooltipTitle;

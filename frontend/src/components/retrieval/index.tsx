@@ -7,9 +7,10 @@ import { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchRetrievalData } from '../../Redux/actions'
 import { fetchModelsData } from '../../Redux/actions';
-import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
+import ViewCode from '@/commonComponent/viewCode/index.tsx'
+import MoreIcon from '@/assets/img/moreIcon.svg?react'
 import EditIcon from '../../assets/img/editIcon.svg?react'
-import ChunkIcon from '../../assets/img/chunkIcon.svg?react'
+import { getViewCode } from '@/axios/index'
 import ModalTable from '../modalTable/index';
 import ModelModal from '../modelModal/index'
 import CommendComponent from '../../contents/index.tsx'
@@ -19,27 +20,44 @@ import ModalFooterEnd from '../modalFooterEnd/index'
 import { toast } from 'react-toastify'
 import ApiErrorResponse from '@/constant/index'
 import tooltipTitle from '../../contents/tooltipTitle'
-import { useNavigate} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import DeleteModal from '../deleteModal/index.tsx'
 import RecordIcon from '../../assets/img/recordIcon.svg?react'
 import closeIcon from '../../assets/img/x-close.svg'
 import { useTranslation } from "react-i18next";
 
 import {
-    Space, Drawer, Input, Tooltip, Spin, Select, Modal, Button
+    Space, Drawer, Popover, Input, Tooltip, Spin, Select, Modal, Button
 } from 'antd';
 function Retrieval() {
     const { t } = useTranslation();
     const { retrievalLists } = useSelector((state: any) => state.retrieval);
     const dispatch = useDispatch();
+    const [isVisible, setIsVisible] = useState(true);
+    const [record, setRecord] = useState<any>({})
+
     const { modelsTableColumn, collectionTableColumn } = CommendComponent();
-    const { tooltipEditTitle, tooltipDeleteTitle, tooltipChunkTitle, tooltipRecordTitle } = tooltipTitle();
+    const { tooltipEditTitle, tooltipRecordTitle, tooltipMoreTitle } = tooltipTitle();
+    // const { tooltipEditTitle, tooltipChunkTitle, tooltipRecordTitle, tooltipMoreTitle } = tooltipTitle();
+    const handleViewCode = () => {
+        setIsVisible(false)
+        setViewCodeOpen(true)
+    }
+    const content = (
+        <div style={{ cursor: 'pointer' }}>
+            <p className={styles['popover-eidt']} onClick={() => handleRecord(record, 'Chunks')}>Chunks</p>
+
+            <p className={styles['popover-eidt']} onClick={handleViewCode}>View code</p>
+            <p className={styles['popover-delete']} onClick={() => handleDelete(record)}>Delete</p>
+
+        </div>
+    );
     const columns = [...collectionTableColumn]
     columns.push({
         title: `${t('projectColumnActions')}`,
         key: 'action',
         fixed: 'right',
-        width: 200,
+        width: 157,
         render: (_: string, record: object) => (
             <Space size="middle">
                 <div className='table-edit-icon' onClick={() => handleRecord(record, 'Records')}>
@@ -47,20 +65,18 @@ function Retrieval() {
                         <RecordIcon />
                     </Tooltip>
                 </div>
-                <div className='table-edit-icon' onClick={() => handleRecord(record, 'Chunks')}>
-                    <Tooltip placement='bottom' color="#fff" arrow={false} overlayClassName='table-tooltip' title={tooltipChunkTitle}>
-                        <ChunkIcon />
-                    </Tooltip>
-                </div>
+               
                 <div onClick={() => handleEdit(record)} className='table-edit-icon'>
                     <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
-                        <EditIcon />
+                        <EditIcon/>
                     </Tooltip>
                 </div>
-                <div onClick={() => handleDelete(record)} className='table-edit-icon'>
-                    <Tooltip placement='bottom' title={tooltipDeleteTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
-                        <DeleteIcon />
-                    </Tooltip>
+                <div className='table-edit-icon' onClick={() => setRecord(record)}>
+                    {isVisible ? <Tooltip placement='bottom' title={tooltipMoreTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <Popover trigger="click" placement='bottom' content={content} arrow={false}>
+                        <MoreIcon  />
+                        </Popover>
+                    </Tooltip> :  <MoreIcon  />}
                 </div>
             </Space>
         ),
@@ -70,7 +86,10 @@ function Retrieval() {
     const [modelHasMore, setModelHasMore] = useState(false)
     const [OpenDrawer, setOpenDrawer] = useState(false)
     const [loading, setLoading] = useState(false);
+    const { projectId } = useParams()
+    const [viewCodeData, setViewCodeData] = useState('')
     const [limit, setLimit] = useState(20)
+    const [viewCodeOpen, setViewCodeOpen] = useState(false)
     const [updatePrevButton, setUpdatePrevButton] = useState(false)
     const [updateRetrievalPrevButton, setUpdateRetrievalPrevButton] = useState(false)
     const [defaultSelectedRowKeys, setDefaultSelectedRowKeys] = useState([])
@@ -78,11 +97,12 @@ function Retrieval() {
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
     const [recordOpen, setRecordOpen] = useState(false)
     const [drawerTitle, setDrawerTitle] = useState('Create Collection')
-    const [drawerName, setDrawerName] = useState('')
+    const [drawerName, setDrawerName] = useState<any>('')
     const [embeddingSize, setEmbeddingSize] = useState(0)
     const [deleteValue, setDeleteValue] = useState('')
     const [recordsSelected, setRecordsSelected] = useState([])
     const [selectedRows, setSelectedRows] = useState<string[]>([])
+    const [selectedModelName, setSelectedModelName] = useState<any>('')
     const [options, setOptions] = useState([])
     const childRef = useRef<ChildRefType | null>(null);
     const [selectValue, setSelectValue] = useState(1000)
@@ -98,6 +118,11 @@ function Retrieval() {
             limit: 20
         }
         fetchModelsList(params)
+        const fetchCodeData = async () => {
+            const res = await getViewCode('collection')
+            setViewCodeData(res.data)
+        }
+        fetchCodeData()
     }, []);
     useEffect(() => {
         if (retrievalLists.data.length > 0) {
@@ -120,11 +145,27 @@ function Retrieval() {
         const tag = selectedRows.map(item => (item.name + '-' + item.model_id))
         if (value.length === 0) {
             setSelectedRows([])
+            setSelectedModelName(undefined)
         } else {
             setSelectedRows(tag)
         }
     }
     const handleModalClose = () => {
+        setSelectedRows([])
+        setModalTableOpen(false)
+        setSelectedModelName(undefined)
+        setDefaultSelectedRowKeys([])
+    }
+    const handleModalCloseConfirm = () => {
+        console.log(selectedRows)
+        if (selectedRows.length) {
+            let str = selectedRows[0];
+            let index = str.lastIndexOf('-');
+            if (index !== -1) {
+                let result = str.substring(0, index);
+                setSelectedModelName(result)
+            }
+        }
         setModalTableOpen(false)
     }
     const fetchData = async (params: Record<string, string | number>) => {
@@ -166,30 +207,35 @@ function Retrieval() {
     }
     const handleCreatePrompt = () => {
         setDrawerTitle('Create Collection')
-        setDrawerName('')
+        setDrawerName(undefined)
         setCollectionId('')
         setRecordsSelected([])
         setDefaultSelectedRowKeys([])
         setDescriptionText('')
         setSelectedRows([])
+        setSelectedModelName(undefined)
         setSelectValue(1000)
         setEmbeddingSize(0)
         setOpenDrawer(true)
         setEditDisabled(false)
+        setIsVisible(false)
     }
     const handleRecord = (val: any, recordOrChunk: string) => {
+        setIsVisible(false)
         setCollectionRecordId(val.collection_id)
         const routeData = recordOrChunk.toLowerCase()
-        navigate(`/project/collections/${val.collection_id}/${routeData}`);
+        navigate(`/projects/${projectId}/collections/${val.collection_id}/${routeData}`)
         setDrawerName(val.name || 'Untitled Collection')
         setRecordOrChunk(recordOrChunk)
         setRecordOpen(true)
     }
     const handleEdit = (val: any) => {
         setDrawerTitle('Edit Collection')
-        setDrawerName(val.name)
+        setDrawerName(val.name ? val.name : undefined)
         setEditDisabled(true)
-        setSelectedRows(val.name ? [val.name + '-' + val.embedding_model_id] : [val.embedding_model_id])
+        setIsVisible(false)
+        setSelectedRows(val.model_name ? [val.model_name + '-' + val.embedding_model_id] : ['Untitled Model' + '-' + val.embedding_model_id])
+        setSelectedModelName(val.model_name ? [val.model_name] : ['Untitled Model'])
         setDescriptionText(val.description)
         setCollectionId(val.collection_id)
         setEmbeddingSize(val.embedding_size)
@@ -199,23 +245,33 @@ function Retrieval() {
 
     const handleDelete = (val: any) => {
         setOpenDeleteModal(true)
+        setIsVisible(false)
+
         setDeleteValue(val.name)
         setCollectionId(val.collection_id)
     }
     const onDeleteCancel = () => {
+        setIsVisible(true)
+
         setOpenDeleteModal(false)
     }
     const handleRecordCancel = () => {
         setRecordOpen(false)
-        navigate(`/project/collections`);
+        setIsVisible(true)
+        navigate(`/projects/${projectId}/collections`)
     }
     const onDeleteConfirm = async () => {
         try {
             const limit1: number = limit || 20
 
             await deleteRetrieval(collectionId)
-            dispatch(fetchRetrievalData(limit1) as any);
+            dispatch(fetchRetrievalData({
+                limit: limit1
+
+            }) as any);
             setOpenDeleteModal(false)
+            setIsVisible(true)
+
             setUpdateRetrievalPrevButton(true)
 
         } catch (error) {
@@ -251,9 +307,11 @@ function Retrieval() {
                 await createRetrieval(params)
             }
             setOpenDrawer(false)
-
+            setIsVisible(true)
             const limit1 = limit || 20
-            dispatch(fetchRetrievalData(limit1) as any);
+            dispatch(fetchRetrievalData({
+                limit: limit1
+            }) as any);
             setUpdateRetrievalPrevButton(true)
 
         } catch (error) {
@@ -267,6 +325,7 @@ function Retrieval() {
     }
     const handleCancel = () => {
         setOpenDrawer(false)
+        setIsVisible(true)
     }
     const handleModalCancel = () => {
         setModelOne(false)
@@ -299,6 +358,10 @@ function Retrieval() {
         setUpdateRetrievalPrevButton(false)
         await fetchData(value);
     }
+    const handleCloseViewCode = () => {
+        setIsVisible(true)
+        setViewCodeOpen(false)
+   }
     return (
 
         <div className={styles["retrieval"]}>
@@ -310,7 +373,7 @@ function Retrieval() {
                     <div className={styles['name-prompt']}>
                         {t('projectModelColumnName')}
                     </div>
-                    <Input className={styles['input']} value={drawerName} onChange={handleNameChange}></Input>
+                    <Input className={styles['input']} placeholder='Enter name' value={drawerName} onChange={handleNameChange}></Input>
                     <div className={styles['desc-prompt']}>
                         {t('projectAssistantsColumnDescription')}
                     </div>
@@ -334,10 +397,11 @@ function Retrieval() {
                         open={false}
                         className={styles['input']}
                         mode="multiple"
+                        style={{caretColor: 'transparent'}}
                         disabled={editDisabled}
                         suffixIcon={<RightOutlined />}
                         maxTagCount={2} removeIcon={null}
-                        value={selectedRows} onClick={handleSelectModelId}
+                        value={selectedModelName} onClick={handleSelectModelId}
                     >
                     </Select>
                     <div className={styles['hr']}></div>
@@ -375,7 +439,7 @@ function Retrieval() {
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleModalClose} className='next-button'>
+                        <Button key="submit" onClick={handleModalCloseConfirm} className='next-button'>
                             {t('confirm')}
                         </Button>
                     </div>
@@ -383,6 +447,7 @@ function Retrieval() {
             ]} title={t('projectSelectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable name="model" title='New model' loading={false} onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
+            <ViewCode open={viewCodeOpen} data={viewCodeData} handleClose={handleCloseViewCode} />
             <DeleteModal describe={`${t('deleteItem')} ${deleteValue || 'Untitled Collection'}? ${t('projectRetrievalDeleteDesc')}`} open={OpenDeleteModal} title={t('projectRetrievalDelete')} projectName={deleteValue || 'Untitled Collection'} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
             <Drawer className={recordOrChunk !== 'Chunks' ? styles['drawer-inner-table'] : styles['drawer-inner-chunk']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleRecordCancel} placement="right" size='large' open={recordOpen} width={1000} title={`${drawerName} / ${recordOrChunk === 'Chunks' ? t('projectChunks') : t('projectRetrievalColumnRecords')}`}>
                 {recordOrChunk === 'Chunks' ? <ChunkPage collectionId={collectionRecordId} /> : <RecordPage collectionId={collectionRecordId} ></RecordPage>}

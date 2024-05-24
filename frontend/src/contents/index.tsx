@@ -120,11 +120,11 @@ function CommonComponents() {
             fixed: 'left',
             width: 280,
             render: (text: string, record: any) =>
-                <div style={{display: 'flex',alignItems:'center'}}>
-                    <img src={record.icon_url} alt="" style={{width:'36px',height:'36px'}} />
-                    <div style={{marginLeft:'12px'}}>
-                        <p className='table-text' style={{ fontSize: '14px',lineHeight:'1',marginBottom:'4px',marginTop:'4px' }}>{text}</p>
-                        <p style={{ display: 'flex', alignItems: 'center', margin: 0,lineHeight:'1' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={record.icon_url} alt="" style={{ width: '36px', height: '36px' }} />
+                    <div style={{ marginLeft: '12px' }}>
+                        <p className='table-text' style={{ fontSize: '14px', marginBottom: '4px', marginTop: '4px' }}>{text}</p>
+                        <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
                             <span style={{ color: '#777', fontSize: '12px' }}>{record.bundle_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.bundle_id)} />
                         </p>
                     </div>
@@ -149,17 +149,12 @@ function CommonComponents() {
             key: 'plugins',
             width: 360,
             render: (plugins: any) => (
-                <div style={{ display: 'flex', alignItems: 'center',flexWrap: 'wrap', }}>
+                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', }}>
                     {plugins.map((plugin: any, index: any) => (
-                        <div key={index} style={{ display: 'flex',marginBottom:'5px', border: '1px solid #e4e4e4', borderRadius: '8px', width: 'auto', padding: '0 4px', marginRight: '12px' }}>
-                            <span>{plugin.name}</span>
+                        <div key={index} style={{ display: 'flex', marginBottom: '5px', borderRadius: '8px', width: 'auto', padding: '4px', marginRight: '12px', background: '#F8F8F8' }}>
+                            <span style={{ color: '#8F8F8F', fontWeight: 500, fontSize: '12px' }}>{plugin.name}</span>
                         </div>
-                    )).slice(0, 2)}
-                    {plugins && plugins.length > 2 && (
-                        <div className='streamParent' style={{ border: '1px solid #e4e4e4', borderRadius: '8px', width: 'auto', padding: '0 4px',marginBottom:'5px' }}>
-                            <span className='stream' style={{ paddingRight: '2px', height: '23px' }}>+{Object.entries(plugins).length - 2}</span>
-                        </div>
-                    )}
+                    ))}
                 </div>
             ),
         },

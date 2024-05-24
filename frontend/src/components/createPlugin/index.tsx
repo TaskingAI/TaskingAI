@@ -10,7 +10,6 @@ import RightArrow from '../../assets/img/rightarrow.svg?react'
 import ToolsNew from '../../assets/img/tools.svg?react'
 import ApiErrorResponse from '@/constant/index'
 import { toast } from 'react-toastify';
-
 function CreatePlugin(props: any) {
     const { t } = useTranslation();
     const { open, handleCloseModal, handleConfirmRequest } = props
@@ -20,7 +19,7 @@ function CreatePlugin(props: any) {
     const [form] = Form.useForm();
     const [bundleId, setBundleId] = useState('')
     const [bundilesList, setBundlesList] = useState([])
-
+    const [nextLoading1, setNextLoading1] = useState(false)
     const [pluginName, setPluginName] = useState('')
     const [credentialsSchema, setCredentialsSchema] = useState({})
     const [pluginInfoLoading, setPluginInfoLoading] = useState(false)
@@ -28,26 +27,25 @@ function CreatePlugin(props: any) {
     const [pluginListData, setPluginListData] = useState([])
     const [pluginId, setPluginId] = useState('')
     const [pluginDesc, setPluginDesc] = useState('')
+    const [description,setDescription] = useState('')
     const [inputSchema, setInputSchema] = useState({})
     const [cachedImages, setCachedImages] = useState({});
 
     useEffect(() => {
-        // const params = {
-        //     limit: 20,
-        // }
         const params1 = {
             limit: 100,
             offset: 0,
             lang: 'en'
         }
         getBundleList(params1)
-        // fetchData(params)
     }, [])
     const getBundleList = async (params: object) => {
         const res: any = await bundleList(params)
         const selectedItem: any = res.data.find((item: any) => item.registered === false) || []
         setBundleId(selectedItem.bundle_id)
         setBundleName(selectedItem.name)
+        setDescription(selectedItem.description)
+
         setBundlesList(res.data)
         const imagesData: any = {};
         res.data.forEach((image: any) => {
@@ -62,7 +60,6 @@ function CreatePlugin(props: any) {
                     reader.readAsDataURL(blob);
                 });
         });
-        // setBundlesHasMore(res.has_more)
         setCredentialsSchema(selectedItem.credentials_schema)
         const res1 = await getPluginDetail(res.data[0].bundle_id)
         setPluginListData(res1.data)
@@ -77,8 +74,31 @@ function CreatePlugin(props: any) {
         setInputSchema(arr)
     }
 
-    const handleNext1 = () => {
-        setOpenCreateModal3(true)
+    const handleNext1 = async () => {
+        if (JSON.stringify(credentialsSchema) === '{}') {
+            const params = {
+                name: bundleName,
+                bundle_id: bundleId,
+            }
+            try {
+                setNextLoading1(true)
+                await createPlugin(params)
+                handleConfirmRequest()
+                handleCloseModal()
+                setOpenCreateModal3(false)
+                setOpenCreateModal2(false)
+                toast.success('Creation successful!')
+            } catch (e) {
+                const apiError = e as ApiErrorResponse;
+                const errorMessage: string = apiError.response.data.error.message;
+                toast.error(errorMessage)
+            } finally {
+                setNextLoading1(false)
+            }
+        } else {
+            form.resetFields()
+            setOpenCreateModal3(true)
+        }
     }
     const handleCancel1 = () => {
         setOpenCreateModal2(false)
@@ -133,12 +153,11 @@ function CreatePlugin(props: any) {
         })
         setInputSchema(arr)
     }
-    const handleClickBundle = async (bundleId: string, bundleName: string, item: any) => {
+    const handleClickBundle = async (bundleId: string, bundelName: string, item: any) => {
         setBundleId(bundleId)
         setPluginInfoLoading(true)
-        setBundleName(bundleName)
-        // setBundleDesc(item.description)
-        // const res = await getPluginDetail(bundleId)
+        setBundleName(bundelName)
+        setDescription(item.description)
         setPluginListData(item.plugins)
         setPluginId(item.plugins[0].plugin_id)
         setCredentialsSchema(item.credentials_schema)
@@ -159,7 +178,7 @@ function CreatePlugin(props: any) {
                     <Button icon={<LeftOutlined />} key="cancel" onClick={handleCancel1} className='cancel-button'>
                         {t('back')}
                     </Button>
-                    <Button key="submit" onClick={handleNext1} className='next-button' style={{ marginLeft: '10px' }}>
+                    <Button key="submit" onClick={handleNext1} loading={nextLoading1} className='next-button' style={{ marginLeft: '10px' }}>
                         {t('confirm')}
                     </Button>
                 </> : <><Button key="cancel" onClick={handleCancel} className='cancel-button'>
@@ -170,7 +189,7 @@ function CreatePlugin(props: any) {
                         <RightOutlined />
                     </Button></>}
             </>
-        ]} zIndex={10002} width={1280} onCancel={handleCancel} centered closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} title={openCreateModal2 ? t('projectBundleSelection') : t('projectPluginCreate')} open={open} className={styles.drawerCreate}>
+        ]} zIndex={10002} width={1280} onCancel={handleCancel} centered closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} title={openCreateModal2 ? t('projectPluginCreate') : t('projectBundleSelection')} open={open} className={styles.drawerCreate}>
             {openCreateModal2 ? <div className={styles.componentsData}>
                 <div className={styles.inputWithLabelParent}>
                     <div className={styles.inputWithLabel}>
@@ -251,16 +270,23 @@ function CreatePlugin(props: any) {
                             <img loading="lazy" src={(cachedImages as any)[bundleId]} alt="" style={{ width: '36px', height: '36px' }} />
                             <div className={styles.googleWebSearch1}>{bundleName}</div>
                         </div>
-                        {
-                            pluginListData.map((item: any, index) => (
-                                <div className={styles.pluginContent} key={index}>
-                                    <div className={styles.pluginTitle}>{item.name}</div>
-                                    <div className={styles.pluginDesc}>
-                                        {item.description}
+                        <div className={styles['description-bundle']}>
+                            <div className={styles['desc-title']}>Description</div>
+                            <div className={styles['desciption-detail']}>{description}</div>
+                        </div>
+                        <div className={styles['description-bundle']}>
+                            <div className={styles['desc-title']}>Plugins</div>
+                            {
+                                pluginListData.map((item: any, index) => (
+                                    <div className={styles.pluginContent} key={index}>
+                                        <div className={styles.pluginTitle}>{item.name}</div>
+                                        <div className={styles.pluginDesc}>
+                                            {item.description}
+                                        </div>
                                     </div>
-                                </div>
-                            ))
-                        }
+                                ))
+                            }
+                        </div>
                     </div>
                 </Spin>
             </div>}
@@ -283,7 +309,7 @@ function CreatePlugin(props: any) {
                 </div>
                 <div className={styles['credentials']}>{t('projectModelCredentials')}</div>
                 <div className={styles['label-desc']} style={{ marginBottom: '24px' }}>
-                    All plugin credentials are encrypted at rest with AES-256 and in transit with TLS 1.2. Refer to <a className='href' href='https://docs.tasking.ai/docs/guide/tool/plugin/create-bundles-and-plugins' target='_blank' rel='noopener noreferrer'>documentation</a> for more information.
+                    All plugin credentials are encrypted at rest with AES-256 and in transit with TLS 1.2.
                 </div>
 
                 <Form

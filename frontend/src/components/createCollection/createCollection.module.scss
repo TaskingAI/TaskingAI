@@ -1,6 +1,5 @@
 .create-collection {
     z-index: 10000;
-
     :global {
     
         .ant-modal-content {
@@ -120,19 +119,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-        }
-
-        .input-map {
-            // margin-bottom: 10px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            .input {
-                margin-top: 8px;
-                width: 95%;
-            }
         }
     }
 }

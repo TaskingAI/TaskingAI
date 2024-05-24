@@ -179,11 +179,14 @@ function ChunkPage({ collectionId }: { collectionId: string }) {
         setOpenDeleteModal(false)
     }
     const handleEdit = async (record: any) => {
+        setLoading(true)
         setDrawerTitle(`${t('projectChunkEditChunk')}`)
         setRecordId(record.chunk_id)
-        setCreateOpenModal(true)
         const res = await getRecord(collectionId, record.chunk_id)
         setContentValue(res.data.content)
+        setCreateOpenModal(true)
+        setLoading(false)
+
     }
     const handleConfirm = async () => {
         if (!contentValue) {

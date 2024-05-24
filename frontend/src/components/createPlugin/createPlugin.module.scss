@@ -11,7 +11,7 @@
         position: relative;
         background-color: var(--color-invert-text);
         padding: 20px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--color-clear-button-hover);
         box-sizing: border-box;
         overflow: hidden;
         display: flex;
@@ -21,7 +21,7 @@
         padding-bottom: 10px;
         text-align: left;
         font-size: 16px;
-        color: #777;
+        color: var(--color-text-secondary);;
         font-family: Inter;
     }
 
@@ -123,7 +123,7 @@
             line-height: 20px;
             font-weight: 600;
             font-family: Inter;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             text-align: left;
             margin-top: 24px;
         }
@@ -183,7 +183,7 @@
         .googleWebSearch {
             position: relative;
             font-weight: 600;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
         }
 
         .label {
@@ -204,12 +204,12 @@
             width: calc(100% - 48px);
             align-items: center;
             padding: 24px;
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid var(--color-divider);
         }
 
         .googleWebSearch1 {
             font-size: 14px;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             font-family: Inter;
             font-weight: 600;
             margin-left: 10px;
@@ -217,7 +217,7 @@
 
         .webSearchWrapper {
             border-radius: 8px;
-            border: 1px solid #e4e4e4;
+            border: 1px solid var(--color-divider);
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -269,7 +269,7 @@
             // width: 270px;
             height: 210px;
             position: relative;
-            border: 1px solid #e4e4e4;
+            border: 1px solid var(--color-divider);
             box-sizing: border-box;
             display: flex;
             // margin-right: 24px;
@@ -283,7 +283,7 @@
             text-align: left;
             border-radius: 8px;
             font-size: 14px;
-            color: #777;
+            color: var(--color-text-secondary);
             font-family: Inter;
         }
 
@@ -293,7 +293,7 @@
         }
 
         .activeframeParent {
-            outline: 2.5px solid #087443;
+            outline: 2.5px solid var(--color-positive);
         }
         .content-modal{
             height: 672px;
@@ -340,7 +340,7 @@
             max-width: 335px;
             flex: 1;
             position: relative;
-            border-left: 1px solid #e4e4e4;
+            border-left: 1px solid var(--color-divider);
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -348,8 +348,28 @@
             justify-content: flex-start;
             text-align: left;
             font-size: 14px;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
+            background-color: white;
             font-family: Inter;
+            .description-bundle {
+                padding: 24px 24px 12px 24px;
+                width: 100%;
+                box-sizing: border-box;
+                border-bottom: 1px solid var(--color-divider);
+                .desc-title {
+                    font-size: 14px;
+                
+                    font-weight: 400;
+                    color: var( --color-text-primary );
+                    margin-bottom: 8px;
+                
+                }
+                .desciption-detail {
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: var(--color-text-secondary);
+                }
+            }
         }
 
         .pluginDesc {
@@ -357,36 +377,39 @@
             position: relative;
             font-size: 14px;
             font-family: Inter;
-            color: #777;
+            color: var(--color-text-secondary);
             text-align: left;
+            line-height: 17px;
             display: inline-block;
         }
 
         .pluginTitle {
-            width: 100%;
             position: relative;
-            font-size: 14px;
-            line-height: 24px;
+            font-size: 10px;
+            line-height: 12px;
             font-weight: 500;
-            color: #2b2b2b;
+            // min-width: 96px;
+            color: var(--color-text-secondary);
+            background-color: var(--color-clear-button-hover);
+            padding: 4px;
             text-align: left;
+            border-radius: 8px;
             display: inline-block;
         }
 
         .pluginContent {
-            border-bottom: 1px solid #e4e4e4;
             box-sizing: border-box;
             display: flex;
-            width: 100%;
             flex-direction: column;
+            width: 100%;
             align-items: flex-start;
             justify-content: center;
-            padding: 12px;
-            gap: 4px;
+            gap: 12px;
             text-align: left;
             font-size: 14px;
-            color: #2b2b2b;
+            color: var( --color-text-primary );
             font-family: Inter;
+            margin-bottom: 12px;
         }
     }
 }
@@ -461,7 +484,7 @@
 
         .desc {
             font-size: 14px;
-            color: #777;
+            color: var(--color-text-secondary);
             line-height: 1;
             margin-top: 12px;
         }
@@ -475,11 +498,11 @@
         align-items: flex-start;
         justify-content: flex-start;
         padding: 24px 0px 24px 24px;
-        border-bottom: 1px solid #e4e4e4;
+        border-bottom: 1px solid var(--color-divider);
         box-sizing: border-box;
         text-align: left;
         font-size: 18px;
-        color: #2b2b2b;
+        color: var( --color-text-primary );
         font-family: Inter;
     }
 
@@ -488,7 +511,7 @@
         height: 612px;
         .left {
             height: calc(100% - 20px);
-            border-right: 1px solid #e4e4e4;
+            border-right: 1px solid var(--color-divider);
             padding: 14px 4px;
             min-width: 160px;
             flex-shrink: 0;
@@ -500,7 +523,7 @@
                 font-size: var(--input--size);
                 align-items: center;
                 background-color: #fff;
-                color: #777;
+                color: var(--color-text-secondary);
                 border-radius: 8px;
                 cursor: pointer;
                 margin-bottom: 5px;
@@ -508,17 +531,17 @@
 
             .pluginName:hover {
                 background-color: #fbfbfb;
-                color: #2b2b2b;
+                color: var( --color-text-primary );
             }
 
             .pluginId {
-                background-color: #f3f8f6;
-                color: #087443;
+                background-color: var(--color-menu-background);
+                color: var(--color-positive);
             }
 
             .pluginId:hover {
-                background-color: #f3f8f6;
-                color: #087443;
+                background-color: var(--color-menu-background);
+                color: var(--color-positive);
             }
         }
 
@@ -546,16 +569,16 @@
             .pluginDesc {
                 color: var(--color-text-secondary);
                 font-size: 14px;
-                border-top: 1px solid #e4e4e4;
+                border-top: 1px solid var(--color-divider);
                 padding: 12px 29px;
-                line-height: 1;
+                line-height: 17px;
             }
 
             .pluginTitle {
                 font-size: 16px;
                 line-height: 24px;
                 font-weight: 500;
-                color: #2b2b2b !important;
+                color: var( --color-text-primary ) !important;
                 text-align: left;
                 display: inline-block;
             }
@@ -574,7 +597,7 @@
 
     .bundleTitle {
         padding: 24px;
-        border-bottom: 1px solid #e4e4e4;
+        border-bottom: 1px solid var(--color-divider);
     }
 
     .label {
@@ -602,7 +625,7 @@
         font-size: 14px;
         line-height: 20px;
         font-family: Inter;
-        color: #777;
+        color: var(--color-text-secondary);
         text-align: left;
         margin-bottom: 8px;
         display: inline-block;
@@ -664,7 +687,7 @@
         }
 
         .description {
-            color: #777;
+            color: var(--color-text-secondary);
             font-size: 14px;
             padding-bottom: 5px;
         }
@@ -716,6 +739,6 @@
     opacity: 0.3;
     cursor: not-allowed !important;
     .registered {
-        color: #087443;
+        color: var(--color-positive);
     }
 }
