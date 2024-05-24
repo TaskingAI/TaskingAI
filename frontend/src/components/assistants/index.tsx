@@ -412,8 +412,8 @@ function Assistant() {
 
         } catch (error) {
             console.log(error)
-            const errotType = error as ApiErrorResponse
-            const errorMessage: string = errotType.response.data.error.message;
+            const errorType = error as ApiErrorResponse
+            const errorMessage: string = errorType.response.data.error.message;
             toast.error(errorMessage)
         } finally {
             setIsVisible(true)
