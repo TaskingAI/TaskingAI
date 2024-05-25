@@ -3,6 +3,15 @@ from tkhelper.utils import current_timestamp_int_milliseconds
 
 from app.models import MessageGenerationLog, Model, RetrievalResult, ToolInput, ToolOutput
 
+__all__ = [
+    "build_retrieval_input_log_dict",
+    "build_retrieval_output_log_dict",
+    "build_tool_input_log_dict",
+    "build_tool_output_log_dict",
+    "build_chat_completion_input_log_dict",
+    "build_chat_completion_output_log_dict",
+]
+
 
 def build_retrieval_input_log_dict(
     session_id: str,
@@ -100,6 +109,7 @@ def build_chat_completion_output_log_dict(
     event_id: str,
     model: Model,
     message: Dict,
+    usage: Dict,
 ):
     return MessageGenerationLog(
         session_id=session_id,
@@ -112,5 +122,6 @@ def build_chat_completion_output_log_dict(
             "model_schema_id": model.model_schema_id,
             "provider_model_id": model.provider_model_id,
             "message": message,
+            "usage": usage,
         },
     ).model_dump()

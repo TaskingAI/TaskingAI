@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 import re
 from typing import Dict, List, Optional, Tuple
 from tkhelper.utils import generate_random_id
@@ -6,7 +7,25 @@ from app.models import Assistant, RetrievalMethod, Chat, RetrievalResult
 from app.services.retrieval.retrieval import query_retrievals
 
 
+__all__ = [
+    "MessageGenerationException",
+    "MessageGenerationInvalidRequestException",
+    "build_system_prompt",
+    "build_chat_completion_messages",
+    "get_chat_memory_messages",
+    "query_assistant_retrieval",
+    "build_retrieval_function_dict",
+    "get_system_prompt_retrieval_query_text",
+    "generate_random_event_id",
+    "generate_random_session_id",
+]
+
+
 class MessageGenerationException(Exception):
+    pass
+
+
+class MessageGenerationInvalidRequestException(MessageGenerationException):
     pass
 
 
@@ -67,7 +86,7 @@ def build_chat_completion_messages(system_prompt: str, history_messages: List[Di
     :param history_messages: A list of dictionaries, each representing a prior message in the chat history.
     :return: A list of chat messages starting with the system's prompt followed by the history messages.
     """
-    return [{"role": "system", "content": system_prompt}] + history_messages
+    return [{"role": "system", "content": system_prompt}] + (history_messages or [])
 
 
 async def get_chat_memory_messages(chat: Chat):
@@ -86,12 +105,14 @@ async def get_chat_memory_messages(chat: Chat):
     if chat_memory_messages:
         last_message = chat_memory_messages[-1]
         if last_message.role == "assistant":
-            raise MessageGenerationException("Cannot generate another assistant message after an assistant message.")
+            raise MessageGenerationInvalidRequestException(
+                "Cannot generate another assistant message after an assistant message."
+            )
 
     # Ensure there is at least one user message in the chat memory
     user_message_count = sum(1 for message in chat_memory_messages if message.role == "user")
     if user_message_count == 0:
-        raise MessageGenerationException("There is no user message in the chat context.")
+        raise MessageGenerationInvalidRequestException("There is no user message in the chat context.")
 
     message_dicts = [message.model_dump() for message in chat_memory_messages]
     return message_dicts
@@ -109,16 +130,21 @@ async def query_assistant_retrieval(
     """
 
     # Perform the query to retrieve results
-    results: List[RetrievalResult] = await query_retrievals(
-        retrieval_refs=assistant.retrievals,
-        top_k=assistant.retrieval_configs.top_k,
-        max_tokens=assistant.retrieval_configs.max_tokens,
-        score_threshold=assistant.retrieval_configs.score_threshold,
-        query_text=query_text,
-    )
+    try:
+        results: List[RetrievalResult] = await query_retrievals(
+            retrieval_refs=assistant.retrievals,
+            top_k=assistant.retrieval_configs.top_k,
+            max_tokens=assistant.retrieval_configs.max_tokens,
+            score_threshold=assistant.retrieval_configs.score_threshold,
+            query_text=query_text,
+        )
+    except HTTPException as e:
+        raise MessageGenerationException(f"Failed to retrieve related documents: {e.detail}")
 
     # Concatenate the text from each chunk into a single retrieval document
     retrieval_doc = "\n\n".join([result.content for result in results])
+    if not retrieval_doc:
+        retrieval_doc = "No related documents found."
 
     return retrieval_doc, results
 

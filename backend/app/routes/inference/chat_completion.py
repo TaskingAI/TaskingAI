@@ -1,15 +1,17 @@
 from fastapi import APIRouter, Depends, Request
 from typing import Dict
-from tkhelper.utils import check_http_error, sse_stream_response
+from starlette.responses import StreamingResponse
+from tkhelper.utils import sse_stream_response
 from tkhelper.error import raise_request_validation_error
 from tkhelper.schemas.base import BaseDataResponse
 
 from app.schemas.model.chat_completion import ChatCompletionRequest
-from app.services.inference.chat_completion import chat_completion, chat_completion_stream
-from app.services.model.model import get_model
-from app.models import Model
+from app.services.inference.chat_completion import chat_completion, stream_chat_completion
+from app.services.assistant.generation import StatelessNormalSession, StatelessStreamSession
+from app.operators import model_ops, assistant_ops
+from app.models import Model, Assistant
 
-from ..utils import auth_info_required
+from ..utils import auth_info_required, is_model_id, is_assistant_id
 
 router = APIRouter()
 
@@ -36,47 +38,63 @@ async def api_chat_completion(
     data: ChatCompletionRequest,
     auth_info: Dict = Depends(auth_info_required),
 ):
-    # validate model
-    model: Model = await get_model(
-        model_id=data.model_id,
-    )
+    if is_model_id(model_id=data.model_id):
+        # validate model
+        model: Model = await model_ops.get(model_id=data.model_id)
 
-    # prepare request
-    message_dicts = [message.model_dump() for message in data.messages]
-    if data.functions is not None:
-        functions = [function.model_dump() for function in data.functions]
-    else:
-        functions = None
+        # check function call ability
+        functions = [function.model_dump() for function in data.functions] if data.functions is not None else None
+        if functions and not model.allow_function_call():
+            raise_request_validation_error(f"Model {model.model_id} does not support function calls.")
 
-    if functions and not model.allow_function_call():
-        raise_request_validation_error(f"Model {model.model_id} does not support function calls.")
+        # prepare messages
+        messages = [message.model_dump() for message in data.messages]
 
-    if data.stream:
-        if not model.allow_streaming():
-            raise_request_validation_error(f"Model {model.model_id} does not support streaming.")
+        # perform chat completion with model
+        if data.stream:
+            if not model.allow_streaming():
+                raise_request_validation_error(f"Model {model.model_id} does not support streaming.")
 
-        response = await sse_stream_response(
-            chat_completion_stream(
+            response = await sse_stream_response(
+                stream_chat_completion(
+                    model=model,
+                    messages=messages,
+                    configs=data.configs,
+                    function_call=data.function_call,
+                    functions=functions,
+                )
+            )
+
+            return response
+
+        else:
+            # generate none stream response
+            response_data = await chat_completion(
                 model=model,
-                messages=message_dicts,
-                encrypted_credentials=model.encrypted_credentials,
+                messages=messages,
                 configs=data.configs,
                 function_call=data.function_call,
                 functions=functions,
             )
-        )
+            return BaseDataResponse(data=response_data)
 
-        return response
+    elif is_assistant_id(assistant_id=data.model_id):
+        # validate assistant
+        assistant: Assistant = await assistant_ops.get(assistant_id=data.model_id)
 
-    else:
-        # generate none stream response
-        response = await chat_completion(
-            model=model,
-            messages=message_dicts,
-            encrypted_credentials=model.encrypted_credentials,
-            configs=data.configs,
-            function_call=data.function_call,
-            functions=functions,
-        )
-        check_http_error(response)
-        return BaseDataResponse(data=response.json()["data"])
+        # perform chat completion with assistant
+        if data.stream:
+            session = StatelessStreamSession(
+                assistant=assistant,
+                save_logs=False,  # todo: enable save_logs
+            )
+            return StreamingResponse(
+                session.stream_generate(data.messages, data.functions),
+                media_type="text/event-stream",
+            )
+        else:
+            session = StatelessNormalSession(
+                assistant=assistant,
+                save_logs=False,  # todo: enable save_logs
+            )
+            return await session.generate(data.messages, data.functions)
