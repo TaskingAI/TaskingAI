@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional, List
+from typing import Optional, List, Union
 from pydantic import BaseModel, Field
 from abc import ABCMeta
 from .chat_completion_function import ChatCompletionFunctionCall
@@ -12,6 +12,7 @@ __all__ = [
     "ChatCompletionUserMessage",
     "ChatCompletionAssistantMessage",
     "ChatCompletionFunctionMessage",
+    "ChatCompletionAnyMessage",
     "ChatCompletionFinishReason",
     "ChatCompletion",
     "ChatCompletionChunk",
@@ -78,6 +79,14 @@ class ChatCompletionFunctionMessage(ChatCompletionMessage):
         description="The corresponding id of the tool requested by the assistant.",
         examples=["call_abc123"],
     )
+
+
+ChatCompletionAnyMessage = Union[
+    ChatCompletionFunctionMessage,
+    ChatCompletionAssistantMessage,
+    ChatCompletionUserMessage,
+    ChatCompletionSystemMessage,
+]
 
 
 class ChatCompletionFinishReason(str, Enum):

@@ -1,6 +1,6 @@
 from typing import Any, Optional
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, Field
 from tkhelper.models import SortOrderEnum
 
 
@@ -72,6 +72,3 @@ class BaseListRequest(BaseModel):
         description="A json string representing the prefix filter.",
         examples=['{"name": "name_prefix", "object_id": "object_id_prefix"}'],
     )
-
-    class Config:
-        extra = Extra.forbid

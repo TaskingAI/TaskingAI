@@ -1,5 +1,5 @@
 from typing import Dict, List, Optional, Union
-from pydantic import BaseModel, Extra, Field, field_validator
+from pydantic import BaseModel, Field, field_validator
 from app.models.inference import *
 
 __all__ = [
@@ -15,7 +15,11 @@ __all__ = [
 # Response: ChatCompletionResponse
 class ChatCompletionRequest(BaseModel):
     model_id: str = Field(
-        ..., min_length=8, max_length=8, description="The chat completion model id.", examples=["abcdefgh"]
+        ...,
+        min_length=1,
+        max_length=50,
+        description="The chat completion model id. It can be a valid model_id or assistant_id.",
+        examples=["abcdefgh"],
     )
     configs: Optional[Dict] = Field(None, description="The model configuration.", examples=[{"temperature": 0.5}])
     stream: bool = Field(
@@ -41,9 +45,6 @@ class ChatCompletionRequest(BaseModel):
         "By default, 'none' is selected when there are no chat_completion_functions available, and 'auto' is selected when one or more chat_completion_functions are present.",
     )
     functions: Optional[List[ChatCompletionFunction]] = Field(None)
-
-    class Config:
-        extra = Extra.forbid
 
     @field_validator("messages", mode="before")
     def validate_message(cls, messages: List[Dict]):
