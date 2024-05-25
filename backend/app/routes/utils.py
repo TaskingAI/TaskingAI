@@ -21,6 +21,8 @@ __all__ = [
     "check_path_params",
     "path_params_required",
     "validate_list_filter",
+    "is_model_id",
+    "is_assistant_id",
 ]
 
 
@@ -167,3 +169,11 @@ async def validate_list_filter(
                 raise_request_validation_error(f"Invalid equal filter: {k}")
 
     return prefix_filter_dict, equal_filter_dict
+
+
+def is_model_id(model_id: str) -> bool:
+    return len(model_id) == 8
+
+
+def is_assistant_id(assistant_id: str) -> bool:
+    return len(assistant_id) == 24

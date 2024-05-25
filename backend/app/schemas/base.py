@@ -1,5 +1,5 @@
 from typing import Optional, Any, Dict
-from pydantic import BaseModel, Field, Extra, model_validator
+from pydantic import BaseModel, Field, model_validator
 from tkhelper.models import SortOrderEnum
 from .utils import validate_list_cursors
 
@@ -60,9 +60,6 @@ class BaseListRequest(BaseModel):
     id_search: Optional[str] = Field(None, min_length=1, max_length=50, description="The object ID to search for.")
 
     name_search: Optional[str] = Field(None, min_length=1, max_length=256, description="The object name to search for.")
-
-    class Config:
-        extra = Extra.forbid
 
     @model_validator(mode="before")
     def custom_validate(cls, data: Any):

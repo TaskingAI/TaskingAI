@@ -1,5 +1,5 @@
 from typing import Optional, List, Union
-from pydantic import BaseModel, Field, Extra
+from pydantic import BaseModel, Field
 from app.models import TextEmbeddingInputType, TextEmbeddingOutput
 
 __all__ = [
@@ -21,9 +21,6 @@ class TextEmbeddingRequest(BaseModel):
         ..., description="The input text or a list of input texts.", examples=["Hello!", ["Hello!", "How are you?"]]
     )
     input_type: Optional[TextEmbeddingInputType] = Field(None, description="The input type.", examples=["text"])
-
-    class Config:
-        extra = Extra.forbid
 
 
 class TextEmbeddingResponse(BaseModel):

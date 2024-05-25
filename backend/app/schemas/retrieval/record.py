@@ -1,6 +1,6 @@
 from typing import Optional, Any
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, Field
 from typing import Dict
 from app.models import RecordType, TextSplitter
 
@@ -55,9 +55,6 @@ class RecordCreateRequest(BaseModel):
         examples=[{}],
     )
 
-    class Config:
-        extra = Extra.forbid
-
     def model_dump(self, **kwargs: Any) -> dict[str, Any]:
         d = super().model_dump(**kwargs)
         d["text_splitter"] = self.text_splitter.model_dump()
@@ -108,6 +105,3 @@ class RecordUpdateRequest(BaseModel):
         "and value's length is less than 512.",
         examples=[{}],
     )
-
-    class Config:
-        extra = Extra.forbid
