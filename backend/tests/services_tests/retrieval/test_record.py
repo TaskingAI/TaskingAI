@@ -496,3 +496,105 @@ class TestRecord(Retrieval):
             assert get_res.status_code == 404, get_res.json()
             assert get_res_json.get("status") == "error"
             assert get_res_json.get("error").get("code") == "OBJECT_NOT_FOUND"
+
+    @pytest.mark.run(order=220)
+    @pytest.mark.asyncio
+    async def test_record_and_chunk(self):
+
+        create_collection_dict = {
+            "capacity": 1000,
+            "embedding_model_id": CONFIG.text_embedding_model_id,
+        }
+        collection_res = await create_collection(create_collection_dict)
+        collection_id = collection_res.json()["data"]["collection_id"]
+        create_record_dict = {
+            "text_splitter": {"type": "token", "chunk_size": 100,
+                              "chunk_overlap": 50},
+            "content": """Introduction
+                           TaskingAI is an AI-native application development platform that unifies modules like Model, Retrieval, Assistant, and Tool into one seamless ecosystem, streamlining the creation and deployment of applications for developers.
+
+                            Key Concepts
+                            Project
+                            Projects in TaskingAI are organizational units designed to group related activities and resources. They offer a structured way to manage different initiatives or brands, allowing for clear segregation and management. Each project can be tailored with specific config and resources, ensuring that the information and activities within one project remain distinct and isolated from others.
+
+                            Model
+                            TaskingAI incorporates a variety of chat completion models, each with distinct capabilities and attributes. These models serve as the core 'brains' of AI assistants, providing them with reasoning and logical capabilities. TaskingAI supports models from multiple providers, each offering different strengths in terms of input token limits, reasoning, and logic capabilities. Users can select and switch between models based on their specific needs and the complexity of the tasks at hand.
+
+                            Retrieval
+                            Retrievals in TaskingAI are mechanisms that enable AI assistants to access and utilize external knowledge bases. This feature allows the integration of additional information into the AI's responses, enhancing its ability to provide accurate and context-relevant answers. Retrievals are crucial for tasks that require specific, detailed, or up-to-date information, ensuring that the AI's responses are not limited by its pre-training data.
+
+                            Assistant
+                            The Assistant feature in TaskingAI refers to the AI entities capable of performing a wide range of tasks. These assistants are customizable and can be tailored to suit various applications, from customer service to internal training. They operate based on the models and tools provided, and their functionality can be extended through the use of retrievals, allowing them to access a broader range of information and capabilities.
+
+                            Tool
+                            Tools in TaskingAI are functionalities that enable AI assistants to interact with external resources and perform specific actions, such as fetching live information or communicating with external systems. These tools are typically defined in OpenAPI schema format and can be attached to assistants to enhance their capabilities. Tools are essential for tasks that require real-time data or interaction with external APIs and services, making the assistants more dynamic and versatile in their operation.
+
+                            TaskingAI is more than just a platform; it's a gateway to unlocking the full potential of AI in your daily tasks. Whether you're a developer, a researcher, or someone looking to streamline their workflow, TaskingAI offers the tools and resources to achieve your goals."""
+        }
+        record_res = await create_record(collection_id, create_record_dict)
+        record_id = record_res.json()["data"]["record_id"]
+        record_chunks = await list_record_chunks(collection_id, record_id, {"limit": 100})
+        init_chunk_num = len(record_chunks.json()["data"])
+        delete_chunks = record_chunks.json()["data"][:2]
+        for chunk in delete_chunks:
+            await delete_chunk(collection_id, chunk["chunk_id"])
+        get_res = await get_record(collection_id, record_id)
+        get_chunk_num = get_res.json()["data"]["num_chunks"]
+
+        pytest.assume(get_chunk_num == init_chunk_num - 2)
+
+        update_record_dict = {
+            "title": "test update record",
+            "content": """Introduction
+                           TaskingAI is an AI-native application development platform that unifies modules like Model, Retrieval, Assistant, and Tool into one seamless ecosystem, streamlining the creation and deployment of applications for developers.
+
+                            Key Concepts
+                            Project
+                            Projects in TaskingAI are organizational units designed to group related activities and resources. They offer a structured way to manage different initiatives or brands, allowing for clear segregation and management. Each project can be tailored with specific config and resources, ensuring that the information and activities within one project remain distinct and isolated from others.
+
+                            Model
+                            TaskingAI incorporates a variety of chat completion models, each with distinct capabilities and attributes. These models serve as the core 'brains' of AI assistants, providing them with reasoning and logical capabilities. TaskingAI supports models from multiple providers, each offering different strengths in terms of input token limits, reasoning, and logic capabilities. Users can select and switch between models based on their specific needs and the complexity of the tasks at hand.
+
+                            Retrieval
+                            Retrievals in TaskingAI are mechanisms that enable AI assistants to access and utilize external knowledge bases. This feature allows the integration of additional information into the AI's responses, enhancing its ability to provide accurate and context-relevant answers. Retrievals are crucial for tasks that require specific, detailed, or up-to-date information, ensuring that the AI's responses are not limited by its pre-training data.
+
+                            Assistant
+                            The Assistant feature in TaskingAI refers to the AI entities capable of performing a wide range of tasks. These assistants are customizable and can be tailored to suit various applications, from customer service to internal training. They operate based on the models and tools provided, and their functionality can be extended through the use of retrievals, allowing them to access a broader range of information and capabilities.
+
+                            Tool
+                            Tools in TaskingAI are functionalities that enable AI assistants to interact with external resources and perform specific actions, such as fetching live information or communicating with external systems. These tools are typically defined in OpenAPI schema format and can be attached to assistants to enhance their capabilities. Tools are essential for tasks that require real-time data or interaction with external APIs and services, making the assistants more dynamic and versatile in their operation.
+
+                            TaskingAI is more than just a platform; it's a gateway to unlocking the full potential of AI in your daily tasks. Whether you're a developer, a researcher, or someone looking to streamline their workflow, TaskingAI offers the tools and resources to achieve your goals.""",
+            "text_splitter": {
+                "type": "token",
+                "chunk_size": 50,
+                "chunk_overlap": 20
+            },
+            "metadata": {
+                "key": "value"
+            }
+        }
+        update_record_res = await update_record(collection_id, record_id, update_record_dict)
+        update_record_data = update_record_res.json()["data"]
+        update_record_chunk_num = update_record_data["num_chunks"]
+
+        pytest.assume(update_record_chunk_num != get_chunk_num)
+
+        get_record_chunk = await list_record_chunks(collection_id, record_id, {"limit": 100})
+        get_chunks = get_record_chunk.json()["data"]
+        for chunk in get_chunks:
+            await delete_chunk(collection_id, chunk["chunk_id"])
+        get_collection_res = await get_collection(collection_id)
+        get_collection_data = get_collection_res.json()["data"]
+        get_collection_chunk_num = get_collection_data["num_chunks"]
+
+        pytest.assume(get_collection_chunk_num == 0)
+
+        delete_res = await delete_record(collection_id, record_id)
+        get_collection_res = await get_collection(collection_id)
+        get_collection_data = get_collection_res.json()["data"]
+        get_collection_record_num = get_collection_data["num_records"]
+        get_collection_chunk_num = get_collection_data["num_chunks"]
+
+        pytest.assume(get_collection_record_num == 0)
+        pytest.assume(get_collection_chunk_num == 0)
