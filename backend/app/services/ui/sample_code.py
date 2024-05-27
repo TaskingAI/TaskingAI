@@ -4,6 +4,8 @@ from enum import Enum
 
 sample_code_dict = {}
 
+resource_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+
 
 class SampleCodeModule(str, Enum):
     ASSISTANT = "assistant"
@@ -31,7 +33,7 @@ def get_sample_codes(module: SampleCodeModule):
 
 def load_sample_code_for_module(module: SampleCodeModule):
     result = []
-    assistant_directory_path = f"./resources/code_templates/{module.value}"
+    assistant_directory_path = f"{resource_dir}/resources/code_templates/{module.value}"
     language_directory_paths = {}
 
     for entry in os.listdir(assistant_directory_path):
@@ -52,9 +54,7 @@ def load_sample_code_for_module(module: SampleCodeModule):
                 content = load_code_template(entry2.path)
                 templates.append(
                     {
-                        "template_name": reformat_string_to_headline(
-                            trim_prefix(entry2.name.replace(".md", ""))
-                        ),
+                        "template_name": reformat_string_to_headline(trim_prefix(entry2.name.replace(".md", ""))),
                         "content": content,
                         "variables": find_dollar_enclosed_substrings(content),
                     }
@@ -67,9 +67,7 @@ def load_sample_code_for_module(module: SampleCodeModule):
                 }
             )
 
-        result.append(
-            {"language_name": reformat_string_to_headline(language), "parts": parts}
-        )
+        result.append({"language_name": reformat_string_to_headline(language), "parts": parts})
 
     return result
 
@@ -93,8 +91,4 @@ def reformat_string_to_headline(input_string):
     formatted_string = input_string.replace("_", " ")
     # Capitalize the first letter of the sentence
     formatted_string = formatted_string.capitalize()
-    return (
-        formatted_string.replace("python", "Python")
-        .replace("api", "API")
-        .replace("Api", "API")
-    )
+    return formatted_string.replace("python", "Python").replace("api", "API").replace("Api", "API")
