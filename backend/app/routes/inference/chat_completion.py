@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, Request
 from typing import Dict
 from starlette.responses import StreamingResponse
-from tkhelper.utils import sse_stream_response
+import json
+
+from tkhelper.utils import SSE_DONE_MSG
 from tkhelper.error import raise_request_validation_error
 from tkhelper.schemas.base import BaseDataResponse
 
@@ -55,17 +57,21 @@ async def api_chat_completion(
             if not model.allow_streaming():
                 raise_request_validation_error(f"Model {model.model_id} does not support streaming.")
 
-            response = await sse_stream_response(
-                stream_chat_completion(
+            async def generator():
+                async for chunk_dict in await stream_chat_completion(
                     model=model,
                     messages=messages,
                     configs=data.configs,
                     function_call=data.function_call,
                     functions=functions,
-                )
-            )
+                ):
+                    yield f"data: {json.dumps(chunk_dict)}\n\n"
+                yield SSE_DONE_MSG
 
-            return response
+            return StreamingResponse(
+                generator(),
+                media_type="text/event-stream",
+            )
 
         else:
             # generate none stream response
