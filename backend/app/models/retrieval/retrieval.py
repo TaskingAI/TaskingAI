@@ -47,7 +47,11 @@ class RetrievalConfig(BaseModel):
         examples=[0.5],
     )
 
-    method: RetrievalMethod = Field(RetrievalMethod.MEMORY, description="The retrieval method.", examples=["memory"])
+    method: RetrievalMethod = Field(
+        ...,
+        description="The retrieval method.",
+        examples=["function_call"],
+    )
 
     function_description: Optional[str] = Field(
         None,
@@ -60,6 +64,16 @@ class RetrievalConfig(BaseModel):
     )
 
 
+DEFAULT_RETRIEVAL_CONFIG = RetrievalConfig(
+    top_k=3,
+    max_tokens=None,
+    score_threshold=0.6,
+    method=RetrievalMethod.USER_MESSAGE,
+    function_description=None,
+    rerank_model_id=None,
+)
+
+
 class RetrievalResult(BaseModel):
     ref: Dict = Field(
         ...,
@@ -68,6 +82,7 @@ class RetrievalResult(BaseModel):
             {
                 "type": "collection",
                 "collection_id": "collection_1",
+                "record_id": "record_1",
                 "chunk_id": "chunk_1",
             }
         ],

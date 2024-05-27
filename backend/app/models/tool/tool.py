@@ -25,8 +25,8 @@ class Tool(BaseModel):
 
     type: ToolType = Field(
         ...,
-        description="The tool type, which can be `function` or `action`.",
-        examples=["action", "plugin"],
+        description="The tool type, which can be `action`, `plugin` or `function`.",
+        examples=["action", "plugin", "function"],
     )
 
     function_def: Dict = Field(
@@ -36,9 +36,6 @@ class Tool(BaseModel):
 
     def function_name(self):
         return self.function_def["name"]
-
-    def to_response_dict(self):
-        return self.model_dump()
 
 
 class ToolInput(BaseModel):
@@ -65,15 +62,12 @@ class ToolInput(BaseModel):
         description="The tool input arguments.",
     )
 
-    def to_response_dict(self):
-        return self.model_dump()
-
 
 class ToolOutput(BaseModel):
     type: ToolType = Field(
         ...,
         description="The tool type, which can be `function` or `action`.",
-        examples=["action"],
+        examples=["action", "plugin"],
     )
 
     tool_id: str = Field(
@@ -99,9 +93,6 @@ class ToolOutput(BaseModel):
         description="The tool output data.",
     )
 
-    def to_response_dict(self):
-        return self.model_dump()
-
     def to_function_message(self):
         if self.status == 200:
             return {
@@ -112,6 +103,6 @@ class ToolOutput(BaseModel):
         else:
             return {
                 "role": "function",
-                "content": json.dumps({"status": self.error, "error": self.data}),
+                "content": json.dumps({"status": self.status, "error": self.data}),
                 "id": self.tool_call_id,
             }
