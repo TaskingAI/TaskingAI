@@ -1,18 +1,15 @@
+from typing import Dict, List, Optional
+
 from fastapi import APIRouter
-from typing import List, Optional
 
-from tkhelper.error import raise_http_error, ErrorCode
-
-from app.models import Chunk, Collection, RetrievalResult, RetrievalRef, RetrievalType
+from app.models import Chunk, Collection, RetrievalRef, RetrievalResult, RetrievalType
+from tkhelper.error import ErrorCode, raise_http_error
 
 from .chunk import query_chunks
 
 router = APIRouter()
 
-__all__ = [
-    "verify_retrievals",
-    "query_retrievals",
-]
+__all__ = ["verify_retrievals", "query_retrievals", "ui_fetch_retrievals"]
 
 
 async def verify_retrievals(retrieval_refs: List[RetrievalRef]):
@@ -74,9 +71,26 @@ async def query_retrievals(
     retrieval_results: List[RetrievalResult] = []
     for chunk in chunks:
         result = RetrievalResult(
-            ref={"type": "collection", "collection_id": chunk.collection_id, "chunk_id": chunk.chunk_id},
+            ref={
+                "type": "collection",
+                "collection_id": chunk.collection_id,
+                "chunk_id": chunk.chunk_id,
+            },
             content=chunk.content,
         )
         retrieval_results.append(result)
 
     return retrieval_results
+
+
+async def ui_fetch_retrievals(retrievals: List[Dict]) -> List[Dict]:
+    from app.operators import collection_ops
+
+    for retrieval in retrievals:
+        if retrieval["type"] == RetrievalType.COLLECTION:
+            collection = await collection_ops.get(collection_id=retrieval["id"])
+            if collection:
+                retrieval["name"] = collection.name
+        else:
+            raise ValueError(f"Unsupported retrieval type {retrieval['type']}")
+    return retrievals
