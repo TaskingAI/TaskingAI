@@ -1,12 +1,19 @@
-from typing import Dict, List
+from typing import Any, Dict, List, Optional, Tuple
 
-from tkhelper.models import RedisOperator, ModelEntity
-from tkhelper.models.operator.postgres_operator import PostgresModelOperator
-from tkhelper.error import raise_request_validation_error
-
-from app.database import redis_conn, postgres_pool
-from app.models import Assistant, Model, ToolRef, RetrievalRef, RetrievalConfig, RetrievalMethod
+from app.database import postgres_pool, redis_conn
+from app.models import (
+    Assistant,
+    Model,
+    RetrievalConfig,
+    RetrievalMethod,
+    RetrievalRef,
+    ToolRef,
+)
 from app.schemas import AssistantCreateRequest, AssistantUpdateRequest
+from tkhelper.error import raise_request_validation_error
+from tkhelper.models import ModelEntity, RedisOperator
+from tkhelper.models.operator.postgres_operator import PostgresModelOperator
+from tkhelper.models.type import SortOrderEnum
 
 from ..model import model_ops
 
@@ -62,6 +69,36 @@ async def _validate_retrievals(
 
 
 class AssistantModelOperator(PostgresModelOperator):
+    async def _get_model_name_entity(self, assistant: Assistant) -> Dict[str, Any]:
+        model: Model = await model_ops.get(model_id=assistant.model_id)
+        assistant_dict = assistant.to_response_dict()
+        assistant_dict["model_name"] = model.name
+        return assistant_dict
+
+    async def ui_get(self, raise_not_found_error=True, **kwargs) -> Optional[Dict[str, Any]]:
+        assistant: Optional[Assistant] = await super().get(raise_not_found_error, **kwargs)
+        if assistant:
+            return await self._get_model_name_entity(assistant)
+        return assistant
+
+    async def ui_list(
+        self,
+        limit: int,
+        order: SortOrderEnum,
+        after_id: Optional[str] = None,
+        before_id: Optional[str] = None,
+        prefix_filters: Optional[Dict] = None,
+        equal_filters: Optional[Dict] = None,
+        **kwargs,
+    ) -> Tuple[List[Dict[str, Any]], bool]:
+        assistants, has_more = await super().list(
+            limit, order, after_id, before_id, prefix_filters, equal_filters, **kwargs
+        )
+        assistant_dict_list = []
+        for assistant in assistants:
+            assistant_dict_list.append(await self._get_model_name_entity(assistant))
+        return assistant_dict_list, has_more
+
     async def create(
         self,
         create_dict: Dict,

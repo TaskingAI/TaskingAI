@@ -67,8 +67,12 @@ def add_file_routes(route_prefix: str):
 
 def add_ui_routes(route_prefix: str):
     from app.routes.ui.sample_code import router as sample_code_router
+    from app.routes.ui.assistant import router as assistant_router
+    from app.routes.ui.collection import router as collection_router
 
     routes.include_router(sample_code_router, prefix=route_prefix)
+    routes.include_router(assistant_router, prefix=route_prefix)
+    routes.include_router(collection_router, prefix=route_prefix)
 
 
 if CONFIG.WEB:

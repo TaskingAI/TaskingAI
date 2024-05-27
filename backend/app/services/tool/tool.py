@@ -1,13 +1,16 @@
 import asyncio
+from typing import Dict, List
+
 from fastapi import APIRouter
-from typing import List
+
+from app.config import CONFIG
+from app.models import BundleInstance, Tool, ToolInput, ToolOutput, ToolRef, ToolType
+from app.operators import action_ops, bundle_instance_ops
+from app.services.tool.plugin.cache import get_bundle, i18n_text
 from tkhelper.error import raise_request_validation_error
 
-from app.models import Tool, ToolType, ToolOutput, BundleInstance, ToolRef, ToolInput
-from app.operators import action_ops, bundle_instance_ops
-
 from .action import run_action
-from .plugin import run_plugin, get_plugin
+from .plugin import get_plugin, run_plugin
 
 router = APIRouter()
 
@@ -126,3 +129,29 @@ async def run_tools(tool_inputs: List[ToolInput]) -> List[ToolOutput]:
             )
 
     return tool_outputs
+
+
+async def ui_fetch_tools(tools: List[Dict]) -> List[Dict]:
+    lang = CONFIG.DEFAULT_LANG
+    for tool in tools:
+        if tool["type"] == ToolType.ACTION:
+            action = await action_ops.get(action_id=tool["id"])
+            if action:
+                tool["name"] = action.name
+
+        elif tool["type"] == ToolType.PLUGIN:
+            if "/" not in tool["id"]:
+                raise_request_validation_error(f"Invalid plugin tool ID: {tool['id']}")
+            bundle_instance_id, plugin_id = tool["id"].split("/")
+            bundle_instance: BundleInstance = await bundle_instance_ops.get(bundle_instance_id=bundle_instance_id)
+            bundle = get_bundle(bundle_id=bundle_instance.bundle_id)
+            real_bundle_name = i18n_text(bundle.bundle_id, bundle.name, lang)
+            plugin = get_plugin(bundle_id=bundle.bundle_id, plugin_id=plugin_id)
+            real_plugin_name = i18n_text(plugin.bundle_id, plugin.name, lang)
+            if bundle:
+                tool["name"] = f"{real_bundle_name} / {real_plugin_name}"
+
+        else:
+            raise_request_validation_error(f"Invalid tool type: {tool['type']}")
+
+    return tools
