@@ -5,6 +5,9 @@ from backend.tests.common.logger import logger
 from backend.tests.api_services.inference.chat_completion import chat_completion
 from backend.tests.common.config import CONFIG
 
+INFERENCE_BASE_URL = CONFIG.BASE_URL
+CHAT_COMPLETION_URL = f"{INFERENCE_BASE_URL}/inference/chat_completion"
+
 
 @pytest.mark.api_test
 class TestChatCompletion:
@@ -174,18 +177,16 @@ class TestChatCompletion:
                 "stream": "True",
                 "configs": {"temperature": 1.0},
             }
-            INFERENCE_BASE_URL = CONFIG.BASE_URL
-            request_url = f"{INFERENCE_BASE_URL}/inference/chat_completion"
             default = False
 
-            async for response_dict in sse_stream(CONFIG.Authentication, request_url, chat_completion_data):
-                default = True
+            async for response_dict in sse_stream(CONFIG.Authentication, CHAT_COMPLETION_URL, chat_completion_data):
                 logger.info(response_dict)
                 if response_dict.get("object") == "ChatCompletion":
                     assert response_dict.get("finish_reason") == "stop"
                     assert response_dict.get("message").get("role") == "assistant"
                     assert response_dict.get("message").get("content") is not None
                     assert response_dict.get("message").get("function_calls") is None
+                    default = True
                 elif response_dict.get("object") == "ChatCompletionChunk":
                     assert response_dict.get("role") == "assistant"
                     assert response_dict.get("index") >= 0
@@ -193,7 +194,7 @@ class TestChatCompletion:
                 else:
                     assert False, response_dict
 
-            assert default is True
+            assert default, "stream failed"
 
 
     @pytest.mark.run(order=126)
@@ -231,11 +232,9 @@ class TestChatCompletion:
                     }
                 ],
             }
-            INFERENCE_BASE_URL = CONFIG.BASE_URL
-            request_url = f"{INFERENCE_BASE_URL}/inference/chat_completion"
             default = False
 
-            async for response_dict in sse_stream(CONFIG.Authentication, request_url, chat_completion_data):
+            async for response_dict in sse_stream(CONFIG.Authentication, CHAT_COMPLETION_URL, chat_completion_data):
                 logger.info(response_dict)
                 assert response_dict.get("object") == "ChatCompletion"
                 assert response_dict.get("finish_reason") == "function_calls"
@@ -261,26 +260,25 @@ class TestChatCompletion:
                 "stream": "True",
                 "configs": {"temperature": 1.0, "max_tokens": 5},
             }
-            INFERENCE_BASE_URL = CONFIG.BASE_URL
-            request_url = f"{INFERENCE_BASE_URL}/inference/chat_completion"
 
             default = False
 
-            async for response_dict in sse_stream(CONFIG.Authentication, request_url, chat_completion_data):
+            async for response_dict in sse_stream(CONFIG.Authentication, CHAT_COMPLETION_URL, chat_completion_data):
                 logger.info(response_dict)
-                default = True
+
                 if response_dict.get("object") == "ChatCompletion":
                     assert response_dict.get("finish_reason") == "length"
                     assert response_dict.get("message").get("role") == "assistant"
                     assert response_dict.get("message").get("content") is not None
                     assert response_dict.get("message").get("function_calls") is None
+                    default = True
                 elif response_dict.get("object") == "ChatCompletionChunk":
                     assert response_dict.get("role") == "assistant"
                     assert response_dict.get("index") >= 0
                     assert response_dict.get("delta") is not None
                 else:
                     assert False, response_dict
-            assert default is True
+            assert default, "stream failed"
 
     @pytest.mark.run(order=128)
     @pytest.mark.asyncio
