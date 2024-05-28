@@ -41,11 +41,12 @@ async def upload_image(
     random_id = generate_random_id(20)
     file_id = f"{ext}_{purpose_info.id_prefix}{random_id}"
 
+    content_bytes = await image.read()
     image_url = await boto3_client.upload_file_from_bytes(
         bucket_name=CONFIG.S3_BUCKET_NAME,
         purpose=purpose.value,
         file_id=file_id,
-        content_bytes=image.file.read(),
+        content_bytes=content_bytes,
         original_file_name=image.filename,
         tenant_id=CONFIG.PROJECT_ID,
         return_url=True,

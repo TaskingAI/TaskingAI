@@ -94,6 +94,7 @@ jobs:
           -e PURPOSE=WEB \
           -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
           -e REDIS_URL="redis://cache:6379/0" \
+          -e OBJECT_STORAGE_TYPE="local" \
           -e PATH_TO_VOLUME="./storage" \
           -e PROJECT_ID="taskingai" \
           -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
@@ -111,6 +112,7 @@ jobs:
           -e PURPOSE=API \
           -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
           -e REDIS_URL="redis://cache:6379/0" \
+          -e OBJECT_STORAGE_TYPE="local" \
           -e PATH_TO_VOLUME="./storage" \
           -e PROJECT_ID="taskingai" \
           -e TASKINGAI_INFERENCE_URL=http://inference:8000 \

@@ -9,6 +9,7 @@ default_env_values = {
     "MODE": "PROD",
     "PURPOSE": "API",
     "SERVICE_PORT": 8000,
+    "HOST_URL": "http://localhost:8000",
     "POSTGRES_MAX_CONNECTIONS": 10,
     "AES_ENCRYPTION_KEY": "b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0",
     "JWT_SECRET_KEY": "dbefe42f34473990a3fa903a6a3283acdc3a910beb1ae271a6463ffa5a926bfb",
@@ -78,6 +79,7 @@ class Config:
 
         # service
         self.SERVICE_PORT = load_int_env("SERVICE_PORT", required=True)
+        self.HOST_URL = load_str_env("HOST_URL", required=True)
         self.WEB_ROUTE_PREFIX = "/api/v1"
         self.API_ROUTE_PREFIX = "/v1"
 
@@ -100,11 +102,14 @@ class Config:
         self.DEFAULT_LANG = "en"
 
         # storage
-        self.S3_BUCKET_NAME=load_str_env("S3_BUCKET_NAME")
-        self.S3_ACCESS_KEY_ID=load_str_env("S3_ACCESS_KEY_ID")
-        self.S3_ACCESS_KEY_SECRET=load_str_env("S3_ACCESS_KEY_SECRET")
-        self.S3_ENDPOINT=load_str_env("S3_ENDPOINT")
-        self.PATH_TO_VOLUME=load_str_env("PATH_TO_VOLUME", required=True)
-        self.PROJECT_ID=load_str_env("PROJECT_ID", required=True)
+        self.S3_BUCKET_NAME = load_str_env("S3_BUCKET_NAME")
+        self.S3_ACCESS_KEY_ID = load_str_env("S3_ACCESS_KEY_ID")
+        self.S3_ACCESS_KEY_SECRET = load_str_env("S3_ACCESS_KEY_SECRET")
+        self.S3_ENDPOINT = load_str_env("S3_ENDPOINT")
+        self.S3_BUCKET_PUBLIC_DOMAIN = load_str_env("S3_BUCKET_PUBLIC_DOMAIN")
+        self.OBJECT_STORAGE_TYPE = load_str_env("OBJECT_STORAGE_TYPE", required=True)
+        self.PATH_TO_VOLUME = load_str_env("PATH_TO_VOLUME", required=True)
+        self.PROJECT_ID = load_str_env("PROJECT_ID", required=True)
+
 
 CONFIG = Config()
