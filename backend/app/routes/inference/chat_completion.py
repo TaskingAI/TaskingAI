@@ -106,3 +106,6 @@ async def api_chat_completion(
                 save_logs=False,  # todo: enable save_logs
             )
             return await session.generate(data.messages, data.functions)
+
+    else:
+        raise_request_validation_error(f"Invalid model_id: {data.model_id}")
