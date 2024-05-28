@@ -1,17 +1,24 @@
 import io
 import logging
 import os
+from enum import Enum
 from typing import Dict, Optional, Tuple
 
 import aioboto3
 import aiofiles
 import aiofiles.os
-from app.config import CONFIG
 
 from tkhelper.error import ErrorCode, raise_http_error
 from tkhelper.utils import decode_base64_to_text, encode_text_to_base64, get_base62_date
 
 logger = logging.getLogger(__name__)
+
+image_extensions = ["jpg", "jpeg", "png"]
+
+
+class StorageClientType(str, Enum):
+    LOCAL = "local"
+    S3 = "s3"
 
 
 def _validate_file_id(file_id: str) -> Tuple[str, str]:
@@ -29,36 +36,43 @@ def _validate_file_id(file_id: str) -> Tuple[str, str]:
     return parts[0], parts[1]
 
 
-def _object_key(
-    purpose: str, file_id: str, ext: str, tenant_id: str, timestamp_path: bool = True
-) -> str:
-    if timestamp_path:
-        return f"{purpose}/{tenant_id}/{get_base62_date()}/{file_id}.{ext}"
-    return f"{purpose}/{tenant_id}/{file_id}.{ext}"
+def _object_key(purpose: str, file_id: str, ext: str, tenant_id: str) -> str:
+    type_path = "imgs/" if (ext in image_extensions) else "files/"
+    purpose_path = f"{purpose[0]}/"
+    tenant_path = f"{tenant_id}/"
+    date_path = f"{get_base62_date()}/"
+
+    return f"{type_path}{purpose_path}{tenant_path}{date_path}{file_id}.{ext}"
 
 
 class StorageClient:
     def __init__(
         self,
-        service_name: str,
-        endpoint_url: Optional[str],
-        access_key_id: Optional[str],
-        access_key_secret: Optional[str],
-        timestamp_path: bool = True,
+        service_name: StorageClientType,
+        endpoint_url: Optional[str] = None,
+        bucket_public_domain: Optional[str] = None,
+        access_key_id: Optional[str] = None,
+        access_key_secret: Optional[str] = None,
+        path_to_volume: Optional[str] = None,
+        host_url: Optional[str] = None,
     ):
-        if endpoint_url and access_key_id and access_key_secret:
-            self._session = aioboto3.Session(
-                aws_access_key_id=access_key_id, aws_secret_access_key=access_key_secret
-            )
-        elif CONFIG.PATH_TO_VOLUME:
+        if service_name == StorageClientType.S3:
+            if not (endpoint_url and access_key_id and access_key_secret):
+                raise ValueError("Missing S3 credentials.")
+            self._session = aioboto3.Session(aws_access_key_id=access_key_id, aws_secret_access_key=access_key_secret)
+        elif service_name == StorageClientType.LOCAL:
+            if not path_to_volume:
+                raise ValueError("Missing path to volume.")
             self._session = None
-            self._volume = os.path.abspath(CONFIG.PATH_TO_VOLUME)
+            self._volume = os.path.abspath(path_to_volume)
         else:
-            raise ValueError("Missing storage credentials.")
+            raise ValueError("Invalid service name.")
 
         self._service_name = service_name
         self._endpoint_url = endpoint_url
-        self._timestamp_path = timestamp_path
+        self._bucket_public_domain = bucket_public_domain
+        self._host_url = host_url
+        self._is_s3 = service_name == StorageClientType.S3
 
     async def init(self):
         logger.info("Storage client initialized.")
@@ -128,15 +142,13 @@ class StorageClient:
         """
 
         metadata = metadata or {}
-        metadata["base64_file_name"] = encode_text_to_base64(
-            original_file_name, exclude_padding=True
-        )
+        metadata["base64_file_name"] = encode_text_to_base64(original_file_name, exclude_padding=True)
         metadata["file_size"] = str(len(content_bytes))
         metadata["tenant_id"] = tenant_id
 
         try:
             ext, _id = _validate_file_id(file_id)
-            key = _object_key(purpose, _id, ext, tenant_id, self._timestamp_path)
+            key = _object_key(purpose, _id, ext, tenant_id)
             """ upload_fileobj params
             :param Fileobj: BinaryIO
             :param Bucket: str
@@ -146,7 +158,7 @@ class StorageClient:
             :param Config: Optional[S3TransferConfig] = None    # boto3.s3.transfer.TransferConfig
             :param Processing: Callable[[bytes], bytes] = None
             """
-            if self._session:
+            if self._is_s3:
                 async with self._session.client(
                     service_name=self._service_name, endpoint_url=self._endpoint_url
                 ) as client:
@@ -157,16 +169,15 @@ class StorageClient:
                         ExtraArgs={"Metadata": metadata or {}},
                     )
                 if return_url:
-                    return f"{self._endpoint_url}/{bucket_name}/{key}"
+                    domain = self._bucket_public_domain or f"http://{self._endpoint_url}/{bucket_name}"
+                    return f"{domain}/{key}"
             else:
                 await self.save_to_volume(file_bytes=content_bytes, path=key)
                 if return_url:
-                    return f"{self._volume}/{key}"
+                    return f"{self._host_url}/{key}"
             return True
         except Exception as e:
-            logger.debug(
-                f"upload_file_from_bytes: failed to upload file {file_id}, e={e}"
-            )
+            logger.debug(f"upload_file_from_bytes: failed to upload file {file_id}, e={e}")
             return False
 
     async def check_file_exists(
@@ -188,8 +199,8 @@ class StorageClient:
         # check if metadata exists
         try:
             ext, _id = _validate_file_id(file_id)
-            key = _object_key(purpose, _id, ext, tenant_id, self._timestamp_path)
-            if self._session:
+            key = _object_key(purpose, _id, ext, tenant_id)
+            if self._is_s3:
                 async with self._session.client(
                     service_name=self._service_name, endpoint_url=self._endpoint_url
                 ) as client:
@@ -222,9 +233,9 @@ class StorageClient:
         """
 
         ext, _id = _validate_file_id(file_id)
-        key = _object_key(purpose, _id, ext, tenant_id, self._timestamp_path)
+        key = _object_key(purpose, _id, ext, tenant_id)
         try:
-            if self._session:
+            if self._is_s3:
                 async with self._session.client(
                     service_name=self._service_name, endpoint_url=self._endpoint_url
                 ) as client:
@@ -235,18 +246,14 @@ class StorageClient:
                 file_metadata = response["Metadata"]
                 base64_name = file_metadata.pop("base64_file_name", None)
                 if base64_name:
-                    file_metadata["original_file_name"] = decode_base64_to_text(
-                        base64_name
-                    )
+                    file_metadata["original_file_name"] = decode_base64_to_text(base64_name)
                 return file_metadata
             return await self.get_volume_file_metadata(path=key)
         except Exception as e:
             logger.debug(f"get_file_metadata: failed to get file {file_id}, e={e}")
             raise_http_error(ErrorCode.OBJECT_NOT_FOUND, f"File {file_id} not found")
 
-    async def download_file_to_bytes(
-        self, bucket_name: str, purpose: str, file_id: str, tenant_id: str
-    ) -> bytes:
+    async def download_file_to_bytes(self, bucket_name: str, purpose: str, file_id: str, tenant_id: str) -> bytes:
         """
         Download file from minio
         :param bucket_name: the name of the bucket
@@ -256,9 +263,9 @@ class StorageClient:
         """
 
         ext, _id = _validate_file_id(file_id)
-        key = _object_key(purpose, _id, ext, tenant_id, self._timestamp_path)
+        key = _object_key(purpose, _id, ext, tenant_id)
         try:
-            if self._session:
+            if self._is_s3:
                 async with self._session.client(
                     service_name=self._service_name, endpoint_url=self._endpoint_url
                 ) as client:
@@ -267,9 +274,7 @@ class StorageClient:
                         Key=key,
                     )
                 data = await response["Body"].read()
-                logger.debug(
-                    f"download_file_to_bytes: downloaded Minio file to bytes: {_id}.{ext}"
-                )
+                logger.debug(f"download_file_to_bytes: downloaded Minio file to bytes: {_id}.{ext}")
                 return data
 
             return await self.read_volume_file(path=key)
@@ -295,10 +300,10 @@ class StorageClient:
         :return: True if the file is downloaded successfully, False otherwise
         """
         ext, _id = _validate_file_id(file_id)
-        key = _object_key(purpose, _id, ext, tenant_id, self._timestamp_path)
+        key = _object_key(purpose, _id, ext, tenant_id)
         # download file
         try:
-            if self._session:
+            if self._is_s3:
                 async with self._session.client(
                     service_name=self._service_name, endpoint_url=self._endpoint_url
                 ) as client:
@@ -323,14 +328,10 @@ class StorageClient:
         try:
             async with aiofiles.open(file_path, "wb") as f:
                 await f.write(file_bytes)
-                logger.debug(
-                    f"download_file_to_path: saved Minio file {file_id} to {file_path}"
-                )
+                logger.debug(f"download_file_to_path: saved Minio file {file_id} to {file_path}")
             return True
         except Exception as e:
-            logger.error(
-                f"download_file_to_path: failed to save Minio file {file_id} to {file_path}, e={e}"
-            )
+            logger.error(f"download_file_to_path: failed to save Minio file {file_id} to {file_path}, e={e}")
 
         return False
 
@@ -351,11 +352,11 @@ class StorageClient:
         """
 
         ext, _id = _validate_file_id(file_id)
-        object_name = _object_key(purpose, _id, ext, tenant_id, self._timestamp_path)
-        if self._session:
-            return f"http://{self._endpoint_url}/{bucket_name}/{object_name}"
-
-        return f"{self._volume}/{object_name}"
+        key = _object_key(purpose, _id, ext, tenant_id)
+        if self._is_s3:
+            domain = self._bucket_public_domain or f"http://{self._endpoint_url}/{bucket_name}"
+            return f"{domain}/{key}"
+        return f"{self._host_url}/{key}"
 
     async def delete_file(
         self,
@@ -374,11 +375,11 @@ class StorageClient:
         """
 
         ext, _id = _validate_file_id(file_id)
-        key = _object_key(purpose, _id, ext, tenant_id, self._timestamp_path)
+        key = _object_key(purpose, _id, ext, tenant_id)
         if not await self.check_file_exists(bucket_name, purpose, file_id, tenant_id):
             raise_http_error(ErrorCode.OBJECT_NOT_FOUND, f"File {file_id} not found")
         try:
-            if self._session:
+            if self._is_s3:
                 async with self._session.client(
                     service_name=self._service_name, endpoint_url=self._endpoint_url
                 ) as client:

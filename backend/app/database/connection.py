@@ -28,10 +28,13 @@ postgres_pool = PostgresDatabasePool(
 
 redis_conn = RedisConnection(url=CONFIG.REDIS_URL)
 boto3_client = StorageClient(
-    service_name="s3",
+    service_name=CONFIG.OBJECT_STORAGE_TYPE,
     endpoint_url=CONFIG.S3_ENDPOINT,
+    bucket_public_domain=CONFIG.S3_BUCKET_PUBLIC_DOMAIN,
     access_key_id=CONFIG.S3_ACCESS_KEY_ID,
     access_key_secret=CONFIG.S3_ACCESS_KEY_SECRET,
+    path_to_volume=CONFIG.PATH_TO_VOLUME,
+    host_url=CONFIG.HOST_URL,
 )
 
 

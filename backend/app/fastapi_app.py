@@ -54,10 +54,17 @@ async def lifespan(app: FastAPI):
 
 
 def create_app():
+    import os
     from app.config import CONFIG
     from app.routes import routes
+    from fastapi.staticfiles import StaticFiles
 
     app = FastAPI(title="TaskingAI-Community", version=CONFIG.VERSION, lifespan=lifespan)
+
+    imgs_volume_path = os.path.abspath(os.path.join(CONFIG.PATH_TO_VOLUME, "imgs"))
+    if not os.path.exists(imgs_volume_path):
+        os.makedirs(imgs_volume_path)
+    app.mount("/imgs", StaticFiles(directory=imgs_volume_path), name="imgs")
 
     # add exception handlers
     add_exception_handlers(app)

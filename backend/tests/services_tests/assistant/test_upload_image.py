@@ -1,10 +1,10 @@
 import pytest
 import os
 
-from backend.tests.api_services.image.image import upload_image, download_image
-from backend.tests.common.config import CONFIG
+from backend.tests.api_services.image.image import upload_image
 
 
+@pytest.mark.api_test
 class TestUploadImage:
     upload_image_list = []
     base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -23,7 +23,6 @@ class TestUploadImage:
     @pytest.mark.asyncio
     @pytest.mark.parametrize("upload_image_data", upload_image_list[:2])
     async def test_upload_image(self, upload_image_data):
-
         res = await upload_image(upload_image_data)
         assert res.status_code == 200, res.json()
         assert res.json()["status"] == "success"
