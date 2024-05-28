@@ -27,9 +27,10 @@ def error_message(code, message: str):
 
 
 class StatelessStreamSession(Session):
-    def __init__(self, assistant: Assistant, save_logs: bool):
+    def __init__(self, assistant: Assistant, save_logs: bool, yield_dict: bool = False):
         super().__init__(assistant, None, save_logs)
         self.stream = True
+        self.yield_dict = yield_dict
 
     async def stream_generate(
         self,
@@ -78,7 +79,10 @@ class StatelessStreamSession(Session):
                         async for t, data in self.stream_inference(message_chunk_object_name="ChatCompletionChunk"):
                             logger.debug(f"completion streaming, {t}: {data}")
                             if t == MESSAGE_CHUNK:
-                                yield f"data: {json.dumps(data)}\n\n"
+                                if self.yield_dict:
+                                    yield data
+                                else:
+                                    yield f"data: {json.dumps(data)}\n\n"
                             elif t == MESSAGE:
                                 chat_completion_assistant_message_dict = data
                                 function_calls = data.get("function_calls")
@@ -164,18 +168,27 @@ class StatelessStreamSession(Session):
             # raise MessageGenerationException("Manually raise error to test")
             response_dict["usage"]["input_tokens"] = self.total_input_tokens
             response_dict["usage"]["output_tokens"] = self.total_output_tokens
-            yield f"data: {json.dumps(response_dict)}\n\n"
-            yield SSE_DONE_MSG
+            if self.yield_dict:
+                yield response_dict
+            else:
+                yield f"data: {json.dumps(response_dict)}\n\n"
+                yield SSE_DONE_MSG
 
         except MessageGenerationInvalidRequestException as e:
             err_dict = error_message(code=ErrorCode.INVALID_REQUEST, message=str(e))
-            yield f"data: {json.dumps(err_dict)}\n\n"
-            yield SSE_DONE_MSG
+            if self.yield_dict:
+                yield err_dict
+            else:
+                yield f"data: {json.dumps(err_dict)}\n\n"
+                yield SSE_DONE_MSG
 
         except MessageGenerationException as e:
             err_dict = error_message(code=ErrorCode.GENERATION_ERROR, message=str(e))
-            yield f"data: {json.dumps(err_dict)}\n\n"
-            yield SSE_DONE_MSG
+            if self.yield_dict:
+                yield err_dict
+            else:
+                yield f"data: {json.dumps(err_dict)}\n\n"
+                yield SSE_DONE_MSG
 
         except Exception as e:
             err_dict = error_message(
@@ -183,5 +196,8 @@ class StatelessStreamSession(Session):
                 message="Assistant message not generated due to an unknown error.",
             )
             logger.error(f"stream_generate: unknown error occurred in stream_generate {e}")
-            yield f"data: {json.dumps(err_dict)}\n\n"
-            yield SSE_DONE_MSG
+            if self.yield_dict:
+                yield err_dict
+            else:
+                yield f"data: {json.dumps(err_dict)}\n\n"
+                yield SSE_DONE_MSG

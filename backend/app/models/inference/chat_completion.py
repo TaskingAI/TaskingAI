@@ -89,6 +89,17 @@ ChatCompletionAnyMessage = Union[
 ]
 
 
+class ChatCompletionUsage(BaseModel):
+    input_tokens: int = Field(
+        ...,
+        description="The number of tokens in the input.",
+    )
+    output_tokens: int = Field(
+        ...,
+        description="The number of tokens in the output.",
+    )
+
+
 class ChatCompletionFinishReason(str, Enum):
     STOP = "stop"
     LENGTH = "length"
@@ -121,6 +132,11 @@ class ChatCompletion(BaseModel):
         ...,
         description="The timestamp in milliseconds when the response is created.",
         examples=[1700000000000],
+    )
+
+    usage: ChatCompletionUsage = Field(
+        ...,
+        description="The token usage of the response.",
     )
 
 

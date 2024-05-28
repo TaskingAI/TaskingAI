@@ -46,9 +46,11 @@ def add_retrieval_routes(route_prefix: str):
 def add_inference_routes(route_prefix: str):
     from app.routes.inference.text_embedding import router as text_embedding_router
     from app.routes.inference.chat_completion import router as chat_completion_router
+    from app.routes.openai.chat_completion import router as openai_chat_completion_router
 
     routes.include_router(text_embedding_router, prefix=route_prefix)
     routes.include_router(chat_completion_router, prefix=route_prefix)
+    routes.include_router(openai_chat_completion_router, prefix=route_prefix)
 
 
 def add_assistant_routes(route_prefix: str):
