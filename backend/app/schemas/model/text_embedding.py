@@ -1,6 +1,6 @@
 from typing import Optional, List, Union
 from pydantic import BaseModel, Field
-from app.models import TextEmbeddingInputType, TextEmbeddingOutput
+from app.models import TextEmbeddingInputType, TextEmbeddingOutput, TextEmbeddingUsage
 
 __all__ = [
     "TextEmbeddingRequest",
@@ -26,3 +26,4 @@ class TextEmbeddingRequest(BaseModel):
 class TextEmbeddingResponse(BaseModel):
     status: str = Field("success", Literal="success", description="The response status.", examples=["success"])
     data: List[TextEmbeddingOutput] = Field(..., description="The text embedding response data.")
+    usage: TextEmbeddingUsage = Field(..., description="The text embedding usage data.")
