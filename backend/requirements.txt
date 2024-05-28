@@ -26,10 +26,3 @@ unstructured==0.12.6
 beautifulsoup4==4.12.3
 langchain-community==0.0.28
 markdown==3.6
-
-# tests
-pytest==7.4.3
-pytest-asyncio==0.21.1
-pytest-ordering==0.6
-pytest-assume==2.4.3
-pytest-rerunfailures==13.0

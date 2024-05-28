@@ -22,6 +22,8 @@ class Config:
     # base url
     WEB_BASE_URL = f"{HOST}:{WEB_SERVICE_PORT}{WEB_ROUTE_PREFIX}"
     API_BASE_URL = f"{HOST}:{API_SERVICE_PORT}{API_ROUTE_PREFIX}"
+    OAPI_BASE_URL = API_BASE_URL
+
 
     # http proxy
     HTTP_PROXY_URL = "http://127.0.0.1:7890"
