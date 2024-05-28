@@ -8,6 +8,8 @@ from backend.tests.api_services.assistant.assistant import (
     list_assistants,
     update_assistant,
     delete_assistant,
+    get_ui_assistant,
+    list_ui_assistants,
 )
 from backend.tests.services_tests.assistant import Assistant
 from backend.tests.services_tests.retrieval import Retrieval
@@ -111,7 +113,20 @@ class TestAssistant(Assistant):
         assert get_res_json.get("status") == "success"
         assert get_res_json.get("data").get("assistant_id") == Assistant.assistant_id
 
+    @pytest.mark.run(order=182)
+    @pytest.mark.asyncio
+    async def test_get_ui_assistant(self):
+        if "WEB" in CONFIG.TEST_MODE:
 
+            get_res = await get_ui_assistant(Assistant.assistant_id)
+            get_res_json = get_res.json()
+            assert get_res.status_code == 200, get_res.json()
+            assert get_res_json.get("status") == "success"
+            assert get_res_json.get("data").get("assistant_id") == Assistant.assistant_id
+            assert get_res_json.get("data").get("retrievals")[0].get("name") == "test_update"
+            assert get_res_json.get("data").get("tools")[0].get("name") == "Open Weather / Get current weather data"
+            assert get_res_json.get("data").get("tools")[1].get("name") == "get_current_weather"
+            assert get_res_json.get("data").get("model_name") == "My Chat Completion Model Test"
 
     @pytest.mark.run(order=183)
     @pytest.mark.asyncio
@@ -141,6 +156,36 @@ class TestAssistant(Assistant):
                 for key in prefix_filter_dict:
                     assert res_json.get("data")[0].get(key).startswith(prefix_filter_dict.get(key))
 
+    @pytest.mark.run(order=183)
+    @pytest.mark.asyncio
+    async def test_list_ui_assistants(self):
+
+        if "WEB" in CONFIG.TEST_MODE:
+
+            list_ui_assistants_data_list = [
+                {"limit": 10, "order": "asc", "before": Assistant.assistant_id},
+                {"prefix_filter": json.dumps({"assistant_id": Assistant.assistant_id[:10]})},
+                {"prefix_filter": json.dumps({"name": Assistant.assistant_name[:5]})},
+            ]
+            for list_ui_assistants_data in list_ui_assistants_data_list:
+                res = await list_ui_assistants(list_ui_assistants_data)
+                res_json = res.json()
+                assert res.status_code == 200, res.json()
+                assert res_json.get("status") == "success"
+                assert len(res_json.get("data")) == 1
+                assert res_json.get("fetched_count") == 1
+                assert res_json.get("has_more") is False
+                if list_ui_assistants_data.get("prefix_filter"):
+                    prefix_filter_dict = json.loads(list_ui_assistants_data.get("prefix_filter"))
+                    for key in prefix_filter_dict:
+                        assert res_json.get("data")[0].get(key).startswith(prefix_filter_dict.get(key))
+                    assert res_json.get("data")[0].get("retrievals")[0].get("name") == "test_update"
+                    assert (
+                            res_json.get("data")[0].get("tools")[0].get("name")
+                            == "Open Weather / Get current weather data"
+                    )
+                    assert res_json.get("data")[0].get("tools")[1].get("name") == "get_current_weather"
+                    assert res_json.get("data")[0].get("model_name") == "My Chat Completion Model Test"
 
     @pytest.mark.run(order=184)
     @pytest.mark.asyncio

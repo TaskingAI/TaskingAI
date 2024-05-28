@@ -89,6 +89,20 @@ class TestCollection(Retrieval):
         assert collection_json.get("data").get("status") == "ready"
         assert collection_json.get("data").get("collection_id") == self.collection_id
 
+    @pytest.mark.run(order=132)
+    @pytest.mark.asyncio
+    async def test_get_ui_collection(self):
+
+        if "WEB" in CONFIG.TEST_MODE:
+
+            collection_res = await get_ui_collection(self.collection_id)
+            collection_json = collection_res.json()
+
+            assert collection_res.status_code == 200, collection_res.json()
+            assert collection_json.get("status") == "success"
+            assert collection_json.get("data").get("status") == "ready"
+            assert collection_json.get("data").get("collection_id") == self.collection_id
+            assert collection_json.get("data").get("model_name") == "Openai Text Embedding Model"
 
     @pytest.mark.run(order=133)
     @pytest.mark.asyncio
@@ -128,7 +142,43 @@ class TestCollection(Retrieval):
                 for key in prefix_filter_dict:
                     assert res_json.get("data")[0].get(key).startswith(prefix_filter_dict.get(key))
 
+    @pytest.mark.run(order=133)
+    @pytest.mark.asyncio
+    async def test_list_ui_collections(self):
 
+        if "WEB" in CONFIG.TEST_MODE:
+            list_ui_collections_data_list = [
+                {
+                    "limit": 10,
+                    "order": "desc",
+                    "after": Retrieval.collection_id,
+                },
+                {
+                    "limit": 10,
+                    "order": "asc",
+                    "prefix_filter": json.dumps({"name": Retrieval.collection_name[:4]}),
+                },
+                {
+                    "limit": 10,
+                    "order": "desc",
+                    "prefix_filter": json.dumps({"collection_id": Retrieval.collection_id[:14]}),
+                },
+            ]
+            for list_ui_collections_data in list_ui_collections_data_list:
+
+                res = await list_ui_collections(list_ui_collections_data)
+                res_json = res.json()
+
+                assert res.status_code == 200, res.json()
+                assert res_json.get("status") == "success"
+                assert len(res_json.get("data")) == 1
+                assert res_json.get("fetched_count") == 1
+                assert res_json.get("has_more") is False
+                if list_ui_collections_data.get("prefix_filter"):
+                    prefix_filter_dict = json.loads(list_ui_collections_data.get("prefix_filter"))
+                    for key in prefix_filter_dict:
+                        assert res_json.get("data")[0].get(key).startswith(prefix_filter_dict.get(key))
+                assert res_json.get("data")[0].get("model_name") == "Openai Text Embedding Model"
 
     @pytest.mark.run(order=134)
     @pytest.mark.asyncio
