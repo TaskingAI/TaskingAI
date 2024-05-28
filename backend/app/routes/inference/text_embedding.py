@@ -29,7 +29,6 @@ async def api_text_embedding(
         model_id=data.model_id,
     )
 
-    # generate none stream response
     response = await text_embedding(
         model=model,
         encrypted_credentials=model.encrypted_credentials,
@@ -37,4 +36,4 @@ async def api_text_embedding(
         input_type=data.input_type,
     )
     check_http_error(response)
-    return TextEmbeddingResponse(data=response.json()["data"])
+    return TextEmbeddingResponse(data=response.json()["data"], usage=response.json()["usage"])

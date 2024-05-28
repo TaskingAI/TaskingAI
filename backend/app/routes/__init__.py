@@ -46,12 +46,17 @@ def add_retrieval_routes(route_prefix: str):
 def add_inference_routes(route_prefix: str):
     from app.routes.inference.text_embedding import router as text_embedding_router
     from app.routes.inference.chat_completion import router as chat_completion_router
-    from app.routes.openai.chat_completion import router as openai_chat_completion_router
 
     routes.include_router(text_embedding_router, prefix=route_prefix)
     routes.include_router(chat_completion_router, prefix=route_prefix)
-    routes.include_router(openai_chat_completion_router, prefix=route_prefix)
 
+
+def add_openai_routes(route_prefix: str):
+    from app.routes.openai.chat_completion import router as openai_chat_completion_router
+    from app.routes.openai.text_embedding import router as openai_text_embedding_router
+
+    routes.include_router(openai_chat_completion_router, prefix=route_prefix)
+    routes.include_router(openai_text_embedding_router, prefix=route_prefix)
 
 def add_assistant_routes(route_prefix: str):
     from app.routes.assistant.generation import router as generation_router
@@ -110,6 +115,7 @@ elif CONFIG.API:
     add_tool_action_routes(CONFIG.API_ROUTE_PREFIX)
     add_retrieval_routes(CONFIG.API_ROUTE_PREFIX)
     add_inference_routes(CONFIG.API_ROUTE_PREFIX)
+    add_openai_routes(CONFIG.API_ROUTE_PREFIX)
     add_assistant_routes(CONFIG.API_ROUTE_PREFIX)
     add_file_routes(CONFIG.API_ROUTE_PREFIX)
 
