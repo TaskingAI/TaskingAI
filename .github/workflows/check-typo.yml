@@ -1,4 +1,4 @@
-name: Build and Test
+name: Check typo
 
 on:
   pull_request:
