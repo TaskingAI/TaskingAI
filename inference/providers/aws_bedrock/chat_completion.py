@@ -127,6 +127,8 @@ class AwsBedrockChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ):
         payload = _build_aws_bedrock_chat_completion_payload(messages, False, provider_model_id, configs)
         input_tokens = estimate_input_tokens(
@@ -142,7 +144,6 @@ class AwsBedrockChatCompletionModel(BaseChatCompletionModel):
                 aws_access_key_id=credentials.AWS_ACCESS_KEY_ID,
                 aws_secret_access_key=credentials.AWS_SECRET_ACCESS_KEY,
             ) as runtime_client:
-
                 body_jsonstr = json.dumps(payload)
                 response = await runtime_client.invoke_model(
                     modelId=provider_model_id, contentType="application/json", accept="*/*", body=body_jsonstr

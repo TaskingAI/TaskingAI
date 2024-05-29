@@ -1,6 +1,7 @@
 import asyncio
 from provider_dependency.chat_completion import *
 from app.models.tokenizer import estimate_input_tokens, estimate_response_tokens
+from typing import List, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -65,6 +66,8 @@ class ReplicateChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ):
         # Convert ChatCompletionMessages to the required format
 
@@ -81,6 +84,14 @@ class ReplicateChatCompletionModel(BaseChatCompletionModel):
         else:
             real_api_url = "https://api.replicate.com/v1/predictions"
             payload["version"] = provider_model_id
+        if proxy:
+            if not proxy.startswith("https://"):
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid proxy URL. Must start with https://")
+            # replace the base url with the proxy
+            real_api_url = proxy
+
+        if custom_headers:
+            headers.update(custom_headers)
         logger.debug("headers = %s", headers)
         logger.debug("payload = %s", payload)
         async with aiohttp.ClientSession() as session:

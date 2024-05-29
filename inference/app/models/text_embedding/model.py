@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List
+from typing import Dict, List, Optional
 from app.models import ProviderCredentials
 import logging
 from .text_embedding import *
@@ -41,5 +41,7 @@ class BaseTextEmbeddingModel(ABC):
         credentials: ProviderCredentials,
         configs: TextEmbeddingModelConfiguration,
         input_type: Optional[TextEmbeddingInputType] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ) -> TextEmbeddingResult:
         raise NotImplementedError

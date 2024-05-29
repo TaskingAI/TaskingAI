@@ -3,6 +3,10 @@ name: "i18n:debug_name"
 description: "i18n:debug_description"
 updated_timestamp: 1711074909
 
+enable_proxy: false
+
+enable_custom_header: false
+
 credentials_schema:
   type: object
   properties:
@@ -12,7 +16,6 @@ credentials_schema:
       secret: true
   required:
     - DEBUG_API_KEY
-
 
 resources:
   taskingai_documentation_url: ""

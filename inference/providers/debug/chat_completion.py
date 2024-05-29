@@ -1,5 +1,6 @@
 from provider_dependency.chat_completion import *
 from app.models.tokenizer import estimate_input_tokens, estimate_response_tokens
+from typing import List, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,8 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ):
         if provider_model_id == "debug-error" and messages[-1].content != "Only say your name":
             raise_http_error(ErrorCode.PROVIDER_ERROR, "Debug error for test")
@@ -53,6 +56,8 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ):
         if not messages:
             raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "No messages provided")
