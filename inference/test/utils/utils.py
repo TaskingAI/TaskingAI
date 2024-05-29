@@ -16,6 +16,7 @@ white_list_providers = [
     "tongyi",
     "wenxin",
     "moonshot",
+    "aws_bedrock",
 ]
 white_list_models = [
     "google_gemini/gemini-pro-vision",
