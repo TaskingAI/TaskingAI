@@ -20,7 +20,7 @@ import ModalFooterEnd from '../modalFooterEnd/index'
 import { toast } from 'react-toastify'
 import ApiErrorResponse from '@/constant/index'
 import tooltipTitle from '../../contents/tooltipTitle'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import DeleteModal from '../deleteModal/index.tsx'
 import RecordIcon from '../../assets/img/recordIcon.svg?react'
 import closeIcon from '../../assets/img/x-close.svg'
@@ -86,7 +86,6 @@ function Retrieval() {
     const [modelHasMore, setModelHasMore] = useState(false)
     const [OpenDrawer, setOpenDrawer] = useState(false)
     const [loading, setLoading] = useState(false);
-    const { projectId } = useParams()
     const [viewCodeData, setViewCodeData] = useState('')
     const [limit, setLimit] = useState(20)
     const [viewCodeOpen, setViewCodeOpen] = useState(false)
@@ -224,7 +223,7 @@ function Retrieval() {
         setIsVisible(false)
         setCollectionRecordId(val.collection_id)
         const routeData = recordOrChunk.toLowerCase()
-        navigate(`/projects/${projectId}/collections/${val.collection_id}/${routeData}`)
+        navigate(`/project/collections/${val.collection_id}/${routeData}`)
         setDrawerName(val.name || 'Untitled Collection')
         setRecordOrChunk(recordOrChunk)
         setRecordOpen(true)
@@ -258,7 +257,7 @@ function Retrieval() {
     const handleRecordCancel = () => {
         setRecordOpen(false)
         setIsVisible(true)
-        navigate(`/projects/${projectId}/collections`)
+        navigate(`/project/collections`)
     }
     const onDeleteConfirm = async () => {
         try {

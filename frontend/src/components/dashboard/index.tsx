@@ -21,23 +21,21 @@ const DashBoard = () => {
     const projectname = localStorage.getItem('projectName')
     const navigate = useNavigate()
     const handleNavigate = (value: string) => {
-        const projectId = localStorage.getItem('projectId')
-
         switch (value) {
             case 'model':
-                navigate(`/projects/${projectId}/models`)
+                navigate(`/project/models`)
                 break;
             case 'retrieval':
-                navigate(`/projects/${projectId}/collections`)
+                navigate(`/project/collections`)
                 break;
             case 'tool':
-                navigate(`/projects/${projectId}/tools`)
+                navigate(`/project/tools`)
                 break;
             case 'assistant':
-                navigate(`/projects/${projectId}/assistants`)
+                navigate(`/project/assistants`)
                 break;
             case 'apikey':
-                navigate(`/projects/${projectId}/apikeys`)
+                navigate(`/project/apikeys`)
                 break;
             default:
                 break;

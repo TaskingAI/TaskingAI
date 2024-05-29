@@ -1,10 +1,11 @@
 .dashboardContent {
     display: flex;
     overflow: auto;
+    background-color: var(--color-item-background);
+
 }
 .dashboard {
     padding: 24px;
-    background-color: var(--color-item-background);
     overflow: auto;
     margin: auto;
     width: 1328px;

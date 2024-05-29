@@ -20,7 +20,7 @@ const getRetrievalList = async <T extends Record<string,string | number>>(
         })
         str = str.substring(0, str.length - 1)
     }
-    return await request.get(`${project_base_url}/collections?${str}`)
+    return await request.get(`${project_base_url}/ui/collections?${str}`)
 }
 const createRetrieval = async (params:object) => {
 
