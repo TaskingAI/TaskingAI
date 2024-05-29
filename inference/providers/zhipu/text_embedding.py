@@ -1,4 +1,5 @@
 from provider_dependency.text_embedding import *
+from typing import List, Dict, Optional
 from .utils import build_zhipu_header
 
 
@@ -10,11 +11,20 @@ class ZhipuTextEmbeddingModel(BaseTextEmbeddingModel):
         credentials: ProviderCredentials,
         configs: TextEmbeddingModelConfiguration,
         input_type: Optional[TextEmbeddingInputType] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ) -> TextEmbeddingResult:
-
         api_url = "https://open.bigmodel.cn/api/paas/v4/embeddings"
 
         headers = build_zhipu_header(credentials)
+        if proxy:
+            if not proxy.startswith("https://"):
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid proxy URL. Must start with https://")
+            # complete the proxy if not end with /
+            api_url = proxy
+
+        if custom_headers:
+            headers.update(custom_headers)
 
         outputs = []
         for i, text in enumerate(input):

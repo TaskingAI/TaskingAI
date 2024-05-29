@@ -20,7 +20,6 @@ def has_multimodal_user_message(messages: List[ChatCompletionMessage]):
 
 
 class ChatCompletionFallback(BaseModel):
-
     model_schema_id: str = Field(
         ...,
         min_length=1,
@@ -100,6 +99,17 @@ class ChatCompletionRequest(BaseModel):
         ],
     )
 
+    proxy: Optional[str] = Field(None, description="The proxy of the model.")
+
+    custom_headers: Optional[Dict[str, str]] = Field(
+        None,
+        min_items=0,
+        max_items=16,
+        description="The custom headers can store up to 16 key-value pairs where each key's "
+        "length is less than 64 and value's length is less than 512.",
+        examples=[{"key1": "value1"}, {"key2": "value2"}],
+    )
+
     fallbacks: Optional[List[ChatCompletionFallback]] = Field(
         None,
         description="A list of fallback completions to use if the model fails to generate a response.",
@@ -162,7 +172,6 @@ class ChatCompletionRequest(BaseModel):
 
     @staticmethod
     def _convert_message(message_data: Dict):
-
         role = message_data.get("role")
         function_calls = message_data.get("function_calls")
         content = message_data.get("content")
@@ -190,7 +199,6 @@ class ChatCompletionRequest(BaseModel):
 
     @field_validator("messages", mode="after")
     def validate_messages(cls, messages: List[ChatCompletionMessage]):
-
         if not messages:
             raise ValueError("messages cannot be empty.")
 
@@ -204,7 +212,6 @@ class ChatCompletionRequest(BaseModel):
         functions_ids = set()
 
         for i, msg in enumerate(messages):
-
             if cls._is_assistant_function_calls_message(msg):
                 # Collect the ids of all new function_calls
                 unmatched_function_calls = [fc_id for fc_id in function_calls_ids if fc_id not in functions_ids]
@@ -275,7 +282,6 @@ class ChatCompletionRequest(BaseModel):
 
     @model_validator(mode="before")
     def validate_before(cls, data: Dict):
-
         # validate function
         function_call, functions = validate_function_call_and_functions(
             function_call=data.get("function_call"), functions=data.get("functions")

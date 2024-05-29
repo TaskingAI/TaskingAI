@@ -88,17 +88,29 @@ class BaseChatCompletionModel(ABC):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ):
         # Convert ChatCompletionMessages to the required format
         api_url, headers, payload = self.prepare_request(
             False, provider_model_id, messages, credentials, configs, function_call, functions
         )
+        if proxy:
+            if not proxy.startswith("https://"):
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid proxy URL. Must start with https://")
+            # complete the proxy if not end with /
+            api_url = proxy
+
+        if custom_headers:
+            headers.update(custom_headers)
         input_tokens = estimate_input_tokens(
             [message.model_dump() for message in messages],
             [function.model_dump() for function in functions] if functions else None,
             function_call,
         )
         async with aiohttp.ClientSession() as session:
+            logger.debug(f"api_url: {api_url}")
+            logger.debug(f"headers: {headers}")
             async with session.post(api_url, headers=headers, json=payload, proxy=CONFIG.PROXY) as response:
                 await self.handle_response(response)
                 result = await response.json()
@@ -127,11 +139,20 @@ class BaseChatCompletionModel(ABC):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ):
-
         api_url, headers, payload = self.prepare_request(
             True, provider_model_id, messages, credentials, configs, function_call, functions
         )
+        if proxy:
+            if not proxy.startswith("https://"):
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid proxy URL. Must start with https://")
+            # complete the proxy if not end with /
+            api_url = proxy
+
+        if custom_headers:
+            headers.update(custom_headers)
         input_tokens = estimate_input_tokens(
             [message.model_dump() for message in messages],
             [function.model_dump() for function in functions] if functions else None,

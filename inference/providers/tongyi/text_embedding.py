@@ -1,4 +1,5 @@
 from provider_dependency.text_embedding import *
+from typing import List, Dict, Optional
 
 
 class TongyiTextEmbeddingModel(BaseTextEmbeddingModel):
@@ -9,8 +10,9 @@ class TongyiTextEmbeddingModel(BaseTextEmbeddingModel):
         credentials: ProviderCredentials,
         configs: TextEmbeddingModelConfiguration,
         input_type: Optional[TextEmbeddingInputType] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ) -> TextEmbeddingResult:
-
         api_url = "https://api.tongyi.com/v1/embeddings"
 
         headers = {
@@ -23,19 +25,14 @@ class TongyiTextEmbeddingModel(BaseTextEmbeddingModel):
             "input": input,
             "encoding_format": "float",
         }
+        if proxy:
+            if not proxy.startswith("https://"):
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid proxy URL. Must start with https://")
+            # complete the proxy if not end with /
+            api_url = proxy
 
-        if provider_model_id == "text-embedding-3-small-512":
-            payload["dimensions"] = 512
-            payload["model"] = "text-embedding-3-small"
-        elif provider_model_id == "text-embedding-3-small-1536":
-            payload["dimensions"] = 1536
-            payload["model"] = "text-embedding-3-small"
-        elif provider_model_id == "text-embedding-3-large-256":
-            payload["dimensions"] = 256
-            payload["model"] = "text-embedding-3-large"
-        elif provider_model_id == "text-embedding-3-large-1024":
-            payload["dimensions"] = 1024
-            payload["model"] = "text-embedding-3-large"
+        if custom_headers:
+            headers.update(custom_headers)
 
         async with aiohttp.ClientSession() as session:
             async with session.post(api_url, headers=headers, json=payload, proxy=CONFIG.PROXY) as response:

@@ -4,6 +4,10 @@ from .utils import *
 
 logger = logging.getLogger(__name__)
 
+__all__ = [
+    "CustomHostFunctionCallChatCompletionModel",
+]
+
 
 def _build_custom_host_chat_completion_payload_openai_function_call(
     messages: List[ChatCompletionMessage],

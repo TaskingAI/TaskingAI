@@ -3,6 +3,7 @@ from .chat_completion_tool_calls import CustomHostToolCallsChatCompletionModel
 from .chat_completion_function_call import CustomHostFunctionCallChatCompletionModel
 from app.models.tokenizer import estimate_input_tokens
 from .utils import *
+from typing import Dict
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,8 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ):
         if provider_model_id == "openai-function-call":
             instance = self.openai_function_call_instance
@@ -36,6 +39,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
         api_url, headers, payload = instance.prepare_request(
             False, model_id, messages, credentials, configs, function_call, functions
         )
+
         for url in CONFIG.PROVIDER_URL_BLACK_LIST:
             if url in api_url:
                 raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, f"Invalid provider url: {url}")
@@ -72,8 +76,9 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ):
-
         if provider_model_id == "openai-function-call":
             instance = self.openai_function_call_instance
         elif provider_model_id == "openai-tool-calls":
@@ -87,6 +92,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
         api_url, headers, payload = instance.prepare_request(
             True, model_id, messages, credentials, configs, function_call, functions
         )
+
         input_tokens = estimate_input_tokens(
             [message.model_dump() for message in messages],
             [function.model_dump() for function in functions] if functions else None,
@@ -105,7 +111,6 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
                 async_stream = AsyncStream(async_stream_generator)
 
                 async for data in async_stream:
-
                     instance.stream_check_error(data)
 
                     # the main chunk data

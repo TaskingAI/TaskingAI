@@ -3,6 +3,10 @@ name: "i18n:ollama_name"
 description: "i18n:ollama_description"
 updated_timestamp: 1707152831000
 
+enable_proxy: false
+
+enable_custom_header: false
+
 credentials_schema:
   type: object
   properties:
@@ -12,7 +16,6 @@ credentials_schema:
       secret: false
   required:
     - OLLAMA_HOST
-
 
 resources:
   taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/ollama"

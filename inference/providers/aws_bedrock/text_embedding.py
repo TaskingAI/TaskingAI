@@ -1,5 +1,6 @@
 from provider_dependency.text_embedding import *
 from aiobotocore.session import get_session
+from typing import List, Dict, Optional
 
 cohere_input_type_map = {
     TextEmbeddingInputType.document: "search_document",
@@ -15,8 +16,9 @@ class AwsBedrockTextEmbeddingModel(BaseTextEmbeddingModel):
         credentials: ProviderCredentials,
         configs: TextEmbeddingModelConfiguration,
         input_type: Optional[TextEmbeddingInputType] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ) -> TextEmbeddingResult:
-
         model_prefix = provider_model_id.split(".")[0]
         payload = {}
         if model_prefix == "cohere":

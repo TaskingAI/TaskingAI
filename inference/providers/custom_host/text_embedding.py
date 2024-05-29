@@ -1,4 +1,5 @@
 from provider_dependency.text_embedding import *
+from typing import List, Dict, Optional
 
 
 class CustomHostTextEmbeddingModel(BaseTextEmbeddingModel):
@@ -9,8 +10,9 @@ class CustomHostTextEmbeddingModel(BaseTextEmbeddingModel):
         credentials: ProviderCredentials,
         configs: TextEmbeddingModelConfiguration,
         input_type: Optional[TextEmbeddingInputType] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ) -> TextEmbeddingResult:
-
         headers = {
             "Authorization": f"Bearer {credentials.CUSTOM_HOST_API_KEY}",
             "Content-Type": "application/json",
@@ -31,7 +33,14 @@ class CustomHostTextEmbeddingModel(BaseTextEmbeddingModel):
                 ErrorCode.REQUEST_VALIDATION_ERROR,
                 f"Invalid provider url: {api_url}, must start with http:// or https://",
             )
+        if proxy:
+            if not proxy.startswith("https://"):
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid proxy URL. Must start with https://")
+            # complete the proxy if not end with /
+            api_url = proxy
 
+        if custom_headers:
+            headers.update(custom_headers)
         async with aiohttp.ClientSession() as session:
             async with session.post(api_url, headers=headers, json=payload, proxy=CONFIG.PROXY) as response:
                 await self.handle_response(response)

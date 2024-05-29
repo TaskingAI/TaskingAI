@@ -27,7 +27,6 @@ router = APIRouter()
 async def api_rerank(
     data: RerankRequest,
 ):
-
     # validate model info
     model_infos = [
         validate_model_info(
@@ -68,6 +67,8 @@ async def api_rerank(
             query=data.query,
             documents=data.documents,
             top_n=data.top_n,
+            proxy=data.proxy,
+            custom_headers=data.custom_headers,
         )
         for r in result.results:
             tokens += string_tokens(r.document.text) + 1

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from starlette.responses import StreamingResponse
 from aiohttp import client_exceptions
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Dict
 import json
 import logging
 from app.cache import get_chat_completion_model
@@ -32,6 +32,8 @@ async def chat_completion(
     configs: ChatCompletionModelConfiguration,
     function_call: Optional[str] = None,
     functions: Optional[List[ChatCompletionFunction]] = None,
+    proxy: Optional[str] = None,
+    custom_headers: Optional[Dict[str, str]] = None,
 ) -> ChatCompletion:
     if not model_infos:
         raise_http_error(ErrorCode.INTERNAL_SERVER_ERROR, "No model info provided.")
@@ -56,6 +58,8 @@ async def chat_completion(
                 configs=configs,
                 function_call=function_call,
                 functions=functions,
+                proxy=proxy,
+                custom_headers=custom_headers,
             )
             if i > 0:
                 response.fallback_index = i - 1
@@ -100,6 +104,8 @@ async def chat_completion_stream(
     configs: ChatCompletionModelConfiguration,
     function_call: Optional[str] = None,
     functions: Optional[List[ChatCompletionFunction]] = None,
+    proxy: Optional[str] = None,
+    custom_headers: Optional[Dict[str, str]] = None,
 ):
     if not model_infos:
         raise_http_error(ErrorCode.INTERNAL_SERVER_ERROR, "No model info provided.")
@@ -124,6 +130,8 @@ async def chat_completion_stream(
                 configs=configs,
                 function_call=function_call,
                 functions=functions,
+                proxy=proxy,
+                custom_headers=custom_headers,
             ):
                 if isinstance(response, ChatCompletion):
                     if i:
@@ -214,6 +222,8 @@ async def api_chat_completion(
                     configs=data.configs,
                     function_call=data.function_call,
                     functions=data.functions,
+                    proxy=data.proxy,
+                    custom_headers=data.custom_headers,
                 ):
                     yield f"data: {response.model_dump_json()}\n\n"
                     i += 1
@@ -237,6 +247,8 @@ async def api_chat_completion(
             configs=data.configs,
             function_call=data.function_call,
             functions=data.functions,
+            proxy=data.proxy,
+            custom_headers=data.custom_headers,
         )
 
         if response:

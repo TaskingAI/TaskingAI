@@ -1,4 +1,5 @@
 from provider_dependency.text_embedding import *
+from typing import List, Dict, Optional
 import hashlib
 import numpy as np
 import re
@@ -31,6 +32,8 @@ class DebugTextEmbeddingModel(BaseTextEmbeddingModel):
         credentials: ProviderCredentials,
         configs: TextEmbeddingModelConfiguration,
         input_type: Optional[TextEmbeddingInputType] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ) -> TextEmbeddingResult:
         match = re.search(r"\d+$", provider_model_id)
         if match:

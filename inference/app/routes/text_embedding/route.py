@@ -26,6 +26,8 @@ async def embed_batch(
     credentials: ProviderCredentials,
     configs: TextEmbeddingModelConfiguration,
     input_type: Optional[TextEmbeddingInputType] = None,
+    proxy: Optional[str] = None,
+    custom_headers: Optional[Dict[str, str]] = None,
 ):
     # Embed a single batch of texts
     res = await model.embed_text(
@@ -34,6 +36,8 @@ async def embed_batch(
         credentials=credentials,
         configs=configs,
         input_type=input_type,
+        proxy=proxy,
+        custom_headers=custom_headers,
     )
     # ensure that the embeddings are unit vectors
     embeddings_array = np.array([output.embedding for output in res.data])
@@ -62,6 +66,8 @@ async def embed_text(
     properties: TextEmbeddingModelProperties,
     configs: TextEmbeddingModelConfiguration,
     input_type: Optional[TextEmbeddingInputType] = None,
+    proxy: Optional[str] = None,
+    custom_headers: Optional[Dict[str, str]] = None,
 ) -> TextEmbeddingResult:
     model = get_text_embedding_model(provider_id=provider_id)
     batch_size = properties.max_batch_size if properties else 512
@@ -88,6 +94,8 @@ async def embed_text(
                 credentials=credentials,
                 configs=configs,
                 input_type=input_type,
+                proxy=proxy,
+                custom_headers=custom_headers,
             )
             tasks.append(task)
 
@@ -175,6 +183,8 @@ async def api_text_embedding(
                 properties=properties,
                 configs=data.configs,
                 input_type=data.input_type,
+                proxy=data.proxy,
+                custom_headers=data.custom_headers,
             )
             fallback_index = None
             if i:

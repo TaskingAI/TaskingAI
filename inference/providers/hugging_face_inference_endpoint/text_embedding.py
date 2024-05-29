@@ -1,4 +1,5 @@
 from provider_dependency.text_embedding import *
+from typing import List, Dict, Optional
 
 
 class HuggingFaceInferenceEndpointTextEmbeddingModel(BaseTextEmbeddingModel):
@@ -9,6 +10,8 @@ class HuggingFaceInferenceEndpointTextEmbeddingModel(BaseTextEmbeddingModel):
         credentials: ProviderCredentials,
         configs: TextEmbeddingModelConfiguration,
         input_type: Optional[TextEmbeddingInputType] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
     ) -> TextEmbeddingResult:
         api_url = credentials.HUGGING_INFERENCE_ENDPOINT_URL
 
@@ -16,7 +19,14 @@ class HuggingFaceInferenceEndpointTextEmbeddingModel(BaseTextEmbeddingModel):
             "Authorization": f"Bearer {credentials.HUGGING_FACE_API_KEY}",
             "Content-Type": "application/json",
         }
+        if proxy:
+            if not proxy.startswith("https://"):
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid proxy URL. Must start with https://")
+            # complete the proxy if not end with /
+            api_url = proxy
 
+        if custom_headers:
+            headers.update(custom_headers)
         outputs = []
         for i, text in enumerate(input):
             payload = {
