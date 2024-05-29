@@ -5,7 +5,6 @@ from test.setting import Config
 
 
 async def chat_completion(data: Dict):
-
     async with aiohttp.ClientSession() as session:
         request_url = f"{Config.BASE_URL}/chat_completion"
         response = await session.post(request_url, json=data)
@@ -13,7 +12,6 @@ async def chat_completion(data: Dict):
 
 
 async def text_embedding(data: Dict):
-
     async with aiohttp.ClientSession() as session:
         request_url = f"{Config.BASE_URL}/text_embedding"
         response = await session.post(request_url, json=data)
@@ -21,7 +19,6 @@ async def text_embedding(data: Dict):
 
 
 async def rerank(data: Dict):
-
     async with aiohttp.ClientSession() as session:
         request_url = f"{Config.BASE_URL}/rerank"
         response = await session.post(request_url, json=data)
