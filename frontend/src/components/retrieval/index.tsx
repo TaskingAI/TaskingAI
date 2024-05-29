@@ -449,7 +449,7 @@ function Retrieval() {
             <ViewCode open={viewCodeOpen} data={viewCodeData} handleClose={handleCloseViewCode} />
             <DeleteModal describe={`${t('deleteItem')} ${deleteValue || 'Untitled Collection'}? ${t('projectRetrievalDeleteDesc')}`} open={OpenDeleteModal} title={t('projectRetrievalDelete')} projectName={deleteValue || 'Untitled Collection'} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
             <Drawer className={recordOrChunk !== 'Chunks' ? styles['drawer-inner-table'] : styles['drawer-inner-chunk']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleRecordCancel} placement="right" size='large' open={recordOpen} width={1000} title={`${drawerName} / ${recordOrChunk === 'Chunks' ? t('projectChunks') : t('projectRetrievalColumnRecords')}`}>
-                {recordOrChunk === 'Chunks' ? <ChunkPage collectionId={collectionRecordId} /> : <RecordPage collectionId={collectionRecordId} ></RecordPage>}
+                {recordOrChunk === 'Chunks' ? <ChunkPage collectionId={collectionRecordId} /> : <RecordPage fetChData={() => fetchData({ limit })} collectionId={collectionRecordId} ></RecordPage>}
             </Drawer>
         </div>)
 }

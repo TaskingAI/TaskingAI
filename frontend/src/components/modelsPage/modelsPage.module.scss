@@ -832,7 +832,25 @@
         display: inline-block;
     }
 }
+.popover-eidt {
+    cursor: pointer;
+    margin: 0;
+    padding: 10px;
+    border-radius: 8px;
 
+}
+.popover-eidt:hover,.popover-delete:hover {
+    background-color: var(--color-clear-button-hover);
+
+} 
+.popover-delete {
+    cursor: pointer;
+    margin: 0;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 4px;
+    color: var(--color-negative);
+}
 
 .editModal {
     :global {
