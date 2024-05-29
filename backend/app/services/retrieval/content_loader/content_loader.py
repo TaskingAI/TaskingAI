@@ -1,12 +1,13 @@
 import json
 import logging
 import os
-from typing import Optional, Tuple
+from typing import Optional
 from fastapi import HTTPException
 from tkhelper.error import raise_http_error, ErrorCode, raise_request_validation_error
 
-from app.models import RecordType
+from app.models import RecordType, UploadFilePurpose
 from app.config import CONFIG
+from app.database import boto3_client
 
 from .pdf import PdfFileContentLoader
 from .web import WebContentLoader
@@ -15,7 +16,7 @@ from .txt import TxtContentLoader
 from .html import HtmlFileContentLoader
 from .markdown import MarkdownFileContentLoader
 
-__all__ = ["load_content"]
+__all__ = ["load_db_content", "load_content_to_split"]
 
 logger = logging.getLogger(__name__)
 
@@ -28,16 +29,15 @@ __web_reader = WebContentLoader()
 
 _bucket_name = CONFIG.S3_BUCKET_NAME
 
-async def download_record_file(project_id: str, file_id: str) -> str:
-    from app.database import boto3_client
 
+async def download_record_file(project_id: str, file_id: str) -> str:
     """
     Download record file from minio
     :param project_id: the project id
     :param file_id: the file id
     :return: the local file path
     """
-    file_url = boto3_client.get_file_url(_bucket_name, "record_file", file_id, project_id)
+    file_url = boto3_client.get_file_url(_bucket_name, UploadFilePurpose.RECORD_FILE.value, file_id, project_id)
     file_name = file_url.split("/")[-1]
 
     file_dir = CONFIG.PATH_TO_VOLUME + "/tmp/record_file"
@@ -46,7 +46,7 @@ async def download_record_file(project_id: str, file_id: str) -> str:
     # download file
     await boto3_client.download_file_to_path(
         bucket_name=_bucket_name,
-        purpose="record_file",
+        purpose=UploadFilePurpose.RECORD_FILE.value,
         file_id=file_id,
         file_path=local_file_path,
         tenant_id=project_id,
@@ -67,13 +67,46 @@ def remove_record_file(local_file_path):
         logger.debug(f"Removed record file: {local_file_path}")
 
 
-async def load_content(
-    project_id: str,
+async def load_db_content(
     record_type: RecordType,
     content: Optional[str],
     file_id: Optional[str],
     url: Optional[str],
-) -> Tuple[str, str]:
+) -> str:
+    if record_type == RecordType.TEXT:
+        processed_content = content.strip() if content else None
+        if not processed_content:
+            raise_request_validation_error(f"The content is empty")
+        return processed_content
+
+    elif record_type == RecordType.FILE:
+        metadata = await boto3_client.get_file_metadata(
+            _bucket_name, UploadFilePurpose.RECORD_FILE.value, file_id, CONFIG.PROJECT_ID
+        )
+        db_content = json.dumps(
+            {
+                "file_id": file_id,
+                "file_name": metadata.get("original_file_name", ""),
+                "file_size": int(metadata.get("file_size", 0)),
+            }
+        )
+        return db_content
+
+    elif record_type == RecordType.WEB:
+        db_content = json.dumps(
+            {
+                "url": url,
+            }
+        )
+        return db_content
+
+
+async def load_content_to_split(
+    record_type: RecordType,
+    content: Optional[str],
+    file_id: Optional[str],
+    url: Optional[str],
+) -> str:
     """
     Load content from record
     :param record_type: the record type
@@ -81,23 +114,21 @@ async def load_content(
     :param file_id: the file id, it is required for file record
     :return: Tuple[the content string to be saved to db, the processed content string]
     """
-    from app.database import boto3_client
 
     if record_type == RecordType.TEXT:
         processed_content = content.strip() if content else None
         if not processed_content:
-            raise_request_validation_error("The content is empty")
-        return content, processed_content
+            raise_request_validation_error(f"The content is empty")
+        return processed_content
 
-    if record_type == RecordType.FILE:
+    elif record_type == RecordType.FILE:
         if not file_id:
             raise_request_validation_error("file_id is required for file record")
 
         local_file_path = None
-        metadata = await boto3_client.get_file_metadata(_bucket_name, "record_file", file_id, project_id)
 
         try:
-            local_file_path = await download_record_file(project_id, file_id)
+            local_file_path = await download_record_file(CONFIG.PROJECT_ID, file_id)
             ext = file_id.split("_")[0]
 
             processed_content = None
@@ -111,34 +142,31 @@ async def load_content(
                 processed_content = await __html_reader.read_content(local_file_path)
             elif ext == "md":
                 processed_content = await __markdown_reader.read_content(local_file_path)
-
-            if processed_content is None:
+            else:
                 raise_request_validation_error(f"Unsupported file type: {ext}")
 
-            if not processed_content.strip():
-                raise_request_validation_error("File content is empty")
+            if processed_content is None:
+                raise_request_validation_error(f"Failed to load content from file")
 
-            db_content = json.dumps(
-                {
-                    "file_id": file_id,
-                    "file_name": metadata.get("original_file_name", ""),
-                    "file_size": int(metadata.get("file_size", 0)),
-                }
-            )
+            processed_content = processed_content.strip()
+            if not processed_content:
+                raise_request_validation_error(f"File content is empty")
 
-            return db_content, processed_content
+            return processed_content
 
         except HTTPException as e:
             raise e
 
         except Exception as e:
             logger.error(f"Failed to load content from file {file_id}: {e}")
-            raise_http_error(ErrorCode.INVALID_REQUEST, "Failed to load content from file.")
+            raise_http_error(ErrorCode.INVALID_REQUEST, f"Failed to load content from file.")
 
         finally:
             if local_file_path:
                 # delete from minio
-                await boto3_client.delete_file(_bucket_name, "record_file", file_id, project_id)
+                await boto3_client.delete_file(
+                    _bucket_name, UploadFilePurpose.RECORD_FILE.value, file_id, CONFIG.PROJECT_ID
+                )
                 remove_record_file(local_file_path)
 
     elif record_type == RecordType.WEB:
@@ -150,15 +178,11 @@ async def load_content(
         elif url.startswith("http://"):
             raise_request_validation_error("HTTPS is required for web URL")
 
-        db_content = json.dumps(
-            {
-                "url": url,
-            }
-        )
         loaded_content = None
 
         try:
             loaded_content = await __web_reader.read_content(url)
+            loaded_content = loaded_content.strip()
             logger.debug(f"loaded_content: type=web, content={loaded_content}")
         except HTTPException as e:
             logger.error(f"Failed to load content from web {url}: HTTPException {e}")
@@ -167,4 +191,7 @@ async def load_content(
             logger.error(f"Failed to load content from web {url}: Exception {e}")
             raise_http_error(ErrorCode.INTERNAL_SERVER_ERROR, f"Failed to process web url {url}")
 
-    return db_content, loaded_content
+        if not loaded_content:
+            raise_http_error(ErrorCode.INVALID_REQUEST, f"The web content is empty")
+
+        return loaded_content
