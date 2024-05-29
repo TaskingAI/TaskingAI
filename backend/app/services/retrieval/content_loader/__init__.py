@@ -1,1 +1,1 @@
-from .content_loader import load_content
+from .content_loader import *

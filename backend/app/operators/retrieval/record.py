@@ -1,13 +1,12 @@
 from typing import Dict, Optional
 
-from app.config import CONFIG
 from tkhelper.models.operator.postgres_operator import PostgresModelOperator, ModelEntity
 from tkhelper.error import raise_http_error, ErrorCode, raise_request_validation_error
 
 from app.database import postgres_pool
 from app.models import Record, RecordType, TextSplitter, Collection
 from app.database_ops.retrieval import record as db_record
-from app.services.retrieval.content_loader import load_content
+from app.services.retrieval.content_loader import load_db_content, load_content_to_split
 
 from .collection import collection_ops
 from ..model import model_ops
@@ -28,8 +27,14 @@ async def process_content(
     from app.services.retrieval.embedding import embed_documents
 
     # split content into chunks
-    db_content, content_to_split = await load_content(
-        project_id=CONFIG.PROJECT_ID,
+    db_content = await load_db_content(
+        record_type=type,
+        content=content,
+        file_id=file_id,
+        url=url,
+    )
+
+    content_to_split = await load_content_to_split(
         record_type=type,
         content=content,
         file_id=file_id,
