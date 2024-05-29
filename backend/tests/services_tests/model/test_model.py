@@ -128,7 +128,7 @@ class TestModel:
     @pytest.mark.parametrize("create_model_data", create_model_list)
     async def test_create_model(self, create_model_data):
 
-        create_model_data.pop("host_type")
+        create_model_data.pop("host_type", None)
 
         res = await create_model(create_model_data)
         res_json = res.json()
@@ -240,7 +240,7 @@ class TestModel:
     @pytest.mark.parametrize("update_model_data", update_model_list)
     async def test_update_model(self, update_model_data):
 
-        update_model_data.pop("host_type")
+        update_model_data.pop("host_type", None)
 
         res = await update_model(CONFIG.chat_completion_model_id, update_model_data)
         res_json = res.json()

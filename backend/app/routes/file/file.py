@@ -4,9 +4,9 @@ from fastapi import File as FastAPIFile
 from app.config import CONFIG
 from app.database import boto3_client
 from app.models import UploadFilePurpose
-from app.routes.file.utils import file_purpose_dict
+from app.routes.file.utils import check_ext, check_file_size, file_purpose_dict
 from app.schemas.file import UploadFileResponse
-from tkhelper.error import ErrorCode, raise_http_error, raise_request_validation_error
+from tkhelper.error import ErrorCode, raise_http_error
 from tkhelper.utils import generate_random_id
 
 from ..utils import auth_info_required
@@ -24,20 +24,11 @@ async def api_upload_file(
     file: UploadFile = FastAPIFile(...),
     auth_info: dict = Depends(auth_info_required),
 ):
-    ext = file.filename.split(".")[-1].lower()
-
     purpose_info = file_purpose_dict.get(purpose)
+    ext = check_ext(purpose_info, file.filename.split(".")[-1].lower())
 
     file_size_limit_mb = 15
-
-    if file.size > file_size_limit_mb * 1024 * 1024:
-        raise_request_validation_error("File size is too large.")
-
-    if ext not in purpose_info.allow_file_formats:
-        raise_request_validation_error(
-            f"File format is not supported, supported formats: {', '.join(purpose_info.allow_file_formats.keys())}"
-        )
-    ext = purpose_info.allow_file_formats[ext]
+    check_file_size(file_size_limit_mb, file.size)
 
     random_id = generate_random_id(20)
     file_id = f"{ext}_{purpose_info.id_prefix}{random_id}"
