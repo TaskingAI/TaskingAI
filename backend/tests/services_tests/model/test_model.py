@@ -100,6 +100,12 @@ class TestModel:
             "name": "debug-text-embedding256",
             "credentials": {"DEBUG_API_KEY": "12345678"},
         },
+        {
+            "host_type": "provider",
+            "model_schema_id": "cohere/rerank-english-v2.0",
+            "name": "Rerank Model",
+            "credentials": {"COHERE_API_KEY": CONFIG.COHERE_API_KEY},
+        },
     ]
 
     update_model_list = [
@@ -218,8 +224,8 @@ class TestModel:
                     assert model.get("type") == "chat_completion"
             if index == 3:
 
-                assert len(res_json.get("data")) == 7
-                assert res_json.get("fetched_count") == 7
+                assert len(res_json.get("data")) == 8
+                assert res_json.get("fetched_count") == 8
 
             assert res_json.get("has_more") is False
 

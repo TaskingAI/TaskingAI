@@ -73,7 +73,7 @@ jobs:
           --name cache redis:7-alpine
 
       - name: Run Docker image - Inference
-        run: docker run --network taskingai-network -d --rm -e MODE=TEST --name inference taskingai/taskingai-inference:v0.2.11
+        run: docker run --network taskingai-network -d --rm -e MODE=TEST --name inference taskingai/taskingai-inference:v0.2.14
 
       - name: Run Docker image - Plugin
         run: docker run --network taskingai-network -d --rm -e MODE=TEST --name plugin taskingai/taskingai-plugin:v0.2.6
