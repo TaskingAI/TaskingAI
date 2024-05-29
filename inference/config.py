@@ -51,9 +51,8 @@ class Config:
     """Backend configuration"""
 
     def __init__(self):
-
         # version
-        self.VERSION = "v0.2.13"
+        self.VERSION = "v0.2.14"
 
         # mode
         self.MODE = load_str_env("MODE", required=True)
