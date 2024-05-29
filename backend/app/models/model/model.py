@@ -36,6 +36,9 @@ class Model(ModelEntity):
     def is_text_embedding(self):
         return self.type == "text_embedding"
 
+    def is_rerank(self):
+        return self.type == "rerank"
+
     def is_custom_host(self):
         return self.provider_id == "custom_host"
 
