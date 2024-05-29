@@ -144,6 +144,12 @@ class Config:
             "function_call": True,
         },
     }
+    RERANK_MODEL = {
+            "host_type": "provider",
+            "model_schema_id": "cohere/rerank-english-v2.0",
+            "name": "Rerank Model",
+            "credentials": {"COHERE_API_KEY": COHERE_API_KEY},
+        }
 
     def __init__(self):
 
@@ -151,6 +157,7 @@ class Config:
 
         if self.TEST_MODE == "TASKINGAI_WEB_TEST":
             self.BASE_URL = self.WEB_BASE_URL
+            self.rerank_model_id = None
         if self.TEST_MODE == "TASKINGAI_API_TEST":
             login_url = f"{self.WEB_BASE_URL}/admins/login"
             login_data = {"username": self.DEFAULT_ADMIN_USERNAME, "password": self.DEFAULT_ADMIN_PASSWORD}
@@ -177,6 +184,7 @@ class Config:
             self.custom_host_chat_completion_model_id = self.get_model(
                 model_url, self.CUSTOM_HOST_CHAT_COMPLETION_MODEL, token
             )
+            self.rerank_model_id = self.get_model(model_url, self.RERANK_MODEL, token)
             apikey_url = f"{self.WEB_BASE_URL}/apikeys"
             create_apikey_dict = {"name": "test_apikey"}
             self.Authentication = self.get_apikey(apikey_url, create_apikey_dict, token)
