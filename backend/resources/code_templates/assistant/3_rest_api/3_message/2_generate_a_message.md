@@ -20,7 +20,7 @@ curl -X POST $$SERVICE_HOST$$/v1/assistants/$$ASSISTANT_ID$$/chats/$$CHAT_ID$$/g
      -H "Content-Type: application/json" \
      -d '{
           "system_prompt_variables": {
-            "langauge": "English"
+            "language": "English"
           },
           "stream": false,
           "debug": false
@@ -35,7 +35,7 @@ curl -X POST $$SERVICE_HOST$$/v1/assistants/$$ASSISTANT_ID$$/chats/$$CHAT_ID$$/g
      -H "Content-Type: application/json" \
      -d '{
           "system_prompt_variables": {
-            "langauge": "English"
+            "language": "English"
           },
           "stream": True,
           "debug": false
