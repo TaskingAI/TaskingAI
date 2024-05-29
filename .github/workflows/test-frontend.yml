@@ -32,6 +32,7 @@ jobs:
           fi
 
       - name: Build docker image
+        working-directory: frontend
         run: |
           docker build -t taskingai/taskingai-app:$IMAGE_TAG .
           echo "Build success: taskingai/taskingai-app:$IMAGE_TAG"
