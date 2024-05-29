@@ -8,6 +8,7 @@ __all__ = ["ModelType", "ModelSchema"]
 class ModelType(str, Enum):
     CHAT_COMPLETION = "chat_completion"
     TEXT_EMBEDDING = "text_embedding"
+    RERANK = "rerank"
     WILDCARD = "wildcard"
 
 

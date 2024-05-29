@@ -100,7 +100,7 @@ async def verify_model_credentials(
     check_http_error(response)
     response_data = response.json()["data"]
     encrypted_credentials = response_data["encrypted_credentials"]
-    properties = response_data["properties"]
+    properties = response_data["properties"] or {}
     display_credentials = None
     if credentials:
         display_credentials = _build_display_credentials(
