@@ -62,14 +62,6 @@ function PlaygroundModel() {
             }, 0);
         }
     }, [contentList]);
-    // useEffect(()=> {
-    //     console.log(temperatureRedux)
-    //     setTemperatureCheckbox(temperatureRedux)
-    //     setMaxTokenCheckbox(maxTokenRedux)
-    //     setTopPCheckbox(topPValueRedux)
-    //     setTopKCheckbox(topKValueRedux)
-    //     setStopSequenceCheckbox(stopSequenceValueRedux)
-    // },[temperatureRedux,maxTokenRedux,topPValueRedux,topKValueRedux,stopSequenceValueRedux])
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -237,10 +229,8 @@ function PlaygroundModel() {
 
         let arr: any[] = []
         if (streamShow && streamSwitch) {
-            const spaceId = localStorage.getItem('spaceId')
-            const projectId = localStorage.getItem('projectId')
             const token = localStorage.getItem('token')
-            const project_base_url = `api/v1/${spaceId}/projects/${projectId}`
+            const project_base_url = `api/v1`
             let source;
             source = new SSE(`${origin}/${project_base_url}/inference/chat_completion`, {
                 headers: {
@@ -382,17 +372,6 @@ function PlaygroundModel() {
 
                             {streamShow && <div style={{ marginTop: '12px' }}><Checkbox value={streamSwitch} defaultChecked={true} onChange={(e) => handleStreamSwitch(e)} /><span style={{ marginLeft: '8px' }}>Stream</span></div>}
                         </div>
-
-                        {/* <ConfigProvider theme={{
-                            components: {
-                                Switch: {
-                                    colorPrimary: '#099250',
-                                    colorPrimaryHover: '#099250',
-                                }
-                            }
-                        }}>
-                            {streamShow && <Switch value={streamSwitch} onChange={handleStreamSwitch} />}
-                        </ConfigProvider> */}
                         <div style={{ margin: '24px' }}>
                             <div className={styles.configuration}>Configuration</div>
                             <ConfigProvider theme={{

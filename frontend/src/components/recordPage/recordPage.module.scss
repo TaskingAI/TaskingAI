@@ -43,7 +43,7 @@
             font-size: 14px;
             line-height: 20px;
             font-family: Inter;
-            color: #777;
+            color: var(--color-text-secondary);
             padding: 0px 24px 0 24px;
             text-align: left;
             display: inline-block;
@@ -89,7 +89,7 @@
         font-size: 14px;
         line-height: 20px;
         font-family: Inter;
-        color: #777777;
+        color: var(--color-text-secondary);
         text-align: left;
         display: inline-block;
         margin: 0 24px 10px 24px;
@@ -126,7 +126,7 @@
             box-sizing: border-box;
 
             .ant-upload-drag:not(.ant-upload-disabled):hover {
-                border: 1px dashed #d9d9d9 !important;
+                border: 1px dashed var(--color-divider) !important;
             }
 
             .ant-upload-drag-hover:not(.ant-upload-disabled) {
@@ -140,10 +140,17 @@
     }
 
 }
-
+.typeDisabled {
+    cursor: not-allowed !important;
+    background-color: var(--color-grap-hover);
+    opacity: 0.3;
+}
 .red-span {
     display: flex;
     align-items: center;
     margin-right: 4px;
     color: var(--color-negative);
+}
+.click-to-upload {
+    color: var(--color-positive)
 }
