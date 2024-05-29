@@ -1,4 +1,4 @@
-name: Build and Test
+name: Frontend - Build and Test
 
 on:
   pull_request:
@@ -30,7 +30,8 @@ jobs:
           if [[ -n "$TAG" ]]; then
             echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
           fi
-          
-      - name: Check spelling of repo
-        uses: crate-ci/typos@master
-      
+
+      - name: Build docker image
+        run: |
+          docker build -t taskingai/taskingai-app:$IMAGE_TAG .
+          echo "Build success: taskingai/taskingai-app:$IMAGE_TAG"
