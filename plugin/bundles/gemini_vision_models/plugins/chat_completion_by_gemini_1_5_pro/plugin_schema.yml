@@ -1,0 +1,26 @@
+description: i18n:chat_completion_by_gemini_1_5_pro_description
+id: chat_completion_by_gemini_1_5_pro
+input_schema:
+  image_url:
+    description: i18n:chat_completion_by_gemini_1_5_pro_input_image_url_description
+    name: i18n:chat_completion_by_gemini_1_5_pro_input_image_url_name
+    required: true
+    type: string
+  prompt:
+    description: i18n:chat_completion_by_gemini_1_5_pro_input_prompt_description
+    name: i18n:chat_completion_by_gemini_1_5_pro_input_prompt_name
+    required: true
+    type: string
+name: i18n:chat_completion_by_gemini_1_5_pro_name
+output_schema:
+  result:
+    description: i18n:chat_completion_by_gemini_1_5_pro_output_result_description
+    name: i18n:chat_completion_by_gemini_1_5_pro_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      image_url: https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png
+      prompt: Please describe the image
+  mode: schema

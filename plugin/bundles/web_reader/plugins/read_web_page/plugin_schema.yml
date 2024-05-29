@@ -1,0 +1,20 @@
+description: i18n:read_web_page_description
+id: read_web_page
+input_schema:
+  url:
+    description: i18n:read_web_page_input_url_description
+    name: i18n:read_web_page_input_url_name
+    required: true
+    type: string
+name: i18n:read_web_page_name
+output_schema:
+  result:
+    description: i18n:read_web_page_output_result_description
+    name: i18n:read_web_page_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      url: https://www.adaprox.io
+  mode: schema

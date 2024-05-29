@@ -1,0 +1,20 @@
+description: i18n:search_repositories_description
+id: search_repositories
+input_schema:
+  query:
+    description: i18n:search_repositories_input_query_description
+    name: i18n:search_repositories_input_query_name
+    required: true
+    type: string
+name: i18n:search_repositories_name
+output_schema:
+  result:
+    description: i18n:search_repositories_output_result_description
+    name: i18n:search_repositories_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      query: taskingai
+  mode: schema

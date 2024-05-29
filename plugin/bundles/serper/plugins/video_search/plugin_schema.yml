@@ -1,0 +1,20 @@
+description: i18n:video_search_description
+id: video_search
+input_schema:
+  query:
+    description: i18n:video_search_input_query_description
+    name: i18n:video_search_input_query_name
+    required: true
+    type: string
+name: i18n:video_search_name
+output_schema:
+  result:
+    description: i18n:video_search_output_result_description
+    name: i18n:video_search_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      query: TaskingAI
+  mode: schema

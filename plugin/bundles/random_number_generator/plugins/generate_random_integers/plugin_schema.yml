@@ -1,0 +1,32 @@
+description: i18n:generate_random_integers_description
+id: generate_random_integers
+input_schema:
+  max:
+    description: i18n:generate_random_integers_input_max_description
+    name: i18n:generate_random_integers_input_max_name
+    required: true
+    type: integer
+  min:
+    description: i18n:generate_random_integers_input_min_description
+    name: i18n:generate_random_integers_input_min_name
+    required: true
+    type: integer
+  number:
+    description: i18n:generate_random_integers_input_number_description
+    name: i18n:generate_random_integers_input_number_name
+    required: false
+    type: integer
+name: i18n:generate_random_integers_name
+output_schema:
+  result:
+    description: i18n:generate_random_integers_output_result_description
+    name: i18n:generate_random_integers_output_result_name
+    required: true
+    type: integer_array
+test:
+  cases:
+  - input:
+      max: 10
+      min: 1
+      number: 5
+  mode: schema

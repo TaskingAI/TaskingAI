@@ -1,0 +1,71 @@
+description: i18n:get_current_weather_description
+id: get_current_weather
+input_schema:
+  lat:
+    description: i18n:get_current_weather_input_lat_description
+    name: i18n:get_current_weather_input_lat_name
+    required: true
+    type: number
+  lon:
+    description: i18n:get_current_weather_input_lon_description
+    name: i18n:get_current_weather_input_lon_name
+    required: true
+    type: number
+name: i18n:get_current_weather_name
+output_schema:
+  feels_like_celsius:
+    description: i18n:get_current_weather_output_feels_like_celsius_description
+    name: i18n:get_current_weather_output_feels_like_celsius_name
+    required: true
+    type: number
+  feels_like_fahrenheit:
+    description: i18n:get_current_weather_output_feels_like_fahrenheit_description
+    name: i18n:get_current_weather_output_feels_like_fahrenheit_name
+    required: true
+    type: number
+  humidity:
+    description: i18n:get_current_weather_output_humidity_description
+    name: i18n:get_current_weather_output_humidity_name
+    required: true
+    type: number
+  pressure:
+    description: i18n:get_current_weather_output_pressure_description
+    name: i18n:get_current_weather_output_pressure_name
+    required: true
+    type: number
+  temperature_celsius:
+    description: i18n:get_current_weather_output_temperature_celsius_description
+    name: i18n:get_current_weather_output_temperature_celsius_name
+    required: true
+    type: number
+  temperature_fahrenheit:
+    description: i18n:get_current_weather_output_temperature_fahrenheit_description
+    name: i18n:get_current_weather_output_temperature_fahrenheit_name
+    required: true
+    type: number
+  timestamp:
+    description: i18n:get_current_weather_output_timestamp_description
+    name: i18n:get_current_weather_output_timestamp_name
+    required: true
+    type: integer
+  uvi:
+    description: i18n:get_current_weather_output_uvi_description
+    name: i18n:get_current_weather_output_uvi_name
+    required: true
+    type: number
+  visibility:
+    description: i18n:get_current_weather_output_visibility_description
+    name: i18n:get_current_weather_output_visibility_name
+    required: true
+    type: number
+  weather_condition:
+    description: i18n:get_current_weather_output_weather_condition_description
+    name: i18n:get_current_weather_output_weather_condition_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      lat: 30.25
+      lon: 120.166
+  mode: schema

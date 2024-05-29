@@ -1,0 +1,38 @@
+version: "v1.0"
+id: "divide"
+name: "i18n:divide_name"
+description: "i18n:divide_description"
+input_schema:
+  number_1:
+    type: number
+    name: "i18n:divide_number_1_name"
+    description: "i18n:divide_number_1_description"
+    required: true
+  number_2:
+    type: number
+    name: "i18n:divide_number_2_name"
+    description: "i18n:divide_number_2_description"
+    required: true
+
+output_schema:
+  result:
+    type: number
+    name: "i18n:divide_result_name"
+    description: "i18n:divide_result_description"
+    required: true
+
+test:
+  mode: precise
+  cases:
+    - input:
+        number_1: 1
+        number_2: 2
+      output:
+        result: 0.5
+    - input:
+        number_1: 0
+        number_2: -12.12
+      output:
+        result: 0
+
+

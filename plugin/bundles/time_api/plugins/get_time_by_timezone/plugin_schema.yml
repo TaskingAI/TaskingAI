@@ -1,0 +1,20 @@
+description: i18n:get_time_by_timezone_description
+id: get_time_by_timezone
+input_schema:
+  timezone:
+    description: i18n:get_time_by_timezone_input_timezone_description
+    name: i18n:get_time_by_timezone_input_timezone_name
+    required: true
+    type: string
+name: i18n:get_time_by_timezone_name
+output_schema:
+  result:
+    description: i18n:get_time_by_timezone_output_result_description
+    name: i18n:get_time_by_timezone_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      timezone: Europe/Amsterdam
+  mode: schema

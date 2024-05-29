@@ -1,0 +1,11 @@
+credentials_schema:
+  STABILITY_AI_API_KEY:
+    description: i18n:credential_stability_ai_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: stability_ai
+name: i18n:bundle_name
+provider: Stability AI

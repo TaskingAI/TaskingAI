@@ -1,0 +1,20 @@
+description: i18n:get_nutrition_info_description
+id: get_nutrition_info
+input_schema:
+  food_description:
+    description: i18n:get_nutrition_info_input_food_description_description
+    name: i18n:get_nutrition_info_input_food_description_name
+    required: true
+    type: string
+name: i18n:get_nutrition_info_name
+output_schema:
+  result:
+    description: i18n:get_nutrition_info_output_result_description
+    name: i18n:get_nutrition_info_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      food_description: 10oz onion and a tomato
+  mode: schema

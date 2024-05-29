@@ -1,0 +1,15 @@
+description: i18n:list_timezones_description
+id: list_timezones
+input_schema: {}
+name: i18n:list_timezones_name
+output_schema:
+  result:
+    description: i18n:list_timezones_output_result_description
+    name: i18n:list_timezones_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      timezone: this is not used
+  mode: schema

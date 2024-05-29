@@ -1,0 +1,20 @@
+description: i18n:generate_qr_code_description
+id: generate_qr_code
+input_schema:
+  text:
+    description: i18n:generate_qr_code_input_text_description
+    name: i18n:generate_qr_code_input_text_name
+    required: true
+    type: string
+name: i18n:generate_qr_code_name
+output_schema:
+  url:
+    description: i18n:generate_qr_code_output_url_description
+    name: i18n:generate_qr_code_output_url_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      text: TaskingAI
+  mode: schema

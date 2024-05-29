@@ -1,0 +1,36 @@
+description: i18n:make_histogram_description
+id: make_histogram
+input_schema:
+  title:
+    description: i18n:make_histogram_input_title_description
+    name: i18n:make_histogram_input_title_name
+    required: false
+    type: string
+  values:
+    description: i18n:make_histogram_input_values_description
+    name: i18n:make_histogram_input_values_name
+    required: true
+    type: string_array
+  x_title:
+    description: i18n:make_histogram_input_x_title_description
+    name: i18n:make_histogram_input_x_title_name
+    required: false
+    type: string
+name: i18n:make_histogram_name
+output_schema:
+  url:
+    description: i18n:make_histogram_output_url_description
+    name: i18n:make_histogram_output_url_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      values:
+      - '1'
+      - '2'
+      - '2'
+      - '4'
+      - '4'
+      - '6'
+  mode: schema

@@ -1,0 +1,26 @@
+description: i18n:get_tracking_info_description
+id: get_tracking_info
+input_schema:
+  slug:
+    description: i18n:get_tracking_info_input_slug_description
+    name: i18n:get_tracking_info_input_slug_name
+    required: true
+    type: string
+  tracking_number:
+    description: i18n:get_tracking_info_input_tracking_number_description
+    name: i18n:get_tracking_info_input_tracking_number_name
+    required: true
+    type: string
+name: i18n:get_tracking_info_name
+output_schema:
+  result:
+    description: i18n:get_tracking_info_output_result_description
+    name: i18n:get_tracking_info_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      slug: dhl
+      tracking_number: '7077779726'
+  mode: schema

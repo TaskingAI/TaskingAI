@@ -1,0 +1,5 @@
+description: i18n:bundle_description
+developer: TaskingAI
+id: jina_web_reader
+name: i18n:bundle_name
+provider: Jina AI

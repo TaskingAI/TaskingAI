@@ -1,0 +1,158 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches: ["master"]
+    paths:
+      - 'plugin/**'
+      - '!**.md'
+      - '!**.svg'
+      - '!**.jpg'
+      - '!**.png'
+
+env:
+  AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Check spelling of repo
+        uses: crate-ci/typos@master
+
+      - name: Get list of changed files
+        id: files
+        run: |
+          git fetch origin +${{ github.event.pull_request.base.sha }}:refs/remotes/origin/pr-base +${{ github.event.pull_request.head.sha }}:refs/remotes/origin/pr-head
+          git diff --name-only origin/pr-base origin/pr-head > /tmp/changed_files.txt
+          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
+          cat /tmp/changed_files.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "::set-output name=changed_files::$(cat /tmp/changed_files.txt)"
+
+      - name: Set short SHA for image tag
+        run: echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
+
+      - name: Check for git tag version
+        run: |
+          TAG=$(git describe --tags --exact-match 2> /dev/null || echo "")
+          if [[ -n "$TAG" ]]; then
+            echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install Dependencies
+        working-directory: plugin
+        run: pip install -r requirements.txt
+
+      - name: Build Docker image
+        working-directory: plugin
+        run: |
+          docker build -t taskingai/taskingai-plugin:$IMAGE_TAG .
+          echo "Build success: taskingai/taskingai-plugin:${IMAGE_TAG}"
+
+      - name: Run Local Docker image
+        working-directory: plugin
+        env:
+          PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
+        run: |
+          echo "$PLUGIN_BUNDLE_CREDENTIALS" > .env
+          echo "$TEST_S3_SECRET_R2" >> .env
+          docker run -d --name test_container --network=host \
+          --env-file .env \
+          -e PATH_TO_VOLUME=./test \
+          -e HOST_URL=http://localhost:8030 \
+          -e OBJECT_STORAGE_TYPE=local \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          taskingai/taskingai-plugin:$IMAGE_TAG
+          sleep 10 # Wait for service to start
+
+      - name: Run Tests
+        working-directory: plugin
+        run: |
+          bash ./test/run_test.sh /tmp/changed_files.txt
+
+      - name: Run Local Tests
+        working-directory: plugin
+        run: |
+          export PATH_TO_VOLUME=./test
+          export HOST_URL=http://localhost:8030
+          bash ./test/run_local_test.sh
+
+      - name: Stop Docker container
+        run: |
+          docker stop test_container
+          sleep 5
+
+      - name: Run S3 without public domain Docker image
+        working-directory: plugin
+        env:
+          PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          TEST_S3_SECRET_AWS: ${{ secrets.TEST_S3_SECRET_AWS }}
+        run: |
+          echo "$PLUGIN_BUNDLE_CREDENTIALS" > 1.env
+          echo "$TEST_S3_SECRET_AWS" >> 1.env
+          docker run -d --name aws_s3_docker --network=host \
+          --env-file 1.env \
+          -e PATH_TO_VOLUME="./test"  \
+          -e OBJECT_STORAGE_TYPE="s3" \
+          -e PROJECT_ID="taskingai"  \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          taskingai/taskingai-plugin:$IMAGE_TAG
+          sleep 5 # Wait for service to start
+
+      - name: Run S3 without public domain Tests
+        working-directory: plugin
+        run: |
+          echo "$TEST_S3_SECRET_AWS" > .env
+          bash ./test/run_s3_without_test.sh 
+      
+      - name: Stop Docker container
+        run: |
+          docker stop aws_s3_docker
+          sleep 5
+
+      - name: Run S3 with public domain Docker image
+        working-directory: plugin
+        env:
+          PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
+        run: |
+          echo "$PLUGIN_BUNDLE_CREDENTIALS" > 2.env
+          echo "$TEST_S3_SECRET_R2" >> 2.env
+          docker run -d --name r2_docker --network=host \
+          --env-file 2.env \
+          -e PATH_TO_VOLUME="./test"  \
+          -e OBJECT_STORAGE_TYPE="s3" \
+          -e PROJECT_ID="taskingai"  \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          taskingai/taskingai-plugin:$IMAGE_TAG
+          sleep 5 # Wait for service to start
+      
+      - name: Run S3 with public domain Tests
+        working-directory: plugin
+        run: |
+          echo "$TEST_S3_SECRET_R2" > .env
+          bash ./test/run_s3_with_test.sh 
+
+      - name: Stop Docker container
+        run: |
+          docker stop r2_docker
+          sleep 5

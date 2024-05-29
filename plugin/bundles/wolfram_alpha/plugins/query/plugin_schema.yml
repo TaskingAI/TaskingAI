@@ -1,0 +1,20 @@
+description: i18n:query_description
+id: query
+input_schema:
+  query:
+    description: i18n:query_input_query_description
+    name: i18n:query_input_query_name
+    required: true
+    type: string
+name: i18n:query_name
+output_schema:
+  result:
+    description: i18n:query_output_result_description
+    name: i18n:query_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      query: the top 5 highest mountain in the world
+  mode: schema

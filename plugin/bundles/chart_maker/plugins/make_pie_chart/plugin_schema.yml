@@ -1,0 +1,37 @@
+description: i18n:make_pie_chart_description
+id: make_pie_chart
+input_schema:
+  labels:
+    description: i18n:make_pie_chart_input_labels_description
+    name: i18n:make_pie_chart_input_labels_name
+    required: true
+    type: string_array
+  title:
+    description: i18n:make_pie_chart_input_title_description
+    name: i18n:make_pie_chart_input_title_name
+    required: false
+    type: string
+  values:
+    description: i18n:make_pie_chart_input_values_description
+    name: i18n:make_pie_chart_input_values_name
+    required: true
+    type: number_array
+name: i18n:make_pie_chart_name
+output_schema:
+  url:
+    description: i18n:make_pie_chart_output_url_description
+    name: i18n:make_pie_chart_output_url_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      labels:
+      - A
+      - B
+      - C
+      values:
+      - 10
+      - 20
+      - 30
+  mode: schema

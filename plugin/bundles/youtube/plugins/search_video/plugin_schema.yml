@@ -1,0 +1,20 @@
+description: i18n:search_video_description
+id: search_video
+input_schema:
+  query:
+    description: i18n:search_video_input_query_description
+    name: i18n:search_video_input_query_name
+    required: true
+    type: string
+name: i18n:search_video_name
+output_schema:
+  result:
+    description: i18n:search_video_output_result_description
+    name: i18n:search_video_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      query: the top 5 highest mountain in the world
+  mode: schema
