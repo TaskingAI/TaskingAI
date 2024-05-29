@@ -36,13 +36,20 @@ def _validate_file_id(file_id: str) -> Tuple[str, str]:
     return parts[0], parts[1]
 
 
-def _object_key(purpose: str, file_id: str, ext: str, tenant_id: str) -> str:
+def _object_key(
+    purpose: str,
+    file_id: str,
+    ext: str,
+    tenant_id: str,
+    original_name: Optional[str] = None,
+) -> str:
     type_path = "imgs/" if (ext in image_extensions) else "files/"
     purpose_path = f"{purpose[0]}/"
     tenant_path = f"{tenant_id}/"
     date_path = f"{get_base62_date()}/"
+    ext = f"/{original_name}" if original_name else f".{ext}"
 
-    return f"{type_path}{purpose_path}{tenant_path}{date_path}{file_id}.{ext}"
+    return f"{type_path}{purpose_path}{tenant_path}{date_path}{file_id}{ext}"
 
 
 class StorageClient:
@@ -148,7 +155,6 @@ class StorageClient:
 
         try:
             ext, _id = _validate_file_id(file_id)
-            key = _object_key(purpose, _id, ext, tenant_id)
             """ upload_fileobj params
             :param Fileobj: BinaryIO
             :param Bucket: str
@@ -159,6 +165,7 @@ class StorageClient:
             :param Processing: Callable[[bytes], bytes] = None
             """
             if self._is_s3:
+                key = _object_key(purpose, _id, ext, tenant_id)
                 async with self._session.client(
                     service_name=self._service_name, endpoint_url=self._endpoint_url
                 ) as client:
@@ -172,6 +179,7 @@ class StorageClient:
                     domain = self._bucket_public_domain or f"http://{self._endpoint_url}/{bucket_name}"
                     return f"{domain}/{key}"
             else:
+                key = _object_key(purpose, _id, ext, tenant_id, original_file_name)
                 await self.save_to_volume(file_bytes=content_bytes, path=key)
                 if return_url:
                     return f"{self._host_url}/{key}"
@@ -209,7 +217,8 @@ class StorageClient:
                         Key=key,
                     )
             else:
-                await self.check_volume_file_exists(path=key)
+                path = key.removesuffix(f".{ext}")
+                await self.check_volume_file_exists(path=path)
 
             return True
         except Exception as e:
@@ -248,7 +257,9 @@ class StorageClient:
                 if base64_name:
                     file_metadata["original_file_name"] = decode_base64_to_text(base64_name)
                 return file_metadata
-            return await self.get_volume_file_metadata(path=key)
+
+            path = key.removesuffix(f".{ext}")
+            return await self.get_volume_file_metadata(path=path)
         except Exception as e:
             logger.debug(f"get_file_metadata: failed to get file {file_id}, e={e}")
             raise_http_error(ErrorCode.OBJECT_NOT_FOUND, f"File {file_id} not found")
@@ -277,7 +288,8 @@ class StorageClient:
                 logger.debug(f"download_file_to_bytes: downloaded Minio file to bytes: {_id}.{ext}")
                 return data
 
-            return await self.read_volume_file(path=key)
+            path = key.removesuffix(f".{ext}")
+            return await self.read_volume_file(path=path)
         except Exception:
             logger.debug(f"download_file_to_bytes: failed to download file {file_id}")
             raise_http_error(ErrorCode.OBJECT_NOT_FOUND, "Failed to download file")
@@ -313,7 +325,8 @@ class StorageClient:
                     )
                     file_bytes = await response["Body"].read()
             else:
-                file_bytes = await self.read_volume_file(path=key)
+                path = key.removesuffix(f".{ext}")
+                file_bytes = await self.read_volume_file(path=path)
 
         except Exception:
             logger.debug(f"download_file_to_bytes: failed to download file {file_id}")
@@ -356,7 +369,12 @@ class StorageClient:
         if self._is_s3:
             domain = self._bucket_public_domain or f"http://{self._endpoint_url}/{bucket_name}"
             return f"{domain}/{key}"
-        return f"{self._host_url}/{key}"
+
+        path = key.removesuffix(f".{ext}")
+        file_path = f"{self._volume}/{path}"
+        files = os.listdir(file_path)
+        file: str = next(f for f in files if os.path.isfile(os.path.join(file_path, f)))
+        return f"{self._host_url}/{path}/{file}"
 
     async def delete_file(
         self,
@@ -394,6 +412,17 @@ class StorageClient:
             logger.error(f"delete_file: failed to delete file {file_id}, e={e}")
             return False
 
+    def get_volume_file_abs_path(self, path):
+        """
+        Get absolute path of file in volume
+        :param path: the path of the file
+        :return: the absolute path of the file
+        """
+        file_path = f"{self._volume}/{path}"
+        files = os.listdir(file_path)
+        file: str = next(f for f in files if os.path.isfile(os.path.join(file_path, f)))
+        return f"{self._volume}/{path}/{file}"
+
     async def save_to_volume(
         self,
         file_bytes: bytes,
@@ -424,8 +453,12 @@ class StorageClient:
         :param path: the path of the file
         """
         try:
-            async with aiofiles.open(f"{self._volume}/{path}", mode="r"):
+            file_path = f"{self._volume}/{path}"
+            files = os.listdir(file_path)
+            num_files = len([f for f in files if os.path.isfile(os.path.join(file_path, f))])
+            if num_files == 1:
                 return
+            raise FileNotFoundError
         except FileNotFoundError:
             raise FileNotFoundError(f"File {path} not found")
 
@@ -438,7 +471,8 @@ class StorageClient:
         :param path: the path of the file
         """
         if self._volume:
-            async with aiofiles.open(f"{self._volume}/{path}", mode="rb") as f:
+            file_abs_path = self.get_volume_file_abs_path(path)
+            async with aiofiles.open(file_abs_path, mode="rb") as f:
                 return await f.read()
         else:
             raise ValueError("PATH_TO_VOLUME is not set")
@@ -452,7 +486,7 @@ class StorageClient:
         :param path: the path of the file
         """
         if self._volume:
-            await aiofiles.os.remove(f"{self._volume}/{path}")
+            await aiofiles.os.removedirs(f"{self._volume}/{path}")
         else:
             raise ValueError("PATH_TO_VOLUME is not set")
 
@@ -465,6 +499,9 @@ class StorageClient:
         :param path: the path of the file
         """
         if self._volume:
-            file_size = await aiofiles.os.path.getsize(f"{self._volume}/{path}")
-            return {"file_size": file_size}
+            file_path = f"{self._volume}/{path}"
+            files = os.listdir(file_path)
+            file: str = next(f for f in files if os.path.isfile(os.path.join(file_path, f)))
+            file_size = await aiofiles.os.path.getsize(file_path)
+            return {"original_file_name": file, "file_size": file_size}
         raise ValueError("PATH_TO_VOLUME is not set")
