@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Dict
 
 from app.models.file import UploadFilePurpose, UploadImagePurpose
+from tkhelper.error import raise_request_validation_error
 
 
 class UploadFileModule(str, Enum):
@@ -49,6 +50,19 @@ image_purpose_dict = {
         "umIM",
         "assistant",
         "user_message_image_size_limit_mb",
-        {"jpg": "jpg", "jpeg": "jpeg", "png": "png"},
+        {"jpg": "jpg", "jpeg": "jpg", "png": "png"},
     ),
 }
+
+
+def check_file_size(limit_mb: int, size: int):
+    if size > limit_mb * 1024 * 1024:
+        raise_request_validation_error("File size is too large.")
+
+
+def check_ext(purpose_info: PurposeInfo, ext: str):
+    if ext not in purpose_info.allow_file_formats:
+        raise_request_validation_error(
+            f"File format is not supported, supported formats: {', '.join(purpose_info.allow_file_formats.keys())}"
+        )
+    return purpose_info.allow_file_formats[ext]

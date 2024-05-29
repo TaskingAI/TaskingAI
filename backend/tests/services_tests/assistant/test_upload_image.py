@@ -1,12 +1,13 @@
 import pytest
 import os
 
-from backend.tests.api_services.image.image import upload_image
+from backend.tests.api_services.image.image import upload_image, download_image
 
 
 @pytest.mark.api_test
 class TestUploadImage:
-    upload_image_list = []
+    max_image_data = None
+    normal_image_data = None
     base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     image_names = os.listdir(base_path + "/image")
     for image_name in image_names:
@@ -17,15 +18,26 @@ class TestUploadImage:
                 "purpose": "user_message_image",
             }
             upload_image_dict.update({"image": image_path})
-            upload_image_list.append(upload_image_dict)
+            if "5M" in image_name:
+                max_image_data = upload_image_dict
+            else:
+                normal_image_data = upload_image_dict
 
     @pytest.mark.run(order=201)
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("upload_image_data", upload_image_list[:2])
-    async def test_upload_image(self, upload_image_data):
-        res = await upload_image(upload_image_data)
+    async def test_upload_image(self):
+        res = await upload_image(self.normal_image_data)
         assert res.status_code == 200, res.json()
         assert res.json()["status"] == "success"
         url = res.json()["data"]["url"]
         assert url is not None
-        assert os.path.isfile(url)
+        get_res = await download_image(url)
+        assert get_res.status_code == 200, get_res.json()
+
+    @pytest.mark.run(order=201)
+    @pytest.mark.asyncio
+    async def test_upload_max_image(self):
+        res = await upload_image(self.max_image_data)
+        assert res.status_code == 400, res.json()
+        assert res.json()["status"] == "error"
+        assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"

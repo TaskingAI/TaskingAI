@@ -3,7 +3,7 @@ from typing import Dict
 from backend.tests.common.utils import ResponseWrapper, get_headers, get_file_name
 from backend.tests.common.config import CONFIG
 
-IMAGE_BASE_URL = f"{CONFIG.WEB_BASE_URL}/images"
+IMAGE_BASE_URL = f"{CONFIG.BASE_URL}/images"
 
 
 async def upload_image(payload: Dict):

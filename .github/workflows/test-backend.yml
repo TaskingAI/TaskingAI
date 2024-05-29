@@ -95,6 +95,7 @@ jobs:
           -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
           -e REDIS_URL="redis://cache:6379/0" \
           -e OBJECT_STORAGE_TYPE="local" \
+          -e HOST_URL=http://127.0.0.1:8080 \
           -e PATH_TO_VOLUME="./storage" \
           -e PROJECT_ID="taskingai" \
           -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
@@ -107,12 +108,15 @@ jobs:
         working-directory: backend
         env:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
         run: |
+          echo "$TEST_S3_SECRET_R2" > docker.env
           docker run --network taskingai-network --rm -d -p 8090:8000 \
+          --env-file docker.env \
           -e PURPOSE=API \
           -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
           -e REDIS_URL="redis://cache:6379/0" \
-          -e OBJECT_STORAGE_TYPE="local" \
+          -e OBJECT_STORAGE_TYPE="s3" \
           -e PATH_TO_VOLUME="./storage" \
           -e PROJECT_ID="taskingai" \
           -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
@@ -126,7 +130,7 @@ jobs:
           INFERENCE_PROVIDER_CREDENTIALS: ${{ secrets.INFERENCE_PROVIDER_CREDENTIALS }}
           PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
         run: |
-          echo "$INFERENCE_PROVIDER_CREDENTIALS" > .env
+          echo "$INFERENCE_PROVIDER_CREDENTIALS" >> .env
           echo "$PLUGIN_BUNDLE_CREDENTIALS" >> .env
           sleep 10
 
