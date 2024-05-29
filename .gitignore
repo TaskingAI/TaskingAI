@@ -171,4 +171,4 @@ backend/auto/
 docker/data/
 
 # vscode
-backend/.vscode/*
+**.vscode
