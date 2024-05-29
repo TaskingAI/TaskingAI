@@ -2,7 +2,7 @@ Fastapi==0.109.2
 uvicorn==0.23.2
 asyncio==3.4.3
 python_dateutil==2.8.2
-aiohttp==3.9.3
+aiohttp==3.9.4
 aiohttp_sse_client==0.2.1
 jsonschema==4.20.0
 PyJWT==2.8.0
