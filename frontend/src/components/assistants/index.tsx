@@ -208,10 +208,9 @@ function Assistant() {
         }
     };
     const handleJump = (value: assistantListType) => {
-        const projectId = localStorage.getItem('projectId')
         dispatch(setPlaygroundSelect('assistant'))
         localStorage.setItem('assistantName', value.name || 'Untitled Assistant')
-        navigate(`/projects/${projectId}/playground?assistant_id=${value.assistant_id}`)
+        navigate(`/project/playground?assistant_id=${value.assistant_id}`)
     }
     const handleModalClose = () => {
         setOriginalModelData((prev: any) => prev)

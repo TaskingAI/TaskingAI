@@ -240,7 +240,7 @@ function ApiKeys() {
         <div className={styles["api-keys"]}>
 
             <Spin spinning={tableLoading} wrapperClassName={styles.spinloading}>
-                <ModalTable ifSelect={false} loading={tableLoading} ifHideFooter={true} columns={columns} name="API Key" dataSource={apiKeysList} onChildEvent={handleChildEvent} onOpenDrawer={handleNewInstance} />
+                <ModalTable ifSelect={false} title='New API Key' loading={tableLoading} ifHideFooter={true} columns={columns} name="API Key" dataSource={apiKeysList} onChildEvent={handleChildEvent} onOpenDrawer={handleNewInstance} />
             </Spin>
             <Modal title={t('projectEditAPIKey')}
                 onCancel={handleModalCancel}
