@@ -78,6 +78,12 @@ jobs:
       - name: Run Docker image - Plugin
         run: docker run --network taskingai-network -d --rm -e MODE=TEST --name plugin taskingai/taskingai-plugin:v0.2.6
 
+      - name: Download nltk data
+        working-directory: backend
+        run: |
+          mkdir nltk_data
+          python -m nltk.downloader -d nltk_data punkt
+
       - name: Build Docker image
         working-directory: backend
         run: |
