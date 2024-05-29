@@ -1,0 +1,42 @@
+version: "v1.0"
+id: "subtract"
+name: "i18n:subtract_name"
+description: "i18n:subtract_description"
+input_schema:
+  number_1:
+    type: number
+    name: "i18n:subtract_number_1_name"
+    description: "i18n:subtract_number_1_description"
+    required: true
+  number_2:
+    type: number
+    name: "i18n:subtract_number_2_name"
+    description: "i18n:subtract_number_2_description"
+    required: true
+
+output_schema:
+  result:
+    type: number
+    name: "i18n:subtract_result_name"
+    description: "i18n:subtract_result_description"
+    required: true
+
+test:
+  mode: precise
+  cases:
+    - input:
+        number_1: 2
+        number_2: 1
+      output:
+        result: 1
+    - input:
+        number_1: 123
+        number_2: 400
+      output:
+        result: -277
+    - input:
+        number_1: 12.23
+        number_2: -5.876
+      output:
+        result: 18.106
+

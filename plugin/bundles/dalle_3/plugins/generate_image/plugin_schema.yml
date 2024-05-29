@@ -1,0 +1,20 @@
+description: i18n:generate_image_description
+id: generate_image
+input_schema:
+  prompt:
+    description: i18n:generate_image_input_prompt_description
+    name: i18n:generate_image_input_prompt_name
+    required: true
+    type: string
+name: i18n:generate_image_name
+output_schema:
+  url:
+    description: i18n:generate_image_output_url_description
+    name: i18n:generate_image_output_url_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      prompt: A cartoon cat playing Texas Hold'em with 6 mice.
+  mode: schema

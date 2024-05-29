@@ -1,0 +1,11 @@
+credentials_schema:
+  AFTERSHIP_API_KEY:
+    description: i18n:credential_aftership_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: aftership
+name: i18n:bundle_name
+provider: Aftership

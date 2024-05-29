@@ -1,0 +1,32 @@
+description: i18n:get_hourly_forecast_description
+id: get_hourly_forecast
+input_schema:
+  hours:
+    description: i18n:get_hourly_forecast_input_hours_description
+    name: i18n:get_hourly_forecast_input_hours_name
+    required: true
+    type: integer
+  lat:
+    description: i18n:get_hourly_forecast_input_lat_description
+    name: i18n:get_hourly_forecast_input_lat_name
+    required: true
+    type: number
+  lon:
+    description: i18n:get_hourly_forecast_input_lon_description
+    name: i18n:get_hourly_forecast_input_lon_name
+    required: true
+    type: number
+name: i18n:get_hourly_forecast_name
+output_schema:
+  result:
+    description: i18n:get_hourly_forecast_output_result_description
+    name: i18n:get_hourly_forecast_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      hours: 5
+      lat: 30.25
+      lon: 120.166
+  mode: schema

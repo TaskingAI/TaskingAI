@@ -1,0 +1,20 @@
+description: i18n:list_exchange_rates_description
+id: list_exchange_rates
+input_schema:
+  base_currency:
+    description: i18n:list_exchange_rates_input_base_currency_description
+    name: i18n:list_exchange_rates_input_base_currency_name
+    required: true
+    type: string
+name: i18n:list_exchange_rates_name
+output_schema:
+  rates:
+    description: i18n:list_exchange_rates_output_rates_description
+    name: i18n:list_exchange_rates_output_rates_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      base_currency: USD
+  mode: schema

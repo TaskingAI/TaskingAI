@@ -1,0 +1,20 @@
+description: i18n:get_recipe_description
+id: get_recipe
+input_schema:
+  query:
+    description: i18n:get_recipe_input_query_description
+    name: i18n:get_recipe_input_query_name
+    required: true
+    type: string
+name: i18n:get_recipe_name
+output_schema:
+  result:
+    description: i18n:get_recipe_output_result_description
+    name: i18n:get_recipe_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      query: beef dumpling
+  mode: schema

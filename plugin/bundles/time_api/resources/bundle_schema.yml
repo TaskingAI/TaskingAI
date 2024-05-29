@@ -1,0 +1,5 @@
+description: i18n:bundle_description
+developer: TaskingAI
+id: time_api
+name: i18n:bundle_name
+provider: TimeAPI

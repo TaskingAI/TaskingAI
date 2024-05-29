@@ -1,0 +1,38 @@
+description: i18n:get_historical_coin_data_description
+id: get_historical_coin_data
+input_schema:
+  interval:
+    description: i18n:get_historical_coin_data_input_interval_description
+    name: i18n:get_historical_coin_data_input_interval_name
+    required: false
+    type: string
+  symbol:
+    description: i18n:get_historical_coin_data_input_symbol_description
+    name: i18n:get_historical_coin_data_input_symbol_name
+    required: true
+    type: string
+  time_end:
+    description: i18n:get_historical_coin_data_input_time_end_description
+    name: i18n:get_historical_coin_data_input_time_end_name
+    required: false
+    type: string
+  time_start:
+    description: i18n:get_historical_coin_data_input_time_start_description
+    name: i18n:get_historical_coin_data_input_time_start_name
+    required: false
+    type: string
+name: i18n:get_historical_coin_data_name
+output_schema:
+  result:
+    description: i18n:get_historical_coin_data_output_result_description
+    name: i18n:get_historical_coin_data_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      interval: daily
+      symbol: ETH
+      time_end: '2024-02-10'
+      time_start: '2024-02-01'
+  mode: schema

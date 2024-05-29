@@ -1,0 +1,45 @@
+description: i18n:generate_image_description
+id: generate_image
+input_schema:
+  cfg_scale:
+    description: i18n:generate_image_input_cfg_scale_description
+    name: i18n:generate_image_input_cfg_scale_name
+    required: false
+    type: integer
+  engine_id:
+    description: i18n:generate_image_input_engine_id_description
+    name: i18n:generate_image_input_engine_id_name
+    required: false
+    type: string
+  height:
+    description: i18n:generate_image_input_height_description
+    name: i18n:generate_image_input_height_name
+    required: false
+    type: integer
+  prompt:
+    description: i18n:generate_image_input_prompt_description
+    name: i18n:generate_image_input_prompt_name
+    required: true
+    type: string
+  steps:
+    description: i18n:generate_image_input_steps_description
+    name: i18n:generate_image_input_steps_name
+    required: false
+    type: integer
+  width:
+    description: i18n:generate_image_input_width_description
+    name: i18n:generate_image_input_width_name
+    required: false
+    type: integer
+name: i18n:generate_image_name
+output_schema:
+  image_url:
+    description: i18n:generate_image_output_image_url_description
+    name: i18n:generate_image_output_image_url_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      prompt: A cartoon cat playing Texas Hold'em with 6 mice.
+  mode: schema

@@ -1,0 +1,26 @@
+description: i18n:chat_completion_by_gpt4_turbo_description
+id: chat_completion_by_gpt4_turbo
+input_schema:
+  image_url:
+    description: i18n:chat_completion_by_gpt4_turbo_input_image_url_description
+    name: i18n:chat_completion_by_gpt4_turbo_input_image_url_name
+    required: true
+    type: string
+  prompt:
+    description: i18n:chat_completion_by_gpt4_turbo_input_prompt_description
+    name: i18n:chat_completion_by_gpt4_turbo_input_prompt_name
+    required: true
+    type: string
+name: i18n:chat_completion_by_gpt4_turbo_name
+output_schema:
+  result:
+    description: i18n:chat_completion_by_gpt4_turbo_output_result_description
+    name: i18n:chat_completion_by_gpt4_turbo_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      image_url: https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png
+      prompt: Please describe the image
+  mode: schema

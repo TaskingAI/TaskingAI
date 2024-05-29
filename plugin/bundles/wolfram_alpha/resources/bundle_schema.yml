@@ -1,0 +1,11 @@
+credentials_schema:
+  WOLFRAM_ALPHA_APP_ID:
+    description: i18n:credential_wolfram_alpha_app_id_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: wolfram_alpha
+name: i18n:bundle_name
+provider: WolframAlpha

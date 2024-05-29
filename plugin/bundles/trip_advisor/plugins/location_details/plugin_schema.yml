@@ -1,0 +1,20 @@
+description: i18n:location_details_description
+id: location_details
+input_schema:
+  location_id:
+    description: i18n:location_details_input_location_id_description
+    name: i18n:location_details_input_location_id_name
+    required: true
+    type: string
+name: i18n:location_details_name
+output_schema:
+  result:
+    description: i18n:location_details_output_result_description
+    name: i18n:location_details_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      location_id: '8626719'
+  mode: schema

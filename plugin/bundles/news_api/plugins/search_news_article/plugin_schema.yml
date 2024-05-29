@@ -1,0 +1,36 @@
+description: i18n:search_news_article_description
+id: search_news_article
+input_schema:
+  count:
+    description: i18n:search_news_article_input_count_description
+    name: i18n:search_news_article_input_count_name
+    required: false
+    type: integer
+  from_date:
+    description: i18n:search_news_article_input_from_date_description
+    name: i18n:search_news_article_input_from_date_name
+    required: false
+    type: string
+  query:
+    description: i18n:search_news_article_input_query_description
+    name: i18n:search_news_article_input_query_name
+    required: true
+    type: string
+  to_date:
+    description: i18n:search_news_article_input_to_date_description
+    name: i18n:search_news_article_input_to_date_name
+    required: false
+    type: string
+name: i18n:search_news_article_name
+output_schema:
+  result:
+    description: i18n:search_news_article_output_result_description
+    name: i18n:search_news_article_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      count: 5
+      query: Tesla
+  mode: schema

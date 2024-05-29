@@ -1,0 +1,41 @@
+version: "v1.0"
+id: "add"
+name: "i18n:add_name"
+description: "i18n:add_description"
+input_schema:
+  number_1:
+    type: number
+    name: "i18n:add_number_1_name"
+    description: "i18n:add_number_1_description"
+    required: true
+  number_2:
+    type: number
+    name: "i18n:add_number_2_name"
+    description: "i18n:add_number_2_description"
+    required: true
+
+output_schema:
+  result:
+    type: number
+    name: "i18n:add_result_name"
+    description: "i18n:add_result_description"
+
+test:
+  mode: precise
+  cases:
+    - input:
+        number_1: 1
+        number_2: 2
+      output:
+        result: 3
+    - input:
+        number_1: -123
+        number_2: 200
+      output:
+        result: 77
+    - input:
+        number_1: 5.123
+        number_2: 5.876
+      output:
+        result: 10.999
+

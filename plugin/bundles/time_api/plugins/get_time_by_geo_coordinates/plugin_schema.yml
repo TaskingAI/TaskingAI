@@ -1,0 +1,26 @@
+description: i18n:get_time_by_geo_coordinates_description
+id: get_time_by_geo_coordinates
+input_schema:
+  latitude:
+    description: i18n:get_time_by_geo_coordinates_input_latitude_description
+    name: i18n:get_time_by_geo_coordinates_input_latitude_name
+    required: true
+    type: number
+  longitude:
+    description: i18n:get_time_by_geo_coordinates_input_longitude_description
+    name: i18n:get_time_by_geo_coordinates_input_longitude_name
+    required: true
+    type: number
+name: i18n:get_time_by_geo_coordinates_name
+output_schema:
+  result:
+    description: i18n:get_time_by_geo_coordinates_output_result_description
+    name: i18n:get_time_by_geo_coordinates_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      latitude: 38.9
+      longitude: -77.0
+  mode: schema

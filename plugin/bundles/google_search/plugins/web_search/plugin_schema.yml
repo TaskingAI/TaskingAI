@@ -1,0 +1,20 @@
+description: i18n:web_search_description
+id: web_search
+input_schema:
+  query:
+    description: i18n:web_search_input_query_description
+    name: i18n:web_search_input_query_name
+    required: true
+    type: string
+name: i18n:web_search_name
+output_schema:
+  results:
+    description: i18n:web_search_output_results_description
+    name: i18n:web_search_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      query: the highest mountain in the world
+  mode: schema

@@ -1,0 +1,5 @@
+description: i18n:bundle_description
+developer: TaskingAI
+id: random_number_generator
+name: i18n:bundle_name
+provider: TaskingAI

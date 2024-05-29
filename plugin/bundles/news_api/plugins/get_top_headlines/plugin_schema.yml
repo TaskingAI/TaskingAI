@@ -1,0 +1,31 @@
+description: i18n:get_top_headlines_description
+id: get_top_headlines
+input_schema:
+  category:
+    description: i18n:get_top_headlines_input_category_description
+    name: i18n:get_top_headlines_input_category_name
+    required: false
+    type: string
+  count:
+    description: i18n:get_top_headlines_input_count_description
+    name: i18n:get_top_headlines_input_count_name
+    required: false
+    type: integer
+  country:
+    description: i18n:get_top_headlines_input_country_description
+    name: i18n:get_top_headlines_input_country_name
+    required: true
+    type: string
+name: i18n:get_top_headlines_name
+output_schema:
+  result:
+    description: i18n:get_top_headlines_output_result_description
+    name: i18n:get_top_headlines_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      category: business
+      country: us
+  mode: schema

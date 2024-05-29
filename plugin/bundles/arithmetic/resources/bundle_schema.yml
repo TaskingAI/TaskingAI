@@ -1,0 +1,6 @@
+version: "v1.0"
+id: arithmetic
+provider: taskingai
+developer: TaskingAI
+name: "i18n:arithmetic_name"
+description: "i18n:arithmetic_description"

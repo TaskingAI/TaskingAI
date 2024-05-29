@@ -1,0 +1,38 @@
+description: i18n:get_historical_stock_data_description
+id: get_historical_stock_data
+input_schema:
+  end_date:
+    description: i18n:get_historical_stock_data_input_end_date_description
+    name: i18n:get_historical_stock_data_input_end_date_name
+    required: false
+    type: string
+  interval:
+    description: i18n:get_historical_stock_data_input_interval_description
+    name: i18n:get_historical_stock_data_input_interval_name
+    required: true
+    type: string
+  start_date:
+    description: i18n:get_historical_stock_data_input_start_date_description
+    name: i18n:get_historical_stock_data_input_start_date_name
+    required: true
+    type: string
+  symbol:
+    description: i18n:get_historical_stock_data_input_symbol_description
+    name: i18n:get_historical_stock_data_input_symbol_name
+    required: true
+    type: string
+name: i18n:get_historical_stock_data_name
+output_schema:
+  result:
+    description: i18n:get_historical_stock_data_output_result_description
+    name: i18n:get_historical_stock_data_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      end_date: '2021-01-31'
+      interval: daily
+      start_date: '2021-01-01'
+      symbol: AAPL
+  mode: schema

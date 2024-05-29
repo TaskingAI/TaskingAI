@@ -1,0 +1,20 @@
+description: i18n:read_url_description
+id: read_url
+input_schema:
+  url:
+    description: i18n:read_url_input_url_description
+    name: i18n:read_url_input_url_name
+    required: true
+    type: string
+name: i18n:read_url_name
+output_schema:
+  result:
+    description: i18n:read_url_output_result_description
+    name: i18n:read_url_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      url: https://tasking.ai
+  mode: schema

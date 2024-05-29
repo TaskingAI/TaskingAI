@@ -1,0 +1,20 @@
+description: i18n:get_commodity_price_description
+id: get_commodity_price
+input_schema:
+  name:
+    description: i18n:get_commodity_price_input_name_description
+    name: i18n:get_commodity_price_input_name_name
+    required: true
+    type: string
+name: i18n:get_commodity_price_name
+output_schema:
+  result:
+    description: i18n:get_commodity_price_output_result_description
+    name: i18n:get_commodity_price_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      name: Gold Futures
+  mode: schema

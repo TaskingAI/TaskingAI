@@ -1,0 +1,11 @@
+credentials_schema:
+  OPEN_WEATHER_API_KEY:
+    description: i18n:credential_open_weather_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: open_weather
+name: i18n:bundle_name
+provider: open_weather

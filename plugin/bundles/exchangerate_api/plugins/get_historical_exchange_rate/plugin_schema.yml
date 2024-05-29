@@ -1,0 +1,38 @@
+description: i18n:get_historical_exchange_rate_description
+id: get_historical_exchange_rate
+input_schema:
+  base_currency:
+    description: i18n:get_historical_exchange_rate_input_base_currency_description
+    name: i18n:get_historical_exchange_rate_input_base_currency_name
+    required: true
+    type: string
+  day:
+    description: i18n:get_historical_exchange_rate_input_day_description
+    name: i18n:get_historical_exchange_rate_input_day_name
+    required: true
+    type: integer
+  month:
+    description: i18n:get_historical_exchange_rate_input_month_description
+    name: i18n:get_historical_exchange_rate_input_month_name
+    required: true
+    type: integer
+  year:
+    description: i18n:get_historical_exchange_rate_input_year_description
+    name: i18n:get_historical_exchange_rate_input_year_name
+    required: true
+    type: integer
+name: i18n:get_historical_exchange_rate_name
+output_schema:
+  rates:
+    description: i18n:get_historical_exchange_rate_output_rates_description
+    name: i18n:get_historical_exchange_rate_output_rates_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      base_currency: USD
+      day: 1
+      month: 1
+      year: 2024
+  mode: schema

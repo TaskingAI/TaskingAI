@@ -1,0 +1,47 @@
+description: i18n:make_scatter_plot_description
+id: make_scatter_plot
+input_schema:
+  title:
+    description: i18n:make_scatter_plot_input_title_description
+    name: i18n:make_scatter_plot_input_title_name
+    required: false
+    type: string
+  x_title:
+    description: i18n:make_scatter_plot_input_x_title_description
+    name: i18n:make_scatter_plot_input_x_title_name
+    required: false
+    type: string
+  x_values:
+    description: i18n:make_scatter_plot_input_x_values_description
+    name: i18n:make_scatter_plot_input_x_values_name
+    required: true
+    type: number_array
+  y_title:
+    description: i18n:make_scatter_plot_input_y_title_description
+    name: i18n:make_scatter_plot_input_y_title_name
+    required: false
+    type: string
+  y_values:
+    description: i18n:make_scatter_plot_input_y_values_description
+    name: i18n:make_scatter_plot_input_y_values_name
+    required: true
+    type: number_array
+name: i18n:make_scatter_plot_name
+output_schema:
+  url:
+    description: i18n:make_scatter_plot_output_url_description
+    name: i18n:make_scatter_plot_output_url_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      x_values:
+      - 1
+      - 2
+      - 3
+      y_values:
+      - 10
+      - 20
+      - 30
+  mode: schema

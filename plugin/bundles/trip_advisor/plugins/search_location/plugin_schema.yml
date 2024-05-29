@@ -1,0 +1,26 @@
+description: i18n:search_location_description
+id: search_location
+input_schema:
+  category:
+    description: i18n:search_location_input_category_description
+    name: i18n:search_location_input_category_name
+    required: false
+    type: string
+  query:
+    description: i18n:search_location_input_query_description
+    name: i18n:search_location_input_query_name
+    required: true
+    type: string
+name: i18n:search_location_name
+output_schema:
+  result:
+    description: i18n:search_location_output_result_description
+    name: i18n:search_location_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      category: restaurants
+      query: Italian food in New York
+  mode: schema

@@ -1,0 +1,26 @@
+description: i18n:evaluate_description
+id: evaluate
+input_schema:
+  expression:
+    description: i18n:evaluate_input_expression_description
+    name: i18n:evaluate_input_expression_name
+    required: true
+    type: string
+name: i18n:evaluate_name
+output_schema:
+  result:
+    description: i18n:evaluate_output_result_description
+    name: i18n:evaluate_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      expression: 5**2+8/2-3
+    output:
+      result: '26.0000000000000'
+  - input:
+      expression: 5*a + 4*a
+    output:
+      result: '9.0*a'
+  mode: precise

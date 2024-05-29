@@ -1,0 +1,26 @@
+description: i18n:get_exchange_rate_description
+id: get_exchange_rate
+input_schema:
+  from_currency:
+    description: i18n:get_exchange_rate_input_from_currency_description
+    name: i18n:get_exchange_rate_input_from_currency_name
+    required: true
+    type: string
+  to_currency:
+    description: i18n:get_exchange_rate_input_to_currency_description
+    name: i18n:get_exchange_rate_input_to_currency_name
+    required: true
+    type: string
+name: i18n:get_exchange_rate_name
+output_schema:
+  rate:
+    description: i18n:get_exchange_rate_output_rate_description
+    name: i18n:get_exchange_rate_output_rate_name
+    required: true
+    type: number
+test:
+  cases:
+  - input:
+      from_currency: USD
+      to_currency: CNY
+  mode: schema

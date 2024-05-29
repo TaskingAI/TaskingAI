@@ -1,0 +1,11 @@
+credentials_schema:
+  GOOGLE_GEMINI_API_KEY:
+    description: i18n:credential_google_gemini_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: gemini_vision_models
+name: i18n:bundle_name
+provider: Google

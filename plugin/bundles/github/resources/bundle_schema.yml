@@ -1,0 +1,11 @@
+credentials_schema:
+  GITHUB_API_KEY:
+    description: i18n:credential_github_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: github
+name: i18n:bundle_name
+provider: GitHub
