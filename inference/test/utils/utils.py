@@ -28,6 +28,7 @@ white_list_models = [
     "togetherai/togethercomputer/CodeLlama-34b-Instruct",
     "togetherai/meta-llama/Llama-2-70b-chat-hf",
     "mistralai/mistral-small-latest",
+    "aws_bedrock/anthropic/claude-v2",
 ]
 
 load_dotenv()
