@@ -25,11 +25,8 @@ white_list_models = [
     "minimax/abab6-chat",
     "minimax/abab6.5-chat",
     "minimax/abab6.5s-chat",
-    "togetherai/mistralai/Mistral-7B-Instruct-v0.1",
-    "togetherai/togethercomputer/CodeLlama-34b-Instruct",
     "togetherai/meta-llama/Llama-2-70b-chat-hf",
     "mistralai/mistral-small-latest",
-    "aws_bedrock/anthropic/claude-v2",
 ]
 
 load_dotenv()
@@ -337,5 +334,4 @@ def check_order(lst, key):
 
 def is_unit_vector(vector, tolerance=1e-3):
     norm = math.sqrt(sum(x**2 for x in vector))
-
     return abs(norm - 1.0) <= tolerance

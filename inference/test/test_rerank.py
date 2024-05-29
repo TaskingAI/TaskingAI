@@ -1,16 +1,12 @@
 import allure
 import pytest
 from test.inference_service.inference import rerank
-from .utils.utils import (
-    generate_test_cases,
-    generate_wildcard_test_cases,
-)
+from .utils.utils import generate_test_cases, generate_wildcard_test_cases, check_order
 
 
 @allure.epic("inference_service")
 @allure.feature("rerank")
 class TestRerank:
-
     query = "Organic skincare products for sensitive skin"
     documents = [
         "Eco-friendly kitchenware for modern homes",
@@ -70,8 +66,10 @@ class TestRerank:
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
-        assert len(res_json.get("data").get("results")) == self.top_n
-        for result in res_json.get("data").get("results"):
+        results = res_json.get("data").get("results")
+        assert len(results) == self.top_n
+        assert check_order(results, "relevance_score")
+        for result in results:
             assert result.get("document").get("text") in self.documents
             assert result.get("relevance_score") >= 0.0
             if "jina-colbert-v1-en" in model_schema_id:
