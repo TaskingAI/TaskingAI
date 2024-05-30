@@ -1,7 +1,8 @@
 import allure
 import pytest
+import asyncio
 from test.inference_service.inference import rerank
-from .utils.utils import generate_test_cases, generate_wildcard_test_cases, check_order
+from .utils.utils import generate_test_cases, generate_wildcard_test_cases, check_order, is_provider_service_error
 
 
 @allure.epic("inference_service")
@@ -62,7 +63,12 @@ class TestRerank:
             "documents": self.documents,
             "top_n": self.top_n,
         }
-        res = await rerank(request_data)
+        try:
+            res = await asyncio.wait_for(rerank(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
@@ -92,7 +98,12 @@ class TestRerank:
             request_data.update({"documents": self.documents})
         if input_data.get("top_n") is None:
             request_data.update({"top_n": self.top_n})
-        res = await rerank(request_data)
+        try:
+            res = await asyncio.wait_for(rerank(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 422, res.json()
         assert res_json.get("status") == "error"

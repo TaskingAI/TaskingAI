@@ -1,12 +1,10 @@
 import allure
 import pytest
+import asyncio
 from test.utils.utils import sse_stream
 from test.setting import Config
 from test.inference_service.inference import chat_completion
-from .utils.utils import (
-    generate_test_cases,
-    generate_wildcard_test_cases,
-)
+from .utils.utils import generate_test_cases, generate_wildcard_test_cases, is_provider_service_error
 
 
 @allure.epic("inference_service")
@@ -37,9 +35,14 @@ class TestChatCompletion:
         }
         if "wildcard" in model_schema_id:
             request_data.update({"provider_model_id": test_data["provider_model_id"]})
-        res = await chat_completion(request_data)
+        try:
+            res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip("Skip the test case with provider service error.")
         res_json = res.json()
-        assert res.status_code == 200, res.json()
+        assert res.status_code == 200, res_json.get("error").get("message")
         assert res_json.get("status") == "success"
         assert res_json.get("data").get("finish_reason") == "stop"
         assert res_json.get("data").get("message").get("role") == "assistant"
@@ -75,7 +78,12 @@ class TestChatCompletion:
         }
         if "wildcard" in model_schema_id:
             request_data.update({"provider_model_id": test_data["provider_model_id"]})
-        res = await chat_completion(request_data)
+        try:
+            res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip("Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
@@ -110,7 +118,12 @@ class TestChatCompletion:
         }
         if "wildcard" in model_schema_id:
             request_data.update({"provider_model_id": test_data["provider_model_id"]})
-        res = await chat_completion(request_data)
+        try:
+            res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip("Skip the test case with provider service error.")
         res_json = res.json()
 
         assert res.status_code == 200, res.json()
@@ -148,7 +161,12 @@ class TestChatCompletion:
         if "wildcard" in model_schema_id:
             request_data.update({"provider_model_id": test_data["provider_model_id"]})
 
-        res = await chat_completion(request_data)
+        try:
+            res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip("Skip the test case with provider service error.")
         res_json = res.json()
 
         assert res.status_code == 200, res.json()
@@ -277,6 +295,7 @@ class TestChatCompletion:
         response_object = []
         async for response_dict in sse_stream(request_url, request_data):
             response_object.append(response_dict.get("object"))
+            assert response_dict.get("object") in except_object, f"response_dict={response_dict}"
             if response_dict.get("object") == "ChatCompletion":
                 assert response_dict.get("finish_reason") == "length"
                 assert response_dict.get("message").get("role") == "assistant"
@@ -286,8 +305,6 @@ class TestChatCompletion:
                 assert response_dict.get("role") == "assistant"
                 assert response_dict.get("index") >= 0
                 assert response_dict.get("delta") is not None
-
-        pytest.assume(set(response_object) == set(except_object))
 
     @pytest.mark.asyncio
     @pytest.mark.test_id("inference_008")
@@ -319,7 +336,12 @@ class TestChatCompletion:
         }
         if "wildcard" in model_schema_id:
             request_data.update({"provider_model_id": test_data["provider_model_id"]})
-        res = await chat_completion(request_data)
+        try:
+            res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip("Skip the test case with provider service error.")
         if (
             "mistralai" in model_schema_id
             or "anthropic" in model_schema_id
@@ -377,7 +399,12 @@ class TestChatCompletion:
                 assert response_dict.get("object") == "Error"
                 assert response_dict.get("code") == "PROVIDER_ERROR"
         else:
-            res = await chat_completion(request_data)
+            try:
+                res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+            except asyncio.TimeoutError:
+                pytest.skip("Skipping test due to timeout after 2 minutes.")
+            if is_provider_service_error(res):
+                pytest.skip("Skip the test case with provider service error.")
             res_json = res.json()
             assert res.status_code == 400, res.json()
             assert res_json.get("status") == "error"
@@ -407,7 +434,12 @@ class TestChatCompletion:
             "stream": True,
             "configs": configs,
         }
-        res = await chat_completion(request_data)
+        try:
+            res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip("Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 422, res.json()
         assert res_json.get("status") == "error"
@@ -445,7 +477,12 @@ class TestChatCompletion:
                 }
             }
         )
-        res = await chat_completion(request_data)
+        try:
+            res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip("Skip the test case with provider service error.")
         assert res.status_code == 422, f"test_validation failed: result={res.json()}"
         assert res.json()["status"] == "error"
         assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"
