@@ -11,6 +11,7 @@ import IconComponent from '@/commonComponent/iconComponent';
 import ChatCompletionIcon from '@/assets/img/chatCompletion.svg?react'
 import TextEmbeddingIcon from '@/assets/img/textEmbedding.svg?react'
 import WildCardIcon from '@/assets/img/wildcard.svg?react'
+import RerankIcon from '@/assets/img/rerankIcon.svg?react'
 function CommonComponents() {
     const { t } = useTranslation()
     const statusReverse = {
@@ -25,7 +26,8 @@ function CommonComponents() {
     const typeIcon = {
         chat_completion: <ChatCompletionIcon />,
         text_embedding: <TextEmbeddingIcon />,
-        wildcard: <WildCardIcon />
+        wildcard: <WildCardIcon />,
+        rerank: <RerankIcon/>
     }
     const reverseLabel: Record<string, any> = {
         naive: 'Naive',
@@ -88,7 +90,7 @@ function CommonComponents() {
                 <>
                     <div className='model-types'>
                         <div className={type}>
-                            {typeIcon[type as keyof typeof typeIcon]}{type}
+                            {typeIcon[type as keyof typeof typeIcon]}{type.split('_').join(' ')}
                         </div>
                     </div>
                 </>
@@ -183,7 +185,7 @@ function CommonComponents() {
             render: (text: string, record: any) =>
                 <div>
                     <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Collection'}</p>
-                    <p style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
+                    <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
                         <span style={{ fontSize: '12px', color: '#777' }}>{record.collection_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.collection_id)} />
 
                     </p>
@@ -227,21 +229,25 @@ function CommonComponents() {
             key: 'status',
             width: 180,
             render: (text: string) => (
-                <Tag color={statusReverse[text as keyof typeof statusReverse] || 'defaultColor'}
-                >
+                <div className={text}>
                     {text}
-                </Tag>
+                </div>
             )
         },
         {
             title: `${t('projectRetrievalColumnEmbeddingModelID')}`,
-            dataIndex: 'embedding_model_id',
+            dataIndex: 'model_name',
             key: 'ModelID',
             ellipsis: true,
-            width: 180,
-            render: (_: string) => (
-                <div>{_}</div>
-            )
+            width: 360,
+            render: (text: string, record: any) =>
+            <div>
+                <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Model'}</p>
+                <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
+                    <span style={{ fontSize: '12px', color: '#777' }}>{record.embedding_model_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.embedding_model_id)} />
+
+                </p>
+            </div>
         },
         {
             title: `${t('projectModelColumnCreatedAt')}`,
@@ -360,7 +366,7 @@ function CommonComponents() {
             render: (text: string, record: any) =>
                 <div>
                     <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Assistant'}</p>
-                    <p style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
+                    <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
                         <span style={{ fontSize: '12px', color: '#777' }}>{record.assistant_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.assistant_id)} />
 
                     </p>
@@ -380,14 +386,18 @@ function CommonComponents() {
         },
         {
             title: `${t('projectAssistantsColumnLangModel')}`,
-            dataIndex: 'model_id',
+            dataIndex: 'model_name',
             width: 360,
             key: 'model_id',
             ellipsis: true,
-            render: (_: string) => (
-                <div>{_}</div>
-
-            )
+            render: (text: string, record: any) =>
+                <div>
+                    <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Model'}</p>
+                    <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
+                        <span style={{ fontSize: '12px', color: '#777' }}>{record.model_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.model_id)} />
+                    </p>
+                </div>
+            ,
         },
         {
             title: `${t('projectAssistantsColumnPromptTemp')}`,

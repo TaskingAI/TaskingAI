@@ -508,33 +508,31 @@ body {
   gap: 12px;
   align-content: space-between;
   padding: 4px 24px 0px 0px;
-
-  // height: 67px;
   .chat_completion {
     background-color: #eff6ff;
     color: #5291f7;
-
     svg {
       path {
         stroke: #5291f7;
       }
-
-      // margin-right: 3px;
     }
-
   }
-
+ .rerank {
+    background-color:#10B9811A;
+    color: #10B981;
+    svg {
+      path {
+        stroke: #10B981;
+      }
+    }
+  }
   .text_embedding {
     background-color: #fff7ed;
     color: #f97316;
-
     svg {
       path {
         stroke: #f97316;
       }
-
-      // margin-right: 3px;
-
     }
   }
 
@@ -554,6 +552,7 @@ body {
 
   .chat_completion,
   .text_embedding,
+  .rerank,
   .wildcard {
     border-radius: 8px;
     padding: 0px 8px;
@@ -561,6 +560,7 @@ body {
     flex-wrap: wrap;
     // margin-right: 12px;
     align-items: center;
+    gap:3px;
     // width: 133px;
     font-size: 12px;
     height: 28px;

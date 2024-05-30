@@ -7,7 +7,7 @@ import StreamIcon from '@/assets/img/streamIcon.svg?react'
 import VisionInputIcon from '@/assets/img/visionInputIcon.svg?react'
 import styles from './modelIcon.module.scss'
 function ModelIcon(props: any) {
-    const { properties } = props;
+    const { properties, isShowText = true } = props;
     const IconReverse = {
         'embedding_size': <DimensionIcon />,
         'function_call': <FunctionCall />,
@@ -28,20 +28,21 @@ function ModelIcon(props: any) {
     }
     return (
         <div className={styles['model-icon']}>
-        { properties &&   Object.entries(properties).map(([key, value]) => {
+            {properties && Object.entries(properties).map(([key, value]) => {
                 if (value !== false) {
                     return (
-                        <div key={key} className={styles.modelIcon}>
+                       value ? <div key={key} className={`${styles.modelIcon} ${!isShowText && styles.modelIconText}`}>
                             {IconReverse[key as keyof typeof IconReverse]}
-                            <span className={styles.name}>{textReverse[key as keyof typeof textReverse]}</span>
-                            {typeof (value) !== 'boolean' && <span className={styles.value}>:&nbsp;&nbsp;{value as string}</span>}
-                        </div>
+                            {isShowText && <>
+                                <span className={styles.name}>{textReverse[key as keyof typeof textReverse]}</span>
+                                {(typeof (value) !== 'boolean' && value) && <span className={styles.value}>:&nbsp;&nbsp;{value as string}</span>}</>}
+                        </div> : null
                     );
                 } else {
                     return null;
                 }
             })}
         </div>
-      );
+    );
 }
 export default ModelIcon;

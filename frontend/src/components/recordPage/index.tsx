@@ -221,6 +221,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
                 const apiError = error as ApiErrorResponse
                 const message = apiError.response.data.error.message
                 setFileList([])
+                setFileId('')
                 toast.error(message)
             } finally {
                 setFileLoading(false);
@@ -264,13 +265,17 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
                         {fileLoading ? (
                             <LoadingAnim className='loading-icon' />
                         ) : (
-                            <CloseIcon onClick={() => setFileList([])} />
+                            <CloseIcon onClick={handleRemoveFileList} />
                         )}
                     </div>
                 </div>
             </div>
         );
     };
+    const handleRemoveFileList = ()=> {
+        setFileList([])
+        setFileId('')
+    }
     const fetchData = async (collectionId: string, params: Record<string, any>) => {
         setLoading(true);
         try {
@@ -298,6 +303,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
         setChunkSize(200)
         setChunkOverlap(10)
         setRecordId('')
+        setFileId('')
         setDrawerTitle(`${t('projectRecordCreateRecord')}`)
         setCreateOpenModal(true)
     }
@@ -330,7 +336,6 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
         setOpenDeleteModal(false)
     }
     const handleEdit = async (record: any) => {
-        console.log(record)
         if (record.type === 'file') {
             return
         }
@@ -368,6 +373,12 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
         }
         if (type === 'web' && !websiteValue) {
             return toast.error('URL is required')
+        }
+        if(type === 'file' && fileLoading && fileList.length !== 0) {
+            return toast.error('File is uploading')
+        }
+        if(type === 'file' && fileList.length === 0) {
+            return toast.error('File is required')
         }
         setConfirmLoading(true)
         try {

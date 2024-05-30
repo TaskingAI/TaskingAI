@@ -16,6 +16,8 @@ import WebSite from '../../assets/img/website.svg?react'
 import Docs from '../../assets/img/docs1.svg?react'
 import ApiKeysIcon from '../../assets/img/apikeysIcon.svg?react'
 import Dollar from '../../assets/img/dollar.svg?react'
+import RerankIcon from '@/assets/img/rerankIcon.svg?react'
+
 import { Modal, Button, Spin, Input, Form, Switch, ConfigProvider, InputNumber, Select } from 'antd'
 import { getAiModelsList, createModels, getAiModelsForm, getModelProviderList } from '../../axios/models'
 import { toast } from 'react-toastify'
@@ -51,11 +53,13 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         chat_completion: 'Chat Completion',
         text_embedding: 'Text Embedding',
         wildcard: 'Wildcard',
+        rerank:'Rerank'
     }
     const typeIcon = {
         chat_completion: <ChatCompletionIcon />,
         text_embedding: <TextEmbeddingIcon />,
-        wildcard: <WildCardIcon />
+        wildcard: <WildCardIcon />,
+        rerank: <RerankIcon />
     }
     const [form] = Form.useForm()
     const [selectedOneId, setSelectedOneId] = useState('')
@@ -340,7 +344,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                       
                                 <div className='model-types'>
                                     <div className={type}>
-                                        {typeIcon[type as keyof typeof typeIcon]} {type}
+                                        {typeIcon[type as keyof typeof typeIcon]} {type.split('_').join(' ')}
                                     </div>
                                 </div>
                             </div>
@@ -393,7 +397,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                 <div className='model-types' style={{ margin: '0 24px 24px 24px' }}>
                                     {modelTypesList.map((item, index) => (
                                         <div key={index} className={item}>
-                                            {typeIcon[item as keyof typeof typeIcon]} {item}
+                                            {typeIcon[item as keyof typeof typeIcon]}{item.split('_').join(' ')}
                                         </div>
                                     ))}
                                 </div>
