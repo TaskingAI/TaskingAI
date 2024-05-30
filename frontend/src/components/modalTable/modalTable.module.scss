@@ -239,8 +239,13 @@
                 display: none;
             }
         }
-
-
+        .able-click-button {
+            color: var( --color-text-primary);
+       
+        }
+       .able-click-button:hover {
+        background-color: var(--color-clear-button-hover);
+       }
         :global {
             .ant-pagination-options {
                 height: 40px !important;
