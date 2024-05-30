@@ -487,6 +487,12 @@ class StorageClient:
         :param path: the path of the file
         """
         if self._volume:
+            file_path = f"{self._volume}/{path}"
+            files = os.listdir(file_path)
+            for f in files:
+                file_abs_path = os.path.join(file_path, f)
+                await aiofiles.os.remove(file_abs_path)
+                logger.debug(f"Delete volume file: {file_abs_path}")
             await aiofiles.os.removedirs(f"{self._volume}/{path}")
         else:
             raise ValueError("PATH_TO_VOLUME is not set")

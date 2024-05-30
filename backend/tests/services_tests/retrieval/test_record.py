@@ -1,6 +1,7 @@
 import pytest
 import json
 import os
+import asyncio
 from backend.tests.api_services.retrieval.collection import create_collection, get_collection
 from backend.tests.api_services.retrieval.record import create_record, get_record, list_records, update_record, delete_record
 from backend.tests.api_services.retrieval.chunk import list_record_chunks, delete_chunk
@@ -16,6 +17,7 @@ class TestRecord(Retrieval):
                    'updated_timestamp', 'created_timestamp', 'status', "title"]
     record_keys = set(record_list)
     upload_file_list = []
+    none_file_list = []
     base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     filenames = os.listdir(base_path + "/file")
     for filename in filenames:
@@ -26,7 +28,11 @@ class TestRecord(Retrieval):
                 "purpose": "record_file",
             }
             upload_file_dict.update({"file": filepath})
-            upload_file_list.append(upload_file_dict)
+            upload_file_dict["file_name"] = filename
+            if "test" in filename:
+                upload_file_list.append(upload_file_dict)
+            elif "none" in filename:
+                none_file_list.append(upload_file_dict)
 
     @pytest.mark.run(order=141)
     @pytest.mark.asyncio
@@ -109,7 +115,7 @@ class TestRecord(Retrieval):
 
     @pytest.mark.run(order=141)
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("upload_file_data", upload_file_list[:2])
+    @pytest.mark.parametrize("upload_file_data", upload_file_list)
     async def test_create_record_with_file(self, upload_file_data):
 
         res = await upload_file(upload_file_data)
@@ -132,8 +138,10 @@ class TestRecord(Retrieval):
             if key in ["text_splitter"]:
                 continue
             elif key == "file_id":
-                assert file_id in res_json.get("data").get("content")
-                assert int(res_json.get("data").get("content").split('\"file_size\":')[-1].strip("}").strip()) > 0
+                content = json.loads(res_json.get("data").get("content"))
+                assert content.get("file_id") == file_id
+                assert content.get("file_name") == upload_file_data["file_name"]
+                assert content.get("file_size") > 0
             else:
                 assert res_json.get("data").get(key) == create_record_data[key]
         assert res_json.get("data").get("collection_id") == Retrieval.collection_id
@@ -153,10 +161,42 @@ class TestRecord(Retrieval):
             if key in ["text_splitter"]:
                 continue
             elif key == "file_id":
-                assert file_id in get_res_json.get("data").get("content")
-                assert int(res_json.get("data").get("content").split('\"file_size\":')[-1].strip("}").strip()) > 0
+                content = json.loads(res_json.get("data").get("content"))
+                assert content.get("file_id") == file_id
+                assert content.get("file_name") == upload_file_data["file_name"]
+                assert content.get("file_size") > 0
             else:
                 assert get_res_json.get("data").get(key) == create_record_data[key]
+        # test file is exist
+        await asyncio.sleep(1)
+        res = await create_record(Retrieval.collection_id, create_record_data)
+        res_json = res.json()
+        assert res.status_code == 404, res.json()
+        assert res_json.get("status") == "error"
+        assert res_json.get("error").get("code") == "OBJECT_NOT_FOUND"
+
+
+    @pytest.mark.run(order=141)
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("upload_file_data", none_file_list)
+    async def test_create_record_with_none_file(self, upload_file_data):
+
+        res = await upload_file(upload_file_data)
+        assert res.status_code == 200, res.json()
+        assert res.json()["status"] == "success"
+        file_id = res.json()["data"]["file_id"]
+        assert file_id is not None
+
+        create_record_data = {
+            "type": "file",
+            "file_id": file_id,
+            "text_splitter": {"type": "token", "chunk_size": 200, "chunk_overlap": 100}
+        }
+
+        res = await create_record(Retrieval.collection_id, create_record_data)
+        res_json = res.json()
+        assert res.status_code == 400, res.json()
+        assert res_json.get("status") == "error"
 
     @pytest.mark.run(order=141)
     @pytest.mark.asyncio
@@ -409,6 +449,28 @@ class TestRecord(Retrieval):
             else:
                 assert get_res_json.get("data").get(key) == update_record_data[key]
 
+    @pytest.mark.run(order=145)
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("upload_file_data", none_file_list)
+    async def test_update_record_with_none_file(self, upload_file_data):
+
+        res = await upload_file(upload_file_data)
+        assert res.status_code == 200, res.json()
+        assert res.json()["status"] == "success"
+        file_id = res.json()["data"]["file_id"]
+        assert file_id is not None
+
+        update_record_data = {
+            "type": "file",
+            "file_id": file_id,
+            "text_splitter": {"type": "token", "chunk_size": 200, "chunk_overlap": 100}
+        }
+
+        res = await update_record(Retrieval.collection_id, Retrieval.record_id, update_record_data)
+        res_json = res.json()
+        assert res.status_code == 400, res.json()
+        assert res_json.get("status") == "error"
+
     @pytest.mark.run(order=146)
     @pytest.mark.asyncio
     @pytest.mark.parametrize("upload_file_data", upload_file_list[2:3])
@@ -434,8 +496,10 @@ class TestRecord(Retrieval):
             if key in ["text_splitter"]:
                 continue
             elif key == "file_id":
-                assert file_id in res_json.get("data").get("content")
-                assert int(res_json.get("data").get("content").split('\"file_size\":')[-1].strip("}").strip()) > 0
+                content = json.loads(res_json.get("data").get("content"))
+                assert content.get("file_id") == file_id
+                assert content.get("file_name") == upload_file_data["file_name"]
+                assert content.get("file_size") > 0
             else:
                 assert res_json.get("data").get(key) == update_record_data[key]
         assert res_json.get("data").get("collection_id") == Retrieval.collection_id
@@ -455,10 +519,19 @@ class TestRecord(Retrieval):
             if key in ["text_splitter"]:
                 continue
             elif key == "file_id":
-                assert file_id in get_res_json.get("data").get("content")
-                assert int(res_json.get("data").get("content").split('\"file_size\":')[-1].strip("}").strip()) > 0
+                content = json.loads(res_json.get("data").get("content"))
+                assert content.get("file_id") == file_id
+                assert content.get("file_name") == upload_file_data["file_name"]
+                assert content.get("file_size") > 0
             else:
                 assert get_res_json.get("data").get(key) == update_record_data[key]
+        # test file is exist
+        await asyncio.sleep(1)
+        res = await create_record(Retrieval.collection_id, update_record_data)
+        res_json = res.json()
+        assert res.status_code == 404, res.json()
+        assert res_json.get("status") == "error"
+        assert res_json.get("error").get("code") == "OBJECT_NOT_FOUND"
 
         update_record_data = {
             "type": "web",
