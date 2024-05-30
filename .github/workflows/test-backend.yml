@@ -110,15 +110,15 @@ jobs:
           -e JWT_SECRET_KEY=$JWT_SECRET_KEY \
           taskingai/taskingai-server:$IMAGE_TAG
 
-      - name: Run Docker image - API
+      - name: Run R2 Docker image - API
         working-directory: backend
         env:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
         run: |
-          echo "$TEST_S3_SECRET_R2" > docker.env
-          docker run --network taskingai-network --rm -d -p 8090:8000 \
-          --env-file docker.env \
+          echo "$TEST_S3_SECRET_R2" > r2.env
+          docker run --name r2_docker  --network taskingai-network --rm -d -p 8090:8000 \
+          --env-file r2.env \
           -e PURPOSE=API \
           -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
           -e REDIS_URL="redis://cache:6379/0" \
@@ -144,6 +144,35 @@ jobs:
         working-directory: backend
         run: bash ./run_web_test.sh
 
-      - name: Run API Tests
+      - name: Run R2 API Tests
+        working-directory: backend
+        run: bash ./run_api_test.sh
+
+      - name: Stop Docker container
+        run: |
+          docker stop r2_docker
+          sleep 5
+
+      - name: Run AWS Docker image - API
+        working-directory: backend
+        env:
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          TEST_S3_SECRET_AWS: ${{ secrets.TEST_S3_SECRET_AWS }}
+        run: |
+          echo "$TEST_S3_SECRET_AWS" > aws.env
+          docker run --name aws_docker  --network taskingai-network --rm -d -p 8090:8000 \
+          --env-file aws.env \
+          -e PURPOSE=API \
+          -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
+          -e REDIS_URL="redis://cache:6379/0" \
+          -e OBJECT_STORAGE_TYPE="s3" \
+          -e PATH_TO_VOLUME="./storage" \
+          -e PROJECT_ID="taskingai" \
+          -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
+          -e TASKINGAI_PLUGIN_URL=http://plugin:8000 \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          taskingai/taskingai-server:$IMAGE_TAG
+
+      - name: Run AWS API Tests
         working-directory: backend
         run: bash ./run_api_test.sh
