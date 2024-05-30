@@ -1,0 +1,200 @@
+name: Inference - Build, Test, Deploy and Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  pull_request:
+    branches: ["master"]
+    paths:
+      - ".github/workflows/release-inference.yml"
+
+env:
+  WORK_DIR: inference
+  ECR_REPOSITORY: inference
+  EKS_NAMESPACE: ${{ secrets.EKS_NAMESPACE_TEST }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION_TEST }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORK_DIR }}
+    environment: test
+    steps:
+      ##################################################################
+      #                        1. check version                        #
+      ##################################################################
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Verify working directory
+        run: pwd
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.*
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Read Version
+        id: version
+        run: |
+          IMAGE_TAG=$(python -c "from config import CONFIG; import os; print(CONFIG.VERSION)")
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+
+      - name: Check if Docker image exists
+        id: docker_image_check
+        run: |
+          if docker pull taskingai/taskingai-${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} > /dev/null 2>&1; then
+            echo "Image exists"
+            echo "::set-output name=exists::true"
+          else
+            echo "Image does not exist"
+            echo "::set-output name=exists::false"
+          fi
+
+      - name: Skip remaining steps if image exists
+        if: steps.docker_image_check.outputs.exists == 'true'
+        run: |
+          echo "Docker image already exists. Skipping remaining steps."
+          exit 0
+
+      ##################################################################
+      #                 2. build docker image then test                #
+      ##################################################################
+
+      - name: Configure AWS credentials
+        if: steps.docker_image_check.outputs.exists != 'true'
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ secrets.AWS_REGION_TEST }}
+          mask-aws-account-id: "true"
+
+      - name: Login to Amazon ECR
+        if: steps.docker_image_check.outputs.exists != 'true'
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: "true"
+        env:
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION_TEST }}
+          AWS_REGION: ${{ secrets.AWS_REGION_TEST }}
+
+      - name: Get ECR registry
+        if: steps.docker_image_check.outputs.exists != 'true'
+        run: |
+          ECR_REGISTRY=$(aws ecr describe-repositories --region $AWS_REGION --query 'repositories[0].repositoryUri' --output text | cut -d'/' -f1)
+          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
+        env:
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION_TEST }}
+          AWS_REGION: ${{ secrets.AWS_REGION_TEST }}
+
+      - name: Build Docker image for test
+        if: steps.docker_image_check.outputs.exists != 'true'
+        env:
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }} .
+          echo "Build success: ${ECR_REGISTRY}/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}"
+
+      - name: Run Docker image
+        if: steps.docker_image_check.outputs.exists != 'true'
+        env:
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+          INFERENCE_PROVIDER_CREDENTIALS: ${{ secrets.INFERENCE_PROVIDER_CREDENTIALS }}
+          AES_SECRET_KEY: ${{ secrets.AES_SECRET_KEY }}
+        run: |
+          echo "$INFERENCE_PROVIDER_CREDENTIALS" > .env
+          echo "$AES_SECRET_KEY" >> .env
+          docker run -d --name test_container --network=host --env-file .env -e MODE=test -e PROVIDER_URL_BLACK_LIST="tasking.ai" $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}
+          sleep 5 # Wait for service to start
+
+      - name: Run Tests
+        if: steps.docker_image_check.outputs.exists != 'true'
+        run: |
+          export PROVIDER_URL_BLACK_LIST="tasking.ai"
+          bash ./test/run_full_test.sh
+
+      ##################################################################
+      #                       3. push to AWS cluster                   #
+      ##################################################################
+
+      - name: Push Docker image to Amazon ECR
+        if: success() && steps.docker_image_check.outputs.exists != 'true'
+        env:
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+        run: |
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}
+          echo "Image pushed: $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}"
+
+      - name: Image digest
+        if: steps.docker_image_check.outputs.exists != 'true'
+        run: |
+          echo "Latest image digest: ${{ steps.docker_build.outputs.digest }}"
+          echo "Tagged image digest: ${{ steps.docker_build.outputs.digest }}-${{ env.IMAGE_TAG }}"
+
+      - name: Update deployment image
+        if: steps.docker_image_check.outputs.exists != 'true'
+        uses: ianbelcher/eks-kubectl-action@master
+        with:
+          cluster_name: ${{ secrets.CLUSTER_NAME_TEST }}
+          args: -n ${{ env.EKS_NAMESPACE }} set image deployment/${{ env.ECR_REPOSITORY }} ${{ env.ECR_REPOSITORY }}=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: Verify deployment
+        if: steps.docker_image_check.outputs.exists != 'true'
+        uses: ianbelcher/eks-kubectl-action@master
+        with:
+          cluster_name: ${{ secrets.CLUSTER_NAME_TEST }}
+          args: -n ${{ env.EKS_NAMESPACE }} rollout status deployment/${{ env.ECR_REPOSITORY }} --timeout=60s
+
+      ##################################################################
+      #         4. build and push multi-platform docker images         #
+      ##################################################################
+
+      - name: Set up Docker Buildx
+        if: steps.docker_image_check.outputs.exists != 'true'
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        if: steps.docker_image_check.outputs.exists != 'true'
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Cache Docker layers
+        if: steps.docker_image_check.outputs.exists != 'true'
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build multi-platform images and push to docker
+        if: steps.docker_image_check.outputs.exists != 'true'
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ env.WORK_DIR }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: taskingai/taskingai-${{ env.ECR_REPOSITORY }}:latest,taskingai/taskingai-${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: Image digest
+        if: steps.docker_image_check.outputs.exists != 'true'
+        run: |
+          echo "Latest image digest: ${{ steps.docker_build.outputs.digest }}"
+          echo "Tagged image digest: ${{ steps.docker_build.outputs.digest }}-${{ env.IMAGE_TAG }}"

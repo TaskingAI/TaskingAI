@@ -1,14 +1,17 @@
-name: Backend - Build and Test
+name: Backend - Build, Test and Release
 
 on:
+  release:
+    types: [published]
+    tags: ["v*.*.*"]
   pull_request:
     branches: ["master"]
     paths:
-      - "backend/**"
-      - ".github/workflows/test-backend.yml"
-      - "!**.md"
+      - ".github/workflows/release-backend.yml"
 
 env:
+  WORK_DIR: backend
+  ECR_REPOSITORY: server
   AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
   JWT_SECRET_KEY: dbefe42f34473990a3fa903a6a3283acdc3a910beb1ae271a6463ffa5a926bfb
 
@@ -16,51 +19,65 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ${{ env.WORK_DIR }}
     environment: test
-
     steps:
+      ##################################################################
+      #                        1. check version                        #
+      ##################################################################
+
       - name: Checkout repo
         uses: actions/checkout@v3
-
-      - name: Set short SHA
-        run: echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
-
-      - name: Check for git tag version
-        id: get_tag
-        run: |
-          TAG=$(git describe --tags --exact-match 2> /dev/null || echo "")
-          if [[ -n "$TAG" ]]; then
-            echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
-          fi
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
 
-      - name: Checkout Test Repository
-        uses: actions/checkout@v2
-        with:
-          repository: TaskingAI/TaskingAI-Test
-          ref: master
-          path: TaskingAI-Test
-          token: ${{ secrets.TASKINGAI_TEST_GH_PAT }}
-
-      - name: Install Dependencies
-        working-directory: backend
+      - name: Install Python dependencies
         run: pip install -r requirements.txt
 
+      - name: Read Version
+        id: version
+        run: |
+          IMAGE_TAG=$(python -c "from app import __VERSION__; import os; print(__VERSION__)")
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+
+      - name: Check if Docker image exists
+        id: docker_image_check
+        run: |
+          if docker pull taskingai/taskingai-${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} > /dev/null 2>&1; then
+            echo "Image exists"
+            echo "::set-output name=exists::true"
+          else
+            echo "Image does not exist"
+            echo "::set-output name=exists::false"
+          fi
+
+      - name: Skip remaining steps if image exists
+        if: steps.docker_image_check.outputs.exists == 'true'
+        run: |
+          echo "Docker image already exists. Skipping remaining steps."
+          exit 0
+
+      ##################################################################
+      #                 2. build docker image then test                #
+      ##################################################################
+
       - name: Install Test Dependencies
-        working-directory: backend
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: pip install -r test_requirements.txt
 
       - name: Create Docker network
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: docker network create taskingai-network
 
       - name: Run Docker image - Postgres
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: |
           docker run --network taskingai-network -d --rm \
           -e POSTGRES_DB=taskingai \
@@ -69,14 +86,17 @@ jobs:
           --name db ankane/pgvector:v0.5.1
 
       - name: Run Docker image - Redis
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: |
           docker run --network taskingai-network -d --rm \
           --name cache redis:7-alpine
 
       - name: Run Docker image - Inference
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: docker run --network taskingai-network -d --rm -e MODE=TEST --name inference taskingai/taskingai-inference:v0.2.14
 
       - name: Run Docker image - Plugin
+        if: steps.docker_image_check.outputs.exists != 'true'
         env:
           TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
         run: |
@@ -86,24 +106,23 @@ jobs:
           -e MODE=TEST \
           -e PATH_TO_VOLUME="./test"  \
           -e OBJECT_STORAGE_TYPE="s3" \
-          -e PROJECT_ID="taskingai"  \
           --name plugin \
           taskingai/taskingai-plugin:v0.2.10
 
       - name: Download nltk data
-        working-directory: backend
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: |
           mkdir nltk_data
           python -m nltk.downloader -d nltk_data punkt
 
       - name: Build Docker image
-        working-directory: backend
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: |
-          docker build -t taskingai/taskingai-server:$IMAGE_TAG .
-          echo "Build success: taskingai/taskingai-server:${IMAGE_TAG}"
+          docker build -t taskingai/taskingai-server:${{ env.IMAGE_TAG }} .
+          echo "Build success: taskingai/taskingai-server:${{ env.IMAGE_TAG }}"
 
       - name: Run Docker image - WEB
-        working-directory: backend
+        if: steps.docker_image_check.outputs.exists != 'true'
         env:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           JWT_SECRET_KEY: ${{ env.JWT_SECRET_KEY }}
@@ -120,10 +139,10 @@ jobs:
           -e TASKINGAI_PLUGIN_URL=http://plugin:8000 \
           -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
           -e JWT_SECRET_KEY=$JWT_SECRET_KEY \
-          taskingai/taskingai-server:$IMAGE_TAG
+          taskingai/taskingai-server:${{ env.IMAGE_TAG }}
 
       - name: Run R2 Docker image - API
-        working-directory: backend
+        if: steps.docker_image_check.outputs.exists != 'true'
         env:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
@@ -140,11 +159,11 @@ jobs:
           -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
           -e TASKINGAI_PLUGIN_URL=http://plugin:8000 \
           -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
-          taskingai/taskingai-server:$IMAGE_TAG
+          taskingai/taskingai-server:${{ env.IMAGE_TAG }}
 
       - name: Wait for service to start
+        if: steps.docker_image_check.outputs.exists != 'true'
         env:
-          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
           INFERENCE_PROVIDER_CREDENTIALS: ${{ secrets.INFERENCE_PROVIDER_CREDENTIALS }}
           PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
         run: |
@@ -153,20 +172,21 @@ jobs:
           sleep 10
 
       - name: Run WEB Tests
-        working-directory: backend
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: bash ./run_web_test.sh
 
       - name: Run R2 API Tests
-        working-directory: backend
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: bash ./run_api_test.sh
 
       - name: Stop Docker container
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: |
           docker stop r2_docker
           sleep 5
 
       - name: Run AWS Docker image - API
-        working-directory: backend
+        if: steps.docker_image_check.outputs.exists != 'true'
         env:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           TEST_S3_SECRET_AWS: ${{ secrets.TEST_S3_SECRET_AWS }}
@@ -183,8 +203,50 @@ jobs:
           -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
           -e TASKINGAI_PLUGIN_URL=http://plugin:8000 \
           -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
-          taskingai/taskingai-server:$IMAGE_TAG
+          taskingai/taskingai-server:${{ env.IMAGE_TAG }}
 
       - name: Run AWS API Tests
-        working-directory: backend
+        if: steps.docker_image_check.outputs.exists != 'true'
         run: bash ./run_api_test.sh
+
+      ##################################################################
+      #         3. build and push multi-platform docker images         #
+      ##################################################################
+
+      - name: Set up Docker Buildx
+        if: steps.docker_image_check.outputs.exists != 'true'
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        if: steps.docker_image_check.outputs.exists != 'true'
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Cache Docker layers
+        if: steps.docker_image_check.outputs.exists != 'true'
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build multi-platform images and push to docker
+        if: steps.docker_image_check.outputs.exists != 'true'
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ env.WORK_DIR }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: taskingai/taskingai-${{ env.ECR_REPOSITORY }}:latest,taskingai/taskingai-${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: Image digest
+        if: steps.docker_image_check.outputs.exists != 'true'
+        run: |
+          echo "Latest image digest: ${{ steps.docker_build.outputs.digest }}"
+          echo "Tagged image digest: ${{ steps.docker_build.outputs.digest }}-${{ env.IMAGE_TAG }}"
