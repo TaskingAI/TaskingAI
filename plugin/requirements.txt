@@ -2,13 +2,13 @@ Fastapi==0.109.2
 uvicorn==0.23.2
 asyncio==3.4.3
 python_dateutil==2.8.2
-aiohttp==3.9.3
+aiohttp==3.9.4
 aiohttp_sse_client==0.2.1
 jsonschema==4.20.0
 PyJWT==2.8.0
 pycryptodome==3.20.0
 python-dotenv==1.0.0
-gunicorn==21.2.0
+gunicorn==22.0.0
 pytest==7.4.3
 PyYAML==6.0.1
 pytest-assume==2.4.3
