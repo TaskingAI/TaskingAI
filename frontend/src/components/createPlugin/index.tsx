@@ -123,6 +123,12 @@ function CreatePlugin(props: any) {
                 }
                 setConfirmLoading(true)
                 await createPlugin(params)
+                const params1 = {
+                    limit: 100,
+                    offset: 0,
+                    lang: 'en'
+                }
+                await getBundleList(params1)
                 handleConfirmRequest()
                 setOpenCreateModal3(false)
                 setOpenCreateModal2(false)
