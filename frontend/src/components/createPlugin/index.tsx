@@ -1,5 +1,5 @@
 import { Modal, Button, Spin, Form, Input } from 'antd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useImperativeHandle, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import styles from './createPlugin.module.scss';
@@ -10,7 +10,9 @@ import RightArrow from '../../assets/img/rightarrow.svg?react'
 import ToolsNew from '../../assets/img/tools.svg?react'
 import ApiErrorResponse from '@/constant/index'
 import { toast } from 'react-toastify';
-function CreatePlugin(props: any) {
+
+const CreatePlugin = forwardRef((props:any, ref) => {
+
     const { t } = useTranslation();
     const { open, handleCloseModal, handleConfirmRequest } = props
     const [openCreateModal2, setOpenCreateModal2] = useState(false);
@@ -39,6 +41,9 @@ function CreatePlugin(props: any) {
         }
         getBundleList(params1)
     }, [])
+    useImperativeHandle(ref, () => ({
+        getBundleList: getBundleList
+    }));
     const getBundleList = async (params: object) => {
         const res: any = await bundleList(params)
         const selectedItem: any = res.data.find((item: any) => item.registered === false) || []
@@ -83,6 +88,12 @@ function CreatePlugin(props: any) {
             try {
                 setNextLoading1(true)
                 await createPlugin(params)
+                const params1 = {
+                    limit: 100,
+                    offset: 0,
+                    lang: 'en'
+                }
+                await getBundleList(params1)
                 handleConfirmRequest()
                 handleCloseModal()
                 setOpenCreateModal3(false)
@@ -346,5 +357,5 @@ function CreatePlugin(props: any) {
             </div>
         </Modal>
     </>;
-}
+})
 export default CreatePlugin;
