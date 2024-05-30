@@ -5,6 +5,7 @@ on:
     branches: ["master"]
     paths:
       - 'plugin/**'
+      - '.github/workflows/test-plugin.yml'
       - '!**.md'
       - '!**.svg'
       - '!**.jpg'

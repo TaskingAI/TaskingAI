@@ -12,6 +12,7 @@ default_env_values = {
     "AES_ENCRYPTION_KEY": "b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0",
     "PATH_TO_VOLUME": "/data",
     "DEFAULT_LANG": "en",
+    "INCLUDE_FILE_CATEGORY_IN_STORAGE_PATH": 1,
 }
 
 
@@ -94,6 +95,7 @@ class Config:
         # file storage
         self.OBJECT_STORAGE_TYPE = load_str_env("OBJECT_STORAGE_TYPE", required=True)
         self.PATH_TO_VOLUME = load_str_env("PATH_TO_VOLUME", required=True)
+        self.INCLUDE_FILE_CATEGORY_IN_STORAGE_PATH = bool(load_int_env("INCLUDE_FILE_CATEGORY_IN_STORAGE_PATH", required=True))
 
         if self.OBJECT_STORAGE_TYPE == "s3":
             self.S3_ACCESS_KEY_ID = load_str_env("S3_ACCESS_KEY_ID", required=True)
