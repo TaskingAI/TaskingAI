@@ -2,14 +2,17 @@ name: Build, Test and Deploy
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
     paths:
-      - 'plugin/**'
-      - '!**.md'
-      - '!**.svg'
-      - '!**.jpg'
-      - '!**.png'
-
+      - "plugin/**"
+      - "!**.md"
+      - "!**.svg"
+      - "!**.jpg"
+      - "!**.png"
+  pull_request:
+    branches: ["master"]
+    paths:
+      - ".github/workflows/deploy-plugin.yml"
 env:
   ECR_REPOSITORY: plugin
   EKS_NAMESPACE: ${{ secrets.EKS_NAMESPACE_TEST }}
@@ -82,20 +85,101 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           echo "Build success: ${ECR_REGISTRY}/$ECR_REPOSITORY:${IMAGE_TAG}"
 
-      - name: Run Docker image
+      - name: Run Local Docker image
         working-directory: plugin
         env:
-          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
           PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
         run: |
           echo "$PLUGIN_BUNDLE_CREDENTIALS" > .env
-          docker run -d --name test_container --network=host --env-file .env -e PATH_TO_VOLUME=./test/ $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          sleep 5 # Wait for service to start
+          echo "$TEST_S3_SECRET_R2" >> .env
+          docker run -d --name test_container --network=host \
+          --env-file .env \
+          -e PATH_TO_VOLUME=./test \
+          -e HOST_URL=http://localhost:8030 \
+          -e OBJECT_STORAGE_TYPE=local \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          sleep 10 # Wait for service to start
 
       - name: Run Tests
         working-directory: plugin
         run: |
           bash ./test/run_full_test.sh
+
+      - name: Run Local Tests
+        working-directory: plugin
+        run: |
+          export PATH_TO_VOLUME=./test
+          export HOST_URL=http://localhost:8030
+          bash ./test/run_local_test.sh
+
+      - name: Stop Docker container
+        run: |
+          docker stop test_container
+          sleep 5
+
+      - name: Run S3 without public domain Docker image
+        working-directory: plugin
+        env:
+          PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          TEST_S3_SECRET_AWS: ${{ secrets.TEST_S3_SECRET_AWS }}
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+        run: |
+          echo "$PLUGIN_BUNDLE_CREDENTIALS" > 1.env
+          echo "$TEST_S3_SECRET_AWS" >> 1.env
+          docker run -d --name aws_s3_docker --network=host \
+          --env-file 1.env \
+          -e PATH_TO_VOLUME="./test"  \
+          -e OBJECT_STORAGE_TYPE="s3" \
+          -e PROJECT_ID="taskingai"  \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          sleep 5 # Wait for service to start
+
+      - name: Run S3 without public domain Tests
+        working-directory: plugin
+        run: |
+          echo "$TEST_S3_SECRET_AWS" > .env
+          bash ./test/run_s3_without_test.sh
+
+      - name: Stop Docker container
+        run: |
+          docker stop aws_s3_docker
+          sleep 5
+
+      - name: Run S3 with public domain Docker image
+        working-directory: plugin
+        env:
+          PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+        run: |
+          echo "$PLUGIN_BUNDLE_CREDENTIALS" > 2.env
+          echo "$TEST_S3_SECRET_R2" >> 2.env
+          docker run -d --name r2_docker --network=host \
+          --env-file 2.env \
+          -e PATH_TO_VOLUME="./test"  \
+          -e OBJECT_STORAGE_TYPE="s3" \
+          -e PROJECT_ID="taskingai"  \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          sleep 5 # Wait for service to start
+
+      - name: Run S3 with public domain Tests
+        working-directory: plugin
+        run: |
+          echo "$TEST_S3_SECRET_R2" > .env
+          bash ./test/run_s3_with_test.sh
+
+      - name: Stop Docker container
+        run: |
+          docker stop r2_docker
+          sleep 5
 
       - name: Push Docker image to Amazon ECR
         if: success()
