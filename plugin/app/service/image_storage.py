@@ -79,8 +79,8 @@ def delete_image(image_path: str):
 
 
 def generate_s3_path(project_id: str, file_format: str):
-
-    return f"imgs/p/{project_id}/{get_base62_date()}/pgIM{generate_random_id(8)}.{file_format}"
+    file_category = "imgs/p/" if CONFIG.INCLUDE_FILE_CATEGORY_IN_STORAGE_PATH else ""
+    return f"{file_category}{project_id}/{get_base62_date()}/pgIM{generate_random_id(8)}.{file_format}"
 
 
 async def upload_local_image_to_s3_then_delete(
