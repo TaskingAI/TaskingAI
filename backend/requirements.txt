@@ -17,6 +17,7 @@ tiktoken==0.5.2
 numpy==1.26.4
 aioboto3==12.4.0
 aiofiles==23.2.1
+pathvalidate==3.2.0
 
 # for record loader
 pypdf==4.1.0
