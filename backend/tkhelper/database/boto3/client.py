@@ -406,7 +406,8 @@ class StorageClient:
                         Key=key,
                     )
             else:
-                await self.delete_volume_file(path=key)
+                path = key.removesuffix(f".{ext}")
+                await self.delete_volume_file(path=path)
             return True
         except Exception as e:
             logger.error(f"delete_file: failed to delete file {file_id}, e={e}")
