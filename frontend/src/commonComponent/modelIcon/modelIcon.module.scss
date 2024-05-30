@@ -10,17 +10,24 @@
         align-items: center;
         margin-bottom: 4px;
         line-height: 12px;
-
+        svg path{
+            stroke: var(--color-text-secondary);
+        }
         .name {
-            color: #777;
+            color: var(--color-text-secondary);
             font-size: 10px;
             margin-left: 4px;
         }
 
         .value {
-            color: #777;
+            color: var(--color-text-secondary);
             font-size: 10px;
         
         }
+    }
+    .modelIconText {
+        margin-bottom: 0;
+        margin-right: 0px;
+
     }
 }

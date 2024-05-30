@@ -131,8 +131,8 @@ function ModelsPage() {
             fixed: 'right',
             render: (_: string, record: RecordType) => (
                 <Space size="middle">
-                    <div onClick={record.type === 'text_embedding' ? undefined : () => handleJump(record as RecordType)} className={`table-edit-icon ${record.type === 'text_embedding' && styles.typeDisabled} `}>
-                        <Tooltip placement='bottom' title={record.type !== 'text_embedding' && tooltipPlaygroundTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                    <div onClick={record.type !== 'chat_completion' ? undefined : () => handleJump(record as RecordType)} className={`table-edit-icon ${record.type !== 'chat_completion' && styles.typeDisabled} `}>
+                        <Tooltip placement='bottom' title={record.type === 'chat_completion' && tooltipPlaygroundTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
                             <JumpIcon />
                         </Tooltip>
                     </div>
