@@ -176,7 +176,7 @@ class StorageClient:
                         ExtraArgs={"Metadata": metadata or {}},
                     )
                 if return_url:
-                    domain = self._bucket_public_domain or f"http://{self._endpoint_url}/{bucket_name}"
+                    domain = self._bucket_public_domain or f"{self._endpoint_url}/{bucket_name}"
                     return f"{domain}/{key}"
             else:
                 key = _object_key(purpose, _id, ext, tenant_id, original_file_name)
@@ -367,7 +367,7 @@ class StorageClient:
         ext, _id = _validate_file_id(file_id)
         key = _object_key(purpose, _id, ext, tenant_id)
         if self._is_s3:
-            domain = self._bucket_public_domain or f"http://{self._endpoint_url}/{bucket_name}"
+            domain = self._bucket_public_domain or f"{self._endpoint_url}/{bucket_name}"
             return f"{domain}/{key}"
 
         path = key.removesuffix(f".{ext}")
