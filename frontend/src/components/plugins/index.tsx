@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchPluginData } from '../../Redux/actions';
 import CreatePlugin from '../createPlugin/index.tsx';
 import styles from './plugins.module.scss'
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import ClipboardJS from 'clipboard';
 import { toast } from 'react-toastify';
 import { deletePlugin, bundleList, getPluginList, editPlugin } from '@/axios/plugin.ts'
@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 
 function Plugins() {
     const { t } = useTranslation();
+    const createPluginRef = useRef<any>()
     const dispatch = useDispatch()
     const { pluginLists } = useSelector((state: any) => state.plugin);
     const { bundleTableColumn } = CommonComponents()
@@ -206,6 +207,13 @@ function Plugins() {
             await deletePlugin(bundleId)
             const limit1: number = limit || 20
             dispatch(fetchPluginData(limit1) as any);
+            if(createPluginRef.current) {
+                createPluginRef.current.getBundleList({
+                    limit: 100,
+                    offset: 0,
+                    lang: 'en'
+                })
+            }
             setUpdatePrevButton(true)
         } catch (error) {
             console.log(error)
@@ -378,7 +386,7 @@ function Plugins() {
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
                 <ModalTable loading={loading} title='New plugin' updatePrevButton={updatePrevButton} name='plugin' id='bundle_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
-            <CreatePlugin handleConfirmRequest={handleConfirmRequest} open={openCreateModal1} handleCloseModal={handleClosePluginModal}></CreatePlugin>
+            <CreatePlugin ref={createPluginRef} handleConfirmRequest={handleConfirmRequest} open={openCreateModal1} handleCloseModal={handleClosePluginModal}></CreatePlugin>
    
             <Drawer footer={null} width={1280} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleEditCancel} open={openEditDrawer} title={bundleName + ' / ' + t('projectPluginsTitle')} className={styles.openLookDrawer}>
                 <ComponentsData />
