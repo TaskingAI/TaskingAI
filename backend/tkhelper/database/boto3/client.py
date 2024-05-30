@@ -7,6 +7,7 @@ from typing import Dict, Optional, Tuple
 import aioboto3
 import aiofiles
 import aiofiles.os
+from pathvalidate import sanitize_filename
 
 from tkhelper.error import ErrorCode, raise_http_error
 from tkhelper.utils import decode_base64_to_text, encode_text_to_base64, get_base62_date
@@ -114,7 +115,7 @@ class StorageClient:
 
         async with aiofiles.open(file_path, "rb") as file:
             content_bytes = await file.read()
-            original_file_name = os.path.basename(file_path)
+            original_file_name = (sanitize_filename(os.path.basename(file_path))).replace(" ", "_")
             await self.upload_file_from_bytes(
                 bucket_name=bucket_name,
                 purpose=purpose,
@@ -149,6 +150,7 @@ class StorageClient:
         """
 
         metadata = metadata or {}
+        original_file_name = (sanitize_filename(original_file_name)).replace(" ", "_")
         metadata["base64_file_name"] = encode_text_to_base64(original_file_name, exclude_padding=True)
         metadata["file_size"] = str(len(content_bytes))
         metadata["tenant_id"] = tenant_id
