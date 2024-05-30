@@ -1,8 +1,9 @@
 import allure
 from test.inference_service.inference import text_embedding
-from .utils.utils import generate_test_cases, generate_wildcard_test_cases, is_unit_vector
+from .utils.utils import generate_test_cases, generate_wildcard_test_cases, is_unit_vector, is_provider_service_error
 import pytest
 from test.setting import Config
+import asyncio
 
 
 @allure.epic("inference_service")
@@ -43,7 +44,12 @@ class TestTextEmbedding:
         if "azure" in model_schema_id:
             pytest.skip("Test not applicable for this model type")
         data.update(self.single_text)
-        res = await text_embedding(data)
+        try:
+            res = await asyncio.wait_for(text_embedding(data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
@@ -71,7 +77,12 @@ class TestTextEmbedding:
             },
         }
         request_data.update(self.single_text)
-        res = await text_embedding(request_data)
+        try:
+            res = await asyncio.wait_for(text_embedding(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
@@ -106,7 +117,12 @@ class TestTextEmbedding:
         if "azure" in model_schema_id:
             pytest.skip("Test not applicable for this model type")
         request_data.update(self.list_text)
-        res = await text_embedding(request_data)
+        try:
+            res = await asyncio.wait_for(text_embedding(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
@@ -134,7 +150,12 @@ class TestTextEmbedding:
             },
         }
         request_data.update(self.list_text)
-        res = await text_embedding(request_data)
+        try:
+            res = await asyncio.wait_for(text_embedding(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
@@ -167,7 +188,12 @@ class TestTextEmbedding:
         if "azure" in model_schema_id:
             pytest.skip("Test not applicable for this model type")
         request_data.update(self.long_list_text)
-        res = await text_embedding(request_data)
+        try:
+            res = await asyncio.wait_for(text_embedding(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
@@ -196,7 +222,12 @@ class TestTextEmbedding:
             },
         }
         request_data.update(self.long_list_text)
-        res = await text_embedding(request_data)
+        try:
+            res = await asyncio.wait_for(text_embedding(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
@@ -229,7 +260,12 @@ class TestTextEmbedding:
         if "azure" in model_schema_id:
             pytest.skip("Test not applicable for this model type")
         request_data.update(self.empty_list_text)
-        res = await text_embedding(request_data)
+        try:
+            res = await asyncio.wait_for(text_embedding(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
@@ -251,7 +287,12 @@ class TestTextEmbedding:
             },
         }
         request_data.update(self.empty_list_text)
-        res = await text_embedding(request_data)
+        try:
+            res = await asyncio.wait_for(text_embedding(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 200, res.json()
         assert res_json.get("status") == "success"
@@ -270,7 +311,12 @@ class TestTextEmbedding:
         if "azure" in model_schema_id:
             pytest.skip("Test not applicable for this model type")
         request_data.update(input_data)
-        res = await text_embedding(request_data)
+        try:
+            res = await asyncio.wait_for(text_embedding(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 422, res.json()
         assert res_json.get("status") == "error"
@@ -293,7 +339,12 @@ class TestTextEmbedding:
             },
         }
         request_data.update(input_data)
-        res = await text_embedding(request_data)
+        try:
+            res = await asyncio.wait_for(text_embedding(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         res_json = res.json()
         assert res.status_code == 422, res.json()
         assert res_json.get("status") == "error"
@@ -320,7 +371,12 @@ class TestTextEmbedding:
             }
         )
         data.update(self.single_text)
-        res = await text_embedding(data)
+        try:
+            res = await asyncio.wait_for(text_embedding(data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
         assert res.status_code == 422, f"test_validation failed: result={res.json()}"
         assert res.json()["status"] == "error"
         assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"

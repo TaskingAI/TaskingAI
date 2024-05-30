@@ -17,6 +17,7 @@ white_list_providers = [
     "wenxin",
     "moonshot",
     "aws_bedrock",
+    "yi",
 ]
 white_list_models = [
     "google_gemini/gemini-pro-vision",
@@ -335,3 +336,10 @@ def check_order(lst, key):
 def is_unit_vector(vector, tolerance=1e-3):
     norm = math.sqrt(sum(x**2 for x in vector))
     return abs(norm - 1.0) <= tolerance
+
+
+def is_provider_service_error(response: ResponseWrapper) -> bool:
+    return (
+        response.status_code == 400
+        and response.json().get("error").get("message") == "Provider's service is unavailable"
+    )
