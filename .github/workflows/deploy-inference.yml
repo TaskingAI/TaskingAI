@@ -2,13 +2,17 @@ name: Build, Test and Deploy
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
     paths:
-      - 'inference/**'
-      - '!**.md'
-      - '!**.svg'
-      - '!**.jpg'
-      - '!**.png'
+      - "inference/**"
+      - "!**.md"
+      - "!**.svg"
+      - "!**.jpg"
+      - "!**.png"
+  pull_request:
+    branches: ["master"]
+    paths:
+      - ".github/workflows/deploy-inference.yml"
 
 env:
   ECR_REPOSITORY: inference
