@@ -11,7 +11,12 @@ const getRecordsList = async <T extends Record<string, string>>(collectionId: st
         str += `prefix_filter={"chunk_id":"${data.id_search}"}&`
         delete data.id_search
     }
-
+    if (data) {
+        Object.keys(data).forEach(key => {
+            str += `${key}=${data[key]}&`
+        })
+        str = str.substring(0, str.length - 1)
+    }
     return await request.get(`${project_base_url}/collections/${collectionId}/chunks?${str}`)
 }
 const createRecord = async (collectionId: string, params: object) => {

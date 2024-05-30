@@ -445,8 +445,8 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
                 </ConfigProvider>
                 {!ifHideFooter && (
                     <div className={`${styles.footer} ${ifSelect ? styles['footer-position'] : ''}`}>
-                        <Button className={styles['previous-button']} style={{ borderRight: 'none' }} onClick={handlePrevious} disabled={previousButtonDisabled}>Previous</Button>
-                        <Button className={styles['next-button-group']} onClick={handleNext} disabled={nextButtonDisabled}>Next</Button>
+                        <Button className={`${styles['previous-button']} ${!previousButtonDisabled && styles['able-click-button']}`} style={{ borderRight: 'none' }} onClick={handlePrevious} disabled={previousButtonDisabled}>Previous</Button>
+                        <Button className={`${styles['next-button-group']} ${!nextButtonDisabled && styles['able-click-button']}`} onClick={handleNext} disabled={nextButtonDisabled}>Next</Button>
                         <Pagination defaultPageSize={20} showQuickJumper={false} showSizeChanger={true} onChange={handleChangePageLimit} />
                     </div>
                 )}
