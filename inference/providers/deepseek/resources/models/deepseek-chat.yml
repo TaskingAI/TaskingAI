@@ -1,0 +1,26 @@
+model_schema_id: deepseek/deepseek-chat
+provider_model_id: deepseek-chat
+type: chat_completion
+name: "i18n:deepseek_chat_name"
+description: "i18n:deepseek_chat_description"
+default_endpoint_url: https://api.deepseek.com/chat/completions
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 32000
+  output_token_limit: 32000
+
+config_schemas:
+  - config_id: presence_penalty
+  - config_id: frequency_penalty
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 1
+  output_token: 2
+  unit: 1000000
+  currency: CNY
