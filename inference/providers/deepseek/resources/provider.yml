@@ -1,0 +1,21 @@
+provider_id: deepseek
+name: "i18n:deepseek_name"
+description: "i18n:deepseek_description"
+updated_timestamp: 1716545924
+
+credentials_schema:
+  type: object
+  properties:
+    DEEPSEEK_API_KEY:
+      type: string
+      description: "i18n:deepseek_api_key_description"
+      secret: true
+  required:
+    - DEEPSEEK_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/deepseek"
+  official_site_url: "https://www.deepseek.com/"
+  official_pricing_url: "https://platform.deepseek.com/api-docs/pricing/"
+  official_credentials_url: "https://platform.deepseek.com/api_keys"

@@ -1,0 +1,10 @@
+deepseek_name: "DeepSeek"
+deepseek_description: "The manufacturer of DeepSeek is DeepSeek AI, an independent research organization established by Magic Cube Quantitative Investment Company. DeepSeek AI is dedicated to exploring the nature of Artificial General Intelligence (AGI). DeepSeek AI's DeepSeek series of models have gained widespread attention in the open-source community, with the MIT license as its open-source protocol."
+
+deepseek_api_key_description: "Your DeepSeek API Key for authentication."
+
+deepseek_chat_name: "DeepSeek Chat"
+deepseek_chat_description: "Deepseek Chat demonstrated outstanding performance in multi-language understanding and generation benchmark tests, particularly in AlignBench, where it is the strongest among open-source models."
+
+deepseek_coder_name: "DeepSeek Coder"
+deepseek_coder_description: "DeepSeek Coder is an AI model focused on the programming field. It can understand coding languages and provide programming-related assistance."
