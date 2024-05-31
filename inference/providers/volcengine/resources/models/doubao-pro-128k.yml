@@ -1,0 +1,25 @@
+model_schema_id: volcengine/doubao-pro-128k
+provider_model_id: doubao-pro-128k
+type: chat_completion
+name: "i18n:doubao_pro_128k_name"
+description: "i18n:doubao_pro_128k_description"
+default_endpoint_url: https://ark.cn-beijing.volces.com/api/v3/chat/completions
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 131072
+  output_token_limit: 131072
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+  - config_id: frequency_penalty
+
+pricing:
+  input_token: 0.0050
+  output_token: 0.0090
+  unit: 1000
+  currency: CNY
