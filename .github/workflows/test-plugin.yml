@@ -1,15 +1,15 @@
 name: Build and Test
 
 on:
-  pull_request:
+  pull_request_target:
     branches: ["master"]
     paths:
-      - 'plugin/**'
-      - '.github/workflows/test-plugin.yml'
-      - '!**.md'
-      - '!**.svg'
-      - '!**.jpg'
-      - '!**.png'
+      - "plugin/**"
+      - ".github/workflows/test-plugin.yml"
+      - "!**.md"
+      - "!**.svg"
+      - "!**.jpg"
+      - "!**.png"
 
 env:
   AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
@@ -122,8 +122,8 @@ jobs:
         working-directory: plugin
         run: |
           echo "$TEST_S3_SECRET_AWS" > .env
-          bash ./test/run_s3_without_test.sh 
-      
+          bash ./test/run_s3_without_test.sh
+
       - name: Stop Docker container
         run: |
           docker stop aws_s3_docker
@@ -146,12 +146,12 @@ jobs:
           -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
           taskingai/taskingai-plugin:$IMAGE_TAG
           sleep 5 # Wait for service to start
-      
+
       - name: Run S3 with public domain Tests
         working-directory: plugin
         run: |
           echo "$TEST_S3_SECRET_R2" > .env
-          bash ./test/run_s3_with_test.sh 
+          bash ./test/run_s3_with_test.sh
 
       - name: Stop Docker container
         run: |
