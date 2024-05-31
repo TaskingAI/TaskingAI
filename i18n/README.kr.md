@@ -1,26 +1,28 @@
 ﻿<p>
-<img src="static/img/logo.png" alt="https://www.tasking.ai">
+<a href="https://www.tasking.ai"><img src="../static/img/logo.png" alt="https://www.tasking.ai"></a>
 </p>
 
 # TaskingAI
 
-[![Docs](https://img.shields.io/badge/docs-latest-brightgreen)](https://docs.tasking.ai/docs/guide/getting_started/overview/)
-[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/taskingai/taskingai-server?label=docker)](https://hub.docker.com/u/taskingai)
-[![GitHub License](https://img.shields.io/github/license/taskingai/taskingai)](https://github.com/TaskingAI/TaskingAI/blob/master/LICENSE)
-[![PyPI version](https://img.shields.io/pypi/v/taskingai?color=blue)](https://pypi.org/project/taskingai)
-[![X (formerly Twitter) URL](https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FTaskingAI)](https://twitter.com/TaskingAI)
-[![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCxUnOM-ZbZKmyR_Q5vAUSTA)](https://www.youtube.com/@TaskingAI)
+<p align="center">
+  <a href="https://docs.tasking.ai"><img alt="Docs" src="https://img.shields.io/badge/docs-latest-brightgreen"></a>
+  <a href="https://hub.docker.com/u/taskingai"><img alt="Docker Image Version (latest semver)" src="https://img.shields.io/docker/v/taskingai/taskingai-server?label=docker"></a>
+  <a href="https://github.com/TaskingAI/TaskingAI/blob/master/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/taskingai/taskingai"></a>
+  <a href="https://pypi.org/project/taskingai"><img alt="PyPI version" src="https://img.shields.io/pypi/v/taskingai?color=blue"></a>
+  <a href="https://twitter.com/TaskingAI"><img alt="X (formerly Twitter) URL" src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FTaskingAI"></a>
+  <a href="https://www.youtube.com/@TaskingAI"><img alt="YouTube Channel Subscribers" src="https://img.shields.io/youtube/channel/subscribers/UCxUnOM-ZbZKmyR_Q5vAUSTA"></a>
+</p>
 
 <p align="center">
-  <a href="../README.md"><img alt="Readme (English)" src="https://img.shields.io/badge/English-827B83"></a>
-  <a href="./README.de.md"><img alt="Readme (Deutsch)" src="https://img.shields.io/badge/Deutsch-827B83"></a>
-  <a href="./README.fr.md"><img alt="Readme (Français)" src="https://img.shields.io/badge/Français-827B83"></a>
-  <a href="./README.es.md"><img alt="Readme (Español)" src="https://img.shields.io/badge/Español-827B83"></a>
-  <a href="./README.pt.md"><img alt="Readme (Português)" src="https://img.shields.io/badge/Português-827B83"></a>
-  <a href="./README.zh-cn.md"><img alt="Readme (简体中文)" src="https://img.shields.io/badge/简体中文-827B83"></a>
-  <a href="./README.zh-tw.md"><img alt="Readme (繁體中文)" src="https://img.shields.io/badge/繁體中文-827B83"></a>
-  <a href="./README.jp.md"><img alt="Readme (日本語)" src="https://img.shields.io/badge/日本語-827B83"></a>
-  <a href="./README.kr.md"><img alt="Readme (한국어)" src="https://img.shields.io/badge/한국어-827B83"></a>
+  <a href="../README.md"><img alt="Readme (English)" src="https://img.shields.io/badge/English-2EA26A"></a>
+  <a href="./README.de.md"><img alt="Readme (Deutsch)" src="https://img.shields.io/badge/Deutsch-2EA26A"></a>
+  <a href="./README.fr.md"><img alt="Readme (Français)" src="https://img.shields.io/badge/Français-2EA26A"></a>
+  <a href="./README.es.md"><img alt="Readme (Español)" src="https://img.shields.io/badge/Español-2EA26A"></a>
+  <a href="./README.pt.md"><img alt="Readme (Português)" src="https://img.shields.io/badge/Português-2EA26A"></a>
+  <a href="./README.zh-cn.md"><img alt="Readme (简体中文)" src="https://img.shields.io/badge/简体中文-2EA26A"></a>
+  <a href="./README.zh-tw.md"><img alt="Readme (繁體中文)" src="https://img.shields.io/badge/繁體中文-2EA26A"></a>
+  <a href="./README.jp.md"><img alt="Readme (日本語)" src="https://img.shields.io/badge/日本語-2EA26A"></a>
+  <a href="./README.kr.md"><img alt="Readme (한국어)" src="https://img.shields.io/badge/한국어-2EA26A"></a>
 </p>
 
 [TaskingAI](https://www.tasking.ai) 는 **LLM 기반 에이전트 개발 및 배포**를 위한 BaaS(Backend as a Service) 플랫폼입니다. 수백 개의 LLM 모델 통합을 통일하고, 툴, RAG 시스템, 어시스턴트, 대화 히스토리 등 LLM 애플리케이션의 기능 모듈을 관리할 수 있는 직관적인 사용자 인터페이스를 제공합니다.
