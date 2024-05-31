@@ -21,7 +21,7 @@ If this PR addresses any issues, please mention them here. For example: Resolves
 
 Before submitting this PR, please make sure:
 
-- [ ] I have read the [CONTRIBUTING.md](/CONTRIBUTING.md) guidelines.
+- [ ] I have read the [CONTRIBUTING.md](../CONTRIBUTING.md) guidelines.
 - [ ] I have tested my changes locally to ensure they are effective.
 - [ ] I have updated the necessary documentation (if applicable).
 

@@ -1,15 +1,15 @@
 name: Build and Test
 
 on:
-  pull_request:
+  pull_request_target:
     branches: ["master"]
     paths:
-      - 'inference/**'
-      - '!**.md'
-      - '!**.svg'
-      - '!**.jpg'
-      - '!**.png'
-
+      - "inference/**"
+      - ".github/workflows/test-inference.yml"
+      - "!**.md"
+      - "!**.svg"
+      - "!**.jpg"
+      - "!**.png"
 
 env:
   ECR_REGISTRY: inference
