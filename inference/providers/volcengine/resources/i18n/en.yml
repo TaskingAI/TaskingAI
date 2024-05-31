@@ -1,0 +1,22 @@
+volcengine_name: "Volcengine"
+volcengine_description: "Volcengine, as ByteDance's cloud service platform, is dedicated to becoming the most open and leading cloud service platform in the AI era. The Volcengine algorithm team will provide support for the enterprise clients of the Doubao large model, sharing practical experience in model tuning and data processing, and jointly exploring the intelligent future of AI transformation with enterprise clients."
+volcengine_api_key_description: "Your Volcengine API Key for authentication."
+volcengine_endpoint_id_description: "Your Volcengine Endpoint ID, which can be found on your console page."
+
+doubao_lite_4k_name: "Doubao-lite-4k"
+doubao_lite_4k_description: "Doubao-lite offers exceptional responsiveness and better cost-effectiveness, providing more flexible options for various customer scenarios. It supports inference and fine-tuning with a 4K context window."
+
+doubao_lite_32k_name: "Doubao-lite-32k"
+doubao_lite_32k_description: "Doubao-lite offers exceptional responsiveness and better cost-effectiveness, providing more flexible options for various customer scenarios. It supports inference and fine-tuning with a 32K context window."
+
+doubao_lite_128k_name: "Doubao-lite-128k"
+doubao_lite_128k_description: "Doubao-lite offers exceptional responsiveness and better cost-effectiveness, providing more flexible options for various customer scenarios. It supports inference and fine-tuning with a 128K context window."
+
+doubao_pro_4k_name: "Doubao-pro-4k"
+doubao_pro_4k_description: "The top-performing flagship model is well-suited for handling complex tasks and excels in scenarios such as reference Q&A, summarization, creation, text classification, and role-playing. It supports inference and fine-tuning with a 4k context window."
+
+doubao_pro_32k_name: "Doubao-pro-32k"
+doubao_pro_32k_description: "The top-performing flagship model is well-suited for handling complex tasks and excels in scenarios such as reference Q&A, summarization, creation, text classification, and role-playing. It supports inference and fine-tuning with a 32k context window."
+
+doubao_pro_128k_name: "Doubao-pro-128k"
+doubao_pro_128k_description: "The top-performing flagship model is well-suited for handling complex tasks and excels in scenarios such as reference Q&A, summarization, creation, text classification, and role-playing. It supports inference and fine-tuning with a 128k context window."

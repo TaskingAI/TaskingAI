@@ -1,0 +1,26 @@
+provider_id: volcengine
+name: "i18n:volcengine_name"
+description: "i18n:volcengine_description"
+updated_timestamp: 1716342841
+
+credentials_schema:
+  type: object
+  properties:
+    VOLCENGINE_API_KEY:
+      type: string
+      description: "i18n:volcengine_api_key_description"
+      secret: true
+    VOLCENGINE_ENDPOINT_ID:
+      type: string
+      description: "i18n:volcengine_endpoint_id_description"
+      secret: true
+  required:
+    - VOLCENGINE_API_KEY
+    - VOLCENGINE_ENDPOINT_ID
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/volcengine"
+  official_site_url: "https://www.volcengine.com/"
+  official_pricing_url: "https://www.volcengine.com/pricing"
+  official_credentials_url: "https://api.volcengine.com/api-docs"
