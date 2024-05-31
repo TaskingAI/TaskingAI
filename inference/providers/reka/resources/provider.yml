@@ -1,0 +1,20 @@
+provider_id: reka
+name: "i18n:reka_name"
+description: "i18n:reka_description"
+updated_timestamp: 1716456299
+
+credentials_schema:
+  type: object
+  properties:
+    REKA_API_KEY:
+      type: string
+      description: "i18n:reka_api_key_description"
+      secret: true
+  required:
+    - REKA_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/reka"
+  official_site_url: "https://www.reka.ai/"
+  official_pricing_url: "https://www.reka.ai/reka-api"
+  official_credentials_url: "https://platform.reka.ai/dashboard"

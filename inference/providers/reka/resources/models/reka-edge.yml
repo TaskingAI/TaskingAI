@@ -1,0 +1,28 @@
+model_schema_id: reka/reka-edge
+provider_model_id: reka-edge
+type: chat_completion
+name: "i18n:reka_edge_name"
+description: "i18n:reka_edge_description"
+default_endpoint_url: https://api.reka.ai/chat
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit:
+  output_token_limit:
+
+config_schemas:
+  - config_id: seed
+  - config_id: presence_penalty
+  - config_id: frequency_penalty
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: top_k
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.4
+  output_token: 1.0
+  unit: 1000000
+  currency: USD
