@@ -1,9 +1,9 @@
 name: Backend - Build, Test and Release
 
 on:
-  release:
-    types: [published]
-    tags: ["v*.*.*"]
+  push:
+    tags:
+      - "v*.*.*"
   pull_request:
     branches: ["master"]
     paths:
