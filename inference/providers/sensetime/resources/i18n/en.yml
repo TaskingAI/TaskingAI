@@ -1,0 +1,26 @@
+sensetime_name: "SenseTime"
+sensetime_description: "SenseTime is a high-tech company focused on the field of artificial intelligence. Its SenseNova large model system is one of the company's significant achievements in the AI domain."
+
+sensetime_access_key_id_description: "Your SenseTime Access Key ID. It can be found on your security credentials page."
+sensetime_secret_access_key_description: "Your SenseTime Secret Access Key. It can be found on your security credentials page."
+
+sensechat_5_name: "SenseChat-5"
+sensechat_5_description: "SenseChat-5 is the latest version of the model (V5), featuring a 128K context length. Its capabilities in language, knowledge, reasoning, mathematics, and coding have significantly improved, reaching or surpassing those of GPT-4 Turbo."
+
+sensechat_name: "SenseChat"
+sensechat_description: "SenseChat (V4) has a 4K context length and possesses strong general capabilities."
+
+sensechat_32k_name: "SenseChat-32K"
+sensechat_32k_description: "SenseChat-32K, the basic version model (V4), has a 32K context length and can be flexibly applied to various scenarios."
+
+sensechat_128k_name: "SenseChat-128K"
+sensechat_128k_description: "SenseChat-128K, the basic version model (V4), has a 128K context length and excels in tasks involving long text comprehension and generation."
+
+sensechat_turbo_name: "SenseChat-Turbo"
+sensechat_turbo_description: "SenseChat-Turbo is suitable for rapid Q&A and model fine-tuning scenarios."
+
+sensechat_functioncall_name: "SenseChat-FunctionCall"
+sensechat_functioncall_description: "SenseChat-FunctionCall, the basic version model, can be applied to tasks involving function call."
+
+nova_embedding_stable_name: "Nova Embedding Stable"
+nova_embedding_stable_description: "Nova-Embedding-Stable is a model used to generate stable embeddings, aimed at enhancing the feature representation capabilities of machine learning models."

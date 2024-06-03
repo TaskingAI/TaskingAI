@@ -1,0 +1,20 @@
+model_schema_id: sensetime/nova-embedding-stable
+provider_model_id: nova-embedding-stable
+type: text_embedding
+name: "i18n:nova_embedding_stable_name"
+description: "i18n:nova_embedding_stable_description"
+default_endpoint_url: https://api.sensenova.cn/v1/llm/embeddings
+
+properties:
+  embedding_size: 768
+  input_token_limit: 512
+  max_batch_size: 32
+
+
+config_schemas:
+
+pricing:
+  input_token: 0.0005
+  output_token: 0.0005
+  unit: 1000
+  currency: CNY
