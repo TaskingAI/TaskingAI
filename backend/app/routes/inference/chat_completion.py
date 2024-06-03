@@ -43,6 +43,10 @@ async def api_chat_completion(
     if is_model_id(model_id=data.model_id):
         # validate model
         model: Model = await model_ops.get(model_id=data.model_id)
+        # Merge configurations from input or use model's default if none provided
+        input_configs = data.configs or {}
+        model_configs = model.configs or {}
+        configs = {**model_configs, **input_configs}
 
         # check function call ability
         functions = [function.model_dump() for function in data.functions] if data.functions is not None else None
@@ -65,7 +69,7 @@ async def api_chat_completion(
             sse_chunk_dicts = await stream_chat_completion(
                 model=model,
                 messages=messages,
-                configs=data.configs,
+                configs=configs,
                 function_call=data.function_call,
                 functions=functions,
             )
@@ -80,7 +84,7 @@ async def api_chat_completion(
             response_data = await chat_completion(
                 model=model,
                 messages=messages,
-                configs=data.configs,
+                configs=configs,
                 function_call=data.function_call,
                 functions=functions,
             )

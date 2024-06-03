@@ -45,15 +45,17 @@ async def verify_model_credentials(
     model_schema_id: str,
     provider_model_id: str,
     properties: Dict,
+    configs: Dict,
     model_type: str,
     credentials: Dict,
     encrypted_credentials: Dict = None,
-) -> Tuple[str, str, str, str, Dict, Dict, Dict]:
+) -> Tuple[str, str, str, str, Dict, Dict, Dict, Dict]:
     """
     verify model credentials and build display credentials
     :param model_schema_id: the model schema id
     :param provider_model_id: the provider model id
     :param properties: the properties
+    :param configs: the configs
     :param model_type: the model type
     :param credentials: the credentials
     :param encrypted_credentials: the encrypted credentials
@@ -96,6 +98,7 @@ async def verify_model_credentials(
         credentials=credentials,
         encrypted_credentials=encrypted_credentials,
         properties=properties,
+        configs=configs,
     )
     check_http_error(response)
     response_data = response.json()["data"]
@@ -116,6 +119,7 @@ async def verify_model_credentials(
         encrypted_credentials,
         display_credentials,
         properties,
+        configs,
     )
 
 
@@ -141,7 +145,7 @@ class ModelOperator(PostgresModelOperator):
             model_type=create_dict.get("type"),
             credentials=create_dict["credentials"],
         )
-
+        configs = create_dict.get("configs") or {}
         model = await super().create(
             create_dict={
                 "model_schema_id": model_schema_id,
@@ -152,6 +156,7 @@ class ModelOperator(PostgresModelOperator):
                 "encrypted_credentials": encrypted_credentials,
                 "display_credentials": display_credentials,
                 "properties": properties,
+                "configs": configs,
             },
         )
         return model
@@ -169,8 +174,9 @@ class ModelOperator(PostgresModelOperator):
         model_type = update_dict.get("type")
         credentials = update_dict.get("credentials")
         properties = update_dict.get("properties")
+        configs = update_dict.get("configs")
 
-        if model_schema_id or provider_model_id or model_type or credentials or properties:
+        if model_schema_id or provider_model_id or model_type or credentials or properties or configs:
             # verify model credentials
             (
                 new_model_schema_id,
@@ -194,6 +200,7 @@ class ModelOperator(PostgresModelOperator):
             new_update_dict["provider_model_id"] = new_provider_model_id
             new_update_dict["type"] = new_model_type
             new_update_dict["properties"] = new_properties
+            new_update_dict["configs"] = configs or model.configs
             if credentials:
                 new_update_dict["encrypted_credentials"] = new_encrypted_credentials
                 new_update_dict["display_credentials"] = new_display_credentials

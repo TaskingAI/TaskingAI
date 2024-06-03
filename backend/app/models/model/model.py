@@ -15,6 +15,7 @@ class Model(ModelEntity):
     name: str
     type: str
     properties: Dict
+    configs: Dict
     encrypted_credentials: Dict
     display_credentials: Dict
     updated_timestamp: int
@@ -67,6 +68,7 @@ class Model(ModelEntity):
             name=row["name"],
             type=row["type"],
             properties=properties,
+            configs=load_json_attr(row, "configs", {}),
             encrypted_credentials=load_json_attr(row, "encrypted_credentials", {}),
             display_credentials=load_json_attr(row, "display_credentials", {}),
             updated_timestamp=row["updated_timestamp"],
@@ -84,6 +86,7 @@ class Model(ModelEntity):
             "name": self.name,
             "type": self.type,
             "properties": model_schema.properties or self.properties,
+            "configs": self.configs,
             "display_credentials": self.display_credentials,
             "updated_timestamp": self.updated_timestamp,
             "created_timestamp": self.created_timestamp,
