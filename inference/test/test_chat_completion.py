@@ -10,6 +10,34 @@ from .utils.utils import generate_test_cases, generate_wildcard_test_cases, is_p
 @allure.epic("inference_service")
 @allure.feature("chat_completion")
 class TestChatCompletion:
+
+    proxy_list = [
+        {
+            "model_schema_id": "openai/gpt-4o",
+            "proxy": "https://oai.hconeai.com/v1/chat/completions",
+        },
+        {
+            "model_schema_id": "anthropic/claude-2.0",
+            "proxy": "https://api.anthropic.com/v1/messages",
+        },
+        {
+            "model_schema_id": "togetherai/mistralai/Mistral-7B-Instruct-v0.1",
+            "proxy": "https://api.together.xyz/v1/chat/completions",
+        },
+        {
+            "model_schema_id": "togetherai/wildcard",
+            "provider_model_id": "mistralai/Mistral-7B-Instruct-v0.1",
+            "proxy": "https://api.together.xyz/v1/chat/completions",
+        },
+        {
+            "model_schema_id": "groq/gemma-7b",
+            "proxy": "https://api.groq.com/openai/v1/chat/completions",
+        },
+        {
+            "model_schema_id": "google_gemini/gemini-1.5-pro",
+            "proxy": f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent",
+        }
+    ]
     @pytest.mark.asyncio
     @pytest.mark.test_id("inference_001")
     @pytest.mark.parametrize(
@@ -493,3 +521,42 @@ class TestChatCompletion:
         assert res.status_code == 422, f"test_validation failed: result={res.json()}"
         assert res.json()["status"] == "error"
         assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"
+
+    @pytest.mark.asyncio
+    @pytest.mark.test_id("inference_030")
+    @pytest.mark.flaky(reruns=3, reruns_delay=1)
+    @pytest.mark.parametrize("test_data", proxy_list, ids=lambda d: d["model_schema_id"])
+    async def test_chat_completion_by_proxy(self, test_data):
+        model_schema_id = test_data["model_schema_id"]
+        message = [{"role": "user", "content": "Hello, nice to meet you, what is your name"}]
+        configs = {
+            "temperature": 0.5,
+            "top_p": 0.5,
+        }
+        proxy = test_data["proxy"]
+        custom_headers = {
+            "Helicone-Auth": f"Bearer {Config.HELICONE_API_KEY}"
+        }
+        request_data = {
+            "model_schema_id": model_schema_id,
+            "messages": message,
+            "stream": False,
+            "configs": configs,
+            "proxy": proxy,
+            "custom_headers": custom_headers,
+        }
+        if "wildcard" in model_schema_id:
+            request_data.update({"provider_model_id": test_data["provider_model_id"]})
+        try:
+            res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip("Skip the test case with provider service error.")
+        res_json = res.json()
+        assert res.status_code == 200, res_json.get("error").get("message")
+        assert res_json.get("status") == "success"
+        assert res_json.get("data").get("finish_reason") == "stop"
+        assert res_json.get("data").get("message").get("role") == "assistant"
+        assert res_json.get("data").get("message").get("content") is not None
+        assert res_json.get("data").get("message").get("function_calls") is None
