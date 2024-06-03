@@ -27,8 +27,6 @@ class TestTextEmbedding:
         model_schema_id = test_data["model_schema_id"]
         print("model_schema_id: ", model_schema_id)
         data = {"model_schema_id": model_schema_id}
-        if "custom_host/openai-text-embedding" not in model_schema_id:
-            pytest.skip("Test not applicable for this model type")
         if "custom_host" in model_schema_id:
             data.update({"properties": {"embedding_size": 1536}})
             test_data["embedding_size"] = 1536
