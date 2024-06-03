@@ -16,6 +16,7 @@ class ModelCreateRequest(BaseModel):
     provider_model_id: Optional[str] = Field(
         None, min_length=1, max_length=255, description="The provider_model_id of the model."
     )
+    configs: Optional[Dict[str, Any]] = Field({}, description="The model configurations.")
     type: Optional[ModelType] = Field(None, description="The type of the model.", examples=["text_embedding"])
     credentials: Dict = Field(..., description="The credentials of the model.")
     properties: Optional[Dict] = Field(None, description="The custom model properties.")
@@ -30,6 +31,7 @@ class ModelUpdateRequest(BaseModel):
     provider_model_id: Optional[str] = Field(
         None, min_length=1, max_length=255, description="The provider_model_id of the model."
     )
+    configs: Optional[Dict[str, Any]] = Field(None, description="The model configurations.")
     type: Optional[ModelType] = Field(None, description="The type of the model.", examples=["text_embedding"])
     credentials: Optional[Dict] = Field(None, description="The credentials of the model.")
     properties: Optional[Dict] = Field(None, description="The custom model properties.")

@@ -23,6 +23,7 @@ class ModelSchema(BaseModel):
     type: ModelType
     properties: Optional[Dict]
     allowed_configs: List[str]
+    config_schemas: List[Dict]
     pricing: Optional[Dict]
 
     @staticmethod
@@ -40,11 +41,22 @@ class ModelSchema(BaseModel):
             type=row["type"],
             properties=row.get("properties"),
             allowed_configs=row.get("allowed_configs") or [],
+            config_schemas=row.get("config_schemas") or [],
             pricing=row.get("pricing"),
         )
 
     def to_dict(self, lang: str):
         from app.services.model import i18n_text
+
+        config_schemas = [
+            {
+                "config_id": config_schema["config_id"],
+                "name": i18n_text("config_schema", config_schema["name"], lang),
+                "description": i18n_text("config_schema", config_schema["description"], lang),
+                "schema": config_schema["schema"],
+            }
+            for config_schema in self.config_schemas
+        ]
 
         return {
             "object": self.object_name(),
@@ -56,5 +68,6 @@ class ModelSchema(BaseModel):
             "type": self.type.value,
             "properties": self.properties,
             "allowed_configs": self.allowed_configs,
+            "config_schemas": config_schemas,
             "pricing": self.pricing,
         }
