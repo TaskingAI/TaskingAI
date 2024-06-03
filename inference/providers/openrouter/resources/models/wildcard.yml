@@ -1,0 +1,24 @@
+model_schema_id: openrouter/wildcard
+provider_model_id:
+type: wildcard
+name: "i18n:wildcard_name"
+description: "i18n:wildcard_description"
+
+properties:
+
+config_schemas:
+  - config_id: response_format
+  - config_id: seed
+  - config_id: presence_penalty
+  - config_id: frequency_penalty
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+  - config_id: top_k
+
+pricing:
+  input_token: 0
+  output_token: 0
+  unit: 1000000
+  currency: USD

@@ -1,0 +1,7 @@
+openrouter_name: "OpenRouter"
+openrouter_description: "OpenRouter is a platform that provides a unified interface for large language models (LLMs) and other AI models. It allows users to directly access and use over 80 different AI models, including popular ones like GPT, LLaMA, Claude, Command-R, and others. OpenRouter's goal is to offer users the best model selection and pricing, simplifying the process of testing and comparing models."
+
+openrouter_api_key_description: "Your OpenRouter API Token for authentication."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from OpenRouter's model hub with custom configurations."

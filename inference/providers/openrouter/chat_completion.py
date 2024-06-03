@@ -1,18 +1,11 @@
+from typing import Tuple, Dict
 from provider_dependency.chat_completion import *
-from typing import List, Optional, Dict, Tuple
-from app.models.utils import generate_random_id
+from .utils import *
 
 logger = logging.getLogger(__name__)
 
 
-def _build_mistral_header(credentials: ProviderCredentials):
-    return {
-        "Authorization": f"Bearer {credentials.MISTRAL_API_KEY}",
-        "Content-Type": "application/json",
-    }
-
-
-def _build_mistral_message(message: ChatCompletionMessage, function_id_to_mistral_id_map: Dict[str, str]):
+def _build_openrouter_message(message: ChatCompletionMessage):
     if message.role == ChatCompletionRole.system:
         return {"role": message.role.name, "content": message.content}
 
@@ -27,14 +20,7 @@ def _build_mistral_message(message: ChatCompletionMessage, function_id_to_mistra
 
     if message.role == ChatCompletionRole.function:
         message: ChatCompletionFunctionMessage
-        if function_id_to_mistral_id_map.get(message.id):
-            return {
-                "role": "tool",
-                "content": message.content,
-                "tool_call_id": function_id_to_mistral_id_map[message.id],
-            }
-        else:
-            raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Function id: {} not found".format(message.id))
+        return {"role": "tool", "content": message.content, "tool_call_id": message.id}
 
     if is_assistant_text_message(message):
         return {"role": message.role.name, "content": message.content}
@@ -47,24 +33,22 @@ def _build_mistral_message(message: ChatCompletionMessage, function_id_to_mistra
             arguments = f.arguments
             if isinstance(arguments, dict):
                 arguments = json.dumps(arguments)
-            mistral_tool_id = generate_random_id(9)
             function_calls.append(
                 {
-                    "id": mistral_tool_id,
+                    "id": f.id,
                     "type": "function",
                     "function": {"name": f.name, "arguments": arguments},
                 }
             )
-            function_id_to_mistral_id_map[f.id] = mistral_tool_id
 
         return {
             "role": ChatCompletionRole.assistant.name,
             "tool_calls": function_calls,
-            "content": "",
+            "content": None,
         }
 
 
-def _build_mistral_chat_completion_payload(
+def _build_openrouter_chat_completion_payload(
     messages: List[ChatCompletionMessage],
     stream: bool,
     provider_model_id: str,
@@ -73,8 +57,7 @@ def _build_mistral_chat_completion_payload(
     functions: Optional[List[ChatCompletionFunction]],
 ):
     # Convert ChatCompletionMessages to the required format
-    function_id_to_mistral_id_map = {}
-    formatted_messages = [_build_mistral_message(msg, function_id_to_mistral_id_map) for msg in messages]
+    formatted_messages = [_build_openrouter_message(msg) for msg in messages]
     logger.debug("formatted_messages: %s", formatted_messages)
     payload = {
         "messages": formatted_messages,
@@ -86,31 +69,18 @@ def _build_mistral_chat_completion_payload(
         if value is not None:
             payload[key] = value
 
-    if configs.response_format:
-        payload["response_format"] = {"type": configs.response_format}
-
-        if configs.response_format == "json_object":
-
-            if payload["messages"][0]["role"] == "system":
-                payload["messages"][0][
-                    "content"
-                ] = f"{payload['messages'][0]['content']} You are designed to output JSON."
-            else:
-                payload["messages"].insert(0, {"role": "system", "content": "You are designed to output JSON."})
-
     if function_call:
         if function_call in ["none", "auto"]:
             payload["tool_choice"] = function_call
         else:
-            payload["tool_choice"] = "any"
+            payload["tool_choice"] = {"name": function_call}
     if functions:
-        if configs.response_format == "json_object":
-            raise_provider_api_error("Provider does not support function calls in JSON format")
         payload["tools"] = [{"type": "function", "function": f.model_dump()} for f in functions]
+    logger.debug(f"_build_openrouter_chat_completion_payload: {payload}")
     return payload
 
 
-class MistralaiChatCompletionModel(BaseChatCompletionModel):
+class OpenrouterChatCompletionModel(BaseChatCompletionModel):
     def __init__(self):
         super().__init__()
 
@@ -127,9 +97,9 @@ class MistralaiChatCompletionModel(BaseChatCompletionModel):
         functions: Optional[List[ChatCompletionFunction]] = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
-        api_url = "https://api.mistral.ai/v1/chat/completions"
-        headers = _build_mistral_header(credentials)
-        payload = _build_mistral_chat_completion_payload(
+        api_url = "https://openrouter.ai/api/v1/chat/completions"
+        headers = build_openrouter_header(credentials)
+        payload = _build_openrouter_chat_completion_payload(
             messages, stream, provider_model_id, configs, function_call, functions
         )
         return api_url, headers, payload
@@ -149,25 +119,30 @@ class MistralaiChatCompletionModel(BaseChatCompletionModel):
 
     def extract_function_calls(self, data: Dict, **kwargs) -> Optional[List[ChatCompletionFunctionCall]]:
         message_data = data.get("message") if data else None
-        if message_data.get("tool_calls"):
-            function_calls = []
-            tool_calls = message_data.get("tool_calls")
-            for call in tool_calls:
-                func_call = build_function_call(
-                    name=call["function"]["name"],
-                    arguments_str=call["function"]["arguments"],
-                )
-                function_calls.append(func_call)
-            return function_calls
+        try:
+            dict_message_data = json.loads(message_data.get("content"))
+        except json.decoder.JSONDecodeError:
+            return None
 
+        if dict_message_data.get("function"):
+            function_calls = []
+            call = dict_message_data
+            func_call = build_function_call(
+                name=call["function"],
+                arguments_dict=call["parameters"],
+            )
+            function_calls.append(func_call)
+            return function_calls
         return None
 
     def extract_finish_reason(self, data: Dict, **kwargs) -> Optional[ChatCompletionFinishReason]:
         finish_reason = data.get("finish_reason", "unknown")
         if finish_reason == "tool_calls":
             finish_reason = ChatCompletionFinishReason.function_calls
-        if finish_reason == "model_length":
-            finish_reason = ChatCompletionFinishReason.length
+        if finish_reason == "content_filter":
+            raise_provider_api_error("Openrouter content filter triggered, content was omitted")
+        if finish_reason == "eos":
+            finish_reason = ChatCompletionFinishReason.stop
         return ChatCompletionFinishReason.__members__.get(finish_reason, ChatCompletionFinishReason.unknown)
 
     # ------------------- handle stream chat completion response -------------------
@@ -198,8 +173,10 @@ class MistralaiChatCompletionModel(BaseChatCompletionModel):
             reason = chunk_data["finish_reason"]
             if reason == "tool_calls":
                 reason = ChatCompletionFinishReason.function_calls
-            if reason == "model_length":
-                reason = ChatCompletionFinishReason.length
+            if reason == "content_filter":
+                raise_provider_api_error("Openrouter content filter triggered, content was omitted")
+            if reason == "eos":
+                reason = ChatCompletionFinishReason.stop
             return ChatCompletionFinishReason.__members__.get(reason, ChatCompletionFinishReason.unknown)
         return None
 
@@ -209,7 +186,7 @@ class MistralaiChatCompletionModel(BaseChatCompletionModel):
         delta = chunk_data.get("delta", {})
         if delta and delta.get("tool_calls"):
             tool_call = delta["tool_calls"][0]
-            toll_call_index = tool_call["index"] if tool_call.get("index") else 0
+            toll_call_index = tool_call["index"]
             tool_call_function = tool_call["function"]
 
             if toll_call_index == function_calls_content.index:

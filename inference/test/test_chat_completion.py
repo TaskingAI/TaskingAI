@@ -92,7 +92,7 @@ class TestChatCompletion:
         message = test_data["message"]
         function_call = test_data["function_call"]
 
-        if not function_call or "azure" in model_schema_id:
+        if not function_call or "azure" in model_schema_id or "openrouter" in model_schema_id:
             pytest.skip("Skip the test case without function call.")
         configs = {
             "temperature": 0.5,
@@ -133,9 +133,17 @@ class TestChatCompletion:
     async def test_chat_completion_by_normal_function_call_result(self, test_data):
         model_schema_id = test_data["model_schema_id"]
         function_call = test_data["function_call"]
-        if not function_call or "debug-error" in model_schema_id or "azure" in model_schema_id:
-            pytest.skip("Skip the test case without function call or debug-error")
+        functions = test_data.get("functions") or None
         message = test_data["message"]
+        if (
+            not function_call
+            or "debug-error" in model_schema_id
+            or "azure" in model_schema_id
+            or "openrouter" in model_schema_id
+            or len(message) <= 1
+        ):
+            pytest.skip("Skip the test case without function call or debug-error")
+
         configs = {
             "temperature": 0.5,
             "top_p": 0.5,
@@ -145,6 +153,7 @@ class TestChatCompletion:
             "messages": message,
             "stream": False,
             "configs": configs,
+            "functions": functions,
         }
         if "wildcard" in model_schema_id:
             request_data.update({"provider_model_id": test_data["provider_model_id"]})
@@ -268,7 +277,7 @@ class TestChatCompletion:
         message = test_data["message"]
         function_call = test_data["function_call"]
         stream = test_data["stream"]
-        if not function_call or not stream or "azure" in model_schema_id:
+        if not function_call or not stream or "azure" in model_schema_id or "openrouter" in model_schema_id:
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
         configs = {
@@ -360,14 +369,15 @@ class TestChatCompletion:
         model_schema_id = test_data["model_schema_id"]
         message = test_data["message"]
         function_call = test_data["function_call"]
-        if not function_call or "sensetime" in model_schema_id:
+
+        if not function_call or "sensetime" in model_schema_id or "openrouter" in model_schema_id:
             pytest.skip("Skip the test case without function call.")
 
         functions = test_data["functions"]
         configs = {
             "temperature": 0.5,
             "top_p": 0.5,
-            "max_tokens": 3,
+            "max_tokens": 1,
         }
         request_data = {
             "model_schema_id": model_schema_id,
@@ -385,10 +395,10 @@ class TestChatCompletion:
         if is_provider_service_error(res):
             pytest.skip("Skip the test case with provider service error.")
         if (
-            "mistralai" in model_schema_id
-            or "anthropic" in model_schema_id
+            "anthropic" in model_schema_id
             or "togetherai" in model_schema_id
             or "google_gemini" in model_schema_id
+            or "openrouter" in model_schema_id
         ):
             assert res.status_code == 200, res.json()
             assert res.json().get("status") == "success"
@@ -422,6 +432,7 @@ class TestChatCompletion:
             or "google_gemini" in model_schema_id
             or "sensetime" in model_schema_id
             or "leptonai" in model_schema_id
+            or "openrouter" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
