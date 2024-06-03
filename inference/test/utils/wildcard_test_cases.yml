@@ -43,3 +43,11 @@ wildcard_test_cases:
         model_type: "text_embedding"
         properties:
           embedding_size: 999
+
+  - provider_id: "openrouter"
+    cases:
+      - model_schema_id: "openrouter/wildcard"
+        provider_model_id: "nousresearch/nous-capybara-7b:free"
+        model_type: "chat_completion"
+        streaming: True
+        function_call: True

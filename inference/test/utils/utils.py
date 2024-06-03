@@ -33,15 +33,23 @@ load_dotenv()
 
 functions = [
     {
-        "name": "add_two_number",
-        "description": "Add two number and return sum",
+        "name": "make_scatter_plot",
+        "description": "Generate a scatter plot from the given data",
         "parameters": {
             "type": "object",
             "properties": {
-                "a": {"type": "number", "description": "First number."},
-                "b": {"type": "number", "description": "Second number."},
+                "x_values": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "description": "The x-axis values for the data points",
+                },
+                "y_values": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "description": "The y-axis values for the data points",
+                },
             },
-            "required": ["a", "b"],
+            "required": ["x_values", "y_values"],
         },
     }
 ]
@@ -127,7 +135,7 @@ def generate_test_cases(model_type):
                     "message": [
                         {
                             "role": "user",
-                            "content": "what is 1794658 + 9731686",
+                            "content": "Draw a scatter plot with x values 1, 2 and y values 3, 4",
                         },
                     ],
                 }
@@ -187,7 +195,7 @@ def generate_wildcard_test_cases(model_type: str):
                         "message": [
                             {
                                 "role": "user",
-                                "content": "what is 1794658 + 9731686",
+                                "content": "Draw a scatter plot with x values 1, 2 and y values 3, 4",
                             },
                         ],
                     }
