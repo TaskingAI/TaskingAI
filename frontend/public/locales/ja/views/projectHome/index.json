@@ -1,0 +1,16 @@
+{
+    "apiReference": "APIレファレンス",
+    "documentation": "ドキュメンテーション",
+    "forum": "フォーラム",
+    "home": "ホーム",
+    "keyReserveValueHome": "$t(home)",
+    "keyReserveValueModels": "$t(common:models)",
+    "keyReserveValueAssistants": "$t(common:assistants)",
+    "keyReserveValueRetrieval": "$t(common:retrieval)",
+    "keyReserveValuePlayground": "$t(common:playground)",
+    "keyReserveValuePlugins": "$t(common:plugins)",
+    "keyReserveValueAPI Keys": "$t(common:apiKeys)",
+    "logoutDesc": "TaskingAIのアクアンとをログアウトしますか？",
+    "logoutTitle": "ログアウト",
+    "tryTaskingAICloud": "TaskingAI Cloudを試す"
+}

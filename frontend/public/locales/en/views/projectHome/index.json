@@ -1,0 +1,16 @@
+{
+    "apiReference": "API Reference",
+    "documentation": "Documentation",
+    "forum": "Forum",
+    "home": "Home",
+    "keyReserveValueHome": "$t(home)",
+    "keyReserveValueModels": "$t(common:models)",
+    "keyReserveValueAssistants": "$t(common:assistants)",
+    "keyReserveValueRetrieval": "$t(common:retrieval)",
+    "keyReserveValuePlayground": "$t(common:playground)",
+    "keyReserveValuePlugins": "$t(common:plugins)",
+    "keyReserveValueAPI Keys": "$t(common:apiKeys)",
+    "logoutDesc": "Are you sure you want to log out of your TaskingAI account?",
+    "logoutTitle": "Logout",
+    "tryTaskingAICloud": "Try TaskingAI Cloud"
+}

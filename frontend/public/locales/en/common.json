@@ -1,0 +1,14 @@
+{
+    "actions": "Actions",
+    "apiKeys": "API Keys",
+    "assistant": "Assistant",
+    "assistants": "Assistants",
+    "cancel": "Cancel",
+    "chatCompletion": "Chat Completion",
+    "confirm": "Confirm",
+    "models": "Models",
+    "playground": "Playground",
+    "plugins": "Plugins",
+    "retrieval": "Retrieval",
+    "tools": "Tools"
+}

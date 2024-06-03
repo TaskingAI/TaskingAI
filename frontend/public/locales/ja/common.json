@@ -1,0 +1,14 @@
+{
+    "actions": "アクション",
+    "apiKeys": "APIキー",
+    "assistant": "アシスタント",
+    "assistants": "アシスタント",
+    "cancel": "キャンセル",
+    "chatCompletion": "チャットコンプリション",
+    "confirm": "確認",
+    "models": "モデル",
+    "playground": "プレイグラウンド",
+    "plugins": "プラグイン",
+    "retrieval": "リトリーバル",
+    "tools": "ツール"
+}
