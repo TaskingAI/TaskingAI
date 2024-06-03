@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import illustration from '../../assets/img/Illustration.png'
 import styles from  "./notFound.module.scss";
+import { useTranslation } from 'react-i18next';
 
 const NotFound = () => {
+  const { t } = useTranslation('views/notFound/index');
     const navigate = useNavigate();
     const handlerBackHome = ()=>{
         const token=localStorage.getItem('token')
@@ -17,13 +19,13 @@ const NotFound = () => {
       <div className={styles["frame"]}>
         <img className={styles["illustration-icon"]} src={illustration} />
         <div className={styles["title-section"]}>
-          <b className={styles["title"]}>Page Not Found</b>
+          <b className={styles["title"]}>{t('pageNotFound')}</b>
           <div className={styles["subtitle"]}>
-            The page you are looking for doesn’t exist or has been moved
+            {t('pageDoesNotExistOrMoved')}
           </div>
         </div>
         <div className={styles["home-button"]} onClick={handlerBackHome}>
-          <div className={styles["text"]}>Back Home</div>
+          <div className={styles["text"]}>{t('backHome')}</div>
         </div>
       </div>
     </div>
