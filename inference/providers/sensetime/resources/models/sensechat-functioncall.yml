@@ -1,0 +1,24 @@
+model_schema_id: sensetime/sensechat-functioncall
+provider_model_id: SenseChat-FunctionCall
+type: chat_completion
+name: "i18n:sensechat_functioncall_name"
+description: "i18n:sensechat_functioncall_description"
+default_endpoint_url: https://api.sensenova.cn/v1/llm/chat-completions
+
+properties:
+  function_call: true
+  streaming: false
+  input_token_limit: 8192
+  output_token_limit: 8192
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0
+  output_token: 0
+  unit: 1000
+  currency: CNY

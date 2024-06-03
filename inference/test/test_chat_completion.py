@@ -143,7 +143,12 @@ class TestChatCompletion:
     @pytest.mark.flaky(reruns=5, reruns_delay=1)
     async def test_chat_completion_by_normal_length(self, test_data):
         model_schema_id = test_data["model_schema_id"]
-        if "debug" in model_schema_id or "google_gemini" in model_schema_id or "hugging_face" in model_schema_id:
+        if (
+            "debug" in model_schema_id
+            or "google_gemini" in model_schema_id
+            or "hugging_face" in model_schema_id
+            or "sensetime" in model_schema_id
+        ):
             # google_gemini model response is empty
             pytest.skip("Skip the test case.")
         message = [{"role": "user", "content": "introduce yourself in detail"}]
@@ -275,6 +280,7 @@ class TestChatCompletion:
             or "debug" in model_schema_id
             or "minimax/abab5.5s" in model_schema_id
             or "google_gemini" in model_schema_id
+            or "sensetime" in model_schema_id
         ):
             pytest.skip("Skip the test case without stream.")
         configs = {
@@ -318,7 +324,7 @@ class TestChatCompletion:
         model_schema_id = test_data["model_schema_id"]
         message = test_data["message"]
         function_call = test_data["function_call"]
-        if not function_call:
+        if not function_call or "sensetime" in model_schema_id:
             pytest.skip("Skip the test case without function call.")
 
         functions = test_data["functions"]
@@ -378,6 +384,7 @@ class TestChatCompletion:
             or "azure" in model_schema_id
             or "mistralai" in model_schema_id
             or "google_gemini" in model_schema_id
+            or "sensetime" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]

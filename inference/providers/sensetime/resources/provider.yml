@@ -1,0 +1,25 @@
+provider_id: sensetime
+name: "i18n:sensetime_name"
+description: "i18n:sensetime_description"
+updated_timestamp: 1716974560000
+
+credentials_schema:
+  type: object
+  properties:
+    SENSETIME_ACCESS_KEY_ID:
+      type: string
+      description: "i18n:sensetime_access_key_id_description"
+      secret: true
+    SENSETIME_SECRET_ACCESS_KEY:
+      type: string
+      description: "i18n:sensetime_secret_access_key_description"
+      secret: true
+  required:
+    - SENSETIME_ACCESS_KEY_ID
+    - SENSETIME_SECRET_ACCESS_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/sensetime"
+  official_site_url: "https://chat.sensetime.com/wb/home"
+  official_pricing_url: "https://platform.sensenova.cn/pricing"
+  official_credentials_url: "https://console.sensecore.cn/iam/Security/access-key"
