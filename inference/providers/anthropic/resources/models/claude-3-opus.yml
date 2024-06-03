@@ -17,6 +17,7 @@ config_schemas:
   - config_id: top_k
   - config_id: max_tokens
   - config_id: stop
+  - config_id: response_format
 
 pricing:
   input_token: 15.0

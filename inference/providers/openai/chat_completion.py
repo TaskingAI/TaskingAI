@@ -64,10 +64,21 @@ def _build_openai_chat_completion_payload(
         "model": provider_model_id,
         "stream": stream,
     }
+
     config_dict = configs.model_dump()
     for key, value in config_dict.items():
         if value is not None:
             payload[key] = value
+
+    if configs.response_format:
+        payload["response_format"] = {"type": configs.response_format}
+
+        if configs.response_format == "json_object":
+
+            if payload["messages"][0]["role"] == "system":
+                payload["messages"][0]["content"] = f"{payload['messages'][0]['content']} You are designed to output JSON."
+            else:
+                payload["messages"].insert(0, {"role": "system", "content": "You are designed to output JSON."})
 
     if "max_tokens" not in payload and "vision" in provider_model_id:
         # OpenAI currently set a low max_tokens default, so we need to override it

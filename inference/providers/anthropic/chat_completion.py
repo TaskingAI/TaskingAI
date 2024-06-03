@@ -116,6 +116,17 @@ def _build_anthropic_chat_completion_payload(
                     payload["stop_sequences"] = [str(value)]
             else:
                 payload[key] = value
+
+    if configs.response_format:
+        payload.pop("response_format", None)
+
+        if configs.response_format == "json_object":
+            payload["messages"][-1]["content"] = f"{payload['messages'][-1]['content']} Please respond in JSON format."
+            if system_message:
+                payload["system"] = f"{payload['system']} You are designed to output in JSON format."
+            else:
+                payload["system"] = "You are designed to output in JSON format."
+
     return payload
 
 
@@ -135,10 +146,6 @@ class AnthropicChatCompletionModel(BaseChatCompletionModel):
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
     ) -> Tuple[str, Dict, Dict]:
-        if stream and functions:
-            raise_http_error(
-                ErrorCode.REQUEST_VALIDATION_ERROR, "Function calls for Claude are not supported in stream mode."
-            )
         # todo accept user's api_url
         api_url = f"https://api.anthropic.com/v1/messages"
         headers = _build_anthropic_header(credentials)

@@ -17,6 +17,8 @@ config_schemas:
   - config_id: top_p
   - config_id: max_tokens
   - config_id: stop
+  - config_id: seed
+  - config_id: response_format
 
 pricing:
   input_token: 0.005

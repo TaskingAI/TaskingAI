@@ -85,12 +85,25 @@ def _build_mistral_chat_completion_payload(
     for key, value in config_dict.items():
         if value is not None:
             payload[key] = value
+
+    if configs.response_format:
+        payload["response_format"] = {"type": configs.response_format}
+
+        if configs.response_format == "json_object":
+
+            if payload["messages"][0]["role"] == "system":
+                payload["messages"][0]["content"] = f"{payload['messages'][0]['content']} You are designed to output JSON."
+            else:
+                payload["messages"].insert(0, {"role": "system", "content": "You are designed to output JSON."})
+
     if function_call:
         if function_call in ["none", "auto"]:
             payload["tool_choice"] = function_call
         else:
             payload["tool_choice"] = "any"
     if functions:
+        if configs.response_format == "json_object":
+            raise_provider_api_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Provider does not support function calls in JSON format")
         payload["tools"] = [{"type": "function", "function": f.model_dump()} for f in functions]
     return payload
 
