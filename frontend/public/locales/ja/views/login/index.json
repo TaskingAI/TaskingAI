@@ -1,0 +1,11 @@
+{
+    "passwordLabel": "パスワード",
+    "passwordPlaceholder": "パスワードを入力",
+    "passwordRequiredMessage": "パスワードを入力してください。",
+    "signinButton": "サインイン",
+    "signinSuccessful": "サインインに成功しました",
+    "usernameLabel": "ユーザー名",
+    "usernamePlaceholder": "ユーザー名を入力",
+    "usernameRequiredMessage": "ユーザー名を入力してください",
+    "welcomeBack": "おかえりなさい"
+}
