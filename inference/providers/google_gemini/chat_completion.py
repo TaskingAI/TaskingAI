@@ -113,6 +113,11 @@ def _build_google_gemini_chat_completion_payload(
             else:
                 generation_config[key] = value
 
+    if configs.response_format:
+        generation_config.pop("response_format", None)
+        if configs.response_format == "json_object":
+            generation_config["response_mime_type"] = "application/json"
+
     payload = {"contents": formatted_messages, "generationConfig": generation_config}
     if functions:
         payload["tools"] = [{"functionDeclarations": [f.model_dump() for f in functions]}]

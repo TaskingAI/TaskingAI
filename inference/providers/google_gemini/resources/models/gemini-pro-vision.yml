@@ -17,7 +17,6 @@ config_schemas:
   - config_id: max_tokens
   - config_id: stop
 
-
 pricing:
   input_token: 0
   output_token: 0
