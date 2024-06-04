@@ -1,17 +1,52 @@
 from typing import Tuple, Dict
+
+from app.utils.utils import image_url_is_on_localhost, fetch_image_format, get_image_base64_string
 from provider_dependency.chat_completion import *
 from .utils import *
 
 logger = logging.getLogger(__name__)
 
+async def construct_image_data(image_url: str) -> dict:
+    if image_url_is_on_localhost(image_url):
+        image_format = await fetch_image_format(image_url)
+        base64_string = await get_image_base64_string(image_url)
 
-def _build_openai_message(message: ChatCompletionMessage):
+        return {"type": "image_url", "image_url": {"url": f"data:image/{image_format};base64,{base64_string}"}}
+
+    # Normal image url
+    if 'http' in image_url:
+        return {"type": "image_url", "image_url": {"url": image_url}}
+
+    raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid image url.")
+
+async def split_markdown_to_objects_preserve_order(markdown_content):
+    import re
+
+    # Define regex pattern for extracting text and images
+    pattern = re.compile(r"(!\[.*?\]\(.*?\))|([^!]+)", re.MULTILINE)
+
+    # Find all matches
+    matches = pattern.findall(markdown_content)
+
+    # Split the content into a list of objects
+    result = []
+
+    for match in matches:
+        if match[0]:  # This is an image
+            image_url = re.findall(r"!\[.*?\]\((.*?)\)", match[0])[0]
+            result.append(await construct_image_data(image_url))
+        elif match[1].strip():  # This is text
+            result.append({"type": "text", "text": match[1].strip()})
+
+    return result
+
+async def _build_openai_message(message: ChatCompletionMessage, vision_support: bool = False):
     if message.role == ChatCompletionRole.system:
         return {"role": message.role.name, "content": message.content}
 
     if message.role == ChatCompletionRole.user:
         if isinstance(message.content, str):
-            return {"role": message.role.name, "content": message.content}
+            return {"role": message.role.name, "content": await split_markdown_to_objects_preserve_order(message.content) if vision_support else message.content}
         elif isinstance(message.content, List):
             return {
                 "role": message.role.name,
@@ -48,7 +83,7 @@ def _build_openai_message(message: ChatCompletionMessage):
         }
 
 
-def _build_openai_chat_completion_payload(
+async def _build_openai_chat_completion_payload(
     messages: List[ChatCompletionMessage],
     stream: bool,
     provider_model_id: str,
@@ -57,7 +92,8 @@ def _build_openai_chat_completion_payload(
     functions: Optional[List[ChatCompletionFunction]],
 ):
     # Convert ChatCompletionMessages to the required format
-    formatted_messages = [_build_openai_message(msg) for msg in messages]
+    vision_support = "vision" in provider_model_id
+    formatted_messages = [await _build_openai_message(msg, vision_support) for msg in messages]
     logger.debug("formatted_messages: %s", formatted_messages)
     payload = {
         "messages": formatted_messages,
@@ -105,7 +141,7 @@ class OpenaiChatCompletionModel(BaseChatCompletionModel):
 
     # ------------------- prepare request data -------------------
 
-    def prepare_request(
+    async def prepare_request(
         self,
         stream: bool,
         provider_model_id: str,
@@ -118,7 +154,7 @@ class OpenaiChatCompletionModel(BaseChatCompletionModel):
         # todo accept user's api_url
         api_url = "https://api.openai.com/v1/chat/completions"
         headers = build_openai_header(credentials)
-        payload = _build_openai_chat_completion_payload(
+        payload = await _build_openai_chat_completion_payload(
             messages, stream, provider_model_id, configs, function_call, functions
         )
         return api_url, headers, payload
