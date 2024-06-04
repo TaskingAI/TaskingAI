@@ -14,12 +14,12 @@ import ShowEye from '../../assets/img/showEye.svg?react'
 import HideEye from '../../assets/img/eyeClose.svg?react'
 import CommonComponents from '../../contents/index'
 import ApiErrorResponse from '../../constant/index.ts'
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { createApiKeys, getApiKeysList, getApiKeys, updateApiKeys, deleteApiKeys } from '../../axios/apiKeys.ts'
 function ApiKeys() {
     const { apiKeyLists } = useSelector((state: any) => state.apikey);
     const dispatch = useDispatch()
-    const { t } = useTranslation();
+    const { t } = useTranslation(['components/apiKey/index', 'common']);
     const { apikeysTableColumn } = CommonComponents();
     const { tooltipEditTitle, tooltipDeleteTitle, tooltipShowTitle, tooltipHideTitle } = tooltipTitle();
 
@@ -84,7 +84,7 @@ function ApiKeys() {
     const columns = [...apikeysTableColumn]
     columns.push(
         {
-            title: `${t('projectColumnActions')}`,
+            title: `${t('actions', {ns: 'common'})}`,
             key: 'action',
             fixed: 'right',
             width: 157,
@@ -175,7 +175,7 @@ function ApiKeys() {
                 try {
                     await updateApiKeys(id, params)
                     setOpenEditAPIKey(false)
-                    toast.success(`${t('updateSuccessful')}`)
+                    toast.success(`${t('updateSuccessful', {ns: 'common'})}`)
 
                 } catch (e) {
                     console.log(e)
@@ -200,7 +200,7 @@ function ApiKeys() {
                 try {
                     await createApiKeys(params)
                     setOpenCreateAPIKey(false)
-                    toast.success(`${t('creationSuccessful')}`)
+                    toast.success(`${t('creationSuccessful', {ns: 'common'})}`)
 
                 } catch (e) {
                     console.log(e)
@@ -240,9 +240,9 @@ function ApiKeys() {
         <div className={styles["api-keys"]}>
 
             <Spin spinning={tableLoading} wrapperClassName={styles.spinloading}>
-                <ModalTable ifSelect={false} title='New API Key' loading={tableLoading} ifHideFooter={true} columns={columns} name="API Key" dataSource={apiKeysList} onChildEvent={handleChildEvent} onOpenDrawer={handleNewInstance} />
+                <ModalTable ifSelect={false} title={t('newApiKey')} loading={tableLoading} ifHideFooter={true} columns={columns} name="API Key" dataSource={apiKeysList} onChildEvent={handleChildEvent} onOpenDrawer={handleNewInstance} />
             </Spin>
-            <Modal title={t('projectEditAPIKey')}
+            <Modal title={t('editApiKey')}
                 onCancel={handleModalCancel}
                 open={openEditAPIKey}
                 centered
@@ -250,20 +250,20 @@ function ApiKeys() {
                 closeIcon={<img src={closeIcon} alt="closeIcon" />}
                 footer={[
                     <Button key="cancel" onClick={handleModalCancel} className='cancel-button'>
-                        {t('cancel')}
+                        {t('cancel', {ns: 'common'})}
                     </Button>,
                     <Button key="submit" loading={loading} onClick={handleCreateConfirm} className='next-button'>
-                        {t('confirm')}
+                        {t('confirm', {ns: 'common'})}
                     </Button>
                 ]}
             >
                 <Form layout='vertical' className={styles['edit-form']} initialValues={initialValues} form={form1}>
-                    <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input Instance Name.' }]}>
+                    <Form.Item label={t('name', {ns: 'common'})} name="name" rules={[{ required: true, message: t('requiredApiKeyName') }]}>
                         <Input className={styles['edit-instance-modal']} onChange={handleChangeNameValue}></Input>
                     </Form.Item>
                 </Form>
             </Modal>
-            <Modal title={t('projectCreateAPIKey')}
+            <Modal title={t('createApiKey')}
                 onCancel={handleCreateCancel}
                 open={openCreateAPIKey}
                 className={styles['create-apikey-modal']}
@@ -271,20 +271,20 @@ function ApiKeys() {
                 closeIcon={<img src={closeIcon} alt="closeIcon" />}
                 footer={[
                     <Button key="cancel" onClick={handleCreateCancel} className='cancel-button'>
-                        {t('cancel')}
+                        {t('cancel', {ns: 'common'})}
                     </Button>,
                     <Button key="submit" loading={confirmLoading} onClick={handleCreateConfirm} className='next-button'>
-                        {t('confirm')}
+                        {t('confirm', {ns: 'common'})}
                     </Button>
                 ]}
             >
                 <Form layout='vertical' className={styles['edit-form']} form={form}>
-                    <Form.Item label={t('projectModelColumnName')} name="name" rules={[{ required: true, message: `${t('projectInputName')}` }]}>
+                    <Form.Item label={t('name', {ns: 'common'})} name="name" rules={[{ required: true, message: `${t('nameRequired', {ns: 'common'})}` }]}>
                         <Input className={styles['edit-instance-modal']} onChange={handleChangeNameValue}></Input>
                     </Form.Item>
                 </Form>
             </Modal>
-            <Modal title={t('projectDeleteAPIKey')}
+            <Modal title={t('deleteApiKey')}
                 onCancel={handleDeleteCancel}
                 open={openDeleteModal}
                 centered
@@ -292,17 +292,17 @@ function ApiKeys() {
                 closeIcon={<img src={closeIcon} alt="closeIcon" />}
                 footer={[
                     <Button key="cancel" onClick={handleDeleteCancel} className='cancel-button'>
-                        {t('cancel')}
+                        {t('cancel', {ns: 'common'})}
                     </Button>,
                     <Button key="delete" onClick={handleDeleteConfirm} className={disabled ? 'disabled-button' : 'delete-button'} disabled={disabled} loading={deleteLoading}>
-                        {t('delete')}
+                        {t('delete', {ns: 'common'})}
                     </Button>
                 ]}
             >
-                <p className={styles['p']}>{t('deleteItem')}<span className={styles['span']}> {record.name}</span>? {t('projectDeleteDesc')} </p>
+                <p className={styles['p']}><Trans i18nKey="components/apiKey/index:deleteItem" values={{ deleteValue: record.name}} components={[<span className={styles['span']}>{record.name}</span>]} /> {t('deleteDesc')} </p>
                 <Form layout='vertical' className={styles['edit-form']} form={deleteForm}>
-                    <Form.Item label={t('projectAPIKeyName')} name="name" rules={[{ required: true, message: `${t('projectAPIKeyValidate')}` }]}>
-                        <Input onChange={handleDeleteValue} className={styles['edit-instance-modal']} placeholder={t('projectAPIKeyDeletePlaceholder')}></Input>
+                    <Form.Item label={t('apiKeyName')} name="name" rules={[{ required: true, message: `${t('apiKeyNameRequired')}` }]}>
+                        <Input onChange={handleDeleteValue} className={styles['edit-instance-modal']} placeholder={t('apiKeyNameDeletePlaceholder')}></Input>
                     </Form.Item>
                 </Form>
             </Modal>

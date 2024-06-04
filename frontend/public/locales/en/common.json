@@ -11,6 +11,7 @@
     "code": "Code",
     "confirm": "Confirm",
     "createdAt": "Created at",
+    "creationSuccessful": "Creation successful",
     "delete": "Delete",
     "deleteItem": "Are you sure you want to delete {{deleteValue}}?",
     "description": "Description",
@@ -24,6 +25,7 @@
     "more": "More",
     "naive": "Naive",
     "name": "Name",
+    "nameRequired": "Please input name.",
     "newAction": "New action",
     "langModel": "Language model",
     "lastUpdated": "Last updated",
@@ -37,5 +39,6 @@
     "status": "Status",
     "tools": "Tools",
     "type": "Type",
+    "updateSuccessful": "Update successful",
     "zero": "Zero"
 }

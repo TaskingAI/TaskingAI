@@ -11,6 +11,7 @@
     "code": "コード",
     "confirm": "確認",
     "createdAt": "作成日",
+    "creationSuccessful": "作成に成功しました",
     "delete": "削除",
     "deleteItem": "「{{deleteValue}}」を本当に削除しますか？",
     "description": "記述",
@@ -24,6 +25,7 @@
     "more": "もっと",
     "naive": "素朴",
     "name": "名",
+    "nameRequired": "名を入力してください。",
     "newAction": "新規アクション",
     "langModel": "言語モデル",
     "lastUpdated": "最終更新日",
@@ -37,5 +39,6 @@
     "status": "ステータス",
     "tools": "ツール",
     "type": "タイプ",
+    "updateSuccessful": "更新に成功しました",
     "zero": "なし"
 }
