@@ -3,10 +3,6 @@ name: "i18n:lm_studio_name"
 description: "i18n:lm_studio_description"
 updated_timestamp: 1707152831000
 
-enable_proxy: false
-
-enable_custom_header: false
-
 credentials_schema:
   type: object
   properties:

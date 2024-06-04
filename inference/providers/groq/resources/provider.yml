@@ -3,6 +3,9 @@ name: "i18n:groq_name"
 description: "i18n:groq_description"
 updated_timestamp: 1707152831000
 
+enable_proxy: true
+enable_custom_headers: true
+
 credentials_schema:
   type: object
   properties:
@@ -12,7 +15,6 @@ credentials_schema:
       secret: true
   required:
     - GROQ_API_KEY
-
 
 resources:
   taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/groq"

@@ -5,6 +5,8 @@ echo "Starting tests..."
 # Get the list of files modified in PR
 changed_files=$(cat /tmp/changed_files.txt)
 
+changed_files=$(echo "$changed_files" | sed 's|inference/||')
+
 # Debug: print changed files
 echo "Changed files:"
 echo "$changed_files"

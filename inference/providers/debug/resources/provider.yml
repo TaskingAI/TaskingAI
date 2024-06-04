@@ -3,10 +3,6 @@ name: "i18n:debug_name"
 description: "i18n:debug_description"
 updated_timestamp: 1711074909
 
-enable_proxy: false
-
-enable_custom_header: false
-
 credentials_schema:
   type: object
   properties:

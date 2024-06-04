@@ -3,6 +3,9 @@ name: "i18n:google_gemini_name"
 description: "i18n:google_gemini_description"
 updated_timestamp: 1707152831000
 
+enable_proxy: true
+enable_custom_headers: true
+
 credentials_schema:
   type: object
   properties:
