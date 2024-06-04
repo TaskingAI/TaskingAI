@@ -1,0 +1,5 @@
+{
+    "deleteAssistant": "Delete Assistant",
+    "deleteDesc": "This action cannot be undone and all integrations associated with the action will be affected.",
+    "modelRequired": "Please select a model"
+}

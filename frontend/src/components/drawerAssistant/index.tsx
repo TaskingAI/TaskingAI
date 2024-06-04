@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import PluginComponent from '../pluginComponent/index'
 const DrawerAssistant = forwardRef((props: any, ref: any) => {
-    const { t } = useTranslation()
+    const { t } = useTranslation(['common'])
     const { handleAddPromptInput, handleNewBundle,modelName,drawerTitle,openDrawer,selectedPluginGroup,selectedActionsSelected, handleNewActionModal, topk, maxTokens, bundilesList, handleMaxToken, handleToks, handleNewCollection, selectedCollectionList, collectionHasMore, actionHasMore, retrievalList, actionList, handleMemoryChange1, handleRetrievalConfigChange1, retrievalConfig, inputValue1, memoryValue, handleInputValueOne, handleInputValueTwo, inputValue2, selectedActionsRows, drawerName, systemPromptTemplate, handleDeletePromptInput, handleInputPromptChange, handleSelectModelId, handleChangeName, drawerDesc, handleDescriptionChange } = props
     const [collectionModal, setCollectionModal] = useState(false)
     const [actionModal, setActionModal] = useState(false)
@@ -43,13 +43,13 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
         setSelectedPluginList(selectedPluginGroup)
     }, [selectedPluginGroup])
     useEffect(() => {
-        if(drawerTitle === 'Create Assistant' && openDrawer) {
+        if(drawerTitle === t('createAssistant', {ns: 'common'}) && openDrawer) {
             setSelectedPluginList([]) 
             setActionSelectedList([])
             setRetrievalSelectedList([])
             setPluginActionList([])
             setRetrievalFormList([''])
-        } else if(drawerTitle === 'Edit Assistant' && openDrawer) {
+        } else if(drawerTitle === t('editAssistant', {ns: 'common'}) && openDrawer) {
             const retrievalFormList1 = selectedCollectionList.map((item: any) => ({ collection_id: item.collection_id,name: item.name })).length > 0 ? selectedCollectionList.map((item: any) => ({ collection_id: item.collection_id,name: item.name })) : ['']
             setRetrievalSelectedList(retrievalFormList1)
             setRetrievalFormList(retrievalFormList1)
