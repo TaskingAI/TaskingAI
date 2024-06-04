@@ -5,6 +5,9 @@ echo "Starting tests..."
 # Get the list of files modified in PR
 changed_files=$(cat /tmp/changed_files.txt)
 
+# Debug: print changed files
+echo "Changed files:"
+echo "$changed_files"
 # Define directories and files that require full testing
 declare -a full_test_triggers=("app/" ".github/" "test/" "provider_dependency/" "requirements.txt" "Dockerfile" "config.py")
 
@@ -26,11 +29,14 @@ for file in $changed_files; do
     fi
 done
 
+echo "Modified providers: ${!modified_providers[@]}"
+
 if $run_full_tests; then
     echo "Running full tests..."
     pytest -n auto -v --reruns 2 --reruns-delay 1 test/
 else
     set +e
+    echo "Running tests for modified providers..."
     # For each provider directory involved in the modification, execute a test
     for provider_name in "${!modified_providers[@]}"; do
         echo "Running tests for provider: $provider_name"
