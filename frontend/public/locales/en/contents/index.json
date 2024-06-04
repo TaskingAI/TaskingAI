@@ -1,0 +1,17 @@
+{
+    "billingAmount": "Amount",
+    "billingDate": "Billing date",
+    "billingInvoiceID": "Invoice ID",
+    "bundleColumnName": "Bundle name",
+    "copiedToClipboard": "Copied to clipboard",
+    "embeddingModelID": "Embedding model",
+    "endpoint": "Endpoint",
+    "joinedAt": "Joined at",
+    "key": "Key",
+    "method": "Method",
+    "promptTemp": "Prompt template",
+    "role": "Role",
+    "untitledAssistant": "Untitled Assistant",
+    "untitledCollection": "Untitled Collection",
+    "untitledModel": "Untitled Model"
+}

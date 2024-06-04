@@ -1,0 +1,17 @@
+{
+    "billingAmount": "費用",
+    "billingDate": "請求日",
+    "billingInvoiceID": "インボイスID",
+    "bundleColumnName": "バンドル名",
+    "copiedToClipboard": "クリップボードにコピーしました",
+    "embeddingModelID": "エンベディングモデル",
+    "endpoint": "エンドポイント",
+    "joinedAt": "参加した日",
+    "key": "キー",
+    "method": "メソッド",
+    "promptTemp": "プロンプトテンプレート",
+    "role": "ロール",
+    "untitledAssistant": "名無しアシスタント",
+    "untitledCollection": "名無しコレクション",
+    "untitledModel": "名無しモデル"
+}
