@@ -38,5 +38,5 @@ class ModelUpdateRequest(BaseModel):
 
     @model_validator(mode="before")
     def before_custom_validate(cls, data: Any):
-        check_update_keys(data, ["name", "credentials", "properties", "model_schema_id", "provider_model_id", "type"])
+        check_update_keys(data, ["name", "credentials", "properties", "model_schema_id", "provider_model_id", "type", "configs"])
         return data

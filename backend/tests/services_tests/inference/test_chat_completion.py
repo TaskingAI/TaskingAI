@@ -11,6 +11,48 @@ CHAT_COMPLETION_URL = f"{INFERENCE_BASE_URL}/inference/chat_completion"
 
 @pytest.mark.api_test
 class TestChatCompletion:
+    error_configs_list = [
+        {
+            "temperature": -1.0,
+        },
+        {
+            "temperature": 2.0,
+        },
+        {
+            "temperature": "test",
+        },
+        {
+            "max_tokens": -8192,
+        },
+        {
+            "max_tokens": 81920,
+        },
+        {
+            "max_tokens": "test",
+        },
+        {
+            "top_p": -1.0,
+        },
+        {
+            "top_p": 2.0,
+        },
+        {
+            "top_p": "test",
+        },
+        {
+            "stop": ["*" * 100, "1", "test3", "test4", "test5", "test6"],
+        },
+        {
+            "stop": ["*" * 200],
+        },
+        {
+            "stop": [""],
+        },
+        {
+            "stop": "test",
+        },
+    ]
+
     @pytest.mark.run(order=121)
     @pytest.mark.asyncio
     @pytest.mark.version("0.3.1")
@@ -28,7 +70,13 @@ class TestChatCompletion:
                 "model_id": model_id,
                 "messages": [{"role": "user", "content": "Hello, nice to meet you, what is your name"}],
                 "stream": "False",
-                "configs": {"temperature": 1.0},
+                "configs": {
+                    "temperature": 0.0,
+                    "max_tokens": 4096,
+                    "top_p": 0.0,
+                    "stop": ["you", "me"],
+                    "test": "test",
+                },
             }
 
             res = await chat_completion(chat_completion_data)
@@ -60,7 +108,13 @@ class TestChatCompletion:
                 "model_id": model_id,
                 "messages": [{"role": "user", "content": "what is 18794658 + 9731686"}],
                 "stream": "False",
-                "configs": {"temperature": 1.0},
+                     "configs": {
+                    "temperature": 1.0,
+                    "max_tokens": 100,
+                    "top_p": 1.0,
+                    "stop": ["you"],
+                    "test": "test",
+                },
                 "function_call": "auto",
                 "functions": [
                     {
@@ -373,4 +427,45 @@ class TestChatCompletion:
         res_json = res.json()
 
         pytest.assume(res.status_code == 400, res.json())
+        pytest.assume(res_json.get("error").get("code") == "REQUEST_VALIDATION_ERROR")
+
+    @pytest.mark.run(order=130)
+    @pytest.mark.asyncio
+    @pytest.mark.version("0.3.1")
+    @pytest.mark.test_id("model_045")
+    @pytest.mark.parametrize("configs", error_configs_list)
+    async def test_chat_completion_by_error_configs(self, configs):
+        chat_completion_data = {
+            "model_id": CONFIG.chat_completion_model_id,
+            "messages": [{"role": "user", "content": "Hello, nice to meet you, what is your name"}],
+            "stream": "False",
+            "configs": configs,
+            "function_call": "auto",
+            "functions": [
+                {
+                    "name": "make_scatter_plot",
+                    "description": "Generate a scatter plot from the given data",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "x_values": {
+                                "type": "array",
+                                "items": {"type": "number"},
+                                "description": "The x-axis values for the data points",
+                            },
+                            "y_values": {
+                                "type": "array",
+                                "items": {"type": "number"},
+                                "description": "The y-axis values for the data points",
+                            },
+                        },
+                        "required": ["x_values", "y_values"],
+                    },
+                }
+            ],
+        }
+        res = await chat_completion(chat_completion_data)
+        res_json = res.json()
+
+        pytest.assume(res.status_code == 422, res.json())
         pytest.assume(res_json.get("error").get("code") == "REQUEST_VALIDATION_ERROR")

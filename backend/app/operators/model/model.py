@@ -138,14 +138,16 @@ class ModelOperator(PostgresModelOperator):
             encrypted_credentials,
             display_credentials,
             properties,
+            configs,
         ) = await verify_model_credentials(
             model_schema_id=create_dict["model_schema_id"],
             provider_model_id=create_dict.get("provider_model_id"),
             properties=create_dict.get("properties"),
             model_type=create_dict.get("type"),
             credentials=create_dict["credentials"],
+            configs=create_dict.get("configs") or {}
         )
-        configs = create_dict.get("configs") or {}
+
         model = await super().create(
             create_dict={
                 "model_schema_id": model_schema_id,
@@ -186,6 +188,7 @@ class ModelOperator(PostgresModelOperator):
                 new_encrypted_credentials,
                 new_display_credentials,
                 new_properties,
+                new_configs,
             ) = await verify_model_credentials(
                 model_schema_id=model_schema_id or model.model_schema_id,
                 provider_model_id=provider_model_id or model.provider_model_id,
@@ -193,6 +196,7 @@ class ModelOperator(PostgresModelOperator):
                 model_type=model_type or model.type,
                 credentials=credentials,
                 encrypted_credentials=model.encrypted_credentials if not credentials else None,
+                configs=configs
             )
 
             new_update_dict["model_schema_id"] = new_model_schema_id
@@ -200,7 +204,7 @@ class ModelOperator(PostgresModelOperator):
             new_update_dict["provider_model_id"] = new_provider_model_id
             new_update_dict["type"] = new_model_type
             new_update_dict["properties"] = new_properties
-            new_update_dict["configs"] = configs or model.configs
+            new_update_dict["configs"] = new_configs or model.configs
             if credentials:
                 new_update_dict["encrypted_credentials"] = new_encrypted_credentials
                 new_update_dict["display_credentials"] = new_display_credentials

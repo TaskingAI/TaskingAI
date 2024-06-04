@@ -23,6 +23,13 @@ class TestModel:
             "name": "Openai Chat Completion Model",
             "model_schema_id": "openai/gpt-3.5-turbo",
             "credentials": {"OPENAI_API_KEY": CONFIG.OPENAI_API_KEY},
+            "configs": {
+                "temperature": 1.0,
+                "max_tokens": 4096,
+                "top_p": 1.0,
+                "stop": ["test1", "test2", "test3"],
+                "test": "test",
+            },
         },
         {
             "host_type": "provider",
@@ -51,6 +58,7 @@ class TestModel:
                 "input_token_limit": 2000,
                 "output_token_limit": 2000,
             },
+            "configs": {"temperature": 0.0, "max_tokens": 4096, "top_p": 0.0, "stop": [], "test": "test"},
         },
         {
             "host_type": "provider",
@@ -68,6 +76,7 @@ class TestModel:
                 "input_token_limit": 2000,
                 "output_token_limit": 2000,
             },
+            "configs": {"temperature": 0.0, "max_tokens": 1, "top_p": 0.0, "stop": [], "test": "test"},
         },
         {
             "host_type": "provider",
@@ -92,6 +101,12 @@ class TestModel:
             "properties": {
                 "streaming": True,
                 "function_call": True,
+            },
+            "configs": {
+                "temperature": 0.5,
+                "max_tokens": 4096,
+                "top_p": 0.5,
+                "stop": [],
             },
         },
         {
@@ -125,6 +140,16 @@ class TestModel:
                 "vision": False,
                 "input_token_limit": 8192,
                 "output_token_limit": 4096,
+            },
+        },
+        {
+            "host_type": "provider",
+            "configs": {
+                "temperature": 1.0,
+                "max_tokens": 8192,
+                "top_p": 1.0,
+                "stop": ["test1", "test2", "test3"],
+                "test": "test",
             },
         },
     ]
