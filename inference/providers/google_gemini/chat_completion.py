@@ -1,5 +1,6 @@
 import json
 
+from app.utils.utils import fetch_image_format, get_image_base64_string
 from provider_dependency.chat_completion import *
 from typing import Tuple, Dict
 
@@ -22,13 +23,38 @@ def _build_google_gemini_header(credentials: ProviderCredentials):
         "Content-Type": "application/json",
     }
 
+async def split_markdown_to_objects_preserve_order(markdown_content):
+    import re
 
-def _build_google_gemini_chat_completion_payload(
+    # Define regex pattern for extracting text and images
+    pattern = re.compile(r"(!\[.*?\]\(.*?\))|([^!]+)", re.MULTILINE)
+
+    # Find all matches
+    matches = pattern.findall(markdown_content)
+
+    # Split the content into a list of objects
+    result = []
+
+    for match in matches:
+        if match[0]:  # This is an image
+            image_url = re.findall(r"!\[.*?\]\((.*?)\)", match[0])[0]
+            image_format = await fetch_image_format(image_url)
+            base64_string = await get_image_base64_string(image_url)
+            result.append({"inlineData": {"mimeType": f"image/{image_format}", "data": base64_string}})
+        elif match[1].strip():  # This is text
+            result.append({"text": match[1].strip()})
+
+    return result
+
+
+async def _build_google_gemini_chat_completion_payload(
     messages: List[ChatCompletionMessage],
     configs: ChatCompletionModelConfiguration,
     function_call: Optional[str],
     functions: Optional[List[ChatCompletionFunction]],
 ):
+    # TODO: check if vision is supported
+    vision_support = False
     # Convert ChatCompletionMessages to the required format
     if len(messages) > 1 and messages[0].role == "system":
         # Append system message content to the next message.
@@ -36,10 +62,13 @@ def _build_google_gemini_chat_completion_payload(
         # Remove the system message from the list.
         del messages[0]
 
-    def format_message(msg: ChatCompletionMessage):
+    async def format_message(msg: ChatCompletionMessage):
         if msg.role == ChatCompletionRole.user:
             if isinstance(msg.content, str):
-                return {"role": msg.role.name, "parts": [{"text": msg.content}]}
+                if vision_support:
+                    return {"role": msg.role.name, "parts": await split_markdown_to_objects_preserve_order(msg.content)}
+                else:
+                    return {"role": msg.role.name, "parts": [{"text": msg.content}]}
             elif isinstance(msg.content, List):
                 check_valid_list_content(msg.content)
                 formatted_msg = {"role": "user", "parts": []}
@@ -99,7 +128,7 @@ def _build_google_gemini_chat_completion_payload(
         if is_assistant_function_calls_message(msg)
     }
 
-    formatted_messages = [format_message(msg) for msg in messages]
+    formatted_messages = [await format_message(msg) for msg in messages]
     generation_config = {}
     config_dict = configs.model_dump()
     for key, value in config_dict.items():
@@ -130,7 +159,7 @@ class GoogleGeminiChatCompletionModel(BaseChatCompletionModel):
 
     # ------------------- prepare request data -------------------
 
-    def prepare_request(
+    async def prepare_request(
         self,
         stream: bool,
         provider_model_id: str,
@@ -154,7 +183,7 @@ class GoogleGeminiChatCompletionModel(BaseChatCompletionModel):
         action = "streamGenerateContent?alt=sse" if stream else "generateContent"
         api_url = f"https://generativelanguage.googleapis.com/{api_version}/models/{provider_model_id}:{action}"
 
-        payload = _build_google_gemini_chat_completion_payload(messages, configs, function_call, functions)
+        payload = await _build_google_gemini_chat_completion_payload(messages, configs, function_call, functions)
         headers = _build_google_gemini_header(credentials)
         return api_url, headers, payload
 

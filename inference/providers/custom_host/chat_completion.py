@@ -38,7 +38,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
             )
         model_id = credentials.CUSTOM_HOST_MODEL_ID
         # Convert ChatCompletionMessages to the required format
-        api_url, headers, payload = instance.prepare_request(
+        api_url, headers, payload = await instance.prepare_request(
             False, model_id, messages, credentials, configs, function_call, functions
         )
 

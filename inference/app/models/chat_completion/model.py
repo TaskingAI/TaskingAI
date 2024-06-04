@@ -93,7 +93,7 @@ class BaseChatCompletionModel(ABC):
         custom_headers: Optional[Dict[str, str]] = None,
     ):
         # Convert ChatCompletionMessages to the required format
-        api_url, headers, payload = self.prepare_request(
+        api_url, headers, payload = await self.prepare_request(
             False, provider_model_id, messages, credentials, configs, function_call, functions
         )
         if proxy:
@@ -132,7 +132,7 @@ class BaseChatCompletionModel(ABC):
                 text_content = self.extract_text_content(core_data)
                 function_calls = self.extract_function_calls(core_data)
                 finish_reason = self.extract_finish_reason(core_data)
-        response = self.prepare_response(
+        response = await self.prepare_response(
             finish_reason=finish_reason,
             text_content=text_content,
             function_calls_content=None,
@@ -156,7 +156,7 @@ class BaseChatCompletionModel(ABC):
         proxy: Optional[str] = None,
         custom_headers: Optional[Dict[str, str]] = None,
     ):
-        api_url, headers, payload = self.prepare_request(
+        api_url, headers, payload = await self.prepare_request(
             True, provider_model_id, messages, credentials, configs, function_call, functions
         )
         if proxy:
@@ -220,7 +220,7 @@ class BaseChatCompletionModel(ABC):
                 if empty_stream:
                     raise_provider_api_error("The model stream response is empty.")
 
-                response = self.prepare_response(
+                response = await self.prepare_response(
                     finish_reason=finish_reason,
                     text_content=text_content,
                     function_calls_content=function_calls_content,
@@ -232,7 +232,7 @@ class BaseChatCompletionModel(ABC):
 
     # ------------------- prepare request and response data -------------------
 
-    def prepare_request(
+    async def prepare_request(
         self,
         stream: bool,
         provider_model_id: str,
@@ -248,7 +248,7 @@ class BaseChatCompletionModel(ABC):
         """
         raise NotImplementedError
 
-    def prepare_response(
+    async def prepare_response(
         self,
         finish_reason: ChatCompletionFinishReason,
         text_content: str,
