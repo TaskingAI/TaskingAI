@@ -15,6 +15,7 @@ on:
       - ".github/workflows/deploy-inference.yml"
 
 env:
+  WORK_DIR: inference
   ECR_REPOSITORY: inference
   EKS_NAMESPACE: ${{ secrets.EKS_NAMESPACE_TEST }}
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION_TEST }}
@@ -27,6 +28,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORK_DIR }}
     environment: test
     steps:
       - name: Checkout repo
@@ -49,7 +53,6 @@ jobs:
           python-version: 3.x
 
       - name: Install Dependencies
-        working-directory: inference
         run: pip install -r requirements.txt
 
       - name: Configure AWS credentials
@@ -76,7 +79,6 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION_TEST }}
 
       - name: Build Docker image
-        working-directory: inference
         env:
           ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
         run: |
@@ -84,7 +86,6 @@ jobs:
           echo "Build success: ${ECR_REGISTRY}/$ECR_REPOSITORY:${IMAGE_TAG}"
 
       - name: Run Docker image
-        working-directory: inference
         env:
           ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
           INFERENCE_PROVIDER_CREDENTIALS: ${{ secrets.INFERENCE_PROVIDER_CREDENTIALS }}
@@ -96,7 +97,6 @@ jobs:
           sleep 5 # Wait for service to start
 
       - name: Run Tests
-        working-directory: inference
         run: |
           export PROVIDER_URL_BLACK_LIST="tasking.ai"
           bash ./test/run_full_test.sh

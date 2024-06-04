@@ -12,6 +12,7 @@ on:
       - "!**.png"
 
 env:
+  WORK_DIR: inference
   ECR_REGISTRY: inference
   ECR_REPOSITORY: inference
 
@@ -21,6 +22,9 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORK_DIR }}
     environment: test
     steps:
       - name: Checkout repository
@@ -57,17 +61,14 @@ jobs:
           python-version: 3.x
 
       - name: Install Dependencies
-        working-directory: inference
         run: pip install -r requirements.txt
 
       - name: Build Docker image
-        working-directory: inference
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           echo "Build success: ${ECR_REGISTRY}/$ECR_REPOSITORY:${IMAGE_TAG}"
 
       - name: Run Docker image
-        working-directory: inference
         env:
           ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
           INFERENCE_PROVIDER_CREDENTIALS: ${{ secrets.INFERENCE_PROVIDER_CREDENTIALS }}
@@ -79,7 +80,6 @@ jobs:
           sleep 10 # Wait for service to start
 
       - name: Run Tests
-        working-directory: inference
         run: |
           export PROVIDER_URL_BLACK_LIST="tasking.ai"
           bash ./test/run_test.sh /tmp/changed_files.txt
