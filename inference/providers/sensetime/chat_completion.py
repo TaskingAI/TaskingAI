@@ -1,3 +1,4 @@
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 from .utils import build_sensetime_header
 from typing import Tuple, Dict
@@ -110,6 +111,7 @@ class SensetimeChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
         api_url = "https://api.sensenova.cn/v1/llm/chat-completions"
