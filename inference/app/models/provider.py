@@ -44,8 +44,8 @@ class Provider(BaseModel):
                 icon_svg_url=icon_svg_url,
                 resources=ProviderResource(**resources_data),
                 updated_timestamp=row["updated_timestamp"],
-                enable_proxy=row.get("enable_proxy", True),
-                enable_custom_headers=row.get("enable_custom_headers", True),
+                enable_proxy=row.get("enable_proxy", False),
+                enable_custom_headers=row.get("enable_custom_headers", False),
             )
         except KeyError as e:
             error_msg = f"Missing key '{e.args[0]}' for provider '{provider_id}'. Please check the data."

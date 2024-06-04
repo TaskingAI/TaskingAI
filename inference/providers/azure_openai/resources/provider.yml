@@ -3,6 +3,9 @@ name: "i18n:azure_openai_name"
 description: "i18n:azure_openai_description"
 updated_timestamp: 1707152831000
 
+enable_proxy: true
+enable_custom_headers: true
+
 credentials_schema:
   type: object
   properties:
