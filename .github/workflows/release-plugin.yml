@@ -113,7 +113,6 @@ jobs:
 
       - name: Run Local Docker image
         if: steps.docker_image_check.outputs.exists != 'true'
-        working-directory: plugin
         env:
           ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
           PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
@@ -133,13 +132,11 @@ jobs:
 
       - name: Run Tests
         if: steps.docker_image_check.outputs.exists != 'true'
-        working-directory: plugin
         run: |
           bash ./test/run_full_test.sh
 
       - name: Run Local Tests
         if: steps.docker_image_check.outputs.exists != 'true'
-        working-directory: plugin
         run: |
           export PATH_TO_VOLUME=./test
           export HOST_URL=http://localhost:8030
@@ -153,7 +150,6 @@ jobs:
 
       - name: Run S3 without public domain Docker image
         if: steps.docker_image_check.outputs.exists != 'true'
-        working-directory: plugin
         env:
           ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
           PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
@@ -173,7 +169,6 @@ jobs:
 
       - name: Run S3 without public domain Tests
         if: steps.docker_image_check.outputs.exists != 'true'
-        working-directory: plugin
         run: |
           echo "$TEST_S3_SECRET_AWS" > .env
           bash ./test/run_s3_without_test.sh
@@ -186,7 +181,6 @@ jobs:
 
       - name: Run S3 with public domain Docker image
         if: steps.docker_image_check.outputs.exists != 'true'
-        working-directory: plugin
         env:
           ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
           PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
@@ -206,7 +200,6 @@ jobs:
 
       - name: Run S3 with public domain Tests
         if: steps.docker_image_check.outputs.exists != 'true'
-        working-directory: plugin
         run: |
           echo "$TEST_S3_SECRET_R2" > .env
           bash ./test/run_s3_with_test.sh
