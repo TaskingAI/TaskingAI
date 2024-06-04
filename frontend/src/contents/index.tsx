@@ -39,7 +39,7 @@ function CommonComponents() {
             text: () => text
         });
         clipboard.on('success', function () {
-            toast.success(t('copiedToClipboard'))
+            toast.success(t('copiedToClipboard', {ns: 'common'}))
             clipboard.destroy()
         });
         clipboard.on('error', function (e) {

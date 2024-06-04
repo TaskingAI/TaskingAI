@@ -1,0 +1,11 @@
+{
+    "chunkLower": "chunk",
+    "chunkPlaceholder": "Enter text content",
+    "chunkTextContentDesc": "The text content of the chunk. Once created, it is converted into a computation-manageable vector via the collection's embedding model.",
+    "createChunk": "Create Chunk",
+    "deleteChunk": "Delete Chunk",
+    "editChunk": "Edit Chunk",
+    "newChunk": "New chunk",
+    "record": "Record",
+    "tokens": "Tokens"
+}

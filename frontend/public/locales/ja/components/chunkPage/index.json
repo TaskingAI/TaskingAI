@@ -1,0 +1,11 @@
+{
+    "chunkLower": "チャンク",
+    "chunkPlaceholder": "テキストコンテンツを入力",
+    "chunkTextContentDesc": "チャンクのテキストコンテンツです。作成すると、コレクションのエンベディングモデルからベクターに変換されます。",
+    "createChunk": "チャンクを作成",
+    "deleteChunk": "チャンクを削除",
+    "editChunk": "チャンクを編集",
+    "newChunk": "新規チャンク",
+    "record": "レコード",
+    "tokens": "トークン"
+}
