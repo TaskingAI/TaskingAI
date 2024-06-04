@@ -235,7 +235,7 @@ function CommonComponents() {
             )
         },
         {
-            title: `${t('embeddingModelID')}`,
+            title: `${t('embeddingModel', {ns: 'common'})}`,
             dataIndex: 'model_name',
             key: 'ModelID',
             ellipsis: true,
