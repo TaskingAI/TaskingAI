@@ -1,4 +1,6 @@
 from typing import Tuple, Dict
+
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 from .utils import *
 
@@ -94,6 +96,7 @@ class BaichuanChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         api_url = "http://api.baichuan-ai.com/v1/chat/completions"
         headers = build_baichuan_header(credentials)

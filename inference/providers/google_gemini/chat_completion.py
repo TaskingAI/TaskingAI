@@ -1,5 +1,6 @@
 import json
 
+from app.models import ModelSchema
 from app.utils.utils import fetch_image_format, get_image_base64_string
 from provider_dependency.chat_completion import *
 from typing import Tuple, Dict
@@ -52,9 +53,8 @@ async def _build_google_gemini_chat_completion_payload(
     configs: ChatCompletionModelConfiguration,
     function_call: Optional[str],
     functions: Optional[List[ChatCompletionFunction]],
+    vision_support: bool = False,
 ):
-    # TODO: check if vision is supported
-    vision_support = False
     # Convert ChatCompletionMessages to the required format
     if len(messages) > 1 and messages[0].role == "system":
         # Append system message content to the next message.
@@ -168,6 +168,7 @@ class GoogleGeminiChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
         if credentials.GOOGLE_GEMINI_API_VERSION == "v1" and functions:
@@ -183,7 +184,7 @@ class GoogleGeminiChatCompletionModel(BaseChatCompletionModel):
         action = "streamGenerateContent?alt=sse" if stream else "generateContent"
         api_url = f"https://generativelanguage.googleapis.com/{api_version}/models/{provider_model_id}:{action}"
 
-        payload = await _build_google_gemini_chat_completion_payload(messages, configs, function_call, functions)
+        payload = await _build_google_gemini_chat_completion_payload(messages, configs, function_call, functions, model_schema.allow_vision_input())
         headers = _build_google_gemini_header(credentials)
         return api_url, headers, payload
 

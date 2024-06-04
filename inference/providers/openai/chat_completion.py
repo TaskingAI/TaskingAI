@@ -1,5 +1,6 @@
 from typing import Tuple, Dict
 
+from app.models import ModelSchema
 from app.utils.utils import image_url_is_on_localhost, fetch_image_format, get_image_base64_string
 from provider_dependency.chat_completion import *
 from .utils import *
@@ -90,9 +91,9 @@ async def _build_openai_chat_completion_payload(
     configs: ChatCompletionModelConfiguration,
     function_call: Optional[str],
     functions: Optional[List[ChatCompletionFunction]],
+    vision_support: bool = False,
 ):
     # Convert ChatCompletionMessages to the required format
-    vision_support = "vision" in provider_model_id
     formatted_messages = [await _build_openai_message(msg, vision_support) for msg in messages]
     logger.debug("formatted_messages: %s", formatted_messages)
     payload = {
@@ -150,12 +151,13 @@ class OpenaiChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
         api_url = "https://api.openai.com/v1/chat/completions"
         headers = build_openai_header(credentials)
         payload = await _build_openai_chat_completion_payload(
-            messages, stream, provider_model_id, configs, function_call, functions
+            messages, stream, provider_model_id, configs, function_call, functions, model_schema.allow_vision_input()
         )
         return api_url, headers, payload
 

@@ -2,6 +2,7 @@ import json
 import logging
 from typing import Dict, List, Optional, Tuple
 
+from app.models import ModelSchema
 from provider_dependency.chat_completion import (
     BaseChatCompletionModel,
     ChatCompletionChunk,
@@ -91,6 +92,7 @@ class WenxinChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         endpoint = {
             "ernie-bot": "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions",

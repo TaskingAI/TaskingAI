@@ -1,3 +1,4 @@
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 from typing import List, Optional, Dict, Tuple
 
@@ -63,6 +64,7 @@ class HuggingFaceChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
         base_url = "https://api-inference.huggingface.co/models/PLACE_HOLDER_MODEL_ID"

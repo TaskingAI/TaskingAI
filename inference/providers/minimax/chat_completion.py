@@ -1,4 +1,6 @@
 from typing import Tuple, Dict
+
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 from .utils import *
 from typing import List, Dict, Any, Optional
@@ -101,6 +103,7 @@ class MinimaxChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
         api_url = "https://api.minimax.chat/v1/text/chatcompletion_v2"

@@ -1,4 +1,6 @@
 from typing import Tuple, Dict
+
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 
 logger = logging.getLogger(__name__)
@@ -97,6 +99,7 @@ class OllamaChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
         api_url = build_url(credentials.OLLAMA_HOST, "/v1/chat/completions")

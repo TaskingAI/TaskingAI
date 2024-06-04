@@ -1,4 +1,6 @@
 import asyncio
+
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 from app.models.tokenizer import estimate_input_tokens, estimate_response_tokens
 from typing import List, Dict, Optional
@@ -68,6 +70,7 @@ class ReplicateChatCompletionModel(BaseChatCompletionModel):
         functions: Optional[List[ChatCompletionFunction]] = None,
         proxy: Optional[str] = None,
         custom_headers: Optional[Dict[str, str]] = None,
+        model_schema: ModelSchema = None,
     ):
         # Convert ChatCompletionMessages to the required format
 
@@ -144,5 +147,8 @@ class ReplicateChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        proxy: Optional[str] = None,
+        custom_headers: Optional[Dict[str, str]] = None,
+        model_schema: ModelSchema = None,
     ):
         pass

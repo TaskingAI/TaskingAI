@@ -1,3 +1,4 @@
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 from .chat_completion_tool_calls import CustomHostToolCallsChatCompletionModel
 from .chat_completion_function_call import CustomHostFunctionCallChatCompletionModel
@@ -17,7 +18,6 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
 
     async def chat_completion(
         self,
-        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -26,6 +26,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
         functions: Optional[List[ChatCompletionFunction]] = None,
         proxy: Optional[str] = None,
         custom_headers: Optional[Dict[str, str]] = None,
+        model_schema: ModelSchema = None,
     ):
         if provider_model_id == "openai-function-call":
             instance = self.openai_function_call_instance
@@ -39,7 +40,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
         model_id = credentials.CUSTOM_HOST_MODEL_ID
         # Convert ChatCompletionMessages to the required format
         api_url, headers, payload = await instance.prepare_request(
-            False, model_id, messages, credentials, configs, function_call, functions
+            False, model_id, messages, credentials, configs, function_call, functions, model_schema
         )
 
         for url in CONFIG.PROVIDER_URL_BLACK_LIST:
@@ -73,7 +74,6 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
 
     async def chat_completion_stream(
         self,
-        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -82,6 +82,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
         functions: Optional[List[ChatCompletionFunction]] = None,
         proxy: Optional[str] = None,
         custom_headers: Optional[Dict[str, str]] = None,
+        model_schema: ModelSchema = None,
     ):
         if provider_model_id == "openai-function-call":
             instance = self.openai_function_call_instance
@@ -94,7 +95,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
             )
         model_id = credentials.CUSTOM_HOST_MODEL_ID
         api_url, headers, payload = instance.prepare_request(
-            True, model_id, messages, credentials, configs, function_call, functions
+            True, model_id, messages, credentials, configs, function_call, functions, model_schema
         )
 
         input_tokens = estimate_input_tokens(

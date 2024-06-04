@@ -1,3 +1,4 @@
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 from typing import List, Optional, Dict, Tuple
 from app.models.utils import generate_random_id
@@ -125,6 +126,7 @@ class MistralaiChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
         api_url = "https://api.mistral.ai/v1/chat/completions"
