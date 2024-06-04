@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 
 const CreatePlugin = forwardRef((props:any, ref) => {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation(['components/createPlugin/index', 'common']);
     const { open, handleCloseModal, handleConfirmRequest } = props
     const [openCreateModal2, setOpenCreateModal2] = useState(false);
     const [openCreateModal3, setOpenCreateModal3] = useState(false);
@@ -98,7 +98,7 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                 handleCloseModal()
                 setOpenCreateModal3(false)
                 setOpenCreateModal2(false)
-                toast.success('Creation successful!')
+                toast.success(t('creationSuccessful', {ns: 'common'}))
             } catch (e) {
                 const apiError = e as ApiErrorResponse;
                 const errorMessage: string = apiError.response.data.error.message;
@@ -145,7 +145,7 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                 setOpenCreateModal2(false)
                 handleCloseModal()
 
-                toast.success('Creation successful!')
+                toast.success(t('creationSuccessful', {ns: 'common'}))
             } catch (error) {
                 const apiError = error as ApiErrorResponse;
                 const errorMessage: string = apiError.response.data.error.message;
@@ -193,24 +193,24 @@ const CreatePlugin = forwardRef((props:any, ref) => {
             <>
                 {openCreateModal2 ? <>
                     <Button icon={<LeftOutlined />} key="cancel" onClick={handleCancel1} className='cancel-button'>
-                        {t('back')}
+                        {t('back', {ns: 'common'})}
                     </Button>
                     <Button key="submit" onClick={handleNext1} loading={nextLoading1} className='next-button' style={{ marginLeft: '10px' }}>
-                        {t('confirm')}
+                        {t('confirm', {ns: 'common'})}
                     </Button>
                 </> : <><Button key="cancel" onClick={handleCancel} className='cancel-button'>
-                    {t('cancel')}
+                    {t('cancel', {ns: 'common'})}
                 </Button>
                     <Button key="submit" onClick={handleNext} className='next-button' style={{ marginLeft: '10px' }}>
-                        {t('next')}
+                        {t('next', {ns: 'common'})}
                         <RightOutlined />
                     </Button></>}
             </>
-        ]} zIndex={10002} width={1280} onCancel={handleCancel} centered closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} title={openCreateModal2 ? t('projectPluginCreate') : t('projectBundleSelection')} open={open} className={styles.drawerCreate}>
+        ]} zIndex={10002} width={1280} onCancel={handleCancel} centered closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} title={openCreateModal2 ? t('createPlugin') : t('bundleSelection')} open={open} className={styles.drawerCreate}>
             {openCreateModal2 ? <div className={styles.componentsData}>
                 <div className={styles.inputWithLabelParent}>
                     <div className={styles.inputWithLabel}>
-                        <div className={styles.label}>{t('projectBundleTitle')}</div>
+                        <div className={styles.label}>{t('bundle', {ns: 'common'})}</div>
                         <div className={styles.inputWithLabelInner}>
                             <div className={styles.frameWrapper}>
                                 <div className={styles.frameContainer}>
@@ -239,14 +239,14 @@ const CreatePlugin = forwardRef((props:any, ref) => {
 
                         </div>
                         <div className={styles.pluginDesc}>{pluginDesc}</div>
-                        <div className={styles.inputParams}>{t('projectInputParameters')}</div>
+                        <div className={styles.inputParams}>{t('inputParameters')}</div>
                         <div style={{ marginLeft: '24px', marginTop: '12px' }}>
                             <ParameterTable parameters={inputSchema} />
                         </div>
                     </div>
                 </div></div> : <div className={styles.modalContent}>
                 <div className={styles.left}>
-                    <div className={styles.selectBundleDesc}>{t('projectBundleDesc')}</div>
+                    <div className={styles.selectBundleDesc}>{t('bundleDesc')}</div>
                     <div className={styles['content-modal']}>
                         <div className={styles.content}>
                             {bundilesList.map((item: any, index: number) => (
@@ -268,7 +268,7 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                                     <div className={styles.frameGroup}>
                                         <div className={styles.functionaliconsParent}>
                                             <ToolsNew />
-                                            <div className={styles.webSearch}>{item.num_plugins} {item.num_plugins > 1 ? t('projectToolsTitle') : 'Tool'}</div>
+                                            <div className={styles.webSearch}>{item.num_plugins} {item.num_plugins > 1 ? t('tools', {ns: 'common'}) : t('tool', {ns: 'common'})}</div>
                                         </div>
                                         <div className={styles.taskingaiWrapper}>
                                             <div className={styles.taskingai}>{item.developer}</div>
@@ -288,11 +288,11 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                             <div className={styles.googleWebSearch1}>{bundleName}</div>
                         </div>
                         <div className={styles['description-bundle']}>
-                            <div className={styles['desc-title']}>Description</div>
+                            <div className={styles['desc-title']}>{t('description', {ns: 'common'})}</div>
                             <div className={styles['description-detail']}>{description}</div>
                         </div>
                         <div className={styles['description-bundle']}>
-                            <div className={styles['desc-title']}>Plugins</div>
+                            <div className={styles['desc-title']}>{t('plugins', {ns: 'common'})}</div>
                             {
                                 pluginListData.map((item: any, index) => (
                                     <div className={styles.pluginContent} key={index}>
@@ -310,23 +310,23 @@ const CreatePlugin = forwardRef((props:any, ref) => {
         </Modal>
         <Modal footer={[
             <Button key="cancel" onClick={handleCancel2} className='cancel-button'>
-                {t('cancel')}
+                {t('cancel', {ns: 'common'})}
             </Button>,
             <Button key="submit" loading={confirmLoading} onClick={handleConfirm} className='next-button'>
-                {t('confirm')}
+                {t('confirm', {ns: 'common'})}
             </Button>
-        ]} width={720} zIndex={10003} onCancel={handleCancel2} open={openCreateModal3} centered closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} title={t('projectPluginCreate')} className={styles.createModal3}>
+        ]} width={720} zIndex={10003} onCancel={handleCancel2} open={openCreateModal3} centered closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} title={t('createPlugin')} className={styles.createModal3}>
             <div className={styles.editForm}>
                 <div className={styles.bundleTitle}>
-                    <div className={styles.label}>{t('projectBundleTitle')}</div>
+                    <div className={styles.label}>{t('bundle', {ns: 'common'})}</div>
                     <div className={styles.googleWeb}>
                         <img loading="lazy" src={(cachedImages as any)[bundleId]} alt="" style={{ width: '24px', height: '24px' }} />
                         <div className={styles.googleWebSearch}>{bundleName}</div>
                     </div>
                 </div>
-                <div className={styles['credentials']}>{t('projectModelCredentials')}</div>
+                <div className={styles['credentials']}>{t('credentials', {ns: 'common'})}</div>
                 <div className={styles['label-desc']} style={{ marginBottom: '24px' }}>
-                    All plugin credentials are encrypted at rest with AES-256 and in transit with TLS 1.2.
+                    {t('credentialsDesc')}
                 </div>
 
                 <Form
@@ -340,7 +340,7 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                         <Form.Item label={key} key={key} name={key} rules={[
                             {
                                 required: property.required,
-                                message: `Please input ${key}.`,
+                                message: t('pleaseInputKey', {key}),
                             },
                         ]}>
                             <div className={styles['description']}>{(property as { description: string }).description}</div>
@@ -349,7 +349,7 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                                 key={key}
                                 className={styles['form-item']}
                             >
-                                <Input placeholder={`Enter ${key}`} className={styles['input']} />
+                                <Input placeholder={t('enterKey', {key})} className={styles['input']} />
                             </Form.Item>
                         </Form.Item>
                     ))}
