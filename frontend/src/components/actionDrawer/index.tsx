@@ -6,7 +6,7 @@ import styles from './actionDrawer.module.scss'
 import { useTranslation } from 'react-i18next';
 import { useState, forwardRef,useImperativeHandle,useEffect } from 'react';
 const ActionDrawer = forwardRef((props: any, ref: any) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['components/actionDrawer/index', 'common']);
   const { actionId, schema, showTipError,open, onhandleTipError, onSchemaChange, onChangeAuthentication, Authentication, onRadioChange, radioValue, onChangeCustom, custom } = props
   const { TextArea } = Input
   const [resetButtonShow, setResetButtonShow] = useState(actionId ? true : false)
@@ -87,41 +87,41 @@ const ActionDrawer = forwardRef((props: any, ref: any) => {
       <div className={styles['top']}>
         <div className={styles['label']} style={{ marginTop: 0 }}>
           <span className={styles['span']}> * </span>
-          <span>{t('projectActionSchema')}</span>
+          <span>{t('schema')}</span>
         </div>
         {!actionId ?
           <div className={styles['label-description']}>
-            {t('projectActionSchemaCompliant')}
-            <a href="https://www.openapis.org/what-is-openapi" target="_blank" rel="noopener noreferrer" className={'href'}> {t('projectActionSchemaDescLink')}</a>.
-            {t('projectActionSchemaDesc')}
-            <a href="https://docs.tasking.ai/docs/guide/tool/action" target="_blank" rel="noopener noreferrer" className={'href'}> {t('projectActionSchemaDescLinkEnd')} </a>
-            {t('projectActionToLearnMore')}
+            {t('schemaCompliant')}
+            <a href="https://www.openapis.org/what-is-openapi" target="_blank" rel="noopener noreferrer" className={'href'}> {t('schemaDescLink')}</a>.
+            {t('schemaDesc')}
+            <a href="https://docs.tasking.ai/docs/guide/tool/action" target="_blank" rel="noopener noreferrer" className={'href'}> {t('schemaDescLinkEnd')} </a>
+            {t('learnMore')}
           </div> :
-          <div className={styles['label-description']}>{t('projectActionEditDesc')}</div>}
+          <div className={styles['label-description']}>{t('editDesc')}</div>}
 
         <TextArea value={schema} placeholder={schemaPlaceholder}
           onChange={(e) => handleSchemaChange(e)} showCount maxLength={32768}></TextArea>
-        <div className={`${styles['desc-action-error']} ${showTipError ? styles.show : ''}`}>Schema is required</div>
+        <div className={`${styles['desc-action-error']} ${showTipError ? styles.show : ''}`}>{t('schemaRequired')}</div>
 
       </div>
       <div className={styles['bottom']}>
         <div className={styles['label']}>
           <span className={styles['span']}> * </span>
-          <span>{t('projectActionAuthentication')}</span>
+          <span>{t('authentication')}</span>
         </div>
-        <div className={styles['label-description']}>{t('projectActionAuthenticationType')}</div>
+        <div className={styles['label-description']}>{t('authenticationType')}</div>
         {resetButtonShow && <div className={styles['formbuttoncancel']} onClick={handleResetCredentials}>
-          <div className={styles['text1']}>{t('projectModelResetCredentials')}</div>
+          <div className={styles['text1']}>{t('resetCredentials', {ns: 'common'})}</div>
         </div>}
         <div className={resetButtonShow ? styles.resetBackground : undefined}>
           <Radio.Group onChange={handleRadioChange} value={radioValue}>
-            <Radio value='none'>{t('projectActionNone')}</Radio>
-            <Radio value='basic'>{t('projectActionBasic')}</Radio>
-            <Radio value='bearer'>{t('projectActionBearer')}</Radio>
-            <Radio value='custom'>{t('projectActionCustom')}</Radio>
+            <Radio value='none'>{t('none')}</Radio>
+            <Radio value='basic'>{t('basic')}</Radio>
+            <Radio value='bearer'>{t('bearer')}</Radio>
+            <Radio value='custom'>{t('custom')}</Radio>
           </Radio.Group>
           {radioValue !== 'none' && <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '15px 0' }}>
-            {radioValue !== 'custom' ? <span className={styles['desc-description']}>Authorization </span> : <Input placeholder='X-Custom' onChange={handleCustom} value={custom} style={{ width: '14%' }} />} <span className={styles['desc-description']}>:</span>  <Input prefix={<span style={{ color: '#999' }} >{radioValue !== 'custom' && titleCase(radioValue)}</span>} value={Authentication} placeholder='<Secret>' onChange={hangleChangeAuthorization} style={{ width: '83%' }}></Input>
+            {radioValue !== 'custom' ? <span className={styles['desc-description']}>{t('authorization')} </span> : <Input placeholder='X-Custom' onChange={handleCustom} value={custom} style={{ width: '14%' }} />} <span className={styles['desc-description']}>:</span>  <Input prefix={<span style={{ color: '#999' }} >{radioValue !== 'custom' && titleCase(radioValue)}</span>} value={Authentication} placeholder='<Secret>' onChange={hangleChangeAuthorization} style={{ width: '83%' }}></Input>
           </div>
           }
         </div>

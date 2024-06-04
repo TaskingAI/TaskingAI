@@ -29,6 +29,7 @@
     "plugins": "Plugins",
     "properties": "Properties",
     "records": "Records",
+    "resetCredentials": "Reset credentials",
     "retrieval": "Retrieval",
     "show": "Show",
     "status": "Status",

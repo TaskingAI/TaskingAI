@@ -29,6 +29,7 @@
     "plugins": "プラグイン",
     "properties": "プロパティ",
     "records": "レコード",
+    "resetCredentials": "認証を再設定",
     "retrieval": "リトリーバル",
     "show": "表示",
     "status": "ステータス",

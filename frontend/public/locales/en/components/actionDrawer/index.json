@@ -1,0 +1,17 @@
+{
+    "authentication": "Authentication",
+    "authenticationType": "Choose an authentication type for the action, and provide necessary credentials. All credentials are encrypted at rest with AES-256 and in transit with TLS 1.2.",
+    "authorization": "Authorization",
+    "basic": "Basic",
+    "bearer": "Bearer",
+    "custom": "Custom",
+    "editDesc": "The action schema, Which is compliant with the OpenAPI Specification. It should only have exactly one path and one method.",
+    "none": "None",
+    "learnMore": "to learn more.",
+    "schema": "Schema",
+    "schemaCompliant": "The action JSON schema is compliant with",
+    "schemaDesc": ". If there are multiple paths and methods in the schema, the service will create multiple actions whose schema only has exactly one path and one method. We’ll use 'operationId' and 'description' fields of each endpoint method as the name and description of the tool. Check",
+    "schemaDescLink": "the OpenAPI Specification",
+    "schemaDescLinkEnd": "the documentation",
+    "schemaRequired": "Schema is required"
+}

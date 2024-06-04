@@ -1,0 +1,17 @@
+{
+    "authentication": "認証",
+    "authenticationType": "アクションの認証種類を選択、必要情報を入力してください。保存された認証はAES-256で暗号化している、そして送信する時にTLS 1.2を使います。",
+    "authorization": "認定",
+    "basic": "ベーシック",
+    "bearer": "Bearer",
+    "custom": "カスタム",
+    "editDesc": "アクションスキーマはオープンAIの仕様を対応する。1つのパスとメソッドのみ持つ。",
+    "none": "なし",
+    "learnMore": "を見る。",
+    "schema": "スキーマ",
+    "schemaCompliant": "アクションのJSONのスキーマは",
+    "schemaDesc": "。もしマルチパスとメソッドがスキーマにあると、このサービスは1つだけのパスと1つだけのメソッドを持つマルチアクションを作成する。エンドポイントメソッドの'operationId'と'description'からツールのオペレーションIDと記述を設定する。",
+    "schemaDescLink": "オープンAPIの仕様に対応する",
+    "schemaDescLinkEnd": "ドキュメンテーション",
+    "schemaRequired": "スキーマは必須です。"
+}
