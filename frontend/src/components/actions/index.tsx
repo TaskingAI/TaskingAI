@@ -21,7 +21,7 @@ import ActionDrawer from '../actionDrawer/index.tsx';
 import { toast } from 'react-toastify';
 import { useTranslation } from "react-i18next";
 function Actions() {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['components/actions/index', 'common']);
     const { actionLists } = useSelector((state: any) => state.action);
     const dispatch = useDispatch()
     const actionDrawerRef = useRef(null)
@@ -86,13 +86,13 @@ function Actions() {
         setActionId('')
         setRadioValue('none')
         setAuthentication('')
-        setDrawerTitle(`${t('projectActionEditTitle')}`)
+        setDrawerTitle(`${t('bulkCreateAction')}`)
         setOpenDrawer(value)
         setTipSchema(false)
     }
     const columns = [...actionsTableColumn]
     columns.push({
-        title: `${t('projectColumnActions')}`,
+        title: `${t('actions', {ns: 'common'})}`,
         key: 'action',
         fixed: 'right',
         width: 118,
@@ -116,7 +116,7 @@ function Actions() {
         setTipSchema(false)
         const res = await getActionsDetail(val.action_id)
         const formattedData = JSON.stringify(res.data.openapi_schema, null, 4);
-        setDrawerTitle(`${t('projectToolsEditAction')}`)
+        setDrawerTitle(`${t('editAction')}`)
         setActionId(val.action_id)
         setSchema(formattedData)
         if (res.data.authentication) {
@@ -150,7 +150,7 @@ function Actions() {
             }
             JSON.parse(schemaStr)
         } catch (e) {
-            toast.error(`${t('projectToolsActionInvalidSchema')}`)
+            toast.error(`${t('invalidSchema')}`)
             return
         }
         const commonData: commonDataType = {
@@ -239,9 +239,9 @@ function Actions() {
         <div className={styles["actions"]}>
 
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
-                <ModalTable title='New action' loading={loading} updatePrevButton={updatePrevButton} name='action' id='action_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
+                <ModalTable title={t('newAction', {ns: 'common'})} loading={loading} updatePrevButton={updatePrevButton} name='action' id='action_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
-            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem')} ${deleteValue}? ${t('projectActionDeleteDesc')}`} title='Delete Action' projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
+            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem', {ns: 'common', deleteValue })} ${t('actionDeleteDesc')}`} title={t('actionDeleteTitle')} projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
             <Drawer className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <ActionDrawer ref={actionDrawerRef} actionId={actionId} showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} open={OpenDrawer} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>

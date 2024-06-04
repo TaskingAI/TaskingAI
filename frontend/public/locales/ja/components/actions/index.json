@@ -1,0 +1,7 @@
+{
+    "actionDeleteDesc": "このアクションはアンドゥできません、連携インテグレーションは変更します。",
+    "actionDeleteTitle": "アクションを削除",
+    "bulkCreateAction": "一括新規アクション",
+    "editAction": "アクションを編集",
+    "invalidSchema": "無効スキーマ"
+}

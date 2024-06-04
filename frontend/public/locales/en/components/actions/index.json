@@ -1,0 +1,7 @@
+{
+    "actionDeleteDesc": "This action cannot be undone and all integrations associated with the action will be affected.",
+    "actionDeleteTitle": "Delete Action",
+    "bulkCreateAction": "Bulk Create Action",
+    "editAction": "Edit Action",
+    "invalidSchema": "Invalid schema"
+}
