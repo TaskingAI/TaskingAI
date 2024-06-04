@@ -5,7 +5,7 @@ from tkhelper.utils import check_http_error
 from typing import Dict, Tuple
 
 from app.database import redis_conn, postgres_pool
-from app.models import Model, ModelSchema, Provider, ModelType
+from app.models import Model, ModelSchema, Provider, ModelType, ModelFallbackConfig
 
 __all__ = ["model_ops"]
 
@@ -49,6 +49,7 @@ async def verify_model_credentials(
     model_type: str,
     credentials: Dict,
     encrypted_credentials: Dict = None,
+    fallbacks: ModelFallbackConfig = None,
 ) -> Tuple[str, str, str, str, Dict, Dict, Dict, Dict]:
     """
     verify model credentials and build display credentials
@@ -59,6 +60,7 @@ async def verify_model_credentials(
     :param model_type: the model type
     :param credentials: the credentials
     :param encrypted_credentials: the encrypted credentials
+    :param fallbacks: the fallback models
     :return: a tuple of (the model schema id, provider id, provider model id, model type,
         encrypted credentials, display credentials, properties)
 
@@ -89,6 +91,21 @@ async def verify_model_credentials(
             raise_request_validation_error("Model type cannot be wildcard.")
     else:
         model_type = model_schema.type
+
+    if fallbacks:
+        fallback_list = fallbacks.get("model_list")
+        seen_model_ids = set()  # Set to track seen model IDs
+        for fb in fallback_list:
+            model_id = fb.get("model_id")
+            if model_id in seen_model_ids:
+                raise_request_validation_error(f"Duplicate fallback model ID {model_id} detected.")
+            seen_model_ids.add(model_id)
+            model = await model_ops.get(model_id=model_id)
+            # check the fallback model type is the same as the main model type
+            if model.type != model_type:
+                raise_request_validation_error(
+                    f"Fallback model {model_id} type {model.type} is not the same as model schema type: {model_type}."
+                )
 
     # verify model credentials
     response = await verify_credentials(
@@ -129,6 +146,7 @@ class ModelOperator(PostgresModelOperator):
         create_dict: Dict,
         **kwargs,
     ) -> ModelEntity:
+        fallbacks = create_dict.get("fallbacks") or {}
         # verify model credentials
         (
             model_schema_id,
@@ -145,7 +163,8 @@ class ModelOperator(PostgresModelOperator):
             properties=create_dict.get("properties"),
             model_type=create_dict.get("type"),
             credentials=create_dict["credentials"],
-            configs=create_dict.get("configs") or {}
+            configs=create_dict.get("configs") or {},
+            fallbacks=fallbacks,
         )
 
         model = await super().create(
@@ -159,6 +178,7 @@ class ModelOperator(PostgresModelOperator):
                 "display_credentials": display_credentials,
                 "properties": properties,
                 "configs": configs,
+                "fallbacks": fallbacks,
             },
         )
         return model
@@ -177,6 +197,7 @@ class ModelOperator(PostgresModelOperator):
         credentials = update_dict.get("credentials")
         properties = update_dict.get("properties")
         configs = update_dict.get("configs")
+        fallbacks = update_dict.get("fallbacks") or {}
 
         if model_schema_id or provider_model_id or model_type or credentials or properties or configs:
             # verify model credentials
@@ -196,7 +217,8 @@ class ModelOperator(PostgresModelOperator):
                 model_type=model_type or model.type,
                 credentials=credentials,
                 encrypted_credentials=model.encrypted_credentials if not credentials else None,
-                configs=configs
+                configs=configs,
+                fallbacks=fallbacks,
             )
 
             new_update_dict["model_schema_id"] = new_model_schema_id
@@ -205,6 +227,8 @@ class ModelOperator(PostgresModelOperator):
             new_update_dict["type"] = new_model_type
             new_update_dict["properties"] = new_properties
             new_update_dict["configs"] = new_configs or model.configs
+            if fallbacks:
+                new_update_dict["fallbacks"] = fallbacks
             if credentials:
                 new_update_dict["encrypted_credentials"] = new_encrypted_credentials
                 new_update_dict["display_credentials"] = new_display_credentials

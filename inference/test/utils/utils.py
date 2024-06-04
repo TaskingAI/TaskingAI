@@ -18,7 +18,7 @@ white_list_providers = [
     "moonshot",
     "aws_bedrock",
     "yi",
-    "minimax"
+    "minimax",
 ]
 white_list_models = [
     "google_gemini/gemini-pro-vision",

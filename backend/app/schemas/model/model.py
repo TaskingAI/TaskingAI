@@ -1,6 +1,6 @@
 from typing import Optional, Any, Dict
 from pydantic import BaseModel, Field, model_validator
-from app.models import ModelType
+from app.models import ModelType, ModelFallbackConfig
 from ..utils import check_update_keys
 
 __all__ = [
@@ -20,6 +20,7 @@ class ModelCreateRequest(BaseModel):
     type: Optional[ModelType] = Field(None, description="The type of the model.", examples=["text_embedding"])
     credentials: Dict = Field(..., description="The credentials of the model.")
     properties: Optional[Dict] = Field(None, description="The custom model properties.")
+    fallbacks: Optional[ModelFallbackConfig] = Field(None, description="The fallback models.")
 
 
 # POST /projects/{project_id}/models/{model_id}
@@ -35,8 +36,11 @@ class ModelUpdateRequest(BaseModel):
     type: Optional[ModelType] = Field(None, description="The type of the model.", examples=["text_embedding"])
     credentials: Optional[Dict] = Field(None, description="The credentials of the model.")
     properties: Optional[Dict] = Field(None, description="The custom model properties.")
+    fallbacks: Optional[ModelFallbackConfig] = Field(None, description="The fallback models.")
 
     @model_validator(mode="before")
     def before_custom_validate(cls, data: Any):
-        check_update_keys(data, ["name", "credentials", "properties", "model_schema_id", "provider_model_id", "type", "configs"])
+        check_update_keys(
+            data, ["name", "credentials", "properties", "model_schema_id", "provider_model_id", "type", "configs"]
+        )
         return data
