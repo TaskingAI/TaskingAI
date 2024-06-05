@@ -63,6 +63,8 @@ class TestChatCompletion:
             CONFIG.chat_completion_model_id,
             CONFIG.togetherai_chat_completion_model_id,
             CONFIG.custom_host_chat_completion_model_id,
+            CONFIG.fallbacks_chat_completion_model_id,
+            CONFIG.fallbacks_debug_error_model_id
         ]
 
         for model_id in chat_completion_model_id_list:
@@ -101,6 +103,7 @@ class TestChatCompletion:
             CONFIG.chat_completion_model_id,
             CONFIG.togetherai_chat_completion_model_id,
             CONFIG.custom_host_chat_completion_model_id,
+            CONFIG.fallbacks_chat_completion_model_id,
         ]
 
         for model_id in chat_completion_model_id_list:
@@ -152,6 +155,8 @@ class TestChatCompletion:
             CONFIG.chat_completion_model_id,
             CONFIG.togetherai_chat_completion_model_id,
             CONFIG.custom_host_chat_completion_model_id,
+            CONFIG.fallbacks_chat_completion_model_id,
+            CONFIG.fallbacks_debug_error_model_id
         ]
         for model_id in chat_completion_model_id_list:
             chat_completion_data = {
@@ -192,6 +197,8 @@ class TestChatCompletion:
             CONFIG.chat_completion_model_id,
             CONFIG.togetherai_chat_completion_model_id,
             CONFIG.custom_host_chat_completion_model_id,
+            CONFIG.fallbacks_chat_completion_model_id,
+            CONFIG.fallbacks_debug_error_model_id
         ]
 
         for model_id in chat_completion_model_id_list:
@@ -222,6 +229,8 @@ class TestChatCompletion:
             CONFIG.chat_completion_model_id,
             CONFIG.togetherai_chat_completion_model_id,
             CONFIG.custom_host_chat_completion_model_id,
+            CONFIG.fallbacks_chat_completion_model_id,
+            CONFIG.fallbacks_debug_error_model_id
         ]
 
         for model_id in chat_completion_model_id_list:
@@ -263,6 +272,7 @@ class TestChatCompletion:
             CONFIG.chat_completion_model_id,
             CONFIG.togetherai_chat_completion_model_id,
             CONFIG.custom_host_chat_completion_model_id,
+            CONFIG.fallbacks_chat_completion_model_id,
         ]
         for model_id in chat_completion_model_id_list:
             chat_completion_data = {
@@ -305,6 +315,8 @@ class TestChatCompletion:
             CONFIG.chat_completion_model_id,
             CONFIG.togetherai_chat_completion_model_id,
             CONFIG.custom_host_chat_completion_model_id,
+            CONFIG.fallbacks_chat_completion_model_id,
+            CONFIG.fallbacks_debug_error_model_id
         ]
 
         for model_id in chat_completion_model_id_list:
@@ -339,8 +351,8 @@ class TestChatCompletion:
     async def test_chat_completion_by_function_call_and_length(self):
         chat_completion_model_id_list = [
             CONFIG.chat_completion_model_id,
-
             CONFIG.custom_host_chat_completion_model_id,
+            CONFIG.fallbacks_chat_completion_model_id,
         ]
 
         for model_id in chat_completion_model_id_list:
@@ -377,8 +389,8 @@ class TestChatCompletion:
     async def test_chat_completion_by_stream_and_function_call_and_length(self):
         chat_completion_model_id_list = [
             CONFIG.chat_completion_model_id,
-
             CONFIG.custom_host_chat_completion_model_id,
+            CONFIG.fallbacks_chat_completion_model_id,
         ]
 
         for model_id in chat_completion_model_id_list:
@@ -426,7 +438,7 @@ class TestChatCompletion:
         res = await chat_completion(chat_completion_data)
         res_json = res.json()
 
-        pytest.assume(res.status_code == 400, res.json())
+        pytest.assume(res.status_code == 422, res.json())
         pytest.assume(res_json.get("error").get("code") == "REQUEST_VALIDATION_ERROR")
 
     @pytest.mark.run(order=130)
@@ -466,6 +478,5 @@ class TestChatCompletion:
         }
         res = await chat_completion(chat_completion_data)
         res_json = res.json()
-
         pytest.assume(res.status_code == 422, res.json())
-        pytest.assume(res_json.get("error").get("code") == "REQUEST_VALIDATION_ERROR")
+        pytest.assume(res_json.get("error").get("code") == "REQUEST_VALIDATION_ERROR", res_json)

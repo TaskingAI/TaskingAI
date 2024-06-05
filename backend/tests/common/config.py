@@ -46,7 +46,7 @@ class Config:
     CHAT_COMPLETION_MODEL = {
         "host_type": "provider",
         "name": "My Chat Completion Model",
-        "model_schema_id": "openai/gpt-3.5-turbo",
+        "model_schema_id": "openai/gpt-4",
         "credentials": {"OPENAI_API_KEY": OPENAI_API_KEY},
     }
     TOGETHERAI_TEXT_EMBEDDING_MODEL = {
@@ -153,6 +153,13 @@ class Config:
             "credentials": {"COHERE_API_KEY": COHERE_API_KEY},
         }
 
+    DEBUG_ERROR_MODEL = {
+            "host_type": "provider",
+            "name": "Debug Error Model",
+            "model_schema_id": "debug/debug-error",
+            "credentials": {"DEBUG_API_KEY": "12345678"},
+        }
+
     def __init__(self):
 
         self.TEST_MODE = os.environ.get("TEST_MODE")
@@ -187,6 +194,17 @@ class Config:
                 model_url, self.CUSTOM_HOST_CHAT_COMPLETION_MODEL, token
             )
             self.rerank_model_id = self.get_model(model_url, self.RERANK_MODEL, token)
+            self.debug_error_model_id = self.get_model(model_url, self.DEBUG_ERROR_MODEL, token)
+            self.TEXT_EMBEDDING_MODEL["fallbacks"] = {
+                "model_list": [{"model_id": self.togetherai_text_embedding_model_id}]}
+            self.fallbacks_text_embedding_model_id = self.get_model(model_url, self.TEXT_EMBEDDING_MODEL, token)
+            self.CHAT_COMPLETION_MODEL["fallbacks"] = {
+                "model_list": [{"model_id": self.custom_host_chat_completion_model_id}]}
+            self.fallbacks_chat_completion_model_id = self.get_model(model_url, self.CHAT_COMPLETION_MODEL, token)
+            self.RERANK_MODEL["fallbacks"] = {"model_list": [{"model_id": self.rerank_model_id}]}
+            self.fallbacks_rerank_model_id = self.get_model(model_url, self.RERANK_MODEL, token)
+            self.DEBUG_ERROR_MODEL["fallbacks"] = {"model_list": [{"model_id": self.chat_completion_model_id}]}
+            self.fallbacks_debug_error_model_id = self.get_model(model_url, self.DEBUG_ERROR_MODEL, token)
             apikey_url = f"{self.WEB_BASE_URL}/apikeys"
             create_apikey_dict = {"name": "test_apikey"}
             self.Authentication = self.get_apikey(apikey_url, create_apikey_dict, token)

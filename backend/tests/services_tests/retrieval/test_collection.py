@@ -73,7 +73,7 @@ class TestCollection(Retrieval):
         res = await create_collection(create_collection_data)
         res_json = res.json()
 
-        assert res.status_code == 400
+        assert res.status_code == 422
         assert res_json.get("status") == "error"
         assert res_json.get("error").get("code") == "REQUEST_VALIDATION_ERROR"
 

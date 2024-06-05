@@ -28,6 +28,7 @@ class TestTextEmbedding:
             CONFIG.text_embedding_model_id,
             CONFIG.togetherai_text_embedding_model_id,
             CONFIG.custom_host_text_embedding_model_id,
+            CONFIG.fallbacks_text_embedding_model_id,
         ]
 
         for model_id in text_embedding_model_id_list:
@@ -50,6 +51,7 @@ class TestTextEmbedding:
             CONFIG.text_embedding_model_id,
             CONFIG.togetherai_text_embedding_model_id,
             CONFIG.custom_host_text_embedding_model_id,
+            CONFIG.fallbacks_text_embedding_model_id,
         ]
 
         for model_id in text_embedding_model_id_list:
@@ -73,6 +75,8 @@ class TestTextEmbedding:
             CONFIG.text_embedding_model_id,
             CONFIG.togetherai_text_embedding_model_id,
             CONFIG.custom_host_text_embedding_model_id,
+            CONFIG.fallbacks_text_embedding_model_id,
+
         ]
 
         for model_id in text_embedding_model_id_list:
@@ -96,6 +100,8 @@ class TestTextEmbedding:
             CONFIG.text_embedding_model_id,
             CONFIG.togetherai_text_embedding_model_id,
             CONFIG.custom_host_text_embedding_model_id,
+            CONFIG.fallbacks_text_embedding_model_id,
+
         ]
 
         for model_id in text_embedding_model_id_list:

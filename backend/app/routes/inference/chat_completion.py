@@ -71,24 +71,23 @@ async def api_chat_completion(
                 if data.stream:
                     if not model.allow_streaming():
                         raise_request_validation_error(f"Model {model.model_id} does not support streaming.")
+                    async def generator(sse_chunk_dicts):
+                        async for chunk_dict in sse_chunk_dicts:
+                            yield f"data: {json.dumps(chunk_dict)}\n\n"
+                        yield SSE_DONE_MSG
 
-                        async def generator(sse_chunk_dicts):
-                            async for chunk_dict in sse_chunk_dicts:
-                                yield f"data: {json.dumps(chunk_dict)}\n\n"
-                            yield SSE_DONE_MSG
+                    sse_chunk_dicts = await stream_chat_completion(
+                        model=model,
+                        messages=messages,
+                        configs=configs,
+                        function_call=data.function_call,
+                        functions=functions,
+                    )
 
-                        sse_chunk_dicts = await stream_chat_completion(
-                            model=model,
-                            messages=messages,
-                            configs=configs,
-                            function_call=data.function_call,
-                            functions=functions,
-                        )
-
-                        return StreamingResponse(
-                            generator(sse_chunk_dicts),
-                            media_type="text/event-stream",
-                        )
+                    return StreamingResponse(
+                        generator(sse_chunk_dicts),
+                        media_type="text/event-stream",
+                    )
                 else:
                     # generate none stream response
                     response_data = await chat_completion(
@@ -103,7 +102,7 @@ async def api_chat_completion(
                 if e.status_code == 422:
                     raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, e.detail)
                 if i == 0:
-                    main_exception = e.detail
+                    main_exception = e.detail["message"]
                 logger.debug(f"Model {model_id} failed to respond: {e.detail}")
                 continue
             except Exception as e:
