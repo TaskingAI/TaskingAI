@@ -209,7 +209,7 @@ const ProjectHome = () => {
                             className='document-button cancel-button'
                             onClick={() => window.open('https://docs.tasking.ai', '_blank')}
                         >
-                            {t('documentation')}
+                            {t('documentation', {ns: 'common'})}
                         </Button>
                     </div>
 

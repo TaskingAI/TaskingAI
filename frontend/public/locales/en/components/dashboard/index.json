@@ -9,7 +9,6 @@
     "clientLibrariesDesc": "Choose your preferred client library to start your project.",
     "comingSoon": "Coming Soon",
     "docs": "Docs",
-    "documentation": "Documentation",
     "examples": "Examples",
     "exploreBasicModules": "Explore basic modules",
     "exploreBasicModulesDesc": "Dive into the foundational trio of Model, Retrieval, and Tool with TaskingAI to build and integrate versatile, agent-driven applications. Seamlessly integrate with cloud resources or giants like OpenAI, Anthropic, and many else model providers, ensuring rapid incorporation into your project's code for immediate impact.",

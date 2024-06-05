@@ -1,0 +1,17 @@
+{
+    "availableModelTypes": "選択可能モデルタイプ",
+    "baseModelSelection": "ベースモデルを選択",
+    "features": "プロパティ",
+    "modelLow": "モデル",
+    "modelLows": "モデル",
+    "officalWebsite": "オフィシャルウェブサイト",
+    "pricing": "値段",
+    "providerSelection": "プロバイダーを選択",
+    "providerSelectionChatCompletion": "プロバイダーを選択 - チャットコンプリション",
+    "providerSelectionTextEmbedding": "プロバイダーを選択 - テキストエンベディング",
+    "rerank": "リランク",
+    "resources": "リーソース",
+    "selectBaseModel": "ベースモデルを選択してそしてプロジェクトに追加する。",
+    "selectProvider": "モデルをホストするのプロバイダーを選択する",
+    "wildcard": "ワイルドカード"
+}

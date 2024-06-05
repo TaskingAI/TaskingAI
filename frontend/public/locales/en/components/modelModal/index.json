@@ -1,0 +1,17 @@
+{
+    "availableModelTypes": "Available Model Types",
+    "baseModelSelection": "Base Model Selection",
+    "features": "Properties",
+    "modelLow": "model",
+    "modelLows": "models",
+    "officalWebsite": "Official website",
+    "pricing": "Pricing",
+    "providerSelection": "Provider Selection",
+    "providerSelectionChatCompletion": "Provider Selection - Chat Completion",
+    "providerSelectionTextEmbedding": "Provider Selection - Text Embedding",
+    "rerank": "Rerank",
+    "resources": "Resources",
+    "selectBaseModel": "Select a base model and add it to your project.",
+    "selectProvider": "Select a provider who hosts the models",
+    "wildcard": "Wildcard"
+}

@@ -9,7 +9,6 @@
     "clientLibrariesDesc": "プロジェクトを始めるためにクライエントライブラリーを選択する。",
     "comingSoon": "近刊",
     "docs": "仕様",
-    "documentation": "ドキュメンテーション",
     "examples": "使用例",
     "exploreBasicModules": "ベーシックモジュールを調べる",
     "exploreBasicModulesDesc": "TaskingAIとモデル、リトリーバル、ツールの基本三組でエージェント向きアプリ作成方法を調べる。クラウドリソース(OpenAI、 Anthropic、など)をプロジェクトに組み込んですぐにインパクトする。",
