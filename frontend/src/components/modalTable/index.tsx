@@ -10,7 +10,9 @@ import NoRecord from '../../assets/img/NO_RECORD_2.svg?react'
 import NoTool from '../../assets/img/NO_TOOL.svg?react'
 import NoProject from '../../assets/img/NO_PROJECT.svg?react'
 import { TableProps } from '../../constant/index'
+import { useTranslation } from 'react-i18next';
 function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreateButton=true, ifOnlyId, defaultSelectedRowKeys, updatePrevButton,ifHideLeftHeader, ifHideFooter=false, dataSource, mode, ifSelect, onChildEvent, id, hasMore, onOpenDrawer, name, handleRecordsSelected }: TableProps) {
+    const { t } = useTranslation(['common'])
     const [selectedValue, setSelectedValue] = useState('id_search')
     const [inputValue, setInputValue] = useState('')
     const [scroll, setScroll] = useState({ x: 0, y: 0 });
@@ -25,7 +27,7 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
         limit: 20,
         sort_field: 'created_timestamp',
     })
-    const [enterPlaceHolder, setEnterPlaceHolder] = useState('Enter Name')
+    const [enterPlaceHolder, setEnterPlaceHolder] = useState(t('enterNameUpper', {ns: 'common'}))
     const empty: Record<string, any> = {
         ['API Key']: <NoApikey style={{ width: '158px', height: '100px' }} />,
         assistant: <NoAssistant style={{ width: '158px', height: '100px' }} />,
@@ -138,12 +140,12 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
     }, [flagPrev])
     useEffect(() => {
         if (selectedValue === 'name_search') {
-            setEnterPlaceHolder('Enter Name')
+            setEnterPlaceHolder(t('enterNameUpper', {ns: 'common'}))
         } else {
-            setEnterPlaceHolder('Enter ID')
+            setEnterPlaceHolder(t('enterID', {ns: 'common'}))
         }
         if (ifOnlyId) {
-            setEnterPlaceHolder('Enter ID')
+            setEnterPlaceHolder(t('enterID', {ns: 'common'}))
         }
     }, [selectedValue, ifOnlyId, enterPlaceHolder])
     useEffect(() => {
@@ -207,7 +209,7 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
         }
     }
     const handleSelectEndChange = (value: string) => {
-        const filteredRows = value === 'Selected Records'
+        const filteredRows = value === t('selectedRecords', {ns: 'common'})
             ? originalDataSource.filter(row => selectedRowKeys.includes(row.key))
             : originalDataSource;
         if (hangleFilterData) {
@@ -373,11 +375,11 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
 
         {
             value: 'All Records',
-            label: 'All Records',
+            label: t('allRecords', {ns: 'common'}),
         },
         {
             value: 'Selected Records',
-            label: 'Selected Records',
+            label: t('selectedRecords', {ns: 'common'}),
         }
     ]
     const customEmptyText = (
@@ -385,7 +387,7 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
             image={empty[name as string]}
             description={
                 <>
-                    <p style={{ color: '#bfbfbf', fontSize: '14px' }}>No {name}</p>
+                    <p style={{ color: '#bfbfbf', fontSize: '14px' }}>{t('emptyName', {ns: 'common', name: t(name, {ns: 'common'})})}</p>
                     {!ifAllowNew && <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>{title}</Button>}
                 </>
             }
@@ -398,7 +400,7 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
                 <div className={styles['header-table']}>
                     <Select defaultValue={'ID' } onChange={handleSelectFrontChange} options={ifOnlyId ? optionsFront1 : optionsFront} className={styles['select-name']} />
                     <Input placeholder={enterPlaceHolder} className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
-                    <Button className='cancel-button' onClick={handleSearch}>Search</Button>
+                    <Button className='cancel-button' onClick={handleSearch}>{t('search', {ns: 'common'})}</Button>
                     {(ifSelect && mode === 'multiple') && <Select defaultValue="All Records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />}
                     {!ifSelect && (
                         <div className={styles['header-new']}>
@@ -445,8 +447,8 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
                 </ConfigProvider>
                 {!ifHideFooter && (
                     <div className={`${styles.footer} ${ifSelect ? styles['footer-position'] : ''}`}>
-                        <Button className={`${styles['previous-button']} ${!previousButtonDisabled && styles['able-click-button']}`} style={{ borderRight: 'none' }} onClick={handlePrevious} disabled={previousButtonDisabled}>Previous</Button>
-                        <Button className={`${styles['next-button-group']} ${!nextButtonDisabled && styles['able-click-button']}`} onClick={handleNext} disabled={nextButtonDisabled}>Next</Button>
+                        <Button className={`${styles['previous-button']} ${!previousButtonDisabled && styles['able-click-button']}`} style={{ borderRight: 'none' }} onClick={handlePrevious} disabled={previousButtonDisabled}>{t('previous', {ns: 'common'})}</Button>
+                        <Button className={`${styles['next-button-group']} ${!nextButtonDisabled && styles['able-click-button']}`} onClick={handleNext} disabled={nextButtonDisabled}>{t('next', {ns: 'common'})}</Button>
                         <Pagination defaultPageSize={20} showQuickJumper={false} showSizeChanger={true} onChange={handleChangePageLimit} />
                     </div>
                 )}
