@@ -18,14 +18,11 @@ white_list_providers = [
     "moonshot",
     "aws_bedrock",
     "yi",
+    "minimax",
 ]
 white_list_models = [
     "google_gemini/gemini-pro-vision",
     "google_gemini/gemini-1.5-pro",
-    "minimax/abab5.5-chat",
-    "minimax/abab6-chat",
-    "minimax/abab6.5-chat",
-    "minimax/abab6.5s-chat",
     "togetherai/meta-llama/Llama-2-70b-chat-hf",
     "mistralai/mistral-small-latest",
 ]
