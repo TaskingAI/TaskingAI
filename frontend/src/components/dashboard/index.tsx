@@ -96,7 +96,7 @@ const DashBoard = () => {
                         <div className={styles['card-top']}>
                             <div className={styles['card-header']}>
                                 <ToolGreenIcon />
-                                <span className={styles['card-name']}>{t('tool', {ns: 'cool'})}</span>
+                                <span className={styles['card-name']}>{t('tool', {ns: 'common'})}</span>
                             </div>
                             <div className={styles.desc}>{t('toolDesc')}</div>
                         </div>
@@ -109,7 +109,7 @@ const DashBoard = () => {
                         <div className={styles['card-top']}>
                             <div className={styles['card-header']}>
                                 <AssistantGreenIcon />
-                                <span className={styles['card-name']}>{t('assistant', {ns: 'cool'})}</span>
+                                <span className={styles['card-name']}>{t('assistant', {ns: 'common'})}</span>
                             </div>
                             <div className={styles.desc}>{t('assistantDesc')}</div>
                         </div>
