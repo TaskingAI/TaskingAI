@@ -24,6 +24,11 @@ class TestChunk(Retrieval):
                 "query_text": "TaskingAI",
                 "top_k": 1,
                 "max_tokens": 20000
+            },
+            {
+                "query_text": "TaskingAI",
+                "top_k": 1,
+                "rerank_model_id": CONFIG.rerank_model_id
             }
         ]
 

@@ -146,7 +146,7 @@ class TestModel:
             "host_type": "provider",
             "configs": {
                 "temperature": 1.0,
-                "max_tokens": 8192,
+                "max_tokens": 4096,
                 "top_p": 1.0,
                 "stop": ["test1", "test2", "test3"],
                 "test": "test",
