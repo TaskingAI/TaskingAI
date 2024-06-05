@@ -1,6 +1,6 @@
 import heapq
 from itertools import islice
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from app.database_ops.retrieval import chunk as db_chunk
 from app.models import Chunk, Collection, Model
@@ -13,6 +13,33 @@ from .embedding import embed_query
 __all__ = [
     "query_chunks",
 ]
+
+
+async def _get_rerank_result(
+    model: Model,
+    encrypted_credentials: Dict,
+    query: str,
+    documents: List[str],
+    top_n: int,
+):
+    """
+    get rerank result
+    :param model: the model
+    :param encrypted_credentials: the encrypted credentials
+    :param query: the query string
+    :param documents: a list of document strings
+    :param top_n: the top n
+    :return: the rerank result
+    """
+    response = await rerank(
+        model=model,
+        encrypted_credentials=encrypted_credentials,
+        query=query,
+        documents=documents,
+        top_n=top_n,
+    )
+    data = response.json()["data"]
+    return [(d["index"], d["document"]["text"]) for d in data["results"]]
 
 
 async def _rank_chunks(
@@ -49,7 +76,7 @@ async def _rank_chunks(
         model: Model = await get_model(model_id=rerank_model_id)
 
         chunk_list = [chunk for sublist in results for chunk in sublist]
-        rerank_result = await rerank(
+        rerank_result = await _get_rerank_result(
             model=model,
             encrypted_credentials=model.encrypted_credentials,
             query=query_text,
@@ -106,7 +133,8 @@ async def query_chunks(
     embedding_model_ids = set([collection.embedding_model_id for collection in collections])
     if len(embedding_model_ids) > 1:
         raise_http_error(
-            ErrorCode.REQUEST_VALIDATION_ERROR, message="The specified collections use different embedding models."
+            ErrorCode.REQUEST_VALIDATION_ERROR,
+            message="The specified collections use different embedding models.",
         )
 
     # validate model
