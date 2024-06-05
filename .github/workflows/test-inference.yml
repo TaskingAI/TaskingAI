@@ -2,7 +2,7 @@ name: Build and Test
 
 on:
   pull_request_target:
-    branches: ["master"]
+    types: [opened, synchronize, reopened]
     paths:
       - "inference/**"
       - ".github/workflows/test-inference.yml"
@@ -30,7 +30,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          ref: ${{ github.event.pull_request.base.ref }}
+          repository: ${{ github.repository }}
+
+      - name: Checkout forked repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          path: fork
+
+      - name: Switch to forked repository
+        run: cd fork
 
       - name: Check spelling of repo
         uses: crate-ci/typos@master
