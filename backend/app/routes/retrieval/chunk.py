@@ -30,6 +30,7 @@ async def api_query_chunk(
         max_tokens=data.max_tokens,
         query_text=data.query_text,
         score_threshold=data.score_threshold,
+        rerank_model_id=data.rerank_model_id,
     )
     return BaseListResponse(
         data=[chunk.to_response_dict() for chunk in chunks],
