@@ -39,6 +39,7 @@ async def query_retrievals(
     max_tokens: Optional[int],
     score_threshold: Optional[float],
     query_text: str,
+    rerank_model_id: Optional[str] = None,
 ) -> List[RetrievalResult]:
     """
     Query the top_k related chunks from the specified collections.
@@ -66,6 +67,7 @@ async def query_retrievals(
         max_tokens=max_tokens,
         score_threshold=score_threshold,
         query_text=query_text,
+        rerank_model_id=rerank_model_id,
     )
 
     retrieval_results: List[RetrievalResult] = []

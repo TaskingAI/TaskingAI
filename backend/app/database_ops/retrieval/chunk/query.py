@@ -1,15 +1,16 @@
-from app.database.connection import postgres_pool
 import json
-from typing import List, Optional
-from app.models import Collection, Chunk
-from .utils import get_ef_search
 import logging
-import heapq
+from typing import List, Optional
+
+from app.database.connection import postgres_pool
+from app.models import Chunk, Collection
+
+from .utils import get_ef_search
 
 logger = logging.getLogger(__name__)
 
 
-async def _query_chunks_in_one_collection(
+async def query_chunks_in_one_collection(
     collection: Collection,
     top_k: int,
     score_threshold: Optional[float],
@@ -62,52 +63,3 @@ async def _query_chunks_in_one_collection(
     chunks = [Chunk.build(row) for row in rows]
 
     return chunks
-
-
-async def query_chunks(
-    collections: List[Collection],
-    top_k: int,
-    max_tokens: Optional[int],
-    score_threshold: Optional[float],
-    query_vector: List[float],
-) -> List[Chunk]:
-    """
-    Query top_k related chunks
-    :param collections: the collections where the chunks belong to
-    :param top_k: the number of chunks to be returned
-    :param max_tokens: the maximum number of tokens in the chunks
-    :param score_threshold: the minimum score threshold to return the chunks
-    :param query_vector: the query vector
-    :return: the top_k related chunks
-    """
-
-    results = []
-    for collection in collections:
-        # query chunks in one collection
-        chunks = await _query_chunks_in_one_collection(
-            collection=collection,
-            top_k=top_k,
-            score_threshold=score_threshold,
-            query_vector=query_vector,
-        )
-        results.append(chunks)
-
-    # merge chunks from all collections
-    top_k_chunks = []
-    for chunk in heapq.merge(*results, key=lambda x: x.score, reverse=True):
-        top_k_chunks.append(chunk)
-        if len(top_k_chunks) >= top_k:
-            break
-
-    # select chunks whose total tokens <= max_tokens
-    total_tokens = 0
-    if max_tokens is not None:
-        result_chunks = []
-        for chunk in top_k_chunks:
-            if total_tokens + chunk.num_tokens <= max_tokens:
-                result_chunks.append(chunk)
-                total_tokens += chunk.num_tokens
-    else:
-        result_chunks = top_k_chunks
-
-    return result_chunks
