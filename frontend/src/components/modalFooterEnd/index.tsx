@@ -4,7 +4,7 @@ import styles from './modalFooterEnd.module.scss'
 import { ModalFooterEndProps } from '@/constant/index'
 import { useTranslation } from "react-i18next";
 function ModalFooterEnd({ onCancel, handleOk }:ModalFooterEndProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['common']);
     const [confirmLoading, setConfirmLoading] = useState(false)
     const handleCancel = () => {
         onCancel()
@@ -20,10 +20,10 @@ function ModalFooterEnd({ onCancel, handleOk }:ModalFooterEndProps) {
     return (
         <div className={styles['button-footer']}>
             <Button key="cancel" onClick={handleCancel} className='cancel-button'>
-                {t('cancel')}
+                {t('cancel', {ns: 'common'})}
             </Button>
             <Button key="Confirm" onClick={handleSuccess} className={`next-button ${styles['button']}`} loading={confirmLoading}>
-                {t('confirm')}
+                {t('confirm', {ns: 'common'})}
             </Button>
         </div>
     )
