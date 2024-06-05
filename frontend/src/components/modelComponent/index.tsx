@@ -16,7 +16,7 @@ import { valueLimit, } from '@/constant/assistant.ts'
 import CommonComponents from '../../contents/index'
 import styles from './modelComponent.module.scss'
 function ModelComponent(props: any) {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['common']);
     const dispatch = useDispatch();
     const { modelsTableColumn,  } = CommonComponents();
     const [recordsSelected, setRecordsSelected] = useState([])
@@ -93,22 +93,22 @@ function ModelComponent(props: any) {
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='footer1'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
-                        {t('projectNewModel')}
+                        {t('newModel', {ns: 'common'})}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected.length}  {recordsSelected.length > 1 ? `${t('projectItemsSelected')}` : `${t('projectItemSelected')}`}
+                            {recordsSelected.length}  {recordsSelected.length > 1 ? `${t('itemsSelected', {ns: 'common'})}` : `${t('itemsSelected', {ns: 'common'})}`}
                         </span>
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
-                            {t('cancel')}
+                            {t('cancel', {ns: 'common'})}
                         </Button>
                         <Button key="submit" onClick={handleModalConfirm} className='next-button' loading={confirmLoading}>
-                            {t('confirm')}
+                            {t('confirm', {ns: 'common'})}
                         </Button>
                     </div>
                 </div>
             ]} title={t('projectSelectModel')} open={props.modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable onOpenDrawer={handleCreateModelId} title='New model' name="model" updatePrevButton={updateModelPrevButton} defaultSelectedRowKeys={selectedRows} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
+                <ModalTable onOpenDrawer={handleCreateModelId} title={t('newModel', {ns: 'common'})} name="model" updatePrevButton={updateModelPrevButton} defaultSelectedRowKeys={selectedRows} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <ModelModal type='chat_completion' ref={childRef} open={modelOne} handleSetModelConfirmOne={handleSetModelConfirmOne} handleSetModelOne={handleModalCancel} getOptionsList={fetchModelsList} modelType='chat_completion'></ModelModal>
         </>
