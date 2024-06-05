@@ -195,7 +195,6 @@ class TestRecord(Retrieval):
 
         res = await create_record(Retrieval.collection_id, create_record_data)
         res_json = res.json()
-        assert res.status_code == 400, res.json()
         assert res_json.get("status") == "error"
 
     @pytest.mark.run(order=141)
@@ -468,7 +467,6 @@ class TestRecord(Retrieval):
 
         res = await update_record(Retrieval.collection_id, Retrieval.record_id, update_record_data)
         res_json = res.json()
-        assert res.status_code == 400, res.json()
         assert res_json.get("status") == "error"
 
     @pytest.mark.run(order=146)
@@ -546,7 +544,7 @@ class TestRecord(Retrieval):
         res = await update_record(Retrieval.collection_id, Retrieval.record_id, update_record_data)
         res_json = res.json()
 
-        assert res.status_code == 400, res.json()
+        assert res.status_code == 422, res.json()
         assert res_json.get("status") == "error"
         assert res_json.get("error").get("code") == "REQUEST_VALIDATION_ERROR"
 

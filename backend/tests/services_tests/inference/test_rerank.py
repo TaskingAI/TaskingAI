@@ -51,25 +51,26 @@ class TestRerank:
     @pytest.mark.version("0.3.2")
     @pytest.mark.test_id("inference_051")
     async def test_rerank(self):
-
-        request_data = {
-            "model_id": CONFIG.rerank_model_id,
-            "query": self.query,
-            "documents": self.documents,
-            "top_n": self.top_n,
-        }
-        res = await rerank(request_data)
-        res_json = res.json()
-        assert res.status_code == 200, res.json()
-        assert res_json.get("status") == "success"
-        results = res_json.get("data").get("results")
-        assert len(results) == self.top_n
-        assert check_order(results, "relevance_score")
-        for result in results:
-            assert result.get("document").get("text") in self.documents
-            assert result.get("relevance_score") >= 0.0
-            assert result.get("relevance_score") <= 1.0
-            assert result.get("index") == self.documents.index(result.get("document").get("text"))
+        rerank_model_list = [CONFIG.rerank_model_id, CONFIG.fallbacks_rerank_model_id]
+        for model_id in rerank_model_list:
+            request_data = {
+                "model_id": model_id,
+                "query": self.query,
+                "documents": self.documents,
+                "top_n": self.top_n,
+            }
+            res = await rerank(request_data)
+            res_json = res.json()
+            assert res.status_code == 200, res.json()
+            assert res_json.get("status") == "success"
+            results = res_json.get("data").get("results")
+            assert len(results) == self.top_n
+            assert check_order(results, "relevance_score")
+            for result in results:
+                assert result.get("document").get("text") in self.documents
+                assert result.get("relevance_score") >= 0.0
+                assert result.get("relevance_score") <= 1.0
+                assert result.get("index") == self.documents.index(result.get("document").get("text"))
 
     @pytest.mark.asyncio
     @pytest.mark.run(order=122)

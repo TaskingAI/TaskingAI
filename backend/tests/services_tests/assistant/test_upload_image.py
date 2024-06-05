@@ -38,6 +38,6 @@ class TestUploadImage:
     @pytest.mark.asyncio
     async def test_upload_max_image(self):
         res = await upload_image(self.max_image_data)
-        assert res.status_code == 400, res.json()
+        assert res.status_code == 422, res.json()
         assert res.json()["status"] == "error"
         assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"

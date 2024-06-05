@@ -19,6 +19,7 @@ white_list_providers = [
     "aws_bedrock",
     "yi",
     "minimax",
+    "sensetime",
 ]
 white_list_models = [
     "google_gemini/gemini-pro-vision",

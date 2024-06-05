@@ -48,7 +48,7 @@ error_messages = {
     ErrorCode.APIKEY_VALIDATION_FAILED: {"status_code": 401, "message": "Apikey validation failed."},
     ErrorCode.TOKEN_VALIDATION_FAILED: {"status_code": 401, "message": "Token validation failed."},
     ErrorCode.OBJECT_NOT_FOUND: {"status_code": 404, "message": "Object does not exist."},
-    ErrorCode.REQUEST_VALIDATION_ERROR: {"status_code": 400, "message": "Request validation error."},
+    ErrorCode.REQUEST_VALIDATION_ERROR: {"status_code": 422, "message": "Request validation error."},
     ErrorCode.DATA_MODEL_VALIDATION_ERROR: {"status_code": 400, "message": "Data model validation error."},
     ErrorCode.RESOURCE_LIMIT_REACHED: {
         "status_code": 429,
