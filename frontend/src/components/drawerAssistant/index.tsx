@@ -293,7 +293,7 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                 </div>
                 <div className='label-desc'>{t('langModelSelect')}</div>
                 <Select
-                    placeholder={t('projectSelectModel')}
+                    placeholder={t('selectModel')}
                     open={false}
                     mode="multiple"
                     suffixIcon={<RightOutlined />}

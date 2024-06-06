@@ -107,7 +107,7 @@ function ModelComponent(props: any) {
                         </Button>
                     </div>
                 </div>
-            ]} title={t('projectSelectModel')} open={props.modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
+            ]} title={t('selectModel')} open={props.modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable onOpenDrawer={handleCreateModelId} title={t('newModel', {ns: 'common'})} name="model" updatePrevButton={updateModelPrevButton} defaultSelectedRowKeys={selectedRows} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <ModelModal type='chat_completion' ref={childRef} open={modelOne} handleSetModelConfirmOne={handleSetModelConfirmOne} handleSetModelOne={handleModalCancel} getOptionsList={fetchModelsList} modelType='chat_completion'></ModelModal>
