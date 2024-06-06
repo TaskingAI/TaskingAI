@@ -45,7 +45,7 @@ function Retrieval() {
     }
     const content = (
         <div style={{ cursor: 'pointer' }}>
-            <p className={styles['popover-eidt']} onClick={() => handleRecord(record, 'Chunks')}>Chunks</p>
+            <p className={styles['popover-eidt']} onClick={() => handleRecord(record, 'Chunks')}>{t('chunks')}</p>
 
             <p className={styles['popover-eidt']} onClick={handleViewCode}>{t('viewCode')}</p>
             <p className={styles['popover-delete']} onClick={() => handleDelete(record)}>{t('delete')}</p>

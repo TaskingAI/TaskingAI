@@ -7,10 +7,12 @@ import ArrowTopIcons from '@/assets/img/ArrowTopIcons.svg?react'
 import ArrowBottomIcons from '@/assets/img/ArrowBottom.svg?react'
 import MarkdownMessageBlock from '@taskingai/taskingai-markdown'
 import { v4 as uuidv4 } from 'uuid'
+import { useTranslation } from "react-i18next"
 
 import './index.css'
 // import '../../components/playground/index.css'
 const ViewCode = (props: any) => {
+    const { t } = useTranslation();
     const { open, handleClose, data } = props
     const [flattenedData, setFlattenedData] = useState<any>([])
     const [uniqueLanguages, setUniqueLanguages] = useState<any>([]);
@@ -140,7 +142,7 @@ const ViewCode = (props: any) => {
     }
 
     return (
-        <Modal centered width={1280} open={open} title='View Code' className={`${styles.modal} view-code-component`} onCancel={handleClose} footer={null} closeIcon={<CloseIcon />}>
+        <Modal centered width={1280} open={open} title={t('viewCode')} className={`${styles.modal} view-code-component`} onCancel={handleClose} footer={null} closeIcon={<CloseIcon />}>
             <div style={{ display: 'flex', width: '100%', flexShrink: 0,height:'732px' }}>
                 <div className={styles.silder}>
                     {uniqueLanguages.map((language: any) => (
