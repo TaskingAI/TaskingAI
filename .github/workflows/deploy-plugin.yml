@@ -1,4 +1,4 @@
-name: Build, Test and Deploy
+name: Plugin - Build, Test and Deploy
 
 on:
   push:
