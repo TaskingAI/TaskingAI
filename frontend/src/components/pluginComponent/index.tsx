@@ -14,7 +14,7 @@ function PluginComponent(props: any) {
     const [pluginId, setPluginId] = useState(pluginSelectedId !== undefined ? pluginSelectedId : '')
     const [inputValue, setInputValue] = useState('')
     const [bundleItem, setBundleItem] = useState(bundleSelectedItem !== undefined ? bundleSelectedItem : {})
-    const { t } = useTranslation()
+    const { t } = useTranslation(['components/pluginComponent/index', 'common'])
     const [bundleListData, setBundleListData] = useState(bundleList)
     useEffect(() => {
         setBundleListData(bundleList)
@@ -23,11 +23,11 @@ function PluginComponent(props: any) {
 
         {
             value: 'All Records',
-            label: 'All Records',
+            label: t('allRecords', {ns: 'common'}),
         },
         {
             value: 'Selected Records',
-            label: 'Selected Records',
+            label: t('selectedRecords', {ns: 'common'}),
         }
     ]
     const handleCancel = () => {
@@ -71,20 +71,20 @@ function PluginComponent(props: any) {
 
 
     }
-    return <Modal open={open} onCancel={handleCancel} centered className={styles['plugin-modal']} width={1325} closeIcon={<img src={closeIcon} alt="closeIcon" />} title='Select Plugin' footer={[
+    return <Modal open={open} onCancel={handleCancel} centered className={styles['plugin-modal']} width={1325} closeIcon={<img src={closeIcon} alt="closeIcon" />} title={t('selectPlugin')} footer={[
         <div className='footer-group' style={{ display: 'flex', justifyContent: 'space-between' }} key='footer2'>
             <Button key="model" icon={<PlusOutlined />} onClick={handleNewBundle} className='cancel-button'>
-                New bundle
+                {t('newBundle')}
             </Button>
             <div>
                 <span className='select-record'>
-                    {pluginId ? 1 : 0}  {t('projectItemSelected')}
+                    {pluginId ? 1 : 0}  {t('itemSelected', {ns: 'common'})}
                 </span>
                 <Button key="cancel" onClick={handleCancel} className='cancel-button' style={{ marginRight: '8px' }}>
-                    {t('cancel')}
+                    {t('cancel', {ns: 'common'})}
                 </Button>
                 <Button key="submit" onClick={handleRetrievlConfirm} className='next-button'>
-                    {t('confirm')}
+                    {t('confirm', {ns: 'common'})}
                 </Button>
             </div>
         </div>
@@ -98,15 +98,15 @@ function PluginComponent(props: any) {
                         label: 'ID',
                     }
                 ]} className={styles['select-name']} />
-                <Input placeholder='Enter ID' className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
-                <Button className='cancel-button' onClick={handleSearch}>Search</Button>
+                <Input placeholder={t('enterID', {ns: 'common'})} className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
+                <Button className='cancel-button' onClick={handleSearch}>{t('search', {ns: 'common'})}</Button>
                 <Select defaultValue="All Records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />
 
             </div>
             {bundleListData.length === 0 ? <div className={styles['no-data']}>
                 <NoTool />
-                <div className={styles['desc']}>New Bundle</div>
-                <Button icon={<PlusOutlined />} type='primary' className={`${styles['prompt-button']} next-button`} onClick={handleNewBundle}>New Bundle</Button>
+                <div className={styles['desc']}>{t('newBundle')}</div>
+                <Button icon={<PlusOutlined />} type='primary' className={`${styles['prompt-button']} next-button`} onClick={handleNewBundle}>{t('newBundle')}</Button>
             </div> : bundleListData.map((item: any) => {
                 return <Collapse key={item.bundle_instance_id} collapsible="header" className={styles.pluginCollapse}>
                     <Collapse.Panel showArrow={false} header={<div className={styles.bundle} >
@@ -124,7 +124,7 @@ function PluginComponent(props: any) {
                                 <div className={`${styles['pluginSingle']} ${plugin.plugin_id === pluginId && styles['selectItem']} ${selectedData.includes(plugin.plugin_id) && styles['selectedItem']}`} onClick={selectedData.includes(plugin.plugin_id) ? undefined : () => handleClickPlugin(plugin, item)}>
                                     <div className={styles.pluginName}>
                                         {plugin.name}
-                                        {selectedData.includes(plugin.plugin_id) ? <span className={styles.selectedName}>Selected</span> : <Radio checked={plugin.plugin_id === pluginId} />}
+                                        {selectedData.includes(plugin.plugin_id) ? <span className={styles.selectedName}>{t('selected', {ns: 'common'})}</span> : <Radio checked={plugin.plugin_id === pluginId} />}
                                     </div>
                                     <div className={styles.pluginDesc}>
                                         {plugin.description}
