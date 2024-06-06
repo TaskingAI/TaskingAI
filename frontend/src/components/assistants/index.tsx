@@ -644,7 +644,7 @@ function Assistant() {
                     </Button>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected.length}  {recordsSelected.length > 1 ? `${t('itemsSelected', {ns: 'common'})}` : `${t('itemsSelected', {ns: 'common'})}`}
+                            {recordsSelected.length}  {recordsSelected.length > 1 ? `${t('itemsSelected', {ns: 'common'})}` : `${t('itemSelected', {ns: 'common'})}`}
                         </span>
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             {t('cancel', {ns: 'common'})}
