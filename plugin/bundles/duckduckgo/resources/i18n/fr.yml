@@ -1,0 +1,7 @@
+bundle_description: Cherchez des informations en utilisant DuckDuckGo.
+search_image_description: Recherchez des images par textes en utilisant DuckDuckGo.
+search_image_input_keywords_description: Les mots clés à rechercher
+search_image_output_results_description: Les résultats de recherche au format json
+search_text_description: Cherchez des informations textuelles en utilisant DuckDuckGo.
+search_text_input_keywords_description: Les mots clés à rechercher
+search_text_output_results_description: Les résultats de recherche au format json

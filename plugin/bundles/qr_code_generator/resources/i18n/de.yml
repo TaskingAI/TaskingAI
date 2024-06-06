@@ -1,0 +1,4 @@
+bundle_description: Erstellen Sie QR-Codes aus Texteingaben
+generate_qr_code_description: Einen QR-Code aus dem angegebenen Text erstellen
+generate_qr_code_input_text_description: Der Text, der im QR-Code codiert werden soll
+generate_qr_code_output_url_description: Die URL zum generierten QR-Code-Bild

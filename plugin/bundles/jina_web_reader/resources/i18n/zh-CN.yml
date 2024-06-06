@@ -1,0 +1,4 @@
+bundle_description: 将任意 URL 转换为 LLM 友好的输入
+read_url_description: 将任意 URL 转换为 LLM 友好的输入
+read_url_input_url_description: 要转换的 URL
+read_url_output_result_description: json 格式的搜索结果

@@ -1,0 +1,24 @@
+bundle_description: 다양한 Google 검색 서비스를 위한 집합기입니다.
+credential_serper_api_key_description: 인증을 위한 API 키입니다. https://serper.dev/api-key
+    에서 받으세요.
+image_search_description: 텍스트 키워드로 Google 이미지 검색
+image_search_input_query_description: 검색 쿼리
+image_search_output_result_description: 검색 결과, json 형식
+maps_search_description: 텍스트 키워드를 사용한 Google 지도 검색
+maps_search_input_query_description: 검색 쿼리
+maps_search_output_result_description: 검색 결과, JSON 형식
+news_search_description: 텍스트 키워드를 사용한 Google 뉴스 검색
+news_search_input_query_description: 검색 쿼리
+news_search_output_result_description: 검색 결과, JSON 형식
+scholar_search_description: 텍스트 키워드로 Google 학술 검색
+scholar_search_input_query_description: 검색 쿼리
+scholar_search_output_result_description: Json 형식의 검색 결과
+shopping_search_description: 텍스트 키워드를 사용한 Google 쇼핑 검색
+shopping_search_input_query_description: 검색 쿼리
+shopping_search_output_result_description: 검색 결과, JSON 형식
+text_search_description: 텍스트 키워드로 일반 Google 검색
+text_search_input_query_description: 검색 쿼리
+text_search_output_result_description: 검색 결과, json 형식
+video_search_description: 텍스트 키워드를 사용한 Google 비디오 검색
+video_search_input_query_description: 검색 쿼리
+video_search_output_result_description: 검색 결과, json 형식

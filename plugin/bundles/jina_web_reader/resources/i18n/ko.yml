@@ -1,0 +1,4 @@
+bundle_description: 모든 URL을 LLM 친화적인 입력으로 변환합니다
+read_url_description: 모든 URL을 LLM 친화적인 입력으로 변환합니다
+read_url_input_url_description: 변환할 URL
+read_url_output_result_description: json 형식의 검색 결과

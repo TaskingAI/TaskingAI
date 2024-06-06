@@ -1,0 +1,36 @@
+bundle_description: Wetterdaten und Vorhersagen.
+credential_open_weather_api_key_description: API-Schlüssel für Open Weather.
+get_current_weather_description: Aktuelle Wetterdaten basierend auf Breiten- und Längengrad
+    abrufen.
+get_current_weather_input_lat_description: Breitengrad des Standorts.
+get_current_weather_input_lon_description: Längengrad des Standorts.
+get_current_weather_output_feels_like_celsius_description: aktuelle gefühlte Temperatur
+    in Celsius
+get_current_weather_output_feels_like_fahrenheit_description: aktuelle gefühlte Temperatur
+    in Fahrenheit
+get_current_weather_output_humidity_description: aktuelle Luftfeuchtigkeit in Prozent
+get_current_weather_output_pressure_description: aktueller Druck in hPa
+get_current_weather_output_temperature_celsius_description: aktuelle Temperatur in
+    Celsius
+get_current_weather_output_temperature_fahrenheit_description: aktuelle Temperatur
+    in Fahrenheit
+get_current_weather_output_timestamp_description: Zeitstempel der Wetterdaten
+get_current_weather_output_uvi_description: aktueller UV-Index
+get_current_weather_output_visibility_description: aktuelle Sichtweite in Metern
+get_current_weather_output_weather_condition_description: aktueller Wetterzustand
+get_daily_forecast_description: Tägliche Vorhersage basierend auf Breitengrad und
+    Längengrad abrufen.
+get_daily_forecast_input_days_description: Die Anzahl der Tage, für die eine Vorhersage
+    gemacht wird. Maximal 7 Tage.
+get_daily_forecast_input_lat_description: Breitengrad des Standorts.
+get_daily_forecast_input_lon_description: Längengrad des Standorts.
+get_daily_forecast_output_result_description: Ergebnis der täglichen Vorhersagen im
+    JSON-String.
+get_hourly_forecast_description: Stündliche Vorhersage basierend auf Breiten- und
+    Längengrad abrufen.
+get_hourly_forecast_input_hours_description: Die Anzahl der Stunden für die Vorhersage.
+    Maximal 24.
+get_hourly_forecast_input_lat_description: Breitengrad des Standorts.
+get_hourly_forecast_input_lon_description: Längengrad des Standorts.
+get_hourly_forecast_output_result_description: Eregebnis der stündlichen Vorhersagen
+    im JSON-String-Format

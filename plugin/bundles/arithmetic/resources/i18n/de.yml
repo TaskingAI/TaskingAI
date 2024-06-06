@@ -1,0 +1,17 @@
+add_description: Zwei Zahlen zusammenzählen
+add_number_1_description: Die erste Zahl
+add_number_2_description: Die zweite Zahl
+add_result_description: Das Ergebnis der Addition beider Zahlen
+arithmetic_description: Ein Paket von Plugins zur Durchführung arithmetischer Operationen
+divide_description: Die erste Zahl durch die zweite Zahl teilen
+divide_number_1_description: Die erste Zahl
+divide_number_2_description: Die zweite Zahl
+divide_result_description: Das Ergebnis der Division der beiden Zahlen
+multiply_description: Zwei Zahlen multiplizieren
+multiply_number_1_description: Die erste Zahl
+multiply_number_2_description: Die zweite Zahl
+multiply_result_description: Das Ergebnis der Multiplikation beider Zahlen
+subtract_description: Zahl 1 von Zahl 2 subtrahieren
+subtract_number_1_description: Die erste Zahl
+subtract_number_2_description: Die zweite Zahl
+subtract_result_description: Das Ergebnis der Subtraktion der beiden Zahlen

@@ -1,0 +1,4 @@
+bundle_description: ウェブからテキスト情報を取得します。
+read_web_page_description: ウェブページからテキストを読み取ります。
+read_web_page_input_url_description: ウェブページのURL。
+read_web_page_output_result_description: ウェブページからのテキスト。

@@ -1,0 +1,6 @@
+bundle_description: Rechercher des vidéos YouTube.
+credential_google_api_key_description: Clé API pour l'authentification. Obtenez-la
+    sur https://console.developers.google.com/
+search_video_description: Recherchez des vidéos sur YouTube par mots-clés
+search_video_input_query_description: La requête de recherche
+search_video_output_result_description: Les résultats de recherche en chaîne JSON

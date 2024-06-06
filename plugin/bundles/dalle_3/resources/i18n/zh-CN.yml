@@ -1,0 +1,6 @@
+bundle_description: DALL·E 3 是一个强大的图像生成模型，可以根据文本描述生成图像。
+credential_openai_api_key_description: 用于身份验证的 API 密钥。 请从 https://platform.openai.com/
+    获取。
+generate_image_description: 通过 DALL·E 3 从文本描述生成图像
+generate_image_input_prompt_description: 用于生成图像的文本描述
+generate_image_output_url_description: 生成图像的 URL

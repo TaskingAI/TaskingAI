@@ -1,0 +1,12 @@
+bundle_description: 搜索您的旅行的酒店、餐厅和景点。
+credential_trip_advisor_api_key_description: 用于身份验证的 API 密钥。可以从 https://www.tripadvisor.com/developers?screen=credentials
+    获取
+location_details_description: 位置详细信息请求返回有关位置（酒店、餐厅或景点）的综合信息，例如名称、地址、评级，以及 Tripadvisor
+    上列表的网址。（位置 ID 从 search_location 插件中获得）
+location_details_input_location_id_description: Tripadvisor 上位置的唯一标识符。可以使用位置搜索获取位置
+    ID。
+location_details_output_result_description: 以 JSON 字符串格式的位置详细信息
+search_location_description: 搜索您的旅行的酒店、餐厅和景点。
+search_location_input_category_description: 位置的类别。必须是以下值之一：hotels, restaurants, attractions
+search_location_input_query_description: 搜索位置的文本查询。例如：Italian food in New York
+search_location_output_result_description: 以 JSON 字符串格式的搜索结果

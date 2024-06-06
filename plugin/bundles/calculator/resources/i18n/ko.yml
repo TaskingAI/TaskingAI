@@ -1,0 +1,13 @@
+bundle_description: 파이썬 형식의 수학적 표현식을 평가하고 결과를 얻습니다
+evaluate_description: 파이썬 형식의 수학적 표현식을 평가하고 결과를 얻습니다
+evaluate_input_expression_description: '평가할 Python 형식의 수학적 표현입니다.
+
+
+    예제1: 입력: 5**2+7-4, 출력: 28.0
+
+
+    예제2: 입력: 5*a + 4*a, 출력: 9.0*a
+
+
+    예제3: 입력: 5**2*(8-4), 출력: 100.0'
+evaluate_output_result_description: 평가된 표현식의 결과

@@ -1,0 +1,6 @@
+bundle_description: Aftership 是一个货运跟踪平台，允许您跟踪全球超过 700 家快递公司的货运。
+credential_aftership_api_key_description: 用于认证的 API 密钥。获取地址：https://www.aftership.com/docs/tracking/quickstart/api-quick-start
+get_tracking_info_description: 获取货运的跟踪信息
+get_tracking_info_input_slug_description: 快递公司的标识，例如：dhl, fedex, ups 等。
+get_tracking_info_input_tracking_number_description: 货运的跟踪号码
+get_tracking_info_output_result_description: 以 JSON 格式显示的货运跟踪信息

@@ -1,0 +1,4 @@
+bundle_description: 텍스트 입력에서 QR 코드를 생성합니다
+generate_qr_code_description: 주어진 텍스트에서 QR 코드를 생성합니다
+generate_qr_code_input_text_description: QR 코드에 인코딩할 텍스트
+generate_qr_code_output_url_description: 생성된 QR 코드 이미지의 URL

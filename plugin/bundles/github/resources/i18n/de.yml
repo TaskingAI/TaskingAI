@@ -1,0 +1,7 @@
+bundle_description: Holen Sie sich Informationen von GitHub
+credential_github_api_key_description: API-Schlüssel für die Authentifizierung. Holen
+    Sie ihn unter https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token
+search_repositories_description: Auf GitHub nach Repositories suchen
+search_repositories_input_query_description: 'Die Suchanfrage. Beispiel: python web
+    crawler'
+search_repositories_output_result_description: Die Suchergebnisse im JSON-String-Format

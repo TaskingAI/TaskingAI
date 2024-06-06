@@ -1,0 +1,6 @@
+bundle_description: 入力パラメータに基づいて乱数を生成します
+generate_random_integers_description: 指定された範囲内で乱整数を生成する
+generate_random_integers_input_max_description: 乱整数の最大値
+generate_random_integers_input_min_description: 乱整数の最小値
+generate_random_integers_input_number_description: 生成する乱整数の数。デフォルトは1です
+generate_random_integers_output_result_description: 生成された乱整数

@@ -1,0 +1,13 @@
+bundle_description: Gemini 비전 모델에서 이미지를 이해할 수 있는 텍스트 응답을 얻습니다.
+chat_completion_by_gemini_1_0_pro_description: Gemini 1.0 Pro 비전 모델에서 텍스트 응답을 얻습니다.
+    이미지 URL과 텍스트 프롬프트를 입력하세요.
+chat_completion_by_gemini_1_0_pro_input_image_url_description: 이미지의 URL
+chat_completion_by_gemini_1_0_pro_input_prompt_description: 모델에 대한 프롬프트
+chat_completion_by_gemini_1_0_pro_output_result_description: 모델로부터의 텍스트 응답
+chat_completion_by_gemini_1_5_pro_description: Gemini 1.5 Pro 비전 모델에서 텍스트 응답을 얻습니다.
+    이미지 URL과 텍스트 프롬프트를 입력하세요.
+chat_completion_by_gemini_1_5_pro_input_image_url_description: 이미지의 URL
+chat_completion_by_gemini_1_5_pro_input_prompt_description: 모델에 대한 프롬프트
+chat_completion_by_gemini_1_5_pro_output_result_description: 모델로부터의 텍스트 응답
+credential_google_gemini_api_key_description: 인증을 위한 API 키. https://ai.google.dev/에서
+    얻으세요.

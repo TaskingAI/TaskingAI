@@ -1,0 +1,6 @@
+bundle_description: 입력 매개변수에 따라 무작위 숫자를 생성합니다
+generate_random_integers_description: 지정된 범위 내에서 무작위 정수를 생성합니다
+generate_random_integers_input_max_description: 무작위 정수의 최대값
+generate_random_integers_input_min_description: 무작위 정수의 최소값
+generate_random_integers_input_number_description: 생성할 무작위 정수의 수. 기본값은 1
+generate_random_integers_output_result_description: 생성된 무작위 정수

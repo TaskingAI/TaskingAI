@@ -1,0 +1,11 @@
+bundle_description: 获取来自Coin Market Cap的最新加密货币信息
+credential_coin_market_cap_api_key_description: 用于身份验证的API密钥。可从https://coinmarketcap.com/api/获取
+get_historical_coin_data_description: 获取某个加密货币的历史信息
+get_historical_coin_data_input_interval_description: 历史数据的间隔。支持的值有：yearly, monthly, weekly, daily, hourly, 5m, 15m, 30m, 45m, 1h, 2h, 3h, 4h, 6h, 12h, 1d, 2d, 3d...
+get_historical_coin_data_input_symbol_description: '加密货币的符号。例: BTC, ETH, SOL等。'
+get_historical_coin_data_input_time_end_description: 历史数据的结束时间。格式应为'YYYY-MM-DD'
+get_historical_coin_data_input_time_start_description: 历史数据的开始时间。格式应为'YYYY-MM-DD'
+get_historical_coin_data_output_result_description: 以json格式提供的加密货币的历史信息
+get_latest_coin_data_description: 获取某种加密货币的最新信息
+get_latest_coin_data_input_symbol_description: '加密货币的符号。例: BTC, ETH, SOL等。'
+get_latest_coin_data_output_result_description: 以json格式提供的加密货币最新信息

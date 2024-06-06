@@ -1,0 +1,15 @@
+bundle_description: 获取 Alpha Vantage 提供的最新和历史股市信息
+credential_alpha_vantage_api_key_description: API 密钥用于身份验证。可以从 https://www.alphavantage.co/support/#api-key
+    获取
+get_historical_stock_data_description: 获取有关股票的历史信息
+get_historical_stock_data_input_end_date_description: 历史数据的结束日期。应为 'YYYY-MM-DD' 格式
+get_historical_stock_data_input_interval_description: 从以下值中选择：daily（日），weekly（周），monthly（月）
+get_historical_stock_data_input_start_date_description: 历史数据的开始日期。应为 'YYYY-MM-DD'
+    格式
+get_historical_stock_data_input_symbol_description: 股票的代码。例如，AAPL、TSLA、MSFT 等。对于非美国股票，请使用以下格式：'股票代码.股票交易所代码'。例如，深圳证券交易所代码为
+    000002 的股票为 000002.SHZ，伦敦证券交易所代码为 TSCO 的股票为 TSCO.LON 等。
+get_historical_stock_data_output_result_description: 以 JSON 格式显示的股票历史信息
+get_latest_stock_data_description: 获取股票的最新信息
+get_latest_stock_data_input_symbol_description: 股票的代码。例如，AAPL、TSLA、MSFT 等。对于非美国股票，请使用以下格式：'股票代码.股票交易所代码'。例如，深圳证券交易所代码为
+    000002 的股票为 000002.SHZ，伦敦证券交易所代码为 TSCO 的股票为 TSCO.LON 等。
+get_latest_stock_data_output_result_description: 以 JSON 格式显示的股票最新信息

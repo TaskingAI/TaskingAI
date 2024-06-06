@@ -1,0 +1,17 @@
+bundle_description: Generar una imagen a partir de una descripción textual por Stability
+    AI
+credential_stability_ai_api_key_description: Clave API para la autenticación. Obténla
+    de https://stability-ai.com/
+generate_image_description: Generar una imagen a partir de una descripción textual
+generate_image_input_cfg_scale_description: La escala a usar para la generación de
+    imágenes. El valor predeterminado es 7
+generate_image_input_engine_id_description: El motor a usar para la generación de
+    imágenes. El valor predeterminado es stable-diffusion-v1-6
+generate_image_input_height_description: La altura de la imagen generada, debe ser
+    un múltiplo de 64, al menos 128. El valor predeterminado es 512
+generate_image_input_prompt_description: La descripción textual para generar la imagen
+generate_image_input_steps_description: El número de pasos a usar para la generación
+    de imágenes. El valor predeterminado es 30
+generate_image_input_width_description: El ancho de la imagen generada, debe ser un
+    múltiplo de 64, al menos 128. El valor predeterminado es 512
+generate_image_output_image_url_description: La URL de la imagen generada

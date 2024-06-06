@@ -1,0 +1,6 @@
+arxiv_search_description: Nutze arXiv, um nach wissenschaftlichen Arbeiten zu suchen
+arxiv_search_input_max_results_description: Die maximale Anzahl der zurückzugebenden
+    Ergebnisse
+arxiv_search_input_query_description: 'Die Suchanfrage. Beispiel: Quantencomputing'
+arxiv_search_output_results_description: Die Suchergebnisse im JSON-String
+bundle_description: Suche nach wissenschaftlichen Arbeiten auf arXiv

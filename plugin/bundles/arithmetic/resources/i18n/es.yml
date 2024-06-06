@@ -1,0 +1,17 @@
+add_description: Sumar dos números
+add_number_1_description: El primer número
+add_number_2_description: El segundo número
+add_result_description: El resultado de sumar los dos números
+arithmetic_description: Un paquete de complementos para realizar operaciones aritméticas
+divide_description: Dividir el número 1 entre el número 2
+divide_number_1_description: El primer número
+divide_number_2_description: El segundo número
+divide_result_description: El resultado de dividir los dos números
+multiply_description: Multiplicar dos números
+multiply_number_1_description: El primer número
+multiply_number_2_description: El segundo número
+multiply_result_description: El resultado de multiplicar los dos números
+subtract_description: Restar el número 1 del número 2
+subtract_number_1_description: El primer número
+subtract_number_2_description: El segundo número
+subtract_result_description: El resultado de restar los dos números

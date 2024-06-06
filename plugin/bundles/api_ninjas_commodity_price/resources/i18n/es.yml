@@ -1,0 +1,8 @@
+bundle_description: Proporciona acceso a los precios en tiempo real de docenas de
+    productos básicos comúnmente comercializados en grandes bolsas (CME, NYMEX, etc.)
+credential_api_ninjas_api_key_description: Clave API para autenticación. Obténla de
+    https://api-ninjas.com/
+get_commodity_price_description: Obtén la información del precio de un artículo de
+    mercancía con textos. Por ejemplo, 'Futuros de Oro'
+get_commodity_price_output_result_description: Información del precio de la mercancía
+    en formato json.

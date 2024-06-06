@@ -1,0 +1,9 @@
+bundle_description: Fournit un accès aux prix des matières premières en temps réel
+    pour des dizaines de matières premières couramment négociées dans les principales
+    bourses (CME, NYMEX, etc.)
+credential_api_ninjas_api_key_description: Clé API pour l'authentification. Obtenez-la
+    depuis https://api-ninjas.com/
+get_commodity_price_description: Obtenir les informations sur le prix d'une marchandise
+    avec des textes. Par exemple, 'Gold Futures'
+get_commodity_price_output_result_description: Informations sur le prix de la marchandise
+    au format json.

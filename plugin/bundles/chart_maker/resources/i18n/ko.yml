@@ -1,0 +1,39 @@
+bundle_description: 데이터 입력에서 차트를 생성
+make_2d_histogram_description: 주어진 데이터로 2D 히스토그램 생성
+make_2d_histogram_input_title_description: 차트의 제목
+make_2d_histogram_input_x_title_description: x축의 제목
+make_2d_histogram_input_x_values_description: 데이터 점들의 x 값. y 값과 같은 크기여야 합니다.
+make_2d_histogram_input_y_title_description: y축의 제목
+make_2d_histogram_input_y_values_description: 데이터 점들의 y 값. x 값과 같은 크기여야 합니다.
+make_2d_histogram_output_url_description: 생성된 차트 이미지의 URL
+make_bar_chart_description: 주어진 데이터에서 막대 차트를 생성
+make_bar_chart_input_title_description: 차트의 제목
+make_bar_chart_input_x_title_description: x축의 제목
+make_bar_chart_input_x_values_description: 데이터 포인트의 x축 값. y 값의 수와 같아야 합니다.
+make_bar_chart_input_y_title_description: y축의 제목
+make_bar_chart_input_y_values_description: 데이터 포인트의 y축 값. x 값의 수와 같아야 합니다.
+make_bar_chart_output_url_description: 생성된 차트 이미지의 URL
+make_histogram_description: 주어진 데이터로 히스토그램 생성
+make_histogram_input_title_description: 차트의 제목
+make_histogram_input_values_description: 데이터 포인트의 값
+make_histogram_input_x_title_description: x축의 제목
+make_histogram_output_url_description: 생성된 차트 이미지의 URL
+make_line_chart_description: 주어진 데이터에서 꺾은선형 차트 생성
+make_line_chart_input_title_description: 차트 제목
+make_line_chart_input_x_title_description: x축 제목
+make_line_chart_input_x_values_description: 데이터 포인트의 x축 값. y 값과 동일한 크기여야 합니다.
+make_line_chart_input_y_title_description: y축 제목
+make_line_chart_input_y_values_description: 데이터 포인트의 y축 값. x 값과 동일한 크기여야 합니다.
+make_line_chart_output_url_description: 생성된 차트 이미지의 URL
+make_pie_chart_description: 주어진 데이터에서 파이 차트 생성
+make_pie_chart_input_labels_description: 데이터 포인트의 레이블. 값의 수와 같아야 합니다.
+make_pie_chart_input_title_description: 차트 제목
+make_pie_chart_input_values_description: 데이터 포인트의 값. 레이블의 수와 같아야 합니다.
+make_pie_chart_output_url_description: 생성된 차트 이미지의 URL
+make_scatter_plot_description: 주어진 데이터를 통해 산포도를 생성합니다
+make_scatter_plot_input_title_description: 차트의 제목
+make_scatter_plot_input_x_title_description: x축의 제목
+make_scatter_plot_input_x_values_description: 데이터 포인트의 x축 값입니다. y값과 크기가 같아야 합니다.
+make_scatter_plot_input_y_title_description: y축의 제목
+make_scatter_plot_input_y_values_description: 데이터 포인트의 y축 값입니다. x값과 크기가 같아야 합니다.
+make_scatter_plot_output_url_description: 생성된 차트 이미지의 URL

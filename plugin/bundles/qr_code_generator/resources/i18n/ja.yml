@@ -1,0 +1,4 @@
+bundle_description: テキスト入力からQRコードを生成
+generate_qr_code_description: 指定されたテキストからQRコードを生成
+generate_qr_code_input_text_description: QRコードにエンコードするテキスト
+generate_qr_code_output_url_description: 生成されたQRコード画像のURL

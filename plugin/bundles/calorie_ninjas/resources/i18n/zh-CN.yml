@@ -1,0 +1,9 @@
+bundle_description: 获取 Calorie Ninjas 的营养信息和食谱
+credential_calorie_ninjas_api_key_description: 用于身份验证的 API 密钥。 可从 https://calorieninjas.com/api
+    获取
+get_nutrition_info_description: 通过文字描述获取食物项目的营养信息
+get_nutrition_info_input_food_description_description: 食物的文字描述。 示例：100ml of apple juice、1 cup of rice。
+get_nutrition_info_output_result_description: 以 JSON 格式表示的食物营养信息
+get_recipe_description: 通过文字描述获取食物项目的食谱信息。例如，“Mushroom Risotto”
+get_recipe_input_query_description: 食谱的文字描述。 示例：蘑菇烩饭
+get_recipe_output_result_description: 以 JSON 格式表示的食谱信息

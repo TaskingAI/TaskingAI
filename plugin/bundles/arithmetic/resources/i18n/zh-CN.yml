@@ -1,0 +1,17 @@
+add_description: 将两个数字相加
+add_number_1_description: 第一个数字
+add_number_2_description: 第二个数字
+add_result_description: 两个数字相加的结果
+arithmetic_description: 用于执行算术运算的插件包
+divide_description: 用第一个数字除以第二个数字
+divide_number_1_description: 第一个数字
+divide_number_2_description: 第二个数字
+divide_result_description: 两个数字相除的结果
+multiply_description: 将两个数字相乘
+multiply_number_1_description: 第一个数字
+multiply_number_2_description: 第二个数字
+multiply_result_description: 两个数字相乘的结果
+subtract_description: 第一数字减去第二数字
+subtract_number_1_description: 第一个数字
+subtract_number_2_description: 第二个数字
+subtract_result_description: 两个数字相减的结果

@@ -1,0 +1,5 @@
+bundle_description: '수십 개의 일반적으로 거래되는 상품(예: CME, NYMEX 등)에 대한 실시간 상품 가격 액세스를 제공합니다'
+credential_api_ninjas_api_key_description: 인증을 위한 API 키입니다. https://api-ninjas.com/에서
+    가져오세요
+get_commodity_price_description: '상품 항목의 가격 정보를 텍스트로 가져옵니다. 예: ''Gold Futures'''
+get_commodity_price_output_result_description: json 형식으로 제공되는 상품 항목의 가격 정보입니다.

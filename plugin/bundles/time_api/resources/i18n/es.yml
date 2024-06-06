@@ -1,0 +1,15 @@
+bundle_description: Obtén la hora actual en una zona horaria específica o por coordenadas
+    geográficas
+get_time_by_geo_coordinates_description: Obtén la hora actual por coordenadas geográficas
+get_time_by_geo_coordinates_input_latitude_description: La latitud de la ubicación
+get_time_by_geo_coordinates_input_longitude_description: La longitud de la ubicación
+get_time_by_geo_coordinates_output_result_description: La hora actual por coordenadas
+    geográficas en formato json
+get_time_by_timezone_description: Obtén la hora actual en una zona horaria específica
+get_time_by_timezone_input_timezone_description: La zona horaria para obtener la hora
+    actual, en formato completo de IANA, por ejemplo, 'America/New_York'
+get_time_by_timezone_output_result_description: La hora actual en la zona horaria
+    especificada en formato json
+list_timezones_description: Lista todas las zonas horarias IANA disponibles
+list_timezones_output_result_description: La lista de todas las zonas horarias IANA
+    disponibles en formato json

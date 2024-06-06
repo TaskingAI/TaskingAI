@@ -1,0 +1,6 @@
+bundle_description: YouTube 비디오 검색.
+credential_google_api_key_description: 인증을 위한 API 키입니다. https://console.developers.google.com/에서
+    가져오세요.
+search_video_description: 키워드로 YouTube에서 비디오 검색
+search_video_input_query_description: 검색 쿼리
+search_video_output_result_description: JSON 문자열 형식의 검색 결과

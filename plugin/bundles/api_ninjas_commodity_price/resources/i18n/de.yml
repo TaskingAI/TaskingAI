@@ -1,0 +1,8 @@
+bundle_description: Bietet Zugang zu Echtzeit-Rohstoffpreisen für Dutzende von häufig
+    gehandelten Rohstoffen an großen Börsen (CME, NYMEX usw.)
+credential_api_ninjas_api_key_description: API-Schlüssel zur Authentifizierung. Holen
+    Sie ihn sich unter https://api-ninjas.com/
+get_commodity_price_description: Holen Sie sich die Rohstoffpreisinformationen eines
+    Artikels mit Texten. Zum Beispiel 'Gold Futures'
+get_commodity_price_output_result_description: Rohstoffpreisinformationen des Warenartikels
+    im JSON-Format.

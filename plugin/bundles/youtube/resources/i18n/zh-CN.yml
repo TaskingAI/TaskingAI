@@ -1,0 +1,6 @@
+bundle_description: 搜索 YouTube 视频。
+credential_google_api_key_description: 用于身份验证的 API 密钥。从 https://console.developers.google.com/
+    获取。
+search_video_description: 通过关键词在 YouTube 上搜索视频
+search_video_input_query_description: 搜索查询
+search_video_output_result_description: JSON 字符串格式的搜索结果

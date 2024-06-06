@@ -1,0 +1,8 @@
+bundle_description: Erzeugt Zufallszahlen basierend auf den Eingabeparametern
+generate_random_integers_description: Erzeugt Zufallszahlen innerhalb des angegebenen
+    Bereichs
+generate_random_integers_input_max_description: Der Höchstwert der Zufallszahl
+generate_random_integers_input_min_description: Der Mindestwert der Zufallszahl
+generate_random_integers_input_number_description: Die Anzahl der zu erzeugenden Zufallszahlen.
+    Standardwert ist 1
+generate_random_integers_output_result_description: Die erzeugten Zufallszahlen

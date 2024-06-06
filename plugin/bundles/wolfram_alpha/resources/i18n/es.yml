@@ -1,0 +1,9 @@
+bundle_description: La forma fácil de integrar conocimientos computacionales de primera
+    línea en sus aplicaciones
+credential_wolfram_alpha_app_id_description: El ID de la aplicación de Wolfram Alpha.
+    Consíguelo en https://developer.wolframalpha.com/access
+query_description: Consulta a Wolfram Alpha para obtener conocimientos computacionales.
+    Por ejemplo, 'la segunda montaña más alta del mundo'
+query_input_query_description: 'La consulta de búsqueda. Ejemplo: la segunda montaña
+    más alta del mundo'
+query_output_result_description: Los resultados de la búsqueda en cadena json

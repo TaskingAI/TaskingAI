@@ -1,0 +1,5 @@
+arxiv_search_description: arXiv를 사용하여 학술 논문 검색
+arxiv_search_input_max_results_description: 반환할 최대 결과 수
+arxiv_search_input_query_description: '검색어. 예시: 양자 컴퓨팅'
+arxiv_search_output_results_description: JSON 문자열 형식의 검색 결과
+bundle_description: arXiv에서 학술 논문 검색

@@ -1,0 +1,13 @@
+bundle_description: GPT 비전 모델에서 이미지 이해가 가능한 텍스트 응답을 받습니다.
+chat_completion_by_gpt4_o_description: 비전 기능이 있는 GPT-4-Omni 모델에서 텍스트 응답을 받습니다. 이미지와
+    텍스트 프롬프트를 입력하세요.
+chat_completion_by_gpt4_o_input_image_url_description: 이미지의 URL
+chat_completion_by_gpt4_o_input_prompt_description: 모델을 위한 프롬프트
+chat_completion_by_gpt4_o_output_result_description: 모델로부터의 텍스트 응답
+chat_completion_by_gpt4_turbo_description: 비전 기능이 있는 GPT-4-Turbo 모델에서 텍스트 응답을 받습니다.
+    이미지와 텍스트 프롬프트를 입력하세요.
+chat_completion_by_gpt4_turbo_input_image_url_description: 이미지의 URL
+chat_completion_by_gpt4_turbo_input_prompt_description: 모델을 위한 프롬프트
+chat_completion_by_gpt4_turbo_output_result_description: 모델로부터의 텍스트 응답
+credential_openai_api_key_description: 인증을 위한 API Key입니다. https://platform.openai.com/docs/overview에서
+    확인하세요.

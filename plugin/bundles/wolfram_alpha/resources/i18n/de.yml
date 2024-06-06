@@ -1,0 +1,9 @@
+bundle_description: Der einfache Weg, erstklassiges computergestütztes Wissen in Ihre
+    Anwendungen zu integrieren
+credential_wolfram_alpha_app_id_description: Die App-ID von Wolfram Alpha. Erhalten
+    Sie sie unter https://developer.wolframalpha.com/access
+query_description: Abfrage von Wolfram Alpha nach computergestütztem Wissen. Zum Beispiel
+    'der zweithöchste Berg der Welt'
+query_input_query_description: 'Die Suchabfrage. Beispiel: der zweithöchste Berg der
+    Welt'
+query_output_result_description: Die Suchergebnisse im JSON-String-Format

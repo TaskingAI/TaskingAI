@@ -1,0 +1,13 @@
+bundle_description: 텍스트 설명에서 이미지를 생성 Stability AI에 의해
+credential_stability_ai_api_key_description: 인증을 위한 API 키입니다. https://stability-ai.com/
+    에서 가져오세요.
+generate_image_description: 텍스트 설명에서 이미지를 생성
+generate_image_input_cfg_scale_description: 이미지 생성을 위한 비율. 기본값은 7입니다.
+generate_image_input_engine_id_description: 이미지 생성을 위한 엔진. 기본값은 stable-diffusion-v1-6입니다.
+generate_image_input_height_description: 생성된 이미지의 높이. 64의 배수여야 하며, 최소 128이어야 합니다.
+    기본값은 512입니다.
+generate_image_input_prompt_description: 이미지를 생성할 텍스트 설명
+generate_image_input_steps_description: 이미지 생성을 위한 단계 수. 기본값은 30입니다.
+generate_image_input_width_description: 생성된 이미지의 너비. 64의 배수여야 하며, 최소 128이어야 합니다. 기본값은
+    512입니다.
+generate_image_output_image_url_description: 생성된 이미지의 URL

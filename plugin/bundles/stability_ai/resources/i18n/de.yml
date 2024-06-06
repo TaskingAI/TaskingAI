@@ -1,0 +1,17 @@
+bundle_description: Ein Bild aus einer Textbeschreibung mit Stability AI generieren
+credential_stability_ai_api_key_description: API-Schlüssel zur Authentifizierung.
+    Erhalten Sie ihn unter https://stability-ai.com/
+generate_image_description: Ein Bild aus einer Textbeschreibung generieren
+generate_image_input_cfg_scale_description: Der Maßstab für die Bilderzeugung. Standard
+    ist 7
+generate_image_input_engine_id_description: Der zu verwendende Motor zur Bilderzeugung.
+    Standard ist stable-diffusion-v1-6
+generate_image_input_height_description: Die Höhe des generierten Bildes, sollte ein
+    Vielfaches von 64 sein, mindestens 128. Standard ist 512
+generate_image_input_prompt_description: Die Textbeschreibung, aus der das Bild generiert
+    werden soll
+generate_image_input_steps_description: Die Anzahl der Schritte zur Bilderzeugung.
+    Standard ist 30
+generate_image_input_width_description: Die Breite des generierten Bildes, sollte
+    ein Vielfaches von 64 sein, mindestens 128. Standard ist 512
+generate_image_output_image_url_description: Die URL des generierten Bildes

@@ -1,0 +1,5 @@
+bundle_description: GitHubから情報を取得
+credential_github_api_key_description: 認証のためのAPIキー。取得先：https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token
+search_repositories_description: GitHubでリポジトリを検索
+search_repositories_input_query_description: 検索クエリ。例：python web crawler
+search_repositories_output_result_description: json文字列形式の検索結果

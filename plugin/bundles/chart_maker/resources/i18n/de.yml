@@ -1,0 +1,50 @@
+bundle_description: Erstellen Sie Diagramme aus Dateneingaben
+make_2d_histogram_description: Erstellen Sie ein 2D-Histogramm aus den angegebenen
+    Daten
+make_2d_histogram_input_title_description: Der Titel des Diagramms
+make_2d_histogram_input_x_title_description: Der Titel der x-Achse
+make_2d_histogram_input_x_values_description: Die x-Werte für die Datenpunkte. Sollte
+    die gleiche Größe wie y-Werte haben.
+make_2d_histogram_input_y_title_description: Der Titel der y-Achse
+make_2d_histogram_input_y_values_description: Die y-Werte für die Datenpunkte. Sollte
+    die gleiche Größe wie x-Werte haben.
+make_2d_histogram_output_url_description: Die URL zum generierten Diagrammbild
+make_bar_chart_description: Ein Balkendiagramm aus den angegebenen Daten erstellen
+make_bar_chart_input_title_description: Der Titel des Diagramms
+make_bar_chart_input_x_title_description: Der Titel der x-Achse
+make_bar_chart_input_x_values_description: Die x-Achsen-Werte für die Datenpunkte.
+    Sollte die gleiche Größe wie die y-Werte haben.
+make_bar_chart_input_y_title_description: Der Titel der y-Achse
+make_bar_chart_input_y_values_description: Die y-Achsen-Werte für die Datenpunkte.
+    Sollte die gleiche Größe wie die x-Werte haben.
+make_bar_chart_output_url_description: Die URL zum generierten Diagrammbild
+make_histogram_description: Erstellen Sie ein Histogramm aus den angegebenen Daten
+make_histogram_input_title_description: Der Titel des Diagramms
+make_histogram_input_values_description: Die Werte für die Datenpunkte
+make_histogram_input_x_title_description: Der Titel der x-Achse
+make_histogram_output_url_description: Die URL zum generierten Diagrammbild
+make_line_chart_description: Erzeuge ein Liniendiagramm aus den angegebenen Daten
+make_line_chart_input_title_description: Der Titel des Diagramms
+make_line_chart_input_x_title_description: Der Titel der x-Achse
+make_line_chart_input_x_values_description: Die x-Achsen-Werte der Datenpunkte. Sollte
+    die gleiche Größe wie die y-Werte haben.
+make_line_chart_input_y_title_description: Der Titel der y-Achse
+make_line_chart_input_y_values_description: Die y-Achsen-Werte der Datenpunkte. Sollte
+    die gleiche Größe wie die x-Werte haben.
+make_line_chart_output_url_description: Die URL zum generierten Diagrammbild
+make_pie_chart_description: Erzeuge ein Tortendiagramm aus den angegebenen Daten
+make_pie_chart_input_labels_description: Die Beschriftungen für die Datenpunkte. Sollte
+    die gleiche Größe wie die Werte haben.
+make_pie_chart_input_title_description: Der Titel des Diagramms
+make_pie_chart_input_values_description: Die Werte für die Datenpunkte. Sollte die
+    gleiche Größe wie die Beschriftungen haben.
+make_pie_chart_output_url_description: Die URL zum generierten Diagrammbild
+make_scatter_plot_description: Erstellen eines Streudiagramms aus den gegebenen Daten
+make_scatter_plot_input_title_description: Der Titel des Diagramms
+make_scatter_plot_input_x_title_description: Der Titel der x-Achse
+make_scatter_plot_input_x_values_description: Die x-Achsen-Werte für die Datenpunkte.
+    Sollten die gleiche Größe wie die y-Werte haben.
+make_scatter_plot_input_y_title_description: Der Titel der y-Achse
+make_scatter_plot_input_y_values_description: Die y-Achsen-Werte für die Datenpunkte.
+    Sollten die gleiche Größe wie die x-Werte haben.
+make_scatter_plot_output_url_description: Die URL des generierten Diagrammbildes

@@ -1,0 +1,24 @@
+bundle_description: 用于不同 Google 搜索服务的聚合器。
+credential_serper_api_key_description: 用于身份验证的 API 密钥。可以从 https://serper.dev/api-key
+    获取。
+image_search_description: 使用文字关键词的 Google 图片搜索
+image_search_input_query_description: 搜索查询
+image_search_output_result_description: 搜索结果，格式为 JSON。
+maps_search_description: 使用文本关键词进行Google地图搜索
+maps_search_input_query_description: 搜索查询
+maps_search_output_result_description: 搜索结果，格式为JSON
+news_search_description: 使用文本关键词进行Google新闻搜索
+news_search_input_query_description: 搜索查询
+news_search_output_result_description: 搜索结果，格式为JSON
+scholar_search_description: 使用文本关键词的Google学术搜索
+scholar_search_input_query_description: 搜索查询
+scholar_search_output_result_description: 搜索结果，以json格式返回
+shopping_search_description: 使用文本关键词进行Google购物搜索
+shopping_search_input_query_description: 搜索查询
+shopping_search_output_result_description: 搜索结果，格式为JSON
+text_search_description: 使用文字关键词的常规 Google 搜索
+text_search_input_query_description: 搜索查询
+text_search_output_result_description: 搜索结果，格式为 JSON。
+video_search_description: 使用文本关键词进行Google视频搜索
+video_search_input_query_description: 搜索查询
+video_search_output_result_description: 搜索结果，格式为 JSON。

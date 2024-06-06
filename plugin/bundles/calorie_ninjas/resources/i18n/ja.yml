@@ -1,0 +1,9 @@
+bundle_description: Calorie Ninjasから栄養情報およびレシピを取得する
+credential_calorie_ninjas_api_key_description: 認証用のAPIキー。https://calorieninjas.com/api
+    から取得
+get_nutrition_info_description: 食品アイテムの栄養情報をテキストによる説明で取得します
+get_nutrition_info_input_food_description_description: 食品のテキストによる説明。例：100mlのアップルジュース、1カップのご飯など。
+get_nutrition_info_output_result_description: 食品アイテムの栄養情報をJSON形式で表示
+get_recipe_description: 食品アイテムのレシピ情報をテキストによる説明で取得します。例えば、「マッシュルームリゾット」
+get_recipe_input_query_description: レシピのテキストによる説明。例：マッシュルームリゾット
+get_recipe_output_result_description: レシピ情報をJSON形式で表示

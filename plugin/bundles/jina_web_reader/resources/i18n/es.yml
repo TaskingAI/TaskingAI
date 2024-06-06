@@ -1,0 +1,4 @@
+bundle_description: Convierte cualquier URL en una entrada amigable para LLM
+read_url_description: Convierte cualquier URL en una entrada amigable para LLM
+read_url_input_url_description: La URL a ser convertida
+read_url_output_result_description: El resultado de la búsqueda en formato JSON

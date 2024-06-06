@@ -1,0 +1,6 @@
+bundle_description: Aftershipは、世界中の700以上の宅配業者からの配送を追跡できる配送追跡プラットフォームです。
+credential_aftership_api_key_description: 認証用のAPIキー。入手先：https://www.aftership.com/docs/tracking/quickstart/api-quick-start
+get_tracking_info_description: 配送の追跡情報を取得する
+get_tracking_info_input_slug_description: 宅配業者のスラッグ（識別名）。例えば、dhl、fedex、upsなど。
+get_tracking_info_input_tracking_number_description: 配送の追跡番号
+get_tracking_info_output_result_description: JSON形式で表示される配送追跡情報

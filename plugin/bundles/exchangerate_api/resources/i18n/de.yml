@@ -1,0 +1,29 @@
+bundle_description: Erhalten Sie aktuelle und historische Wechselkurse
+credential_exchangerate_api_api_key_description: API-Schlüssel zur Authentifizierung.
+    Holen Sie ihn sich unter https://www.exchangerate-api.com/
+get_exchange_rate_description: Erhalten Sie den aktuellen Wechselkurs von einer Währung
+    zu einer anderen
+get_exchange_rate_input_from_currency_description: Der Währungscode, von dem konvertiert
+    werden soll. Sollte ein 3-stelliger Währungscode sein, z. B. USD, EUR, CNY usw.
+get_exchange_rate_input_to_currency_description: Der Währungscode, zu dem konvertiert
+    werden soll. Sollte ein 3-stelliger Währungscode sein, z. B. USD, EUR, CNY usw.
+get_exchange_rate_output_rate_description: Der Wechselkurs von der Ausgangswährung
+    zur Zielwährung.
+get_historical_exchange_rate_description: Liste der Wechselkurse einer Basiswährung
+    an einem bestimmten Datum
+get_historical_exchange_rate_input_base_currency_description: Der Währungscode, von
+    dem konvertiert werden soll. Sollte ein 3-stelliger Währungscode sein, z. B. USD,
+    EUR, CNY usw.
+get_historical_exchange_rate_input_day_description: Der Tag des historischen Wechselkurses.
+get_historical_exchange_rate_input_month_description: Der Monat des historischen Wechselkurses.
+get_historical_exchange_rate_input_year_description: Das Jahr des historischen Wechselkurses.
+get_historical_exchange_rate_output_rates_description: Die Wechselkurse von der Basiswährung
+    zu anderen Währungen im JSON-String-Format. Der Schlüssel ist der Währungscode
+    und der Wert ist der Wechselkurs.
+list_exchange_rates_description: Liste der aktuellen Wechselkurse von einer Währung
+    zu allen anderen verfügbaren Währungen
+list_exchange_rates_input_base_currency_description: Der Währungscode, von dem konvertiert
+    werden soll. Sollte ein 3-stelliger Währungscode sein, z. B. USD, EUR, CNY usw.
+list_exchange_rates_output_rates_description: Die Wechselkurse von der Basiswährung
+    zu anderen Währungen im JSON-String-Format. Der Schlüssel ist der Währungscode
+    und der Wert ist der Wechselkurs.

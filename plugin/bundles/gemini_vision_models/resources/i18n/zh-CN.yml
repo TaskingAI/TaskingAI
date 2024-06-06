@@ -1,0 +1,13 @@
+bundle_description: 从 Gemini 视觉模型获取能够理解图像的文字响应。
+chat_completion_by_gemini_1_0_pro_description: 从 Gemini 1.0 Pro 视觉模型获取文字响应。输入图像 URL
+    和文字提示词。
+chat_completion_by_gemini_1_0_pro_input_image_url_description: 图片的 URL
+chat_completion_by_gemini_1_0_pro_input_prompt_description: 模型的提示词
+chat_completion_by_gemini_1_0_pro_output_result_description: 模型的文本响应
+chat_completion_by_gemini_1_5_pro_description: 从 Gemini 1.5 Pro 视觉模型获取文字响应。输入图像 URL
+    和文字提示词。
+chat_completion_by_gemini_1_5_pro_input_image_url_description: 图片的 URL
+chat_completion_by_gemini_1_5_pro_input_prompt_description: 模型的提示词
+chat_completion_by_gemini_1_5_pro_output_result_description: 模型的文本响应
+credential_google_gemini_api_key_description: 用于认证的 API 密钥。请从 https://ai.google.dev/
+    获取。

@@ -1,0 +1,4 @@
+bundle_description: 从文本输入生成二维码
+generate_qr_code_description: 从给定文本生成二维码
+generate_qr_code_input_text_description: 在二维码中编码的文本
+generate_qr_code_output_url_description: 生成的二维码图像的 URL

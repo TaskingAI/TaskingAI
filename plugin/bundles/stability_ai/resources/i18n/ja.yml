@@ -1,0 +1,10 @@
+bundle_description: Stability AI によるテキスト記述から画像を生成
+credential_stability_ai_api_key_description: 認証用のAPIキー。https://stability-ai.com/から入手してください
+generate_image_description: テキスト記述から画像を生成
+generate_image_input_cfg_scale_description: 画像生成に使用するスケール。デフォルトは7です
+generate_image_input_engine_id_description: 画像生成に使用するエンジン。デフォルトはstable-diffusion-v1-6です
+generate_image_input_height_description: 生成された画像の高さ。64の倍数で、少なくとも128。デフォルトは512です
+generate_image_input_prompt_description: 画像を生成するためのテキスト記述
+generate_image_input_steps_description: 画像生成に使用するステップ数。デフォルトは30です
+generate_image_input_width_description: 生成された画像の幅。64の倍数で、少なくとも128。デフォルトは512です
+generate_image_output_image_url_description: 生成された画像のURL

@@ -1,0 +1,17 @@
+add_description: 두 숫자를 더합니다
+add_number_1_description: 첫 번째 숫자
+add_number_2_description: 두 번째 숫자
+add_result_description: 두 숫자를 더한 결과
+arithmetic_description: 산술 연산을 수행하는 플러그인 모음
+divide_description: 첫 번째 숫자를 두 번째 숫자로 나눕니다
+divide_number_1_description: 첫번째 숫자
+divide_number_2_description: 두번째 숫자
+divide_result_description: 두 숫자를 나눈 결과
+multiply_description: 두 숫자를 곱합니다
+multiply_number_1_description: 첫 번째 숫자
+multiply_number_2_description: 두 번째 숫자
+multiply_result_description: 두 숫자를 곱한 결과
+subtract_description: 첫번째 숫자에서 두번째 숫자를 뺍니다
+subtract_number_1_description: 첫번째 숫자
+subtract_number_2_description: 두번째 숫자
+subtract_result_description: 두 숫자를 뺀 결과

@@ -1,0 +1,6 @@
+bundle_description: DALL·E 3은 텍스트 설명으로부터 이미지를 생성할 수 있는 강력한 이미지 생성 모델입니다.
+credential_openai_api_key_description: 인증을 위한 API 키입니다. https://platform.openai.com/
+    에서 얻으십시오.
+generate_image_description: DALL·E 3로 텍스트 설명을 통해 이미지를 생성합니다
+generate_image_input_prompt_description: 텍스트 설명으로 이미지를 생성합니다
+generate_image_output_url_description: 생성된 이미지의 URL

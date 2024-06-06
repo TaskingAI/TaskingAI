@@ -1,0 +1,7 @@
+bundle_description: 使用 DuckDuckGo 搜索信息。
+search_image_description: 使用 DuckDuckGo 通过文本搜索图片。
+search_image_input_keywords_description: 要搜索的关键词
+search_image_output_results_description: json 格式的搜索结果
+search_text_description: 使用 DuckDuckGo 搜索文本信息。
+search_text_input_keywords_description: 要搜索的关键词
+search_text_output_results_description: json 格式的搜索结果

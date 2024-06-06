@@ -1,0 +1,15 @@
+bundle_description: Obtén respuestas textuales de modelos de visión GPT que pueden
+    entender imágenes.
+chat_completion_by_gpt4_o_description: Obtén respuestas textuales del modelo GPT-4-Omni
+    con capacidades de visión. Ingresa una imagen y un aviso textual.
+chat_completion_by_gpt4_o_input_image_url_description: La URL de la imagen
+chat_completion_by_gpt4_o_input_prompt_description: El aviso para el modelo
+chat_completion_by_gpt4_o_output_result_description: La respuesta textual del modelo
+chat_completion_by_gpt4_turbo_description: Obtén respuestas textuales del modelo GPT-4-Turbo
+    con capacidades de visión. Ingresa una imagen y un aviso textual.
+chat_completion_by_gpt4_turbo_input_image_url_description: La URL de la imagen
+chat_completion_by_gpt4_turbo_input_prompt_description: El aviso para el modelo
+chat_completion_by_gpt4_turbo_output_result_description: La respuesta textual del
+    modelo
+credential_openai_api_key_description: Clave API para autenticación. Consíguela en
+    https://platform.openai.com/docs/overview

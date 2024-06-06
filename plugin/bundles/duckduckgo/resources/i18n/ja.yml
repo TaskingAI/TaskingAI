@@ -1,0 +1,7 @@
+bundle_description: DuckDuckGo を使って情報を検索します。
+search_image_description: DuckDuckGo を使ってテキストから画像を検索します。
+search_image_input_keywords_description: 検索するキーワード
+search_image_output_results_description: json 形式の検索結果
+search_text_description: DuckDuckGo を使ってテキスト情報を検索します。
+search_text_input_keywords_description: 検索するキーワード
+search_text_output_results_description: json 形式の検索結果

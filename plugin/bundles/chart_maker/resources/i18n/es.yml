@@ -1,0 +1,50 @@
+bundle_description: Generar gráficos a partir de la entrada de datos
+make_2d_histogram_description: Generar un histograma 2D a partir de los datos proporcionados
+make_2d_histogram_input_title_description: El título del gráfico
+make_2d_histogram_input_x_title_description: El título del eje x
+make_2d_histogram_input_x_values_description: Los valores de x para los puntos de
+    datos. Deben tener el mismo tamaño que los valores de y.
+make_2d_histogram_input_y_title_description: El título del eje y
+make_2d_histogram_input_y_values_description: Los valores de y para los puntos de
+    datos. Deben tener el mismo tamaño que los valores de x.
+make_2d_histogram_output_url_description: La URL de la imagen del gráfico generado
+make_bar_chart_description: Generar un gráfico de barras a partir de los datos proporcionados
+make_bar_chart_input_title_description: El título del gráfico
+make_bar_chart_input_x_title_description: El título del eje x
+make_bar_chart_input_x_values_description: Los valores del eje x para los puntos de
+    datos. Deben tener el mismo tamaño que los valores y.
+make_bar_chart_input_y_title_description: El título del eje y
+make_bar_chart_input_y_values_description: Los valores del eje y para los puntos de
+    datos. Deben tener el mismo tamaño que los valores x.
+make_bar_chart_output_url_description: La URL de la imagen del gráfico generado
+make_histogram_description: Generar un histograma a partir de los datos proporcionados
+make_histogram_input_title_description: El título del gráfico
+make_histogram_input_values_description: Los valores para los puntos de datos
+make_histogram_input_x_title_description: El título del eje x
+make_histogram_output_url_description: La URL de la imagen del gráfico generado
+make_line_chart_description: Generar un gráfico de líneas a partir de los datos dados
+make_line_chart_input_title_description: El título del gráfico
+make_line_chart_input_x_title_description: El título del eje x
+make_line_chart_input_x_values_description: Los valores del eje x para los puntos
+    de datos. Deben ser del mismo tamaño que los valores de y.
+make_line_chart_input_y_title_description: El título del eje y
+make_line_chart_input_y_values_description: Los valores del eje y para los puntos
+    de datos. Deben ser del mismo tamaño que los valores de x.
+make_line_chart_output_url_description: La URL de la imagen del gráfico generado
+make_pie_chart_description: Generar un gráfico de pastel a partir de los datos dados
+make_pie_chart_input_labels_description: Las etiquetas para los puntos de datos. Deben
+    tener el mismo tamaño que los valores.
+make_pie_chart_input_title_description: El título del gráfico
+make_pie_chart_input_values_description: Los valores para los puntos de datos. Deben
+    tener el mismo tamaño que las etiquetas.
+make_pie_chart_output_url_description: La URL de la imagen del gráfico generado
+make_scatter_plot_description: Generar un diagrama de dispersión a partir de los datos
+    proporcionados
+make_scatter_plot_input_title_description: El título del gráfico
+make_scatter_plot_input_x_title_description: El título del eje x
+make_scatter_plot_input_x_values_description: Los valores del eje x para los puntos
+    de datos. Deben tener el mismo tamaño que los valores de y.
+make_scatter_plot_input_y_title_description: El título del eje y
+make_scatter_plot_input_y_values_description: Los valores del eje y para los puntos
+    de datos. Deben tener el mismo tamaño que los valores de x.
+make_scatter_plot_output_url_description: La URL de la imagen generada del gráfico

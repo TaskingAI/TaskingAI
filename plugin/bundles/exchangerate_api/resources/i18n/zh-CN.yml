@@ -1,0 +1,15 @@
+bundle_description: 获取实时和历史汇率
+credential_exchangerate_api_api_key_description: 用于身份验证的API密钥。可以从https://www.exchangerate-api.com/获取
+get_exchange_rate_description: 获取从一种货币到另一种货币的当前汇率
+get_exchange_rate_input_from_currency_description: 转换源货币的货币代码。应为三字母货币代码。例如：USD、EUR、CNY等。
+get_exchange_rate_input_to_currency_description: 转换目标货币的货币代码。应为三字母货币代码。例如：USD、EUR、CNY等。
+get_exchange_rate_output_rate_description: 从源货币到目标货币的汇率。
+get_historical_exchange_rate_description: 列出特定日期基准货币的汇率
+get_historical_exchange_rate_input_base_currency_description: 转换源货币的货币代码。应为三字母货币代码。例如：USD、EUR、CNY等。
+get_historical_exchange_rate_input_day_description: 历史汇率的日期。
+get_historical_exchange_rate_input_month_description: 历史汇率的月份。
+get_historical_exchange_rate_input_year_description: 历史汇率的年份。
+get_historical_exchange_rate_output_rates_description: 基准货币对其他货币的汇率，采用 JSON 字符串格式。键是货币代码，值是汇率。
+list_exchange_rates_description: 列出一种货币到所有其他可用货币的实时汇率
+list_exchange_rates_input_base_currency_description: 转换源货币的货币代码。应为三字母货币代码。例如：USD、EUR、CNY等。
+list_exchange_rates_output_rates_description: 以json字符串格式从基准货币到其他货币的汇率。键为货币代码，值为汇率。

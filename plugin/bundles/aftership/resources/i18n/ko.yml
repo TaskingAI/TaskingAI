@@ -1,0 +1,7 @@
+bundle_description: Aftership은 전 세계 700개 이상의 택배사에서 배송을 추적할 수 있는 배송 추적 플랫폼입니다.
+credential_aftership_api_key_description: 인증을 위한 API 키입니다. https://www.aftership.com/docs/tracking/quickstart/api-quick-start에서
+    얻을 수 있습니다.
+get_tracking_info_description: 배송의 추적 정보를 가져옵니다.
+get_tracking_info_input_slug_description: '택배사의 슬러그입니다. 예: dhl, fedex, ups 등'
+get_tracking_info_input_tracking_number_description: 배송의 추적 번호
+get_tracking_info_output_result_description: 배송의 추적 정보를 JSON 형식으로 표시

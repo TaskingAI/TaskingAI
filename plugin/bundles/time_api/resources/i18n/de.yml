@@ -1,0 +1,16 @@
+bundle_description: Erhalte die aktuelle Zeit in einer bestimmten Zeitzone oder durch
+    geografische Koordinaten
+get_time_by_geo_coordinates_description: Erhalte die aktuelle Zeit durch geografische
+    Koordinaten
+get_time_by_geo_coordinates_input_latitude_description: Der Breitengrad des Standorts
+get_time_by_geo_coordinates_input_longitude_description: Der Längengrad des Standorts
+get_time_by_geo_coordinates_output_result_description: Die aktuelle Zeit nach geografischen
+    Koordinaten im JSON-Format
+get_time_by_timezone_description: Erhalte die aktuelle Zeit in einer bestimmten Zeitzone
+get_time_by_timezone_input_timezone_description: Die Zeitzone, um die aktuelle Zeit
+    zu erhalten, im vollständigen IANA-Format, z.B. 'America/New_York'
+get_time_by_timezone_output_result_description: Die aktuelle Zeit in der angegebenen
+    Zeitzone im JSON-Format
+list_timezones_description: Liste aller verfügbaren IANA-Zeitzonen
+list_timezones_output_result_description: Die Liste aller verfügbaren IANA-Zeitzonen
+    im JSON-Format

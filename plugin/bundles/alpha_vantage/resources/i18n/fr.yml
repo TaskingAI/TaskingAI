@@ -1,0 +1,27 @@
+bundle_description: Obtenez les informations les plus récentes et historiques sur
+    les actions d'Alpha Vantage
+credential_alpha_vantage_api_key_description: Clé API pour l'authentification. Obtenez-la
+    sur https://www.alphavantage.co/support/#api-key
+get_historical_stock_data_description: Obtenez des informations historiques sur une
+    action
+get_historical_stock_data_input_end_date_description: La date de fin des données historiques.
+    Elle doit être au format 'AAAA-MM-JJ'
+get_historical_stock_data_input_interval_description: 'Sélectionner parmi les valeurs
+    suivantes : daily (journalier), weekly (hebdomadaire), monthly (mensuel)'
+get_historical_stock_data_input_start_date_description: La date de début des données
+    historiques. Elle doit être au format 'AAAA-MM-JJ'
+get_historical_stock_data_input_symbol_description: 'Le symbole de l''action. par
+    exemple, AAPL, TSLA, MSFT, etc. Pour les actions autres que les actions américaines,
+    veuillez utiliser le format suivant : ''stock_symbol.stock_exchange_symbol''.
+    par exemple, 000002.SHZ pour le code 000002 à la Bourse de Shenzhen, TSCO.LON
+    pour le code TSCO à la Bourse de Londres, etc.'
+get_historical_stock_data_output_result_description: Les informations historiques
+    sur l'action au format JSON
+get_latest_stock_data_description: Obtenez les dernières informations sur une action
+get_latest_stock_data_input_symbol_description: 'Le symbole de l''action. par exemple,
+    AAPL, TSLA, MSFT, etc. Pour les actions autres que les actions américaines, veuillez
+    utiliser le format suivant : ''stock_symbol.stock_exchange_symbol''. par exemple,
+    000002.SHZ pour le code 000002 à la Bourse de Shenzhen, TSCO.LON pour le code
+    TSCO à la Bourse de Londres, etc.'
+get_latest_stock_data_output_result_description: Les informations les plus récentes
+    sur l'action au format JSON

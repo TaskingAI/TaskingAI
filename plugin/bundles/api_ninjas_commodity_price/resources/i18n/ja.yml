@@ -1,0 +1,4 @@
+bundle_description: 多数の取引所（CME、NYMEXなど）で一般的に取引される商品のリアルタイム価格へのアクセスを提供します。
+credential_api_ninjas_api_key_description: 認証用のAPIキーです。https://api-ninjas.com/ から取得してください。
+get_commodity_price_description: テキストを使用して商品の価格情報を取得します。例えば、「Gold Futures」
+get_commodity_price_output_result_description: 商品の価格情報をjson形式で提供します。

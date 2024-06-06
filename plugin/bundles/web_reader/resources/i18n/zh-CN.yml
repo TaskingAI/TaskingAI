@@ -1,0 +1,4 @@
+bundle_description: 从网页中获取文本信息。
+read_web_page_description: 读取网页中的文本。
+read_web_page_input_url_description: 网页的URL。
+read_web_page_output_result_description: 来自网页的文本。

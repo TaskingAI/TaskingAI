@@ -1,0 +1,9 @@
+bundle_description: DALL·E 3 ist ein leistungsstarkes Bildgenerierungsmodell, das
+    Bilder aus textuellen Beschreibungen erzeugen kann.
+credential_openai_api_key_description: API-Schlüssel zur Authentifizierung. Holen
+    Sie ihn sich unter https://platform.openai.com/
+generate_image_description: Erzeugen Sie ein Bild aus einer textuellen Beschreibung
+    mit DALL·E 3
+generate_image_input_prompt_description: Die textuelle Beschreibung, aus der das Bild
+    generiert werden soll
+generate_image_output_url_description: Die URL des generierten Bildes

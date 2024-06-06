@@ -1,0 +1,6 @@
+bundle_description: 최고의 컴퓨테이셔널 지식을 귀하의 애플리케이션에 통합하는 쉬운 방법
+credential_wolfram_alpha_app_id_description: Wolfram Alpha의 애플리케이션 ID. https://developer.wolframalpha.com/access
+    에서 받을 수 있습니다
+query_description: Wolfram Alpha에 컴퓨테이셔널 지식을 문의하세요. 예를 들어, '세계에서 두 번째로 높은 산'
+query_input_query_description: '검색 쿼리. 예시: 세계에서 두 번째로 높은 산'
+query_output_result_description: JSON 문자열 형식의 검색 결과

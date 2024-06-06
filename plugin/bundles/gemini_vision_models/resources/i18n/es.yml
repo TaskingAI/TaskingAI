@@ -1,0 +1,16 @@
+bundle_description: Obtén respuestas textuales de los modelos de visión Gemini que
+    pueden entender imágenes.
+chat_completion_by_gemini_1_0_pro_description: Obtén respuestas textuales del modelo
+    de visión Gemini 1.0 Pro. Ingresa una URL de imagen y un aviso textual.
+chat_completion_by_gemini_1_0_pro_input_image_url_description: La URL de la imagen
+chat_completion_by_gemini_1_0_pro_input_prompt_description: El aviso para el modelo
+chat_completion_by_gemini_1_0_pro_output_result_description: La respuesta textual
+    del modelo
+chat_completion_by_gemini_1_5_pro_description: Obtén respuestas textuales del modelo
+    de visión Gemini 1.5 Pro. Ingresa una URL de imagen y un aviso textual.
+chat_completion_by_gemini_1_5_pro_input_image_url_description: La URL de la imagen
+chat_completion_by_gemini_1_5_pro_input_prompt_description: El aviso para el modelo
+chat_completion_by_gemini_1_5_pro_output_result_description: La respuesta textual
+    del modelo
+credential_google_gemini_api_key_description: Clave API para autenticación. Consíguela
+    en https://ai.google.dev/

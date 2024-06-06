@@ -1,0 +1,28 @@
+bundle_description: Obtén las últimas noticias y noticias históricas de News API
+credential_news_api_api_key_description: Clave API para autenticación. Obténla en
+    https://newsapi.org/
+get_top_headlines_description: Obtener los titulares principales
+get_top_headlines_input_category_description: 'La categoría para la que deseas obtener
+    titulares. Debe ser una de: ''business'', ''entertainment'', ''general'', ''health'',
+    ''science'', ''sports'', ''technology'''
+get_top_headlines_input_count_description: El número de artículos a devolver
+get_top_headlines_input_country_description: 'El código de 2 letras ISO 3166-1 del
+    país para el que deseas obtener titulares. Opciones posibles: ''ae'', ''ar'',
+    ''at'', ''au'', ''be'', ''bg'', ''br'', ''ca'', ''ch'', ''cn'', ''co'', ''cu'',
+    ''cz'', ''de'', ''eg'', ''fr'', ''gb'', ''gr'', ''hk'', ''hu'', ''id'', ''ie'',
+    ''il'', ''in'', ''it'', ''jp'', ''kr'', ''lt'', ''lv'', ''ma'', ''mx'', ''my'',
+    ''ng'', ''nl'', ''no'', ''nz'', ''ph'', ''pl'', ''pt'', ''rs'', ''ru'', ''sa'',
+    ''se'', ''sg'', ''si'', ''sk'', ''th'', ''tr'', ''tw'', ''ua'', ''us'', ''ve'',
+    ''za'''
+get_top_headlines_output_result_description: Los resultados de la búsqueda en una
+    cadena json
+search_news_article_description: Buscar artículos de noticias
+search_news_article_input_count_description: El número de artículos a devolver
+search_news_article_input_from_date_description: La fecha y hora del artículo más
+    antiguo permitido. Debe estar en formato ISO 8601 (por ejemplo, 2024-02-12)
+search_news_article_input_query_description: 'La consulta de búsqueda. Ejemplo: Apple
+    Inc.'
+search_news_article_input_to_date_description: La fecha y hora del artículo más reciente
+    permitido. Debe estar en formato ISO 8601 (por ejemplo, 2024-02-12)
+search_news_article_output_result_description: Los resultados de la búsqueda en formato
+    de cadena json

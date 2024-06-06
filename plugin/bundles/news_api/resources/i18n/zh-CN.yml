@@ -1,0 +1,18 @@
+bundle_description: 获取来自News API的最新新闻和历史新闻
+credential_news_api_api_key_description: 用于身份验证的API密钥。请从https://newsapi.org/获取
+get_top_headlines_description: 获取头条新闻
+get_top_headlines_input_category_description: 您想要获取头条新闻的类别。必须是以下之一：'business', 'entertainment',
+    'general', 'health', 'science', 'sports', 'technology'
+get_top_headlines_input_count_description: 要返回的文章数量
+get_top_headlines_input_country_description: 您想要获取头条新闻的国家的2字母ISO 3166-1代码。可能的选项有：'ae',
+    'ar', 'at', 'au', 'be', 'bg', 'br', 'ca', 'ch', 'cn', 'co', 'cu', 'cz', 'de',
+    'eg', 'fr', 'gb', 'gr', 'hk', 'hu', 'id', 'ie', 'il', 'in', 'it', 'jp', 'kr',
+    'lt', 'lv', 'ma', 'mx', 'my', 'ng', 'nl', 'no', 'nz', 'ph', 'pl', 'pt', 'rs',
+    'ru', 'sa', 'se', 'sg', 'si', 'sk', 'th', 'tr', 'tw', 'ua', 'us', 've', 'za'
+get_top_headlines_output_result_description: 搜索结果以 json 字符串形式返回
+search_news_article_description: 搜索新闻文章
+search_news_article_input_count_description: 要返回的文章数量
+search_news_article_input_from_date_description: 允许的最旧文章的日期和时间。应为ISO 8601格式（例如：2024-02-12）
+search_news_article_input_query_description: 搜索查询。例如：苹果公司
+search_news_article_input_to_date_description: 允许的最新文章的日期和时间。应为ISO 8601格式（例如：2024-02-12）
+search_news_article_output_result_description: json字符串形式的搜索结果

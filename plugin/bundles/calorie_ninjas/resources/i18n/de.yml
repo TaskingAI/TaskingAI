@@ -1,0 +1,14 @@
+bundle_description: Erhalten Sie Nährwertinformationen und Rezepte von Calorie Ninjas
+credential_calorie_ninjas_api_key_description: API-Schlüssel zur Authentifizierung.
+    Erhalten Sie ihn von https://calorieninjas.com/api
+get_nutrition_info_description: Erhalten Sie die Nährwertinformationen eines Lebensmittels
+    anhand textlicher Beschreibungen
+get_nutrition_info_input_food_description_description: 'Die textliche Beschreibung
+    der Lebensmittel. Beispiel: 100ml Apfelsaft, 1 Tasse Reis usw.'
+get_nutrition_info_output_result_description: Die Nährwertinformationen des Lebensmittels
+    im JSON-Format
+get_recipe_description: Erhalten Sie die Rezeptinformationen eines Lebensmittels anhand
+    textlicher Beschreibungen. Zum Beispiel, 'Pilzrisotto'
+get_recipe_input_query_description: 'Die textliche Beschreibung des Rezepts. Beispiel:
+    Pilzrisotto'
+get_recipe_output_result_description: Die Rezeptinformationen im JSON-Format

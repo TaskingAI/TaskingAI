@@ -1,0 +1,6 @@
+bundle_description: アプリケーションに最先端の計算知識を簡単に統合する方法
+credential_wolfram_alpha_app_id_description: Wolfram Alpha のアプリケーション ID。https://developer.wolframalpha.com/access
+    から取得できます
+query_description: Wolfram Alpha に計算知識を問い合わせます。例：「世界で2番目に高い山」
+query_input_query_description: 検索クエリ。例：世界で2番目に高い山
+query_output_result_description: 検索結果を json 文字列で

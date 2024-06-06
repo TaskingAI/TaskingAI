@@ -1,0 +1,13 @@
+bundle_description: 以Python格式评估数学表达式并获得结果
+evaluate_description: 以Python格式评估数学表达式并获得结果
+evaluate_input_expression_description: '要评估的Python格式的数学表达式。
+
+
+    例1：输入：5**2+7-4，输出：28.0。
+
+
+    例2：输入：5*a + 4*a，输出：9.0*a。
+
+
+    例3：输入：5**2*(8-4)，输出：100.0。'
+evaluate_output_result_description: 评估表达式的结果

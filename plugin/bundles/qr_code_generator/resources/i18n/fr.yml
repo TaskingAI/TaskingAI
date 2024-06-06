@@ -1,0 +1,4 @@
+bundle_description: Générer des codes QR à partir d'une entrée textuelle
+generate_qr_code_description: Générer un code QR à partir du texte donné
+generate_qr_code_input_text_description: Le texte à encoder dans le code QR
+generate_qr_code_output_url_description: L'URL de l'image du code QR généré

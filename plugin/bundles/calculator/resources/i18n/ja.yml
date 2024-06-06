@@ -1,0 +1,13 @@
+bundle_description: Python形式の数学表現を評価し、結果を得る
+evaluate_description: Python形式の数学表現を評価し、結果を得る
+evaluate_input_expression_description: '評価されるPython形式の数学表現。
+
+
+    例1: 入力: 5**2+7-4, 出力: 28.0。
+
+
+    例2: 入力: 5*a + 4*a, 出力: 9.0*a。
+
+
+    例3: 入力: 5**2*(8-4), 出力: 100.0。'
+evaluate_output_result_description: 評価された表現の結果

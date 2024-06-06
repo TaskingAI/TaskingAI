@@ -1,0 +1,28 @@
+bundle_description: Holen Sie sich die neuesten Nachrichten und historische Nachrichten
+    von News API
+credential_news_api_api_key_description: API-Schlüssel für die Authentifizierung.
+    Holen Sie ihn von https://newsapi.org/
+get_top_headlines_description: Abrufen der Top-Schlagzeilen
+get_top_headlines_input_category_description: 'Die Kategorie, für die Sie Schlagzeilen
+    erhalten möchten. Muss eine der folgenden sein: ''business'', ''entertainment'',
+    ''general'', ''health'', ''science'', ''sports'', ''technology'''
+get_top_headlines_input_count_description: Die Anzahl der Artikel, die zurückgegeben
+    werden sollen
+get_top_headlines_input_country_description: 'Der 2-Buchstaben-ISO-3166-1-Code des
+    Landes, für das Sie Schlagzeilen erhalten möchten. Mögliche Optionen: ''ae'',
+    ''ar'', ''at'', ''au'', ''be'', ''bg'', ''br'', ''ca'', ''ch'', ''cn'', ''co'',
+    ''cu'', ''cz'', ''de'', ''eg'', ''fr'', ''gb'', ''gr'', ''hk'', ''hu'', ''id'',
+    ''ie'', ''il'', ''in'', ''it'', ''jp'', ''kr'', ''lt'', ''lv'', ''ma'', ''mx'',
+    ''my'', ''ng'', ''nl'', ''no'', ''nz'', ''ph'', ''pl'', ''pt'', ''rs'', ''ru'',
+    ''sa'', ''se'', ''sg'', ''si'', ''sk'', ''th'', ''tr'', ''tw'', ''ua'', ''us'',
+    ''ve'', ''za'''
+get_top_headlines_output_result_description: Die Suchergebnisse als JSON-String
+search_news_article_description: Suche nach Nachrichtenartikeln
+search_news_article_input_count_description: Die Anzahl der Artikel, die zurückgegeben
+    werden sollen
+search_news_article_input_from_date_description: Das Datum und die Uhrzeit für den
+    ältesten zulässigen Artikel. Dies sollte im ISO 8601-Format vorliegen (z. B. 2024-02-12)
+search_news_article_input_query_description: 'Die Suchanfrage. Beispiel: Apple Inc.'
+search_news_article_input_to_date_description: Das Datum und die Uhrzeit für den neuesten
+    zulässigen Artikel. Dies sollte im ISO 8601-Format vorliegen (z. B. 2024-02-12)
+search_news_article_output_result_description: Die Suchergebnisse im JSON-String

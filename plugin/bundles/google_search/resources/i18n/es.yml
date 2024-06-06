@@ -1,0 +1,9 @@
+bundle_description: La búsqueda web proporcionada por Google
+credential_google_custom_search_api_key_description: Clave de API para la autenticación.
+    Consíguela en https://developers.google.com/custom-search/v1/introduction
+credential_google_custom_search_engine_id_description: ID del motor de búsqueda personalizado.
+    Consíguelo en https://cse.google.com/cse/create/new
+web_search_description: Usa Google para buscar en la web
+web_search_input_query_description: La consulta de búsqueda
+web_search_output_results_description: Los resultados de la búsqueda en una cadena
+    JSON

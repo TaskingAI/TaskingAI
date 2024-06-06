@@ -1,0 +1,15 @@
+bundle_description: 最新の株式情報と履歴情報をAlpha Vantageから取得
+credential_alpha_vantage_api_key_description: 認証用のAPIキー。https://www.alphavantage.co/support/#api-key
+    から取得可能
+get_historical_stock_data_description: 株式の過去の情報を取得
+get_historical_stock_data_input_end_date_description: 履歴データの終了日。'YYYY-MM-DD'形式である必要があります
+get_historical_stock_data_input_interval_description: '以下の値から選択: daily（デイリー）, weekly（ウィークリー）,
+    monthly（マンスリー）'
+get_historical_stock_data_input_start_date_description: 履歴データの開始日。'YYYY-MM-DD'形式である必要があります
+get_historical_stock_data_input_symbol_description: '株式のシンボル。例: AAPL, TSLA, MSFTなど。米国株以外については、次のフォーマットを使用してください:
+    ''stock_symbol.stock_exchange_symbol''。例: 深セン証券取引所のコード000002の場合は000002.SHZ、ロンドン証券取引所のコードTSCOの場合はTSCO.LONなど。'
+get_historical_stock_data_output_result_description: JSON形式で表示される株式の履歴情報
+get_latest_stock_data_description: 株式の最新情報を取得
+get_latest_stock_data_input_symbol_description: '株式のシンボル。例: AAPL, TSLA, MSFTなど。米国株以外については、次のフォーマットを使用してください:
+    ''stock_symbol.stock_exchange_symbol''。例: 深セン証券取引所のコード000002の場合は000002.SHZ、ロンドン証券取引所のコードTSCOの場合はTSCO.LONなど。'
+get_latest_stock_data_output_result_description: JSON形式で表示される株式の最新情報

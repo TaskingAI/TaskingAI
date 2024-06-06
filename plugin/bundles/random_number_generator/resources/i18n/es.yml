@@ -1,0 +1,10 @@
+bundle_description: Genera números aleatorios basados en los parámetros de entrada
+generate_random_integers_description: Genera números enteros aleatorios dentro del
+    rango especificado
+generate_random_integers_input_max_description: El valor máximo del número entero
+    aleatorio
+generate_random_integers_input_min_description: El valor mínimo del número entero
+    aleatorio
+generate_random_integers_input_number_description: El número de enteros aleatorios
+    a generar. El valor predeterminado es 1
+generate_random_integers_output_result_description: Los enteros aleatorios generados

@@ -1,0 +1,16 @@
+bundle_description: 최신 암호화폐 정보를 코인 마켓 캡에서 받아보세요
+credential_coin_market_cap_api_key_description: 인증을 위한 API 키입니다. https://coinmarketcap.com/api/에서
+    확인 가능합니다
+get_historical_coin_data_description: 암호화폐에 대한 과거 정보를 얻으세요
+get_historical_coin_data_input_interval_description: '역사 데이터의 간격. 지원되는 값: yearly,
+    monthly, weekly, daily, hourly, 5m, 15m, 30m, 45m, 1h, 2h, 3h, 4h, 6h, 12h, 1d,
+    2d, 3d...'
+get_historical_coin_data_input_symbol_description: '암호화폐의 심볼 예: BTC, ETH, SOL 등'
+get_historical_coin_data_input_time_end_description: 역사 데이터의 종료 시간. 'YYYY-MM-DD' 형식이어야
+    합니다
+get_historical_coin_data_input_time_start_description: 역사 데이터의 시작 시간. 'YYYY-MM-DD'
+    형식이어야 합니다
+get_historical_coin_data_output_result_description: json 형식으로 제공되는 암호화폐의 역사 정보
+get_latest_coin_data_description: 암호화폐의 최신 정보를 받아보세요
+get_latest_coin_data_input_symbol_description: '암호화폐의 심볼 예: BTC, ETH, SOL 등'
+get_latest_coin_data_output_result_description: json 형식으로 제공되는 최신 암호화폐 정보

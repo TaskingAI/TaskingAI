@@ -1,0 +1,5 @@
+arxiv_search_description: arXivを使用して学術論文を検索
+arxiv_search_input_max_results_description: 返される結果の最大数
+arxiv_search_input_query_description: 検索クエリ。例：量子コンピューティング
+arxiv_search_output_results_description: JSON文字列としての検索結果
+bundle_description: arXivで学術論文を検索

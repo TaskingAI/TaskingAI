@@ -1,0 +1,17 @@
+bundle_description: Obtenez l'heure actuelle dans un fuseau horaire spécifique ou
+    par coordonnées géographiques
+get_time_by_geo_coordinates_description: Obtenez l'heure actuelle par coordonnées
+    géographiques
+get_time_by_geo_coordinates_input_latitude_description: La latitude de l'emplacement
+get_time_by_geo_coordinates_input_longitude_description: La longitude de l'emplacement
+get_time_by_geo_coordinates_output_result_description: L'heure actuelle par coordonnées
+    géographiques au format json
+get_time_by_timezone_description: Obtenez l'heure actuelle dans un fuseau horaire
+    spécifique
+get_time_by_timezone_input_timezone_description: Le fuseau horaire pour obtenir l'heure
+    actuelle, au format complet IANA, par exemple 'America/New_York'
+get_time_by_timezone_output_result_description: L'heure actuelle dans le fuseau horaire
+    spécifié au format json
+list_timezones_description: Liste de tous les fuseaux horaires IANA disponibles
+list_timezones_output_result_description: La liste de tous les fuseaux horaires IANA
+    disponibles au format json

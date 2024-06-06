@@ -1,0 +1,4 @@
+bundle_description: 任意のURLをLLMに適した入力に変換
+read_url_description: 任意のURLをLLMに適した入力に変換
+read_url_input_url_description: 変換されるURL
+read_url_output_result_description: json形式の検索結果

@@ -1,0 +1,7 @@
+bundle_description: Suche nach Informationen mit DuckDuckGo.
+search_image_description: Suche nach Bildern über Texte mit DuckDuckGo.
+search_image_input_keywords_description: Die Schlüsselwörter für die Suche
+search_image_output_results_description: Die Suchergebnisse im JSON-Format
+search_text_description: Suche nach Textinformationen mit DuckDuckGo.
+search_text_input_keywords_description: Die Schlüsselwörter für die Suche
+search_text_output_results_description: Die Suchergebnisse im JSON-Format

@@ -1,0 +1,19 @@
+bundle_description: Busca hoteles, restaurantes y atracciones para tu viaje.
+credential_trip_advisor_api_key_description: Clave API para autenticación. Consíguela
+    en https://www.tripadvisor.com/developers?screen=credentials
+location_details_description: Una solicitud de Detalles de Ubicación devuelve información
+    integral sobre una ubicación (hotel, restaurante o atracción) como nombre, dirección,
+    calificación y URLs para el listado en Tripadvisor. (El ID de la ubicación se
+    obtiene del complemento search_location)
+location_details_input_location_id_description: Un identificador único para una ubicación
+    en Tripadvisor. El ID de la ubicación se puede obtener utilizando la Búsqueda
+    de Ubicación.
+location_details_output_result_description: Los detalles de la ubicación en formato
+    de cadena JSON
+search_location_description: Busca hoteles, restaurantes y atracciones para tu viaje.
+search_location_input_category_description: 'La categoría de la ubicación. Debe ser
+    uno de los siguientes valores: hoteles, restaurantes, atracciones'
+search_location_input_query_description: 'La consulta textual para buscar ubicaciones.
+    Ejemplo: Comida italiana en Nueva York'
+search_location_output_result_description: El resultado de la búsqueda en formato
+    de cadena JSON

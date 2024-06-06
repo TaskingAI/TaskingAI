@@ -1,0 +1,17 @@
+add_description: 二つの数字を加算する
+add_number_1_description: 最初の数字
+add_number_2_description: 二番目の数字
+add_result_description: 二つの数字を加算した結果
+arithmetic_description: 算術演算を行うためのプラグインの束
+divide_description: 一番目の数字を二番目の数字で割る
+divide_number_1_description: 最初の数字
+divide_number_2_description: 2番目の数字
+divide_result_description: 2つの数字を除算した結果
+multiply_description: 二つの数字を掛け算する
+multiply_number_1_description: 最初の数字
+multiply_number_2_description: 二番目の数字
+multiply_result_description: 二つの数字を掛け算した結果
+subtract_description: 最初の数字から2番目の数字を引く
+subtract_number_1_description: 最初の数字
+subtract_number_2_description: 2番目の数字
+subtract_result_description: 2つの数字を減算した結果

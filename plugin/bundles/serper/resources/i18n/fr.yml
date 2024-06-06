@@ -1,0 +1,25 @@
+bundle_description: Un agrégateur pour différents services de recherche Google.
+credential_serper_api_key_description: Clé API pour l'authentification. Obtenez-la
+    sur https://serper.dev/api-key
+image_search_description: Recherche d'image Google avec des mots-clés textuels
+image_search_input_query_description: La requête de recherche
+image_search_output_result_description: Le résultat de recherche, au format json
+maps_search_description: Recherche sur Google Maps avec des mots-clés textuels
+maps_search_input_query_description: La requête de recherche
+maps_search_output_result_description: Le résultat de la recherche, au format json
+news_search_description: Recherche d'actualités Google avec des mots-clés textuels
+news_search_input_query_description: La requête de recherche
+news_search_output_result_description: Le résultat de la recherche, au format json
+scholar_search_description: Recherche Google Scholar avec des mots-clés textuels
+scholar_search_input_query_description: La requête de recherche
+scholar_search_output_result_description: Le résultat de la recherche, au format json
+shopping_search_description: Recherche de shopping Google avec des mots-clés textuels
+shopping_search_input_query_description: La requête de recherche
+shopping_search_output_result_description: Le résultat de la recherche, au format
+    json
+text_search_description: Recherche Google normale avec des mots-clés textuels
+text_search_input_query_description: La requête de recherche
+text_search_output_result_description: Le résultat de recherche, au format json
+video_search_description: Recherche de vidéos Google avec des mots-clés textuels
+video_search_input_query_description: La requête de recherche
+video_search_output_result_description: Le résultat de recherche, au format json

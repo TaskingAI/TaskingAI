@@ -1,0 +1,5 @@
+bundle_description: 从GitHub获取信息
+credential_github_api_key_description: 用于认证的API密钥。获取地址：https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token
+search_repositories_description: 在GitHub上搜索仓库
+search_repositories_input_query_description: 搜索查询。例如：python web crawler
+search_repositories_output_result_description: JSON字符串格式的搜索结果

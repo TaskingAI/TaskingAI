@@ -1,0 +1,22 @@
+bundle_description: 실시간 및 과거 환율을 확인하세요
+credential_exchangerate_api_api_key_description: 인증을 위한 API 키입니다. https://www.exchangerate-api.com/에서
+    얻을 수 있습니다.
+get_exchange_rate_description: 한 통화에서 다른 통화로의 현재 환율을 확인하세요
+get_exchange_rate_input_from_currency_description: '변환할 통화 코드입니다. 3자리 통화 코드여야 합니다.
+    예: USD, EUR, CNY 등'
+get_exchange_rate_input_to_currency_description: '변환 대상 통화 코드입니다. 3자리 통화 코드여야 합니다.
+    예: USD, EUR, CNY 등'
+get_exchange_rate_output_rate_description: 변환 원 통화에서 대상 통화로의 환율입니다.
+get_historical_exchange_rate_description: 특정 날짜의 기준 통화 환율 목록
+get_historical_exchange_rate_input_base_currency_description: '변환할 통화 코드입니다. 3자리 통화
+    코드여야 합니다. 예: USD, EUR, CNY 등'
+get_historical_exchange_rate_input_day_description: 역사적 환율의 날짜.
+get_historical_exchange_rate_input_month_description: 역사적 환율의 월.
+get_historical_exchange_rate_input_year_description: 역사적 환율의 연도.
+get_historical_exchange_rate_output_rates_description: 기준 통화에서 다른 통화로의 환율을 JSON 문자열
+    형식으로 나타냅니다. 키는 통화 코드이고, 값은 환율입니다.
+list_exchange_rates_description: 한 통화에서 모든 사용 가능한 다른 통화로의 실시간 환율을 나열합니다
+list_exchange_rates_input_base_currency_description: '변환할 통화 코드입니다. 3자리 통화 코드여야 합니다.
+    예: USD, EUR, CNY 등'
+list_exchange_rates_output_rates_description: 기준 통화에서 다른 통화로의 환율을 json 문자열 형식으로 제공합니다.
+    키는 통화 코드이고 값은 환율입니다.

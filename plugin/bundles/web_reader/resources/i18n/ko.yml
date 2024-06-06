@@ -1,0 +1,4 @@
+bundle_description: 웹에서 텍스트 정보를 가져옵니다.
+read_web_page_description: 웹 페이지에서 텍스트를 읽습니다.
+read_web_page_input_url_description: 웹 페이지의 URL입니다.
+read_web_page_output_result_description: 웹 페이지의 텍스트입니다.

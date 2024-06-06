@@ -1,0 +1,10 @@
+bundle_description: 由Stability AI根据文本描述生成图像
+credential_stability_ai_api_key_description: 用于认证的API密钥。从https://stability-ai.com/获取
+generate_image_description: 根据文本描述生成图像
+generate_image_input_cfg_scale_description: 用于图像生成的比例。默认为7
+generate_image_input_engine_id_description: 用于图像生成的引擎。默认为stable-diffusion-v1-6
+generate_image_input_height_description: 生成图像的高度，应为64的倍数，至少为128。默认为512
+generate_image_input_prompt_description: 用于生成图像的文本描述
+generate_image_input_steps_description: 用于图像生成的步数。默认为30
+generate_image_input_width_description: 生成图像的宽度，应为64的倍数，至少为128。默认为512
+generate_image_output_image_url_description: 生成图像的URL

@@ -1,0 +1,5 @@
+bundle_description: GitHub에서 정보 가져오기
+credential_github_api_key_description: '인증을 위한 API 키. 다음에서 가져올 수 있습니다: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token'
+search_repositories_description: GitHub에서 리포지토리 검색
+search_repositories_input_query_description: '검색 쿼리. 예: python web crawler'
+search_repositories_output_result_description: json 문자열 형식의 검색 결과

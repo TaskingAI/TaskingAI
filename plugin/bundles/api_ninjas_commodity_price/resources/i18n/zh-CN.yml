@@ -1,0 +1,5 @@
+bundle_description: 提供对主要交易所（如CME、NYMEX等）常见交易商品的实时价格的访问。
+credential_api_ninjas_api_key_description: 用于身份验证的API密钥。从 https://api-ninjas.com/
+    获取。
+get_commodity_price_description: 获取商品项的价格信息。例如，“Gold Futures”。
+get_commodity_price_output_result_description: 以json格式显示商品项的价格信息。

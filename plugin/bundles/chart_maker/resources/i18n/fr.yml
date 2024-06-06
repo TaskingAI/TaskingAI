@@ -1,0 +1,53 @@
+bundle_description: Générer des graphiques à partir de l'entrée de données
+make_2d_histogram_description: Générer un histogramme 2D à partir des données fournies
+make_2d_histogram_input_title_description: Le titre du graphique
+make_2d_histogram_input_x_title_description: Le titre de l'axe des x
+make_2d_histogram_input_x_values_description: Les valeurs x des points de données.
+    Elles doivent être de la même taille que les valeurs y.
+make_2d_histogram_input_y_title_description: Le titre de l'axe des y
+make_2d_histogram_input_y_values_description: Les valeurs y des points de données.
+    Elles doivent être de la même taille que les valeurs x.
+make_2d_histogram_output_url_description: L'URL de l'image du graphique généré
+make_bar_chart_description: Générer un graphique à barres à partir des données fournies
+make_bar_chart_input_title_description: Le titre du graphique
+make_bar_chart_input_x_title_description: Le titre de l'axe des x
+make_bar_chart_input_x_values_description: Les valeurs de l'axe des x pour les points
+    de données. Devraient être de la même taille que les valeurs de y.
+make_bar_chart_input_y_title_description: Le titre de l'axe des y
+make_bar_chart_input_y_values_description: Les valeurs de l'axe des y pour les points
+    de données. Devraient être de la même taille que les valeurs de x.
+make_bar_chart_output_url_description: L'URL de l'image du graphique généré
+make_histogram_description: Générer un histogramme à partir des données fournies
+make_histogram_input_title_description: Le titre du graphique
+make_histogram_input_values_description: Les valeurs pour les points de données
+make_histogram_input_x_title_description: Le titre de l'axe des abscisses
+make_histogram_output_url_description: L'URL de l'image du graphique généré
+make_line_chart_description: Générer un graphique en ligne à partir des données fournies
+make_line_chart_input_title_description: Le titre du graphique
+make_line_chart_input_x_title_description: Le titre de l'axe des abscisses
+make_line_chart_input_x_values_description: Les valeurs de l'axe des abscisses pour
+    les points de données. Devraient avoir la même taille que les valeurs de l'axe
+    des ordonnées.
+make_line_chart_input_y_title_description: Le titre de l'axe des ordonnées
+make_line_chart_input_y_values_description: Les valeurs de l'axe des ordonnées pour
+    les points de données. Devraient avoir la même taille que les valeurs de l'axe
+    des abscisses.
+make_line_chart_output_url_description: L'URL de l'image du graphique généré
+make_pie_chart_description: Générer un graphique à secteurs à partir des données fournies
+make_pie_chart_input_labels_description: Les étiquettes pour les points de données.
+    Devraient être de la même taille que les valeurs.
+make_pie_chart_input_title_description: Le titre du graphique
+make_pie_chart_input_values_description: Les valeurs pour les points de données. Devraient
+    être de la même taille que les étiquettes.
+make_pie_chart_output_url_description: L'URL de l'image du graphique généré
+make_scatter_plot_description: Générer un nuage de points à partir des données fournies
+make_scatter_plot_input_title_description: Le titre du graphique
+make_scatter_plot_input_x_title_description: Le titre de l'axe des abscisses
+make_scatter_plot_input_x_values_description: Les valeurs de l'axe des abscisses pour
+    les points de données. Elles doivent être de la même taille que les valeurs de
+    l'axe des ordonnées.
+make_scatter_plot_input_y_title_description: Le titre de l'axe des ordonnées
+make_scatter_plot_input_y_values_description: Les valeurs de l'axe des ordonnées pour
+    les points de données. Elles doivent être de la même taille que les valeurs de
+    l'axe des abscisses.
+make_scatter_plot_output_url_description: L'URL de l'image du graphique généré

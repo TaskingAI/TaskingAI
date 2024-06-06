@@ -1,0 +1,18 @@
+bundle_description: 最新ニュースと歴史的なニュースをNews APIで取得する
+credential_news_api_api_key_description: 認証用のAPIキー。https://newsapi.org/から取得してください
+get_top_headlines_description: トップニュースを取得
+get_top_headlines_input_category_description: ヘッドラインを取得したいカテゴリ。以下のいずれかである必要があります：'business',
+    'entertainment', 'general', 'health', 'science', 'sports', 'technology'
+get_top_headlines_input_count_description: 返される記事の数
+get_top_headlines_input_country_description: ヘッドラインを取得したい国の2文字のISO 3166-1コード。選択可能なオプションは以下の通り：'ae',
+    'ar', 'at', 'au', 'be', 'bg', 'br', 'ca', 'ch', 'cn', 'co', 'cu', 'cz', 'de',
+    'eg', 'fr', 'gb', 'gr', 'hk', 'hu', 'id', 'ie', 'il', 'in', 'it', 'jp', 'kr',
+    'lt', 'lv', 'ma', 'mx', 'my', 'ng', 'nl', 'no', 'nz', 'ph', 'pl', 'pt', 'rs',
+    'ru', 'sa', 'se', 'sg', 'si', 'sk', 'th', 'tr', 'tw', 'ua', 'us', 've', 'za'
+get_top_headlines_output_result_description: json 文字列形式の検索結果
+search_news_article_description: ニュース記事を検索する
+search_news_article_input_count_description: 返却する記事の数
+search_news_article_input_from_date_description: 許可される最も古い記事の日付と時刻。ISO 8601形式である必要があります（例：2024-02-12）
+search_news_article_input_query_description: 検索クエリ。例：Apple Inc.
+search_news_article_input_to_date_description: 許可される最新の記事の日付と時刻。ISO 8601形式である必要があります（例：2024-02-12）
+search_news_article_output_result_description: json文字列形式の検索結果

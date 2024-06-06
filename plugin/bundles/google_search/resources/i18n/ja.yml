@@ -1,0 +1,6 @@
+bundle_description: Googleによるウェブ検索
+credential_google_custom_search_api_key_description: '認証用APIキー。入手先: https://developers.google.com/custom-search/v1/introduction'
+credential_google_custom_search_engine_id_description: 'カスタム検索エンジンID。入手先: https://cse.google.com/cse/create/new'
+web_search_description: Googleを使用してウェブ検索を行う
+web_search_input_query_description: 検索クエリ
+web_search_output_results_description: json文字列形式の検索結果

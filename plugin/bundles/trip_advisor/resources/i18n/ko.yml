@@ -1,0 +1,13 @@
+bundle_description: 여행을 위한 호텔, 레스토랑 및 명소를 검색하세요.
+credential_trip_advisor_api_key_description: 인증을 위한 API 키. https://www.tripadvisor.com/developers?screen=credentials
+    에서 가져올 수 있습니다.
+location_details_description: '위치 세부 정보 요청은 Tripadvisor에 있는 위치(호텔, 레스토랑 또는 명소)에 대한
+    종합적인 정보를 반환합니다. 예: 이름, 주소, 평가 및 목록 URL. (위치 ID는 search_location 플러그인에서 얻음)'
+location_details_input_location_id_description: Tripadvisor의 특정 위치에 대한 고유 식별자. 위치
+    검색을 사용하여 위치 ID를 얻을 수 있습니다.
+location_details_output_result_description: JSON 문자열 형식의 위치 세부 정보
+search_location_description: 여행을 위한 호텔, 레스토랑 및 명소를 검색하세요.
+search_location_input_category_description: '위치의 카테고리. 다음 값 중 하나여야 합니다: hotels, restaurants,
+    attractions'
+search_location_input_query_description: '위치를 검색하기 위한 텍스트 쿼리. 예제: New York의 이탈리아 음식'
+search_location_output_result_description: JSON 문자열 형식의 검색 결과

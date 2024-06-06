@@ -1,0 +1,7 @@
+arxiv_search_description: Utilizar arXiv para buscar artículos académicos
+arxiv_search_input_max_results_description: El número máximo de resultados a devolver
+arxiv_search_input_query_description: 'La consulta de búsqueda. Ejemplo: computación
+    cuántica'
+arxiv_search_output_results_description: Los resultados de la búsqueda en formato
+    de cadena json
+bundle_description: Buscar artículos académicos en arXiv

@@ -1,0 +1,16 @@
+bundle_description: Evalúe expresiones matemáticas en formato Python y obtenga el
+    resultado
+evaluate_description: Evalúe expresiones matemáticas en formato Python y obtenga el
+    resultado
+evaluate_input_expression_description: 'La expresión matemática en formato Python
+    a evaluar.
+
+
+    Ejemplo1: entrada: 5**2+7-4, salida: 28.0.
+
+
+    Ejemplo2: Entrada: 5*a + 4*a, salida: 9.0*a.
+
+
+    Ejemplo3: entrada: 5**2*(8-4), salida: 100.0.'
+evaluate_output_result_description: El resultado de la expresión evaluada

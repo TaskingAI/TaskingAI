@@ -1,0 +1,23 @@
+bundle_description: 異なるGoogle検索サービスのためのアグリゲーター。
+credential_serper_api_key_description: 認証のためのAPIキー。https://serper.dev/api-key から取得してください
+image_search_description: テキストキーワードを使用したGoogle画像検索
+image_search_input_query_description: 検索クエリ
+image_search_output_result_description: 検索結果、json形式で
+maps_search_description: テキストのキーワードを使用したGoogleマップ検索
+maps_search_input_query_description: 検索クエリ
+maps_search_output_result_description: 検索結果（JSON形式）
+news_search_description: テキストのキーワードを使用したGoogleニュース検索
+news_search_input_query_description: 検索クエリ
+news_search_output_result_description: 検索結果（JSON形式）
+scholar_search_description: テキストキーワードを用いたGoogle Scholar検索
+scholar_search_input_query_description: 検索クエリ
+scholar_search_output_result_description: 検索結果（JSON形式で）
+shopping_search_description: テキストのキーワードを使用したGoogleショッピング検索
+shopping_search_input_query_description: 検索クエリ
+shopping_search_output_result_description: 検索結果（JSON形式）
+text_search_description: テキストキーワードを使用した通常のGoogle検索
+text_search_input_query_description: 検索クエリ
+text_search_output_result_description: 検索結果、json形式で
+video_search_description: テキストのキーワードを使用したGoogleビデオ検索
+video_search_input_query_description: 検索クエリ
+video_search_output_result_description: 検索結果、json形式で

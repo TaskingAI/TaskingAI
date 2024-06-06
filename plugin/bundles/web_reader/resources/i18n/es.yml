@@ -1,0 +1,4 @@
+bundle_description: Obtener información textual de la web.
+read_web_page_description: Lee el texto de una página web.
+read_web_page_input_url_description: La URL de la página web.
+read_web_page_output_result_description: El texto de la página web.

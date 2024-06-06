@@ -1,0 +1,7 @@
+bundle_description: DuckDuckGo를 사용하여 정보를 검색합니다.
+search_image_description: DuckDuckGo를 사용하여 텍스트로 이미지를 검색합니다.
+search_image_input_keywords_description: 검색할 키워드
+search_image_output_results_description: json 형식의 검색 결과
+search_text_description: DuckDuckGo를 사용하여 텍스트 정보를 검색합니다.
+search_text_input_keywords_description: 검색할 키워드
+search_text_output_results_description: json 형식의 검색 결과

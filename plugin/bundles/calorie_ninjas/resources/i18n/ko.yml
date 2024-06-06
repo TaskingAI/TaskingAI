@@ -1,0 +1,10 @@
+bundle_description: 칼로리 닌자에서 영양 정보와 요리법을 확인하세요
+credential_calorie_ninjas_api_key_description: 인증을 위한 API 키입니다. https://calorieninjas.com/api에서
+    받을 수 있습니다.
+get_nutrition_info_description: 텍스트 설명을 통해 음식 항목의 영양 정보를 확인하세요
+get_nutrition_info_input_food_description_description: '음식에 대한 텍스트 설명입니다. 예: 사과 주스
+    100ml, 밥 한 컵 등.'
+get_nutrition_info_output_result_description: JSON 형식으로 표시된 음식 항목의 영양 정보
+get_recipe_description: '텍스트 설명을 통해 음식 항목의 요리 정보를 확인하세요. 예: ''버섯 리조또'''
+get_recipe_input_query_description: '요리법의 텍스트 설명입니다. 예: 버섯 리조또'
+get_recipe_output_result_description: JSON 형식으로 표시된 요리 정보

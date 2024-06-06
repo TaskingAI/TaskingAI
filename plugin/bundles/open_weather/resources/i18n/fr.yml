@@ -1,0 +1,37 @@
+bundle_description: Données météorologiques et prévisions.
+credential_open_weather_api_key_description: Clé API pour Open Weather.
+get_current_weather_description: Obtenez les données météorologiques actuelles en
+    fonction de la latitude et de la longitude.
+get_current_weather_input_lat_description: Latitude de l'emplacement.
+get_current_weather_input_lon_description: Longitude de l'emplacement.
+get_current_weather_output_feels_like_celsius_description: température actuelle ressentie
+    en Celsius
+get_current_weather_output_feels_like_fahrenheit_description: température actuelle
+    ressentie en Fahrenheit
+get_current_weather_output_humidity_description: humidité actuelle en pourcentage
+get_current_weather_output_pressure_description: pression actuelle en hPa
+get_current_weather_output_temperature_celsius_description: température actuelle en
+    Celsius
+get_current_weather_output_temperature_fahrenheit_description: température actuelle
+    en Fahrenheit
+get_current_weather_output_timestamp_description: horodatage des données météorologiques
+get_current_weather_output_uvi_description: indice UV actuel
+get_current_weather_output_visibility_description: visibilité actuelle en mètres
+get_current_weather_output_weather_condition_description: condition météorologique
+    actuelle
+get_daily_forecast_description: Obtenez les prévisions quotidiennes basées sur latitude
+    et longitude.
+get_daily_forecast_input_days_description: Le nombre de jours à prévoir. Maximum est
+    7.
+get_daily_forecast_input_lat_description: Latitude du lieu.
+get_daily_forecast_input_lon_description: Longitude du lieu.
+get_daily_forecast_output_result_description: résultat des prévisions quotidiennes
+    en chaîne JSON
+get_hourly_forecast_description: Obtenez la prévision horaire en fonction de la latitude
+    et de la longitude.
+get_hourly_forecast_input_hours_description: Le nombre d'heures à prévoir. Le maximum
+    est de 24.
+get_hourly_forecast_input_lat_description: Latitude de l'emplacement.
+get_hourly_forecast_input_lon_description: Longitude de l'emplacement.
+get_hourly_forecast_output_result_description: résultats des prévisions horaires au
+    format chaîne json

@@ -1,0 +1,28 @@
+bundle_description: Obtenga tasas de cambio en vivo e históricas
+credential_exchangerate_api_api_key_description: Clave de API para autenticación.
+    Consíguela en https://www.exchangerate-api.com/
+get_exchange_rate_description: Obtenga la tasa de cambio actual de una moneda a otra
+get_exchange_rate_input_from_currency_description: El código de moneda a convertir.
+    Debe ser un código de moneda de 3 letras. por ejemplo, USD, EUR, CNY, etc.
+get_exchange_rate_input_to_currency_description: El código de moneda a la cual convertir.
+    Debe ser un código de moneda de 3 letras. por ejemplo, USD, EUR, CNY, etc.
+get_exchange_rate_output_rate_description: La tasa de cambio de la moneda origen a
+    la moneda destino.
+get_historical_exchange_rate_description: Lista de tipos de cambio de una moneda base
+    en una fecha específica
+get_historical_exchange_rate_input_base_currency_description: El código de moneda
+    a convertir. Debe ser un código de moneda de 3 letras. por ejemplo, USD, EUR,
+    CNY, etc.
+get_historical_exchange_rate_input_day_description: El día del tipo de cambio histórico.
+get_historical_exchange_rate_input_month_description: El mes del tipo de cambio histórico.
+get_historical_exchange_rate_input_year_description: El año del tipo de cambio histórico.
+get_historical_exchange_rate_output_rates_description: Los tipos de cambio de la moneda
+    base a otras monedas en formato de cadena json. La clave es el código de la moneda
+    y el valor es el tipo de cambio.
+list_exchange_rates_description: Listar tasas de cambio en vivo de una moneda a todas
+    las demás monedas disponibles
+list_exchange_rates_input_base_currency_description: El código de moneda a convertir.
+    Debe ser un código de moneda de 3 letras. por ejemplo, USD, EUR, CNY, etc.
+list_exchange_rates_output_rates_description: Las tasas de cambio de la moneda base
+    a otras monedas en formato de cadena JSON. La clave es el código de moneda y el
+    valor es la tasa de cambio.

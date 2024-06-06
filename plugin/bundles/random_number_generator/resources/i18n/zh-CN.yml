@@ -1,0 +1,6 @@
+bundle_description: 根据输入参数生成随机数
+generate_random_integers_description: 在指定范围内生成随机整数
+generate_random_integers_input_max_description: 随机整数的最大值
+generate_random_integers_input_min_description: 随机整数的最小值
+generate_random_integers_input_number_description: 要生成的随机整数的数量。默认值为1
+generate_random_integers_output_result_description: 生成的随机整数

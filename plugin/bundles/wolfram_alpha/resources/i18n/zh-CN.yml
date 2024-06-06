@@ -1,0 +1,6 @@
+bundle_description: 将最先进的计算知识轻松整合到您的应用程序中
+credential_wolfram_alpha_app_id_description: 来自 Wolfram Alpha 的应用程序 ID。可以从 https://developer.wolframalpha.com/access
+    获取
+query_description: 向 Wolfram Alpha 查询计算知识。例如，“世界第二高的山峰”
+query_input_query_description: 搜索查询。例如：世界第二高的山峰
+query_output_result_description: json 字符串格式的搜索结果

@@ -1,0 +1,6 @@
+bundle_description: 由谷歌提供的网络搜索
+credential_google_custom_search_api_key_description: 用于认证的API密钥。获取地址：https://developers.google.com/custom-search/v1/introduction
+credential_google_custom_search_engine_id_description: 自定义搜索引擎ID。获取地址：https://cse.google.com/cse/create/new
+web_search_description: 使用谷歌搜索网络
+web_search_input_query_description: 搜索查询
+web_search_output_results_description: 以json字符串形式显示的搜索结果

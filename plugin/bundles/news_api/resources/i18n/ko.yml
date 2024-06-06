@@ -1,0 +1,23 @@
+bundle_description: 뉴스 API에서 최신 뉴스와 역사적인 뉴스를 받아보세요
+credential_news_api_api_key_description: 인증을 위한 API 키. https://newsapi.org/에서 받아보세요
+get_top_headlines_description: 주요 헤드라인 가져오기
+get_top_headlines_input_category_description: '헤드라인을 받고 싶은 카테고리. 반드시 다음 중 하나이어야 합니다:
+    ''business'', ''entertainment'', ''general'', ''health'', ''science'', ''sports'',
+    ''technology'''
+get_top_headlines_input_count_description: 돌려줄 기사 수
+get_top_headlines_input_country_description: '헤드라인을 받고 싶은 국가의 2자리 ISO 3166-1 코드. 가능한
+    옵션: ''ae'', ''ar'', ''at'', ''au'', ''be'', ''bg'', ''br'', ''ca'', ''ch'', ''cn'',
+    ''co'', ''cu'', ''cz'', ''de'', ''eg'', ''fr'', ''gb'', ''gr'', ''hk'', ''hu'',
+    ''id'', ''ie'', ''il'', ''in'', ''it'', ''jp'', ''kr'', ''lt'', ''lv'', ''ma'',
+    ''mx'', ''my'', ''ng'', ''nl'', ''no'', ''nz'', ''ph'', ''pl'', ''pt'', ''rs'',
+    ''ru'', ''sa'', ''se'', ''sg'', ''si'', ''sk'', ''th'', ''tr'', ''tw'', ''ua'',
+    ''us'', ''ve'', ''za'''
+get_top_headlines_output_result_description: json 문자열로 검색 결과를 반환합니다
+search_news_article_description: 뉴스 기사 검색
+search_news_article_input_count_description: 반환할 기사 수
+search_news_article_input_from_date_description: '허용되는 가장 오래된 기사의 날짜 및 시간. ISO 8601
+    형식이어야 합니다 (예: 2024-02-12)'
+search_news_article_input_query_description: '검색 쿼리. 예: Apple Inc.'
+search_news_article_input_to_date_description: '허용되는 가장 최신 기사의 날짜 및 시간. ISO 8601 형식이어야
+    합니다 (예: 2024-02-12)'
+search_news_article_output_result_description: json 문자열 형식의 검색 결과

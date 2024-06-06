@@ -1,0 +1,10 @@
+bundle_description: Aftership est une plateforme de suivi des expéditions qui vous
+    permet de suivre les envois de plus de 700 transporteurs dans le monde entier.
+credential_aftership_api_key_description: Clé API pour l'authentification. Récupérez-la
+    sur https://www.aftership.com/docs/tracking/quickstart/api-quick-start
+get_tracking_info_description: Obtenez les informations de suivi d'une expédition
+get_tracking_info_input_slug_description: Le slug du transporteur. par ex. dhl, fedex,
+    ups, etc.
+get_tracking_info_input_tracking_number_description: Le numéro de suivi de l'expédition
+get_tracking_info_output_result_description: Les informations de suivi de l'expédition
+    au format json

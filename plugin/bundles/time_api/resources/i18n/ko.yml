@@ -1,0 +1,12 @@
+bundle_description: 특정 시간대 또는 지리적 좌표별 현재 시간을 가져옵니다
+get_time_by_geo_coordinates_description: 지리적 좌표에 따라 현재 시간을 가져옵니다
+get_time_by_geo_coordinates_input_latitude_description: 위치의 위도를 입력합니다
+get_time_by_geo_coordinates_input_longitude_description: 위치의 경도를 입력합니다
+get_time_by_geo_coordinates_output_result_description: 지리적 좌표에 따른 현재 시간을 json 형식으로
+    출력합니다
+get_time_by_timezone_description: 특정 시간대의 현재 시간을 가져옵니다
+get_time_by_timezone_input_timezone_description: '현재 시간을 가져올 시간대, 전체 IANA 형식으로 입력,
+    예: ''America/New_York'''
+get_time_by_timezone_output_result_description: 지정된 시간대의 현재 시간을 json 형식으로 출력합니다
+list_timezones_description: 사용 가능한 모든 IANA 시간대를 나열합니다
+list_timezones_output_result_description: 모든 사용 가능한 IANA 시간대 목록을 json 형식으로 출력합니다
