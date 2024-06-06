@@ -1,4 +1,4 @@
-name: Build and Test
+name: Inference - Build and Test
 
 on:
   pull_request_target:
@@ -49,7 +49,7 @@ jobs:
           echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
           cat /tmp/changed_files.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-          echo "::set-output name=changed_files::$(cat /tmp/changed for all operations within the fork's directory by defining `WORKING_DIRECTORY` as an environment variable and prepending `cd ${{ env.WORKING_DIRECTORY }} &&` to all relevant commands.
+          echo "::set-output name=changed_files::$(cat /tmp/changed_files.txt)"
 
       - name: Set short SHA for image tag
         run: |
