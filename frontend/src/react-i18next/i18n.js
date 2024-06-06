@@ -8,6 +8,7 @@ i18n
 	.use(Backend)
 	.init({
 		fallbackLng: "en",
+		fallbackNS: ['translation'],
 		lng: navigator.language,
 		debug: true,
 		interpolation: {

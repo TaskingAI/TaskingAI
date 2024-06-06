@@ -19,7 +19,7 @@ import { createApiKeys, getApiKeysList, getApiKeys, updateApiKeys, deleteApiKeys
 function ApiKeys() {
     const { apiKeyLists } = useSelector((state: any) => state.apikey);
     const dispatch = useDispatch()
-    const { t } = useTranslation(['components/apiKey/index', 'common']);
+    const { t } = useTranslation(['components/apiKey/index']);
     const { apikeysTableColumn } = CommonComponents();
     const { tooltipEditTitle, tooltipDeleteTitle, tooltipShowTitle, tooltipHideTitle } = tooltipTitle();
 
@@ -84,7 +84,7 @@ function ApiKeys() {
     const columns = [...apikeysTableColumn]
     columns.push(
         {
-            title: `${t('actions', {ns: 'common'})}`,
+            title: `${t('actions')}`,
             key: 'action',
             fixed: 'right',
             width: 157,
@@ -175,7 +175,7 @@ function ApiKeys() {
                 try {
                     await updateApiKeys(id, params)
                     setOpenEditAPIKey(false)
-                    toast.success(`${t('updateSuccessful', {ns: 'common'})}`)
+                    toast.success(`${t('updateSuccessful')}`)
 
                 } catch (e) {
                     console.log(e)
@@ -200,7 +200,7 @@ function ApiKeys() {
                 try {
                     await createApiKeys(params)
                     setOpenCreateAPIKey(false)
-                    toast.success(`${t('creationSuccessful', {ns: 'common'})}`)
+                    toast.success(`${t('creationSuccessful')}`)
 
                 } catch (e) {
                     console.log(e)
@@ -250,15 +250,15 @@ function ApiKeys() {
                 closeIcon={<img src={closeIcon} alt="closeIcon" />}
                 footer={[
                     <Button key="cancel" onClick={handleModalCancel} className='cancel-button'>
-                        {t('cancel', {ns: 'common'})}
+                        {t('cancel')}
                     </Button>,
                     <Button key="submit" loading={loading} onClick={handleCreateConfirm} className='next-button'>
-                        {t('confirm', {ns: 'common'})}
+                        {t('confirm')}
                     </Button>
                 ]}
             >
                 <Form layout='vertical' className={styles['edit-form']} initialValues={initialValues} form={form1}>
-                    <Form.Item label={t('name', {ns: 'common'})} name="name" rules={[{ required: true, message: t('requiredApiKeyName') }]}>
+                    <Form.Item label={t('name')} name="name" rules={[{ required: true, message: t('requiredApiKeyName') }]}>
                         <Input className={styles['edit-instance-modal']} onChange={handleChangeNameValue}></Input>
                     </Form.Item>
                 </Form>
@@ -271,15 +271,15 @@ function ApiKeys() {
                 closeIcon={<img src={closeIcon} alt="closeIcon" />}
                 footer={[
                     <Button key="cancel" onClick={handleCreateCancel} className='cancel-button'>
-                        {t('cancel', {ns: 'common'})}
+                        {t('cancel')}
                     </Button>,
                     <Button key="submit" loading={confirmLoading} onClick={handleCreateConfirm} className='next-button'>
-                        {t('confirm', {ns: 'common'})}
+                        {t('confirm')}
                     </Button>
                 ]}
             >
                 <Form layout='vertical' className={styles['edit-form']} form={form}>
-                    <Form.Item label={t('name', {ns: 'common'})} name="name" rules={[{ required: true, message: `${t('nameRequired', {ns: 'common'})}` }]}>
+                    <Form.Item label={t('name')} name="name" rules={[{ required: true, message: `${t('nameRequired')}` }]}>
                         <Input className={styles['edit-instance-modal']} onChange={handleChangeNameValue}></Input>
                     </Form.Item>
                 </Form>
@@ -292,10 +292,10 @@ function ApiKeys() {
                 closeIcon={<img src={closeIcon} alt="closeIcon" />}
                 footer={[
                     <Button key="cancel" onClick={handleDeleteCancel} className='cancel-button'>
-                        {t('cancel', {ns: 'common'})}
+                        {t('cancel')}
                     </Button>,
                     <Button key="delete" onClick={handleDeleteConfirm} className={disabled ? 'disabled-button' : 'delete-button'} disabled={disabled} loading={deleteLoading}>
-                        {t('delete', {ns: 'common'})}
+                        {t('delete')}
                     </Button>
                 ]}
             >

@@ -30,7 +30,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 const { Header, Content, Sider } = Layout;
 const ProjectHome = () => {
-    const { t } = useTranslation(['views/projectHome/index', 'common']);
+    const { t } = useTranslation(['views/projectHome/index']);
     const { search, pathname } = useLocation();
 
     const navigate = useNavigate();
@@ -52,8 +52,8 @@ const ProjectHome = () => {
         ['/project/apikeys']: 'API Keys',
     }
     const subMenuItems = [
-        { key: '/project/tools/plugins', icon: <LogoutOutlined />, text: t('plugins', {ns: 'common'}), path: `/project/tools/plugins` },
-        { key: '/project/tools/actions', icon: <LogoutOutlined />, text: t('actions', {ns: 'common'}), path: `/project/tools/actions` },
+        { key: '/project/tools/plugins', icon: <LogoutOutlined />, text: t('plugins'), path: `/project/tools/plugins` },
+        { key: '/project/tools/actions', icon: <LogoutOutlined />, text: t('actions'), path: `/project/tools/actions` },
     ];
     const [key, setKey] = useState('')
     const filteredKeys = [location.pathname === `/project` || location.pathname === `/project/` ? `/project/home` : location.pathname, location.pathname.includes('tools') && `/project/tools`, !location.pathname.includes('tools/actions') && location.pathname.includes('tools') && `/project/tools/plugins`]
@@ -181,12 +181,12 @@ const ProjectHome = () => {
 
                 </div>
                 {isOpen && <div className='center-header' >
-                    {t('tools', {ns: 'common'})}
+                    {t('tools')}
                 </div>}
                 <div className="right-header">
                     <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
                         <span style={{ lineHeight: 1 }}>{t(`keyReserveValue${keyReverseValue[key]}`)}</span>
-                        {keyReverseValue[key] === 'Playground' && <Select value={playgroundType} style={{ marginLeft: '10px', width: '155px' }} defaultValue='assistant' onChange={handleChangePlaygroundModel} options={[{ value: 'chat_completion', label: t('chatCompletion', {ns: 'common'}) }, { value: 'assistant', label: t('assistant', {ns: 'common'}) }]}></Select>}
+                        {keyReverseValue[key] === 'Playground' && <Select value={playgroundType} style={{ marginLeft: '10px', width: '155px' }} defaultValue='assistant' onChange={handleChangePlaygroundModel} options={[{ value: 'chat_completion', label: t('chatCompletion') }, { value: 'assistant', label: t('assistant') }]}></Select>}
                     </div>
 
                     <div className='button-group-href'>
@@ -209,7 +209,7 @@ const ProjectHome = () => {
                             className='document-button cancel-button'
                             onClick={() => window.open('https://docs.tasking.ai', '_blank')}
                         >
-                            {t('documentation', {ns: 'common'})}
+                            {t('documentation')}
                         </Button>
                     </div>
 
@@ -233,31 +233,31 @@ const ProjectHome = () => {
                                     <Link to={`/project/home`}>{t('home')}</Link>
                                 </Menu.Item>
                                 <Menu.Item key={'/project/playground'} icon={<Playground className="svg-icons" />}>
-                                    <Link to={'/project/playground'}>{t('playground', {ns: 'common'})}</Link>
+                                    <Link to={'/project/playground'}>{t('playground')}</Link>
                                 </Menu.Item>
 
                                 <Menu.Item key='/hr1' className='menu-hr' style={{ borderBottom: '1px solid #E4e4e4', borderRadius: 'none', height: '8px', width: '100%', margin: 0, marginBottom: '8px' }} >
                                 </Menu.Item>
                                 <Menu.Item key={'/project/models'} icon={<IconData className="svg-icons" />}>
-                                    <Link to={'/project/models'}>{t('models', {ns: 'common'})}</Link>
+                                    <Link to={'/project/models'}>{t('models')}</Link>
                                 </Menu.Item>
                                 <Menu.Item key={'/project/collections'} icon={<Retrieval className="svg-icons" />}>
-                                    <Link to={'/project/collections'}>{t('retrieval', {ns: 'common'})}</Link>
+                                    <Link to={'/project/collections'}>{t('retrieval')}</Link>
                                 </Menu.Item>
                                 <Menu.Item key={'/project/tools'} icon={<Plugin className="svg-icons" />} onClick={handleSubMenu}>
-                                    <Link to={'/project/tools'}>{t('tools', {ns: 'common'})}</Link>
+                                    <Link to={'/project/tools'}>{t('tools')}</Link>
                                 </Menu.Item>
                                 <Menu.Item key='/hr2' className='menu-hr' style={{ borderBottom: '1px solid #E4e4e4', borderRadius: 'none', height: '8px', width: '100%', margin: 0, marginBottom: '8px' }}>
                                 </Menu.Item>
                                 <Menu.Item key={`/project/assistants`} icon={<Assistant className="svg-icons" />}>
-                                    <Link to={'/project/assistants'}>{t('assistants', {ns: 'common'})}</Link>
+                                    <Link to={'/project/assistants'}>{t('assistants')}</Link>
                                 </Menu.Item>
                                 <Menu.Item key='/hr3' className='menu-hr' style={{ borderBottom: '1px solid #E4e4e4', borderRadius: 'none', height: '8px', width: '100%', margin: 0, marginBottom: '8px' }}>
                                 </Menu.Item>
                                 <Menu.Item key='/hr4' className='menu-hr border-hr' style={{ borderBottom: '1px solid #E4e4e4', borderRadius: 'none', height: '8px', margin: 0, marginBottom: '8px' }}>
                                 </Menu.Item>
                                 <Menu.Item key={'/project/apikeys'} className='api-key-menu' icon={<Apikeys className="svg-icons" />}>
-                                    <Link to={'/project/apikeys'}>{t('apiKeys', {ns: 'common'})}</Link>
+                                    <Link to={'/project/apikeys'}>{t('apiKeys')}</Link>
                                 </Menu.Item>
 
                                 <Menu.Item icon={<Back className="svg-icons" />} onClick={handleBack} className='orgination' key='/'>
@@ -313,10 +313,10 @@ const ProjectHome = () => {
                     onCancel={handleModalCancel}
                     footer={[
                         <Button key="cancel" onClick={handleModalCancel} className='cancel-button'>
-                            {t('cancel', {ns: 'common'})}
+                            {t('cancel')}
                         </Button>,
                         <Button key="submit" onClick={handleCreateConfirm} className='delete-button'>
-                            {t('confirm', {ns: 'common'})}
+                            {t('confirm')}
                         </Button>
                     ]}>
                     <span>{t('logoutDesc')}</span>

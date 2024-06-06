@@ -6,7 +6,7 @@ import styles from './actionDrawer.module.scss'
 import { useTranslation } from 'react-i18next';
 import { useState, forwardRef,useImperativeHandle,useEffect } from 'react';
 const ActionDrawer = forwardRef((props: any, ref: any) => {
-  const { t } = useTranslation(['components/actionDrawer/index', 'common']);
+  const { t } = useTranslation(['components/actionDrawer/index']);
   const { actionId, schema, showTipError,open, onhandleTipError, onSchemaChange, onChangeAuthentication, Authentication, onRadioChange, radioValue, onChangeCustom, custom } = props
   const { TextArea } = Input
   const [resetButtonShow, setResetButtonShow] = useState(actionId ? true : false)
@@ -111,7 +111,7 @@ const ActionDrawer = forwardRef((props: any, ref: any) => {
         </div>
         <div className={styles['label-description']}>{t('authenticationType')}</div>
         {resetButtonShow && <div className={styles['formbuttoncancel']} onClick={handleResetCredentials}>
-          <div className={styles['text1']}>{t('resetCredentials', {ns: 'common'})}</div>
+          <div className={styles['text1']}>{t('resetCredentials')}</div>
         </div>}
         <div className={resetButtonShow ? styles.resetBackground : undefined}>
           <Radio.Group onChange={handleRadioChange} value={radioValue}>

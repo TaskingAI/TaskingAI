@@ -49,11 +49,11 @@ function Assistant() {
     const [isVisible, setIsVisible] = useState(true);
     const [record, setRecord] = useState<any>({})
     const [originalModelData, setOriginalModelData] = useState<any>()
-    const { t } = useTranslation(['components/assistants/index', 'common']);
+    const { t } = useTranslation(['components/assistants/index']);
     const columns = [...assistantTableColumn]
     columns.push(
         {
-            title: `${t('actions', {ns: 'common'})}`,
+            title: `${t('actions')}`,
             key: 'action',
             width: 157,
             fixed: 'right',
@@ -96,7 +96,7 @@ function Assistant() {
     const [updateModelPrevButton, setUpdateModelPrevButton] = useState(false)
     const [selectedActionsRows, setSelectedActionsRows] = useState<any[]>([])
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
-    const [drawerTitle, setDrawerTitle] = useState(`${t('createAssistant', {ns: 'common'})}`)
+    const [drawerTitle, setDrawerTitle] = useState(`${t('createAssistant')}`)
     const [drawerName, setDrawerName] = useState<any>('')
     const [hasActionMore, setHasActionMore] = useState(false)
     const [tipSchema, setTipSchema] = useState(false)
@@ -183,8 +183,8 @@ function Assistant() {
     }
     const content = (
         <div style={{ cursor: 'pointer' }}>
-            <p className={styles['popover-eidt']} onClick={handleViewCode}>{t('viewCode', {ns: 'common'})}</p>
-            <p className={styles['popover-delete']} onClick={() => handleDelete(record)} >{t('delete', {ns: 'common'})}</p>
+            <p className={styles['popover-eidt']} onClick={handleViewCode}>{t('viewCode')}</p>
+            <p className={styles['popover-delete']} onClick={() => handleDelete(record)} >{t('delete')}</p>
         </div>
     );
     const fetchData = async (params: object) => {
@@ -209,7 +209,7 @@ function Assistant() {
     };
     const handleJump = (value: assistantListType) => {
         dispatch(setPlaygroundSelect('assistant'))
-        localStorage.setItem('assistantName', value.name || t('untitledAssistant', {ns: 'common'}))
+        localStorage.setItem('assistantName', value.name || t('untitledAssistant'))
         navigate(`/project/playground?assistant_id=${value.assistant_id}`)
     }
     const handleModalClose = () => {
@@ -327,7 +327,7 @@ function Assistant() {
         setOptions(prevOptions => [...prevOptions]);
     }
     const handleCreatePrompt = () => {
-        setDrawerTitle(t('createAssistant', {ns: 'common'}))
+        setDrawerTitle(t('createAssistant'))
         setAssistantId('')
         setSystemPromptTemplate([''])
         setSelectedPluginGroup([])
@@ -346,11 +346,11 @@ function Assistant() {
     const handleEdit = (val: assistantListType) => {
         console.log(val)
         setModelName(val.model_name)
-        setDrawerTitle(`${t('editAssistant', {ns: 'common'})}`)
+        setDrawerTitle(`${t('editAssistant')}`)
         const tag = val.retrievals.map(item => {
             return {
                 collection_id: item.id,
-                name: item.name || t('untitledCollection', {ns: 'common'})
+                name: item.name || t('untitledCollection')
             }
         })
         setSelectedRetrievalRows(tag)
@@ -464,10 +464,10 @@ function Assistant() {
             count += length
         })
         if (count > 16384) {
-            return toast.error(`${t('assistantSystemPromptMax', {ns: 'common'})}`)
+            return toast.error(`${t('assistantSystemPromptMax')}`)
         }
         if (originalModelData[0].slice(-8).length !== 8) {
-            return toast.error(`${t('assistantModelIDRequired', {ns: 'common'})}`)
+            return toast.error(`${t('assistantModelIDRequired')}`)
         }
         try {
             setLoading(true)
@@ -618,7 +618,7 @@ function Assistant() {
         <div className={styles["assistants"]}>
 
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
-                <ModalTable title={t('newAssistant', {ns: 'common'})} loading={loading} updatePrevButton={updatePrevButton} hasMore={assistantHasMore} id="assistant_id" ifSelect={false} columns={columns} name="assistant" dataSource={assistantsList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
+                <ModalTable title={t('newAssistant')} loading={loading} updatePrevButton={updatePrevButton} hasMore={assistantHasMore} id="assistant_id" ifSelect={false} columns={columns} name="assistant" dataSource={assistantsList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
             <Drawer
                 className={styles['drawer-assistants']}
@@ -626,10 +626,10 @@ function Assistant() {
                 closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />}
                 onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={[
                     <Button key="cancel" onClick={handleCancel} className='cancel-button'>
-                        {t('cancel', {ns: 'common'})}
+                        {t('cancel')}
                     </Button>,
                     <Button key="submit" loading={editLoading} onClick={handleRequest} className={`next-button ${styles['button']}`}>
-                        {t('confirm', {ns: 'common'})}
+                        {t('confirm')}
                     </Button>
                 ]}>
                 <DrawerAssistant modelName={modelName} drawerTitle={drawerTitle} openDrawer={OpenDrawer} selectedActionsSelected={selectedActionsSelected} selectedPluginGroup={selectedPluginGroup} handleNewBundle={handleNewBundle} retrievalConfig={retrievalConfig} topk={topk} maxTokens={maxTokens} handleMaxToken={handleMaxToken} handleToks={handleToks} bundilesList={bundilesList} handleNewActionModal={handleNewActionModal} handleNewCollection={handleNewCollection} selectedCollectionList={selectedRetrievalRows} actionHasMore={hasActionMore} actionList={actionList} collectionHasMore={hasMore} ref={drawerAssistantRef}
@@ -640,27 +640,27 @@ function Assistant() {
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='footer1'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
-                        {t('newModel', {ns: 'common'})}
+                        {t('newModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected.length}  {recordsSelected.length > 1 ? `${t('itemsSelected', {ns: 'common'})}` : `${t('itemSelected', {ns: 'common'})}`}
+                            {recordsSelected.length}  {recordsSelected.length > 1 ? `${t('itemsSelected')}` : `${t('itemSelected')}`}
                         </span>
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
-                            {t('cancel', {ns: 'common'})}
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleModalCloseConfirm} className='next-button'>
-                            {t('confirm', {ns: 'common'})}
+                            {t('confirm')}
                         </Button>
                     </div>
                 </div>
-            ]} title={t('selectModel', {ns: 'common'})} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable title={t('newModel', {ns: 'common'})} onOpenDrawer={handleCreateModelId} name="model" updatePrevButton={updateModelPrevButton} defaultSelectedRowKeys={selectedModelRows} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
+            ]} title={t('selectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
+                <ModalTable title={t('newModel')} onOpenDrawer={handleCreateModelId} name="model" updatePrevButton={updateModelPrevButton} defaultSelectedRowKeys={selectedModelRows} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <ViewCode open={viewCodeOpen} data={viewCodeData} handleClose={handleCloseViewCode}/>
             <CreatePlugin handleConfirmRequest={handleConfirmRequest} open={pluginModalOpen} handleCloseModal={handleClosePluginModal}></CreatePlugin>
-            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem', {ns: 'common', deleteValue: (deleteValue || t('untitledAssistant', {ns: 'common'}))})} ${t('deleteDesc')}`} title={t('deleteAssistant')} projectName={deleteValue || t('untitledAssistant', {ns: 'common'})} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
-            <Drawer zIndex={10001} className={styles['drawer-action']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title={t('bulkCreateAction', {ns: 'common'})} placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
+            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem',{ deleteValue: (deleteValue || t('untitledAssistant'))})} ${t('deleteDesc')}`} title={t('deleteAssistant')} projectName={deleteValue || t('untitledAssistant')} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
+            <Drawer zIndex={10001} className={styles['drawer-action']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title={t('bulkCreateAction')} placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
                 <ActionDrawer showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>
             <CreateCollection handleFetchData={() => fetchDataRetrievalData({limit: 20})} handleModalCloseOrOpen={() => setOpenCollectionDrawer(false)} OpenDrawer={openCollectionDrawer}></CreateCollection>

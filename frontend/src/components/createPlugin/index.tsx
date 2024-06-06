@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 
 const CreatePlugin = forwardRef((props:any, ref) => {
 
-    const { t } = useTranslation(['components/createPlugin/index', 'common']);
+    const { t } = useTranslation(['components/createPlugin/index']);
     const { open, handleCloseModal, handleConfirmRequest } = props
     const [openCreateModal2, setOpenCreateModal2] = useState(false);
     const [openCreateModal3, setOpenCreateModal3] = useState(false);
@@ -98,7 +98,7 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                 handleCloseModal()
                 setOpenCreateModal3(false)
                 setOpenCreateModal2(false)
-                toast.success(t('creationSuccessful', {ns: 'common'}))
+                toast.success(t('creationSuccessful'))
             } catch (e) {
                 const apiError = e as ApiErrorResponse;
                 const errorMessage: string = apiError.response.data.error.message;
@@ -145,7 +145,7 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                 setOpenCreateModal2(false)
                 handleCloseModal()
 
-                toast.success(t('creationSuccessful', {ns: 'common'}))
+                toast.success(t('creationSuccessful'))
             } catch (error) {
                 const apiError = error as ApiErrorResponse;
                 const errorMessage: string = apiError.response.data.error.message;
@@ -193,16 +193,16 @@ const CreatePlugin = forwardRef((props:any, ref) => {
             <>
                 {openCreateModal2 ? <>
                     <Button icon={<LeftOutlined />} key="cancel" onClick={handleCancel1} className='cancel-button'>
-                        {t('back', {ns: 'common'})}
+                        {t('back')}
                     </Button>
                     <Button key="submit" onClick={handleNext1} loading={nextLoading1} className='next-button' style={{ marginLeft: '10px' }}>
-                        {t('confirm', {ns: 'common'})}
+                        {t('confirm')}
                     </Button>
                 </> : <><Button key="cancel" onClick={handleCancel} className='cancel-button'>
-                    {t('cancel', {ns: 'common'})}
+                    {t('cancel')}
                 </Button>
                     <Button key="submit" onClick={handleNext} className='next-button' style={{ marginLeft: '10px' }}>
-                        {t('next', {ns: 'common'})}
+                        {t('next')}
                         <RightOutlined />
                     </Button></>}
             </>
@@ -210,7 +210,7 @@ const CreatePlugin = forwardRef((props:any, ref) => {
             {openCreateModal2 ? <div className={styles.componentsData}>
                 <div className={styles.inputWithLabelParent}>
                     <div className={styles.inputWithLabel}>
-                        <div className={styles.label}>{t('bundle', {ns: 'common'})}</div>
+                        <div className={styles.label}>{t('bundle')}</div>
                         <div className={styles.inputWithLabelInner}>
                             <div className={styles.frameWrapper}>
                                 <div className={styles.frameContainer}>
@@ -268,7 +268,7 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                                     <div className={styles.frameGroup}>
                                         <div className={styles.functionaliconsParent}>
                                             <ToolsNew />
-                                            <div className={styles.webSearch}>{item.num_plugins} {item.num_plugins > 1 ? t('tools', {ns: 'common'}) : t('tool', {ns: 'common'})}</div>
+                                            <div className={styles.webSearch}>{item.num_plugins} {item.num_plugins > 1 ? t('tools') : t('tool')}</div>
                                         </div>
                                         <div className={styles.taskingaiWrapper}>
                                             <div className={styles.taskingai}>{item.developer}</div>
@@ -288,11 +288,11 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                             <div className={styles.googleWebSearch1}>{bundleName}</div>
                         </div>
                         <div className={styles['description-bundle']}>
-                            <div className={styles['desc-title']}>{t('description', {ns: 'common'})}</div>
+                            <div className={styles['desc-title']}>{t('description')}</div>
                             <div className={styles['description-detail']}>{description}</div>
                         </div>
                         <div className={styles['description-bundle']}>
-                            <div className={styles['desc-title']}>{t('plugins', {ns: 'common'})}</div>
+                            <div className={styles['desc-title']}>{t('plugins')}</div>
                             {
                                 pluginListData.map((item: any, index) => (
                                     <div className={styles.pluginContent} key={index}>
@@ -310,21 +310,21 @@ const CreatePlugin = forwardRef((props:any, ref) => {
         </Modal>
         <Modal footer={[
             <Button key="cancel" onClick={handleCancel2} className='cancel-button'>
-                {t('cancel', {ns: 'common'})}
+                {t('cancel')}
             </Button>,
             <Button key="submit" loading={confirmLoading} onClick={handleConfirm} className='next-button'>
-                {t('confirm', {ns: 'common'})}
+                {t('confirm')}
             </Button>
         ]} width={720} zIndex={10003} onCancel={handleCancel2} open={openCreateModal3} centered closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} title={t('createPlugin')} className={styles.createModal3}>
             <div className={styles.editForm}>
                 <div className={styles.bundleTitle}>
-                    <div className={styles.label}>{t('bundle', {ns: 'common'})}</div>
+                    <div className={styles.label}>{t('bundle')}</div>
                     <div className={styles.googleWeb}>
                         <img loading="lazy" src={(cachedImages as any)[bundleId]} alt="" style={{ width: '24px', height: '24px' }} />
                         <div className={styles.googleWebSearch}>{bundleName}</div>
                     </div>
                 </div>
-                <div className={styles['credentials']}>{t('credentials', {ns: 'common'})}</div>
+                <div className={styles['credentials']}>{t('credentials')}</div>
                 <div className={styles['label-desc']} style={{ marginBottom: '24px' }}>
                     {t('credentialsDesc')}
                 </div>

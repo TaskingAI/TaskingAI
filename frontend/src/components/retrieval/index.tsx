@@ -30,7 +30,7 @@ import {
     Space, Drawer, Popover, Input, Tooltip, Spin, Select, Modal, Button
 } from 'antd';
 function Retrieval() {
-    const { t } = useTranslation(['common']);
+    const { t } = useTranslation();
     const { retrievalLists } = useSelector((state: any) => state.retrieval);
     const dispatch = useDispatch();
     const [isVisible, setIsVisible] = useState(true);
@@ -47,14 +47,14 @@ function Retrieval() {
         <div style={{ cursor: 'pointer' }}>
             <p className={styles['popover-eidt']} onClick={() => handleRecord(record, 'Chunks')}>Chunks</p>
 
-            <p className={styles['popover-eidt']} onClick={handleViewCode}>{t('viewCode', {ns: 'common'})}</p>
-            <p className={styles['popover-delete']} onClick={() => handleDelete(record)}>{t('delete', {ns: 'common'})}</p>
+            <p className={styles['popover-eidt']} onClick={handleViewCode}>{t('viewCode')}</p>
+            <p className={styles['popover-delete']} onClick={() => handleDelete(record)}>{t('delete')}</p>
 
         </div>
     );
     const columns = [...collectionTableColumn]
     columns.push({
-        title: `${t('actions', {ns: 'common'})}`,
+        title: `${t('actions')}`,
         key: 'action',
         fixed: 'right',
         width: 157,
@@ -95,7 +95,7 @@ function Retrieval() {
     const [modalTableOpen, setModalTableOpen] = useState(false)
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
     const [recordOpen, setRecordOpen] = useState(false)
-    const [drawerTitle, setDrawerTitle] = useState(t('createCollection', {ns: 'common'}))
+    const [drawerTitle, setDrawerTitle] = useState(t('createCollection'))
     const [drawerName, setDrawerName] = useState<any>('')
     const [embeddingSize, setEmbeddingSize] = useState(0)
     const [deleteValue, setDeleteValue] = useState('')
@@ -205,7 +205,7 @@ function Retrieval() {
         }
     }
     const handleCreatePrompt = () => {
-        setDrawerTitle(t('createCollection', {ns: 'common'}))
+        setDrawerTitle(t('createCollection'))
         setDrawerName(undefined)
         setCollectionId('')
         setRecordsSelected([])
@@ -224,17 +224,17 @@ function Retrieval() {
         setCollectionRecordId(val.collection_id)
         const routeData = recordOrChunk.toLowerCase()
         navigate(`/project/collections/${val.collection_id}/${routeData}`)
-        setDrawerName(val.name || t('untitledCollection', {ns: 'common'}))
+        setDrawerName(val.name || t('untitledCollection'))
         setRecordOrChunk(recordOrChunk)
         setRecordOpen(true)
     }
     const handleEdit = (val: any) => {
-        setDrawerTitle(t('editCollection', {ns: 'common'}))
+        setDrawerTitle(t('editCollection'))
         setDrawerName(val.name ? val.name : undefined)
         setEditDisabled(true)
         setIsVisible(false)
-        setSelectedRows(val.model_name ? [val.model_name + '-' + val.embedding_model_id] : [t('untitledModel', {ns: 'common'}) + '-' + val.embedding_model_id])
-        setSelectedModelName(val.model_name ? [val.model_name] : [t('untitledModel', {ns: 'common'})])
+        setSelectedRows(val.model_name ? [val.model_name + '-' + val.embedding_model_id] : [t('untitledModel') + '-' + val.embedding_model_id])
+        setSelectedModelName(val.model_name ? [val.model_name] : [t('untitledModel')])
         setDescriptionText(val.description)
         setCollectionId(val.collection_id)
         setEmbeddingSize(val.embedding_size)
@@ -282,7 +282,7 @@ function Retrieval() {
 
     const handleRequest = async () => {
         if (selectedRows.length === 0 || !selectValue) {
-            return toast.error(`${t('missingRequiredParameters', {ns: 'common'})}`)
+            return toast.error(`${t('missingRequiredParameters')}`)
         }
         try {
 
@@ -365,22 +365,22 @@ function Retrieval() {
 
         <div className={styles["retrieval"]}>
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
-                <ModalTable loading={loading} title={t('newCollection', {ns: 'common'})} updatePrevButton={updateRetrievalPrevButton} onChildEvent={handleChildEvent} name="collection" hasMore={hasMore} id='collection_id' columns={columns} ifSelect={false} onOpenDrawer={handleCreatePrompt} dataSource={promptList} />
+                <ModalTable loading={loading} title={t('newCollection')} updatePrevButton={updateRetrievalPrevButton} onChildEvent={handleChildEvent} name="collection" hasMore={hasMore} id='collection_id' columns={columns} ifSelect={false} onOpenDrawer={handleCreatePrompt} dataSource={promptList} />
             </Spin>
             <Drawer className={styles['drawer-retrievals']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <div className={styles['drawer-retrieval']}>
                     <div className={styles['name-prompt']}>
-                        {t('name', {ns: 'common'})}
+                        {t('name')}
                     </div>
-                    <Input className={styles['input']} placeholder={t('enterName', {ns: 'common'})} value={drawerName} onChange={handleNameChange}></Input>
+                    <Input className={styles['input']} placeholder={t('enterName')} value={drawerName} onChange={handleNameChange}></Input>
                     <div className={styles['desc-prompt']}>
-                        {t('description', {ns: 'common'})}
+                        {t('description')}
                     </div>
                     <div className={styles['label-desc']}>
-                        {t('retrievalCreateDesc', {ns: 'common'})}
+                        {t('retrievalCreateDesc')}
                     </div>
                     <Input.TextArea autoSize={{ minRows: 3, maxRows: 10 }} showCount
-                        placeholder={t('enterDescription', {ns: 'common'})}
+                        placeholder={t('enterDescription')}
                         value={descriptionText}
                         className={styles['input']}
                         onChange={(e) => setDescriptionText(e.target.value)}
@@ -388,11 +388,11 @@ function Retrieval() {
                     <div className={styles['hr']}></div>
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
-                        <span>{t('embeddingModel', {ns: 'common'})}</span>
+                        <span>{t('embeddingModel')}</span>
                     </div>
-                    <div className={styles['label-desc']}>{t('embeddingModelDesc', {ns: 'common'})}</div>
+                    <div className={styles['label-desc']}>{t('embeddingModelDesc')}</div>
                     <Select
-                        placeholder={t('selectModel', {ns: 'common'})}
+                        placeholder={t('selectModel')}
                         open={false}
                         className={styles['input']}
                         mode="multiple"
@@ -406,13 +406,13 @@ function Retrieval() {
                     <div className={styles['hr']}></div>
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
-                        <span>{t('capacity', {ns: 'common'})}</span>
+                        <span>{t('capacity')}</span>
                     </div>
                     <div className={styles['label-desc']}>
-                        {t('capacityDesc', {ns: 'common'})}
+                        {t('capacityDesc')}
                     </div>
                     <Select
-                        placeholder={t('capacityPlaceholder', {ns: 'common'})}
+                        placeholder={t('capacityPlaceholder')}
                         onChange={handleSelectValue}
                         value={selectValue}
                         className={styles['input']}
@@ -429,26 +429,26 @@ function Retrieval() {
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleModalClose} centered footer={[
                 <div className='footer-group' key='footer'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
-                        {t('newModel', {ns: 'common'})}
+                        {t('newModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected.length} {recordsSelected.length > 1 ? `${t('itemsSelected', {ns: 'common'})}` : `${t('itemSelected', {ns: 'common'})}`}
+                            {recordsSelected.length} {recordsSelected.length > 1 ? `${t('itemsSelected')}` : `${t('itemSelected')}`}
                         </span>
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
-                            {t('cancel', {ns: 'common'})}
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleModalCloseConfirm} className='next-button'>
-                            {t('confirm', {ns: 'common'})}
+                            {t('confirm')}
                         </Button>
                     </div>
                 </div>
-            ]} title={t('selectModel', {ns: 'common'})} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable name="model" title={t('newModel', {ns: 'common'})} loading={false} onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
+            ]} title={t('selectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
+                <ModalTable name="model" title={t('newModel')} loading={false} onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <ViewCode open={viewCodeOpen} data={viewCodeData} handleClose={handleCloseViewCode} />
-            <DeleteModal describe={`${t('deleteItem', {ns: 'common', deleteValue: deleteValue || t('untitledCollection', {ns: 'common'})})} ${t('retrievalDeleteDesc', {ns: 'common'})}`} open={OpenDeleteModal} title={t('retrievalDelete', {ns: 'common'})} projectName={deleteValue || t('untitledCollection', {ns: 'common'})} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
-            <Drawer className={recordOrChunk !== 'Chunks' ? styles['drawer-inner-table'] : styles['drawer-inner-chunk']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleRecordCancel} placement="right" size='large' open={recordOpen} width={1000} title={`${drawerName} / ${recordOrChunk === 'Chunks' ? t('chunks', {ns: 'common'}) : t('records', {ns: 'common'})}`}>
+            <DeleteModal describe={`${t('deleteItem',{ deleteValue: deleteValue || t('untitledCollection')})} ${t('retrievalDeleteDesc')}`} open={OpenDeleteModal} title={t('retrievalDelete')} projectName={deleteValue || t('untitledCollection')} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
+            <Drawer className={recordOrChunk !== 'Chunks' ? styles['drawer-inner-table'] : styles['drawer-inner-chunk']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleRecordCancel} placement="right" size='large' open={recordOpen} width={1000} title={`${drawerName} / ${recordOrChunk === 'Chunks' ? t('chunks') : t('records')}`}>
                 {recordOrChunk === 'Chunks' ? <ChunkPage collectionId={collectionRecordId} /> : <RecordPage fetChData={() => fetchData({ limit })} collectionId={collectionRecordId} ></RecordPage>}
             </Drawer>
         </div>)

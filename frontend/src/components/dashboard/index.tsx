@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom'
 import MarkdownMessageBlock from '@taskingai/taskingai-markdown'
 import { useTranslation } from 'react-i18next';
 const DashBoard = () => {
-    const { t } = useTranslation(['components/dashboard/index', 'common']);
+    const { t } = useTranslation(['components/dashboard/index']);
     const projectname = localStorage.getItem('projectName')
     const navigate = useNavigate()
     const handleNavigate = (value: string) => {
@@ -57,7 +57,7 @@ const DashBoard = () => {
                         <div className={styles.desc} style={{ marginBottom: '24px' }}>{t('getStartedDesc')}</div>
                         <div className={styles['group-button']}>
                             <Button onClick={()=>window.open('https://www.tasking.ai/examples')} style={{ display: 'flex', alignItems: 'center' }} icon={<Examples />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }} >{t('examples')}</span></Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai')} style={{ display: 'flex', alignItems: 'center' }} icon={<Documentation />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>{t('documentation', {ns: 'common'})}</span></Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai')} style={{ display: 'flex', alignItems: 'center' }} icon={<Documentation />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>{t('documentation')}</span></Button>
                             <Button onClick={()=>window.open('https://forum.tasking.ai')} style={{ display: 'flex', alignItems: 'center' }} icon={<Forum />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>{t('forum')}</span></Button>
                         </div>
                     </div>
@@ -83,7 +83,7 @@ const DashBoard = () => {
                         <div className={styles['card-top']}>
                             <div className={styles['card-header']}>
                                 <RetrievalGreenIcon />
-                                <span className={styles['card-name']}>{t('retrieval', {ns: 'common'})}</span>
+                                <span className={styles['card-name']}>{t('retrieval')}</span>
                             </div>
                             <div className={styles.desc}>{t('retrievalDesc')}</div>
                         </div>
@@ -96,7 +96,7 @@ const DashBoard = () => {
                         <div className={styles['card-top']}>
                             <div className={styles['card-header']}>
                                 <ToolGreenIcon />
-                                <span className={styles['card-name']}>{t('tool', {ns: 'common'})}</span>
+                                <span className={styles['card-name']}>{t('tool')}</span>
                             </div>
                             <div className={styles.desc}>{t('toolDesc')}</div>
                         </div>
@@ -109,7 +109,7 @@ const DashBoard = () => {
                         <div className={styles['card-top']}>
                             <div className={styles['card-header']}>
                                 <AssistantGreenIcon />
-                                <span className={styles['card-name']}>{t('assistant', {ns: 'common'})}</span>
+                                <span className={styles['card-name']}>{t('assistant')}</span>
                             </div>
                             <div className={styles.desc}>{t('assistantDesc')}</div>
                         </div>
@@ -170,7 +170,7 @@ client = OpenAI(
                         </div>
                         <div style={{ display: 'flex', gap: '12px' }}>
                             <Button onClick={()=>window.open('https://pypi.org/project/taskingai/')} className='cancel-button'>PyPI</Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/sdks/python/quickstart')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>{t('documentation', {ns: 'common'})}</span></Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/sdks/python/quickstart')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>{t('documentation')}</span></Button>
                         </div>
                     </div>
                     <div className={styles['card-bottom-item']}>
@@ -180,7 +180,7 @@ client = OpenAI(
                         </div>
                         <div style={{ display: 'flex', gap: '12px' }}>
                             <Button onClick={()=>window.open('https://platform.openai.com/docs/guides/text-generation/chat-completions-api')} className='cancel-button'>OpenAI</Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/sdks/openai_compatible/overview')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>{t('documentation', {ns: 'common'})}</span></Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/sdks/openai_compatible/overview')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>{t('documentation')}</span></Button>
                         </div>
                     </div>
                     <div className={styles['card-bottom-item']}>

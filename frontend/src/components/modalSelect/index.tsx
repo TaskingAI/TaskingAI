@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { getRetrievalList } from '../../axios/retrieval.ts'
 import { getActionsList } from '../../axios/actions.ts'
 function ModalSelect(prop: any) {
-    const { t } = useTranslation(['common'])
+    const { t } = useTranslation()
     const { retrievalList, collectionSelectedId, hasMore, handleNewModal, id, nameTitle, title, newTitle, handleSelectedItem, retrievalSelectedList, retrievalModal, handleClose } = prop
     const [collectionId, setCollectionId] = useState(collectionSelectedId !== undefined ? collectionSelectedId : '')
     const [collectionItem, setCollectionItem] = useState('')
@@ -22,11 +22,11 @@ function ModalSelect(prop: any) {
 
         {
             value: 'All Records',
-            label: t('allRecords', {ns: 'common'}),
+            label: t('allRecords'),
         },
         {
             value: 'Selected Records',
-            label: t('selectedRecords', {ns: 'common'}),
+            label: t('selectedRecords'),
         }
     ]
     const empty: Record<string, any> = {
@@ -124,13 +124,13 @@ function ModalSelect(prop: any) {
                 </Button>
                 <div>
                     <span className='select-record'>
-                        {collectionId ? 1 : 0}   {t('itemSelected', {ns: 'common'})}
+                        {collectionId ? 1 : 0}   {t('itemSelected')}
                     </span>
                     <Button key="cancel" onClick={handleRetrievlCancel} className='cancel-button' style={{ marginRight: '8px' }}>
-                        {t('cancel', {ns: 'common'})}
+                        {t('cancel')}
                     </Button>
                     <Button key="submit" onClick={handleRetrievlConfirm} className='next-button'>
-                        {t('confirm', {ns: 'common'})}
+                        {t('confirm')}
                     </Button>
                 </div>
             </div>
@@ -144,8 +144,8 @@ function ModalSelect(prop: any) {
                             label: 'ID',
                         }
                     ]} className={'select-name'} />
-                    <Input placeholder={t('enterID', {ns: 'common'})} className={'input-name'} onChange={handleInputChange} value={inputValue} />
-                    <Button className='cancel-button' onClick={handleSearch}>{t('search', {ns: 'common'})}</Button>
+                    <Input placeholder={t('enterID')} className={'input-name'} onChange={handleInputChange} value={inputValue} />
+                    <Button className='cancel-button' onClick={handleSearch}>{t('search')}</Button>
                     <Select defaultValue="All Records" onChange={handleSelectEndChange} options={optionsEnd} className={'select-data'} />
 
                 </div>
@@ -159,8 +159,8 @@ function ModalSelect(prop: any) {
                             {contentList.map((item: any, index: number) => (
                                 <div className={`retrieval-single ${retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) && 'selected-retrieval'} ${item[id] === collectionId && 'retrieval-selected-single'}`} key={index} onClick={retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) ? undefined : () => handleSelectCollection(item)}>
                                     <div className='top'>
-                                        <span className='name'>{item.name || t('untitledTitle', {ns: 'common', title})}</span>
-                                        {retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) && item[id] !== collectionId ? <span className='text'>{t('selected', {ns: 'common'})}</span> : <Radio checked={item[id] === collectionId}></Radio>}
+                                        <span className='name'>{item.name || t('untitledTitle',{ title})}</span>
+                                        {retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) && item[id] !== collectionId ? <span className='text'>{t('selected')}</span> : <Radio checked={item[id] === collectionId}></Radio>}
                                     </div>
                                     <div className='desc'>
                                         {item.description}

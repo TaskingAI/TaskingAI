@@ -17,7 +17,7 @@ const origin = window.location.origin;
 import IconComponent from '@/commonComponent/iconComponent/index.jsx';
 import { useTranslation } from "react-i18next";
 function PlaygroundModel() {
-    const { t } = useTranslation(['components/playgroundModel/index', 'common'])
+    const { t } = useTranslation(['components/playgroundModel/index'])
     const [loading, setLoading] = useState(false)
     const { search, pathname } = useLocation();
     const [selectedModel, setSelectedModel] = useState<any>([{
@@ -407,7 +407,7 @@ function PlaygroundModel() {
                                     <Checkbox value={maxTokenCheckbox} defaultChecked={maxTokenCheckbox} onChange={handleMaxTokenCheckbox} />
                                     <div style={{ flex: 1, marginLeft: '12px' }}>
                                         <div className={styles.temperature}>
-                                            <span style={{ color: maxTokenCheckbox ? '#2B2B2B' : '#BFBFBF' }}>{t('maxTokens', {ns: 'common'})}</span>
+                                            <span style={{ color: maxTokenCheckbox ? '#2B2B2B' : '#BFBFBF' }}>{t('maxTokens')}</span>
                                             {maxTokenCheckbox && <InputNumber parser={(value: any) => {
                                                 const parsedValue = parseInt(value, 10);
                                                 return isNaN(parsedValue) ? 1 : Math.max(parsedValue, 1);
@@ -469,14 +469,14 @@ function PlaygroundModel() {
                                 },
                                 {
                                     value: 'assistant',
-                                    label: t('assistant', {ns: 'common'})
+                                    label: t('assistant')
 
                                 }]}></Select>
                                 <Input.TextArea placeholder={item.role === 'assistant' ? t('enterAssistantMessage') : t('enterUserMessage')} autoSize value={item.content} className={styles.input} onChange={(e) => handleChangeValue(e.target.value, index)}></Input.TextArea>
                                 <DeleteInputIcon onClick={() => handleDeletedata(index)} style={{ cursor: 'pointer' }} />
                             </div>
                         ))}
-                        <Button onClick={handleAddData} icon={<PlusOutlined />} style={{ marginTop: '12px', background: 'white' }}>{t('add', {ns: 'common'})}</Button>
+                        <Button onClick={handleAddData} icon={<PlusOutlined />} style={{ marginTop: '12px', background: 'white' }}>{t('add')}</Button>
                     </div>
                     <div className={styles.generate}>
                         <Button className='next-button' onClick={handleGenerate} loading={generateLoading}>{t('generate')}</Button>
@@ -486,7 +486,7 @@ function PlaygroundModel() {
                 {<NoModel className={styles.svg} />}
                 <div className={styles['select-assistant']}>{t('selectAModelToStart')}</div>
                 <div className={styles['header-news']}>
-                    <Button className={styles['prompt-button']} onClick={handleSelectModel}>{t('selectModel', {ns: 'common'})}</Button>
+                    <Button className={styles['prompt-button']} onClick={handleSelectModel}>{t('selectModel')}</Button>
                 </div>
             </div>}
             <ModelComponent defaultSelectedData={selectedData} modalTableOpen={open} handleCloseModal={handleCloseModal} handleModalConfirm={handleModalConfirm} />

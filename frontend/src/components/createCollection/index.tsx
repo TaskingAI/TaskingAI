@@ -20,7 +20,7 @@ import CommonComponents from '../../contents/index'
 import ApiErrorResponse, { ChildRefType } from '../../constant/index.ts'
 import { useTranslation } from "react-i18next";
 function CreateCollection(props: createCollectionType) {
-    const { t } = useTranslation(['common']);
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const { modelsTableColumn } = CommonComponents();
     const { OpenDrawer, handleModalCloseOrOpen, handleFetchData } = props
@@ -85,7 +85,7 @@ function CreateCollection(props: createCollectionType) {
     }
     const handleRequest = async () => {
         if (!selectedRows || !selectValue) {
-            return toast.error(`${t('missingRequiredParameters', {ns: 'common'})}`)
+            return toast.error(`${t('missingRequiredParameters')}`)
         }
         try {
             const params = {
@@ -162,31 +162,31 @@ function CreateCollection(props: createCollectionType) {
     }
     return (
         <>
-            <Modal zIndex={10000}  onCancel={handleCancel} className={styles['create-collection']} width={1000} centered closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} title={t('createCollection', {ns: 'common'})} open={OpenDrawer} footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
+            <Modal zIndex={10000}  onCancel={handleCancel} className={styles['create-collection']} width={1000} centered closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} title={t('createCollection')} open={OpenDrawer} footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <div className={styles['drawer-retrieval']}>
                     <div className={styles['name-prompt']}>
-                        {t('name', {ns: 'common'})}
+                        {t('name')}
                     </div>
-                    <Input value={drawerName} onChange={handleNameChange} className={styles['input']} placeholder={t('enterName', {ns: 'common'})}></Input>
+                    <Input value={drawerName} onChange={handleNameChange} className={styles['input']} placeholder={t('enterName')}></Input>
                     <div className={styles['desc-prompt']}>
-                        {t('description', {ns: 'common'})}
+                        {t('description')}
                     </div>
                     <div className={styles['label-desc']}>
-                    {t('retrievalCreateDesc', {ns: 'common'})}
+                    {t('retrievalCreateDesc')}
                     </div>
                     <Input.TextArea className={styles['input']} autoSize={{ minRows: 3, maxRows: 10 }} showCount
-                         placeholder={t('recordEnterDescription', {ns: 'common'})}
+                         placeholder={t('recordEnterDescription')}
                         value={descriptionText}
                         onChange={(e) => setDescriptionText(e.target.value)}
                         maxLength={200} />
                     <div className={styles['hr']}></div>
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
-                        <span>{t('embeddingModel', {ns: 'common'})}</span>
+                        <span>{t('embeddingModel')}</span>
                     </div>
-                    <div className={styles['label-desc']}>{t('embeddingModelDesc', {ns: 'common'})}</div>
+                    <div className={styles['label-desc']}>{t('embeddingModelDesc')}</div>
                     <Select
-                        placeholder={t('selectModel', {ns: 'common'})}
+                        placeholder={t('selectModel')}
                         open={false}
                         mode="multiple"
                         className={styles['input']}
@@ -201,13 +201,13 @@ function CreateCollection(props: createCollectionType) {
 
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
-                        <span>{t('capacity', {ns: 'common'})}</span>
+                        <span>{t('capacity')}</span>
                     </div>
                     <div className={styles['label-desc']}>
-                    {t('capacityDesc', {ns: 'common'})}
+                    {t('capacityDesc')}
                     </div>
                     <Select
-                       placeholder={t('capacityPlaceholder', {ns: 'common'})}
+                       placeholder={t('capacityPlaceholder')}
                         onChange={handleSelectValue}
                         value={selectValue}
                         className={styles['input']}
@@ -222,24 +222,24 @@ function CreateCollection(props: createCollectionType) {
             <Modal zIndex={10001} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleModalClose} centered footer={[
                 <div className='footer-group' key='footer'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
-                        {t('newModel', {ns: 'common'})}
+                        {t('newModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected.length} {recordsSelected.length > 1 ? `${t('itemsSelected', {ns: 'common'})}` : `${t('itemSelected', {ns: 'common'})}`}
+                            {recordsSelected.length} {recordsSelected.length > 1 ? `${t('itemsSelected')}` : `${t('itemSelected')}`}
                         </span>
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
-                            {t('cancel', {ns: 'common'})}
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleModalCloseConfirm} className='next-button'>
-                            {t('confirm', {ns: 'common'})}
+                            {t('confirm')}
                         </Button>
                     </div>
 
                 </div>
 
-            ]} title={t('selectModel', {ns: 'common'})} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable title={t('newModel', {ns: 'common'})} name="model" onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
+            ]} title={t('selectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
+                <ModalTable title={t('newModel')} name="model" onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <ModelModal type='text_embedding'  getOptionsList={fetchModelsList} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} modelType='text_embedding' handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>
         </>

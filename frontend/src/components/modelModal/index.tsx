@@ -37,7 +37,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         properties: {},
         required: []
     })
-    const { t } = useTranslation(['components/modelModal/index', 'common'])
+    const { t } = useTranslation(['components/modelModal/index'])
     const [nextLoading, setNextLoading] = useState(false)
     const [modelOneLoading, setModelOneLoading] = useState(false)
     const [nextLoading1, setNextLoading1] = useState(false)
@@ -50,8 +50,8 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const [wildcardForm] = Form.useForm()
 
     const typeReverse = {
-        chat_completion: t('chatCompletion', {ns: 'common'}),
-        text_embedding: t('textEmbedding', {ns: 'common'}),
+        chat_completion: t('chatCompletion'),
+        text_embedding: t('textEmbedding'),
         wildcard: t('wildcard'),
         rerank:t('rerank')
     }
@@ -78,9 +78,9 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
         setOpenModalOne(false)
     }
     const resourcesType = {
-        taskingai_documentation_url: { name: t('documentation', {ns: 'common'}), icon: <Docs /> },
+        taskingai_documentation_url: { name: t('documentation'), icon: <Docs /> },
         official_site_url: { name: t('officalWebsite'), icon: <WebSite /> },
-        official_credentials_url: { name: t('apiKeys', {ns: 'common'}), icon: <ApiKeysIcon /> },
+        official_credentials_url: { name: t('apiKeys'), icon: <ApiKeysIcon /> },
         official_pricing_url: { name: t('pricing'), icon: <Dollar /> }
     }
     const resourceListOrder = ['taskingai_documentation_url', 'official_site_url', 'official_credentials_url', 'official_pricing_url']
@@ -289,18 +289,18 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     {openModalOne ? <>
                         <Button key="cancel" onClick={handleCancel} className='cancel-button'>
                             <LeftOutlined />
-                            {t('back', {ns: 'common'})}
+                            {t('back')}
                         </Button>
                         <Button key="submit" onClick={handleNext} className='next-button' loading={nextLoading}>
-                            {t('confirm', {ns: 'common'})}
+                            {t('confirm')}
                         </Button>
 
                     </> : <>
                         <Button key="cancel" onClick={handleCancel1} className='cancel-button'>
-                            {t('cancel', {ns: 'common'})}
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleNext1} className='next-button' loading={nextLoading1} >
-                            {t('next', {ns: 'common'})}
+                            {t('next')}
                             <RightOutlined />
                         </Button>
                     </>}
@@ -338,9 +338,9 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                             <div className='chat-name'>{name}</div>
                             <div className='content'>
                     
-                                <div className='label3'>{t('description', {ns: 'common'})}</div>
+                                <div className='label3'>{t('description')}</div>
                                 <div className='desc-info'>{description}</div>
-                                <div className='label3' style={{ marginTop: '22px' }}>{t('type', {ns: 'common'})}</div>
+                                <div className='label3' style={{ marginTop: '22px' }}>{t('type')}</div>
                       
                                 <div className='model-types'>
                                     <div className={type}>
@@ -391,7 +391,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                             </div>
                             <div className='right'>
                                 <div className='chat-name'>{prividerName}</div>
-                                <div className='label3' style={{ marginTop: '22px' }}>{t('description', {ns: 'common'})}</div>
+                                <div className='label3' style={{ marginTop: '22px' }}>{t('description')}</div>
                                 <div className='desc-info'>{prividerDesc}</div>
                                 <div className='label3' style={{ marginTop: '22px' }}>{t('availableModelTypes')}</div>
                                 <div className='model-types' style={{ margin: '0 24px 24px 24px' }}>
@@ -423,14 +423,14 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
 
             <Modal zIndex={10001} className='modal-content' title={t('createModalOneTitle')} width={1000} centered open={modelTwoOpen} footer={[
                 <Button key="cancel" onClick={handleSecondCancel} className='cancel-button'>
-                    {t('back', {ns: 'common'})}
+                    {t('back')}
                 </Button>,
                 <Button key="submit" onClick={handleConfirm} className='next-button' loading={confirmLoading}>
-                    {t('confirm', {ns: 'common'})}
+                    {t('confirm')}
                 </Button>
             ]} closeIcon={<img src={closeIcon} alt="closeIcon" />} onCancel={handleSecondCancel}>
                 <div className='second-modals'>
-                    <div className='base-model' style={{ marginTop: '24px' }}>{t('baseModel', {ns: 'common'})}</div>
+                    <div className='base-model' style={{ marginTop: '24px' }}>{t('baseModel')}</div>
                     <div className='frameParent'>
                         <div className='modelproviderParent'>
                             <IconComponent providerId={providerId} />
@@ -448,21 +448,21 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                             <Form.Item rules={[
                                 {
                                     required: true,
-                                    message: t('nameRequired', {ns: 'common'}),
+                                    message: t('nameRequired'),
                                 },
-                            ]} label={t('modelName', {ns: 'common'})} name="name" >
+                            ]} label={t('modelName')} name="name" >
                                 <div>
-                                    <Input className='input-name' placeholder={t('enterModelName', {ns: 'common'})} />
+                                    <Input className='input-name' placeholder={t('enterModelName')} />
                                 </div>
                             </Form.Item>
                             {type === 'wildcard' && <Form.Item rules={[
                                 {
                                     required: true,
-                                    message: t('modelIDRequired', {ns: 'common'}),
+                                    message: t('modelIDRequired'),
                                 },
-                            ]} label={t('providerModelID', {ns: 'common'})} name="provider_model_id">
+                            ]} label={t('providerModelID')} name="provider_model_id">
                                 <div>
-                                    <Input className='input-name' placeholder={t('providerModelIDPlaceholder', {ns: 'common'})} />
+                                    <Input className='input-name' placeholder={t('providerModelIDPlaceholder')} />
                                 </div>
                             </Form.Item>}
 
@@ -472,7 +472,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                     {
                         type === 'wildcard' && <>
                             <div className='hr'></div>
-                            <div className='credentials'>{t('properties', {ns: 'common'})}</div>
+                            <div className='credentials'>{t('properties')}</div>
                             <ConfigProvider theme={{
                                 components: {
                                     Form: {
@@ -481,12 +481,12 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                 }
                             }}>
                                 <Form layout="vertical" className='second-form' form={wildcardForm}>
-                                    <Form.Item label={t('modelType', {ns: 'common'})} required>
-                                        <Select placeholder={t('selectModelType', {ns: 'common'})} options={[{
-                                            label: t('textEmbedding', {ns: 'common'}),
+                                    <Form.Item label={t('modelType')} required>
+                                        <Select placeholder={t('selectModelType')} options={[{
+                                            label: t('textEmbedding'),
                                             value: 'text_embedding'
                                         }, {
-                                            label: t('chatCompletion', {ns: 'common'}),
+                                            label: t('chatCompletion'),
                                             value: 'chat_completion'
                                         }
                                         ]} onChange={handleModelTypes} value={modelTypes}>
@@ -494,33 +494,33 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                         </Select>
                                     </Form.Item>
                                     {modelTypes === 'text_embedding' && <>
-                                        <Form.Item label={t('embeddingSize', {ns: 'common'})} required name='embedding_size' rules={[
+                                        <Form.Item label={t('embeddingSize')} required name='embedding_size' rules={[
                                             {
                                                 required: true,
-                                                message: `${t('embeddingSizeRequired', {ns: 'common'})}`,
+                                                message: `${t('embeddingSizeRequired')}`,
                                             },
                                         ]}>
                                             <div>
-                                                <div className='description'>{t('embeddingSizeDesc', {ns: 'common'})}</div>
-                                                <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('embeddingSizePlaceholder', {ns: 'common'})} />
+                                                <div className='description'>{t('embeddingSizeDesc')}</div>
+                                                <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('embeddingSizePlaceholder')} />
                                             </div>
                                         </Form.Item>
-                                        <Form.Item label={t('inputMaxTokens', {ns: 'common'})} name='input_token_limit'>
+                                        <Form.Item label={t('inputMaxTokens')} name='input_token_limit'>
                                             <div>
-                                                <div className='description'>{t('inputMaxTokensDesc', {ns: 'common'})}</div>
-                                                <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('inputMaxTokensPlaceholder', {ns: 'common'})} />
+                                                <div className='description'>{t('inputMaxTokensDesc')}</div>
+                                                <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('inputMaxTokensPlaceholder')} />
                                             </div>
                                         </Form.Item>
-                                        <Form.Item label={t('maxBatchSize', {ns: 'common'})} name='max_batch_size'>
+                                        <Form.Item label={t('maxBatchSize')} name='max_batch_size'>
                                             <div>
-                                                <div className='description'>{t('maxBatchSizeDesc', {ns: 'common'})}</div>
-                                                <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('maxBatchSizePlaceholder', {ns: 'common'})} />
+                                                <div className='description'>{t('maxBatchSizeDesc')}</div>
+                                                <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('maxBatchSizePlaceholder')} />
                                             </div>
                                         </Form.Item>
                                     </>}
                                     {modelTypes === 'chat_completion' && <>
-                                        <Form.Item label={t('functionCall', {ns: 'common'})} required name='function_call' valuePropName="checked">
-                                            <div className='description'>{t('propertiesDesc', {ns: 'common'})}</div>
+                                        <Form.Item label={t('functionCall')} required name='function_call' valuePropName="checked">
+                                            <div className='description'>{t('propertiesDesc')}</div>
                                             <ConfigProvider theme={{
                                                 components: {
                                                     Switch: {
@@ -534,8 +534,8 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                                 </Form.Item>
                                             </ConfigProvider>
                                         </Form.Item>
-                                        <Form.Item label={t('streaming', {ns: 'common'})} required name='streaming' valuePropName="checked">
-                                            <div className='description'>{t('streamingDesc', {ns: 'common'})}</div>
+                                        <Form.Item label={t('streaming')} required name='streaming' valuePropName="checked">
+                                            <div className='description'>{t('streamingDesc')}</div>
                                             <ConfigProvider theme={{
                                                 components: {
                                                     Switch: {
@@ -549,16 +549,16 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                                 </Form.Item>
                                             </ConfigProvider>
                                         </Form.Item>
-                                        <Form.Item label={t('inputMaxTokens', {ns: 'common'})} name='input_token_limit'>
+                                        <Form.Item label={t('inputMaxTokens')} name='input_token_limit'>
                                             <div>
-                                                <div className='description'>{t('inputMaxTokensDesc', {ns: 'common'})}</div>
-                                                <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('inputMaxTokensPlaceholder', {ns: 'common'})} />
+                                                <div className='description'>{t('inputMaxTokensDesc')}</div>
+                                                <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('inputMaxTokensPlaceholder')} />
                                             </div>
                                         </Form.Item>
-                                        <Form.Item label={t('outputMaxTokens', {ns: 'common'})} name='output_token_limit'>
+                                        <Form.Item label={t('outputMaxTokens')} name='output_token_limit'>
                                             <div>
-                                                <div className='description'>{t('outputMaxTokensDesc', {ns: 'common'})}</div>
-                                                <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('outputMaxTokensPlaceholder', {ns: 'common'})} />
+                                                <div className='description'>{t('outputMaxTokensDesc')}</div>
+                                                <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('outputMaxTokensPlaceholder')} />
                                             </div>
                                         </Form.Item>
                                     </>}
@@ -570,12 +570,12 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                         !properties && <>
                             {type !== 'wildcard' && <>
                                 <div className='hr'></div>
-                                <div className='credentials'>{t('properties', {ns: 'common'})}</div>
+                                <div className='credentials'>{t('properties')}</div>
                             </>}
 
                             {type === 'chat_completion' && <Form layout="vertical" className='second-form' form={propertyForm}>
-                                <Form.Item label={t('functionCall', {ns: 'common'})} required name='function_call' valuePropName="checked">
-                                    <div className='description'>{t('propertiesDesc', {ns: 'common'})}</div>
+                                <Form.Item label={t('functionCall')} required name='function_call' valuePropName="checked">
+                                    <div className='description'>{t('propertiesDesc')}</div>
                                     <ConfigProvider theme={{
                                         components: {
                                             Switch: {
@@ -589,8 +589,8 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                         </Form.Item>
                                     </ConfigProvider>
                                 </Form.Item>
-                                <Form.Item label={t('streaming', {ns: 'common'})} required name='streaming' valuePropName="checked">
-                                    <div className='description'>{t('streamingDesc', {ns: 'common'})}</div>
+                                <Form.Item label={t('streaming')} required name='streaming' valuePropName="checked">
+                                    <div className='description'>{t('streamingDesc')}</div>
                                     <ConfigProvider theme={{
                                         components: {
                                             Switch: {
@@ -604,30 +604,30 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                         </Form.Item>
                                     </ConfigProvider>
                                 </Form.Item>
-                                <Form.Item label={t('inputMaxTokens', {ns: 'common'})} name='input_token_limit'>
+                                <Form.Item label={t('inputMaxTokens')} name='input_token_limit'>
                                     <div>
-                                        <div className='description'>{t('inputMaxTokensDesc', {ns: 'common'})}</div>
-                                        <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('inputMaxTokensPlaceholder', {ns: 'common'})} />
+                                        <div className='description'>{t('inputMaxTokensDesc')}</div>
+                                        <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('inputMaxTokensPlaceholder')} />
                                     </div>
                                 </Form.Item>
-                                <Form.Item label={t('outputMaxTokens', {ns: 'common'})} name='output_token_limit'>
+                                <Form.Item label={t('outputMaxTokens')} name='output_token_limit'>
                                     <div>
-                                        <div className='description'>{t('outputMaxTokensDesc', {ns: 'common'})}</div>
-                                        <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('outputMaxTokensPlaceholder', {ns: 'common'})} />
+                                        <div className='description'>{t('outputMaxTokensDesc')}</div>
+                                        <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('outputMaxTokensPlaceholder')} />
                                     </div>
                                 </Form.Item>
                             </Form>}
                             {
                                 type === 'text_embedding' && <Form layout="vertical" className='second-form' form={propertyForm} autoComplete='off'>
-                                    <Form.Item label={t('embeddingSize', {ns: 'common'})} required name='embedding_size' rules={[
+                                    <Form.Item label={t('embeddingSize')} required name='embedding_size' rules={[
                                         {
                                             required: true,
-                                            message: `${t('embeddingSizeRequired', {ns: 'common'})}`,
+                                            message: `${t('embeddingSizeRequired')}`,
                                         },
                                     ]}>
                                         <div>
-                                            <div className='description'>{t('embeddingSizeDesc', {ns: 'common'})}</div>
-                                            <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('embeddingSizePlaceholder', {ns: 'common'})} />
+                                            <div className='description'>{t('embeddingSizeDesc')}</div>
+                                            <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('embeddingSizePlaceholder')} />
                                         </div>
                                     </Form.Item>
                                 </Form>
@@ -635,9 +635,9 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                         </>
                     }
                     <div className='hr'></div>
-                    <div className='credentials'>{t('credentials', {ns: 'common'})}</div>
+                    <div className='credentials'>{t('credentials')}</div>
                     <div className='label-desc' style={{ marginBottom: '24px' }}>
-                        {t('credentialsDesc', {ns: 'common'})}
+                        {t('credentialsDesc')}
                     </div>
                     <Form
                         layout="vertical"
@@ -654,19 +654,19 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                 rules={[
                                     {
                                         required: formData.required.includes(key) ? true : false,
-                                        message: t('pleaseInput', {ns: 'common', key}),
+                                        message: t('pleaseInput',{ key}),
                                     },
                                 ]}
                             >
                                 <div>
                                     <div className='description'>{(property as { description: string }).description}</div>
-                                    <Input placeholder={t('enter', {ns: 'common', key})} className='input' />
+                                    <Input placeholder={t('enter',{ key})} className='input' />
                                 </div>
                             </Form.Item>
                         ))}
                     </Form>
                     {providerUrl && <div className='label-desc' style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', marginTop: '15px', lineHeight: 1 }} >
-                        <QuestionCircleOutlined />  {t('havingTroubleModel', {ns: 'common'})}  <a href={providerUrl} target="_blank" rel="noreferrer" className='href' style={{ marginLeft: '4px' }}> {t('seeTheDocumentation', {ns: 'common'})}</a>
+                        <QuestionCircleOutlined />  {t('havingTroubleModel')}  <a href={providerUrl} target="_blank" rel="noreferrer" className='href' style={{ marginLeft: '4px' }}> {t('seeTheDocumentation')}</a>
                     </div>}
                 </div>
             </Modal>

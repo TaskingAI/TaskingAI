@@ -13,7 +13,7 @@ import TextEmbeddingIcon from '@/assets/img/textEmbedding.svg?react'
 import WildCardIcon from '@/assets/img/wildcard.svg?react'
 import RerankIcon from '@/assets/img/rerankIcon.svg?react'
 function CommonComponents() {
-    const { t } = useTranslation(['contents/index', 'common'])
+    const { t } = useTranslation(['contents/index'])
     const statusReverse = {
         creating: 'orange',
         ready: 'green',
@@ -30,16 +30,16 @@ function CommonComponents() {
         rerank: <RerankIcon/>
     }
     const reverseLabel: Record<string, any> = {
-        naive: t('naive', {ns: 'common'}),
-        zero: t('zero', {ns: 'common'}),
-        [`message_window`]: t('messageWindow', {ns: 'common'}),
+        naive: t('naive'),
+        zero: t('zero'),
+        [`message_window`]: t('messageWindow'),
     }
     const handleCopy = (text: string) => {
         const clipboard = new ClipboardJS('.icon-copy', {
             text: () => text
         });
         clipboard.on('success', function () {
-            toast.success(t('copiedToClipboard', {ns: 'common'}))
+            toast.success(t('copiedToClipboard'))
             clipboard.destroy()
         });
         clipboard.on('error', function (e) {
@@ -55,7 +55,7 @@ function CommonComponents() {
     }
     const modelsTableColumn: any = [
         {
-            title: `${t('name', {ns: 'common'})}`,
+            title: `${t('name')}`,
             dataIndex: 'name',
             key: 'name',
             fixed: 'left',
@@ -70,7 +70,7 @@ function CommonComponents() {
             ,
         },
         {
-            title: `${t('baseModel', {ns: 'common'})}`,
+            title: `${t('baseModel')}`,
             dataIndex: 'model_schema_id',
             key: 'base_model_id',
             width: 240,
@@ -82,7 +82,7 @@ function CommonComponents() {
             ,
         },
         {
-            title: `${t('type', {ns: 'common'})}`,
+            title: `${t('type')}`,
             dataIndex: 'type',
             key: 'type',
             width: 240,
@@ -97,7 +97,7 @@ function CommonComponents() {
             ),
         },
         {
-            title: `${t('properties', {ns: 'common'})}`,
+            title: `${t('properties')}`,
             dataIndex: 'properties',
             key: 'properties',
             width: 360,
@@ -106,7 +106,7 @@ function CommonComponents() {
             ),
         },
         {
-            title: `${t('createdAt', {ns: 'common'})}`,
+            title: `${t('createdAt')}`,
             width: 180,
             dataIndex: 'created_timestamp',
             key: 'created_timestamp',
@@ -135,7 +135,7 @@ function CommonComponents() {
             ,
         },
         {
-            title: `${t('description', {ns: 'common'})}`,
+            title: `${t('description')}`,
             dataIndex: 'description',
             key: 'description',
             width: 360,
@@ -146,7 +146,7 @@ function CommonComponents() {
             ),
         },
         {
-            title: `${t('plugins', {ns: 'common'})}`,
+            title: `${t('plugins')}`,
             dataIndex: 'plugins',
             key: 'plugins',
             width: 360,
@@ -161,14 +161,14 @@ function CommonComponents() {
             ),
         },
         {
-            title: `${t('createdAt', {ns: 'common'})}`,
+            title: `${t('createdAt')}`,
             dataIndex: 'created_timestamp',
             key: 'created_timestamp',
             width: 180,
             render: (time: number) => <div>{formatTimestamp(time)}</div>
         },
         {
-            title: `${t('lastUpdated', {ns: 'common'})}`,
+            title: `${t('lastUpdated')}`,
             dataIndex: 'updated_timestamp',
             key: 'updated_timestamp',
             width: 180,
@@ -177,7 +177,7 @@ function CommonComponents() {
     ]
     const collectionTableColumn: any = [
         {
-            title: `${t('name', {ns: 'common'})}`,
+            title: `${t('name')}`,
             dataIndex: 'name',
             key: 'name',
             width: 240,
@@ -193,7 +193,7 @@ function CommonComponents() {
             ,
         },
         {
-            title: `${t('description', {ns: 'common'})}`,
+            title: `${t('description')}`,
             dataIndex: 'description',
             key: 'description',
             width: 360,
@@ -204,7 +204,7 @@ function CommonComponents() {
             ),
         },
         {
-            title: `${t('records', {ns: 'common'})}`,
+            title: `${t('records')}`,
             dataIndex: 'num_records',
             key: 'num_records',
             width: 180,
@@ -215,7 +215,7 @@ function CommonComponents() {
             ),
         },
         {
-            title: `${t('capacity', {ns: 'common'})}`,
+            title: `${t('capacity')}`,
             dataIndex: 'capacity1',
             key: 'capacity1',
             width: 180,
@@ -224,7 +224,7 @@ function CommonComponents() {
             )
         },
         {
-            title: `${t('status', {ns: 'common'})}`,
+            title: `${t('status')}`,
             dataIndex: 'status',
             key: 'status',
             width: 180,
@@ -235,7 +235,7 @@ function CommonComponents() {
             )
         },
         {
-            title: `${t('embeddingModel', {ns: 'common'})}`,
+            title: `${t('embeddingModel')}`,
             dataIndex: 'model_name',
             key: 'ModelID',
             ellipsis: true,
@@ -250,7 +250,7 @@ function CommonComponents() {
             </div>
         },
         {
-            title: `${t('createdAt', {ns: 'common'})}`,
+            title: `${t('createdAt')}`,
             dataIndex: 'created_timestamp',
             key: 'created_timestamp',
             width: 180,
@@ -260,7 +260,7 @@ function CommonComponents() {
     ];
     const actionsTableColumn: any = [
         {
-            title: `${t('name', {ns: 'common'})}`,
+            title: `${t('name')}`,
             dataIndex: 'name',
             key: 'name',
             fixed: 'left',
@@ -276,7 +276,7 @@ function CommonComponents() {
             ,
         },
         {
-            title: `${t('description', {ns: 'common'})}`,
+            title: `${t('description')}`,
             dataIndex: 'description',
             key: 'description',
             width: 360,
@@ -309,7 +309,7 @@ function CommonComponents() {
             ),
         },
         {
-            title: `${t('createdAt', {ns: 'common'})}`,
+            title: `${t('createdAt')}`,
             width: 180,
             dataIndex: 'created_timestamp',
             key: 'created_timestamp',
@@ -317,7 +317,7 @@ function CommonComponents() {
         }]
     const apikeysTableColumn: any = [
         {
-            title: `${t('name', {ns: 'common'})}`,
+            title: `${t('name')}`,
             dataIndex: 'name',
             key: 'name',
             fixed: 'left',
@@ -340,14 +340,14 @@ function CommonComponents() {
             ),
         },
         {
-            title: `${t('createdAt', {ns: 'common'})}`,
+            title: `${t('createdAt')}`,
             dataIndex: 'created_timestamp',
             key: 'created_timestamp',
             width: 180,
             render: (time: number) => <div>{formatTimestamp(time)}</div>
         },
         {
-            title: `${t('lastUpdated', {ns: 'common'})}`,
+            title: `${t('lastUpdated')}`,
             dataIndex: 'updated_timestamp',
             key: 'updated_timestamp',
             width: 180,
@@ -357,7 +357,7 @@ function CommonComponents() {
     ];
     const assistantTableColumn: any = [
         {
-            title: `${t('name', {ns: 'common'})}`,
+            title: `${t('name')}`,
             dataIndex: 'name',
             key: 'name',
             width: 240,
@@ -374,7 +374,7 @@ function CommonComponents() {
             ,
         },
         {
-            title: `${t('description', {ns: 'common'})}`,
+            title: `${t('description')}`,
             width: 360,
             dataIndex: 'description',
             key: 'description',
@@ -385,7 +385,7 @@ function CommonComponents() {
             ),
         },
         {
-            title: `${t('langModel', {ns: 'common'})}`,
+            title: `${t('langModel')}`,
             dataIndex: 'model_name',
             width: 360,
             key: 'model_id',
@@ -410,7 +410,7 @@ function CommonComponents() {
             )
         },
         {
-            title: `${t('memory', {ns: 'common'})}`,
+            title: `${t('memory')}`,
             width: 180,
             dataIndex: 'memory',
             render: (_: any) => (
@@ -419,7 +419,7 @@ function CommonComponents() {
             )
         },
         {
-            title: `${t('createdAt', {ns: 'common'})}`,
+            title: `${t('createdAt')}`,
             width: 180,
             dataIndex: 'created_timestamp',
             key: 'created_timestamp',
@@ -441,7 +441,7 @@ function CommonComponents() {
             width: 240,
         },
         {
-            title: `${t('description', {ns: 'common'})}`,
+            title: `${t('description')}`,
             dataIndex: 'Description',
             key: 'Description',
             width: 360
@@ -454,13 +454,13 @@ function CommonComponents() {
 
         },
         {
-            title: `${t('status', {ns: 'common'})}`,
+            title: `${t('status')}`,
             dataIndex: 'status',
             key: 'status',
             width: 180
         },
         {
-            title: `${t('createdAt', {ns: 'common'})}`,
+            title: `${t('createdAt')}`,
             width: 180,
             dataIndex: 'created_timestamp',
             key: 'created_timestamp',
@@ -470,14 +470,14 @@ function CommonComponents() {
     ]
     const memberTableColumn: any = [
         {
-            title: `${t('name', {ns: 'common'})}`,
+            title: `${t('name')}`,
             key: 'name',
             dataIndex: 'name',
             fixed: 'left',
             width: 240,
         },
         {
-            title: `${t('email', {ns: 'common'})}`,
+            title: `${t('email')}`,
             key: 'email',
             dataIndex: 'email',
             width: 240
@@ -489,7 +489,7 @@ function CommonComponents() {
             width: 180,
         },
         {
-            title: `${t('status', {ns: 'common'})}`,
+            title: `${t('status')}`,
             key: 'status',
             dataIndex: 'status',
             width: 180,

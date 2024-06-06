@@ -30,7 +30,7 @@ import { useTranslation } from 'react-i18next';
 
 
 function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData:Function }) {
-    const { t } = useTranslation(['components/recordPage/index', 'common']);
+    const { t } = useTranslation(['components/recordPage/index']);
     const { tooltipEditTitle, tooltipDeleteTitle } = tooltipTitle();
     const { Dragger } = Upload;
     const handleCopy = (text: string) => {
@@ -38,7 +38,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             text: () => text
         });
         clipboard.on('success', function () {
-            toast.success(`${t('copiedToClipboard', {ns: 'common'})}`)
+            toast.success(`${t('copiedToClipboard')}`)
             clipboard.destroy()
         });
         clipboard.on('error', function (e) {
@@ -64,14 +64,14 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
     }
     const columns = [
         {
-            title: t('record', {ns: 'common'}),
+            title: t('record'),
             dataIndex: 'title',
             key: 'title',
             width: 240,
             fixed: 'left',
             render: (text: string, record: any) =>
                 <div>
-                    <p className='table-text' style={{ fontSize: '14px' }}>{text || t('untitled', {ns: 'common'})}</p>
+                    <p className='table-text' style={{ fontSize: '14px' }}>{text || t('untitled')}</p>
                     <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
                         <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>{record.record_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.record_id)} />
 
@@ -79,7 +79,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
                 </div>
         },
         {
-            title: `${t('content', {ns: 'common'})}`,
+            title: `${t('content')}`,
             width: 480,
             dataIndex: 'content',
             key: 'content',
@@ -89,7 +89,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             ),
         },
         {
-            title: `${t('status', {ns: 'common'})}`,
+            title: `${t('status')}`,
             dataIndex: 'status',
             key: 'status',
             width: 180,
@@ -100,7 +100,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             )
         },
         {
-            title: `${t('chunk', {ns: 'common'})}`,
+            title: `${t('chunk')}`,
             dataIndex: 'num_chunks',
             key: 'num_chunks',
             width: 180,
@@ -111,14 +111,14 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             )
         },
         {
-            title: `${t('createdAt', {ns: 'common'})} `,
+            title: `${t('createdAt')} `,
             width: 180,
             dataIndex: 'created_timestamp',
             key: 'created_timestamp',
             render: (time: number) => <div>{formatTimestamp(time)}</div>
         },
         {
-            title: `${t('actions', {ns: 'common'})}`,
+            title: `${t('actions')}`,
             key: 'action',
             width: 118,
             fixed: 'right',
@@ -361,7 +361,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
     }
     const handleConfirm = async () => {
         if (type === 'text' && !contentValue) {
-            toast.error(`${t('chunkContentRequired', {ns: 'common'})}`)
+            toast.error(`${t('chunkContentRequired')}`)
             return
         }
         if (type === 'web' && websiteValue) {
@@ -447,24 +447,24 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             <ModalTable ifOnlyId={true} title={t('newRecord')} onOpenDrawer={handleCreatePrompt} onChildEvent={handleChildEvent} updatePrevButton={updatePrevButton} dataSource={recordList} ifSelect={false} name="record" columns={columns} hasMore={hasMore} id="record_id"></ModalTable>
             <Modal footer={[
                 <Button key="cancel" onClick={handleCancel} className='cancel-button'>
-                    {t('cancel', {ns: 'common'})}
+                    {t('cancel')}
                 </Button>,
                 <Button key="submit" onClick={() => handleConfirm()} className='next-button' loading={confirmLoading}>
-                    {t('confirm', {ns: 'common'})}
+                    {t('confirm')}
                 </Button>
             ]} title={drawerTitle} centered className={styles['record-create-model']} open={createOpenModal} width={720} onCancel={handleCancel} closeIcon={<CloseIcon className={styles['img-icon-close']} />}>
                 <div className={styles['text-content']}>
-                    <div className={styles['text-title']}>{t('title', {ns: 'common'})}</div>
+                    <div className={styles['text-title']}>{t('title')}</div>
                     <div className={styles.desc}>{t('recordDesc')}</div>
-                    <Input className={styles['input1']} placeholder={t('enterName', {ns: 'common'})} value={title} onChange={(e) => setTitle(e.target.value)}></Input>
+                    <Input className={styles['input1']} placeholder={t('enterName')} value={title} onChange={(e) => setTitle(e.target.value)}></Input>
                     <div className={styles['text-title']} style={{ display: 'flex', alignItems: 'center' }}>
-                        <span className={styles['red-span']}> * </span> <div >{t('type', {ns: 'common'})}</div>
+                        <span className={styles['red-span']}> * </span> <div >{t('type')}</div>
                     </div>
                     <Select value={type} onChange={handleTypeChange} className={styles['input1']} options={[{ label: t('text'), value: 'text' }, { label: t('website'), value: 'web' }, { label: t('file'), value: 'file' }]}></Select>
                     {type === 'text' && <>
                         <div className={styles['text-title']} style={{ display: 'flex', alignItems: 'center' }}><span className={styles['red-span']}> * </span> {t('textContent')}</div>
                         <div className={styles['desc']}>{t('recordContentDesc')}</div>
-                        <Input.TextArea placeholder={t('enterDescription', {ns: 'common'})} showCount minLength={0} maxLength={32768} value={contentValue} onChange={handleContentChange} className={styles['input']}></Input.TextArea>
+                        <Input.TextArea placeholder={t('enterDescription')} showCount minLength={0} maxLength={32768} value={contentValue} onChange={handleContentChange} className={styles['input']}></Input.TextArea>
                     </>}
                     {type === 'web' && <>
                         <div className={styles['text-title']} style={{ display: 'flex', alignItems: 'center' }}>
@@ -510,7 +510,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
                     <InputNumber className={styles['input-number']} placeholder={t('chunkOverlapPlaceholder')} value={chunkOverlap} onChange={(value: number | null) => setChunkOverlap(value as number)} parser={(value: string | undefined) => (isNaN(Number(value)) ? 1 : parseInt(value as string, 10))} min={0} max={100}></InputNumber>
                 </div>
             </Modal>
-            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem', {ns: 'common', deleteValue: `${t('record', {ns: 'common'})} ${deleteId}`})} ${t('deleteChunkDesc')}`} title={t('deleteRecord')} projectName={deleteId} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
+            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem',{ deleteValue: `${t('record')} ${deleteId}`})} ${t('deleteChunkDesc')}`} title={t('deleteRecord')} projectName={deleteId} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
         </Spin>
     );
 }

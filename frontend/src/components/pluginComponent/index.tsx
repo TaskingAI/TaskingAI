@@ -14,7 +14,7 @@ function PluginComponent(props: any) {
     const [pluginId, setPluginId] = useState(pluginSelectedId !== undefined ? pluginSelectedId : '')
     const [inputValue, setInputValue] = useState('')
     const [bundleItem, setBundleItem] = useState(bundleSelectedItem !== undefined ? bundleSelectedItem : {})
-    const { t } = useTranslation(['components/pluginComponent/index', 'common'])
+    const { t } = useTranslation(['components/pluginComponent/index'])
     const [bundleListData, setBundleListData] = useState(bundleList)
     useEffect(() => {
         setBundleListData(bundleList)
@@ -23,11 +23,11 @@ function PluginComponent(props: any) {
 
         {
             value: 'All Records',
-            label: t('allRecords', {ns: 'common'}),
+            label: t('allRecords'),
         },
         {
             value: 'Selected Records',
-            label: t('selectedRecords', {ns: 'common'}),
+            label: t('selectedRecords'),
         }
     ]
     const handleCancel = () => {
@@ -78,13 +78,13 @@ function PluginComponent(props: any) {
             </Button>
             <div>
                 <span className='select-record'>
-                    {pluginId ? 1 : 0}  {t('itemSelected', {ns: 'common'})}
+                    {pluginId ? 1 : 0}  {t('itemSelected')}
                 </span>
                 <Button key="cancel" onClick={handleCancel} className='cancel-button' style={{ marginRight: '8px' }}>
-                    {t('cancel', {ns: 'common'})}
+                    {t('cancel')}
                 </Button>
                 <Button key="submit" onClick={handleRetrievlConfirm} className='next-button'>
-                    {t('confirm', {ns: 'common'})}
+                    {t('confirm')}
                 </Button>
             </div>
         </div>
@@ -98,8 +98,8 @@ function PluginComponent(props: any) {
                         label: 'ID',
                     }
                 ]} className={styles['select-name']} />
-                <Input placeholder={t('enterID', {ns: 'common'})} className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
-                <Button className='cancel-button' onClick={handleSearch}>{t('search', {ns: 'common'})}</Button>
+                <Input placeholder={t('enterID')} className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
+                <Button className='cancel-button' onClick={handleSearch}>{t('search')}</Button>
                 <Select defaultValue="All Records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />
 
             </div>
@@ -124,7 +124,7 @@ function PluginComponent(props: any) {
                                 <div className={`${styles['pluginSingle']} ${plugin.plugin_id === pluginId && styles['selectItem']} ${selectedData.includes(plugin.plugin_id) && styles['selectedItem']}`} onClick={selectedData.includes(plugin.plugin_id) ? undefined : () => handleClickPlugin(plugin, item)}>
                                     <div className={styles.pluginName}>
                                         {plugin.name}
-                                        {selectedData.includes(plugin.plugin_id) ? <span className={styles.selectedName}>{t('selected', {ns: 'common'})}</span> : <Radio checked={plugin.plugin_id === pluginId} />}
+                                        {selectedData.includes(plugin.plugin_id) ? <span className={styles.selectedName}>{t('selected')}</span> : <Radio checked={plugin.plugin_id === pluginId} />}
                                     </div>
                                     <div className={styles.pluginDesc}>
                                         {plugin.description}

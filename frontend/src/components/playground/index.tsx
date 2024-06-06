@@ -60,7 +60,7 @@ function Playground() {
     const uploadUrl = `${origin}/api/v1/images`
     const { assistantPlaygroundId } = useSelector((state: any) => state.assistantId)
     const { playgroundType } = useSelector((state: any) => state.playgroundType)
-    const { t } = useTranslation(['components/playground/index', 'common']);
+    const { t } = useTranslation(['components/playground/index']);
     const dispatch = useDispatch();
     const [assistantLimit, setAssistantLimit] = useState(20)
     const { search, pathname } = useLocation();
@@ -312,7 +312,7 @@ function Playground() {
         if (assistantId && assistantId === assistantPlaygroundId) {
             setLoading(true)
             setAssistantId([assistantId])
-            setAssistantName(localStorage.getItem('assistantName') || t('untitledAssistant', {ns: 'common'}))
+            setAssistantName(localStorage.getItem('assistantName') || t('untitledAssistant'))
             try {
                 const listChats: any = localStorage.getItem('listChats')
                 const chatsHasMore: any = localStorage.getItem('chatsHasMore')
@@ -348,7 +348,7 @@ function Playground() {
             setLoading(true)
             try {
                 const assistantDetail = await getAssistantDetail(assistantId)
-                setAssistantName(assistantDetail.data.name ? assistantDetail.data.name : t('untitledAssistant', {ns: 'common'}))
+                setAssistantName(assistantDetail.data.name ? assistantDetail.data.name : t('untitledAssistant'))
                 setAssistantId([assistantId])
                 dispatch(setPlaygroundAssistantId(assistantId))
                 const res2: any = await getListChats(assistantId, params)
@@ -521,7 +521,7 @@ function Playground() {
         const tag = retrievals.map((item: any) => {
             return {
                 collection_id: item.id,
-                name: item.name || t('untitledCollection', {ns: 'common'})
+                name: item.name || t('untitledCollection')
             }
         })
         setRecordsSelected1(tag)
@@ -1021,8 +1021,8 @@ function Playground() {
                 setAssistantName(assistantData.name)
                 localStorage.setItem('assistantName', assistantData.name)
             } else {
-                setAssistantName(t('untitledAssistant', {ns: 'common'}))
-                localStorage.setItem('assistantName', t('untitledAssistant', {ns: 'common'}))
+                setAssistantName(t('untitledAssistant'))
+                localStorage.setItem('assistantName', t('untitledAssistant'))
             }
             setAssistantId([assistantData.assistant_id])
         }
@@ -1127,7 +1127,7 @@ function Playground() {
                 localStorage.setItem('assistantName', item.name)
                 return item.name + '-' + item.assistant_id
             } else {
-                setAssistantName(t('untitledAssistant', {ns: 'common'}))
+                setAssistantName(t('untitledAssistant'))
                 return item.assistant_id
             }
         })
@@ -1420,7 +1420,7 @@ function Playground() {
                 </div> : <div className={styles['playground']}>
                     <div className={styles['left-content']}>
                         <div className={styles['top']}>
-                            <div className={styles['select-assistant']}>{t('assistant', {ns: 'common'})}</div>
+                            <div className={styles['select-assistant']}>{t('assistant')}</div>
                             {!assistantId && <div className={styles['select-desc']}>{t('selectAssistantInfo')}</div>}
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Select open={false} suffixIcon={<RightOutlined />} onClick={handleSelectAssistantID} value={assistantName} className={styles['select']} removeIcon={null}>
@@ -1588,71 +1588,71 @@ function Playground() {
                 closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />}
                 className={styles['assistant-drawer']}
                 width={1280}
-                onClose={handleCancel} title={t('editAssistant', {ns: 'common'})} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
-                <DrawerAssistant modelName={modelName} drawerTitle={t('editAssistant', {ns: 'common'})} openDrawer={OpenDrawer} selectedActionsSelected={selectedActionsSelected} selectedPluginGroup={selectedPluginGroup} handleNewBundle={handleNewBundle} retrievalConfig={retrievalConfig} topk={topk} maxTokens={maxTokens} handleMaxToken={handleMaxToken} handleToks={handleToks} bundilesList={bundilesList} handleNewActionModal={handleNewActionModal} handleNewCollection={handleNewCollection} selectedCollectionList={selectedRetrievalRows} actionHasMore={hasActionMore} actionList={actionList} collectionHasMore={hasMore} ref={drawerAssistantRef}
+                onClose={handleCancel} title={t('editAssistant')} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
+                <DrawerAssistant modelName={modelName} drawerTitle={t('editAssistant')} openDrawer={OpenDrawer} selectedActionsSelected={selectedActionsSelected} selectedPluginGroup={selectedPluginGroup} handleNewBundle={handleNewBundle} retrievalConfig={retrievalConfig} topk={topk} maxTokens={maxTokens} handleMaxToken={handleMaxToken} handleToks={handleToks} bundilesList={bundilesList} handleNewActionModal={handleNewActionModal} handleNewCollection={handleNewCollection} selectedCollectionList={selectedRetrievalRows} actionHasMore={hasActionMore} actionList={actionList} collectionHasMore={hasMore} ref={drawerAssistantRef}
                     handleRetrievalConfigChange1={handleRetrievalConfigChange1} retrievalList={retrievalList} selectedActionsRows={selectedActionsRows} inputValue1={inputValueOne} inputValue2={inputValueTwo} handleMemoryChange1={handleMemoryChange1} memoryValue={memoryValue} handleAddPromptInput={handleAddPrompt} drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} selectedRows={originalModelData} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange} selectedRetrievalRows={selectedRetrievalRows}></DrawerAssistant>
             </Drawer>
             <ModelModal handleSetModelConfirmOne={handleSetModelConfirmOne} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} getOptionsList={fetchModelsList} modelType='chat_completion'></ModelModal>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} centered footer={[
                 <div className='footer-group' key='footer-group'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleNewModal} className='cancel-button'>
-                        {t('newCollection', {ns: 'common'})}
+                        {t('newCollection')}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected1.length}  {recordsSelected1.length > 1 ? `${t('itemsSelected', {ns: 'common'})}` : `${t('itemSelected', {ns: 'common'})}`}
+                            {recordsSelected1.length}  {recordsSelected1.length > 1 ? `${t('itemsSelected')}` : `${t('itemSelected')}`}
                         </span>
                         <Button key="cancel" onClick={handleCloseModal} className={`cancel-button ${styles.cancelButton}`}>
-                            {t('cancel', {ns: 'common'})}
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleCreateConfirm} className='next-button'>
-                            {t('confirm', {ns: 'common'})}
+                            {t('confirm')}
                         </Button>
                     </div>
                 </div>
             ]} title={t('retrievalPlaceHolder')} open={openModalTable} width={1000} onCancel={handleCloseModal} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable title={t('newCollection', {ns: 'common'})} name='collection' updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
+                <ModalTable title={t('newCollection')} name='collection' updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
             </Modal>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='group'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
-                        {t('newModel', {ns: 'common'})}
+                        {t('newModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            1 {t('itemSelected', {ns: 'common'})}
+                            1 {t('itemSelected')}
                         </span>
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
-                            {t('cancel', {ns: 'common'})}
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleModalCloseConfirm} className='next-button'>
-                            {t('confirm', {ns: 'common'})}
+                            {t('confirm')}
                         </Button>
                     </div>
                 </div>
             ]} title={t('selectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable title={t('newModel', {ns: 'common'})} name="model" defaultSelectedRowKeys={Array.isArray(selectedModelRows) ? selectedModelRows : [selectedModelRows]} updatePrevButton={updateModelPrevButton} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
+                <ModalTable title={t('newModel')} name="model" defaultSelectedRowKeys={Array.isArray(selectedModelRows) ? selectedModelRows : [selectedModelRows]} updatePrevButton={updateModelPrevButton} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
-            <Drawer zIndex={10001} className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title={t('bulkCreateAction', {ns: 'common'})} placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
+            <Drawer zIndex={10001} className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title={t('bulkCreateAction')} placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
                 <ActionDrawer showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>
             <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleAssistantModalClose} centered footer={[
                 <div className='footer-group' style={{ justifyContent: 'flex-end' }} key='footer'>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected.length} {t('itemSelected', {ns: 'common'})}
+                            {recordsSelected.length} {t('itemSelected')}
                         </span>
                         <Button key="cancel" onClick={handleAssistantModalClose} className={`cancel-button ${styles.cancelButton}`}>
-                            {t('cancel', {ns: 'common'})}
+                            {t('cancel')}
                         </Button>
                         <Button key="submit" onClick={handleAssistantModalClose1} className='next-button' loading={confirmLoading}>
-                            {t('confirm', {ns: 'common'})}
+                            {t('confirm')}
                         </Button>
                     </div>
 
                 </div>
             ]} title={t('selectAssistant')} open={openAssistantModalTable} width={1000} className={`modal-inner-table ${styles.model1}`}>
-                <ModalTable name='assistant' title={t('newAssistant', {ns: 'common'})} ifAllowNew={true} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedAssistant} handleRecordsSelected={handleRecordsAssistantSelected} ifSelect={true} columns={assistantTableColumn} hasMore={modelHasMore} id='assistant_id' dataSource={optionList} onChildEvent={handleChildAssistantEvent}></ModalTable>
+                <ModalTable name='assistant' title={t('newAssistant')} ifAllowNew={true} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedAssistant} handleRecordsSelected={handleRecordsAssistantSelected} ifSelect={true} columns={assistantTableColumn} hasMore={modelHasMore} id='assistant_id' dataSource={optionList} onChildEvent={handleChildAssistantEvent}></ModalTable>
             </Modal>
             <CreateCollection handleFetchData={() => fetchDataRetrievalData({ limit: retrievalLimit || 20 })} handleModalCloseOrOpen={() => setOpenCollectionDrawer(false)} OpenDrawer={openCollectionDrawer}></CreateCollection>
             <Drawer width={700} open={contentDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCloseContentDrawer} title={t('chatCompletion')}>
@@ -1694,7 +1694,7 @@ function Playground() {
                     }]}></Collapse>
             </Drawer>
             <CreatePlugin handleConfirmRequest={handleConfirmRequest} open={pluginModalOpen} handleCloseModal={handleClosePluginModal}></CreatePlugin>
-            <DeleteModal title={t('deleteChatUpper')} projectName={chatId} open={OpenDeleteModal} describe={`${t('deleteItem', {ns: 'common', deleteValue: `${t('chatLow')} ${chatId}`})}`} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
+            <DeleteModal title={t('deleteChatUpper')} projectName={chatId} open={OpenDeleteModal} describe={`${t('deleteItem',{ deleteValue: `${t('chatLow')} ${chatId}`})}`} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
         </>
     );
 }
