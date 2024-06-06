@@ -1,8 +1,8 @@
-model_schema_id: google_gemini/gemini-1.5-pro
-provider_model_id: gemini-1.5-pro
+model_schema_id: google_gemini/gemini-1.5-flash
+provider_model_id: gemini-1.5-flash
 type: chat_completion
-name: "i18n:gemini_1_5_pro_name"
-description: "i18n:gemini_1_5_pro_description"
+name: "i18n:gemini_1_5_flash_latest_name"
+description: "i18n:gemini_1_5_flash_latest_description"
 
 properties:
   function_call: true
@@ -16,11 +16,10 @@ config_schemas:
   - config_id: top_k
   - config_id: max_tokens
   - config_id: stop
-  - config_id: response_format
 
 
 pricing:
-  input_token: 0.007
-  output_token: 0.021
-  unit: 1000
+  input_token: 0.35
+  output_token: 0.70
+  unit: 1000000
   currency: USD

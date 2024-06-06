@@ -5,8 +5,6 @@ name: "i18n:jina_reranker_v1_tiny_en_name"
 description: "i18n:jina_reranker_v1_tiny_en_description"
 default_endpoint_url: https://api.jina.ai/v1/rerank
 
-properties:
-  input_token_limit: 8192
 
 pricing:
   input_token: 0.02

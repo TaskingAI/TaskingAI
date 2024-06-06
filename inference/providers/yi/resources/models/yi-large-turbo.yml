@@ -1,0 +1,23 @@
+model_schema_id: yi/yi-large-turbo
+provider_model_id: yi-large-turbo
+type: chat_completion
+name: "i18n:yi_large_turbo_name"
+description: "i18n:yi_large_turbo_description"
+default_endpoint_url: https://api.lingyiwanwu.com/v1/chat/completions
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 16000
+  output_token_limit: 16000
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+
+pricing:
+  input_token: 12
+  output_token: 12
+  unit: 1000000
+  currency: CNY

@@ -1,0 +1,18 @@
+model_schema_id: tongyi/text-embedding-v2
+provider_model_id: text-embedding-v2
+type: text_embedding
+name: "i18n:text_embedding_v2_name"
+description: "i18n:text_embedding_v2_description"
+default_endpoint_url: "https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding"
+
+properties:
+  embedding_size: 1536
+  input_token_limit: 2048
+  max_batch_size: 2048
+
+config_schemas:
+
+pricing:
+  input_token: 0.0007
+  unit: 1000
+  currency: CNY

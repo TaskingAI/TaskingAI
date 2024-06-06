@@ -4,14 +4,20 @@ google_gemini_description: "Integrate with Google Gemini for cutting-edge langua
 google_gemini_api_key_description: "Your Google Gemini API Key for authentication."
 google_gemini_api_version_description: "The version of the Google Gemini API being used."
 
-gemini_pro_name: "Gemini Pro"
-gemini_pro_description: "Gemini Pro offers advanced chat completion capabilities with extensive input and output token limits for comprehensive interactions."
+gemini_1_0_pro_name: "Gemini 1.0 Pro"
+gemini_1_0_pro_description: "Gemini 1.0 Pro offers advanced chat completion capabilities with extensive input and output token limits for comprehensive interactions."
 
-gemini_pro_vision_name: "Gemini Pro Vision"
-gemini_pro_vision_description: "Gemini Pro Vision offers vision-enabled chat completion capabilities with extensive input and output token limits for comprehensive interactions."
+gemini_1_0_pro_vision_name: "Gemini Pro Vision"
+gemini_1_0_pro_vision_description: "Gemini Pro Vision offers vision-enabled chat completion capabilities with extensive input and output token limits for comprehensive interactions."
 
-gemini_1_5_pro_latest_name: "Gemini 1.5 Pro"
-gemini_1_5_pro_latest_description: "Gemini 1.5 Pro offers 1048576 input tokens and 8192 output tokens for advanced chat completion capabilities."
+gemini_1_5_flash_latest_name: "Gemini 1.5 Flash"
+gemini_1_5_flash_latest_description: "Gemini 1.5 Flash offers 1048576 input tokens and 8192 output tokens for advanced chat completion capabilities."
+
+gemini_1_5_pro_name: "Gemini 1.5 Pro"
+gemini_1_5_pro_description: "Gemini 1.5 Pro offers 1048576 input tokens and 8192 output tokens for advanced chat completion capabilities."
+
+text_embedding_004_name: "Text Embedding 004"
+text_embedding_004_description: "Text Embedding 004 model is optimized for creating embeddings with 768 dimensions for text of up to 2,048 tokens, offers elastic embedding sizes under 768."
 
 wildcard_name: "Wildcard"
 wildcard_description: "Wildcard allows you to use any model from Google Gemini with custom configurations."

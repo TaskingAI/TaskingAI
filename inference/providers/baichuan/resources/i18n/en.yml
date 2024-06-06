@@ -8,3 +8,15 @@ baichuan2_turbo_description: "BaiChuan 2 Turbo is a high-performance chat comple
 
 baichuan2_turbo_192k_name: "BaiChuan 2 Turbo 192K"
 baichuan2_turbo_192k_description: "BaiChuan 2 Turbo 192K is a high-performance chat completion model from Baichuan with a 192K token limit."
+
+baichuan3_turbo_name: "BaiChuan 3 Turbo"
+baichuan3_turbo_description: "BaiChuan 3 Turbo is a high-performance chat completion model from Baichuan."
+
+baichuan3_turbo_128k_name: "BaiChuan 3 Turbo 128K"
+baichuan3_turbo_128k_description: "BaiChuan 3 Turbo 128K is a high-performance chat completion model from Baichuan with a 128K token limit."
+
+baichuan4_name: "BaiChuan 4"
+baichuan4_description: "BaiChuan 4 is a high-performance chat completion model from Baichuan."
+
+baichuan_text_embedding_name: "BaiChuan Text Embedding"
+baichuan_text_embedding_description: "BaiChuan Text Embedding is a high-performance text embedding model from Baichuan."

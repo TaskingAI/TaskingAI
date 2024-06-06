@@ -1,0 +1,24 @@
+model_schema_id: yi/yi-vision
+provider_model_id: yi-vision
+type: chat_completion
+name: "i18n:yi_vision_name"
+description: "i18n:yi_vision_description"
+default_endpoint_url: https://api.lingyiwanwu.com/v1/chat/completions
+
+properties:
+  vision: true
+  function_call: false
+  streaming: true
+  input_token_limit: 4000
+  output_token_limit: 4000
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+
+pricing:
+  input_token: 6
+  output_token: 6
+  unit: 1000000
+  currency: CNY

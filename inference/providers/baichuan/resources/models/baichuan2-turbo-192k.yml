@@ -3,13 +3,14 @@ provider_model_id: baichuan2-turbo-192k
 type: chat_completion
 name: "i18n:baichuan2_turbo_192k_name"
 description: "i18n:baichuan2_turbo_192k_description"
-default_endpoint_url: http://api.baichuan-ai.com/v1/chat/completions
+default_endpoint_url: https://api.baichuan-ai.com/v1/chat/completions
 
 properties:
   function_call: false
   streaming: true
 
 config_schemas:
+  - config_id: max_tokens
   - config_id: temperature
   - config_id: top_p
   - config_id: top_k

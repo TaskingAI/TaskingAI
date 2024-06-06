@@ -1,15 +1,15 @@
-model_schema_id: yi/yi-34b-chat-200k
-provider_model_id: yi-34b-chat-200k
+model_schema_id: yi/yi-large
+provider_model_id: yi-large
 type: chat_completion
-name: "i18n:yi_34b_chat_200k_name"
-description: "i18n:yi_34b_chat_200k_description"
+name: "i18n:yi_large_name"
+description: "i18n:yi_large_description"
 default_endpoint_url: https://api.lingyiwanwu.com/v1/chat/completions
 
 properties:
   function_call: false
   streaming: true
-  input_token_limit: 200000
-  output_token_limit: 200000
+  input_token_limit: 16000
+  output_token_limit: 16000
 
 config_schemas:
   - config_id: temperature
@@ -17,7 +17,7 @@ config_schemas:
   - config_id: max_tokens
 
 pricing:
-  input_token: 12
-  output_token: 12
+  input_token: 20
+  output_token: 20
   unit: 1000000
   currency: CNY

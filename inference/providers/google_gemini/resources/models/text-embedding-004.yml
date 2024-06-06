@@ -1,0 +1,18 @@
+model_schema_id: google_gemini/text-embedding-004
+provider_model_id: text-embedding-004
+type: text_embedding
+name: "i18n:text_embedding_004_name"
+description: "i18n:text_embedding_004_description"
+default_endpoint_url: https://generativelanguage.googleapis.com/v1beta/{model=models/*}:embedContent
+
+properties:
+  embedding_size: 768
+  input_token_limit: 10000
+  max_batch_size: 2048
+
+config_schemas:
+
+pricing:
+  input_token: 0
+  unit: 0
+  currency: USD

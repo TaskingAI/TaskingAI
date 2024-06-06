@@ -1,10 +1,11 @@
-model_schema_id: google_gemini/gemini-pro-vision
+model_schema_id: google_gemini/gemini-1.0-pro-vision
 provider_model_id: gemini-pro-vision
 type: chat_completion
-name: "i18n:gemini_pro_vision_name"
-description: "i18n:gemini_pro_vision_description"
+name: "i18n:gemini_1_0_pro_vision_name"
+description: "i18n:gemini_1_0_pro_vision_description"
 
 properties:
+  vision: true
   function_call: false
   streaming: true
   input_token_limit: 12288

@@ -6,9 +6,6 @@ description: "i18n:jina_colbert_v1_en_description"
 default_endpoint_url: https://api.jina.ai/v1/rerank
 
 
-properties:
-  input_token_limit: 8192
-
 pricing:
   input_token: 0.02
   unit: 1000000
