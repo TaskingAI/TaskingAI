@@ -11,6 +11,7 @@
   <a href="https://pypi.org/project/taskingai"><img alt="PyPI version" src="https://img.shields.io/pypi/v/taskingai?color=blue"></a>
   <a href="https://twitter.com/TaskingAI"><img alt="X (formerly Twitter) URL" src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FTaskingAI"></a>
   <a href="https://www.youtube.com/@TaskingAI"><img alt="YouTube Channel Subscribers" src="https://img.shields.io/youtube/channel/subscribers/UCxUnOM-ZbZKmyR_Q5vAUSTA"></a>
+  <a href="https://discord.gg/FsNQXFj9"><img alt="Discord" src="https://img.shields.io/discord/1244486619914834110"></a>
 </p>
 
 <p align="center">
@@ -219,7 +220,16 @@ print(assistant_message)
 
 ## 社區和貢獻
 
-請參閱我們的 [貢獻指南](./CONTRIBUTING.md) 了解如何為項目做出貢獻。
+請查閱我們的[貢獔指南](../CONTRIBUTING.md)，了解如何對項目作出貢獻。
+
+此外，我們很高興地宣布 TaskingAI 現已有官方 Discord 社群！🎊
+
+[加入我們的 Discord 伺服器](https://discord.gg/BNCSWXmV)來：
+
+    • 💬 參與有關 TaskingAI 的討論，分享想法，提供反饋。
+    • 📚 從其他用戶和我們的團隊獲得支持、提示和最佳實踐。
+    • 🚀 保持最新的消息、更新和功能發布。
+    • 🤝 與對人工智能和任務自動化充滿熱情的同好建立聯繫。
 
 ## 許可證和行為準則
 
