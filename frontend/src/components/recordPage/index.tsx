@@ -30,7 +30,7 @@ import { useTranslation } from 'react-i18next';
 
 
 function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData:Function }) {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['components/recordPage/index', 'common']);
     const { tooltipEditTitle, tooltipDeleteTitle } = tooltipTitle();
     const { Dragger } = Upload;
     const handleCopy = (text: string) => {
@@ -38,7 +38,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             text: () => text
         });
         clipboard.on('success', function () {
-            toast.success(`${t('CopiedToClipboard')}`)
+            toast.success(`${t('copiedToClipboard', {ns: 'common'})}`)
             clipboard.destroy()
         });
         clipboard.on('error', function (e) {
@@ -64,14 +64,14 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
     }
     const columns = [
         {
-            title: 'Record',
+            title: t('record', {ns: 'common'}),
             dataIndex: 'title',
             key: 'title',
             width: 240,
             fixed: 'left',
             render: (text: string, record: any) =>
                 <div>
-                    <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled'}</p>
+                    <p className='table-text' style={{ fontSize: '14px' }}>{text || t('untitled', {ns: 'common'})}</p>
                     <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
                         <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>{record.record_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.record_id)} />
 
@@ -79,7 +79,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
                 </div>
         },
         {
-            title: `${t('projectChunkColumnContent')}`,
+            title: `${t('content', {ns: 'common'})}`,
             width: 480,
             dataIndex: 'content',
             key: 'content',
@@ -89,7 +89,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             ),
         },
         {
-            title: `${t('projectRetrievalColumnStatus')}`,
+            title: `${t('status', {ns: 'common'})}`,
             dataIndex: 'status',
             key: 'status',
             width: 180,
@@ -100,7 +100,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             )
         },
         {
-            title: `${t('chunk')}`,
+            title: `${t('chunk', {ns: 'common'})}`,
             dataIndex: 'num_chunks',
             key: 'num_chunks',
             width: 180,
@@ -111,14 +111,14 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             )
         },
         {
-            title: `${t('projectModelColumnCreatedAt')} `,
+            title: `${t('createdAt', {ns: 'common'})} `,
             width: 180,
             dataIndex: 'created_timestamp',
             key: 'created_timestamp',
             render: (time: number) => <div>{formatTimestamp(time)}</div>
         },
         {
-            title: `${t('projectColumnActions')}`,
+            title: `${t('actions', {ns: 'common'})}`,
             key: 'action',
             width: 118,
             fixed: 'right',
@@ -149,7 +149,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
     const [recordId, setRecordId] = useState('')
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false)
-    const [drawerTitle, setDrawerTitle] = useState('Create Record')
+    const [drawerTitle, setDrawerTitle] = useState(t('createRecord'))
     const [deleteId, setDeleteId] = useState('')
     const [chunkSize, setChunkSize] = useState(200)
     const [title, setTitle] = useState('')
@@ -193,7 +193,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             const fileType = ['txt', 'docx', 'pdf', 'html', 'md'];
             const fileExtension = e.dataTransfer.files[0].name.slice(((e.dataTransfer.files[0].name.lastIndexOf(".") - 1) >>> 0) + 2);
             if (!fileType.includes(fileExtension.toLowerCase())) {
-                toast.error('File type not allowed');
+                toast.error(t('fileTypeNotAllowed'));
                 return false;
             }
         },
@@ -201,7 +201,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             const fileType = ['txt', 'docx', 'pdf', 'html', 'md'];
             const fileExtension = file.name.slice(((file.name.lastIndexOf(".") - 1) >>> 0) + 2);
             if (!fileType.includes(fileExtension.toLowerCase())) {
-                toast.error('File type not allowed');
+                toast.error(t('fileTypeNotAllowed'));
                 return false;
             }
             return true;
@@ -304,7 +304,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
         setChunkOverlap(10)
         setRecordId('')
         setFileId('')
-        setDrawerTitle(`${t('projectRecordCreateRecord')}`)
+        setDrawerTitle(`${t('createRecord')}`)
         setCreateOpenModal(true)
     }
     const handleCancel = () => {
@@ -339,7 +339,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
         if (record.type === 'file') {
             return
         }
-        setDrawerTitle(`${t('projectRecordEditRecord')}`)
+        setDrawerTitle(`${t('editRecord')}`)
         setRecordId(record.record_id)
         setType(record.type)
         setTitle(record.title)
@@ -361,24 +361,24 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
     }
     const handleConfirm = async () => {
         if (type === 'text' && !contentValue) {
-            toast.error(`${t('projectChunkContentRequired')}`)
+            toast.error(`${t('chunkContentRequired', {ns: 'common'})}`)
             return
         }
         if (type === 'web' && websiteValue) {
             const websiteValueRequired = /^https:\/\//.test(websiteValue)
             if (!websiteValueRequired) {
-                toast.error('URL must start with https://')
+                toast.error(t('mustStartWithHTTPS'))
                 return
             }
         }
         if (type === 'web' && !websiteValue) {
-            return toast.error('URL is required')
+            return toast.error(t('urlRequired'))
         }
         if(type === 'file' && fileLoading && fileList.length !== 0) {
-            return toast.error('File is uploading')
+            return toast.error(t('fileUploading'))
         }
         if(type === 'file' && fileList.length === 0) {
-            return toast.error('File is required')
+            return toast.error(t('fileRequired'))
         }
         setConfirmLoading(true)
         try {
@@ -444,35 +444,35 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
     }
     return (
         <Spin spinning={loading} >
-            <ModalTable ifOnlyId={true} title='New record' onOpenDrawer={handleCreatePrompt} onChildEvent={handleChildEvent} updatePrevButton={updatePrevButton} dataSource={recordList} ifSelect={false} name="record" columns={columns} hasMore={hasMore} id="record_id"></ModalTable>
+            <ModalTable ifOnlyId={true} title={t('newRecord')} onOpenDrawer={handleCreatePrompt} onChildEvent={handleChildEvent} updatePrevButton={updatePrevButton} dataSource={recordList} ifSelect={false} name="record" columns={columns} hasMore={hasMore} id="record_id"></ModalTable>
             <Modal footer={[
                 <Button key="cancel" onClick={handleCancel} className='cancel-button'>
-                    {t('cancel')}
+                    {t('cancel', {ns: 'common'})}
                 </Button>,
                 <Button key="submit" onClick={() => handleConfirm()} className='next-button' loading={confirmLoading}>
-                    {t('confirm')}
+                    {t('confirm', {ns: 'common'})}
                 </Button>
             ]} title={drawerTitle} centered className={styles['record-create-model']} open={createOpenModal} width={720} onCancel={handleCancel} closeIcon={<CloseIcon className={styles['img-icon-close']} />}>
                 <div className={styles['text-content']}>
-                    <div className={styles['text-title']}>{t('title')}</div>
-                    <div className={styles.desc}>{t('projectRecordTitleDesc')}</div>
-                    <Input className={styles['input1']} placeholder='Enter name' value={title} onChange={(e) => setTitle(e.target.value)}></Input>
+                    <div className={styles['text-title']}>{t('title', {ns: 'common'})}</div>
+                    <div className={styles.desc}>{t('recordDesc')}</div>
+                    <Input className={styles['input1']} placeholder={t('enterName', {ns: 'common'})} value={title} onChange={(e) => setTitle(e.target.value)}></Input>
                     <div className={styles['text-title']} style={{ display: 'flex', alignItems: 'center' }}>
-                        <span className={styles['red-span']}> * </span> <div >Type</div>
+                        <span className={styles['red-span']}> * </span> <div >{t('type', {ns: 'common'})}</div>
                     </div>
-                    <Select value={type} onChange={handleTypeChange} className={styles['input1']} options={[{ label: 'Text', value: 'text' }, { label: 'Website', value: 'web' }, { label: 'File', value: 'file' }]}></Select>
+                    <Select value={type} onChange={handleTypeChange} className={styles['input1']} options={[{ label: t('text'), value: 'text' }, { label: t('website'), value: 'web' }, { label: t('file'), value: 'file' }]}></Select>
                     {type === 'text' && <>
-                        <div className={styles['text-title']} style={{ display: 'flex', alignItems: 'center' }}><span className={styles['red-span']}> * </span> {t('projectChunkTextContent')}</div>
-                        <div className={styles['desc']}>{t('projectRecordContentDesc')}</div>
-                        <Input.TextArea placeholder={t('projectRecordEnterDescription')} showCount minLength={0} maxLength={32768} value={contentValue} onChange={handleContentChange} className={styles['input']}></Input.TextArea>
+                        <div className={styles['text-title']} style={{ display: 'flex', alignItems: 'center' }}><span className={styles['red-span']}> * </span> {t('textContent')}</div>
+                        <div className={styles['desc']}>{t('recordContentDesc')}</div>
+                        <Input.TextArea placeholder={t('enterDescription', {ns: 'common'})} showCount minLength={0} maxLength={32768} value={contentValue} onChange={handleContentChange} className={styles['input']}></Input.TextArea>
                     </>}
                     {type === 'web' && <>
                         <div className={styles['text-title']} style={{ display: 'flex', alignItems: 'center' }}>
                             <span className={styles['red-span']}> * </span>  <div >URL</div>
                         </div>
 
-                        <div className={styles['desc']}>The website URL should start with https.</div>
-                        <Input onChange={handleWebsiteUrl} value={websiteValue} className={styles['urlInput']} placeholder='Enter website URL'></Input>
+                        <div className={styles['desc']}>{t('shouldStartWithHTTPS')}</div>
+                        <Input onChange={handleWebsiteUrl} value={websiteValue} className={styles['urlInput']} placeholder={t('enterWebsiteURL')}></Input>
                     </>}
                     {type === 'file' && (
                         fileList.length ? <div>
@@ -486,31 +486,31 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
                                 <p className="ant-upload-drag-icon">
                                     <UploadIcon />
                                 </p>
-                                <p className="ant-upload-text"><span className={styles['click-to-upload']}>Click to upload</span> or drag and drop</p>
+                                <p className="ant-upload-text"><span className={styles['click-to-upload']}>{t('clickToUpload')}</span>{t('orDragAndDrop')}</p>
                                 <p className="ant-upload-hint">
-                                    Allow file types: txt, docx, pdf, html, md
+                                    {t('allowedFileTypes')}
                                 </p>
                             </Dragger>
                         )
                     )}
 
-                    <div className={styles.label1}>{t('projectRecordTextSplitter')}</div>
+                    <div className={styles.label1}>{t('textSplitter')}</div>
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
-                        <span>{t('projectRecordChunkSize')}</span>
+                        <span>{t('chunkSize')}</span>
                     </div>
-                    <div className={styles['label-desc']}>{t('projectRecordChunkSizeDesc')}</div>
-                    <InputNumber className={styles['input-number1']} placeholder={t('projectRecordChunkSizePlaceholder')} parser={(value: string | undefined) => (isNaN(Number(value)) ? 1 : parseInt(value as string, 10))} value={chunkSize} onChange={(value: number | null) => setChunkSize(value as number)} min={100} max={500}></InputNumber>
+                    <div className={styles['label-desc']}>{t('chunkSizeDesc')}</div>
+                    <InputNumber className={styles['input-number1']} placeholder={t('chunkSizePlaceholder')} parser={(value: string | undefined) => (isNaN(Number(value)) ? 1 : parseInt(value as string, 10))} value={chunkSize} onChange={(value: number | null) => setChunkSize(value as number)} min={100} max={500}></InputNumber>
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
-                        <span>{t('projectRecordChunkOverlap')}</span>
+                        <span>{t('chunkOverlap')}</span>
 
                     </div>
-                    <div className={styles['label-desc']}>{t('projectRecordChunkOverlapDesc')}</div>
-                    <InputNumber className={styles['input-number']} placeholder={t('projectRecordChunkOverlapPlaceholder')} value={chunkOverlap} onChange={(value: number | null) => setChunkOverlap(value as number)} parser={(value: string | undefined) => (isNaN(Number(value)) ? 1 : parseInt(value as string, 10))} min={0} max={100}></InputNumber>
+                    <div className={styles['label-desc']}>{t('chunkOverlapDesc')}</div>
+                    <InputNumber className={styles['input-number']} placeholder={t('chunkOverlapPlaceholder')} value={chunkOverlap} onChange={(value: number | null) => setChunkOverlap(value as number)} parser={(value: string | undefined) => (isNaN(Number(value)) ? 1 : parseInt(value as string, 10))} min={0} max={100}></InputNumber>
                 </div>
             </Modal>
-            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem')} ${t('projectRecord')} ${deleteId}? ${t('projectDeleteChunkDesc')}`} title={t('projectRecordDeleteRecord')} projectName={deleteId} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
+            <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem', {ns: 'common', deleteValue: `${t('record', {ns: 'common'})} ${deleteId}`})} ${t('deleteChunkDesc')}`} title={t('deleteRecord')} projectName={deleteId} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm}></DeleteModal>
         </Spin>
     );
 }
