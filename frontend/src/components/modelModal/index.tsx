@@ -421,7 +421,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                 }
             </Modal>
 
-            <Modal zIndex={10001} className='modal-content' title={t('projectModelCreateModalOneTitle')} width={1000} centered open={modelTwoOpen} footer={[
+            <Modal zIndex={10001} className='modal-content' title={t('createModalOneTitle')} width={1000} centered open={modelTwoOpen} footer={[
                 <Button key="cancel" onClick={handleSecondCancel} className='cancel-button'>
                     {t('back', {ns: 'common'})}
                 </Button>,

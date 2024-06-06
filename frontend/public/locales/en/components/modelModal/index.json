@@ -1,6 +1,7 @@
 {
     "availableModelTypes": "Available Model Types",
     "baseModelSelection": "Base Model Selection",
+    "createModalOneTitle": "Create Model - Base Model Selection",
     "features": "Properties",
     "modelLow": "model",
     "modelLows": "models",

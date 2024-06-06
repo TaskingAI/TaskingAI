@@ -1,6 +1,7 @@
 {
     "availableModelTypes": "選択可能モデルタイプ",
     "baseModelSelection": "ベースモデルを選択",
+    "createModalOneTitle": "モデル作成 - ベースモデルを選択",
     "features": "プロパティ",
     "modelLow": "モデル",
     "modelLows": "モデル",
