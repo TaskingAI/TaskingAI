@@ -1,6 +1,7 @@
 import allure
 import pytest
 import asyncio
+import json
 from test.utils.utils import sse_stream
 from test.setting import Config
 from test.inference_service.inference import chat_completion
@@ -560,3 +561,105 @@ class TestChatCompletion:
         assert res_json.get("data").get("message").get("role") == "assistant"
         assert res_json.get("data").get("message").get("content") is not None
         assert res_json.get("data").get("message").get("function_calls") is None
+        
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "test_data",
+        generate_test_cases("chat_completion") + generate_wildcard_test_cases("chat_completion"),
+        ids=lambda d: d["model_schema_id"],
+    )
+    @pytest.mark.flaky(reruns=5, reruns_delay=1)
+    async def test_chat_completion_by_normal_response_format(self, test_data):
+        if "response_format" not in test_data["allowed_configs"]:
+            pytest.skip("Skip the test case without response_format.")
+        model_schema_id = test_data["model_schema_id"]
+        message = [
+        {
+            "role": "user",
+            "content": "What does 42 mean"
+        }
+    ]
+        if "debug-error" in model_schema_id or "azure" in model_schema_id or "hugging_face" in model_schema_id:
+            pytest.skip("Skip the test case with debug-error.")
+        configs = {
+            "temperature": 0.5,
+            "response_format": "json_object"
+        }
+        request_data = {
+            "model_schema_id": model_schema_id,
+            "messages": message,
+            "stream": False,
+            "configs": configs,
+        }
+        if "wildcard" in model_schema_id:
+            request_data.update({"provider_model_id": test_data["provider_model_id"]})
+        try:
+            res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip("Skip the test case with provider service error.")
+        res_json = res.json()
+        assert res.status_code == 200, res_json.get("error").get("message")
+        assert res_json.get("status") == "success"
+        assert res_json.get("data").get("finish_reason") == "stop"
+        assert res_json.get("data").get("message").get("role") == "assistant"
+        content = res_json.get("data").get("message").get("content")
+        assert content is not None
+        assert json.loads(content)
+        assert res_json.get("data").get("message").get("function_calls") is None
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "test_data",
+        generate_test_cases("chat_completion") + generate_wildcard_test_cases("chat_completion"),
+        ids=lambda d: d["model_schema_id"],
+    )
+    @pytest.mark.flaky(reruns=5, reruns_delay=1)
+    async def test_chat_completion_by_stream_response_format(self, test_data):
+        if "response_format" not in test_data["allowed_configs"]:
+            pytest.skip("Skip the test case without response_format.")
+        model_schema_id = test_data["model_schema_id"]
+        message = [
+            {
+                "role": "user",
+                "content": "What does 42 mean"
+            }
+        ]
+        stream = test_data["stream"]
+        if not stream or "debug" in model_schema_id or "azure" in model_schema_id:
+            pytest.skip("Skip the test case without stream.")
+        configs = {
+            "temperature": 0.5,
+            "response_format": "json_object"
+
+        }
+        request_data = {
+            "model_schema_id": model_schema_id,
+            "messages": message,
+            "stream": True,
+            "configs": configs,
+        }
+        if "wildcard" in model_schema_id:
+            request_data.update({"provider_model_id": test_data["provider_model_id"]})
+
+        request_url = f"{Config.BASE_URL}/chat_completion"
+        default = False
+        content = ""
+        async for response_dict in sse_stream(request_url, request_data):
+            if response_dict.get("object") == "ChatCompletion":
+                assert response_dict.get("finish_reason") == "stop"
+                assert response_dict.get("message").get("role") == "assistant"
+                assert response_dict.get("message").get("content") is not None
+                assert response_dict.get("message").get("function_calls") is None
+                default = True
+            elif response_dict.get("object") == "ChatCompletionChunk":
+                assert response_dict.get("role") == "assistant"
+                assert response_dict.get("index") >= 0
+                assert response_dict.get("delta") is not None
+                content += response_dict.get("delta")
+            else:
+                assert False, f"response_dict={response_dict}"
+        assert default, "stream failed"
+        assert json.loads(content)
+
