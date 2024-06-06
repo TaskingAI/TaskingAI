@@ -71,7 +71,7 @@
     "maxBatchSize": "Max batch size",
     "maxBatchSizeDesc": "The maximum number of text chunks that a provider's API can process in one call. Default value is 512.",
     "maxBatchSizePlaceholder": "Enter batch size",
-    "maxTokens": "Max tokens",
+    "maxTokens": "Max Tokens",
     "memory": "Memory",
     "messageWindow": "Message Window",
     "method": "Method",

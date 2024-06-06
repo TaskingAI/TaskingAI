@@ -15,7 +15,9 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 const origin = window.location.origin;
 import IconComponent from '@/commonComponent/iconComponent/index.jsx';
+import { useTranslation } from "react-i18next";
 function PlaygroundModel() {
+    const { t } = useTranslation(['components/playgroundModel/index', 'common'])
     const [loading, setLoading] = useState(false)
     const { search, pathname } = useLocation();
     const [selectedModel, setSelectedModel] = useState<any>([{
@@ -193,14 +195,14 @@ function PlaygroundModel() {
             return item.content === ''
         })
         if (message) {
-            return toast.error('Please enter the message')
+            return toast.error(t('pleaseEnterMessage'))
         }
         let contentListNew = contentList
         if (systemContent !== '') {
             contentListNew = [{ role: 'system', content: systemContent }, ...contentList]
         }
         if (contentListNew[contentListNew.length - 1].role === 'assistant') {
-            return toast.error('Last message should not be assistant message')
+            return toast.error(t('lastMessageNotAssistant'))
         }
         const configs = allowedConfigs.reduce((acc: any, key: any) => {
             if (key === 'temperature' && temperatureValue !== undefined && temperatureCheckbox) {
@@ -351,9 +353,9 @@ function PlaygroundModel() {
             {selectedModel[0].id ? <div className={styles.playgroundModal}>
                 <div className={styles.left}>
                     <div className={styles.leftTop}>
-                        <div className={styles.modal}>Model</div>
+                        <div className={styles.modal}>{t('model')}</div>
                         <Select
-                            placeholder='Select a model'
+                            placeholder={t('selectAModel')}
                             open={false}
                             className={styles['select-model']}
                             suffixIcon={<RightOutlined />}
@@ -365,15 +367,15 @@ function PlaygroundModel() {
                     </div>
                     <div className={styles.leftBottom}>
                         <div className={styles.generateOptions}>
-                            <div className={styles.configuration}>Generation options</div>
+                            <div className={styles.configuration}>{t('generationOptions')}</div>
                             <div style={{ display: 'flex', margin: '12px 0 0 0' }}>
                                 <IconComponent providerId={providerId} />  <div className={styles.responseStream}>{modelSchemaId}</div>
                             </div>
 
-                            {streamShow && <div style={{ marginTop: '12px' }}><Checkbox value={streamSwitch} defaultChecked={true} onChange={(e) => handleStreamSwitch(e)} /><span style={{ marginLeft: '8px' }}>Stream</span></div>}
+                            {streamShow && <div style={{ marginTop: '12px' }}><Checkbox value={streamSwitch} defaultChecked={true} onChange={(e) => handleStreamSwitch(e)} /><span style={{ marginLeft: '8px' }}>{t('stream')}</span></div>}
                         </div>
                         <div style={{ margin: '24px' }}>
-                            <div className={styles.configuration}>Configuration</div>
+                            <div className={styles.configuration}>{t('configuration')}</div>
                             <ConfigProvider theme={{
                                 components: {
                                     Slider: {
@@ -405,7 +407,7 @@ function PlaygroundModel() {
                                     <Checkbox value={maxTokenCheckbox} defaultChecked={maxTokenCheckbox} onChange={handleMaxTokenCheckbox} />
                                     <div style={{ flex: 1, marginLeft: '12px' }}>
                                         <div className={styles.temperature}>
-                                            <span style={{ color: maxTokenCheckbox ? '#2B2B2B' : '#BFBFBF' }}>Max Tokens</span>
+                                            <span style={{ color: maxTokenCheckbox ? '#2B2B2B' : '#BFBFBF' }}>{t('maxTokens', {ns: 'common'})}</span>
                                             {maxTokenCheckbox && <InputNumber parser={(value: any) => {
                                                 const parsedValue = parseInt(value, 10);
                                                 return isNaN(parsedValue) ? 1 : Math.max(parsedValue, 1);
@@ -420,7 +422,7 @@ function PlaygroundModel() {
                                     <Checkbox value={stopSequencesCheckbox} defaultChecked={stopSequencesCheckbox} onChange={handleStopSequencesCheckbox} />
                                     <div style={{ flex: 1, marginLeft: '12px' }}>
                                         <div className={styles.temperature} style={{ color: stopSequencesCheckbox ? '#2B2B2B' : '#BFBFBF' }}>
-                                            Stop sequences
+                                            {t('stopSequences')}
                                         </div>
                                         {stopSequencesCheckbox && <Input className={styles['code-input']} onChange={(e: any) => setStopSequences([e.target.value])} value={stopSequences}></Input>}
                                     </div>
@@ -456,35 +458,35 @@ function PlaygroundModel() {
                 <div className={styles.right} >
                     <div className={styles.content} ref={contentListRef}>
                         <div className={styles.contentItem}>
-                            <Select style={{ cursor: 'auto' }} className={styles.systemSelect} options={[{ value: 'system', label: 'System' }]} value='system' open={false}></Select>
-                            <Input.TextArea placeholder='Enter system message' autoSize value={systemContent} className={styles.input} onChange={(e) => handleChangeContentValue(e.target.value)}></Input.TextArea>
+                            <Select style={{ cursor: 'auto' }} className={styles.systemSelect} options={[{ value: 'system', label: t('system') }]} value='system' open={false}></Select>
+                            <Input.TextArea placeholder={t('enterSystemMessage')} autoSize value={systemContent} className={styles.input} onChange={(e) => handleChangeContentValue(e.target.value)}></Input.TextArea>
                         </div>
                         {contentList.map((item: any, index: number) => (
                             <div className={styles.contentItem} key={index}>
                                 <Select className={styles.select} onChange={(value) => handleRoleChange(value, index)} value={item.role} options={[{
                                     value: 'user',
-                                    label: 'User'
+                                    label: t('user')
                                 },
                                 {
                                     value: 'assistant',
-                                    label: 'Assistant'
+                                    label: t('assistant', {ns: 'common'})
 
                                 }]}></Select>
-                                <Input.TextArea placeholder={item.role === 'assistant' ? 'Enter assistant message' : 'Enter user message'} autoSize value={item.content} className={styles.input} onChange={(e) => handleChangeValue(e.target.value, index)}></Input.TextArea>
+                                <Input.TextArea placeholder={item.role === 'assistant' ? t('enterAssistantMessage') : t('enterUserMessage')} autoSize value={item.content} className={styles.input} onChange={(e) => handleChangeValue(e.target.value, index)}></Input.TextArea>
                                 <DeleteInputIcon onClick={() => handleDeletedata(index)} style={{ cursor: 'pointer' }} />
                             </div>
                         ))}
-                        <Button onClick={handleAddData} icon={<PlusOutlined />} style={{ marginTop: '12px', background: 'white' }}>Add</Button>
+                        <Button onClick={handleAddData} icon={<PlusOutlined />} style={{ marginTop: '12px', background: 'white' }}>{t('add', {ns: 'common'})}</Button>
                     </div>
                     <div className={styles.generate}>
-                        <Button className='next-button' onClick={handleGenerate} loading={generateLoading}>Generate</Button>
+                        <Button className='next-button' onClick={handleGenerate} loading={generateLoading}>{t('generate')}</Button>
                     </div>
                 </div>
             </div> : <div className={styles['selectAssistant']}>
                 {<NoModel className={styles.svg} />}
-                <div className={styles['select-assistant']}>Select a chat completion model to start</div>
+                <div className={styles['select-assistant']}>{t('selectAModelToStart')}</div>
                 <div className={styles['header-news']}>
-                    <Button className={styles['prompt-button']} onClick={handleSelectModel}>Select model</Button>
+                    <Button className={styles['prompt-button']} onClick={handleSelectModel}>{t('selectModel', {ns: 'common'})}</Button>
                 </div>
             </div>}
             <ModelComponent defaultSelectedData={selectedData} modalTableOpen={open} handleCloseModal={handleCloseModal} handleModalConfirm={handleModalConfirm} />

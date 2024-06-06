@@ -1,0 +1,17 @@
+{
+    "configuration": "Configuration",
+    "enterAssistantMessage": "Enter assistant message",
+    "enterSystemMessage": "Enter system message",
+    "enterUserMessage": "Enter user message",
+    "generate": "Generate",
+    "generationOptions": "Generation options",
+    "model": "Model",
+    "lastMessageNotAssistant": "Last message should not be assistant message",
+    "pleaseEnterMessage": "Please enter the message",
+    "selectAModel": "Select a model",
+    "selectAModelToStart": "Select a chat completion model to start",
+    "stopSequences": "Stop sequences",
+    "stream": "Stream",
+    "system": "System",
+    "user": "User"
+}
