@@ -1,4 +1,5 @@
 from provider_dependency.text_embedding import *
+from typing import List, Optional, Dict
 from .utils import build_sensetime_header
 
 

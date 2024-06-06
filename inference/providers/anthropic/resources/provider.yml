@@ -22,5 +22,5 @@ credentials_schema:
 resources:
   taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/anthropic"
   official_site_url: "https://anthropic.com/"
-  official_pricing_url: "https://anthropic.com/pricing"
+  official_pricing_url: "https://www.anthropic.com/api"
   official_credentials_url: "https://console.anthropic.com/settings/keys"
