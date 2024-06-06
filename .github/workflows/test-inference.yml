@@ -40,10 +40,6 @@ jobs:
       - name: Set working directory
         run: echo "WORKING_DIRECTORY=fork/${{ env.WORK_DIR }}" >> $GITHUB_ENV
 
-      - name: Check spelling of repo
-        uses: crate-ci/typos@master
-        working-directory: fork
-
       - name: Get list of changed files
         id: files
         run: |

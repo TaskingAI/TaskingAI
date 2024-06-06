@@ -36,6 +36,3 @@ jobs:
         run: |
           docker build -t taskingai/taskingai-app:$IMAGE_TAG .
           echo "Build success: taskingai/taskingai-app:$IMAGE_TAG"
-
-      - name: Check spelling of repo
-        uses: crate-ci/typos@master
