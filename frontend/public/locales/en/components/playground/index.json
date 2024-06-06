@@ -18,6 +18,7 @@
     "pleaseWaitForAssistant": "Please wait for the assistant to respond.",
     "pleaseWaitForInfo": "Please wait for the info to respond.",
     "promptVariables": "Prompt variables",
+    "retrievalPlaceHolder": "Select collections",
     "selectAssistant": "Select assistant",
     "selectAssistantDesc": "Select an assistant to start",
     "selectAssistantInfo": "Select or enter a valid assistant ID to start chatting",

@@ -401,7 +401,7 @@ function Plugins() {
             ]} open={openEditFormDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} width={720} onClose={handleEditFormCancel} className={styles.openEditDrawer}>
                 <EditForm />
             </Drawer>
-            <DeleteModal open={OpenDeleteModal} describe={`${t('pluginDeleteDesc', {deleteValue})} ${t('projectDeleteDesc')}`} title={t('projectPluginDeleteTitle')} projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
+            <DeleteModal open={OpenDeleteModal} describe={`${t('pluginDeleteDesc', {deleteValue})} ${t('projectDeleteDesc')}`} title={t('pluginDeleteTitle')} projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
         </div>
 
     )

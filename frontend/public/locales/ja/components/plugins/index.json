@@ -3,5 +3,6 @@
     "editPlugin": "プラグインを編集",
     "newPlugin": "新規プラグイン",
     "pluginDeleteDesc": "「{{deleteValue}}」を本当に削除しますか？",
+    "pluginDeleteTitle": "プラグインを削除",
     "projectDeleteDesc": "このアクションはアンドゥでしません、プロジェクトの連携データ削除します。"
 }

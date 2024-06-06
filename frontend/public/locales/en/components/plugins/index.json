@@ -3,5 +3,6 @@
     "editPlugin": "Edit Plugin",
     "newPlugin": "New plugin",
     "pluginDeleteDesc": "Are you sure you want to unregister {{deleteValue}}?",
+    "pluginDeleteTitle": "Unregister Plugin",
     "projectDeleteDesc": "This action cannot be undone and all data related to the project will be deleted."
 }
