@@ -1,4 +1,4 @@
-name: Build and Test
+name: Plugin - Build and Test
 
 on:
   pull_request_target:
@@ -21,22 +21,28 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ env.WORK_DIR }}
     environment: test
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          ref: ${{ github.event.pull_request.base.ref }}
+          repository: ${{ github.repository }}
 
-      - name: Check spelling of repo
-        uses: crate-ci/typos@master
+      - name: Checkout forked repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          path: fork
+
+      - name: Set working directory
+        run: echo "WORKING_DIRECTORY=fork/${{ env.WORK_DIR }}" >> $GITHUB_ENV
 
       - name: Get list of changed files
         id: files
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           git fetch origin +${{ github.event.pull_request.base.sha }}:refs/remotes/origin/pr-base +${{ github.event.pull_request.head.sha }}:refs/remotes/origin/pr-head
           git diff --name-only origin/pr-base origin/pr-head > /tmp/changed_files.txt
           echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
@@ -45,10 +51,13 @@ jobs:
           echo "::set-output name=changed_files::$(cat /tmp/changed_files.txt)"
 
       - name: Set short SHA for image tag
-        run: echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
 
       - name: Check for git tag version
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           TAG=$(git describe --tags --exact-match 2> /dev/null || echo "")
           if [[ -n "$TAG" ]]; then
             echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
@@ -60,10 +69,13 @@ jobs:
           python-version: 3.x
 
       - name: Install Dependencies
-        run: pip install -r requirements.txt
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          pip install -r requirements.txt
 
       - name: Build Docker image
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           docker build -t taskingai/taskingai-plugin:$IMAGE_TAG .
           echo "Build success: taskingai/taskingai-plugin:${IMAGE_TAG}"
 
@@ -73,6 +85,7 @@ jobs:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           echo "$PLUGIN_BUNDLE_CREDENTIALS" > .env
           echo "$TEST_S3_SECRET_R2" >> .env
           docker run -d --name test_container --network=host \
@@ -86,16 +99,19 @@ jobs:
 
       - name: Run Tests
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           bash ./test/run_test.sh /tmp/changed_files.txt
 
       - name: Run Local Tests
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           export PATH_TO_VOLUME=./test
           export HOST_URL=http://localhost:8030
           bash ./test/run_local_test.sh
 
       - name: Stop Docker container
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           docker stop test_container
           sleep 5
 
@@ -105,6 +121,7 @@ jobs:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           TEST_S3_SECRET_AWS: ${{ secrets.TEST_S3_SECRET_AWS }}
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           echo "$PLUGIN_BUNDLE_CREDENTIALS" > 1.env
           echo "$TEST_S3_SECRET_AWS" >> 1.env
           docker run -d --name aws_s3_docker --network=host \
@@ -118,11 +135,13 @@ jobs:
 
       - name: Run S3 without public domain Tests
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           echo "$TEST_S3_SECRET_AWS" > .env
           bash ./test/run_s3_without_test.sh
 
       - name: Stop Docker container
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           docker stop aws_s3_docker
           sleep 5
 
@@ -132,6 +151,7 @@ jobs:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           echo "$PLUGIN_BUNDLE_CREDENTIALS" > 2.env
           echo "$TEST_S3_SECRET_R2" >> 2.env
           docker run -d --name r2_docker --network=host \
@@ -145,10 +165,12 @@ jobs:
 
       - name: Run S3 with public domain Tests
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           echo "$TEST_S3_SECRET_R2" > .env
           bash ./test/run_s3_with_test.sh
 
       - name: Stop Docker container
         run: |
+          cd ${{ env.WORKING_DIRECTORY }}
           docker stop r2_docker
           sleep 5
