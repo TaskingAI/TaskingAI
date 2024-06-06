@@ -1,0 +1,32 @@
+description: i18n:get_commodity_price_time_series_description
+id: get_commodity_price_time_series
+input_schema:
+  end_date:
+    description: i18n:get_commodity_price_time_series_input_end_date_description
+    name: i18n:get_commodity_price_time_series_input_end_date_name
+    required: true
+    type: string
+  start_date:
+    description: i18n:get_commodity_price_time_series_input_start_date_description
+    name: i18n:get_commodity_price_time_series_input_start_date_name
+    required: true
+    type: string
+  symbols:
+    description: i18n:get_commodity_price_time_series_input_symbols_description
+    name: i18n:get_commodity_price_time_series_input_symbols_name
+    required: true
+    type: string
+name: i18n:get_commodity_price_time_series_name
+output_schema:
+  result:
+    description: i18n:get_commodity_price_time_series_output_result_description
+    name: i18n:get_commodity_price_time_series_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      symbols: RICE
+      end_date: '2022-05-05'
+      start_date: '2022-05-01'
+  mode: schema
