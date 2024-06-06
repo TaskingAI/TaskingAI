@@ -23,7 +23,7 @@ import ApiErrorResponse from '@/constant/index'
 import { useTranslation } from "react-i18next";
 
 function Plugins() {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['components/plugins/index', 'common']);
     const createPluginRef = useRef<any>()
     const dispatch = useDispatch()
     const { pluginLists } = useSelector((state: any) => state.plugin);
@@ -115,7 +115,7 @@ function Plugins() {
     }
     const columns = [...bundleTableColumn]
     columns.push({
-        title: `${t('projectColumnActions')}`,
+        title: `${t('actions', {ns: 'common'})}`,
         key: 'action',
         fixed: 'right',
         width: 156,
@@ -181,7 +181,7 @@ function Plugins() {
             text: () => text
         });
         clipboard.on('success', function () {
-            toast.success(t('CopiedToClipboard'))
+            toast.success(t('copiedToClipboard', {ns: 'common'}))
             clipboard.destroy()
         });
         clipboard.on('error', function (e) {
@@ -255,7 +255,7 @@ function Plugins() {
                 <div className={styles.componentsData}>
                     {isShowBundle && <div className={styles.inputWithLabelParent}>
                         <div className={styles.inputWithLabel}>
-                            <div className={styles.label}>{t('projectBundleTitle')}</div>
+                            <div className={styles.label}>{t('bundle', {ns: 'common'})}</div>
                             <div className={styles.inputWithLabelInner}>
                                 <div className={styles.frameWrapper}>
                                     <div className={styles.frameContainer}>
@@ -302,19 +302,19 @@ function Plugins() {
         return (
             <div className={styles.editForm}>
                 <div className={styles.bundleTitle}>
-                    <div className={styles.label}>{t('projectBundleTitle')}</div>
+                    <div className={styles.label}>{t('bundle', {ns: 'common'})}</div>
                     <div className={styles.googleWeb}>
                         <img loading="lazy" src={(cachedImages as any)[bundleId]} alt="" style={{ width: '24px', height: '24px' }} />
                         <div className={styles.googleWebSearch}>{bundleName}</div>
                     </div>
                 </div>
                 {JSON.stringify(credentialsSchema) !== '{}' && <div>
-                    <div className={styles['credentials']}>{t('projectModelCredentials')}</div>
+                    <div className={styles['credentials']}>{t('credentials', {ns: 'common'})}</div>
                     <div className={styles['label-desc']} style={{ marginBottom: '24px' }}>
-                        All plugin credentials are encrypted at rest with AES-256 and in transit with TLS 1.2.
+                        {t('allCredentialsAreEncrypted')}
                     </div>
                     {resetButtonShow && <div className={styles['formbuttoncancel']} onClick={handleResetCredentials}>
-                        <div className={styles['text1']}>{t('projectModelResetCredentials')}</div>
+                        <div className={styles['text1']}>{t('resetCredentials', {ns: 'common'})}</div>
                     </div>}
                     <Form
                         layout="vertical"
@@ -328,7 +328,7 @@ function Plugins() {
                             <Form.Item label={key} key={key} name={key} rules={[
                                 {
                                     required: property.required,
-                                    message: `Please input ${key}.`,
+                                    message: t('pleaseInput', {ns: 'common', key}),
                                 },
                             ]}>
                                 <div className={styles['description']}>{(property as { description: string }).description}</div>
@@ -337,7 +337,7 @@ function Plugins() {
                                     key={key}
                                     className={styles['form-item']}
                                 >
-                                    <Input placeholder={`Enter ${key}`} className={styles['input']} />
+                                    <Input placeholder={t('enter', {ns: 'common', key})} className={styles['input']} />
                                 </Form.Item>
                             </Form.Item>
                         ))}
@@ -369,7 +369,7 @@ function Plugins() {
                 setUpdatePrevButton(true)
                 setOpenEditFormDrawer(false)
                 setOpenEditDrawer(false)
-                toast.success(t('updateSuccessful'))
+                toast.success(t('updateSuccessful', {ns: 'common'}))
             } catch (error) {
                 const apiError = error as ApiErrorResponse;
                 const errorMessage: string = apiError.response.data.error.message;
@@ -384,24 +384,24 @@ function Plugins() {
     return (
         <div className={styles["actions"]}>
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
-                <ModalTable loading={loading} title='New plugin' updatePrevButton={updatePrevButton} name='plugin' id='bundle_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
+                <ModalTable loading={loading} title={t('newPlugin')} updatePrevButton={updatePrevButton} name='plugin' id='bundle_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
             <CreatePlugin ref={createPluginRef} handleConfirmRequest={handleConfirmRequest} open={openCreateModal1} handleCloseModal={handleClosePluginModal}></CreatePlugin>
    
-            <Drawer footer={null} width={1280} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleEditCancel} open={openEditDrawer} title={bundleName + ' / ' + t('projectPluginsTitle')} className={styles.openLookDrawer}>
+            <Drawer footer={null} width={1280} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleEditCancel} open={openEditDrawer} title={bundleName + ' / ' + t('plugins', {ns: 'common'})} className={styles.openLookDrawer}>
                 <ComponentsData />
             </Drawer>
-            <Drawer title={t('projectPluginEditPlugin')} footer={[
+            <Drawer title={t('editPlugin')} footer={[
                 <Button key="cancel" onClick={handleEditFormCancel} className='cancel-button'>
-                    {t('cancel')}
+                    {t('cancel', {ns: 'common'})}
                 </Button>,
                 <Button key="submit" loading={confirmLoading} onClick={handleEditFormConfirm} className={`next-button ${styles.button}`}>
-                    {t('confirm')}
+                    {t('confirm', {ns: 'common'})}
                 </Button>
             ]} open={openEditFormDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} width={720} onClose={handleEditFormCancel} className={styles.openEditDrawer}>
                 <EditForm />
             </Drawer>
-            <DeleteModal open={OpenDeleteModal} describe={`${t('projectPluginDeleteDesc')} ${deleteValue}? ${t('projectDeleteProjectDesc')}`} title={t('projectPluginDeleteTitle')} projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
+            <DeleteModal open={OpenDeleteModal} describe={`${t('pluginDeleteDesc', {deleteValue})} ${t('projectDeleteDesc')}`} title={t('projectPluginDeleteTitle')} projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
         </div>
 
     )

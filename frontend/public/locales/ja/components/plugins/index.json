@@ -1,0 +1,7 @@
+{
+    "allCredentialsAreEncrypted": "保存された認証はAES-256で暗号化している、そして送信する時にTLS 1.2を使います。",
+    "editPlugin": "プラグインを編集",
+    "newPlugin": "新規プラグイン",
+    "pluginDeleteDesc": "「{{deleteValue}}」を本当に削除しますか？",
+    "projectDeleteDesc": "このアクションはアンドゥでしません、プロジェクトの連携データ削除します。"
+}
