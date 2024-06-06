@@ -607,7 +607,7 @@ function ModelsPage() {
                             {t('credentialsDesc', {ns: 'common'})} <Trans i18nKey="common:credentialsDescEnd" values={{ linkText: t('documentationLow', {ns: 'common'})}} components={[<a className='href' href='https://docs.tasking.ai/docs/guide/model/overview#required-credentials-for-model-access' target='_blank' rel='noopener noreferrer'>{t('documentationLow', {ns: 'common'})}</a>]} />
                         </div>
                         {resetButtonShow && <div className={styles['formbuttoncancel']} onClick={handleResetCredentials}>
-                            <div className={styles['text1']}>{t('projectModelResetCredentials')}</div>
+                            <div className={styles['text1']}>{t('resetCredentials')}</div>
                         </div>}
                         <Form
                             layout="vertical"
