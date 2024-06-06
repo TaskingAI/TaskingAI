@@ -22,9 +22,19 @@ jobs:
     environment: test
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          repository: ${{ github.repository }}
 
+      - name: Checkout forked repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          path: fork
+          
       - name: Set short SHA
         run: echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
 
@@ -50,11 +60,11 @@ jobs:
           token: ${{ secrets.TASKINGAI_TEST_GH_PAT }}
 
       - name: Install Dependencies
-        working-directory: backend
+        working-directory: fork/backend
         run: pip install -r requirements.txt
 
       - name: Install Test Dependencies
-        working-directory: backend
+        working-directory: fork/backend
         run: pip install -r test_requirements.txt
 
       - name: Create Docker network
@@ -91,19 +101,19 @@ jobs:
           taskingai/taskingai-plugin:v0.2.10
 
       - name: Download nltk data
-        working-directory: backend
+        working-directory: fork/backend
         run: |
           mkdir nltk_data
           python -m nltk.downloader -d nltk_data punkt
 
       - name: Build Docker image
-        working-directory: backend
+        working-directory: fork/backend
         run: |
           docker build -t taskingai/taskingai-server:$IMAGE_TAG .
           echo "Build success: taskingai/taskingai-server:${IMAGE_TAG}"
 
       - name: Run Docker image - WEB
-        working-directory: backend
+        working-directory: fork/backend
         env:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           JWT_SECRET_KEY: ${{ env.JWT_SECRET_KEY }}
@@ -123,7 +133,7 @@ jobs:
           taskingai/taskingai-server:$IMAGE_TAG
 
       - name: Run R2 Docker image - API
-        working-directory: backend
+        working-directory: fork/backend
         env:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
@@ -153,11 +163,11 @@ jobs:
           sleep 10
 
       - name: Run WEB Tests
-        working-directory: backend
+        working-directory: fork/backend
         run: bash ./run_web_test.sh
 
       - name: Run R2 API Tests
-        working-directory: backend
+        working-directory: fork/backend
         run: bash ./run_api_test.sh
 
       - name: Stop Docker container
@@ -166,7 +176,7 @@ jobs:
           sleep 5
 
       - name: Run AWS Docker image - API
-        working-directory: backend
+        working-directory: fork/backend
         env:
           AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
           TEST_S3_SECRET_AWS: ${{ secrets.TEST_S3_SECRET_AWS }}
@@ -186,5 +196,5 @@ jobs:
           taskingai/taskingai-server:$IMAGE_TAG
 
       - name: Run AWS API Tests
-        working-directory: backend
+        working-directory: fork/backend
         run: bash ./run_api_test.sh
