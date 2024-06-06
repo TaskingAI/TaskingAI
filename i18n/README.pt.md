@@ -11,6 +11,7 @@
   <a href="https://pypi.org/project/taskingai"><img alt="PyPI version" src="https://img.shields.io/pypi/v/taskingai?color=blue"></a>
   <a href="https://twitter.com/TaskingAI"><img alt="X (formerly Twitter) URL" src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FTaskingAI"></a>
   <a href="https://www.youtube.com/@TaskingAI"><img alt="YouTube Channel Subscribers" src="https://img.shields.io/youtube/channel/subscribers/UCxUnOM-ZbZKmyR_Q5vAUSTA"></a>
+  <a href="https://discord.gg/FsNQXFj9"><img alt="Discord" src="https://img.shields.io/discord/1244486619914834110"></a>
 </p>
 
 <p align="center">
@@ -218,7 +219,16 @@ Você pode aprender mais na [documentação](https://docs.tasking.ai/docs/guide/
 
 ## Comunidade e Contribuição
 
-Por favor, veja nossas [diretrizes de contribuição](../CONTRIBUTING.md) para saber como contribuir para o projeto.
+Por favor, consulte nossas [diretrizes de contribuição](../CONTRIBUTING.md) para saber como contribuir para o projeto.
+
+Além disso, estamos entusiasmados em anunciar que o TaskingAI agora tem uma comunidade oficial no Discord! 🎊
+
+[Junte-se ao nosso servidor do Discord](https://discord.gg/BNCSWXmV) para:
+
+    • 💬 Participar de discussões sobre o TaskingAI, compartilhar ideias e fornecer feedback.
+    • 📚 Obter suporte, dicas e melhores práticas de outros usuários e nossa equipe.
+    • 🚀 Manter-se atualizado sobre as últimas notícias, atualizações e lançamentos de recursos.
+    • 🤝 Conectar-se com indivíduos com interesses similares apaixonados por IA e automação de tarefas.
 
 ## Licença e Código de Conduta
 

@@ -11,6 +11,7 @@
   <a href="https://pypi.org/project/taskingai"><img alt="PyPI version" src="https://img.shields.io/pypi/v/taskingai?color=blue"></a>
   <a href="https://twitter.com/TaskingAI"><img alt="X (formerly Twitter) URL" src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FTaskingAI"></a>
   <a href="https://www.youtube.com/@TaskingAI"><img alt="YouTube Channel Subscribers" src="https://img.shields.io/youtube/channel/subscribers/UCxUnOM-ZbZKmyR_Q5vAUSTA"></a>
+  <a href="https://discord.gg/FsNQXFj9"><img alt="Discord" src="https://img.shields.io/discord/1244486619914834110"></a>
 </p>
 
 <p align="center">
@@ -219,7 +220,16 @@ print(assistant_message)
 
 ## コミュニティと貢献
 
-プロジェクトへの貢献方法については、[貢献ガイドライン](./CONTRIBUTING.md)をご参照ください。
+プロジェクトへの貢献方法については、[貢献ガイドライン](../CONTRIBUTING.md)をご覧ください。
+
+また、TaskingAIに公式Discordコミュニティができたことをお知らせいたします！ 🎊
+
+[Discordサーバーに参加する](https://discord.gg/BNCSWXmV)ことで：
+
+    • 💬 TaskingAIについての議論に参加し、アイデアを共有し、フィードバックを提供。
+    • 📚 他のユーザーや私たちのチームからのサポート、ヒント、ベストプラクティスを受け取る。
+    • 🚀 最新のニュース、アップデート、機能リリースを常に更新。
+    • 🤝 AIとタスク自動化に情瞭のある同じ志を持つ人々とネットワーキング。
 
 ## ライセンスと行動規範
 
