@@ -22,9 +22,9 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ env.WORK_DIR }}
+    # defaults:
+    #   run:
+    #     working-directory: ${{ env.WORK_DIR }}
     environment: test
     steps:
       - name: Checkout repository
@@ -39,9 +39,11 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: fork
+      - name: Switch to forked repository
+        run: ls -lah
 
       - name: Switch to forked repository
-        run: cd fork
+        run: cd fork/${{ env.WORK_DIR }}
 
       - name: Check spelling of repo
         uses: crate-ci/typos@master
