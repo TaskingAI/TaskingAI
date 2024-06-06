@@ -2,8 +2,23 @@ yi_name: "Yi"
 yi_description: "01.AI's global ambition is to build cutting-edge large language model technology and software applications."
 yi_api_key_description: "Your Yi API Key for authentication."
 
-yi_34b_chat_200k_name: "Yi 34B Chat 200K"
-yi_34b_chat_200k_description: "Ultra-long context. Support for up to 200K allows for the processing of approximately 300,000 Chinese characters (≈ 1 copy of 'The Three-Body Problem') or 300,000 English words, suitable for understanding multiple document contents, massive data analysis and mining, and cross-domain knowledge integration."
+yi_large_name: "Yi Large"
+yi_large_description: "Yi Large is a large-scale model with hundreds of billions of parameters, offering exceptional Q&A and text generation capabilities. It possesses extremely strong reasoning abilities, making it suitable for complex language comprehension, deep content creation, and other demanding scenarios."
 
-yi_34b_chat_0205_name: "Yi 34B Chat 0205"
-yi_34b_chat_0205_description: "Based on the open-source version yi-34b-chat-1123, numerous performance improvements have been made, especially in command adherence ability (increased by nearly 30%), and the latency of model responses has been reduced. Context length is 4k."
+yi_large_rag_name: "Yi Large RAG"
+yi_large_rag_description: "Yi Large Rag offers real-time web information retrieval services and advanced model capabilities. Based on the Yi Large model, it combines retrieval and generation technologies to provide precise answers."
+
+yi_large_turbo_name: "Yi Large Turbo"
+yi_large_turbo_description: "Yi Large Turbo is finely tuned for a balance of performance, inference speed, and cost. It is suitable for all scenarios requiring high-quality inference and text generation."
+
+yi_medium_name: "Yi Medium"
+yi_medium_description: "Yi Medium is a medium-sized model that has been upgraded and fine-tuned, offering balanced capabilities and high cost-effectiveness. It has been deeply optimized for instruction-following abilities, making it suitable for general scenarios such as daily chatting, Q&A, writing, and translation. It is an ideal choice for enterprise applications and large-scale AI deployments."
+
+yi_medium_200k_name: "Yi Medium 200k"
+yi_medium_200k_description: "Yi Medium 200K has an ultra-long context window of 200K, providing deep understanding and generation capabilities for long texts. It is suitable for scenarios involving long text comprehension and generation, such as document reading, Q&A, and knowledge base construction."
+
+yi_vision_name: "Yi Vision"
+yi_vision_description: "Yi Vision is a model designed for complex visual tasks, offering high-performance image understanding and analysis capabilities. It is suitable for scenarios that require the analysis and interpretation of images and charts."
+
+yi_spark_name: "Yi Spark"
+yi_spark_description: "Yi Spark offers enhanced mathematical computation and code writing capabilities. It is suitable for lightweight mathematical analysis, code generation, and text chatting scenarios."

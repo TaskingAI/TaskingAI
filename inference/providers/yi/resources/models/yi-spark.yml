@@ -1,0 +1,23 @@
+model_schema_id: yi/yi-spark
+provider_model_id: yi-spark
+type: chat_completion
+name: "i18n:yi_spark_name"
+description: "i18n:yi_spark_description"
+default_endpoint_url: https://api.lingyiwanwu.com/v1/chat/completions
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 16000
+  output_token_limit: 16000
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+
+pricing:
+  input_token: 1
+  output_token: 1
+  unit: 1000000
+  currency: CNY

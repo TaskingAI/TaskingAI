@@ -1,0 +1,18 @@
+model_schema_id: baichuan/baichuan-text-embedding
+provider_model_id: baichuan-text-embedding
+type: text_embedding
+name: "i18n:baichuan_text_embedding_name"
+description: "i18n:baichuan_text_embedding_description"
+default_endpoint_url: https://api.baichuan-ai.com/v1/embeddings
+
+properties:
+  embedding_size: 1024
+  input_token_limit: 512
+
+config_schemas:
+
+pricing:
+  input_token: 0.0005
+  output_token: 0.0005
+  unit: 1000
+  currency: CNY

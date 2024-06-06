@@ -23,7 +23,7 @@ white_list_providers = [
     "leptonai",
 ]
 white_list_models = [
-    "google_gemini/gemini-pro-vision",
+    "google_gemini/gemini-1.0-pro-vision",
     "google_gemini/gemini-1.5-pro",
     "togetherai/meta-llama/Llama-2-70b-chat-hf",
     "mistralai/mistral-small-latest",

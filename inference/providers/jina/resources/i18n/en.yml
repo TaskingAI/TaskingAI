@@ -12,6 +12,9 @@ jina_embeddings_v2_small_en_description: "The jina-embeddings-v2-small-en model 
 jina_embeddings_v2_base_de_name: "jina-embeddings-v2-base-de"
 jina_embeddings_v2_base_de_description: "The jina-embeddings-v2-base-de model is a bilingual German/English BERT-based text embedding model designed for both monolingual and cross-lingual applications, supporting mixed German-English inputs up to 8192 sequence lengths."
 
+jina_embeddings_v2_base_es_name: "jina-embeddings-v2-base-es"
+jina_embeddings_v2_base_es_description: "The jina-embeddings-v2-base-de model is a bilingual Spanish/English BERT-based text embedding model designed for both monolingual and cross-lingual applications, supporting mixed Spanish-English inputs up to 8192 sequence lengths."
+
 jina_embeddings_v2_base_zh_name: "jina-embeddings-v2-base-zh"
 jina_embeddings_v2_base_zh_description: "The jina-embeddings-v2-base-zh model is a bilingual Chinese/English BERT-based text embedding model optimized for high performance in both monolingual and cross-lingual tasks, accommodating mixed Chinese-English inputs up to 8192 sequence lengths."
 

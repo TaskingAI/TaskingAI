@@ -6,11 +6,12 @@ description: "i18n:qwen_turbo_description"
 default_endpoint_url: https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation
 
 properties:
-  function_call: false
+  function_call: true
   streaming: true
   input_token_limit: 6000
 
 config_schemas:
+  - config_id: seed
   - config_id: temperature
   - config_id: top_p
   - config_id: max_tokens
@@ -18,7 +19,7 @@ config_schemas:
   - config_id: top_k
 
 pricing:
-  input_token: 0.008
-  output_token: 0.008
+  input_token: 0.002
+  output_token: 0.006
   unit: 1000
-  currency: USD
+  currency: CNY

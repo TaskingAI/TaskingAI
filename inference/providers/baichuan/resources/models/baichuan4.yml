@@ -1,12 +1,12 @@
-model_schema_id: baichuan/baichuan2-turbo
-provider_model_id: baichuan2-turbo
+model_schema_id: baichuan/baichuan4
+provider_model_id: baichuan4
 type: chat_completion
-name: "i18n:baichuan2_turbo_name"
-description: "i18n:baichuan2_turbo_description"
+name: "i18n:baichuan4_name"
+description: "i18n:baichuan4_description"
 default_endpoint_url: https://api.baichuan-ai.com/v1/chat/completions
 
 properties:
-  function_call: false
+  function_call: true
   streaming: true
 
 config_schemas:
@@ -16,7 +16,7 @@ config_schemas:
   - config_id: top_k
 
 pricing:
-  input_token: 0.008
-  output_token: 0.008
+  input_token: 0.1
+  output_token: 0.1
   unit: 1000
   currency: CNY

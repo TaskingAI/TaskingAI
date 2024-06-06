@@ -1,8 +1,8 @@
-model_schema_id: google_gemini/gemini-pro
+model_schema_id: google_gemini/gemini-1.0-pro
 provider_model_id: gemini-pro
 type: chat_completion
-name: "i18n:gemini_pro_name"
-description: "i18n:gemini_pro_description"
+name: "i18n:gemini_1_0_pro_name"
+description: "i18n:gemini_1_0_pro_description"
 
 properties:
   function_call: true

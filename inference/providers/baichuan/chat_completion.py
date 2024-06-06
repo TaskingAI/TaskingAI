@@ -6,14 +6,45 @@ logger = logging.getLogger(__name__)
 
 
 def _build_baichuan_message(message: ChatCompletionMessage):
-    if message.role in [
-        ChatCompletionRole.user,
-        ChatCompletionRole.assistant,
-        ChatCompletionRole.system,
-    ] or is_assistant_text_message(message):
+    if message.role == ChatCompletionRole.system:
+        return {"role": message.role.name, "content": message.content}
+
+    if message.role == ChatCompletionRole.user:
+        if isinstance(message.content, str):
+            return {"role": message.role.name, "content": message.content}
+        elif isinstance(message.content, List):
+            return {
+                "role": message.role.name,
+                "content": [c.model_dump() for c in message.content],
+            }
+
+    if message.role == ChatCompletionRole.function:
+        message: ChatCompletionFunctionMessage
+        return {"role": "tool", "content": message.content, "tool_call_id": message.id}
+
+    if is_assistant_text_message(message):
+        return {"role": message.role.name, "content": message.content}
+
+    if is_assistant_function_calls_message(message):
+        message: ChatCompletionAssistantMessage
+        function_calls = []
+
+        for f in message.function_calls:
+            arguments = f.arguments
+            if isinstance(arguments, dict):
+                arguments = json.dumps(arguments)
+            function_calls.append(
+                {
+                    "id": f.id,
+                    "type": "function",
+                    "function": {"name": f.name, "arguments": arguments},
+                }
+            )
+
         return {
-            "role": message.role.name if message.role != ChatCompletionRole.system else ChatCompletionRole.user,
-            "content": message.content,
+            "role": ChatCompletionRole.assistant.name,
+            "tool_calls": function_calls,
+            "content": None,
         }
 
 
@@ -37,6 +68,14 @@ def _build_baichuan_chat_completion_payload(
     for key, value in config_dict.items():
         if value is not None:
             payload[key] = value
+    if function_call:
+        if function_call in ["none", "auto"]:
+            payload["tool_choice"] = function_call
+        else:
+            payload["tool_choice"] = {"name": function_call}
+    if functions:
+        payload["tools"] = [{"type": "function", "function": f.model_dump()} for f in functions]
+    logger.debug(f"_build_openai_chat_completion_payload: {payload}")
     return payload
 
 
@@ -77,7 +116,17 @@ class BaichuanChatCompletionModel(BaseChatCompletionModel):
         return None
 
     def extract_function_calls(self, data: Dict, **kwargs) -> Optional[List[ChatCompletionFunctionCall]]:
-
+        message_data = data.get("message") if data else None
+        if message_data.get("tool_calls"):
+            function_calls = []
+            tool_calls = message_data.get("tool_calls")
+            for call in tool_calls:
+                func_call = build_function_call(
+                    name=call["function"]["name"],
+                    arguments_str=call["function"]["arguments"],
+                )
+                function_calls.append(func_call)
+            return function_calls
         return None
 
     def extract_finish_reason(self, data: Dict, **kwargs) -> Optional[ChatCompletionFinishReason]:
@@ -124,5 +173,20 @@ class BaichuanChatCompletionModel(BaseChatCompletionModel):
     def stream_handle_function_calls(
         self, chunk_data: Dict, function_calls_content: ChatCompletionFunctionCallsContent, **kwargs
     ) -> Optional[ChatCompletionFunctionCallsContent]:
+        delta = chunk_data.get("delta", {})
+        if delta and delta.get("tool_calls"):
+            tool_call = delta["tool_calls"][0]
+            toll_call_index = tool_call["index"]
+            tool_call_function = tool_call["function"]
 
+            if toll_call_index == function_calls_content.index:
+                # append to the current function call argument string
+                function_calls_content.arguments_strs[function_calls_content.index] += tool_call_function["arguments"]
+
+            elif toll_call_index > function_calls_content.index:
+                # trigger another function call
+                function_calls_content.arguments_strs.append(tool_call_function["arguments"] or "")
+                function_calls_content.names.append(tool_call_function["name"])
+                function_calls_content.index = toll_call_index
+            return function_calls_content
         return None

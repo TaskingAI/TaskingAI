@@ -16,3 +16,6 @@ abab6_5_chat_description: "ABAB 6.5 is a large-scale language model developed by
 
 abab6_5s_chat_name: "ABAB 6.5s Chat"
 abab6_5s_chat_description: "ABAB 6.5s is a smaller version of the ABAB 6.5 model developed by MiniMax. The total tokens limit for input and output is 245,760 tokens. Suitable for character setting."
+
+abab6_5g_chat_name: "ABAB 6.5g Chat"
+abab6_5g_chat_description: "ABAB 6.5g is a smaller version of the ABAB 6.5 model developed by MiniMax. The total tokens limit for input and output is 8,192 tokens. Suitable for more complex formatted text generation."
