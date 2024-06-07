@@ -12,7 +12,6 @@ class TestTextEmbedding:
     single_text = {"input": "hello, nice to meet you"}
     list_text = {"input": ["hello, nice to meet you", "i'm fine thank you"]}
 
-    long_list_text = {"input": ["*" * 600, "!" * 600]}
     empty_list_text = {"input": []}
 
     error_input_list = [

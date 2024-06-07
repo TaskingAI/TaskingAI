@@ -1,0 +1,42 @@
+leptonai_name: "Lepton AI"
+leptonai_description: "Lepton AI is a cloud-native AI platform that offers a range of tools and services designed to lower the barriers to AI application development. It helps developers easily accomplish tasks such as creation, deployment, and scaling. The goal of Lepton AI is to make building AI applications simple and efficient, eliminating the need for complex programming knowledge. Users can quickly launch AI applications with simple command-line operations."
+
+leptonai_api_key_description: "Your LeptonAI API Key for authentication."
+
+
+gemma_7b_name: "Gemma 7b"
+gemma_7b_description: "The Gemma model was proposed in Gemma: Open Models Based on Gemini Technology and Research by Gemma Team, Google. Gemma models are trained on 6T tokens, and released with 2 versions, 2b and 7b."
+
+jetmoe_8b_chat_name: "Jetmoe"
+jetmoe_8b_chat_description: "Jetmoe 8B is a state-of-the-art AI model with 8 billion parameters, designed for advanced natural language processing tasks, excelling in context comprehension, multilingual support, and customizable applications, while prioritizing ethical use."
+
+llama2_13b_name: "Llama2 13b"
+llama2_13b_description: "LLaMA 2 13b is an AI model developed by OpenAI, trained in multilingual tasks using machine translation, and excels in tasks involving multiple languages or translation between languages."
+
+llama3_70b_name: "Llama3 70b"
+llama3_70b_description: "Llama 70b trained on a massive dataset of text from the internet, capable of generating human-like responses to a wide range of questions and topics, with a knowledge cutoff of 2022."
+
+llama3_8b_name: "Llama3 8b"
+llama3_8b_description: "Llama3 8b is an advanced AI language model with 8 billion parameters, designed to excel in natural language processing tasks with improved comprehension, generation, and multilingual capabilities, prioritizing efficiency and ethical considerations."
+
+mistral_7b_name: "Mistral 7B"
+mistral_7b_description: "Mistral 7B is the first large language model (LLM) released by mistral.ai, the most powerful language model for its size to date."
+
+mixtral_8x7b_name: "Mixtral 8x7b"
+mixtral_8x7b_description: "Mixtral 8x7b is the strongest open-weight model with a permissive license and the best model overall regarding cost/performance trade-offs."
+
+nous_hermes_llama2_13b_name: "Nous: Hermes 13B"
+nous_hermes_llama2_13b_description: "Nous-Hermes 13B is an advanced AI language model with 13 billion parameters, designed for superior natural language processing capabilities, excelling in nuanced comprehension, text generation, and multilingual tasks, with a strong emphasis on efficiency and ethical use."
+
+openchat_3_5_name: "OpenChat 3.5"
+openchat_3_5_description: "OpenChat 3.5 is a sophisticated AI language model designed for advanced conversational abilities, offering improved natural language understanding and generation, enhanced contextual awareness, and robust multilingual support, with a focus on providing efficient, coherent, and ethical interactions."
+
+
+toppy_m_7b_name: "Toppy M 7B"
+toppy_m_7b_description: "Toppy M 7B is a state-of-the-art AI language model featuring 7 billion parameters, designed for advanced natural language processing tasks, providing high-quality text comprehension and generation, multilingual capabilities, and efficient, ethical performance in various applications."
+
+wizardlm_2_7b_name: "WizardLM-2 7B"
+wizardlm_2_7b_description: "WizardLM-2 7B is a highly advanced AI language model with 7 billion parameters, engineered for superior natural language processing tasks, excelling in text comprehension, generation, and multilingual support, while ensuring efficient and ethical performance across diverse applications."
+
+wizardlm_2_8x22b_name: "WizardLM-2 8x22B"
+wizardlm_2_8x22b_description: "WizardLM-2 8x22B is an exceptionally powerful AI language model comprising eight interconnected sub-models, each with 22 billion parameters, totaling 176 billion parameters, designed for advanced natural language processing tasks, offering unparalleled text comprehension, generation, and multilingual capabilities, with a focus on scalability, efficiency, and ethical use."

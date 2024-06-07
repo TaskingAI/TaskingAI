@@ -1,0 +1,24 @@
+model_schema_id: leptonai/llama2_13b
+provider_model_id: llama2-13b
+type: chat_completion
+name: "i18n:llama2_13b_name"
+description: "i18n:llama2_13b_description"
+default_endpoint_url: https://llama2-13b.lepton.run/api/v1/chat/completions
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 972
+  output_token_limit: 972
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.3
+  output_token: 0.3
+  unit: 1000000
+  currency: USD

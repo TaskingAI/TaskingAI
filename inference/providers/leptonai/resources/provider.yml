@@ -1,0 +1,21 @@
+provider_id: leptonai
+name: "i18n:leptonai_name"
+description: "i18n:leptonai_description"
+updated_timestamp: 1716431009
+
+credentials_schema:
+  type: object
+  properties:
+    LEPTONAI_API_KEY:
+      type: string
+      description: "i18n:leptonai_api_key_description"
+      secret: true
+  required:
+    - LEPTONAI_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/leptonai"
+  official_site_url: "https://www.lepton.ai/"
+  official_pricing_url: "https://www.lepton.ai/pricing"
+  official_credentials_url: "https://dashboard.lepton.ai"
