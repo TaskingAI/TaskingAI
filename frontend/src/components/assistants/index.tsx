@@ -17,12 +17,13 @@ import EditIcon from '../../assets/img/editIcon.svg?react'
 import ViewCode from '@/commonComponent/viewCode/index.tsx'
 import MoreIcon from '@/assets/img/moreIcon.svg?react'
 import { getViewCode } from '@/axios/index'
+import { dealThemeColor } from '@/utils/util.ts'
 import JumpIcon from '../../assets/img/assistantJumpIcon.svg?react'
 import { getFirstMethodAndEndpoint } from '@/utils/util'
 import { toast } from 'react-toastify'
 import DeleteModal from '../deleteModal/index.tsx'
 import DrawerAssistant from '../drawerAssistant/index'
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import { useNavigate } from 'react-router-dom';
 import { ChildRefType } from '../../constant/index.ts'
 import ApiErrorResponse from '@/constant/index.ts'
@@ -60,17 +61,17 @@ function Assistant() {
             render: (_action: string, record: assistantListType) => (
                 <Space size="middle">
                     <div onClick={() => handleJump(record)} className='table-edit-icon'>
-                        <Tooltip placement='bottom' title={tooltipPlaygroundTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <Tooltip placement='bottom' title={tooltipPlaygroundTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                             <JumpIcon />
                         </Tooltip>
                     </div>
                     <div onClick={() => handleEdit(record)} className='table-edit-icon'>
-                        <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <Tooltip placement='bottom' title={tooltipEditTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                         <EditIcon/>
                         </Tooltip>
                     </div>
                     <div className='table-edit-icon' onClick={()=>setRecord(record)}>
-                    {isVisible ? <Tooltip placement='bottom' title={tooltipMoreTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                    {isVisible ? <Tooltip placement='bottom' title={tooltipMoreTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                         <Popover trigger="click" placement='bottom' content={content} arrow={false}>
                             <MoreIcon  />
                         </Popover>
@@ -344,7 +345,6 @@ function Assistant() {
         setIsVisible(false)
     }
     const handleEdit = (val: assistantListType) => {
-        console.log(val)
         setModelName(val.model_name)
         setDrawerTitle(`${t('projectEditAssistant')}`)
         const tag = val.retrievals.map(item => {
@@ -623,12 +623,13 @@ function Assistant() {
             <Drawer
                 className={styles['drawer-assistants']}
                 width={1280}
-                closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />}
+                closeIcon={<CloseIcon className={styles['img-icon-close']}/>}
+              
                 onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={[
-                    <Button key="cancel" onClick={handleCancel} className='cancel-button'>
+                    <Button key="cancel" onClick={handleCancel}>
                         {t('cancel')}
                     </Button>,
-                    <Button key="submit" loading={editLoading} onClick={handleRequest} className={`next-button ${styles['button']}`}>
+                    <Button key="submit" type='primary' loading={editLoading} onClick={handleRequest} className={`${styles['button']}`}>
                         {t('confirm')}
                     </Button>
                 ]}>
@@ -637,19 +638,19 @@ function Assistant() {
             </Drawer>
 
             <ModelModal type='chat_completion' ref={childRef} open={modelOne} handleSetModelConfirmOne={handleSetModelConfirmOne} handleSetModelOne={handleModalCancel} getOptionsList={fetchModelsList} modelType='chat_completion'></ModelModal>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
+            <Modal   closeIcon={<CloseIcon className={styles['img-icon-close']}/>} centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='footer1'>
-                    <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
+                    <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId}>
                         {t('projectNewModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
                             {recordsSelected.length}  {recordsSelected.length > 1 ? `${t('projectItemsSelected')}` : `${t('projectItemSelected')}`}
                         </span>
-                        <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
+                        <Button key="cancel" onClick={handleModalClose} className={`${styles.cancelButton}`}>
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleModalCloseConfirm} className='next-button'>
+                        <Button key="submit" onClick={handleModalCloseConfirm} type='primary'>
                             {t('confirm')}
                         </Button>
                     </div>
@@ -660,7 +661,7 @@ function Assistant() {
             <ViewCode open={viewCodeOpen} data={viewCodeData} handleClose={handleCloseViewCode}/>
             <CreatePlugin handleConfirmRequest={handleConfirmRequest} open={pluginModalOpen} handleCloseModal={handleClosePluginModal}></CreatePlugin>
             <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem')} ${deleteValue || 'Untitled Assistant'}? This action cannot be undone and all integrations associated with the assistant will be affected.`} title='Delete Assistant' projectName={deleteValue || 'Untitled Assistant'} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
-            <Drawer zIndex={10001} className={styles['drawer-action']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
+            <Drawer zIndex={10001} className={styles['drawer-action']}    closeIcon={<CloseIcon className={styles['img-icon-close']}/>} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
                 <ActionDrawer showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>
             <CreateCollection handleFetchData={() => fetchDataRetrievalData({limit: 20})} handleModalCloseOrOpen={() => setOpenCollectionDrawer(false)} OpenDrawer={openCollectionDrawer}></CreateCollection>

@@ -14,8 +14,10 @@ import { getViewCode } from '@/axios/index'
 import CommonComponents from '../../contents/index.tsx'
 import ModalTable from '@/components/modalTable';
 import ModelModal from '@/components/modelModal';
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import { toast } from 'react-toastify';
+import { dealThemeColor } from '@/utils/util.ts'
+
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from "react-i18next";
 import IconComponent from '@/commonComponent/iconComponent';
@@ -38,7 +40,7 @@ function ModelsPage() {
     const [modelOne, setModelOne] = useState(false);
     const [modelId, setModelId] = useState('');
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
-    const [modelList, setModelList] = useState([])
+    const [modelList, setModelList] = useState<Array<any>>([])
     const [formData, setFormData] = useState<formDataType>({
         properties: {},
         required: []
@@ -131,19 +133,18 @@ function ModelsPage() {
             fixed: 'right',
             render: (_: string, record: RecordType) => (
                 <Space size="middle">
-                    <div onClick={record.type !== 'chat_completion' ? undefined : () => handleJump(record as RecordType)} className={`table-edit-icon ${record.type !== 'chat_completion' && styles.typeDisabled} `}>
-                        <Tooltip placement='bottom' title={record.type === 'chat_completion' && tooltipPlaygroundTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                   <div onClick={record.type !== 'chat_completion' ? undefined : () => handleJump(record as RecordType)} className={`table-edit-icon ${record.type !== 'chat_completion' && styles.typeDisabled} `}>
+                        <Tooltip placement='bottom' title={record.type === 'chat_completion' && tooltipPlaygroundTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                             <JumpIcon />
                         </Tooltip>
                     </div>
                     <div onClick={()=>handleEdit(record)} className='table-edit-icon' >
-                        <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <Tooltip placement='bottom' title={tooltipEditTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                             <EditIcon />
                         </Tooltip>
-
                     </div>
                     <div className='table-edit-icon' onClick={()=>setRecord(record)}>
-                    {isVisible ? <Tooltip placement='bottom' title={tooltipMoreTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                    {isVisible ? <Tooltip placement='bottom' title={tooltipMoreTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                         <Popover trigger="click" placement='bottom' content={content} arrow={false}>
                         <MoreIcon  />
                         </Popover>
@@ -384,11 +385,11 @@ function ModelsPage() {
             </Spin>
             <ModelModal getOptionsList={fetchData1} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>
 
-            <Drawer title={t('projectEditModel')} width={700} closeIcon={<img src={closeIcon} alt="closeIcon" />} footer={[
-                <Button key="cancel" onClick={onClose} className='cancel-button'>
+            <Drawer title={t('projectEditModel')} width={700}        closeIcon={<CloseIcon className={styles['img-icon-close']}/>} footer={[
+                <Button key="cancel" onClick={onClose} >
                     {t('cancel')}
                 </Button>,
-                <Button key="submit" loading={confirmloading} onClick={handleConfirm} className={`next-button ${styles.button}`}>
+                <Button key="submit" type='primary' loading={confirmloading} onClick={handleConfirm} className={`${styles.button}`}>
                     {t('confirm')}
                 </Button>
             ]} placement="right" onClose={onClose} open={drawerEditOpen} className={styles['editModal']}>
@@ -646,9 +647,9 @@ function ModelsPage() {
                 open={openDeleteModal}
                 centered
                 className={styles['delete-model-modal']}
-                closeIcon={<img src={closeIcon} alt="closeIcon" />}
+                closeIcon={<CloseIcon className={styles['img-icon-close']}/>}
                 footer={[
-                    <Button key="cancel" onClick={handleDeleteCancel} className='cancel-button'>
+                    <Button key="cancel" onClick={handleDeleteCancel} >
                         {t('cancel')}
                     </Button>,
                     <Button key="delete" onClick={handleDeleteConfirm} className={disabled ? 'disabled-button' : 'delete-button'} disabled={disabled} loading={deleteLoading}>

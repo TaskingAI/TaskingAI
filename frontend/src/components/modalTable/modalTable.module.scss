@@ -6,10 +6,11 @@
     flex-direction: column;
 
     .table-border {
-        border: 1px solid var(--color-clear-button-hover);
+        border: 1px solid var(--color-border);
         flex: 1;
+        background-color: var(--color-background) !important;
         border-radius: 8px;
-        background-color: white;
+        background-color: var(--color-background);
         height: calc(100% - 76px);
         position: relative;
 
@@ -35,16 +36,32 @@
 
                         .ant-table {
                             height: 100% !important;
+                            background-color: var(--color-background);
 
                             .ant-table-container {
                                 height: 100% !important;
 
                                 .ant-table-header {
+
                                     table {
                                         .ant-table-thead {
+.ant-table-cell-scrollbar  {
+    // display: none;
+    background-color: var(--color-background);
+    box-shadow: none;
+}
                                             tr {
+
                                                 th::before {
                                                     display: none;
+
+                                                }
+
+                                                th {
+                                                    color: var(--color-text-primary);
+                                                    border-bottom: 1px solid var(--color-divider);
+                                                    border-right: none;
+                                                    background-color: var(--color-background);
                                                 }
                                             }
                                         }
@@ -54,6 +71,13 @@
                                 .ant-table-body {
                                     height: calc(100% - 60px) !important;
                                     max-height: calc(100% - 60px) !important;
+
+                                    .ant-table-cell {
+                                        background-color: var(--color-background) !important;
+                                        color: var(--color-text-primary);
+                                        border-bottom: 1px solid var(--color-divider);
+                                    }
+
                                 }
                             }
                         }
@@ -66,6 +90,7 @@
 
                                 .ant-table-body {
                                     min-height: calc(100% - 60px) !important;
+                                    background-color: var(--color-background);
 
                                     table {
                                         height: 100% !important;
@@ -141,8 +166,8 @@
         .select-name:hover {
             :global {
                 .ant-select-selector {
-                    border: 1px solid #099250;
-                    border-right: 1px solid #099250 !important;
+                    border: 1px solid var(--color-background);
+                    border-right: 1px solid var(--color-background) !important;
                 }
             }
         }
@@ -162,9 +187,9 @@
         position: absolute;
         bottom: 10px;
         display: flex;
-        background-color: white;
+        background-color: var(--color-background);
         padding-top: 10px;
-        border-top: 1px solid var(--color-clear-button-hover);
+        border-top: 1px solid var(--color-divider);
         width: 100%;
         justify-content: center;
         align-items: center;
@@ -194,14 +219,14 @@
             }
 
             .ant-btn-default:hover {
-                color: var( --color-text-primary );
+                color: var(--color-text-primary);
                 border: 1px solid var(--color-divider);
 
             }
 
             .ant-btn-default:disabled {
                 border: 1px solid var(--color-divider);
-                color: var( --color-text-disable );
+                color: var(--color-text-disable);
             }
 
         }
@@ -210,12 +235,11 @@
         .previous-button {
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
-            border: 1px solid var(--color-divider);
-            border-right: none;
+            border-right: none !important;
             width: 96px;
             height: 40px;
-            color: var( --color-text-disable );
-            background-color: white;
+            background-color: var(--color-background) !important;
+            color: var(--color-text-disable);
             border: 1px solid var(--color-divider);
 
             div {
@@ -229,9 +253,9 @@
             border-top-left-radius: 0;
             width: 96px;
             height: 40px;
-            color: var( --color-text-disable );
-            background-color: white;
-
+            color: var(--color-text-disable);
+            background-color: var(--color-background);
+            background-color: var(--color-background) !important;
             border: 1px solid var(--color-divider);
             border-bottom-left-radius: 0;
 
@@ -239,6 +263,7 @@
                 display: none;
             }
         }
+
         .able-click-button {
             color: var( --color-text-primary);
        
@@ -246,6 +271,8 @@
        .able-click-button:hover {
         background-color: var(--color-clear-button-hover);
        }
+    
+
         :global {
             .ant-pagination-options {
                 height: 40px !important;
@@ -343,8 +370,8 @@
 }
 
 .prompt-button {
-    background-color: #099250;
-    color: white;
+    background-color: var(--color-positive);
+    color: var(--color-invert-text);
     margin: 0px;
     height: 32px;
     padding: 2px 10px;
@@ -386,5 +413,12 @@
         height: 6px;
         width: 3px;
     }
-
+    .ant-table-wrapper
+    .ant-table-ping-left
+    .ant-table-cell-fix-left-last::after {
+      box-shadow: none !important;
+    }
+    .ant-table-wrapper .ant-table-ping-right .ant-table-cell-fix-right-first::after {
+      box-shadow: none !important;
+    }
 }

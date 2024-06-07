@@ -10,7 +10,7 @@
         }
         .ant-modal-body {
             padding: 0;
-            background-color: white;
+            background-color: var(--color-background);
             max-height: 732px;
             min-height: 732px;
             border-radius: 8px;
@@ -32,22 +32,23 @@
             font-weight: 400;
             font-size: 14px;
             cursor: pointer;
+            color: var(--color-text-secondary);
             line-height: 17px;
         }
 
         .first-menu:hover {
-            background-color: var(--color-gray-hover);
+            background-color: var(--color-background-hover);
             color: var(--color-text-primary);
         }
 
         .selected-menu {
-            background-color: var(--color-menu-background);
-            color: var(--color-primary);
+            background-color: var(--color-list-item-bg-selected);
+            color: var(--color-list-item-selected);
         }
 
         .selected-menu:hover {
-            background-color: var(--color-menu-background);
-            color: var(--color-primary);
+            background-color: var(--color-list-item-bg-selected);
+            color: var(--color-list-item-selected);
 
         }
     }
@@ -65,10 +66,17 @@
             border-radius: 8px;
             cursor: pointer;
             align-items: center;
+            color: var(--color-text-primary);
             justify-content: space-between;
+            svg {
+                path {
+                    stroke: var(--color-text-primary);
+                }
+            
+            }
         }
         .second-menu:hover {
-            background-color: var(--color-gray-hover);
+            background-color: var(--color-background-hover);
             color: var(--color-text-primary);
         }
         ul {
@@ -88,18 +96,18 @@
             }
 
             .third-menu:hover {
-                background-color: var(--color-gray-hover);
+                background-color: var(--color-background-hover);
                 color: var(--color-text-primary);
             }
 
             .selected-menu {
-                background-color: var(--color-menu-background);
-                color: var(--color-primary);
+                background-color: var(--color-list-item-bg-selected);
+                color: var(--color-list-item-selected);
             }
 
             .selected-menu:hover {
-                background-color: var(--color-menu-background);
-                color: var(--color-primary);
+                background-color: var(--color-list-item-bg-selected);
+                color: var(--color-list-item-selected);
 
             }
         }
@@ -125,6 +133,7 @@
                 border-radius: 8px;
                 border-top-right-radius: 0%;
                 border-bottom-right-radius: 0%;
+                color: var(--color-text-primary);
                 border-right: none;
                 font-size: 14px;
                 line-height: 17px;

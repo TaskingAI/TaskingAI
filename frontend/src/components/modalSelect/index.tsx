@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import NoCollection from '../../assets/img/NO_COLLECTION.svg?react'
 import NoTool from '../../assets/img/NO_TOOL.svg?react'
 import { formatTime } from '../../utils/util'
@@ -117,19 +117,19 @@ function ModalSelect(prop: any) {
         setContentLoading(false)
     }
     return (
-        <Modal onCancel={handleRetrievlCancel} centered className='collection-modal' width={1325} open={retrievalModal} closeIcon={<img src={closeIcon} alt="closeIcon" />} title={nameTitle} footer={[
+        <Modal onCancel={handleRetrievlCancel} centered className='collection-modal' width={1325} open={retrievalModal}        closeIcon={<CloseIcon/>} title={nameTitle} footer={[
             <div className='footer-group' style={{ display: 'flex', justifyContent: 'space-between' }} key='footer2'>
-                <Button key="model" icon={<PlusOutlined />} onClick={handleNewRetrieval} className='cancel-button'>
+                <Button key="model" icon={<PlusOutlined />} onClick={handleNewRetrieval}>
                     {newTitle}
                 </Button>
                 <div>
                     <span className='select-record'>
                         {collectionId ? 1 : 0}   {t('projectItemSelected')}
                     </span>
-                    <Button key="cancel" onClick={handleRetrievlCancel} className='cancel-button' style={{ marginRight: '8px' }}>
+                    <Button key="cancel" onClick={handleRetrievlCancel} style={{ marginRight: '8px' }}>
                         {t('cancel')}
                     </Button>
-                    <Button key="submit" onClick={handleRetrievlConfirm} className='next-button'>
+                    <Button key="submit" onClick={handleRetrievlConfirm} type='primary'>
                         {t('confirm')}
                     </Button>
                 </div>
@@ -145,14 +145,14 @@ function ModalSelect(prop: any) {
                         }
                     ]} className={'select-name'} />
                     <Input placeholder='Enter ID' className={'input-name'} onChange={handleInputChange} value={inputValue} />
-                    <Button className='cancel-button' onClick={handleSearch}>Search</Button>
+                    <Button  onClick={handleSearch}>Search</Button>
                     <Select defaultValue="All Records" onChange={handleSelectEndChange} options={optionsEnd} className={'select-data'} />
 
                 </div>
                 {contentList.length === 0 ? <div className='no-data'>
                     {empty[id]}
                     <div className='desc'>{newTitle}</div>
-                    <Button icon={<PlusOutlined />} className='prompt-button' onClick={handleNewRetrieval}>{newTitle.split(' ').map((word: any) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</Button>
+                    <Button icon={<PlusOutlined />} type='primary' onClick={handleNewRetrieval}>{newTitle.split(' ').map((word: any) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</Button>
                 </div> :
                     <Spin spinning={contentLoading}>
                         <div className='content'>

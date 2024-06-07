@@ -27,7 +27,7 @@ import { getRetrievalList } from '../../axios/retrieval.ts';
 import PlaygroundImg from '@/assets/img/playgroundImg.svg?react'
 import { openChat, sendMessage, generateMessage, getListChats, getHistoryMessage, getChatItem, deleteChatItem } from '@/axios/playground'
 import { getAssistantDetail, updateAssistant, getAssistantsList } from '@/axios/assistant'
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 import AnimLoadingImg from '@/assets/img/loadingAnimImg.svg?react'
 import RemoveIcon from '../../assets/img/removeIcon.svg?react'
@@ -49,6 +49,7 @@ import './index.css'
 import { fetchAssistantsData } from '@/Redux/actions.ts'
 import MarkdownMessageBlock from '@taskingai/taskingai-markdown'
 const origin = window.location.origin;
+
 const plainOptions = [
     { label: 'Stream', value: 1 },
     { label: 'Debug', value: 2 },
@@ -287,7 +288,6 @@ function Playground() {
         } else {
             res = await getAssistantsList({ limit: assistantLimit || 20 }) as FullApiResponse
         }
-        // const res: any = await getAssistantsList({ limit: assistantLimit || 20})
         const data = res.data.map((item: any) => {
             return {
                 ...item,
@@ -646,8 +646,8 @@ function Playground() {
         setLoading(false)
     }
     const handleCreateMessage = async (flag?: any) => {
-        const imgLoading = imgList.some(item => item.loadingAnim)
-        if (imgLoading) {
+        const imgIfLoading = imgList.some(item => item.loadingAnim)
+        if (imgIfLoading) {
             return toast.error('The image is still uploading, please wait.')
         }
         const params = {
@@ -792,8 +792,8 @@ function Playground() {
 
     }
     const handleGenerateMessage = async (contentTalk1?: any) => {
-        const imgLoading = imgList.some(item => item.loadingAnim)
-        if (imgLoading) {
+        const imgIfLoading = imgList.some(item => item.loadingAnim)
+        if (imgIfLoading) {
             return toast.error('The image is still uploading, please wait.')
         }
         const lastData = Array.isArray(contentTalk[contentTalk.length - 1]?.content.text)
@@ -1414,7 +1414,7 @@ function Playground() {
                     <div className={styles['select-assistant']}>{t('projectPlaygroundSelectAssistantDesc')}</div>
                     <div className={styles['header-news']}>
                         <div className={styles['plusParent']}>
-                            <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleSelectAssistantID}>{t('projectPlaygroundSelectAssistant')}</Button>
+                            <Button icon={<PlusOutlined />} type='primary' onClick={handleSelectAssistantID}>{t('projectPlaygroundSelectAssistant')}</Button>
                         </div>
                     </div>
                 </div> : <div className={styles['playground']}>
@@ -1431,14 +1431,13 @@ function Playground() {
                         <div className={styles['selected-modal']}>
                             <div className={styles['generation-options']}>
                                 {t('projectPlaygroundGenerationOptions')}
-                                {/* <QuestionIcon /> */}
                             </div>
                             <div className={styles['desc']}></div>
                             <Checkbox.Group onChange={handleChangeCheckbox} options={plainOptions} defaultValue={JSON.parse(localStorage.getItem('checkedValues') as string) || checkBoxValue} />
                         </div>
                         <div className={styles['bottom']}>
                             <div className={styles['bottom-chats']}>
-                                <div>{t('projectPlaygroundChats')}</div>
+                                <div className={styles.chatsTitle}>{t('projectPlaygroundChats')}</div>
                                 <div className={styles['actionbuttondownload']} onClick={handleNewChat}>
                                     <PlusOutlined />
                                     <div className={styles['text1']}>{t('projectPlaygroundNewChat')}</div>
@@ -1446,7 +1445,7 @@ function Playground() {
                             </div>
                             <Space.Compact>
                                 <Input readOnly className={styles['id-input']} style={{ width: '20%', borderRight: 0 }} defaultValue="ID" />
-                                <Input style={{ width: '73%' }} onPressEnter={handleSearchChatId} value={searchChatID} onChange={(e) => handleChangeSearchChatID(e)} placeholder='Enter chat_id' suffix={<SearchOutlined onClick={handleSearchChatId} style={{ color: 'rgba(0,0,0,.45)' }} />} />
+                                <Input style={{ width: '73%' }} onPressEnter={handleSearchChatId} value={searchChatID} onChange={(e) => handleChangeSearchChatID(e)} placeholder='Enter chat_id' suffix={<SearchOutlined onClick={handleSearchChatId} className={styles['search-icon']}  />} />
                             </Space.Compact>
                             <div className={styles['chats']}>
                                 <div className={styles['chat-message']}>
@@ -1482,7 +1481,7 @@ function Playground() {
                             </div>
 
                             {listChats.length > 0 && <div className={styles['header-right']} onClick={handleDeleteChat}>
-                                <Button icon={<DeleteIcon />} className='cancel-button'>{t('projectPlaygroundDeleteChat')}</Button>
+                                <Button icon={<DeleteIcon />} >{t('projectPlaygroundDeleteChat')}</Button>
                             </div>}
                         </div>
                         {!chatId && <div className={styles['content-center']}>
@@ -1512,7 +1511,7 @@ function Playground() {
                                     {contentTalk.map((item, index) => (
                                         <div className={styles['message']} key={index} ref={divRef}>
                                             <div className={`${styles.subText1} ${item.role === 'user' ? styles.user : ''}`}>{item.role.charAt(0).toUpperCase() + item.role.slice(1)}</div>
-                                            {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`} style={{ whiteSpace: "pre-line" }}>{checkBoxValue.indexOf(4) !== -1 ? <MarkdownMessageBlock message={item.content.text} /> : item.content.text}</div>}
+                                            {typeof (item.content.text) === 'string' && <div className={`${styles.text1} ${item.role === 'user' ? styles.userInfo : ''}`} >{checkBoxValue.indexOf(4) !== -1 ? <MarkdownMessageBlock message={item.content.text} /> : item.content.text}</div>}
                                             {typeof (item.content.text) === 'object' && <div className={`text1 ${item.role === 'user' ? styles.userInfo : ''}`}>{item.content.text.map((item1: any, index1: number) => (<div key={index1} className={`${(item1.color === 'orange' && index === contentTalk.length - 1) ? 'orange' : 'green'} ${index1 === item.content.text.length - 1 && styles.lastItem}`}>
                                                 {(item1.color === 'orange' && index === contentTalk.length - 1 && item1.event_step !== '') ?
                                                     (<div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>{lottieAnimShow && (
@@ -1555,7 +1554,7 @@ function Playground() {
                             <TextArea className={styles['textarea']} autoSize={{ minRows: 3, maxRows: 6 }} value={contentValue} onChange={(e) => setContentValue(e.target.value)}></TextArea>
                             <div className={styles['button-group']}>
                                 <div style={{ display: 'flex' }}>
-                                    <Button className={`next-button ${styles.button}`} onClick={handleSendAndGenerateMessage} loading={sendGenerateLoading}>Send and Generate</Button>
+                                    <Button type='primary' className={`${styles.button}`} onClick={handleSendAndGenerateMessage} loading={sendGenerateLoading}>Send and Generate</Button>
                                     <div className={`${styles.formbuttoncancel} ${sendButtonLoading ? styles.loading : ''}`} onClick={handleCreateMessage}>
                                         {sendButtonLoading && <LoadingOutlined style={{ marginRight: '3px' }} />}  <div className={styles['text1']}>{t('projectPlaygroundSend')}</div>
                                     </div>
@@ -1577,7 +1576,7 @@ function Playground() {
                             <div className={styles['setting-modal']} ref={settingModal} style={{ display: 'none' }}>
 
                                 <div className={styles['select-assistant']}>Prompt variables</div>
-                                <TextArea style={{ height: '300px' }} placeholder={`{\n   key: value\n}`}
+                                <TextArea className={styles['prompt-textarea']} style={{ height: '300px' }} placeholder={`{\n   key: value\n}`}
                                     value={systemPromptVariables} onChange={(e) => setSystemPromptVariable(e.target.value)}></TextArea>
                             </div>
                         </div>
@@ -1585,7 +1584,7 @@ function Playground() {
                 </div >}
             </Spin > : <PlaygroundModel />}
             <Drawer
-                closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />}
+                    closeIcon={<CloseIcon className={styles['img-icon-close']}/>}
                 className={styles['assistant-drawer']}
                 width={1280}
                 onClose={handleCancel} title={t('projectEditAssistant')} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
@@ -1593,19 +1592,19 @@ function Playground() {
                     handleRetrievalConfigChange1={handleRetrievalConfigChange1} retrievalList={retrievalList} selectedActionsRows={selectedActionsRows} inputValue1={inputValueOne} inputValue2={inputValueTwo} handleMemoryChange1={handleMemoryChange1} memoryValue={memoryValue} handleAddPromptInput={handleAddPrompt} drawerName={drawerName} systemPromptTemplate={systemPromptTemplate} handleDeletePromptInput={handleDeletePromptInput} handleInputPromptChange={handleInputPromptChange} handleInputValueOne={handleInputValueOne} handleInputValueTwo={handleInputValueTwo} selectedRows={originalModelData} handleSelectModelId={handleSelectModelId} handleChangeName={handleChangeName} drawerDesc={drawerDesc} handleDescriptionChange={handleDescriptionChange} selectedRetrievalRows={selectedRetrievalRows}></DrawerAssistant>
             </Drawer>
             <ModelModal handleSetModelConfirmOne={handleSetModelConfirmOne} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} getOptionsList={fetchModelsList} modelType='chat_completion'></ModelModal>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} centered footer={[
+            <Modal    closeIcon={<CloseIcon className={styles['img-icon-close']}/>} centered footer={[
                 <div className='footer-group' key='footer-group'>
-                    <Button key="model" icon={<PlusOutlined />} onClick={handleNewModal} className='cancel-button'>
+                    <Button key="model" icon={<PlusOutlined />} onClick={handleNewModal} >
                         {t('projectRetrievalNew')}
                     </Button>
                     <div>
                         <span className='select-record'>
                             {recordsSelected1.length}  {recordsSelected1.length > 1 ? `${t('projectItemsSelected')}` : `${t('projectItemSelected')}`}
                         </span>
-                        <Button key="cancel" onClick={handleCloseModal} className={`cancel-button ${styles.cancelButton}`}>
+                        <Button key="cancel" onClick={handleCloseModal} className={`${styles.cancelButton}`}>
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleCreateConfirm} className='next-button'>
+                        <Button key="submit" onClick={handleCreateConfirm} type='primary'>
                             {t('confirm')}
                         </Button>
                     </div>
@@ -1613,19 +1612,19 @@ function Playground() {
             ]} title={t('projectAssistantRetrievalPlaceHolder')} open={openModalTable} width={1000} onCancel={handleCloseModal} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable title='New collection' name='collection' updatePrevButton={updateRetrievalPrevButton} defaultSelectedRowKeys={selectedRetrievalRows} hangleFilterData={hangleFilterData} mode='multiple' handleRecordsSelected={handleCollectionSelected} ifSelect={true} columns={collectionTableColumn} dataSource={retrievalList} hasMore={hasMore} id='collection_id' onChildEvent={handleChildRetrievalEvent} />
             </Modal>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
+            <Modal  closeIcon={<CloseIcon className={styles['img-icon-close']}/>}centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='group'>
-                    <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
+                    <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} >
                         {t('projectNewModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
                             1 {t('projectItemSelected')}
                         </span>
-                        <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
+                        <Button key="cancel" onClick={handleModalClose} className={`${styles.cancelButton}`}>
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleModalCloseConfirm} className='next-button'>
+                        <Button key="submit" onClick={handleModalCloseConfirm} type='primary'>
                             {t('confirm')}
                         </Button>
                     </div>
@@ -1633,19 +1632,19 @@ function Playground() {
             ]} title={t('projectSelectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
                 <ModalTable title='New model' name="model" defaultSelectedRowKeys={Array.isArray(selectedModelRows) ? selectedModelRows : [selectedModelRows]} updatePrevButton={updateModelPrevButton} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={hasModelMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
-            <Drawer zIndex={10001} className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
+            <Drawer zIndex={10001} className={styles.drawerCreate}        closeIcon={<CloseIcon className={styles['img-icon-close']}/>} onClose={handleActionCancel} title='Bulk Create Action' placement="right" open={OpenActionDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleActionRequest()} onCancel={handleActionCancel} />}>
                 <ActionDrawer showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleAssistantModalClose} centered footer={[
+            <Modal        closeIcon={<CloseIcon className={styles['img-icon-close']}/>} onCancel={handleAssistantModalClose} centered footer={[
                 <div className='footer-group' style={{ justifyContent: 'flex-end' }} key='footer'>
                     <div>
                         <span className='select-record'>
                             {recordsSelected.length} {t('projectItemSelected')}
                         </span>
-                        <Button key="cancel" onClick={handleAssistantModalClose} className={`cancel-button ${styles.cancelButton}`}>
+                        <Button key="cancel" onClick={handleAssistantModalClose} className={`${styles.cancelButton}`}>
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleAssistantModalClose1} className='next-button' loading={confirmLoading}>
+                        <Button key="submit" onClick={handleAssistantModalClose1} type='primary' loading={confirmLoading}>
                             {t('confirm')}
                         </Button>
                     </div>
@@ -1655,7 +1654,7 @@ function Playground() {
                 <ModalTable name='assistant' title='New assistant' ifAllowNew={true} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedAssistant} handleRecordsSelected={handleRecordsAssistantSelected} ifSelect={true} columns={assistantTableColumn} hasMore={modelHasMore} id='assistant_id' dataSource={optionList} onChildEvent={handleChildAssistantEvent}></ModalTable>
             </Modal>
             <CreateCollection handleFetchData={() => fetchDataRetrievalData({ limit: retrievalLimit || 20 })} handleModalCloseOrOpen={() => setOpenCollectionDrawer(false)} OpenDrawer={openCollectionDrawer}></CreateCollection>
-            <Drawer width={700} open={contentDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCloseContentDrawer} title={t('projectPlaygroundChatCompletion')}>
+            <Drawer width={700} open={contentDrawer}        closeIcon={<CloseIcon className={styles['img-icon-close']}/>} onClose={handleCloseContentDrawer} title={t('projectPlaygroundChatCompletion')}>
                 <Collapse expandIconPosition='end' items={[
                     {
                         key: '1',
@@ -1680,7 +1679,7 @@ function Playground() {
                     }]}></Collapse>
 
             </Drawer>
-            <Drawer width={700} open={contentErrorDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCloseContentErrorDrawer} title='Chat Completion'>
+            <Drawer width={700} open={contentErrorDrawer}        closeIcon={<CloseIcon className={styles['img-icon-close']}/>} onClose={handleCloseContentErrorDrawer} title='Chat Completion'>
                 <Collapse expandIconPosition='end' items={[
                     {
                         key: '1',

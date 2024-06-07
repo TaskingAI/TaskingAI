@@ -140,7 +140,7 @@ const ViewCode = (props: any) => {
     }
 
     return (
-        <Modal centered width={1280} open={open} title='View Code' className={`${styles.modal} view-code-component`} onCancel={handleClose} footer={null} closeIcon={<CloseIcon />}>
+        <Modal centered width={1280} open={open} title='View Code' className={`${styles.modal} view-code-component`} onCancel={handleClose} footer={null} closeIcon={<CloseIcon className='img-icon-close'/>}>
             <div style={{ display: 'flex', width: '100%', flexShrink: 0,height:'732px' }}>
                 <div className={styles.silder}>
                     {uniqueLanguages.map((language: any) => (

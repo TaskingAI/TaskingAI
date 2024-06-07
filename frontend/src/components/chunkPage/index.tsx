@@ -4,6 +4,8 @@ import {
     Button,
     Space, Input, Spin, Tooltip, Modal
 } from 'antd';
+import { dealThemeColor } from '@/utils/util.ts'
+
 import styles from './chunkPage.module.scss'
 import { toast } from 'react-toastify';
 import tooltipTitle from '../../contents/tooltipTitle.tsx'
@@ -12,7 +14,7 @@ import CopyOutlined from '../../assets/img/copyIcon.svg?react'
 import { getRecordsList, createRecord, deleteRecord, updateRecord, getRecord } from '../../axios/chunk.ts'
 import { formatTimestamp } from '@/utils/util'
 import DeleteIcon from '../../assets/img/deleteIcon.svg?react'
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import EditIcon from '../../assets/img/editIcon.svg?react'
 import ClipboardJS from 'clipboard';
 import { useTranslation } from 'react-i18next';
@@ -39,8 +41,8 @@ function ChunkPage({ collectionId }: { collectionId: string }) {
             width: 240,
             fixed: 'left',
             render: (text: string) =>
-                <div style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
-                    <span style={{ fontSize: '12px', color: '#777' }}>{text}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(text)} />
+                <div className={styles['id-copy']} style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
+                    <span style={{ fontSize: '12px' }}>{text}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(text)} />
                 </div>
             ,
         },
@@ -91,12 +93,12 @@ function ChunkPage({ collectionId }: { collectionId: string }) {
             render: (__: string, record: any) => (
                 <Space size="middle">
                     <div onClick={() => handleEdit(record)} className='table-edit-icon' style={{ height: '34px', width: '34px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <Tooltip placement='bottom' title={tooltipEditTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                             <EditIcon />
                         </Tooltip>
                     </div>
                     <div onClick={() => handleDelete(record)} className='table-edit-icon' style={{ height: '34px', width: '34px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Tooltip placement='bottom' title={tooltipDeleteTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <Tooltip placement='bottom' title={tooltipDeleteTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                             <DeleteIcon />
                         </Tooltip>
                     </div>
@@ -225,13 +227,13 @@ function ChunkPage({ collectionId }: { collectionId: string }) {
         <Spin spinning={loading} >
             <ModalTable title='New chunk' ifOnlyId={true} onOpenDrawer={handleCreatePrompt} onChildEvent={handleChildEvent} updatePrevButton={updatePrevButton} dataSource={recordList} ifSelect={false} name="chunk" columns={columns} hasMore={hasMore} id="chunk_id"></ModalTable>
             <Modal footer={[
-                <Button key="cancel" onClick={handleCancel} className='cancel-button'>
+                <Button key="cancel" onClick={handleCancel}>
                    {t('cancel')}
                 </Button>,
-                <Button key="submit" onClick={() => handleConfirm()} className='next-button' loading={confirmLoading}>
+                <Button key="submit" onClick={() => handleConfirm()} type='primary' loading={confirmLoading}>
                  {t('confirm')}
                 </Button>
-            ]} title={drawerTitle} centered className={styles['record-create-model']} open={createOpenModal} width={720} onCancel={handleCancel} closeIcon={<img src={closeIcon} alt="closeIcon" />}>
+            ]} title={drawerTitle} centered className={styles['record-create-model']} open={createOpenModal} width={720} onCancel={handleCancel}    closeIcon={<CloseIcon className={styles['img-icon-close']}/>}>
                 <div className={styles['text-content']}>
                     <div className={styles['text-title']}>{t('projectChunkTextContent')}</div>
                     <div className={styles['desc']}>{t('projectChunkTextContentDesc')}</div>

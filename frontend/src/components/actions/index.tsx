@@ -5,9 +5,11 @@ import styles from './action.module.scss'
 import { useState, useEffect,useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchActionData } from '../../Redux/actions';
+import { dealThemeColor } from '@/utils/util.ts'
+
 import { getFirstMethodAndEndpoint } from '../../utils/util.ts'
 import { getActionsList, updateActions, deleteActions, createActions, getActionsDetail } from '../../axios/actions.ts'
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import DeleteModal from '../deleteModal/index.tsx'
 import ModalTable from '../modalTable/index'
 import ModalFooterEnd from '../modalFooterEnd/index'
@@ -99,12 +101,12 @@ function Actions() {
         render: (__: string, record: any) => (
             <Space size="middle">
                 <div onClick={() => handleEdit(record)} className='table-edit-icon'>
-                    <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                    <Tooltip placement='bottom' title={tooltipEditTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                         <EditIcon />
                     </Tooltip>
                 </div>
                 <div onClick={() => handleDelete(record)} className='table-edit-icon'>
-                    <Tooltip placement='bottom' title={tooltipDeleteTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                    <Tooltip placement='bottom' title={tooltipDeleteTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                         <DeleteIcon />
                     </Tooltip>
                 </div>
@@ -242,7 +244,7 @@ function Actions() {
                 <ModalTable title='New action' loading={loading} updatePrevButton={updatePrevButton} name='action' id='action_id' hasMore={hasMore} ifSelect={false} columns={columns} dataSource={pluginFunList} onChildEvent={handleChildEvent} onOpenDrawer={handleCreatePrompt} />
             </Spin>
             <DeleteModal open={OpenDeleteModal} describe={`${t('deleteItem')} ${deleteValue}? ${t('projectActionDeleteDesc')}`} title='Delete Action' projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
-            <Drawer className={styles.drawerCreate} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
+            <Drawer className={styles.drawerCreate} closeIcon={<CloseIcon className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <ActionDrawer ref={actionDrawerRef} actionId={actionId} showTipError={tipSchema} onhandleTipError={onhandleTipError} schema={schema} onSchemaChange={handleSchemaChange} open={OpenDrawer} onRadioChange={onRadioChange} onChangeCustom={handleCustom} onChangeAuthentication={hangleChangeAuthorization} radioValue={radioValue} custom={custom} Authentication={Authentication} />
             </Drawer>
         </div>

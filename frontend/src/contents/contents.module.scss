@@ -1,0 +1,20 @@
+.project-access {
+    display: inline-block;
+    background: var(--color-tag-background);
+    border-radius: 8px;
+    padding: 4px;
+
+    .project-name {
+        color: var(--color-text-secondary);
+        font-weight: 500;
+        font-size: 10px;
+    }
+}
+.id-copy {
+    span {
+        color: var(--color-text-secondary);
+    }
+    svg path {
+        stroke: var(--color-text-secondary);
+    }
+}

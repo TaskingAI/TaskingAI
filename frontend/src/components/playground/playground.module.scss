@@ -9,10 +9,21 @@
     }
 }
 
+.img-icon-close {
+    height: 27px;
+    min-width: 27px;
+
+    g {
+        path {
+            stroke: var(--color-text-primary);
+        }
+    }
+}
+
 .playground {
     display: flex;
     height: 100%;
-    background-color: white;
+    background-color: var(--color-background);
 
     .left-content {
         flex: 0 0 350px;
@@ -21,10 +32,10 @@
         max-width: 350px;
         min-width: 350px;
         width: 350px;
-        border-right: 1px solid var(--color-clear-button-hover);
+        border-right: 1px solid var(--color-divider);
 
         .top {
-            border-bottom: 1px solid var(--color-clear-button-hover);
+            border-bottom: 1px solid var(--color-divider);
             padding: 24px;
 
             .select {
@@ -40,19 +51,12 @@
                     align-items: center;
                 }
             }
-
             .edit-button:hover {
                 border: 1px solid var(--color-divider) !important;
                 color: var(--color-text-primary) !important;
-                background-color: var(--color-invert-text);
+                background-color: var(--color-background-hover) !important;
             }
 
-            .disabled {
-                background-color: var(--color-clear-button-hover);
-                color: var(--color-text-disable) !important;
-                background-color: var(--color-clear-button-hover) !important;
-                border: 1px solid var(--color-divider) !important;
-            }
         }
 
         .bottom {
@@ -69,6 +73,10 @@
                 margin-bottom: 16px;
                 justify-content: space-between;
 
+                .chatsTitle {
+                    color: var(--color-text-primary);
+                }
+
                 .arrowicons {
                     position: relative;
                     width: 18px;
@@ -78,7 +86,6 @@
                 }
 
                 .text1 {
-
                     width: 100%;
                     position: relative;
                     font-size: 14px;
@@ -94,7 +101,7 @@
                     position: relative;
                     cursor: pointer;
                     border-radius: 8px;
-                    background-color: var(--color-invert-text);
+                    background-color: var(--color-background);
                     border: 1px solid var(--color-divider);
                     box-sizing: border-box;
                     // width: 100%;
@@ -115,8 +122,18 @@
 
                 .actionbuttondownload:hover {
                     border: 1px solid var(--color-divider);
-                    color: #2b2b2b;
-                    background-color: var(--color-clear-button-hover);
+                    color: var(--color-text-primary);
+                    background-color: var(--color-background-hover);
+                }
+            }
+
+            :global {
+                .ant-input-suffix {
+                    .anticon {
+                        svg {
+                            fill: var(--color-text-secondary);
+                        }
+                    }
                 }
             }
 
@@ -155,6 +172,7 @@
 
                 .noPreviousChat1 {
                     position: relative;
+                    color: var(--color-text-disable)
                 }
 
                 .text1 {
@@ -172,7 +190,7 @@
 
                 .formbuttoncancel {
                     border-radius: 8px;
-                    background-color: var(--color-invert-text);
+                    background-color: var(--color-background);
                     border: 1px solid var(--color-divider);
                     box-sizing: border-box;
                     height: 34px;
@@ -211,6 +229,9 @@
                 overflow: hidden;
                 flex-shrink: 0;
 
+                path {
+                    stroke: var(--color-text-secondary);
+                }
             }
 
             .son {
@@ -238,7 +259,7 @@
                 position: relative;
                 border-radius: 8px;
                 margin-top: 10px;
-                background-color: var(--color-invert-text);
+                background-color: var(--color-background);
                 display: flex;
                 flex-direction: row;
                 align-items: center;
@@ -248,26 +269,26 @@
                 gap: 8px;
                 text-align: left;
                 font-size: 14px;
-                color: #777;
+                color: var(--color-text-secondary);
                 font-family: Inter;
             }
 
             .functionaliconsParent:hover {
-                background-color: rgba(0, 0, 0, 0.06);
-                color: rgba(0, 0, 0, 0.88);
+                background-color: var(--color-background-hover);
+                color: var(--color-text-primary);
 
                 svg path {
-                    stroke: rgba(0, 0, 0, 0.88);
+                    stroke: var(--color-text-primary);
                 }
             }
 
             .functionaliconsParent.chatId {
-                color: var(--color-primary);
-                background-color: #f3f8f6;
+                color: var(--color-list-item-selected);
+                background-color: var(--color-list-item-bg-selected);
                 cursor: auto;
 
                 svg path {
-                    stroke: var(--color-primary);
+                    stroke: var(--color-list-item-selected);
                 }
             }
 
@@ -289,7 +310,7 @@
             font-size: 14px;
             font-family: Inter;
             margin-bottom: 10px;
-            color: #777;
+            color: var(--color-text-secondary);
             text-align: left;
             display: inline-block;
         }
@@ -311,7 +332,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid var(--color-clear-button-hover);
+            border-bottom: 1px solid var(--color-divider);
             padding: 16px 24px;
 
             .header-left {
@@ -332,7 +353,7 @@
                     position: relative;
                     font-size: 14px;
                     font-family: Inter;
-                    color: #777;
+                    color: var(--color-text-secondary);
                     text-align: left;
                 }
             }
@@ -349,16 +370,15 @@
                         display: flex;
                         justify-content: center;
                         align-items: center;
+
+                        .ant-btn-icon {
+                            svg path {
+                                stroke: var(--color-text-primary);
+                            }
+                        }
                     }
                 }
 
-
-                // .disabled {
-                //     background-color: var(--color-clear-button-hover);
-                //     color: var( --color-text-disable ) !important;
-                //     background-color: var(--color-clear-button-hover) !important;
-                //     border: 1px solid var(--color-divider !important;
-                // }
             }
         }
 
@@ -401,9 +421,7 @@
             max-width: 1380px;
             height: calc(100% - 40px);
             overflow-x: hidden;
-            // max-height: 580px;
 
-            // border:1px solid var(--color-clear-button-hover);
             .message {
                 width: 100%;
                 position: relative;
@@ -411,7 +429,7 @@
                 padding-top: 24px;
                 overflow: hidden;
                 display: flex;
-                border-bottom: 1px solid var(--color-clear-button-hover);
+                border-bottom: 1px solid var(--color-divider);
                 // flex-direction: column;
                 // align-items: center;
                 justify-content: flex-start;
@@ -424,7 +442,6 @@
 
                 .loading-icon {
                     color: #ffbb58;
-
                     svg {
                         width: 18px;
                         height: 18px;
@@ -480,7 +497,7 @@
                     position: relative;
                     font-size: 12px;
                     font-family: Inter;
-                    color: #777 !important;
+                    color: var(--color-text-secondary) !important;
                     font-weight: bold;
                     text-align: left;
                 }
@@ -490,7 +507,7 @@
                     position: relative;
                     font-size: 14px;
                     font-family: Inter;
-                    color: #777;
+                    color: var(--color-text-secondary);
                     text-align: left;
                     display: inline-block;
                 }
@@ -529,7 +546,7 @@
 
                 .formbuttoncancel {
                     border-radius: 8px;
-                    background-color: var(--color-invert-text);
+                    background-color: var(--color-background-hover);
                     border: 1px solid var(--color-divider);
                     box-sizing: border-box;
                     height: 34px;
@@ -555,14 +572,20 @@
 
         .content-bottom {
             position: absolute;
-            border: 1px solid var(--color-clear-button-hover);
+            border: 1px solid var(--color-divider);
             padding: 24px;
             bottom: 24px;
-            background-color: white;
+            background-color: var(--color-background);
             right: 24px;
             border-radius: 8px;
             width: calc(100% - 48px);
 
+            .textarea {
+                border: none !important;
+                outline: none !important;
+                box-shadow: none;
+                margin-bottom: 10px;
+            }
             .upload-list {
                 display: flex;
                 gap: 15px;
@@ -574,25 +597,28 @@
                     position: relative;
                     // outline: 1px solid var(--color-divider);
                     border-radius: 6px;
+
                     .close-icon {
                         position: absolute;
                         left: 54px;
-                        stroke: #777;
+                        stroke: var(--color-text-secondary);
                         top: -6px;
                         display: none;
                         z-index: 999;
                         border-radius: 50%;
                         cursor: pointer;
-                        background-color: white;
+                        background-color: var(--color-background);
                     }
 
                     :global {
                         .ant-image {
                             border-radius: 6px;
+
                             img {
                                 border-radius: 6px;
                             }
                         }
+
                         .ant-image-mask {
                             border-radius: 8px;
 
@@ -617,6 +643,7 @@
                     }
 
                 }
+
                 .upload-item:hover {
                     .close-icon {
                         display: block;
@@ -624,19 +651,7 @@
                 }
             }
 
-            .textarea {
-                border: none;
-                outline: none !important;
-                box-shadow: none;
-                margin-bottom: 10px;
-            }
-
-            :global {
-                .textarea.ant-input {
-                    border: none;
-                }
-            }
-
+          
 
             .button-group {
                 display: flex;
@@ -654,10 +669,14 @@
                     border-radius: 8px;
                     cursor: pointer;
                     border: 1px solid var(--color-divider);
+
+                    svg path {
+                        stroke: var(--color-text-primary);
+                    }
                 }
 
                 .upload-img:hover {
-                    background-color: var(--color-clear-button-hover);
+                    background-color: var(--color-background-hover);
                 }
 
                 .button {
@@ -683,7 +702,7 @@
 
                 .formbuttoncancel {
                     border-radius: 8px;
-                    background-color: var(--color-invert-text);
+                    background-color: var(--color-background);
                     border: 1px solid var(--color-divider);
                     box-sizing: border-box;
                     height: 34px;
@@ -700,7 +719,7 @@
                 .formbuttoncancel:hover {
                     border: 1px solid var(--color-divider);
                     color: var(--color-text-primary);
-                    background-color: var(--color-clear-button-hover);
+                    background-color: var(--color-background-hover);
                 }
 
                 .functionalicons {
@@ -714,7 +733,7 @@
                 .actionbuttonedit {
                     position: relative;
                     border-radius: 8px;
-                    background-color: var(--color-invert-text);
+                    background-color: var(--color-background);
                     border: 1px solid var(--color-divider);
                     box-sizing: border-box;
                     // width: 100%;
@@ -730,10 +749,16 @@
 
                     svg {
                         path {
-                            fill: #2B2B2B !important;
-                            stroke: #2B2B2B !important;
+                            fill: var(--color-text-primary) !important;
+                            stroke: var(--color-text-primary) !important;
                         }
                     }
+                }
+
+                .actionbuttonedit:hover {
+                    background-color: var(--color-background-hover);
+                    border: 1px solid var(--color-divider);
+                    color: var(--color-text-primary);
                 }
             }
         }
@@ -771,11 +796,12 @@
 
         .plusParent {
             display: flex;
+
         }
 
         .prompt-button {
             background-color: var(--color-positive);
-            color: white;
+            color: var(--color-invert-text);
             margin: 0px;
             height: 32px;
             padding: 2px 10px;
@@ -783,7 +809,7 @@
 
         .prompt-button:hover {
             background-color: var(--color-positive-hover);
-            color: white;
+            color: var(--color-invert-text);
             border: 1px solid transparent !important;
         }
     }
@@ -802,7 +828,6 @@
 .loading-icon {
     width: 18px;
     height: 18px;
-
     svg {
         width: 18px;
         height: 18px;
@@ -829,7 +854,7 @@
 
         .ant-drawer-body {
             padding: 0;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
             overflow-x: hidden;
         }
     }
@@ -851,7 +876,7 @@
         .ant-modal-content {
             .ant-modal-body {
                 padding: 0 24px;
-                background-color: var(--color-item-background);
+                background-color: var(--color-background-item);
                 overflow: auto;
             }
         }
@@ -862,7 +887,7 @@
 .setting-modal {
     width: 346px;
     padding: 24px;
-    background-color: var(--color-invert-text);
+    background-color: var(--color-background);
     border: 1px solid var(--color-divider);
     border-radius: 8px;
     position: absolute;
@@ -879,10 +904,9 @@
         margin-bottom: 8px;
     }
 
-    :global {
-        .ant-input {
-            height: 300px !important;
-        }
+    .prompt-textarea {
+        height: 300px !important;
+        border: 1px solid var(--color-divider) !important;
     }
 
 }
@@ -911,8 +935,8 @@
     :global {
         .ant-input.ant-input-disabled {
             border-radius: 8px;
-            color: #777;
-            background-color: white;
+            color: var(--color-text-secondary);
+            background-color: var(--color-background);
 
         }
     }
@@ -932,7 +956,7 @@
     :global {
         .ant-modal-body {
             padding: 0 24px;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
         }
 
         .ant-modal-footer {
@@ -964,7 +988,7 @@
 
 .selected-modal {
     padding: 16px 24px;
-    border-bottom: 1px solid var(--color-clear-button-hover);
+    border-bottom: 1px solid var(--color-divider);
 
     .generation-options {
         position: relative;
@@ -993,6 +1017,17 @@
             }
         }
     }
+
+    // .desc {
+    //     width: 100%;
+    //     position: relative;
+    //     font-size: 14px;
+    //     font-family: Inter;
+    //     color: var(--color-text-secondary);
+    //     text-align: left;
+    //     display: inline-block;
+    //     margin: 8px 0;
+    // }
 }
 
 :global {

@@ -242,7 +242,7 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
         onSelect: onSelectChange1,
         columnTitle: ' ',
         getCheckboxProps: (record: any) => ({
-            checked: selectedRowKeys.includes(record.key),
+            checked : selectedRowKeys.includes(record.key),
         }),
         type: mode === 'multiple' ? 'checkbox' : 'radio',
         hideDefaultSelections: true,
@@ -386,7 +386,7 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
             description={
                 <>
                     <p style={{ color: '#bfbfbf', fontSize: '14px' }}>No {name}</p>
-                    {!ifAllowNew && <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>{title}</Button>}
+                    {!ifAllowNew && <Button icon={<PlusOutlined />} type='primary' onClick={handleCreatePrompt}>{title}</Button>}
                 </>
             }
         />
@@ -398,12 +398,12 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
                 <div className={styles['header-table']}>
                     <Select defaultValue={'ID' } onChange={handleSelectFrontChange} options={ifOnlyId ? optionsFront1 : optionsFront} className={styles['select-name']} />
                     <Input placeholder={enterPlaceHolder} className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
-                    <Button className='cancel-button' onClick={handleSearch}>Search</Button>
+                    <Button onClick={handleSearch}>Search</Button>
                     {(ifSelect && mode === 'multiple') && <Select defaultValue="All Records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />}
                     {!ifSelect && (
                         <div className={styles['header-new']}>
                             <div className={styles['plusParent']}>
-                                <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>{title}</Button>
+                                <Button icon={<PlusOutlined />} type='primary'  onClick={handleCreatePrompt}>{title}</Button>
                             </div>
                         </div>
                     )}
@@ -411,7 +411,7 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
             ) : (
                 isShowNewCreateButton && <div className={styles['header-news']}>
                     <div className={styles['plusParent']}>
-                        <Button icon={<PlusOutlined />} className={styles['prompt-button']} onClick={handleCreatePrompt}>{title}</Button>
+                        <Button icon={<PlusOutlined />} type='primary' onClick={handleCreatePrompt}>{title}</Button>
                     </div>
                 </div>
             )}
@@ -420,7 +420,6 @@ function ModalTable({ columns, ifAllowNew,title, hangleFilterData,isShowNewCreat
                     components: {
                         Table: {
                             headerBg: 'white',
-                            headerColor: '#2b2b2b'
                         }
                     }
                 }}>

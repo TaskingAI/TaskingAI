@@ -6,11 +6,29 @@
             }
         }
     }
+
     .p {
         line-height: 17px;
         margin: 0;
+        color: var(--color-text-primary);
+
+        .span {
+            color: var(--color-positive);
+        }
     }
 }
+
 .button {
-    margin-left:10px
+    margin-left: 10px
+}
+
+.img-icon-close {
+    height: 27px;
+    min-width: 27px;
+
+    g {
+        path {
+            stroke: var(--color-text-primary);
+        }
+    }
 }

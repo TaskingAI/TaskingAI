@@ -9,7 +9,7 @@
             .ant-modal-body {
                 height: calc(100% - 115px);
                 padding: 0px;
-                background-color: var(--color-item-background);
+                background-color: var(--color-background-item);
                 overflow: auto;
             }
         }
@@ -37,7 +37,7 @@
             position: relative;
             font-size: 14px;
             font-family: Inter;
-            color: #777;
+            color: var(--color-text-secondary);
             padding: 0px 24px 0 24px;
             text-align: left;
             display: inline-block;
@@ -57,4 +57,21 @@
         }
     }
 
+}
+.img-icon-close {
+    height: 27px;
+    min-width: 27px;
+    g {
+        path {
+          stroke: var(--color-text-primary);
+        }
+      }
+}
+.id-copy {
+    span {
+        color: var(--color-text-secondary);
+    }
+    svg path {
+        stroke: var(--color-text-secondary);
+    }
 }

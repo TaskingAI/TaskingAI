@@ -220,3 +220,7 @@ export const fetchActionData = (limit: number) => {
       });
   };
 };
+export const themeColorRedux = (color: string) => ({
+  type: 'SET_THEME_COLOR',
+  payload: color,
+});

@@ -1,10 +1,10 @@
 
-import { Tag } from 'antd';
 import { formatTimestamp } from '@/utils/util'
-import ModelIcon from '@/commonComponent/modelIcon/index';
 
 import ClipboardJS from 'clipboard';
+import ModelIcon from '@/commonComponent/modelIcon/index';
 import { toast } from 'react-toastify';
+import styles from './contents.module.scss'
 import CopyOutlined from '@/assets/img/copyIcon.svg?react';
 import { useTranslation } from 'react-i18next';
 import IconComponent from '@/commonComponent/iconComponent';
@@ -14,15 +14,7 @@ import WildCardIcon from '@/assets/img/wildcard.svg?react'
 import RerankIcon from '@/assets/img/rerankIcon.svg?react'
 function CommonComponents() {
     const { t } = useTranslation()
-    const statusReverse = {
-        creating: 'orange',
-        ready: 'green',
-        error: 'red',
-        deleting: 'red',
-        Inviting: 'orange',
-        Active: 'green',
-        Rejected: 'red'
-    }
+
     const typeIcon = {
         chat_completion: <ChatCompletionIcon />,
         text_embedding: <TextEmbeddingIcon />,
@@ -47,7 +39,6 @@ function CommonComponents() {
         });
     }
 
-
     const typeReverse: Record<string, string> = {
         instruct_completion: 'Instruct Completion',
         chat_completion: 'Chat Completion',
@@ -63,8 +54,8 @@ function CommonComponents() {
             render: (text: string, record: any) =>
                 <div>
                     <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Model'}</p>
-                    <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
-                        <span style={{ fontSize: '12px', color: '#777', lineHeight: '18px' }}>{record.model_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.model_id)} />
+                    <p className={styles['id-copy']} style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
+                        <span style={{ fontSize: '12px',  lineHeight: '18px' }}>{record.model_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.model_id)} />
                     </p>
                 </div>
             ,
@@ -90,7 +81,8 @@ function CommonComponents() {
                 <>
                     <div className='model-types'>
                         <div className={type}>
-                            {typeIcon[type as keyof typeof typeIcon]}{type.split('_').join(' ')}
+                        {typeIcon[type as keyof typeof typeIcon]}{type.split('_').join(' ')}
+
                         </div>
                     </div>
                 </>
@@ -126,8 +118,8 @@ function CommonComponents() {
                     <img src={record.icon_url} alt="" style={{ width: '36px', height: '36px' }} />
                     <div style={{ marginLeft: '12px' }}>
                         <p className='table-text' style={{ fontSize: '14px', marginBottom: '4px', marginTop: '4px' }}>{text}</p>
-                        <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
-                            <span style={{ color: '#777', fontSize: '12px' }}>{record.bundle_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.bundle_id)} />
+                        <p className={styles['id-copy']}  style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
+                            <span style={{  fontSize: '12px' }}>{record.bundle_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.bundle_id)} />
                         </p>
                     </div>
 
@@ -153,8 +145,8 @@ function CommonComponents() {
             render: (plugins: any) => (
                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', }}>
                     {plugins.map((plugin: any, index: any) => (
-                        <div key={index} style={{ display: 'flex', marginBottom: '5px', borderRadius: '8px', width: 'auto', padding: '4px', marginRight: '12px', background: '#F8F8F8' }}>
-                            <span style={{ color: '#8F8F8F', fontWeight: 500, fontSize: '12px' }}>{plugin.name}</span>
+                        <div key={index} className='color-tag'>
+                            <span className='plugin-name'>{plugin.name}</span>
                         </div>
                     ))}
                 </div>
@@ -185,8 +177,8 @@ function CommonComponents() {
             render: (text: string, record: any) =>
                 <div>
                     <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Collection'}</p>
-                    <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
-                        <span style={{ fontSize: '12px', color: '#777' }}>{record.collection_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.collection_id)} />
+                    <p className={styles['id-copy']} style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
+                        <span style={{ fontSize: '12px', }}>{record.collection_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.collection_id)} />
 
                     </p>
                 </div>
@@ -258,6 +250,7 @@ function CommonComponents() {
         },
 
     ];
+
     const actionsTableColumn: any = [
         {
             title: `${t('projectModelColumnName')}`,
@@ -268,8 +261,8 @@ function CommonComponents() {
             render: (text: string, record: any) =>
                 <div>
                     <p className='table-text' style={{ fontSize: '14px' }}>{text}</p>
-                    <p style={{ display: 'flex', alignItems: 'center', margin: 0 }}>
-                        <span style={{ color: '#777', fontSize: '12px' }}>{record.action_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.action_id)} />
+                    <p className={styles['id-copy']} style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
+                        <span style={{  fontSize: '12px' }}>{record.action_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.action_id)} />
 
                     </p>
                 </div>
@@ -355,6 +348,7 @@ function CommonComponents() {
         }
 
     ];
+    
     const assistantTableColumn: any = [
         {
             title: `${t('projectModelColumnName')}`,
@@ -366,8 +360,8 @@ function CommonComponents() {
             render: (text: string, record: any) =>
                 <div>
                     <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Assistant'}</p>
-                    <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
-                        <span style={{ fontSize: '12px', color: '#777' }}>{record.assistant_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.assistant_id)} />
+                    <p className={styles['id-copy']} style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
+                        <span style={{ fontSize: '12px', }}>{record.assistant_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.assistant_id)} />
 
                     </p>
                 </div>
@@ -393,8 +387,8 @@ function CommonComponents() {
             render: (text: string, record: any) =>
                 <div>
                     <p className='table-text' style={{ fontSize: '14px' }}>{text || 'Untitled Model'}</p>
-                    <p style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
-                        <span style={{ fontSize: '12px', color: '#777' }}>{record.model_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.model_id)} />
+                    <p className={styles['id-copy']} style={{ display: 'flex', alignItems: 'center', margin: 0, lineHeight: '18px' }}>
+                        <span style={{ fontSize: '12px' }}>{record.model_id}</span><CopyOutlined className='icon-copy' onClick={() => handleCopy(record.model_id)} />
                     </p>
                 </div>
             ,
@@ -426,91 +420,10 @@ function CommonComponents() {
             render: (time: number) => <div>{formatTimestamp(time)}</div>
         },
     ]
-    const billingsColumns: any = [
-        {
-            title: `${t('spaceBillingColumnsDate')}`,
-            dataIndex: 'BillingDate',
-            key: 'date',
-            width: 240,
-            fixed: 'left',
-        },
-        {
-            title: `${t('spacceBillingColumnInvoiceID')}`,
-            dataIndex: 'InvoiceId',
-            key: 'InvoiceId',
-            width: 240,
-        },
-        {
-            title: `${t('projectAssistantsColumnDescription')}`,
-            dataIndex: 'Description',
-            key: 'Description',
-            width: 360
-        },
-        {
-            title: `${t('spaceBillingColumnAmount')}`,
-            dataIndex: 'Amount',
-            key: 'Amount',
-            width: 180
-
-        },
-        {
-            title: `${t('projectRetrievalColumnStatus')}`,
-            dataIndex: 'status',
-            key: 'status',
-            width: 180
-        },
-        {
-            title: `${t('projectModelColumnCreatedAt')}`,
-            width: 180,
-            dataIndex: 'created_timestamp',
-            key: 'created_timestamp',
-            render: (time: number) => <div>{formatTimestamp(time)}</div>
-        },
-
-    ]
-    const memberTableColumn: any = [
-        {
-            title: `${t('projectModelColumnName')}`,
-            key: 'name',
-            dataIndex: 'name',
-            fixed: 'left',
-            width: 240,
-        },
-        {
-            title: `${t('authEmail')}`,
-            key: 'email',
-            dataIndex: 'email',
-            width: 240
-        },
-        {
-            title: `${t('spaceRole')}`,
-            key: 'role',
-            dataIndex: 'role',
-            width: 180,
-        },
-        {
-            title: `${t('projectRetrievalColumnStatus')}`,
-            key: 'status',
-            dataIndex: 'status',
-            width: 180,
-            render: (text: string) => (
-                <Tag color={statusReverse[text as keyof typeof statusReverse] || 'defaultColor'}
-                >
-                    {text}
-                </Tag>
-            )
-        },
-
-        {
-            title: `${t('spaceBillingColumnJoinTime')}`,
-            key: 'created_timestamp',
-            dataIndex: 'created_timestamp',
-            width: 180,
-            render: (time: number) => <div>{formatTimestamp(time)}</div>
-        },
-    ]
+    
+    
     return (
-        { collectionTableColumn, bundleTableColumn, typeReverse, memberTableColumn, billingsColumns, assistantTableColumn, apikeysTableColumn, actionsTableColumn, modelsTableColumn }
+        { collectionTableColumn, bundleTableColumn, typeReverse, assistantTableColumn, apikeysTableColumn, actionsTableColumn, modelsTableColumn }
     )
 }
 export default CommonComponents;

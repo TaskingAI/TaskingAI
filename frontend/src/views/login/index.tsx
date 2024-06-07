@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button } from 'antd';
 import { useState } from 'react';
-import aiIcon from "../../assets/img/LOGO+TEXT.svg";
+import AiIcon from "../../assets/img/LOGO.svg?react";
 import Beta from "../../assets/img/CommunityTag.svg?react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,7 +27,7 @@ function Login() {
         <>
             <div className={style.login}>
                 <div className={style["ai-header"]}>
-                    <img src={aiIcon} alt="social-icon"></img>
+                    <AiIcon />   <span className={style['title']}>Tasking.AI</span>
                     <Beta style={{ marginLeft: '12px' }} />
                 </div>
                 <div className={style["welcome-font"]}>Welcome back</div>

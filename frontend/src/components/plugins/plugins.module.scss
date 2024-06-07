@@ -1,75 +1,11 @@
 .actions {
-    background-color: var(--color-item-background);
+    background-color: var(--color-background-item);
     height: 100%;
 
     .ant-spin-nested-loading {
         height: 100% !important;
         // overflow: hidden;
     }
-
-    .superchargeYourInstancesWitParent {
-        width: 100%;
-        position: relative;
-        background-color: var(--color-invert-text);
-        padding: 20px;
-        border-bottom: 1px solid var(--color-clear-button-hover);
-        box-sizing: border-box;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        // padding: 24px;
-        padding-bottom: 10px;
-        text-align: left;
-        font-size: 16px;
-        color: #777;
-        font-family: Inter;
-    }
-
-    .header-prompts {
-        display: flex;
-        justify-content: flex-end;
-        margin: 24px;
-
-        .plusParent {
-            display: flex;
-            cursor: pointer;
-
-            .arrowSyncParent {
-                height: 100%;
-                position: relative;
-                border-radius: 8px;
-                border: 1px solid var(--color-divider);
-                box-sizing: border-box;
-                // width: 100%;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-                padding: 12px;
-            }
-
-            .arrowSyncParent:hover {
-                background-color: #f5f5f5;
-            }
-
-            .prompt-button {
-                background-color: var(--color-positive);
-                color: white;
-                margin-left: 10px;
-                height: 40px;
-            }
-
-            .prompt-button:hover {
-                color: var(--color-invert-text) !important;
-                cursor: pointer;
-                background-color: var(--color-positive-hover);
-                border: 1px solid transparent;
-            }
-        }
-    }
-
 }
 
 .actions {
@@ -112,12 +48,12 @@
         .ant-modal-body {
             height: 732px;
             padding: 0;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
         }
     }
 
     .componentsData {
-        background-color: white !important;
+        background-color: var(--color-background) !important;
 
         .label {
             position: relative;
@@ -183,7 +119,7 @@
 
             .desc {
                 font-size: 14px;
-                color: #777;
+                color: var(--color-text-secondary);
                 line-height: 1;
                 margin-top: 12px;
             }
@@ -223,26 +159,26 @@
                     height: 16px;
                     font-size: var(--input--size);
                     align-items: center;
-                    background-color: #fff;
-                    color: #777;
+                    background-color:var(--color-background);
+                    color: var(--color-text-secondary);
                     border-radius: 8px;
                     cursor: pointer;
                     margin-bottom: 5px;
                 }
 
                 .pluginName:hover {
-                    background-color: #fbfbfb;
-                    color: var( --color-text-primary );
+                    background-color: var(--color-background-hover);
+                    color: var( --color-text-primary);
                 }
 
                 .pluginId {
-                    background-color: var(--color-menu-background);
-                    color: var(--color-positive);
+                    background-color: var(--color-list-item-bg-selected);
+                    color: var(--color-list-item-selected);
                 }
 
                 .pluginId:hover {
-                    background-color: var(--color-menu-background);
-                    color: var(--color-positive);
+                    background-color: var(--color-list-item-bg-selected);
+                    color: var(--color-list-item-selected);
                 }
             }
 
@@ -284,12 +220,7 @@
                     display: inline-block;
                 }
 
-                .inputParams {
-                    font-size: 16px;
-                    color: #000;
-                    line-height: 1;
-                    padding: 12px 0 0 29px;
-                }
+              
             }
         }
     }
@@ -367,6 +298,7 @@
             position: relative;
             font-weight: 600;
             color: var( --color-text-primary );
+
         }
 
         .label {
@@ -453,7 +385,7 @@
             height: 210px;
             position: relative;
             border: 1px solid var(--color-divider);
-            background-color: white;
+            background-color: var(--color-background);
             box-sizing: border-box;
             display: flex;
             // margin-right: 24px;
@@ -466,12 +398,12 @@
             text-align: left;
             border-radius: 8px;
             font-size: 14px;
-            color: #777;
+            color: var(--color-text-secondary);
             font-family: Inter;
         }
 
         .frameParent:hover {
-            background-color: #FAFAFA;
+            background-color: var(--color-background-hover);
             cursor: pointer;
         }
 
@@ -543,7 +475,7 @@
             position: relative;
             font-size: 14px;
             font-family: Inter;
-            color: #777;
+            color: var(--color-text-secondary);
             text-align: left;
             display: inline-block;
         }
@@ -579,7 +511,7 @@
 
 .disabledButton {
     cursor: not-allowed;
-    background-color: #FAFAFA;
+    background-color: var(--color-background-hover);
     opacity: 0.3;
 
     svg {
@@ -620,6 +552,7 @@
             margin-left: 8px;
             font-size: 14px;
             font-weight: 600;
+            color: var( --color-text-primary);
         }
     }
 
@@ -628,7 +561,7 @@
         font-size: 14px;
         line-height: 20px;
         font-family: Inter;
-        color: #777;
+        color: var(--color-text-secondary);
         text-align: left;
         margin-bottom: 8px;
         display: inline-block;
@@ -639,7 +572,7 @@
     .formbuttoncancel {
         position: relative;
         border-radius: 8px;
-        background-color: var(--color-invert-text);
+        background-color: var(--color-background);
         margin-left: 24px;
         border: 1px solid var(--color-divider);
         box-sizing: border-box;
@@ -690,7 +623,7 @@
         }
 
         .description {
-            color: #777;
+            color: var(--color-text-secondary);
             font-size: 14px;
             padding-bottom: 5px;
         }
@@ -702,7 +635,7 @@
         .ant-modal-body {
             height: 720px;
             padding: 0;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
         }
     }
 
@@ -727,7 +660,7 @@
             padding: 0;
             height: 100%;
             overflow: hidden;
-            background-color: white;
+            background-color: var(--color-background);
         }
 
         .ant-drawer-footer {
@@ -741,7 +674,7 @@
         margin-left: 10px;
     }  
     .componentsData {
-        background-color: white !important;
+        background-color: var(--color-background) !important;
         height: 100%;
 
         .label {
@@ -808,7 +741,7 @@
 
             .desc {
                 font-size: 14px;
-                color: #777;
+                color: var(--color-text-secondary);
                 line-height: 1;
                 margin-top: 12px;
             }
@@ -848,32 +781,32 @@
                     height: 16px;
                     font-size: var(--input--size);
                     align-items: center;
-                    background-color: #fff;
-                    color: #777;
+                    background-color: var(--color-background);
+                    color: var(--color-text-secondary);
                     border-radius: 8px;
                     cursor: pointer;
                     margin-bottom: 5px;
                 }
 
                 .pluginName:hover {
-                    background-color: #fbfbfb;
+                    background-color: var(--color-background-hover);
                     color: var( --color-text-primary );
                 }
 
                 .pluginId {
-                    background-color: var(--color-menu-background);
-                    color: var(--color-positive);
+                    background-color: var(--color-list-item-bg-selected);
+                    color: var(--color-list-item-selected);
                 }
 
                 .pluginId:hover {
-                    background-color: var(--color-menu-background);
-                    color: var(--color-positive);
+                    background-color: var(--color-list-item-bg-selected);
+                    color: var(--color-list-item-selected);
                 }
             }
 
             .right {
                 overflow-x: hidden;
-                background-color: white;
+                background-color: var(--color-background);
                 .topContent {
                     display: flex;
                     align-items: center;
@@ -909,12 +842,7 @@
                     display: inline-block;
                 }
 
-                .inputParams {
-                    font-size: 16px;
-                    color: #000;
-                    line-height: 1;
-                    padding: 12px 0 0 29px;
-                }
+              
             }
         }
     }
@@ -936,7 +864,7 @@
 
         .ant-drawer-body {
             padding: 0;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
         }
 
         .ant-drawer-footer {
@@ -959,4 +887,13 @@
     .registered {
         color: var(--color-positive);
     }
+}
+.img-icon-close {
+    height: 27px;
+    min-width: 27px;
+    g {
+        path {
+          stroke: var(--color-text-primary);
+        }
+      }
 }

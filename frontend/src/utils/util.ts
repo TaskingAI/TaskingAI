@@ -73,6 +73,13 @@ const findRouteByPath = (path:string, routes:any) => {
       return text;
     }
   };
-
-  export { findRouteByPath, getFirstMethodAndEndpoint,formatTimestamp,parseAndRenderText,formatTime };
+  const dealThemeColor = () => {
+    const colorTheme = localStorage.getItem('themeColor');
+    if (colorTheme === 'light') {
+      return '#fff'
+    } else {
+      return '#2b2b2b'
+    }
+  }
+  export { findRouteByPath,dealThemeColor, getFirstMethodAndEndpoint,formatTimestamp,parseAndRenderText,formatTime };
   

@@ -1,72 +1,10 @@
 .actions {
-    background-color: var(--color-item-background);
+    background-color: var(--color-background-item);
     height: 100%;
 
     .ant-spin-nested-loading {
         height: 100% !important;
     }
-
-    .superchargeYourInstancesWitParent {
-        width: 100%;
-        position: relative;
-        background-color: var(--color-invert-text);
-        padding: 20px;
-        border-bottom: 1px solid var(--color-clear-button-hover);
-        box-sizing: border-box;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        padding-bottom: 10px;
-        text-align: left;
-        font-size: 16px;
-        color: var(--color-text-secondary);;
-        font-family: Inter;
-    }
-
-    .header-prompts {
-        display: flex;
-        justify-content: flex-end;
-        margin: 24px;
-
-        .plusParent {
-            display: flex;
-            cursor: pointer;
-
-            .arrowSyncParent {
-                height: 100%;
-                position: relative;
-                border-radius: 8px;
-                border: 1px solid var(--color-divider);
-                box-sizing: border-box;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-                padding: 12px;
-            }
-
-            .arrowSyncParent:hover {
-                background-color: #f5f5f5;
-            }
-
-            .prompt-button {
-                background-color: var(--color-positive);
-                color: white;
-                margin-left: 10px;
-                height: 40px;
-            }
-
-            .prompt-button:hover {
-                color: var(--color-invert-text) !important;
-                cursor: pointer;
-                background-color: var(--color-positive-hover);
-                border: 1px solid transparent;
-            }
-        }
-    }
-
 }
 
 .actions {
@@ -107,7 +45,7 @@
         .ant-modal-body {
             height: 732px;
             padding: 0;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
         }
     }
 
@@ -183,7 +121,7 @@
         .googleWebSearch {
             position: relative;
             font-weight: 600;
-            color: var( --color-text-primary );
+            color: var( --color-text-primary);
         }
 
         .label {
@@ -198,7 +136,11 @@
         .webSearch {
             position: relative;
         }
-
+        .svg-tools-icon {
+            path {
+                stroke: var(--color-text-secondary);
+            }
+        }
         .googleWeb {
             display: flex;
             width: calc(100% - 48px);
@@ -274,7 +216,7 @@
             display: flex;
             // margin-right: 24px;
             // margin-bottom: 24px;
-            background-color: white;
+            background-color: var(--color-background);
             flex-direction: column;
             align-items: flex-start;
             justify-content: flex-start;
@@ -288,7 +230,7 @@
         }
 
         .frameParent:hover {
-            background-color: #FAFAFA;
+            background-color: var(--color-background-hover);
             cursor: pointer;
         }
 
@@ -349,7 +291,7 @@
             text-align: left;
             font-size: 14px;
             color: var( --color-text-primary );
-            background-color: white;
+            background-color: var(--color-background);
             font-family: Inter;
             .description-bundle {
                 padding: 24px 24px 12px 24px;
@@ -387,10 +329,10 @@
             position: relative;
             font-size: 10px;
             line-height: 12px;
-            font-weight: 500;
+            font-weight: 400;
             // min-width: 96px;
             color: var(--color-text-secondary);
-            background-color: var(--color-clear-button-hover);
+            background-color: var(--color-divider);
             padding: 4px;
             text-align: left;
             border-radius: 8px;
@@ -419,7 +361,7 @@
 
 
 .componentsData {
-    background-color: white;
+    background-color: var(--color-background);
     .label {
         position: relative;
         font-weight: 600;
@@ -522,7 +464,7 @@
                 height: 16px;
                 font-size: var(--input--size);
                 align-items: center;
-                background-color: #fff;
+                background-color: var(--color-background);
                 color: var(--color-text-secondary);
                 border-radius: 8px;
                 cursor: pointer;
@@ -530,18 +472,18 @@
             }
 
             .pluginName:hover {
-                background-color: #fbfbfb;
-                color: var( --color-text-primary );
+                background-color: var(--color-background-hover);
+                color: var( --color-text-primary);
             }
 
             .pluginId {
-                background-color: var(--color-menu-background);
-                color: var(--color-positive);
+                background-color: var(--color-list-item-bg-selected);
+                color: var(--color-list-item-selected);
             }
 
             .pluginId:hover {
-                background-color: var(--color-menu-background);
-                color: var(--color-positive);
+                background-color: var(--color-list-item-bg-selected);
+                color: var(--color-list-item-selected);
             }
         }
 
@@ -585,7 +527,7 @@
 
             .inputParams {
                 font-size: 16px;
-                color: #000;
+                color: var(--color-text-primary);
                 line-height: 1;
                 padding: 12px 0 0 29px;
             }
@@ -617,6 +559,7 @@
             margin-left: 8px;
             font-size: 14px;
             font-weight: 600;
+            color: var( --color-text-primary);
         }
     }
 
@@ -631,28 +574,6 @@
         display: inline-block;
         padding-left: 24px;
         padding-right: 24px;
-    }
-
-    .formbuttoncancel {
-        position: relative;
-        border-radius: 8px;
-        background-color: var(--color-invert-text);
-        margin-left: 24px;
-        border: 1px solid var(--color-divider);
-        box-sizing: border-box;
-        width: 163px;
-        overflow: hidden;
-        display: flex;
-        margin-bottom: 24px;
-        cursor: pointer;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        padding: 8px 12px;
-        text-align: left;
-        font-size: 14px;
-        color: var(--color-text-primary);
-        font-family: Inter;
     }
 
     .credentials {
@@ -699,7 +620,7 @@
         .ant-modal-body {
             height: 720px;
             padding: 0;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
         }
     }
 
@@ -721,7 +642,7 @@
 
         .ant-drawer-body {
             padding: 0;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
         }
 
         .ant-drawer-footer {
@@ -741,4 +662,18 @@
     .registered {
         color: var(--color-positive);
     }
+}
+.right-arrow-svg {
+    g path {
+        stroke: var(--color-text-primary)
+    }
+}
+.img-icon-close {
+    height: 27px;
+    min-width: 27px;
+    g {
+        path {
+          stroke: var(--color-text-primary);
+        }
+      }
 }

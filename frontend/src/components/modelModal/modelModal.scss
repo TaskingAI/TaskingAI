@@ -3,7 +3,7 @@
         .ant-modal-body {
             height: 720px;
             padding: 0;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
 
             .ant-spin-nested-loading {
                 height: 100%;
@@ -26,7 +26,7 @@
     .right {
         border-left: 1px solid var(--color-divider);
         flex: 1;
-        background-color: white;
+        background-color: var(--color-background);
         min-width: 360px;
         flex-shrink: 0;
         .chat-name {
@@ -54,6 +54,7 @@
                 position: relative;
                 margin-bottom: 8px;
                 line-height: 1;
+                color: var(--color-text-primary);
             }
 
             .modelproviderIcon {
@@ -81,6 +82,7 @@
                 position: relative;
                 line-height: 24px;
                 font-weight: 500;
+        
             }
 
        
@@ -89,7 +91,7 @@
         .desc-info {
             font-size: 14px;
             font-family: Inter;
-            color: #777;
+            color: var(--color-text-secondary);
             display: inline-block;
             padding-right: 24px;
         }
@@ -152,7 +154,7 @@
                 gap: 6px;
                 text-align: left;
                 font-size: 12px;
-                color: #777;
+                color: var(--color-text-secondary);
                 font-family: Inter;
             }
 
@@ -183,7 +185,7 @@
 
         .ant-pagination {
             // position: absolute;
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--color-divider);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -273,16 +275,15 @@
     .providermodelcardInner {
         align-self: stretch;
         display: flex;
-        flex-direction: column;
         align-items: flex-start;
-        justify-content: flex-start;
+        justify-content: space-between;
     }
 
     .desc {
         height: 78px;
 
         span {
-            color: #777;
+            color: var(--color-text-secondary);
             font-size: 14px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -300,10 +301,11 @@
         line-height: 16px;
         font-weight: 400;
         font-size: 12px;
-        color: #777;
-        border: 1px solid #e4e4e4;
         padding: 0 6px;
         border-radius: 8px;
+        padding: 4px;
+        background-color: var(--color-tag-background);
+        color: var(--color-text-secondary);
     }
 
     .frameIcon1 {
@@ -320,17 +322,17 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        color: #777;
+        color: var(--color-text-secondary);
     }
 
     .providermodelcard {
         border-radius: 5px;
-        border: 1px solid #e4e4e4;
-        background-color: white;
+        border: 1px solid var(--color-divider);
+        background-color: var(--color-background);
         box-sizing: border-box;
         width: 48%;
         margin-bottom: 24px;
-        height: 88px;
+        height: 112px;
         overflow: hidden;
         flex-shrink: 0;
         display: flex;
@@ -347,7 +349,7 @@
     }
 
     .providermodelcard:hover {
-        background-color: #FAFAFA;
+        background-color: var(--color-background-hover);
         cursor: pointer;
 
         .anticon {
@@ -363,7 +365,7 @@
 
     .providermodelcardInner1 {
         // border: 2px solid var(--color-primary);
-        outline: 2.5px solid #087443;
+        outline: 2.5px solid var(--color-positive);
     }
 
 }
@@ -375,7 +377,9 @@
 .second-form {
     padding: 0 24px;
     margin-bottom: 16px;
-
+.ant-input-number {
+    width: 100%;
+}
     .form-item {
         margin-bottom: 0;
     }
@@ -398,7 +402,7 @@
         font-size: 14px;
         line-height: 1;
         font-family: Inter;
-        color: #777;
+        color: var(--color-text-secondary);
         margin-bottom: 8px;
         text-align: left;
         display: inline-block;
@@ -421,18 +425,19 @@
             overflow-y: auto;
             overflow-x: hidden;
             position: relative;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
 
 
 
             .second-modals {
-                background-color: var(--color-item-background);
+                background-color: var(--color-background-item);
                 overflow: hidden;
 
                 .base-model {
                     font-size: 16px;
                     font-weight: 400;
                     margin-left: 24px;
+                    color: var(--color-text-primary);
                 }
 
                 .input-form {
@@ -469,7 +474,7 @@
 
                     height: 1px;
                     margin-top: 24px;
-                    background-color: #eee;
+                    background-color: var(--color-divider);
                     line-height: 1;
                 }
 
@@ -564,7 +569,7 @@
                     font-size: 14px;
                     line-height: 20px;
                     font-family: Inter;
-                    color: #777;
+                    color: var(--color-text-secondary);
                     line-height: 1;
                     text-align: left;
                     padding: 0 24px;
@@ -614,7 +619,7 @@
                         position: relative;
                         font-size: 14px;
                         line-height: 20px;
-                        color: #777;
+                        color: var(--color-text-secondary);
                     }
                 }
             }
@@ -646,7 +651,7 @@
 .create-models {
     .ant-modal-body {
         padding: 0;
-        background-color: var(--color-item-background);
+        background-color: var(--color-background-item);
     }
 
     .content {
@@ -707,7 +712,7 @@
                     // width: calc((100% - 72px)/4);
                     height: 112px;
                     padding: 12px;
-                    background-color: white;
+                    background-color: var(--color-background);
                     position: relative;
                     border: 1px solid var(--color-divider);
                     border-radius: 8px;
@@ -725,7 +730,13 @@
                         .provider {
                             display: flex;
                             align-items: center;
+                            color: var(--color-text-primary)
+                        }
+                        .right-arrow {
+                            g path{
+                                stroke: var(--color-text-primary);
 
+                            }
                         }
                     }
 
@@ -733,7 +744,7 @@
                         height: 78px;
 
                         span {
-                            color: #777;
+                            color: var(--color-text-secondary);
                             font-size: 14px;
                             display: -webkit-box;
                             -webkit-line-clamp: 3;
@@ -749,7 +760,7 @@
                     .choices {
                         font-size: 14px;
                         bottom: 12px;
-                        color: #777;
+                        color: var(--color-text-secondary);
                         // position: absolute;
                     }
 
@@ -757,7 +768,7 @@
                         padding-top: 12px;
 
                         .type-single {
-                            color: #777;
+                            color: var(--color-text-secondary);
                             font-size: 12px;
                             border-radius: 8px;
                             border: 1px solid var(--color-divider);
@@ -767,12 +778,12 @@
                 }
 
                 .openai-card:hover {
-                    background-color: #FAFAFA;
+                    background-color: var(--color-background-hover);
                     cursor: pointer;
                 }
 
                 .select-provider {
-                    outline: 2.5px solid #087443;
+                    outline: 2.5px solid var(--color-positive);
                 }
 
                 // padding: 24px 24px 14px 0;
@@ -786,7 +797,8 @@
         .right {
             border-left: 1px solid var(--color-divider);
             flex: 1;
-            background-color: white;
+            background-color: var(--color-background);
+            background-color: var(--color-background);
 
             min-width: 360px;
             flex-shrink: 0;
@@ -813,13 +825,14 @@
                 position: relative;
                 margin-bottom: 8px;
                 margin-left: 24px;
+                color: var(--color-text-primary);
                 line-height: 1;
             }
 
             .desc-info {
                 font-size: 14px;
                 font-family: Inter;
-                color: #777;
+                color: var(--color-text-secondary);
                 display: inline-block;
                 margin-left: 24px;
 
@@ -831,7 +844,7 @@
                 padding: 24px;
                 .resource {
                     font-size: 14px;
-                    color: #2b2b2b;
+                    color: var( --color-text-primary);
                 }
                 .list {
                     margin-top:8px;
@@ -841,7 +854,7 @@
                         margin-bottom: 6px;
 
                         a {
-                            color: #777;
+                            color: var(--color-text-secondary);
                             font-size: 14px;
                             margin-left:4px;
                         }

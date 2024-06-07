@@ -2,7 +2,7 @@
     :global {
         .ant-modal-body {
             padding: 0 24px;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
         }
 
         .ant-modal-footer {
@@ -14,4 +14,13 @@
     .cancelButton {
         margin-right: 10px;
     }
+}
+.img-icon-close {
+    height: 27px;
+    min-width: 27px;
+    g {
+        path {
+          stroke: var(--color-text-primary);
+        }
+      }
 }

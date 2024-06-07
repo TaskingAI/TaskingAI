@@ -4,7 +4,7 @@
         padding: 0;
         height: 600px;
         display: flex;
-        background-color: var(--color-item-background);
+        background-color: var(--color-background-item);
 
     }
 
@@ -13,7 +13,7 @@
         width: 100%;
         display: flex;
         flex-direction: column;
-        background-color: var(--color-item-background);
+        background-color: var(--color-background-item);
 
         .header-table {
             display: flex;
@@ -36,15 +36,6 @@
                 width: 150px !important;
             }
 
-            .header-new {
-                display: flex;
-                justify-content: flex-end;
-
-                .plusParent {
-                    display: flex;
-                }
-            }
-
             .input-name {
                 border-top-left-radius: 0;
                 border-bottom-left-radius: 0;
@@ -63,8 +54,8 @@
 
             .select-name:hover {
                 .ant-select-selector {
-                    border: 1px solid #099250;
-                    border-right: 1px solid #099250 !important;
+                    border: 1px solid var(--color-background);
+                    border-right: 1px solid var(--color-background) !important;
                 }
             }
         }
@@ -90,7 +81,7 @@
 
         .prompt-button {
             background-color: var(--color-positive);
-            color: white;
+            color: var(--color-background);
             margin-left: 10px;
             height: 40px;
         }
@@ -111,10 +102,10 @@
         justify-content: flex-start;
         overflow: auto;
         gap: 24px;
-        background-color: var(--color-item-background) !important;
+        background-color: var(--color-background-item) !important;
         padding: 24px 24px 0 24px;
         border-bottom: 1px solid var(--color-divider);
-        background-color: #fff;
+        background-color: var(--color-background);
         height: 504px;
 
         .retrieval-single {
@@ -124,7 +115,7 @@
             padding: 12px;
             border-radius: 8px;
             border: 1px solid var(--color-divider);
-            background-color: white;
+            background-color: var(--color-background);
             box-sizing: border-box;
             cursor: pointer;
 
@@ -148,14 +139,14 @@
                 height: 68px;
                 font-size: 14px;
                 font-family: Inter;
-                color: #777;
+                color: var(--color-text-secondary);
             }
 
             .bottom {
                 display: flex;
                 justify-content: space-between;
                 font-size: 12px;
-                color: #777;
+                color: var(--color-text-secondary);
                 align-items: center;
             }
         }
@@ -163,7 +154,7 @@
 
 
         .selected-retrieval {
-            background-color: #fff;
+            background-color: var(--color-background);
             cursor: not-allowed;
             opacity: 0.3;
             border: 1px solid var(--color-divider);

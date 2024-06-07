@@ -1,8 +1,9 @@
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import {
     LeftOutlined, RightOutlined
 } from '@ant-design/icons';
 import './modelModal.scss'
+
 import QuestionCircleOutlined from '../../assets/img/questionCircleOutlined.svg?react'
 import RightArrow from '../../assets/img/rightarrow.svg?react'
 import IconComponent from '@/commonComponent/iconComponent';
@@ -15,9 +16,8 @@ import ApiErrorResponse from '../../constant/index';
 import WebSite from '../../assets/img/website.svg?react'
 import Docs from '../../assets/img/docs1.svg?react'
 import ApiKeysIcon from '../../assets/img/apikeysIcon.svg?react'
-import Dollar from '../../assets/img/dollar.svg?react'
 import RerankIcon from '@/assets/img/rerankIcon.svg?react'
-
+import Dollar from '../../assets/img/dollar.svg?react'
 import { Modal, Button, Spin, Input, Form, Switch, ConfigProvider, InputNumber, Select } from 'antd'
 import { getAiModelsList, createModels, getAiModelsForm, getModelProviderList } from '../../axios/models'
 import { toast } from 'react-toastify'
@@ -72,7 +72,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const [prividerDesc, setPrividerDesc] = useState('')
     const [openModalOne, setOpenModalOne] = useState(false)
     const [modelTypesList, setModelTypesList] = useState<string[]>([])
-    const [description, setDescription] = useState('')
+    const [Description, setDescription] = useState('')
     const [resourcesList, setResourcesList] = useState<any>([])
     const handleCancel = () => {
         setOpenModalOne(false)
@@ -86,7 +86,6 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     const resourceListOrder = ['taskingai_documentation_url', 'official_site_url', 'official_credentials_url', 'official_pricing_url']
     const fetchAiModelsList = async (offset: number, providerId: string) => {
         try {
-            console.log(props.modelType)
             const res: any = await getAiModelsList(offset, 100, providerId, props.modelType as string,)
             if (res.data.length !== 0) {
                 setPromptList(res.data)
@@ -114,23 +113,30 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
     }
     const fetchModelProviderList = async (type?: any) => {
         setModelOneLoading(true)
-        const res: Record<string, any> = await getModelProviderList(type)
-        const data = resourceListOrder.map(key => {
-            if (key in res.data[0].resources && res.data[0].resources[key] !== '') {
-                return {
-                    [key]: res.data[0].resources[key]
+        try {
+            const res: Record<string, any> = await getModelProviderList(type)
+            const data = resourceListOrder.map(key => {
+                if (key in res.data[0].resources && res.data[0].resources[key] !== '') {
+                    return {
+                        [key]: res.data[0].resources[key]
+                    }
                 }
-            }
-            return null
-        }).filter(item => item !== null)
-        setModelProviderList(res.data)
-        setPrividerName(res.data[0].name)
-        setPrividerDesc(res.data[0].description)
-        setResourcesList(data)
-        setModelTypesList(res.data[0].model_types)
-        setProviderUrl(res.data[0].resources.taskingai_documentation_url)
-        await fetchAiModelsList(0, res.data[0].provider_id)
-        setModelOneLoading(false)
+                return null
+            }).filter(item => item !== null)
+            setModelProviderList(res.data)
+            setPrividerName(res.data[0].name)
+            setPrividerDesc(res.data[0].description)
+            setResourcesList(data)
+            setModelTypesList(res.data[0].model_types)
+            setProviderUrl(res.data[0].resources.taskingai_documentation_url)
+            await fetchAiModelsList(0, res.data[0].provider_id)
+        } catch (e) {
+            const apiError = e as ApiErrorResponse;
+            toast.error(apiError.response.data.error.message)
+        } finally {
+            setModelOneLoading(false)
+        }
+     
     }
 
     const handleNext = async () => {
@@ -287,24 +293,24 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
             <Modal zIndex={10001} title={openModalOne ? t('projectModelBaseModelSelection') : (!props.type ? t('projectProviderSelection') : (props.type === 'chat_completion' ? 'Provider Selection - Chat Completion' : 'Provider Selection - Text Embedding'))} onCancel={handleCancel1} footer={
                 <>
                     {openModalOne ? <>
-                        <Button key="cancel" onClick={handleCancel} className='cancel-button'>
+                        <Button key="cancel" onClick={handleCancel} >
                             <LeftOutlined />
                             {t('back')}
                         </Button>
-                        <Button key="submit" onClick={handleNext} className='next-button' loading={nextLoading}>
+                        <Button key="submit" onClick={handleNext} type='primary' loading={nextLoading}>
                             {t('confirm')}
                         </Button>
 
                     </> : <>
-                        <Button key="cancel" onClick={handleCancel1} className='cancel-button'>
+                        <Button key="cancel" onClick={handleCancel1} >
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleNext1} className='next-button' loading={nextLoading1} >
+                        <Button key="submit" onClick={handleNext1} type='primary' loading={nextLoading1} >
                             {t('next')}
                             <RightOutlined />
                         </Button>
                     </>}
-                </>} centered width={1280} open={props.open} closeIcon={<img src={closeIcon} alt="closeIcon" />} className={openModalOne ? 'create-model-one' : 'create-models'}>
+                </>} centered width={1280} open={props.open}    closeIcon={<CloseIcon className='img-icon-close'/>} className={openModalOne ? 'create-model-one' : 'create-models'}>
                 {openModalOne ?
                     <div className='create-model'>
                         <div className='center'>
@@ -323,10 +329,11 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <RightArrow />
                                         </div>
                                         <div className='chatCompletionParent'>
                                             <div className='chatCompletion'>{typeReverse[item.type as keyof typeof typeReverse]}</div>
-                                            <RightArrow />
+                                            <ModelIcon properties={item.properties} isShowText={false}/>
                                         </div>
                                     </div>))}
                                 </div>
@@ -339,12 +346,12 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                             <div className='content'>
                     
                                 <div className='label3'>{t('projectAssistantsColumnDescription')}</div>
-                                <div className='desc-info'>{description}</div>
+                                <div className='desc-info'>{Description}</div>
                                 <div className='label3' style={{ marginTop: '22px' }}>{t('projectModelColumnType')}</div>
                       
                                 <div className='model-types'>
                                     <div className={type}>
-                                        {typeIcon[type as keyof typeof typeIcon]} {type.split('_').join(' ')}
+                                    {typeIcon[type as keyof typeof typeIcon]} {type.split('_').join(' ')}
                                     </div>
                                 </div>
                             </div>
@@ -370,10 +377,10 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                                         <IconComponent providerId={item.provider_id} />
                                                         <div className='name'>{item.name}</div>
                                                     </div>
-                                                    <RightArrow />
+                                                    <RightArrow className='right-arrow' />
                                                 </div>
                                                 <div style={{display:'flex',width:'88%',alignItems:'center',justifyContent:'space-between',position:'absolute',bottom:'12px'}}>
-                                                    <div className='model-types'>
+                                                    <div className='model-types-group'>
                                                         {item.model_types.map((item, index) => (
                                                             <div key={index} style={{marginRight:'4px'}}>
                                                                 {typeIcon[item as keyof typeof typeIcon]}
@@ -397,7 +404,7 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
                                 <div className='model-types' style={{ margin: '0 24px 24px 24px' }}>
                                     {modelTypesList.map((item, index) => (
                                         <div key={index} className={item}>
-                                            {typeIcon[item as keyof typeof typeIcon]}{item.split('_').join(' ')}
+                                         {typeIcon[item as keyof typeof typeIcon]}{item.split('_').join(' ')}
                                         </div>
                                     ))}
                                 </div>
@@ -422,13 +429,13 @@ const ModelModal = react.forwardRef((props: modelModalProps, ref) => {
             </Modal>
 
             <Modal zIndex={10001} className='modal-content' title={t('projectModelCreateModalOneTitle')} width={1000} centered open={modelTwoOpen} footer={[
-                <Button key="cancel" onClick={handleSecondCancel} className='cancel-button'>
+                <Button key="cancel" onClick={handleSecondCancel} >
                     {t('back')}
                 </Button>,
-                <Button key="submit" onClick={handleConfirm} className='next-button' loading={confirmLoading}>
+                <Button key="submit" onClick={handleConfirm} type='primary' loading={confirmLoading}>
                     {t('confirm')}
                 </Button>
-            ]} closeIcon={<img src={closeIcon} alt="closeIcon" />} onCancel={handleSecondCancel}>
+            ]}        closeIcon={<CloseIcon className='img-icon-close'/>} onCancel={handleSecondCancel}>
                 <div className='second-modals'>
                     <div className='base-model' style={{ marginTop: '24px' }}>{t('projectModelColumnBaseModel')}</div>
                     <div className='frameParent'>

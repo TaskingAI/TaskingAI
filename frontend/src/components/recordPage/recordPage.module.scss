@@ -9,7 +9,7 @@
             .ant-modal-body {
                 height: calc(100% - 115px);
                 padding: 0px;
-                background-color: var(--color-item-background);
+                background-color: var(--color-background-item);
                 overflow: auto;
             }
         }
@@ -153,4 +153,13 @@
 }
 .click-to-upload {
     color: var(--color-positive)
+}
+.img-icon-close {
+    height: 27px;
+    min-width: 27px;
+    g {
+        path {
+          stroke: var(--color-text-primary);
+        }
+      }
 }

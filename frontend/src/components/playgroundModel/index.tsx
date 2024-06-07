@@ -14,7 +14,7 @@ import { SSE } from "sse.js";
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 const origin = window.location.origin;
-import IconComponent from '@/commonComponent/iconComponent/index.jsx';
+import IconComponent from '@/commonComponent/iconComponent/index.tsx';
 function PlaygroundModel() {
     const [loading, setLoading] = useState(false)
     const { search, pathname } = useLocation();
@@ -171,7 +171,6 @@ function PlaygroundModel() {
             name: detailData.name
         }])
         const res = await getModelSchema(detailData.model_schema_id)
-        console.log(res)
         localStorage.setItem('modelSchemaId', detailData.model_schema_id)
         setModelSchemaId(detailData.model_schema_id)
         setProviderId(detailData.provider_id)
@@ -310,9 +309,7 @@ function PlaygroundModel() {
     const handleTopkValue = (value: any) => {
         setTopkValue(value)
     }
-    // const handleStopSequences = (e: any) => {
-    //     setStopSequences(e.target.value)
-    // }
+
     const handleStreamSwitch = (e: any) => {
         setStreamSwitch(e.target.checked)
     }
@@ -372,6 +369,8 @@ function PlaygroundModel() {
 
                             {streamShow && <div style={{ marginTop: '12px' }}><Checkbox value={streamSwitch} defaultChecked={true} onChange={(e) => handleStreamSwitch(e)} /><span style={{ marginLeft: '8px' }}>Stream</span></div>}
                         </div>
+
+                      
                         <div style={{ margin: '24px' }}>
                             <div className={styles.configuration}>Configuration</div>
                             <ConfigProvider theme={{
@@ -392,7 +391,7 @@ function PlaygroundModel() {
                                     <Checkbox value={temperatureCheckbox} defaultChecked={temperatureCheckbox} onChange={handleTemperatureCheckbox} />
                                     <div style={{ flex: 1, marginLeft: '12px' }}>
                                         <div className={styles.temperature}>
-                                            <span style={{ color: temperatureCheckbox ? '#2B2B2B' : '#BFBFBF' }}>Temperature</span>
+                                            <span className={`${temperatureCheckbox ? styles.active : styles.inactive}`}>Temperature</span>
                                             {temperatureCheckbox && <InputNumber
                                                 className={styles['code-input']} step={0.01} onChange={(value: number | null) => setTemperatureValue(value as number)} min={0} max={1} value={temperatureValue}></InputNumber>}
                                         </div>
@@ -405,7 +404,7 @@ function PlaygroundModel() {
                                     <Checkbox value={maxTokenCheckbox} defaultChecked={maxTokenCheckbox} onChange={handleMaxTokenCheckbox} />
                                     <div style={{ flex: 1, marginLeft: '12px' }}>
                                         <div className={styles.temperature}>
-                                            <span style={{ color: maxTokenCheckbox ? '#2B2B2B' : '#BFBFBF' }}>Max Tokens</span>
+                                            <span className={`${maxTokenCheckbox ? styles.active : styles.inactive}`}>Max Tokens</span>
                                             {maxTokenCheckbox && <InputNumber parser={(value: any) => {
                                                 const parsedValue = parseInt(value, 10);
                                                 return isNaN(parsedValue) ? 1 : Math.max(parsedValue, 1);
@@ -419,7 +418,7 @@ function PlaygroundModel() {
                                 {allowedConfigs.includes('stop') && <div style={{ display: 'flex', alignItems: 'center', marginTop: '12px' }}>
                                     <Checkbox value={stopSequencesCheckbox} defaultChecked={stopSequencesCheckbox} onChange={handleStopSequencesCheckbox} />
                                     <div style={{ flex: 1, marginLeft: '12px' }}>
-                                        <div className={styles.temperature} style={{ color: stopSequencesCheckbox ? '#2B2B2B' : '#BFBFBF' }}>
+                                        <div className={`${stopSequencesCheckbox ? styles.active : styles.inactive}`}  >
                                             Stop sequences
                                         </div>
                                         {stopSequencesCheckbox && <Input className={styles['code-input']} onChange={(e: any) => setStopSequences([e.target.value])} value={stopSequences}></Input>}
@@ -428,8 +427,8 @@ function PlaygroundModel() {
                                 {allowedConfigs.includes('top_p') && <div style={{ display: 'flex', alignItems: 'center', marginTop: '12px' }}>
                                     <Checkbox value={topPCheckbox} defaultChecked={topPCheckbox} onChange={handleTopPCheckbox} />
                                     <div style={{ flex: 1, marginLeft: '12px' }}>
-                                        <div className={styles.temperature}>
-                                            <span style={{ color: topPCheckbox ? '#2B2B2B' : '#BFBFBF' }}>Top P</span>
+                                        <div  className={styles.temperature}>
+                                            <span className={`${topPCheckbox ? styles.active : styles.inactive}`}>Top P</span>
                                             {topPCheckbox && <InputNumber
                                                 parser={(value: any) => value.replace(/\$\s?|(,*)/g, '')} className={styles['code-input']} step={0.01} value={topValue} onChange={(value: number | null) => setTopValue(value as number)} min={0} max={1}></InputNumber>}
                                         </div>
@@ -440,7 +439,7 @@ function PlaygroundModel() {
                                     <Checkbox value={topKCheckbox} defaultChecked={topKCheckbox} onChange={handleTopKCheckbox} />
                                     <div style={{ flex: 1, marginLeft: '12px' }}>
                                         <div className={styles.temperature}>
-                                            <span style={{ color: topKCheckbox ? '#2B2B2B' : '#BFBFBF' }}>Top K</span>
+                                            <span className={`${topKCheckbox ? styles.active : styles.inactive}`}>Top K</span>
                                             {topKCheckbox && <InputNumber parser={(value: any) => value.replace(/\\B(?=(\d{3})+(?!\d))/g, '').replace(/,/g, '')} className={styles['code-input']} step={1} value={topkValue} onChange={(value: number | null) => setTopkValue(value as number)} min={0} max={2048}></InputNumber>}
                                         </div>
                                         {topKCheckbox && <Slider max={2048} min={0} step={1} value={topkValue} onChange={handleTopkValue}></Slider>}
@@ -474,17 +473,17 @@ function PlaygroundModel() {
                                 <DeleteInputIcon onClick={() => handleDeletedata(index)} style={{ cursor: 'pointer' }} />
                             </div>
                         ))}
-                        <Button onClick={handleAddData} icon={<PlusOutlined />} style={{ marginTop: '12px', background: 'white' }}>Add</Button>
+                        <Button onClick={handleAddData} icon={<PlusOutlined />} style={{ marginTop: '12px'}}>Add</Button>
                     </div>
                     <div className={styles.generate}>
-                        <Button className='next-button' onClick={handleGenerate} loading={generateLoading}>Generate</Button>
+                        <Button type='primary' onClick={handleGenerate} loading={generateLoading}>Generate</Button>
                     </div>
                 </div>
             </div> : <div className={styles['selectAssistant']}>
                 {<NoModel className={styles.svg} />}
                 <div className={styles['select-assistant']}>Select a chat completion model to start</div>
                 <div className={styles['header-news']}>
-                    <Button className={styles['prompt-button']} onClick={handleSelectModel}>Select model</Button>
+                    <Button type='primary' onClick={handleSelectModel}>Select model</Button>
                 </div>
             </div>}
             <ModelComponent defaultSelectedData={selectedData} modalTableOpen={open} handleCloseModal={handleCloseModal} handleModalConfirm={handleModalConfirm} />

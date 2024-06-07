@@ -1,98 +1,11 @@
 .models-page {
     height: 100%;
     overflow: hidden;
-    background-color: var(--color-item-background);
+    background-color: var(--color-background-item);
 
     .ant-spin-nested-loading {
         height: 100% !important;
-        // overflow: hidden;
     }
-
-    .usersCanSet1 {
-        align-self: stretch;
-        position: relative;
-        line-height: 24px;
-        font-weight: 500;
-    }
-
-    .header-prompts {
-        display: flex;
-        justify-content: flex-end;
-        margin: 24px;
-
-        .plusParent {
-            display: flex;
-
-            .arrowSyncParent {
-                height: 100%;
-                position: relative;
-                border-radius: 8px;
-                border: 1px solid var(--color-divider);
-                box-sizing: border-box;
-                // width: 100%;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-                padding: 12px;
-            }
-
-            .arrowSyncParent:hover {
-                background-color: #f5f5f5;
-                cursor: pointer;
-            }
-
-            .prompt-button {
-                background-color: var(--color-positive);
-                color: white;
-                margin-left: 10px;
-                height: 40px;
-            }
-
-            .prompt-button:hover {
-                color: var(--color-invert-text) !important;
-                cursor: pointer;
-                background-color: var(--color-positive-hover);
-                border: 1px solid transparent;
-            }
-        }
-    }
-
-    .usersCanSetUpAndSelectFrParent {
-        position: relative;
-        background-color: var(--color-invert-text);
-        border-bottom: 1px solid var(--color-divider);
-        box-sizing: border-box;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        padding: 20px;
-        text-align: left;
-        font-size: 16px;
-        color: #777;
-        font-family: Inter;
-    }
-
-    .languageModels {
-        position: relative;
-        font-size: 20px;
-        line-height: 24px;
-        font-weight: 600;
-        font-family: Inter;
-        color: var(--color-text-primary);
-        text-align: left;
-        margin: 20px;
-    }
-
-    .language-models {
-        font-size: 20px;
-        line-height: 24px;
-        font-weight: 600;
-        margin: 20px;
-    }
-
     .cards {
         .sub-card {
             display: flex;
@@ -178,24 +91,6 @@
         line-height: 24px;
         font-weight: 500;
     }
-
-    .registertag {
-        border-radius: 8px;
-        background-color: var(--color-invert-text);
-        border: 1px solid #bfbfbf;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 0px 12px;
-        font-size: 14px;
-        color: #bfbfbf;
-        position: absolute;
-        right: 0;
-    }
-
-
-
     .property1disabledInner {
         align-self: stretch;
         display: flex;
@@ -220,30 +115,8 @@
         justify-content: space-between;
         opacity: 0.5;
         font-size: 14px;
-        color: #777;
+        color: var(--color-text-secondary);
     }
-
-    .property1disabled {
-        position: relative;
-        border-radius: 5px;
-        background-color: var(--color-invert-text);
-        // border: 1px solid var(--color-divider;
-        box-sizing: border-box;
-        width: 100%;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        padding: 14px;
-        padding-top: 0;
-        gap: 24px;
-        text-align: left;
-        font-size: 18px;
-        color: var(--color-text-primary);
-        font-family: Inter;
-    }
-
     .frameWrapper {
         align-self: stretch;
         display: flex;
@@ -269,32 +142,11 @@
         justify-content: space-between;
         font-size: 14px;
     }
-
-    .property1enabled {
-        position: relative;
-        border-radius: 5px;
-        background-color: var(--color-invert-text);
-        border: 1px solid var(--color-divider);
-        box-sizing: border-box;
-        width: 100%;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        padding: 24px;
-        gap: 24px;
-        text-align: left;
-        font-size: 18px;
-        color: var(--color-text-primary);
-        font-family: Inter;
-    }
-
     .basicInformation {
         position: relative;
         font-size: 18px;
         line-height: 32px;
-        border-top: 1px solid #eee;
+        border-top: 1px solid var(--color-divider);
     }
 
     .modelproviderIcon {
@@ -319,7 +171,7 @@
         justify-content: flex-start;
         gap: 8px;
         font-size: 14px;
-        color: #777;
+        color: var(--color-text-secondary);
     }
 
     .instructCompletion {
@@ -327,20 +179,6 @@
         line-height: 24px;
         font-weight: 500;
     }
-
-    .registertagEnabled {
-        border-radius: 8px;
-        background-color: var(--color-invert-text);
-        border: 1px solid var(--color-positive);
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 0px 12px;
-        font-size: 14px;
-        color: var(--color-positive);
-    }
-
     .basicInformationParent {
         align-self: stretch;
         display: flex;
@@ -353,10 +191,21 @@
 }
 .typeDisabled {
     cursor: not-allowed !important;
-    background-color: #FAFAFA;
+    background-color: var(--color-background-item);
     opacity: 0.3;
+    svg {
+        stroke: var(--color-text-disable)
+    }
 }
-
+.img-icon-close {
+    height: 27px;
+    min-width: 27px;
+    g {
+        path {
+          stroke: var(--color-text-primary);
+        }
+      }
+}
 .models-page {
     margin: 0;
     width: 100%;
@@ -381,14 +230,14 @@
         height: 100% !important;
     }
 
-    border: 1px solid #eee !important;
+    border: 1px solid var(--color-divider) !important;
     border-radius: 8px !important;
     margin-bottom: 30px;
 }
 
 .ant-table-empty {
     .ant-table-content {
-        border: 1px solid #eee;
+        border: 1px solid var(--color-divider);
         border-radius: 8px;
     }
 
@@ -430,7 +279,7 @@
     position: relative;
     height: 1px;
     margin-top: 24px;
-    background-color: #eee;
+    background-color: var(--color-divider);
     line-height: 1;
 }
 
@@ -561,7 +410,7 @@
         font-size: 14px;
         line-height: 20px;
         font-family: Inter;
-        color: #777;
+        color: var(--color-text-secondary);
         text-align: left;
         margin-bottom: 8px;
         display: inline-block;
@@ -584,82 +433,11 @@
         position: relative;
     }
 
-    .chatCompletion {
-        position: relative;
-        line-height: 24px;
-        font-weight: 500;
-    }
-
-    .modeltypetag {
-        position: relative;
-        border-radius: 8px;
-        background-color: #fff;
-        border: 1px solid #e4e4e4;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 0px 12px;
-        text-align: left;
-        font-size: 14px;
-        width: 140px;
-        color: #087443;
-        font-family: Inter;
-        margin-top: 8px
-    }
-
-    .stream {
-        position: relative;
-    }
-
-    .instanceChild {
-        align-self: stretch;
-        width: 1px;
-        position: relative;
-        border-right: 1px solid #e4e4e4;
-        box-sizing: border-box;
-    }
-
-    .on {
-        position: relative;
-        color: #2b2b2b;
-    }
-
-    .feature {
-        display: flex;
-    }
-
-    .streamParent {
-        position: relative;
-        border-radius: 8px;
-        border: 1px solid #e4e4e4;
-        background-color: white;
-        box-sizing: border-box;
-        height: 24px;
-        // width: 130px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 0px 4px;
-        gap: 3px;
-        margin-top: 8px;
-        margin-bottom: 24px;
-        text-align: left;
-        font-size: 12px;
-        color: #777;
-        font-family: Inter;
-    }
-
-    .streamBooleanFalse {
-        opacity: 0.5;
-    }
 
     .formbuttoncancel {
         position: relative;
         border-radius: 8px;
-        background-color: var(--color-invert-text);
+        background-color: var(--color-background);
         border: 1px solid var(--color-divider);
         box-sizing: border-box;
         width: 163px;
@@ -677,41 +455,10 @@
         color: var(--color-text-primary);
         font-family: Inter;
     }
-
-    .inputWithLabel1 {
-        flex: 1;
-        width: 100%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        gap: 8px;
-        text-align: left;
-        font-size: 16px;
-        color: var(--color-text-primary);
-        font-family: Inter;
-
-        .span {
-            font-weight: 600;
-            color: var(--color-negative);
-        }
-
-        .label {
-            position: relative;
-            line-height: 20px;
-        }
-
-        .label1 {
-            align-self: stretch;
-            position: relative;
-            font-size: 14px;
-            line-height: 20px;
-            color: #777;
-        }
+    .formbuttoncancel:hover {
+        background-color: var(--color-background-hover);
+    
     }
-
-
 }
 
 .p {
@@ -737,7 +484,7 @@
 
             .ant-modal-header {
                 padding: 10px 24px;
-                border-bottom: 1px solid #eee;
+                border-bottom: 1px solid var(--color-divider);
                 display: flex;
                 align-items: center;
                 margin: 0;
@@ -755,7 +502,7 @@
             }
 
             .ant-modal-body {
-                border-bottom: 1px solid #eee;
+                border-bottom: 1px solid var(--color-divider);
                 padding: 24px 20px;
                 height: auto;
             }
@@ -791,7 +538,7 @@
 }
 
 .disabled-button {
-    background-color: #d9d9d9;
+    background-color: var(--color-text-disable);
 }
 
 .edit-form {
@@ -827,30 +574,12 @@
         line-height: 20px;
         font-family: Inter;
         margin-bottom: 8px;
-        color: #777;
+        color: var(--color-text-secondary);
         text-align: left;
         display: inline-block;
     }
 }
-.popover-eidt {
-    cursor: pointer;
-    margin: 0;
-    padding: 10px;
-    border-radius: 8px;
 
-}
-.popover-eidt:hover,.popover-delete:hover {
-    background-color: var(--color-clear-button-hover);
-
-} 
-.popover-delete {
-    cursor: pointer;
-    margin: 0;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 4px;
-    color: var(--color-negative);
-}
 
 .editModal {
     :global {
@@ -861,7 +590,7 @@
             }
         }
         .ant-drawer-body {
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
             padding: 0 !important;
         }
         .ant-form-item {
@@ -882,4 +611,25 @@
 
 .button {
     margin-left: 15px;
+}
+.popover-eidt {
+    cursor: pointer;
+    margin: 0;
+    padding: 10px;
+    border-radius: 8px;
+    color: var(--color-text-primary);
+
+}
+.popover-eidt:hover,.popover-delete:hover {
+    background-color: var(--color-background-hover);
+
+} 
+.popover-delete {
+    cursor: pointer;
+    margin: 0;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 4px;
+    color: var(--color-negative);
+    // color: white
 }

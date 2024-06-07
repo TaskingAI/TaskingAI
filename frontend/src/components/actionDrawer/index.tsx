@@ -115,13 +115,13 @@ const ActionDrawer = forwardRef((props: any, ref: any) => {
         </div>}
         <div className={resetButtonShow ? styles.resetBackground : undefined}>
           <Radio.Group onChange={handleRadioChange} value={radioValue}>
-            <Radio value='none'>{t('projectActionNone')}</Radio>
-            <Radio value='basic'>{t('projectActionBasic')}</Radio>
-            <Radio value='bearer'>{t('projectActionBearer')}</Radio>
-            <Radio value='custom'>{t('projectActionCustom')}</Radio>
+            <Radio value='none'><span className='radio-label'>{t('projectActionNone')}</span></Radio>
+            <Radio value='basic'><span className='radio-label'>{t('projectActionBasic')}</span></Radio>
+            <Radio value='bearer'><span className='radio-label'>{t('projectActionBearer')}</span></Radio>
+            <Radio value='custom'><span className='radio-label'>{t('projectActionCustom')}</span></Radio>
           </Radio.Group>
           {radioValue !== 'none' && <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '15px 0' }}>
-            {radioValue !== 'custom' ? <span className={styles['desc-description']}>Authorization </span> : <Input placeholder='X-Custom' onChange={handleCustom} value={custom} style={{ width: '14%' }} />} <span className={styles['desc-description']}>:</span>  <Input prefix={<span style={{ color: '#999' }} >{radioValue !== 'custom' && titleCase(radioValue)}</span>} value={Authentication} placeholder='<Secret>' onChange={hangleChangeAuthorization} style={{ width: '83%' }}></Input>
+            {radioValue !== 'custom' ? <span className={styles['desc-description']}>Authorization </span> : <Input placeholder='X-Custom' onChange={handleCustom} value={custom} style={{ width: '14%' }} />} <span className={styles['desc-description']}>:</span>  <Input className={styles['input-secret']} prefix={<span style={{ color: '#999' }} >{radioValue !== 'custom' && titleCase(radioValue)}</span>} value={Authentication} placeholder='<Secret>' onChange={hangleChangeAuthorization} style={{ width: '83%' }}></Input>
           </div>
           }
         </div>

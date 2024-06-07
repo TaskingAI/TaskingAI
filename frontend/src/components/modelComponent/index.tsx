@@ -2,7 +2,7 @@ import {
     Button,
     Modal
 } from 'antd';
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import { PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from "react-i18next";
 import { useEffect, useState, useRef } from 'react'
@@ -90,19 +90,19 @@ function ModelComponent(props: any) {
     }
     return (
         <>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} centered onCancel={handleModalClose} footer={[
+            <Modal        closeIcon={<CloseIcon className={styles['img-icon-close']}/>} centered onCancel={handleModalClose} footer={[
                 <div className='footer-group' key='footer1'>
-                    <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
+                    <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} >
                         {t('projectNewModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
                             {recordsSelected.length}  {recordsSelected.length > 1 ? `${t('projectItemsSelected')}` : `${t('projectItemSelected')}`}
                         </span>
-                        <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
+                        <Button key="cancel" onClick={handleModalClose} className={`${styles.cancelButton}`}>
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleModalConfirm} className='next-button' loading={confirmLoading}>
+                        <Button key="submit" onClick={handleModalConfirm} type='primary' loading={confirmLoading}>
                             {t('confirm')}
                         </Button>
                     </div>

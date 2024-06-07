@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchIcon } from '@/axios';
 import styles from './icon.module.scss'
 const IconComponent = ({ providerId }) => {
@@ -6,7 +6,7 @@ const IconComponent = ({ providerId }) => {
     useEffect(() => {
         const fetchIcon1 = async () => {
             const res = await fetchIcon(providerId)
-            const html = await res;
+            const html:any = await res;
             setIconHtml(html);
         };
 

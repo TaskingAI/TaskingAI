@@ -1,6 +1,6 @@
 import styles from './apiKey.module.scss'
 import ModalTable from '../modalTable/index'
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import { Button, Modal, Form, Input, Spin, Space, Tooltip } from 'antd'
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -22,7 +22,6 @@ function ApiKeys() {
     const { t } = useTranslation();
     const { apikeysTableColumn } = CommonComponents();
     const { tooltipEditTitle, tooltipDeleteTitle, tooltipShowTitle, tooltipHideTitle } = tooltipTitle();
-
     useEffect(() => {
         if (apiKeyLists.data.length > 0) {
             const data = apiKeyLists.data.map((item: any) => {
@@ -32,7 +31,7 @@ function ApiKeys() {
                 }
             })
             setApiKeysList(data)
-        }else {
+        } else {
             setApiKeysList([])
         }
     }, [apiKeyLists])
@@ -236,6 +235,7 @@ function ApiKeys() {
         setOpenDeleteModal(false)
         setDeleteLoading(false)
     }
+
     return (
         <div className={styles["api-keys"]}>
 
@@ -247,12 +247,12 @@ function ApiKeys() {
                 open={openEditAPIKey}
                 centered
                 className={styles['delete-apikey-modal']}
-                closeIcon={<img src={closeIcon} alt="closeIcon" />}
+                closeIcon={<CloseIcon className='img-icon-close' />}
                 footer={[
-                    <Button key="cancel" onClick={handleModalCancel} className='cancel-button'>
+                    <Button key="cancel" onClick={handleModalCancel}>
                         {t('cancel')}
                     </Button>,
-                    <Button key="submit" loading={loading} onClick={handleCreateConfirm} className='next-button'>
+                    <Button key="submit" type='primary' loading={loading} onClick={handleCreateConfirm} >
                         {t('confirm')}
                     </Button>
                 ]}
@@ -268,12 +268,12 @@ function ApiKeys() {
                 open={openCreateAPIKey}
                 className={styles['create-apikey-modal']}
                 centered
-                closeIcon={<img src={closeIcon} alt="closeIcon" />}
+                closeIcon={<CloseIcon className='img-icon-close' />}
                 footer={[
-                    <Button key="cancel" onClick={handleCreateCancel} className='cancel-button'>
+                    <Button key="cancel" onClick={handleCreateCancel}>
                         {t('cancel')}
                     </Button>,
-                    <Button key="submit" loading={confirmLoading} onClick={handleCreateConfirm} className='next-button'>
+                    <Button key="submit" loading={confirmLoading} onClick={handleCreateConfirm} type='primary' >
                         {t('confirm')}
                     </Button>
                 ]}
@@ -289,9 +289,9 @@ function ApiKeys() {
                 open={openDeleteModal}
                 centered
                 className={styles['delete-apikey-modal']}
-                closeIcon={<img src={closeIcon} alt="closeIcon" />}
+                closeIcon={<CloseIcon className='img-icon-close' />}
                 footer={[
-                    <Button key="cancel" onClick={handleDeleteCancel} className='cancel-button'>
+                    <Button key="cancel" onClick={handleDeleteCancel}>
                         {t('cancel')}
                     </Button>,
                     <Button key="delete" onClick={handleDeleteConfirm} className={disabled ? 'disabled-button' : 'delete-button'} disabled={disabled} loading={deleteLoading}>

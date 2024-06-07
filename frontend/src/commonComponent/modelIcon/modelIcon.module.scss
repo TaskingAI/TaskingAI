@@ -5,11 +5,11 @@
         display: flex;
         margin-right: 8px;
         border-radius: 8px;
-        background-color: #fafafa;
         padding: 4px;
         align-items: center;
         margin-bottom: 4px;
         line-height: 12px;
+        background-color: var(--color-tag-background);
         svg path{
             stroke: var(--color-text-secondary);
         }

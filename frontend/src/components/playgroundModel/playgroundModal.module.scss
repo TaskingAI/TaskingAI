@@ -1,22 +1,22 @@
 .playgroundModal {
-    background-color: white;
+    background-color: var(--color-background);
     display: flex;
     height: 100%;
 
     .left {
         width: 360px;
-        border-right: 1px solid var(--color-clear-button-hover);
+        border-right: 1px solid var(--color-divider);
         height: 100%;
 
         .leftTop {
-            border-bottom: 1px solid var(--color-clear-button-hover);
+            border-bottom: 1px solid var(--color-divider);
             padding-bottom: 16px;
             padding: 24px 24px 16px 24px;
 
             .modal {
                 font-size: 16px;
                 font-weight: 500;
-                color: var( --color-text-primary );
+                color: var(--color-text-primary);
                 margin-bottom: 12px;
 
             }
@@ -28,7 +28,7 @@
                 .modelName {
                     font-size: 14px;
                     font-weight: 500;
-                    color: var( --color-text-primary );
+                    color: var(--color-text-primary);
                     margin-left: 5px;
                 }
             }
@@ -48,12 +48,12 @@
 
             .configuration {
                 font-weight: 500;
-                color: var( --color-text-primary );
+                color: var(--color-text-primary);
                 font-size: 16px;
             }
 
             .responseStream {
-                color: var( --color-text-primary );
+                color: var(--color-text-primary);
                 font-size: 14px;
                 margin-left: 4px;
                 font-weight: 500;
@@ -63,7 +63,7 @@
             .temperature {
                 height: 24px;
                 font-size: 14px;
-                color: var( --color-text-primary );
+                color: var(--color-text-primary);
                 line-height: 24px;
                 display: flex;
                 justify-content: space-between;
@@ -118,7 +118,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border-bottom: 1px solid var(--color-clear-button-hover);
+                border-bottom: 1px solid var(--color-divider);
                 padding: 12px 0;
             }
 
@@ -275,7 +275,7 @@
         position: relative;
         font-size: 14px;
         font-family: Inter;
-        color: var( --color-text-disable );
+        color: var(--color-text-disable);
         text-align: center !important;
         width: 265px;
         margin-bottom: 12px;
@@ -288,7 +288,7 @@
 
         .prompt-button {
             background-color: var(--color-positive);
-            color: white;
+            color: var(--color-background);
             margin: 0px;
             height: 32px;
             padding: 2px 10px;
@@ -296,7 +296,7 @@
 
         .prompt-button:hover {
             background-color: var(--color-positive-hover);
-            color: white;
+            color: var(--color-background);
             border: 1px solid transparent !important;
         }
     }
@@ -304,7 +304,19 @@
 }
 
 :global {
+    // .ant-input-number {
+    //     width: 60px;
+    // }
+
     .ant-slider {
         margin-left: 0;
     }
+}
+
+.active {
+    color: var(--color-text-primary)
+}
+
+.inactive {
+    color: var(--color-text-disable)
 }

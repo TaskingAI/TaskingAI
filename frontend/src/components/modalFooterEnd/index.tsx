@@ -19,10 +19,10 @@ function ModalFooterEnd({ onCancel, handleOk }:ModalFooterEndProps) {
     }
     return (
         <div className={styles['button-footer']}>
-            <Button key="cancel" onClick={handleCancel} className='cancel-button'>
+            <Button key="cancel" onClick={handleCancel}>
                 {t('cancel')}
             </Button>
-            <Button key="Confirm" onClick={handleSuccess} className={`next-button ${styles['button']}`} loading={confirmLoading}>
+            <Button key="Confirm" onClick={handleSuccess} type='primary' className={`${styles['button']}`} loading={confirmLoading}>
                 {t('confirm')}
             </Button>
         </div>

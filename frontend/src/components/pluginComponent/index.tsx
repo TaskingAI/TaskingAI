@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, useEffect } from 'react';
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import Paginations from '@/commonComponent/pagination'
+
 import { Modal, Button, Collapse, Radio, Select, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
@@ -71,19 +72,19 @@ function PluginComponent(props: any) {
 
 
     }
-    return <Modal open={open} onCancel={handleCancel} centered className={styles['plugin-modal']} width={1325} closeIcon={<img src={closeIcon} alt="closeIcon" />} title='Select Plugin' footer={[
+    return <Modal open={open} onCancel={handleCancel} centered className={styles['plugin-modal']} width={1325}        closeIcon={<CloseIcon className={styles['img-icon-close']}/>} title='Select Plugin' footer={[
         <div className='footer-group' style={{ display: 'flex', justifyContent: 'space-between' }} key='footer2'>
-            <Button key="model" icon={<PlusOutlined />} onClick={handleNewBundle} className='cancel-button'>
+            <Button key="model" icon={<PlusOutlined />} onClick={handleNewBundle} >
                 New bundle
             </Button>
             <div>
                 <span className='select-record'>
                     {pluginId ? 1 : 0}  {t('projectItemSelected')}
                 </span>
-                <Button key="cancel" onClick={handleCancel} className='cancel-button' style={{ marginRight: '8px' }}>
+                <Button key="cancel" onClick={handleCancel}  style={{ marginRight: '8px' }}>
                     {t('cancel')}
                 </Button>
-                <Button key="submit" onClick={handleRetrievlConfirm} className='next-button'>
+                <Button key="submit" onClick={handleRetrievlConfirm} type='primary'>
                     {t('confirm')}
                 </Button>
             </div>
@@ -99,14 +100,14 @@ function PluginComponent(props: any) {
                     }
                 ]} className={styles['select-name']} />
                 <Input placeholder='Enter ID' className={styles['input-name']} onChange={handleInputChange} value={inputValue} />
-                <Button className='cancel-button' onClick={handleSearch}>Search</Button>
+                <Button  onClick={handleSearch}>Search</Button>
                 <Select defaultValue="All Records" onChange={handleSelectEndChange} options={optionsEnd} className={styles['select-data']} />
 
             </div>
             {bundleListData.length === 0 ? <div className={styles['no-data']}>
                 <NoTool />
                 <div className={styles['desc']}>New Bundle</div>
-                <Button icon={<PlusOutlined />} type='primary' className={`${styles['prompt-button']} next-button`} onClick={handleNewBundle}>New Bundle</Button>
+                <Button icon={<PlusOutlined />} type='primary'  onClick={handleNewBundle}>New Bundle</Button>
             </div> : bundleListData.map((item: any) => {
                 return <Collapse key={item.bundle_instance_id} collapsible="header" className={styles.pluginCollapse}>
                     <Collapse.Panel showArrow={false} header={<div className={styles.bundle} >

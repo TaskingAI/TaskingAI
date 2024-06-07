@@ -1,11 +1,10 @@
 .dashboardContent {
     display: flex;
     overflow: auto;
-    background-color: var(--color-item-background);
-
 }
 .dashboard {
     padding: 24px;
+    background-color: var(--color-background-item);
     overflow: auto;
     margin: auto;
     width: 1328px;
@@ -14,11 +13,14 @@
         line-height: 30px;
         font-weight: 600;
         margin-bottom: 72px;
+        color: var(--color-text-primary);
     }
 
     .second-title {
         font-size: 18px;
         line-height: 22px;
+        color: var(--color-text-primary);
+
         font-weight: 600;
         margin-bottom: 12px;
     }
@@ -27,7 +29,7 @@
         font-size: 14px;
         line-height: 17px;
         font-weight: 400;
-        color: #777;
+        color: var(--color-text-secondary);
     }
 
     .content {
@@ -54,7 +56,7 @@
         margin-bottom: 72px;
         .card-item {
             border: 1px solid var(--color-divider);
-            background-color: white;
+            background-color: var(--color-background);
             padding: 12px;
             display: flex;
             border-radius: 8px;
@@ -76,6 +78,7 @@
             .card-name {
                 font-size: 16px;
                 line-height: 20px;
+                color: var(--color-text-primary);
                 font-weight: 500;
             }
             .button-group {
@@ -95,11 +98,17 @@
             .card-header {
                 display: flex;
                 gap: 8px;
+              
                 align-items: center;
+                svg{
+                    width: 32px;
+                    height: 32px;
+                }
                 .card-bottom-title {
                     font-size: 16px;
                     line-height: 20px;
                     height: 20px;
+                    color: var(--color-text-primary);
                     font-weight: 500;
                 }
             }
@@ -113,4 +122,10 @@
 .dashboardContent::-webkit-scrollbar {
     display: none;
 
+}
+.disabled-button1 {
+   border: 1px solid var(--color-divider) !important;
+}
+.disabled-button {
+    color: var(--color-text-disable);
 }

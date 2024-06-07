@@ -43,16 +43,6 @@ function Paginations(props:any) {
         setOffset(offset - 20)
         onFetchData(params)
     }
-    // const handleChangePageLimit = (page:number, pageSize:number) => {
-    //     setPageSize(pageSize)
-    //     setOffset(pageSize * (page - 1))
-    //     const params = {
-    //         limit: pageSize,
-    //         offset: pageSize * (page - 1),
-    //         lang: 'en'
-    //     }
-    //     onFetchData(params)
-    // }
     const handleNext = () => {
         setNextFlag(true)
         setPreviousFlag(false)
@@ -69,7 +59,6 @@ function Paginations(props:any) {
         <div className={styles.footer}>
             <Button className={styles['previous-button']} style={{ borderRight: 'none' }} onClick={handlePrevious} disabled={previousButtonDisabled}>Previous</Button>
             <Button className={styles['next-button-group']} onClick={handleNext} disabled={nextButtonDisabled}>Next</Button>
-            {/* <Pagination defaultPageSize={10} showQuickJumper={false} showSizeChanger={true} onChange={handleChangePageLimit} /> */}
         </div>
     );
 }

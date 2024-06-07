@@ -299,6 +299,7 @@
     margin-top: 0px;
     margin-bottom: -15px !important;
     font-weight: var(--base-text-weight-semibold, 600);
+    color:var(--color-text-primary);
     line-height: 1.25
 }
 
@@ -343,6 +344,7 @@
     margin-bottom: -15px !important;
     margin-block-start: 0;
     margin-block-end: 0;
+    color: var(--color-text-primary)
 }
 
 .markdown-body blockquote {
@@ -388,7 +390,9 @@
 .markdown-body pre {
     margin-top: 0;
     margin-bottom: 0;
-    word-wrap: normal
+    word-wrap: normal;
+    background-color: var(--color-background-hover);
+    overflow: hidden !important;
 }
 
 .playground-content-markdown .markdown-body .octicon {
@@ -567,9 +571,12 @@
 }
 
 .playground-content-markdown .markdown-body li>p {
-    margin-top: -21px !important
+    margin-top: -21px !important;
+    color:var(--color-text-primary)
 }
-
+.markdown-body ul li {
+    color: var(--color-text-primary)
+}
 .markdown-body li+li {
     margin-top: .25em
 }
@@ -1089,7 +1096,7 @@
 .markdown-body code {
     padding: 2px 4px;
     border-radius: 4px;
-    background-color: #f4f4f4;
+    background-color: var(--color-tag-background);
 }
 
 .markdown-body .hljs,

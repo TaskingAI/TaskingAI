@@ -21,11 +21,12 @@ import { toast } from 'react-toastify'
 import ApiErrorResponse from '@/constant/index'
 import tooltipTitle from '../../contents/tooltipTitle'
 import { useNavigate } from 'react-router-dom';
+
 import DeleteModal from '../deleteModal/index.tsx'
 import RecordIcon from '../../assets/img/recordIcon.svg?react'
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import { useTranslation } from "react-i18next";
-
+import { dealThemeColor } from '@/utils/util.ts'
 import {
     Space, Drawer, Popover, Input, Tooltip, Spin, Select, Modal, Button
 } from 'antd';
@@ -38,7 +39,6 @@ function Retrieval() {
 
     const { modelsTableColumn, collectionTableColumn } = CommendComponent();
     const { tooltipEditTitle, tooltipRecordTitle, tooltipMoreTitle } = tooltipTitle();
-    // const { tooltipEditTitle, tooltipChunkTitle, tooltipRecordTitle, tooltipMoreTitle } = tooltipTitle();
     const handleViewCode = () => {
         setIsVisible(false)
         setViewCodeOpen(true)
@@ -61,22 +61,21 @@ function Retrieval() {
         render: (_: string, record: object) => (
             <Space size="middle">
                 <div className='table-edit-icon' onClick={() => handleRecord(record, 'Records')}>
-                    <Tooltip placement='bottom' color="#fff" arrow={false} overlayClassName='table-tooltip' title={tooltipRecordTitle}>
+                    <Tooltip placement='bottom' color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip' title={tooltipRecordTitle}>
                         <RecordIcon />
                     </Tooltip>
                 </div>
-               
                 <div onClick={() => handleEdit(record)} className='table-edit-icon'>
-                    <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
-                        <EditIcon/>
+                    <Tooltip placement='bottom' title={tooltipEditTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
+                        <EditIcon />
                     </Tooltip>
                 </div>
                 <div className='table-edit-icon' onClick={() => setRecord(record)}>
-                    {isVisible ? <Tooltip placement='bottom' title={tooltipMoreTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                    {isVisible ? <Tooltip placement='bottom' title={tooltipMoreTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                         <Popover trigger="click" placement='bottom' content={content} arrow={false}>
-                        <MoreIcon  />
+                            <MoreIcon />
                         </Popover>
-                    </Tooltip> :  <MoreIcon  />}
+                    </Tooltip> : <MoreIcon />}
                 </div>
             </Space>
         ),
@@ -156,7 +155,6 @@ function Retrieval() {
         setDefaultSelectedRowKeys([])
     }
     const handleModalCloseConfirm = () => {
-        console.log(selectedRows)
         if (selectedRows.length) {
             let str = selectedRows[0];
             let index = str.lastIndexOf('-');
@@ -360,14 +358,14 @@ function Retrieval() {
     const handleCloseViewCode = () => {
         setIsVisible(true)
         setViewCodeOpen(false)
-   }
+    }
     return (
 
         <div className={styles["retrieval"]}>
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
                 <ModalTable loading={loading} title='New collection' updatePrevButton={updateRetrievalPrevButton} onChildEvent={handleChildEvent} name="collection" hasMore={hasMore} id='collection_id' columns={columns} ifSelect={false} onOpenDrawer={handleCreatePrompt} dataSource={promptList} />
             </Spin>
-            <Drawer className={styles['drawer-retrievals']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
+            <Drawer className={styles['drawer-retrievals']} closeIcon={<CloseIcon className={styles['img-icon-close']} />} onClose={handleCancel} title={drawerTitle} placement="right" open={OpenDrawer} size='large' footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <div className={styles['drawer-retrieval']}>
                     <div className={styles['name-prompt']}>
                         {t('projectModelColumnName')}
@@ -396,7 +394,7 @@ function Retrieval() {
                         open={false}
                         className={styles['input']}
                         mode="multiple"
-                        style={{caretColor: 'transparent'}}
+                        style={{ caretColor: 'transparent' }}
                         disabled={editDisabled}
                         suffixIcon={<RightOutlined />}
                         maxTagCount={2} removeIcon={null}
@@ -426,19 +424,19 @@ function Retrieval() {
                 </div>
             </Drawer>
             <ModelModal type='text_embedding' ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} getOptionsList={fetchModelsList} modelType='text_embedding' handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>
-            <Modal closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleModalClose} centered footer={[
+            <Modal closeIcon={<CloseIcon className={styles['img-icon-close']} />} onCancel={handleModalClose} centered footer={[
                 <div className='footer-group' key='footer'>
-                    <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
+                    <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId}>
                         {t('projectNewModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
                             {recordsSelected.length} {recordsSelected.length > 1 ? `${t('projectItemsSelected')}` : `${t('projectItemSelected')}`}
                         </span>
-                        <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
+                        <Button key="cancel" onClick={handleModalClose} className={`${styles.cancelButton}`}>
                             {t('cancel')}
                         </Button>
-                        <Button key="submit" onClick={handleModalCloseConfirm} className='next-button'>
+                        <Button key="submit" onClick={handleModalCloseConfirm} type='primary'>
                             {t('confirm')}
                         </Button>
                     </div>
@@ -448,7 +446,7 @@ function Retrieval() {
             </Modal>
             <ViewCode open={viewCodeOpen} data={viewCodeData} handleClose={handleCloseViewCode} />
             <DeleteModal describe={`${t('deleteItem')} ${deleteValue || 'Untitled Collection'}? ${t('projectRetrievalDeleteDesc')}`} open={OpenDeleteModal} title={t('projectRetrievalDelete')} projectName={deleteValue || 'Untitled Collection'} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />
-            <Drawer className={recordOrChunk !== 'Chunks' ? styles['drawer-inner-table'] : styles['drawer-inner-chunk']} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleRecordCancel} placement="right" size='large' open={recordOpen} width={1000} title={`${drawerName} / ${recordOrChunk === 'Chunks' ? t('projectChunks') : t('projectRetrievalColumnRecords')}`}>
+            <Drawer className={recordOrChunk !== 'Chunks' ? styles['drawer-inner-table'] : styles['drawer-inner-chunk']} closeIcon={<CloseIcon className={styles['img-icon-close']} />} onClose={handleRecordCancel} placement="right" size='large' open={recordOpen} width={1000} title={`${drawerName} / ${recordOrChunk === 'Chunks' ? t('projectChunks') : t('projectRetrievalColumnRecords')}`}>
                 {recordOrChunk === 'Chunks' ? <ChunkPage collectionId={collectionRecordId} /> : <RecordPage fetChData={() => fetchData({ limit })} collectionId={collectionRecordId} ></RecordPage>}
             </Drawer>
         </div>)

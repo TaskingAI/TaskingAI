@@ -27,6 +27,8 @@ import CloseIcon from '../../assets/img/x-close.svg?react'
 import EditIcon from '../../assets/img/editIcon.svg?react'
 import ClipboardJS from 'clipboard';
 import { useTranslation } from 'react-i18next';
+import { dealThemeColor } from '@/utils/util.ts'
+
 
 
 function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData:Function }) {
@@ -124,13 +126,13 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
             fixed: 'right',
             render: (_text: string, record: any) => (
                 <Space size="middle">
-                    <div onClick={record.type !=='file' ? () => handleEdit(record) : undefined} className={`table-edit-icon ${record.type ==='file' && styles.typeDisabled}`} style={{ height: '34px', width: '34px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Tooltip placement='bottom' title={record.type !=='file' && tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                   <div onClick={record.type !=='file' ? () => handleEdit(record) : undefined} className={`table-edit-icon ${record.type ==='file' && styles.typeDisabled}`} style={{ height: '34px', width: '34px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Tooltip placement='bottom' title={record.type !=='file' && tooltipEditTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                             <EditIcon />
                         </Tooltip>
                     </div>
                     <div onClick={() => handleDelete(record)} className='table-edit-icon' style={{ height: '34px', width: '34px', padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Tooltip placement='bottom' title={tooltipDeleteTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                        <Tooltip placement='bottom' title={tooltipDeleteTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                             <DeleteIcon />
                         </Tooltip>
                     </div>
@@ -265,7 +267,7 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
                         {fileLoading ? (
                             <LoadingAnim className='loading-icon' />
                         ) : (
-                            <CloseIcon onClick={handleRemoveFileList} />
+                            <CloseIcon onClick={handleRemoveFileList} className='img-icon-close'/>
                         )}
                     </div>
                 </div>
@@ -446,10 +448,10 @@ function RecordPage({ collectionId,fetChData }: { collectionId: string,fetChData
         <Spin spinning={loading} >
             <ModalTable ifOnlyId={true} title='New record' onOpenDrawer={handleCreatePrompt} onChildEvent={handleChildEvent} updatePrevButton={updatePrevButton} dataSource={recordList} ifSelect={false} name="record" columns={columns} hasMore={hasMore} id="record_id"></ModalTable>
             <Modal footer={[
-                <Button key="cancel" onClick={handleCancel} className='cancel-button'>
+                <Button key="cancel" onClick={handleCancel}>
                     {t('cancel')}
                 </Button>,
-                <Button key="submit" onClick={() => handleConfirm()} className='next-button' loading={confirmLoading}>
+                <Button key="submit" onClick={() => handleConfirm()} type='primary' loading={confirmLoading}>
                     {t('confirm')}
                 </Button>
             ]} title={drawerTitle} centered className={styles['record-create-model']} open={createOpenModal} width={720} onCancel={handleCancel} closeIcon={<CloseIcon className={styles['img-icon-close']} />}>

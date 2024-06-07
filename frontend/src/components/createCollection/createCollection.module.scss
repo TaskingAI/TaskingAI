@@ -1,12 +1,13 @@
 .create-collection {
     z-index: 10000;
+
     :global {
     
         .ant-modal-content {
             .ant-modal-body {
                 padding: 24px 0;
                 overflow: auto;
-                background-color: var(--color-item-background);
+                background-color: var(--color-background-item);
                 max-height: 680px;
             }
         }
@@ -68,7 +69,7 @@
             font-size: 14px;
             line-height: 20px;
             font-family: Inter;
-            color: #777777;
+            color: var(--color-text-secondary);
             text-align: left;
             display: inline-block;
             margin: 0 24px 10px 24px;
@@ -78,7 +79,7 @@
             }
 
             .referToTheDocumentationFor {
-                color: #777777;
+                color: var(--color-text-secondary);
             }
 
         }
@@ -99,18 +100,18 @@
             }
 
             .ant-btn:hover {
-                background-color: white !important;
+                background-color: var(--color-background) !important;
                 border: none !important;
-                color: black !important;
+                color: var(--color-text-primary) !important;
             }
 
             .ant-btn:active {
-                background-color: white !important;
+                background-color: var(--color-background) !important;
                 border: none !important;
             }
 
             .ant-btn:visited {
-                background-color: white !important;
+                background-color: var(--color-background) !important;
                 border: none !important;
             }
         }
@@ -130,7 +131,7 @@
     :global {
         .ant-modal-body {
             padding: 0 24px;
-            background-color: var(--color-item-background);
+            background-color: var(--color-background-item);
         }
         .ant-modal-footer {
             height: 70px;
@@ -140,4 +141,13 @@
     .cancelButton {
         margin-right: 10px;
     }
+}
+.img-icon-close {
+    height: 27px;
+    min-width: 27px;
+    g {
+        path {
+          stroke: var(--color-text-primary);
+        }
+      }
 }

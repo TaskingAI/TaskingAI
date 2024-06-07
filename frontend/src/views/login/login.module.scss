@@ -1,10 +1,28 @@
 .login {
-    border: 2px solid #eee;
+    border: 2px solid var(--color-divider);
     padding: 36px;
     margin: auto;
     min-width: 540px;
     border-radius: 16px;
     font-family: var(--text-single-100-regular);
+    background-color: var(--color-background);
+    .content-divider {
+        display: flex;
+        align-items: center;
+
+        .divider {
+            width: 45%;
+            height: 1px;
+            background-color: var( --color-text-disable );
+            opacity: 0.5;
+        }
+
+        .or {
+            margin: 0 24px;
+            color: var( --color-text-disable );
+        }
+    }
+
     .social_btn {
         width: 100%;
         display: flex;
@@ -17,17 +35,19 @@
         margin-top: 12px;
         font-size: 16px;
         font-family: Inter;
-        color: var(--color-text-primary);
+        color: var( --color-text-primary );
 
         .social-icon {
             margin-right: 8px;
+            width: 21px;
+            height: 21px;
         }
     }
 
     .social_btn:hover {
-        color: var(--color-text-primary);
-        border: 1px solid transparent;
-        background-color: #eee;
+        color: var( --color-text-primary );
+        border: 1px solid var(--color-divider);
+        background-color: var(--color-background-hover);
     }
 
     .img {
@@ -37,7 +57,7 @@
 
     .submit-btn {
         text-align: center;
-        background-color: #09914f;
+        background-color: var(--color-positive);
         width: 100%;
         height: 40px;
         cursor: pointer;
@@ -45,10 +65,7 @@
         align-items: center;
         display: flex;
         box-shadow: rgba(16, 24, 40, 0.05) 0px 1px 2px;
-        border-width: 1px;
-        border-style: solid;
-        border-color: initial;
-        border-image: initial;
+        border: 1px solid var(--color-divider) !important;
         border-radius: 8px;
         gap: 8px;
         margin: auto;
@@ -60,9 +77,9 @@
 
     .submit-btn:hover {
         opacity: 0.9;
-        color: white !important;
-        border: none !important;
-        background-color: var(--color-positive) !important;
+        color: var(--color-invert-text) !important;
+        border: 1px solid var(--color-divider) !important;
+        background-color: var(--color-positive-hover) !important;
     }
 
     .welcome-font {
@@ -71,7 +88,7 @@
         line-height: 29px;
         font-family: Inter;
         font-weight: bold;
-        color: var(--color-text-primary);
+        color: var( --color-text-primary );
         text-align: left;
         margin-top: 18px;
         margin-bottom: 24px;
@@ -82,6 +99,7 @@
         text-align: center;
         height: 30px;
         font-size: 16px;
+        color: var(--color-text-primary);
         margin-bottom: 12px;
     }
 
@@ -99,29 +117,16 @@
             height: 30px;
             margin-right: 10px
         }
+        .title {
+            font-size: 18px;
+            color: var(--color-text-primary);
+            font-weight: 500;
+            line-height: 22px;
+            margin-left: 6px;
+        }
     }
 
-    .remember {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 30px;
-    }
-
-    .forgot-pass {
-        color: #333;
-        text-decoration: underline;
-
-    }
-
-    .forgot-pass:hover {
-        color: #09914f;
-        text-decoration: underline;
-    }
-
-    .verification-code {
-        display: flex;
-        justify-content: space-between;
-    }
+   
 
     .input-edit {
         height: 38px;

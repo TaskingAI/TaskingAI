@@ -3,7 +3,7 @@ import { useState, useEffect,useImperativeHandle, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import styles from './createPlugin.module.scss';
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import { getPluginDetail, createPlugin, bundleList } from '@/axios/plugin.ts'
 import ParameterTable from '../parameterTable/index.tsx'
 import RightArrow from '../../assets/img/rightarrow.svg?react'
@@ -93,11 +93,12 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                     offset: 0,
                     lang: 'en'
                 }
-                await getBundleList(params1)
                 handleConfirmRequest()
                 handleCloseModal()
                 setOpenCreateModal3(false)
                 setOpenCreateModal2(false)
+                await getBundleList(params1)
+
                 toast.success('Creation successful!')
             } catch (e) {
                 const apiError = e as ApiErrorResponse;
@@ -139,11 +140,11 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                     offset: 0,
                     lang: 'en'
                 }
-                await getBundleList(params1)
                 handleConfirmRequest()
                 setOpenCreateModal3(false)
                 setOpenCreateModal2(false)
                 handleCloseModal()
+                await getBundleList(params1)
 
                 toast.success('Creation successful!')
             } catch (error) {
@@ -192,21 +193,21 @@ const CreatePlugin = forwardRef((props:any, ref) => {
         <Modal footer={[
             <>
                 {openCreateModal2 ? <>
-                    <Button icon={<LeftOutlined />} key="cancel" onClick={handleCancel1} className='cancel-button'>
+                    <Button icon={<LeftOutlined />} key="cancel" onClick={handleCancel1}>
                         {t('back')}
                     </Button>
-                    <Button key="submit" onClick={handleNext1} loading={nextLoading1} className='next-button' style={{ marginLeft: '10px' }}>
+                    <Button key="submit" onClick={handleNext1} loading={nextLoading1} type='primary' style={{ marginLeft: '10px' }}>
                         {t('confirm')}
                     </Button>
-                </> : <><Button key="cancel" onClick={handleCancel} className='cancel-button'>
+                </> : <><Button key="cancel" onClick={handleCancel}>
                     {t('cancel')}
                 </Button>
-                    <Button key="submit" onClick={handleNext} className='next-button' style={{ marginLeft: '10px' }}>
+                    <Button key="submit" onClick={handleNext} type='primary'  style={{ marginLeft: '10px' }}>
                         {t('next')}
                         <RightOutlined />
                     </Button></>}
             </>
-        ]} zIndex={10002} width={1280} onCancel={handleCancel} centered closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} title={openCreateModal2 ? t('projectPluginCreate') : t('projectBundleSelection')} open={open} className={styles.drawerCreate}>
+        ]} zIndex={10002} width={1280} onCancel={handleCancel} centered   closeIcon={<CloseIcon className={styles['img-icon-close']}/>} title={openCreateModal2 ? t('projectPluginCreate') : t('projectBundleSelection')} open={open} className={styles.drawerCreate}>
             {openCreateModal2 ? <div className={styles.componentsData}>
                 <div className={styles.inputWithLabelParent}>
                     <div className={styles.inputWithLabel}>
@@ -235,8 +236,6 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                     <div className={styles.right}>
                         <div className={styles.topContent}>
                             <div className={styles.pluginTitle}>{pluginName}</div>
-
-
                         </div>
                         <div className={styles.pluginDesc}>{pluginDesc}</div>
                         <div className={styles.inputParams}>{t('projectInputParameters')}</div>
@@ -260,14 +259,14 @@ const CreatePlugin = forwardRef((props:any, ref) => {
                                                 </div>
                                             </div>
                                         </div>
-                                        {item.registered ? <div className={styles.registered}>Registered</div> : <RightArrow />}
+                                        {item.registered ? <div className={styles.registered}>Registered</div> : <RightArrow className={styles['right-arrow-svg']} />}
                                     </div>
                                     <div className={styles.googleWebSearch}>{item.name}</div>
                                     <div className={styles.label}>{item.description}</div>
 
                                     <div className={styles.frameGroup}>
                                         <div className={styles.functionaliconsParent}>
-                                            <ToolsNew />
+                                            <ToolsNew className={styles['svg-tools-icon']} />
                                             <div className={styles.webSearch}>{item.num_plugins} {item.num_plugins > 1 ? t('projectToolsTitle') : 'Tool'}</div>
                                         </div>
                                         <div className={styles.taskingaiWrapper}>
@@ -309,13 +308,13 @@ const CreatePlugin = forwardRef((props:any, ref) => {
             </div>}
         </Modal>
         <Modal footer={[
-            <Button key="cancel" onClick={handleCancel2} className='cancel-button'>
+            <Button key="cancel" onClick={handleCancel2} >
                 {t('cancel')}
             </Button>,
-            <Button key="submit" loading={confirmLoading} onClick={handleConfirm} className='next-button'>
+            <Button key="submit" loading={confirmLoading} onClick={handleConfirm} type='primary'>
                 {t('confirm')}
             </Button>
-        ]} width={720} zIndex={10003} onCancel={handleCancel2} open={openCreateModal3} centered closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} title={t('projectPluginCreate')} className={styles.createModal3}>
+        ]} width={720} zIndex={10003} onCancel={handleCancel2} open={openCreateModal3} centered        closeIcon={<CloseIcon className={styles['img-icon-close']}/>}title={t('projectPluginCreate')} className={styles.createModal3}>
             <div className={styles.editForm}>
                 <div className={styles.bundleTitle}>
                     <div className={styles.label}>{t('projectBundleTitle')}</div>

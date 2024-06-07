@@ -9,7 +9,7 @@ import { useState, useEffect,useRef } from 'react';
 import ClipboardJS from 'clipboard';
 import { toast } from 'react-toastify';
 import { deletePlugin, bundleList, getPluginList, editPlugin } from '@/axios/plugin.ts'
-import closeIcon from '../../assets/img/x-close.svg'
+import CloseIcon from '../../assets/img/x-close.svg?react'
 import DeleteModal from '../deleteModal/index.tsx'
 import ModalTable from '../modalTable/index'
 import CopyOutlined from '@/assets/img/copyIcon.svg?react';
@@ -21,6 +21,7 @@ import tooltipTitle from '../../contents/tooltipTitle.tsx'
 import CommonComponents from '../../contents/index.tsx'
 import ApiErrorResponse from '@/constant/index'
 import { useTranslation } from "react-i18next";
+import { dealThemeColor } from '@/utils/util.ts'
 
 function Plugins() {
     const { t } = useTranslation();
@@ -122,17 +123,17 @@ function Plugins() {
         render: (_: any, record: any) => (
             <Space size="middle">
                 <div onClick={() => handleTools(record)} className='table-edit-icon'>
-                    <Tooltip placement='bottom' color='#fff' arrow={false} title={tooltipPluginTitle} overlayClassName='table-tooltip'>
+                    <Tooltip placement='bottom' color={dealThemeColor()} arrow={false} title={tooltipPluginTitle} overlayClassName='table-tooltip'>
                         <ToolsNew />
                     </Tooltip>
                 </div>
                 <div onClick={JSON.stringify(record.display_credentials) !== '{}' ? () => handleEdit(record) : undefined} className={`table-edit-icon ${JSON.stringify(record.display_credentials) === '{}' && styles.disabledButton}`}>
-                    {JSON.stringify(record.display_credentials) !== '{}' ? <Tooltip placement='bottom' title={tooltipEditTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                    {JSON.stringify(record.display_credentials) !== '{}' ? <Tooltip placement='bottom' title={tooltipEditTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                         <EditIcon />
                     </Tooltip> : <EditIcon />}
                 </div>
                 <div onClick={() => handleDelete(record)} className='table-edit-icon'>
-                    <Tooltip placement='bottom' title={tooltipDeleteTitle} color='#fff' arrow={false} overlayClassName='table-tooltip'>
+                    <Tooltip placement='bottom' title={tooltipDeleteTitle} color={dealThemeColor()} arrow={false} overlayClassName='table-tooltip'>
                         <DeleteIcon />
                     </Tooltip>
                 </div>
@@ -388,17 +389,17 @@ function Plugins() {
             </Spin>
             <CreatePlugin ref={createPluginRef} handleConfirmRequest={handleConfirmRequest} open={openCreateModal1} handleCloseModal={handleClosePluginModal}></CreatePlugin>
    
-            <Drawer footer={null} width={1280} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onClose={handleEditCancel} open={openEditDrawer} title={bundleName + ' / ' + t('projectPluginsTitle')} className={styles.openLookDrawer}>
+            <Drawer footer={null} width={1280} closeIcon={<CloseIcon className='img-icon-close'/>} onClose={handleEditCancel} open={openEditDrawer} title={bundleName + ' / ' + t('projectPluginsTitle')} className={styles.openLookDrawer}>
                 <ComponentsData />
             </Drawer>
             <Drawer title={t('projectPluginEditPlugin')} footer={[
                 <Button key="cancel" onClick={handleEditFormCancel} className='cancel-button'>
                     {t('cancel')}
                 </Button>,
-                <Button key="submit" loading={confirmLoading} onClick={handleEditFormConfirm} className={`next-button ${styles.button}`}>
+                <Button key="submit" loading={confirmLoading} type='primary' onClick={handleEditFormConfirm} className={`${styles.button}`}>
                     {t('confirm')}
                 </Button>
-            ]} open={openEditFormDrawer} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} width={720} onClose={handleEditFormCancel} className={styles.openEditDrawer}>
+            ]} open={openEditFormDrawer} closeIcon={<CloseIcon className='img-icon-close'/>} width={720} onClose={handleEditFormCancel} className={styles.openEditDrawer}>
                 <EditForm />
             </Drawer>
             <DeleteModal open={OpenDeleteModal} describe={`${t('projectPluginDeleteDesc')} ${deleteValue}? ${t('projectDeleteProjectDesc')}`} title={t('projectPluginDeleteTitle')} projectName={deleteValue} onDeleteCancel={onDeleteCancel} onDeleteConfirm={onDeleteConfirm} />

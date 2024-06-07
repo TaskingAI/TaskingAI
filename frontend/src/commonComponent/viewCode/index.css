@@ -159,7 +159,7 @@
     margin: 1em 40px
 }
 
-.markdown-body hr {
+.view-code-component .markdown-body hr {
     box-sizing: content-box;
     overflow: hidden;
     background: transparent;
@@ -167,7 +167,6 @@
     padding: 0;
     margin: 24px 0;
     background-color: var(--color-border-default);
-    border: 0
 }
 
 .markdown-body input {
@@ -309,6 +308,7 @@
     margin-top: 24px;
     margin-bottom: 16px;
     font-weight: var(--base-text-weight-semibold, 600);
+    color:var(--color-text-primary);
     line-height: 1.25
 }
 
@@ -348,7 +348,8 @@
 
 .view-code-component .markdown-body p {
     margin-top: 0 !important;
-    margin-bottom: 10px !important
+    margin-bottom: 10px !important;
+    color: var(--color-text-primary)
 }
 
 .markdown-body blockquote {
@@ -393,7 +394,8 @@
     margin-top: 0;
     margin-bottom: 0;
     width: 90%;
-    word-wrap: normal
+    word-wrap: normal;
+    overflow: hidden !important;
 }
 
 .view-code-component .markdown-body .octicon {
@@ -573,7 +575,8 @@
 }
 
 .markdown-body li>p {
-    margin-top: 16px
+    margin-top: 16px;
+    color:var(--color-text-primary)
 }
 
 .markdown-body li+li {
@@ -860,7 +863,9 @@
 .markdown-body .footnotes li:target {
     color: var(--color-fg-default)
 }
-
+.markdown-body ul li {
+    color: var(--color-text-primary)
+}
 .markdown-body .footnotes .data-footnote-backref g-emoji {
     font-family: monospace
 }
@@ -1071,7 +1076,8 @@
 }
 
 .markdown-body pre {
-    padding: 0
+    padding: 0;
+    background-color: var(--color-background-hover);
 }
 
 .markdown-body code,
@@ -1103,7 +1109,8 @@
     background: #555;
   }
 .markdown-body code {
-    padding: 3px 5px
+    padding: 3px 5px;
+    background-color: var(--color-tag-background);
 }
 
 .markdown-body .hljs,

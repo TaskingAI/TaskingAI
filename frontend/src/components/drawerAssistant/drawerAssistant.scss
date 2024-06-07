@@ -1,13 +1,13 @@
 .ant-drawer-body {
     overflow: hidden;
-    background-color: var(--color-item-background);
+    background-color: var(--color-background-item);
 }
 .drawer-assistant {
     width: 100%;
     display: flex;
     height: 100%;
     overflow: auto;
-    background-color: var(--color-item-background);
+    background-color: var(--color-background-item);
 
     overflow: hidden;
     .left-assistant {
@@ -43,7 +43,7 @@
         display: none;
     }
     .basic-information {
-        color: var( --color-text-primary );
+        color: var( --color-text-primary);
         font-size: 18px;
         font-weight: 600;
         margin: 24px;
@@ -82,10 +82,13 @@
             width: calc(50% - 12px);
             display: flex;
             justify-content: flex-end;
+         
         }
-        // .ant-input-number {
-        //     width: 49%;
-        // }
+        .ant-btn {
+            background-color: var(--color-background);
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-divider);
+        }
         .ant-input-number {
             border-top-left-radius: 0;
            flex:1;
@@ -130,7 +133,7 @@
         font-size: 14px;
         line-height: 20px;
         font-family: Inter;
-        color: #777777;
+        color: var(--color-text-secondary);
         text-align: left;
         display: inline-block;
         margin: 0 24px 10px 24px;
@@ -141,7 +144,7 @@
     }
 
     .referToTheDocumentationFor {
-        color: #777777;
+        color: var(--color-text-secondary);
         text-decoration: underline;
 
     }
@@ -160,6 +163,7 @@
         display: flex;
         justify-content: space-between;
         margin: 10px 24px 0 24px;
+        color: var(--color-text-primary);
 
         .ant-btn {
             width: 63px;
@@ -167,8 +171,8 @@
             height: 30px;
             border: none;
             box-shadow: none;
-            background-color: var(--color-item-background) !important;
-
+            background-color: var(--color-background-item) !important;
+           color: var(--color-text-primary);
             div {
                 display: none;
             }
@@ -176,6 +180,9 @@
             .ant-btn-icon {
                 // margin-inline-end: 0 !important;
                 margin-right: 6px;
+                svg {
+                    fill: var(--color-text-primary)
+                }
             }
         }
 
@@ -191,7 +198,7 @@
     .disabled-button {
         .ant-btn:hover {
             border: none;
-            color: rgba(0, 0, 0, 0.25);
+            color: black
         }
     }
 
@@ -225,7 +232,10 @@
     display: flex;
     align-items: center;
     padding: 0 24px;
-
+    .ant-btn {
+        color: var(--color-text-primary);
+        border: 1px solid var(--color-divider);
+    }
     .select-input {
 
         .ant-select-selector {
@@ -240,7 +250,7 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right: none !important;
-    background-color: #fff;
+    background-color: var(--color-background);
     width: 120px;
     flex-shrink: 0;
     text-align: left;
@@ -252,5 +262,6 @@
 .button-type:hover {
     border-color: var(--color-divider) !important;
     color: var( --color-text-primary ) !important;
+    background-color: var(--color-background-hover) !important;
 }
 

@@ -54,9 +54,9 @@ const DashBoard = () => {
                         </div>
                         <div className={styles.desc} style={{ marginBottom: '24px' }}>Embark on your AI-native adventure with TaskingAI, where Forums, API Reference, and Official Documentation are your treasure map to innovation.</div>
                         <div className={styles['group-button']}>
-                            <Button onClick={()=>window.open('https://www.tasking.ai/examples')} style={{ display: 'flex', alignItems: 'center' }} icon={<Examples />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }} >Examples</span></Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai')} style={{ display: 'flex', alignItems: 'center' }} icon={<Documentation />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>Documentation</span></Button>
-                            <Button onClick={()=>window.open('https://forum.tasking.ai')} style={{ display: 'flex', alignItems: 'center' }} icon={<Forum />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>Forum</span></Button>
+                            <Button onClick={()=>window.open('https://www.tasking.ai/examples')} style={{ display: 'flex', alignItems: 'center' }} icon={<Examples />}><span style={{ fontSize: '12px', lineHeight: '15px' }} >Examples</span></Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai')} style={{ display: 'flex', alignItems: 'center' }} icon={<Documentation />} ><span style={{ fontSize: '12px', lineHeight: '15px' }}>Documentation</span></Button>
+                            <Button onClick={()=>window.open('https://forum.tasking.ai')} style={{ display: 'flex', alignItems: 'center' }} icon={<Forum />} ><span style={{ fontSize: '12px', lineHeight: '15px' }}>Forum</span></Button>
                         </div>
                     </div>
                     <img style={{width:'333px',height:'250px'}} src={DashBoardImg} alt="" />
@@ -73,8 +73,8 @@ const DashBoard = () => {
                             <div className={styles.desc}>Connect various LLM providers, granting a spectrum of advanced AI models to craft your application.</div>
                         </div>
                         <div className={styles['button-group']}>
-                            <Button className='cancel-button' onClick={() => handleNavigate('model')}>Explore model</Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/product_modules/model/overview')} icon={<ForwardIcon />} style={{ display: 'flex', alignItems: 'center' }} className='cancel-button'>Docs</Button>
+                            <Button  onClick={() => handleNavigate('model')}>Explore model</Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/product_modules/model/overview')} icon={<ForwardIcon />} style={{ display: 'flex', alignItems: 'center' }} >Docs</Button>
                         </div>
                     </div>
                     <div className={styles['card-item']}>
@@ -86,8 +86,8 @@ const DashBoard = () => {
                             <div className={styles.desc}>Uses external data to enhance LLM inferences, enabling dynamic, context-aware interactions through record management and text queries.</div>
                         </div>
                         <div className={styles['button-group']}>
-                            <Button className='cancel-button' onClick={() => handleNavigate('retrieval')}>Explore retrieval</Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/product_modules/retrieval/overview/')} icon={<ForwardIcon />} style={{ display: 'flex', alignItems: 'center' }} className='cancel-button'>Docs</Button>
+                            <Button  onClick={() => handleNavigate('retrieval')}>Explore retrieval</Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/product_modules/retrieval/overview/')} icon={<ForwardIcon />} style={{ display: 'flex', alignItems: 'center' }} >Docs</Button>
                         </div>
                     </div>
                     <div className={styles['card-item']}>
@@ -99,8 +99,8 @@ const DashBoard = () => {
                             <div className={styles.desc}>Featuring Plugins and Actions, enhances Assistant functionalities, enabling integration with external APIs and tailored function executions.</div>
                         </div>
                         <div className={styles['button-group']}>
-                            <Button className='cancel-button' onClick={() => handleNavigate('tool')}>Explore tool</Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/product_modules/tool/overview/')} icon={<ForwardIcon />} style={{ display: 'flex', alignItems: 'center' }} className='cancel-button'>Docs</Button>
+                            <Button  onClick={() => handleNavigate('tool')}>Explore tool</Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/product_modules/tool/overview/')} icon={<ForwardIcon />} style={{ display: 'flex', alignItems: 'center' }} >Docs</Button>
                         </div>
                     </div>
                     <div className={styles['card-item']}>
@@ -112,8 +112,8 @@ const DashBoard = () => {
                             <div className={styles.desc}>A flexible framework for building customizable AI agents, supporting diverse applications with integrated models, memory, retrieval, and tools.</div>
                         </div>
                         <div className={styles['button-group']}>
-                            <Button className='cancel-button' onClick={() => handleNavigate('assistant')}>Explore assistant</Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/product_modules/assistant/overview/')} icon={<ForwardIcon />} style={{ display: 'flex', alignItems: 'center' }} className='cancel-button'>Docs</Button>
+                            <Button onClick={() => handleNavigate('assistant')}>Explore assistant</Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/product_modules/assistant/overview/')} icon={<ForwardIcon />} style={{ display: 'flex', alignItems: 'center' }} >Docs</Button>
                         </div>
                     </div>
                 </div>
@@ -124,8 +124,8 @@ const DashBoard = () => {
                         </div>
                         <div className={styles.desc} style={{ marginBottom: '12px' }}>Interact with the project through the TaskingAI client SDKs with your API keys.</div>
                         <div className={styles['group-button']}>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}  onClick={() => handleNavigate('apikey')}>View API Keys</span></Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/sdks/rest_api/authorization')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>About Authentication</span></Button>
+                            <Button style={{ display: 'flex', alignItems: 'center' }}><span style={{ fontSize: '12px', lineHeight: '15px' }}  onClick={() => handleNavigate('apikey')}>View API Keys</span></Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/sdks/rest_api/authorization')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} ><span style={{ fontSize: '12px', lineHeight: '15px' }}>About Authentication</span></Button>
                         </div>
                     </div>
                     <MarkdownMessageBlock styles={{flex:1}} message='```python
@@ -157,7 +157,7 @@ client = OpenAI(
                             <span className={styles['card-bottom-title']}>REST APIs</span>
                         </div>
                         <div>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai/api/')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>API Reference</span></Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai/api/')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} ><span style={{ fontSize: '12px', lineHeight: '15px' }}>API Reference</span></Button>
 
                         </div>
                     </div>
@@ -167,18 +167,18 @@ client = OpenAI(
                             <span className={styles['card-bottom-title']}>Python SDK</span>
                         </div>
                         <div style={{ display: 'flex', gap: '12px' }}>
-                            <Button onClick={()=>window.open('https://pypi.org/project/taskingai/')} className='cancel-button'>PyPI</Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/sdks/python/quickstart')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>Documentation</span></Button>
+                            <Button onClick={()=>window.open('https://pypi.org/project/taskingai/')} >PyPI</Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/sdks/python/quickstart')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} ><span style={{ fontSize: '12px', lineHeight: '15px' }}>Documentation</span></Button>
                         </div>
                     </div>
                     <div className={styles['card-bottom-item']}>
                         <div className={styles['card-header']}>
                             <OpenaiIcon />
-                            <span className={styles['card-bottom-title']}>OpenAI compatible APIs</span>
+                            <span className={styles['card-bottom-title']}>OpenAI Compatible APIs</span>
                         </div>
                         <div style={{ display: 'flex', gap: '12px' }}>
-                            <Button onClick={()=>window.open('https://platform.openai.com/docs/guides/text-generation/chat-completions-api')} className='cancel-button'>OpenAI</Button>
-                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/sdks/openai_compatible/overview')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />} className='cancel-button'><span style={{ fontSize: '12px', lineHeight: '15px' }}>Documentation</span></Button>
+                            <Button onClick={()=>window.open('https://platform.openai.com/docs/guides/text-generation/chat-completions-api')} >OpenAI</Button>
+                            <Button onClick={()=>window.open('https://docs.tasking.ai/docs/guide/sdks/openai_compatible/overview')} style={{ display: 'flex', alignItems: 'center' }} icon={<ForwardIcon />}><span style={{ fontSize: '12px', lineHeight: '15px' }}>Documentation</span></Button>
                         </div>
                     </div>
                     <div className={styles['card-bottom-item']}>
@@ -187,7 +187,7 @@ client = OpenAI(
                             <span className={styles['card-bottom-title']}>Node.js SDK</span>
                         </div>
                         <div>
-                            <Button disabled type='primary'><span style={{ fontSize: '12px', lineHeight: '15px' }}>Coming Soon</span></Button>
+                            <Button className={styles['disabled-button1']} disabled type='primary'><span className={styles['disabled-button']} style={{ fontSize: '12px', lineHeight: '15px' }}>Coming Soon</span></Button>
 
                         </div>
                     </div>

@@ -2,14 +2,14 @@ import React from 'react';
 import styles from './parameter.module.scss';
 import MessageSuccess from '../../assets/img/messageSuccess.svg?react'
 
-const ParameterTable = ({ parameters }) => {
+const ParameterTable = ({ parameters }:{parameters:any}) => {
   return (
     <div className={styles.table}>
       <div className={`${styles.cell} ${styles.header} ${styles.headerName}`}>Parameter name</div>
       <div className={`${styles.cell} ${styles.header} ${styles.headerType}`}>Type</div>
       <div className={`${styles.cell} ${styles.header} ${styles.headerRequired}`}>Required</div>
       <div className={`${styles.cell} ${styles.header} ${styles.headerDescription}`}>Description</div>
-      {parameters.map((param, index) => (
+      {parameters.map((param:any, index:number) => (
         <React.Fragment key={index}>
           <div className={styles.cell}>{param.name}</div>
           <div className={styles.cell}>{param.type}</div>

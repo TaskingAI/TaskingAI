@@ -1,13 +1,15 @@
+/* ParameterTable.module.css */
 .table {
     display: grid;
     width: 100%;
     grid-template-columns: 30% 20% 10% 40%;
+    // grid-gap: 10px;
   }
   
   .header {
     padding-bottom: 5px;
     color: var(--color-text-secondary);
-    border-bottom: 1px solid #e4e4e4;
+    border-bottom: 1px solid var(--color-divider);
   }
   
   .headerName {
@@ -28,9 +30,11 @@
   
   .cell {
     padding: 5px;
+    color: var(--color-text-primary);
   }
   
   .required {
+    // text-align: center;
     margin-left: 20px
   }
   
