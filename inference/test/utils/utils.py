@@ -128,7 +128,7 @@ def generate_test_cases(model_type):
             if model_type == "chat_completion":
                 function_call = properties.get("function_call", False)
                 streaming = properties.get("streaming", False)
-
+                vision = properties.get("vision", False)
                 chat_completion_case = {
                     **base_test_case,
                     "function_call": function_call,
@@ -142,19 +142,19 @@ def generate_test_cases(model_type):
                 if function_call:
                     chat_completion_case["functions"] = functions
                     if streaming and provider_id != "anthropic":
-                        cases.append({**chat_completion_case, "stream": True})
+                        cases.append({**chat_completion_case, "stream": True, "vision": vision})
                     # Always generate test cases with streaming set to false
-                    cases.append({**chat_completion_case, "stream": False})
+                    cases.append({**chat_completion_case, "stream": False, "vision": vision})
                     new_chat_completion_case = copy.deepcopy(chat_completion_case)
                     new_chat_completion_case["message"].extend(function_message)
                     new_chat_completion_case["function_call"] = False
                     if streaming and provider_id != "anthropic":
-                        cases.append({**new_chat_completion_case, "stream": True})
-                    cases.append({**new_chat_completion_case, "stream": False})
+                        cases.append({**new_chat_completion_case, "stream": True, "vision": vision})
+                    cases.append({**new_chat_completion_case, "stream": False, "vision": vision})
                 else:
                     if streaming:
-                        cases.append({**chat_completion_case, "stream": True})
-                    cases.append({**chat_completion_case, "stream": False})
+                        cases.append({**chat_completion_case, "stream": True, "vision": vision})
+                    cases.append({**chat_completion_case, "stream": False, "vision": vision})
             elif model_type == "text_embedding":
                 embedding_size = properties.get("embedding_size", 0)
                 text_embedding_case = {**base_test_case, "embedding_size": embedding_size}
