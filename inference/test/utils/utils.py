@@ -20,6 +20,7 @@ white_list_providers = [
     "yi",
     "minimax",
     "sensetime",
+    "leptonai",
 ]
 white_list_models = [
     "google_gemini/gemini-pro-vision",

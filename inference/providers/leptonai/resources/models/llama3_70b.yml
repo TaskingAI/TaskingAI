@@ -1,0 +1,24 @@
+model_schema_id: leptonai/llama3_70b
+provider_model_id: llama3-70b
+type: chat_completion
+name: "i18n:llama3_70b_name"
+description: "i18n:llama3_70b_description"
+default_endpoint_url: https://llama3-70b.lepton.run/api/v1/chat/completions
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 972
+  output_token_limit: 972
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+
+pricing:
+  input_token: 0.8
+  output_token: 0.8
+  unit: 1000000
+  currency: USD

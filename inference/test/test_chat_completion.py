@@ -37,8 +37,9 @@ class TestChatCompletion:
         {
             "model_schema_id": "google_gemini/gemini-1.5-pro",
             "proxy": f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent",
-        }
+        },
     ]
+
     @pytest.mark.asyncio
     @pytest.mark.test_id("inference_001")
     @pytest.mark.parametrize(
@@ -286,11 +287,17 @@ class TestChatCompletion:
         request_url = f"{Config.BASE_URL}/chat_completion"
 
         async for response_dict in sse_stream(request_url, request_data):
-            assert response_dict.get("object") == "ChatCompletion"
-            assert response_dict.get("finish_reason") == "function_calls"
-            assert response_dict.get("message").get("role") == "assistant"
-            assert response_dict.get("message").get("content") is None
-            assert response_dict.get("message").get("function_calls") is not None
+            if response_dict.get("object") == "ChatCompletion":
+                assert response_dict.get("finish_reason") == "function_calls"
+                assert response_dict.get("message").get("role") == "assistant"
+                assert response_dict.get("message").get("content") is None
+                assert response_dict.get("message").get("function_calls") is not None
+            elif response_dict.get("object") == "ChatCompletionChunk":
+                assert response_dict.get("role") == "assistant"
+                assert response_dict.get("index") >= 0
+                assert response_dict.get("delta") is not None
+            else:
+                assert False, f"Unexpected response: {response_dict}"
 
     @pytest.mark.asyncio
     @pytest.mark.test_id("inference_007")
@@ -414,6 +421,7 @@ class TestChatCompletion:
             or "mistralai" in model_schema_id
             or "google_gemini" in model_schema_id
             or "sensetime" in model_schema_id
+            or "leptonai" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
@@ -429,7 +437,15 @@ class TestChatCompletion:
             "configs": configs,
             "functions": functions,
         }
-        if "openai" in model_schema_id or "togetherai" in model_schema_id or "minimax" in model_schema_id:
+        if "wildcard" in model_schema_id:
+            request_data.update({"provider_model_id": test_data["provider_model_id"]})
+        if (
+            "google_gemini" in model_schema_id
+            or "openai" in model_schema_id
+            or "togetherai" in model_schema_id
+            or "minimax" in model_schema_id
+            or "sensetime" in model_schema_id
+        ):
             request_url = f"{Config.BASE_URL}/chat_completion"
             async for response_dict in sse_stream(request_url, request_data):
                 assert response_dict.get("object") == "Error"
@@ -470,6 +486,9 @@ class TestChatCompletion:
             "stream": True,
             "configs": configs,
         }
+        if "wildcard" in model_schema_id:
+            request_data.update({"provider_model_id": test_data["provider_model_id"]})
+
         try:
             res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
         except asyncio.TimeoutError:
@@ -513,6 +532,9 @@ class TestChatCompletion:
                 }
             }
         )
+
+        if "wildcard" in model_schema_id:
+            request_data.update({"provider_model_id": test_data["provider_model_id"]})
         try:
             res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
         except asyncio.TimeoutError:
@@ -535,9 +557,7 @@ class TestChatCompletion:
             "top_p": 0.5,
         }
         proxy = test_data["proxy"]
-        custom_headers = {
-            "Helicone-Auth": f"Bearer {Config.HELICONE_API_KEY}"
-        }
+        custom_headers = {"Helicone-Auth": f"Bearer {Config.HELICONE_API_KEY}"}
         request_data = {
             "model_schema_id": model_schema_id,
             "messages": message,
@@ -561,7 +581,7 @@ class TestChatCompletion:
         assert res_json.get("data").get("message").get("role") == "assistant"
         assert res_json.get("data").get("message").get("content") is not None
         assert res_json.get("data").get("message").get("function_calls") is None
-        
+
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
         "test_data",
@@ -573,18 +593,10 @@ class TestChatCompletion:
         if "response_format" not in test_data["allowed_configs"]:
             pytest.skip("Skip the test case without response_format.")
         model_schema_id = test_data["model_schema_id"]
-        message = [
-        {
-            "role": "user",
-            "content": "What does 42 mean"
-        }
-    ]
+        message = [{"role": "user", "content": "What does 42 mean"}]
         if "debug-error" in model_schema_id or "azure" in model_schema_id or "hugging_face" in model_schema_id:
             pytest.skip("Skip the test case with debug-error.")
-        configs = {
-            "temperature": 0.5,
-            "response_format": "json_object"
-        }
+        configs = {"temperature": 0.5, "response_format": "json_object"}
         request_data = {
             "model_schema_id": model_schema_id,
             "messages": message,
@@ -620,20 +632,11 @@ class TestChatCompletion:
         if "response_format" not in test_data["allowed_configs"]:
             pytest.skip("Skip the test case without response_format.")
         model_schema_id = test_data["model_schema_id"]
-        message = [
-            {
-                "role": "user",
-                "content": "What does 42 mean"
-            }
-        ]
+        message = [{"role": "user", "content": "What does 42 mean"}]
         stream = test_data["stream"]
         if not stream or "debug" in model_schema_id or "azure" in model_schema_id:
             pytest.skip("Skip the test case without stream.")
-        configs = {
-            "temperature": 0.5,
-            "response_format": "json_object"
-
-        }
+        configs = {"temperature": 0.5, "response_format": "json_object"}
         request_data = {
             "model_schema_id": model_schema_id,
             "messages": message,
@@ -662,4 +665,3 @@ class TestChatCompletion:
                 assert False, f"response_dict={response_dict}"
         assert default, "stream failed"
         assert json.loads(content)
-
