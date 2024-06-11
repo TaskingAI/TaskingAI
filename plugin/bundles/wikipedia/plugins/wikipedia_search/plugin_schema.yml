@@ -1,0 +1,25 @@
+description: i18n:wikipedia_search_description
+id: wikipedia_search
+input_schema:
+  limit:
+    description: i18n:wikipedia_search_input_limit_description
+    name: i18n:wikipedia_search_input_limit_name
+    required: false
+    type: string
+  q:
+    description: i18n:wikipedia_search_input_q_description
+    name: i18n:wikipedia_search_input_q_name
+    required: true
+    type: string
+name: i18n:wikipedia_search_name
+output_schema:
+  results:
+    description: i18n:wikipedia_search_output_results_description
+    name: i18n:wikipedia_search_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      q: the highest mountain in the world
+  mode: schema
