@@ -1,0 +1,11 @@
+credentials_schema:
+  BING_SEARCH_API_KEY:
+    description: i18n:credential_bing_search_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: bing_search
+name: i18n:bundle_name
+provider: Bing
