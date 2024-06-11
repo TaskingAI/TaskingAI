@@ -1,89 +1,35 @@
 # Contributing to TaskingAI
 
-We welcome contributions from the community and are pleased to have you join us. This document will help you get started.
+We appreciate your interest in contributing to TaskingAI! Our project thrives on the contributions of our vibrant open source community, and your participation is welcomed. Below, you will find essential resources and instructions to guide you through the process:
 
-## Developing Locally with Poetry
+[1. Getting Started](#getting-started)
+[2. Issues](#issues)
+[3. Pull Requests](#pull-requests)
 
-[Poetry](https://python-poetry.org/) is a dependency management and packaging tool in Python that makes it easy to manage virtual environments. It's particularly useful when you need to test changes to the TaskingAI client in a local development setup.
+## Getting Started
 
-Whether you're looking to fix a bug, add a new feature, or just improve the TaskingAI client, you'll want to be able to:
+To promote a welcoming and positive experience, please familiarize yourself with our [code of conduct](https://github.com/TaskingAI/TaskingAI/blob/master/.github/CODE_OF_CONDUCT.md) before starting your contribution journey. For instructions on setting up the codebase, consult our [DEVELOPERS.md](https://github.com/TaskingAI/TaskingAI/blob/master/DEVELOPERS.md).
 
-1. Test your changes in isolation from your system Python installation.
-2. See your changes reflected immediately in any local code that imports the TaskingAI client.
-3. Keep track of your changes in git to enable collaboration and code review through GitHub pull requests.
+## Issues
 
-### Step 1: Fork and Clone the Repository
+Encountering bugs is a part of development; when you find one, please open an Issue to help us improve.
 
-First, create a fork of the TaskingAI client repository on GitHub, and then clone your fork locally:
+- Check our [current Issues](https://github.com/TaskingAI/TaskingAI/issues) to ensure your problem hasn't already been reported.
+- Include a detailed description of the issue and steps to reproduce it. The more specific you are, including screenshots and URLs, the easier it will be for us to address the problem quickly.
 
-```bash
-git clone https://github.com/<your-username>/taskingai-python-client.git
-cd taskingai-python-client
-```
+## Pull Requests
 
-### Step 2: Install Poetry
+Your Pull Requests are crucial to the growth of this project, and we look forward to each contribution. Here are important considerations:
 
-You can install Poetry by following the instructions on [the official website](https://python-poetry.org/docs/).
+- Verify no existing Pull Requests address the same issue. Connect your PR to any relevant existing Issues.
+- We prioritize accepting the first effective PR submitted for each problem.
+- Beginners might find [good first issue](https://github.com/TaskingAI/TaskingAI/labels/good%20first%20issue) tags helpful to start contributing.
+- Ensure your PR description is detailed using our template to facilitate a faster review process. PRs without clear problem statements will be closed.
 
-### Step 3: Install Dependencies
+Before you submit your PR, make sure to keep the code clean:
 
-Once Poetry is installed, you can install all the required dependencies by running:
+- Go to your root directory and run `pip install pre-commit` first if you haven't already.
+- Run `pre-commit install` to install the pre-commit hooks.
+- Commit your changes. If there are any issues, wait for the pre-commit hooks to run and fix them, then commit again.
 
-```bash
-poetry install
-```
-
-### Step 4: Activate the Virtual Environment
-
-Enter the virtual environment shell created by Poetry:
-
-```bash
-poetry shell
-```
-
-Verify the setup:
-
-```bash
-poetry env info
-```
-
-### Step 5: Make Changes and Test
-
-Now you can start making changes to the TaskingAI client. To test your changes, you may want to:
-
-- Write unit tests.
-- Run the TaskingAI client in your local applications or Jupyter Notebooks.
-
-### Step 6: Push Changes and Create a Pull Request
-
-After making your changes, push them to your fork and [create a pull request](https://github.com/taskingai/taskingai-python-client/compare) on the original TaskingAI repository.
-
-## Load Your Virtualenv in Another Shell
-
-To use your development version of the TaskingAI client in another application or Jupyter Notebook:
-
-### Get the Path to Your Virtualenv
-
-Run:
-
-```bash
-poetry env info --path
-```
-
-### Activate Your Virtualenv
-
-Source the `activate` script in your virtualenv:
-
-```bash
-source <your-virtualenv-path>/bin/activate
-```
-
-### Test Your Virtualenv
-
-Create a test file in your TaskingAI client code directory and another in your second shell to verify that changes to the client are reflected immediately.
-
-## Need Help?
-
-If you have any questions or run into issues, please [file an issue](https://github.com/taskingai/taskingai-python-client/issues/new) on GitHub.
-
-Thank you for contributing to TaskingAI!
+These checks will streamline the process and decrease the need for multiple revisions.
