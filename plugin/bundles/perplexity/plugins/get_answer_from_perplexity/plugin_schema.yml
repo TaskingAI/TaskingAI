@@ -1,0 +1,26 @@
+description: i18n:get_answer_from_perplexity_description
+id: get_answer_from_perplexity
+input_schema:
+  content:
+    description: i18n:get_answer_from_perplexity_input_content_description
+    name: i18n:get_answer_from_perplexity_input_content_name
+    required: true
+    type: string
+  model:
+    description: i18n:get_answer_from_perplexity_input_model_description
+    name: i18n:get_answer_from_perplexity_input_model_name
+    required: false
+    type: string
+name: i18n:get_answer_from_perplexity_name
+output_schema:
+  results:
+    description: i18n:get_answer_from_perplexity_output_results_description
+    name: i18n:get_answer_from_perplexity_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      content: How many stars are there in our galaxy?
+      model: llama-3-sonar-large-32k-online
+  mode: schema
