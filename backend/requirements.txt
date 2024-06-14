@@ -25,6 +25,6 @@ python-docx==0.8.11
 pymupdf==1.23.3
 unstructured==0.12.6
 beautifulsoup4==4.12.3
-langchain-community==0.0.28
+langchain-community==0.2.5
 markdown==3.6
 nltk==3.8.1
