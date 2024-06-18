@@ -1,0 +1,25 @@
+description: i18n:image_geolocate_predict_description
+id: image_geolocate_predict
+input_schema:
+  image:
+    description: i18n:image_geolocate_predict_input_image_description
+    name: i18n:image_geolocate_predict_input_image_name
+    required: true
+    type: string
+  top_k:
+    description: i18n:image_geolocate_predict_input_top_k_description
+    name: i18n:image_geolocate_predict_input_top_k_name
+    required: false
+    type: integer
+name: i18n:image_geolocate_predict_name
+output_schema:
+  results:
+    description: i18n:image_geolocate_predict_output_results_description
+    name: i18n:image_geolocate_predict_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      image: https://www.grandplazapenthouse.com/wp-content/uploads/sites/6/2020/03/chicago-bean.jpg
+  mode: schema
