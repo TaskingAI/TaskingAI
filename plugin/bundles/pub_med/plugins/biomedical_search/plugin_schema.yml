@@ -1,0 +1,32 @@
+description: i18n:biomedical_search_description
+id: biomedical_search
+input_schema:
+  journal:
+    description: i18n:biomedical_search_input_journal_description
+    name: i18n:biomedical_search_input_journal_name
+    required: false
+    type: string
+  pub_year:
+    description: i18n:biomedical_search_input_pub_year_description
+    name: i18n:biomedical_search_input_pub_year_name
+    required: true
+    type: string
+  query:
+    description: i18n:biomedical_search_input_query_description
+    name: i18n:biomedical_search_input_query_name
+    required: true
+    type: string
+name: i18n:biomedical_search_name
+output_schema:
+  results:
+    description: i18n:biomedical_search_output_results_description
+    name: i18n:biomedical_search_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      journal: science
+      pub_year: "2008"
+      query: breast cancer
+  mode: schema

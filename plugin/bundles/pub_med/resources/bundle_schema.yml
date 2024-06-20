@@ -1,0 +1,11 @@
+credentials_schema:
+  PUB_MED_API_KEY:
+    description: i18n:credential_pub_med_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: pub_med
+name: i18n:bundle_name
+provider: National Center for Biotechnology Information
