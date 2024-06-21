@@ -155,7 +155,7 @@ class AnthropicChatCompletionModel(BaseChatCompletionModel):
     # ------------------- handle non-stream chat completion response -------------------
 
     def extract_core_data(self, response_data: Dict, **kwargs) -> Optional[Dict]:
-        if not response_data.get("content"):
+        if response_data.get("content") is None:
             return None
         return response_data
 
@@ -163,6 +163,8 @@ class AnthropicChatCompletionModel(BaseChatCompletionModel):
         message_data = data.get("content")
         if message_data and message_data[0].get("text"):
             return message_data[0].get("text")
+        elif message_data is not None:
+            return ""
         return None
 
     def extract_function_calls(self, data: Dict, **kwargs) -> Optional[List[ChatCompletionFunctionCall]]:

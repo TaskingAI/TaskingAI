@@ -1,0 +1,26 @@
+model_schema_id: anthropic/claude-3.5-sonnet
+provider_model_id: claude-3-5-sonnet-20240620
+type: chat_completion
+name: "i18n:claude_3_5_sonnet_name"
+description: "i18n:claude_3_5_sonnet_description"
+default_endpoint_url: https://api.anthropic.com/v1/messages
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 200000
+  output_token_limit: 4096
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: top_k
+  - config_id: max_tokens
+  - config_id: stop
+  - config_id: response_format
+
+pricing:
+  input_token: 3.0
+  output_token: 15.0
+  unit: 1000000
+  currency: USD
