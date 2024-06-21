@@ -254,7 +254,7 @@ class BaseChatCompletionModel(ABC):
             message = ChatCompletionAssistantMessage(function_calls=function_calls)
 
         else:
-            if not text_content:
+            if text_content is None:
                 raise_provider_api_error("The model response is empty.")
             message = ChatCompletionAssistantMessage(content=text_content or "")
 
