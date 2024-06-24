@@ -1,0 +1,92 @@
+description: i18n:get_current_weather_description
+id: get_current_weather
+input_schema:
+  lat:
+    description: i18n:get_current_weather_input_lat_description
+    name: i18n:get_current_weather_input_lat_name
+    required: true
+    type: number
+  lon:
+    description: i18n:get_current_weather_input_lon_description
+    name: i18n:get_current_weather_input_lon_name
+    required: true
+    type: number
+  units:
+    description: i18n:get_current_weather_input_units_description
+    name: i18n:get_current_weather_input_units_name
+    required: false
+    type: string
+name: i18n:get_current_weather_name
+output_schema:
+  aqi:
+    description: i18n:get_current_weather_output_aqi_description
+    name: i18n:get_current_weather_output_aqi_name
+    required: true
+    type: number
+  city_name:
+    description: i18n:get_current_weather_output_city_name_description
+    name: i18n:get_current_weather_output_city_name_name
+    required: true
+    type: string
+  country_code:
+    description: i18n:get_current_weather_output_country_code_description
+    name: i18n:get_current_weather_output_country_code_name
+    required: true
+    type: string
+  feels_like_temperature:
+    description: i18n:get_current_weather_output_feels_like_temperature_description
+    name: i18n:get_current_weather_output_feels_like_temperature_name
+    required: true
+    type: number
+  pressure:
+    description: i18n:get_current_weather_output_pressure_description
+    name: i18n:get_current_weather_output_pressure_name
+    required: true
+    type: number
+  sunrise:
+    description: i18n:get_current_weather_output_sunrise_description
+    name: i18n:get_current_weather_output_sunrise_name
+    required: true
+    type: string
+  sunset:
+    description: i18n:get_current_weather_output_sunset_description
+    name: i18n:get_current_weather_output_sunset_name
+    required: true
+    type: string
+  temperature:
+    description: i18n:get_current_weather_output_temperature_description
+    name: i18n:get_current_weather_output_temperature_name
+    required: true
+    type: number
+  unit:
+    description: i18n:get_current_weather_output_unit_description
+    name: i18n:get_current_weather_output_unit_name
+    required: true
+    type: string
+  uv_index:
+    description: i18n:get_current_weather_output_uv_index_description
+    name: i18n:get_current_weather_output_uv_index_name
+    required: true
+    type: number
+  weather_condition:
+    description: i18n:get_current_weather_output_weather_condition_description
+    name: i18n:get_current_weather_output_weather_condition_name
+    required: true
+    type: string
+  wind_cdir:
+    description: i18n:get_current_weather_output_wind_cdir_description
+    name: i18n:get_current_weather_output_wind_cdir_name
+    required: true
+    type: string
+  wind_spd:
+    description: i18n:get_current_weather_output_wind_spd_description
+    name: i18n:get_current_weather_output_wind_spd_name
+    required: true
+    type: number
+test:
+  cases:
+  - input:
+      lat: 30.25
+      lon: 120.166
+      units: I
+  mode: schema
