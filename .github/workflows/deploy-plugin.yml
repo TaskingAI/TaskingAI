@@ -16,6 +16,7 @@ on:
 env:
   WORK_DIR: plugin
   ECR_REPOSITORY: plugin
+  EKS_NAMESPACE_OPEN: taskingai-open
   EKS_NAMESPACE: ${{ secrets.EKS_NAMESPACE_TEST }}
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION_TEST }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -205,3 +206,15 @@ jobs:
         with:
           cluster_name: ${{ secrets.CLUSTER_NAME_TEST }}
           args: -n ${{ env.EKS_NAMESPACE }} rollout status deployment/${{ env.ECR_REPOSITORY }} --timeout=60s
+
+      - name: Update deployment image (open source)
+        uses: ianbelcher/eks-kubectl-action@master
+        with:
+          cluster_name: ${{ secrets.CLUSTER_NAME_TEST }}
+          args: -n ${{ env.EKS_NAMESPACE_OPEN }} set image deployment/${{ env.ECR_REPOSITORY }} ${{ env.ECR_REPOSITORY }}=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+  
+      - name: Verify deployment (open source)
+        uses: ianbelcher/eks-kubectl-action@master
+        with:
+          cluster_name: ${{ secrets.CLUSTER_NAME_TEST }}
+          args: -n ${{ env.EKS_NAMESPACE_OPEN }} rollout status deployment/${{ env.ECR_REPOSITORY }} --timeout=60s

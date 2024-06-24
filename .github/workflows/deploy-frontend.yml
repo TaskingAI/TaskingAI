@@ -1,24 +1,20 @@
-name: Inference - Build, Test and Deploy
+name: Frontend - Build, Test and Deploy
 
 on:
   push:
     branches: ["master"]
     paths:
-      - "inference/**"
+      - "frontend/**"
       - "!**.md"
-      - "!**.svg"
-      - "!**.jpg"
-      - "!**.png"
   pull_request:
     branches: ["master"]
     paths:
-      - ".github/workflows/deploy-inference.yml"
+      - ".github/workflows/deploy-frontend.yml"
 
 env:
-  WORK_DIR: inference
-  ECR_REPOSITORY: inference
+  WORK_DIR: frontend
+  ECR_REPOSITORY: frontend
   EKS_NAMESPACE_OPEN: taskingai-open
-  EKS_NAMESPACE: ${{ secrets.EKS_NAMESPACE_TEST }}
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION_TEST }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -33,29 +29,22 @@ jobs:
       run:
         working-directory: ${{ env.WORK_DIR }}
     environment: test
-    if: github.repository == 'TaskingAI/TaskingAI'
     steps:
+      ##################################################################
+      #                        1. check version                        #
+      ##################################################################
+
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set short SHA
-        run: echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
+      - name: Verify working directory
+        run: pwd
 
-      - name: Check for git tag version
-        id: get_tag
+      - name: Read Version
+        id: version
         run: |
-          TAG=$(git describe --tags --exact-match 2> /dev/null || echo "")
-          if [[ -n "$TAG" ]]; then
-            echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
-          fi
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
-
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
+          IMAGE_TAG=$(jq -r '.version' package.json)
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -86,23 +75,7 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           echo "Build success: ${ECR_REGISTRY}/$ECR_REPOSITORY:${IMAGE_TAG}"
-
-      - name: Run Docker image
-        env:
-          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
-          INFERENCE_PROVIDER_CREDENTIALS: ${{ secrets.INFERENCE_PROVIDER_CREDENTIALS }}
-          AES_SECRET_KEY: ${{ secrets.AES_SECRET_KEY }}
-        run: |
-          echo "$INFERENCE_PROVIDER_CREDENTIALS" > .env
-          echo "$AES_SECRET_KEY" >> .env
-          docker run -d --name test_container --network=host --env-file .env -e MODE=test -e PROVIDER_URL_BLACK_LIST="tasking.ai" $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          sleep 5 # Wait for service to start
-
-      - name: Run Tests
-        run: |
-          export PROVIDER_URL_BLACK_LIST="tasking.ai"
-          bash ./test/run_full_test.sh
-
+      
       - name: Push Docker image to Amazon ECR
         if: success()
         env:
@@ -110,19 +83,6 @@ jobs:
         run: |
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "Image pushed: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-      - name: Update deployment image
-        uses: ianbelcher/eks-kubectl-action@master
-        with:
-          cluster_name: ${{ secrets.CLUSTER_NAME_TEST }}
-          args: -n ${{ env.EKS_NAMESPACE }} set image deployment/${{ env.ECR_REPOSITORY }} ${{ env.ECR_REPOSITORY }}=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-
-      - name: Verify deployment
-        uses: ianbelcher/eks-kubectl-action@master
-        with:
-          cluster_name: ${{ secrets.CLUSTER_NAME_TEST }}
-          args: -n ${{ env.EKS_NAMESPACE }} rollout status deployment/${{ env.ECR_REPOSITORY }} --timeout=60s
-
 
       - name: Update deployment image (open source)
         uses: ianbelcher/eks-kubectl-action@master
