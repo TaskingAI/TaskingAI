@@ -9,7 +9,7 @@ from config import CONFIG
 class WikipediaSearch(PluginHandler):
     async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
         q: str = plugin_input.input_params.get("q")
-        limit: str = plugin_input.input_params.get("limit", 50)
+        limit: str = plugin_input.input_params.get("limit", 10)
 
         url = f"https://en.wikipedia.org/w/rest.php/v1/search/page?q={q}&limit={limit}"
 
