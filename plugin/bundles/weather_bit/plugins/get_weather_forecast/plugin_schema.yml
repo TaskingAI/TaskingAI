@@ -1,0 +1,44 @@
+description: i18n:get_weather_forecast_description
+id: get_weather_forecast
+input_schema:
+  hours:
+    description: i18n:get_weather_forecast_input_hours_description
+    name: i18n:get_weather_forecast_input_hours_name
+    required: false
+    type: integer
+  interval:
+    description: i18n:get_weather_forecast_input_interval_description
+    name: i18n:get_weather_forecast_input_interval_name
+    required: true
+    type: string
+  lat:
+    description: i18n:get_weather_forecast_input_lat_description
+    name: i18n:get_weather_forecast_input_lat_name
+    required: true
+    type: number
+  lon:
+    description: i18n:get_weather_forecast_input_lon_description
+    name: i18n:get_weather_forecast_input_lon_name
+    required: true
+    type: number
+  units:
+    description: i18n:get_weather_forecast_input_units_description
+    name: i18n:get_weather_forecast_input_units_name
+    required: false
+    type: string
+name: i18n:get_weather_forecast_name
+output_schema:
+  result:
+    description: i18n:get_weather_forecast_output_result_description
+    name: i18n:get_weather_forecast_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      hours: 48
+      interval: hourly
+      lat: 30.25
+      lon: 120.166
+      units: I
+  mode: schema

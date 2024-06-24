@@ -1,0 +1,55 @@
+description: i18n:get_historical_weather_description
+id: get_historical_weather
+input_schema:
+  end_date:
+    description: i18n:get_historical_weather_input_end_date_description
+    name: i18n:get_historical_weather_input_end_date_name
+    required: true
+    type: string
+  interval:
+    description: i18n:get_historical_weather_input_interval_description
+    name: i18n:get_historical_weather_input_interval_name
+    required: true
+    type: string
+  lat:
+    description: i18n:get_historical_weather_input_lat_description
+    name: i18n:get_historical_weather_input_lat_name
+    required: true
+    type: number
+  lon:
+    description: i18n:get_historical_weather_input_lon_description
+    name: i18n:get_historical_weather_input_lon_name
+    required: true
+    type: number
+  start_date:
+    description: i18n:get_historical_weather_input_start_date_description
+    name: i18n:get_historical_weather_input_start_date_name
+    required: true
+    type: string
+  tz:
+    description: i18n:get_historical_weather_input_tz_description
+    name: i18n:get_historical_weather_input_tz_name
+    required: false
+    type: string
+  units:
+    description: i18n:get_historical_weather_input_units_description
+    name: i18n:get_historical_weather_input_units_name
+    required: false
+    type: string
+name: i18n:get_historical_weather_name
+output_schema:
+  result:
+    description: i18n:get_historical_weather_output_result_description
+    name: i18n:get_historical_weather_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      end_date: "2024-06-21"
+      lat: 30.25
+      lon: 120.166
+      start_date: "2024-06-20"
+      interval: hourly
+      tz: local
+  mode: schema
