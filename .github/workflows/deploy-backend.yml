@@ -1,0 +1,231 @@
+name: Backend - Build, Test and Deploy
+
+on:
+  push:
+    branches: ["master"]
+    paths:
+      - "backend/**"
+      - "!**.md"
+      - "!**.svg"
+      - "!**.jpg"
+      - "!**.png"
+  pull_request:
+    branches: ["master"]
+    paths:
+      - ".github/workflows/deploy-backend.yml"
+
+env:
+  WORK_DIR: backend
+  ECR_REPOSITORY: backend
+  EKS_NAMESPACE_OPEN: taskingai-open
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION_TEST }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AES_ENCRYPTION_KEY: b90e4648ad699c3bdf62c0860e09eb9efc098ee75f215bf750847ae19d41e4b0
+  JWT_SECRET_KEY: dbefe42f34473990a3fa903a6a3283acdc3a910beb1ae271a6463ffa5a926bfb
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORK_DIR }}
+    environment: test
+    steps:
+      ##################################################################
+      #                        1. check version                        #
+      ##################################################################
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Verify working directory
+        run: pwd
+
+      - name: Read Version
+        id: version
+        run: |
+          IMAGE_TAG=$(python -c "from app import __VERSION__; import os; print(__VERSION__)")
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ secrets.AWS_REGION_TEST }}
+          mask-aws-account-id: "true"
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: "true"
+        env:
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION_TEST }}
+          AWS_REGION: ${{ secrets.AWS_REGION_TEST }}
+
+      - name: Get ECR registry
+        run: |
+          ECR_REGISTRY=$(aws ecr describe-repositories --region $AWS_REGION --query 'repositories[0].repositoryUri' --output text | cut -d'/' -f1)
+          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
+        env:
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION_TEST }}
+          AWS_REGION: ${{ secrets.AWS_REGION_TEST }}
+
+      ##################################################################
+      #                 2. build docker image then test                #
+      ##################################################################
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Test Dependencies
+        run: pip install -r test_requirements.txt
+
+      - name: Download nltk data
+        run: |
+          mkdir nltk_data
+          python -m nltk.downloader -d nltk_data punkt
+
+      - name: Build Docker image
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }} .
+          echo "Build success: $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}"
+
+      - name: Create Docker network
+        run: docker network create taskingai-network
+
+      - name: Run Docker image - Postgres
+        run: |
+          docker run --network taskingai-network -d --rm \
+          -e POSTGRES_DB=taskingai \
+          -e POSTGRES_USER=postgres \
+          -e POSTGRES_PASSWORD=TaskingAI321 \
+          --name db ankane/pgvector:v0.5.1
+
+      - name: Run Docker image - Redis
+        run: |
+          docker run --network taskingai-network -d --rm \
+          --name cache redis:7-alpine
+
+      - name: Run Docker image - Inference
+        run: docker run --network taskingai-network -d --rm -e MODE=TEST --name inference taskingai/taskingai-inference:v0.2.14
+
+      - name: Run Docker image - Plugin
+        env:
+          TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
+        run: |
+          echo "$TEST_S3_SECRET_R2" > 1.env
+          docker run --network taskingai-network -d --rm \
+          --env-file 1.env \
+          -e MODE=TEST \
+          -e PATH_TO_VOLUME="./test"  \
+          -e OBJECT_STORAGE_TYPE="s3" \
+          --name plugin \
+          taskingai/taskingai-plugin:v0.2.10
+
+      - name: Run Docker image - WEB
+        env:
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          JWT_SECRET_KEY: ${{ env.JWT_SECRET_KEY }}
+        run: |
+          docker run --network taskingai-network --rm -d -p 8080:8000 \
+          -e PURPOSE=WEB \
+          -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
+          -e REDIS_URL="redis://cache:6379/0" \
+          -e OBJECT_STORAGE_TYPE="local" \
+          -e HOST_URL=http://127.0.0.1:8080 \
+          -e PATH_TO_VOLUME="./storage" \
+          -e PROJECT_ID="taskingai" \
+          -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
+          -e TASKINGAI_PLUGIN_URL=http://plugin:8000 \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          -e JWT_SECRET_KEY=$JWT_SECRET_KEY \
+          $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}
+
+      - name: Run R2 Docker image - API
+        env:
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          TEST_S3_SECRET_R2: ${{ secrets.TEST_S3_SECRET_R2 }}
+        run: |
+          echo "$TEST_S3_SECRET_R2" > r2.env
+          docker run --name r2_docker  --network taskingai-network --rm -d -p 8090:8000 \
+          --env-file r2.env \
+          -e PURPOSE=API \
+          -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
+          -e REDIS_URL="redis://cache:6379/0" \
+          -e OBJECT_STORAGE_TYPE="s3" \
+          -e PATH_TO_VOLUME="./storage" \
+          -e PROJECT_ID="taskingai" \
+          -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
+          -e TASKINGAI_PLUGIN_URL=http://plugin:8000 \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}
+
+      - name: Wait for service to start
+        env:
+          INFERENCE_PROVIDER_CREDENTIALS: ${{ secrets.INFERENCE_PROVIDER_CREDENTIALS }}
+          PLUGIN_BUNDLE_CREDENTIALS: ${{ secrets.PLUGIN_BUNDLE_CREDENTIALS }}
+        run: |
+          echo "$INFERENCE_PROVIDER_CREDENTIALS" >> .env
+          echo "$PLUGIN_BUNDLE_CREDENTIALS" >> .env
+          sleep 10
+
+      - name: Run WEB Tests
+        run: bash ./run_web_test.sh
+
+      - name: Run R2 API Tests
+        run: bash ./run_api_test.sh
+
+      - name: Stop Docker container
+        run: |
+          docker stop r2_docker
+          sleep 5
+
+      - name: Run AWS Docker image - API
+        env:
+          AES_ENCRYPTION_KEY: ${{ env.AES_ENCRYPTION_KEY }}
+          TEST_S3_SECRET_AWS: ${{ secrets.TEST_S3_SECRET_AWS }}
+        run: |
+          echo "$TEST_S3_SECRET_AWS" > aws.env
+          docker run --name aws_docker  --network taskingai-network --rm -d -p 8090:8000 \
+          --env-file aws.env \
+          -e PURPOSE=API \
+          -e POSTGRES_URL="postgres://postgres:TaskingAI321@db:5432/taskingai" \
+          -e REDIS_URL="redis://cache:6379/0" \
+          -e OBJECT_STORAGE_TYPE="s3" \
+          -e PATH_TO_VOLUME="./storage" \
+          -e PROJECT_ID="taskingai" \
+          -e TASKINGAI_INFERENCE_URL=http://inference:8000 \
+          -e TASKINGAI_PLUGIN_URL=http://plugin:8000 \
+          -e AES_ENCRYPTION_KEY=$AES_ENCRYPTION_KEY \
+          $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}
+
+      - name: Run AWS API Tests
+        run: bash ./run_api_test.sh
+
+      - name: Push Docker image to Amazon ECR
+        if: success()
+        env:
+          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+        run: |
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "Image pushed: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Update deployment image (open source)
+        uses: ianbelcher/eks-kubectl-action@master
+        with:
+          cluster_name: ${{ secrets.CLUSTER_NAME_TEST }}
+          args: -n ${{ env.EKS_NAMESPACE_OPEN }} set image deployment/${{ env.ECR_REPOSITORY }} ${{ env.ECR_REPOSITORY }}=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: Verify deployment (open source)
+        uses: ianbelcher/eks-kubectl-action@master
+        with:
+          cluster_name: ${{ secrets.CLUSTER_NAME_TEST }}
+          args: -n ${{ env.EKS_NAMESPACE_OPEN }} rollout status deployment/${{ env.ECR_REPOSITORY }} --timeout=60s
