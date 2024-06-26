@@ -1,0 +1,29 @@
+model_schema_id: siliconcloud/wildcard
+provider_model_id:
+type: wildcard
+name: "i18n:wildcard_name"
+description: "i18n:wildcard_description"
+
+properties:
+  function_call: false
+  streaming: true
+  input_token_limit: 4096
+  output_token_limit: 4096
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+    type: int
+    default: 4096
+    min: 1
+    max: 4096
+    step: 1
+  - config_id: stop
+  - config_id: top_k
+  - config_id: frequency_penalty
+
+pricing:
+  input_token: 0
+  output_token: 0
+  unit: 0
+  currency: CNY
