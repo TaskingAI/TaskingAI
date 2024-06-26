@@ -1,0 +1,23 @@
+provider_id: siliconcloud
+name: "i18n:siliconcloud_name"
+description: "i18n:siliconcloud_description"
+updated_timestamp: 1719373812000
+
+return_token_usage: true
+return_stream_token_usage: true
+
+credentials_schema:
+  type: object
+  properties:
+    SILICONCLOUD_API_KEY:
+      type: string
+      description: "i18n:siliconcloud_api_key_description"
+      secret: true
+  required:
+    - SILICONCLOUD_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/siliconcloud"
+  official_site_url: "https://siliconflow.cn/zh-cn/siliconcloud"
+  official_pricing_url: "https://siliconflow.cn/zh-cn/pricing"
+  official_credentials_url: "https://cloud.siliconflow.cn/account/ak"

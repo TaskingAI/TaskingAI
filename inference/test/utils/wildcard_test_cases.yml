@@ -51,3 +51,11 @@ wildcard_test_cases:
         model_type: "chat_completion"
         streaming: True
         function_call: True
+
+  - provider_id: "siliconcloud"
+    cases:
+      - model_schema_id: "siliconcloud/wildcard"
+        provider_model_id: "01-ai/Yi-1.5-34B-Chat-16K"
+        model_type: "chat_completion"
+        streaming: True
+        function_call: False
