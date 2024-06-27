@@ -2,6 +2,7 @@ from provider_dependency.chat_completion import *
 from .chat_completion_tool_calls import CustomHostToolCallsChatCompletionModel
 from .chat_completion_function_call import CustomHostFunctionCallChatCompletionModel
 from app.models.tokenizer import estimate_input_tokens
+from app.models import ProviderCredentials, ModelSchema
 from .utils import *
 from typing import Dict
 
@@ -16,6 +17,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
 
     async def chat_completion(
         self,
+        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -63,6 +65,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
             function_calls_content=None,
             function_calls=function_calls,
             input_tokens=input_tokens,
+            output_tokens=None,
         )
         return response
 
@@ -70,6 +73,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
 
     async def chat_completion_stream(
         self,
+        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -135,5 +139,6 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
                     function_calls_content=function_calls_content,
                     function_calls=None,
                     input_tokens=input_tokens,
+                    output_tokens=None,
                 )
                 yield response

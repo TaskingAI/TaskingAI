@@ -64,6 +64,8 @@ def _build_openai_chat_completion_payload(
         "model": provider_model_id,
         "stream": stream,
     }
+    if stream:
+        payload["stream_options"] = {"include_usage": True}
 
     config_dict = configs.model_dump()
     for key, value in config_dict.items():
@@ -76,7 +78,9 @@ def _build_openai_chat_completion_payload(
         if configs.response_format == "json_object":
 
             if payload["messages"][0]["role"] == "system":
-                payload["messages"][0]["content"] = f"{payload['messages'][0]['content']} You are designed to output JSON."
+                payload["messages"][0][
+                    "content"
+                ] = f"{payload['messages'][0]['content']} You are designed to output JSON."
             else:
                 payload["messages"].insert(0, {"role": "system", "content": "You are designed to output JSON."})
 
@@ -126,6 +130,10 @@ class OpenaiChatCompletionModel(BaseChatCompletionModel):
             return None
         return response_data["choices"][0]
 
+    def extract_usage_data(self, response_data: Dict, **kwargs) -> Tuple[Optional[int], Optional[int]]:
+        usage = response_data.get("usage") if response_data else None
+        return usage.get("prompt_tokens", None), usage.get("completion_tokens", None)
+
     def extract_text_content(self, data: Dict, **kwargs) -> Optional[str]:
         message_data = data.get("message") if data else None
         if message_data and message_data.get("content"):
@@ -165,6 +173,13 @@ class OpenaiChatCompletionModel(BaseChatCompletionModel):
         if not sse_data.get("choices"):
             return None
         return sse_data["choices"][0]
+
+    def stream_extract_usage_data(self, sse_data: Dict, input_tokens, output_tokens, **kwargs) -> Tuple[int, int]:
+        usage = sse_data.get("usage") if sse_data else None
+        if usage is not None:
+            input_tokens = max(input_tokens or 0, usage.get("prompt_tokens", 0))
+            output_tokens = max(output_tokens or 0, usage.get("completion_tokens", 0))
+        return input_tokens, output_tokens
 
     def stream_extract_chunk(
         self, index: int, chunk_data: Dict, text_content: str, **kwargs

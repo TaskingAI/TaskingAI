@@ -1,6 +1,6 @@
 from abc import ABC
 from typing import Dict, List, Optional, Tuple
-from app.models import ProviderCredentials
+from app.models import ProviderCredentials, ModelSchema
 from .chat_completion import *
 from .function_call import *
 from .model_config import *
@@ -82,6 +82,7 @@ class BaseChatCompletionModel(ABC):
 
     async def chat_completion(
         self,
+        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -103,11 +104,20 @@ class BaseChatCompletionModel(ABC):
 
         if custom_headers:
             headers.update(custom_headers)
-        input_tokens = estimate_input_tokens(
-            [message.model_dump() for message in messages],
-            [function.model_dump() for function in functions] if functions else None,
-            function_call,
-        )
+        from app.cache import get_provider
+
+        provider = get_provider(model_schema.provider_id)
+        if not provider.return_token_usage:
+            input_tokens = estimate_input_tokens(
+                [message.model_dump() for message in messages],
+                [function.model_dump() for function in functions] if functions else None,
+                function_call,
+            )
+            output_tokens = None
+        else:
+            input_tokens = None
+            output_tokens = None
+
         async with aiohttp.ClientSession() as session:
             logger.debug(f"api_url: {api_url}")
             logger.debug(f"headers: {headers}")
@@ -115,6 +125,8 @@ class BaseChatCompletionModel(ABC):
                 await self.handle_response(response)
                 result = await response.json()
                 core_data = self.extract_core_data(result)
+                if provider.return_token_usage:
+                    input_tokens, output_tokens = self.extract_usage_data(result)
                 if core_data is None:
                     raise_provider_api_error(f"The model did not return a valid response. data: {result}")
                 text_content = self.extract_text_content(core_data)
@@ -126,6 +138,7 @@ class BaseChatCompletionModel(ABC):
             function_calls_content=None,
             function_calls=function_calls,
             input_tokens=input_tokens,
+            output_tokens=output_tokens,
         )
         return response
 
@@ -133,6 +146,7 @@ class BaseChatCompletionModel(ABC):
 
     async def chat_completion_stream(
         self,
+        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -153,11 +167,20 @@ class BaseChatCompletionModel(ABC):
 
         if custom_headers:
             headers.update(custom_headers)
-        input_tokens = estimate_input_tokens(
-            [message.model_dump() for message in messages],
-            [function.model_dump() for function in functions] if functions else None,
-            function_call,
-        )
+        from app.cache import get_provider
+
+        provider = get_provider(model_schema.provider_id)
+        if not provider.return_stream_token_usage:
+            input_tokens = estimate_input_tokens(
+                [message.model_dump() for message in messages],
+                [function.model_dump() for function in functions] if functions else None,
+                function_call,
+            )
+            output_tokens = None
+        else:
+            input_tokens = None
+            output_tokens = None
+
         index = 0
         text_content = ""
         finish_reason = ChatCompletionFinishReason.unknown
@@ -172,6 +195,9 @@ class BaseChatCompletionModel(ABC):
                 empty_stream = True
                 async for data in async_stream:
                     self.stream_check_error(data)
+                    if provider.return_stream_token_usage:
+                        input_tokens, output_tokens = self.stream_extract_usage_data(data, input_tokens, output_tokens)
+
                     # the main chunk data
                     chunk_data = self.stream_extract_chunk_data(data)
                     if chunk_data is None:
@@ -200,6 +226,7 @@ class BaseChatCompletionModel(ABC):
                     function_calls_content=function_calls_content,
                     function_calls=None,
                     input_tokens=input_tokens,
+                    output_tokens=output_tokens,
                 )
                 yield response
 
@@ -227,7 +254,8 @@ class BaseChatCompletionModel(ABC):
         text_content: str,
         function_calls_content: Optional[ChatCompletionFunctionCallsContent],
         function_calls: Optional[List[ChatCompletionFunctionCall]],
-        input_tokens: int = 0,
+        input_tokens: int = None,
+        output_tokens: int = None,
     ) -> ChatCompletion:
         """
         Prepare the response from the chat completion model.
@@ -258,9 +286,9 @@ class BaseChatCompletionModel(ABC):
                 raise_provider_api_error("The model response is empty.")
             message = ChatCompletionAssistantMessage(content=text_content or "")
 
-        usage = ChatCompletionUsage(
-            input_tokens=input_tokens, output_tokens=estimate_response_tokens(message.model_dump())
-        )
+        if output_tokens is None:
+            output_tokens = estimate_response_tokens(message.model_dump())
+        usage = ChatCompletionUsage(input_tokens=input_tokens, output_tokens=output_tokens)
         response = ChatCompletion(
             created_timestamp=get_current_timestamp_int(),
             finish_reason=finish_reason,

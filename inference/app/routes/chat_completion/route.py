@@ -52,6 +52,7 @@ async def chat_completion(
 
         try:
             response = await model.chat_completion(
+                model_schema=model_schema,
                 provider_model_id=provider_model_id,
                 messages=messages,
                 credentials=credentials,
@@ -124,6 +125,7 @@ async def chat_completion_stream(
 
         try:
             async for response in model.chat_completion_stream(
+                model_schema=model_schema,
                 provider_model_id=provider_model_id,
                 messages=messages,
                 credentials=credentials,
