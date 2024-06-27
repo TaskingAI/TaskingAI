@@ -1,5 +1,5 @@
 from typing import Dict
-
+from app.models import ProviderCredentials, ModelSchema
 from provider_dependency.chat_completion import *
 from aiobotocore.session import get_session
 import json
@@ -121,6 +121,7 @@ class AwsBedrockChatCompletionModel(BaseChatCompletionModel):
 
     async def chat_completion(
         self,
+        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -159,6 +160,7 @@ class AwsBedrockChatCompletionModel(BaseChatCompletionModel):
                     function_calls_content=None,
                     function_calls=None,
                     input_tokens=input_tokens,
+                    output_tokens=None,
                 )
                 return response
         except Exception as e:

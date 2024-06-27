@@ -1,6 +1,7 @@
 from provider_dependency.chat_completion import *
 from app.models.tokenizer import estimate_input_tokens, estimate_response_tokens
 from typing import List, Dict, Optional
+from app.models import ProviderCredentials, ModelSchema
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +19,7 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
 
     async def chat_completion(
         self,
+        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -50,6 +52,7 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
 
     async def chat_completion_stream(
         self,
+        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
