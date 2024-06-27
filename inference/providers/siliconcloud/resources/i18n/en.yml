@@ -1,0 +1,7 @@
+siliconcloud_name: "SiliconCloud"
+siliconcloud_description: "SiliconCloud is a one-stop cloud service platform launched by SiliconFlow. It focuses on providing developers with a suite of services integrating mainstream open-source large models. The platform aims to accelerate the development and adoption of generative AI (GenAI) applications by offering comprehensive, fast, and cost-effective model APIs."
+
+siliconcloud_api_key_description: "Your Siliconcloud API Key for authentication."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from SiliconCloud with custom configurations."
