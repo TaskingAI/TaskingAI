@@ -13,6 +13,7 @@ from .schema import *
 import logging
 from typing import List, Optional
 import numpy as np
+from config import CONFIG
 
 logger = logging.getLogger(__name__)
 
@@ -165,6 +166,13 @@ async def api_text_embedding(
 
     default_embedding_size = model_infos[0][2].embedding_size
     last_exception = None
+
+    # check if proxy is blacklisted
+    if data.proxy:
+        for url in CONFIG.PROVIDER_URL_BLACK_LIST:
+            if url in data.proxy:
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, f"Invalid provider url: {url}")
+
     for i, (model_schema, provider_model_id, properties, _) in enumerate(model_infos):
         properties: TextEmbeddingModelProperties
         if default_embedding_size != properties.embedding_size:

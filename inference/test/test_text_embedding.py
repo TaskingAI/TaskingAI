@@ -305,3 +305,22 @@ class TestTextEmbedding:
         assert res.status_code == 422, f"test_validation failed: result={res.json()}"
         assert res.json()["status"] == "error"
         assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"
+
+    @pytest.mark.test_id("inference_011")
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("provider_url", Config.PROVIDER_URL_BLACK_LIST)
+    async def test_text_embedding_with_error_proxy(self, provider_url):
+        model_schema_id = "openai/text-embedding-3-large-256"
+        data = {"model_schema_id": model_schema_id}
+        data.update(self.single_text)
+        data.update({"proxy": provider_url})
+        try:
+            res = await asyncio.wait_for(text_embedding(data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
+        assert res.status_code == 422, f"test_validation failed: result={res.json()}"
+        assert res.json()["status"] == "error"
+        assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"
+        await asyncio.sleep(1)

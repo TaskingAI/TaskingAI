@@ -3,6 +3,7 @@ import pytest
 import asyncio
 from test.inference_service.inference import rerank
 from .utils.utils import generate_test_cases, generate_wildcard_test_cases, check_order, is_provider_service_error
+from test.setting import Config
 
 
 @allure.epic("inference_service")
@@ -118,3 +119,26 @@ class TestRerank:
         assert res.status_code == 422, res.json()
         assert res_json.get("status") == "error"
         assert res_json.get("error").get("code") == "REQUEST_VALIDATION_ERROR"
+
+    @pytest.mark.asyncio
+    @pytest.mark.test_id("inference_031")
+    @pytest.mark.parametrize("provider_url", Config.PROVIDER_URL_BLACK_LIST)
+    @pytest.mark.flaky(reruns=3, reruns_delay=1)
+    async def test_rerank_with_error_proxy(self, provider_url):
+        model_schema_id = "cohere/rerank-english-v2.0"
+        request_data = {
+            "model_schema_id": model_schema_id,
+            "query": self.query,
+            "documents": self.documents,
+            "top_n": self.top_n,
+            "proxy": provider_url,
+        }
+        try:
+            res = await asyncio.wait_for(rerank(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip(f"Skip the test case with provider service error.")
+        assert res.status_code == 422, f"test_validation failed: result={res.json()}"
+        assert res.json()["status"] == "error"
+        assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"
