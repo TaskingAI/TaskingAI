@@ -19,6 +19,7 @@ from app.models import (
     ModelSchema,
     BaseModelProperties,
 )
+from config import CONFIG
 from .schema import *
 
 router = APIRouter()
@@ -209,6 +210,12 @@ async def api_chat_completion(
             raise_http_error(
                 ErrorCode.REQUEST_VALIDATION_ERROR, "Model type should be chat_completion, but got " + model_type
             )
+
+    # check if proxy is blacklisted
+    if data.proxy:
+        for url in CONFIG.PROVIDER_URL_BLACK_LIST:
+            if url in data.proxy:
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, f"Invalid provider url: {url}")
 
     if data.stream:
 

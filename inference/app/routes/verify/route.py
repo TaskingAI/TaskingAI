@@ -17,6 +17,7 @@ from app.models import (
 from app.error import ErrorCode, raise_http_error, TKHttpException, error_messages
 from aiohttp import client_exceptions
 import logging
+from config import CONFIG
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +33,6 @@ router = APIRouter()
 async def api_verify_credentials(
     data: VerifyModelCredentialsSchema,
 ):
-
     model_infos = [
         validate_model_info(
             model_schema_id=data.model_schema_id,
@@ -49,6 +49,13 @@ async def api_verify_credentials(
         encrypted_credentials_dict=data.encrypted_credentials,
     )
     model_schema, provider_model_id, properties, model_type = model_infos[0]
+
+    # check if proxy is blacklisted
+    if data.proxy:
+        for url in CONFIG.PROVIDER_URL_BLACK_LIST:
+            if url in data.proxy:
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, f"Invalid provider url: {url}")
+
     try:
         if model_type == ModelType.CHAT_COMPLETION:
             from ..chat_completion.route import chat_completion, chat_completion_stream
@@ -71,6 +78,8 @@ async def api_verify_credentials(
                             messages=[message],
                             credentials=provider_credentials,
                             configs=config,
+                            proxy=data.proxy,
+                            custom_headers=data.custom_headers,
                         )
                         if response.message.content is None:
                             raise_http_error(ErrorCode.CREDENTIALS_VALIDATION_ERROR, error_message)
@@ -81,6 +90,8 @@ async def api_verify_credentials(
                             messages=[message],
                             credentials=provider_credentials,
                             configs=config,
+                            proxy=data.proxy,
+                            custom_headers=data.custom_headers,
                         ):
                             if isinstance(response, ChatCompletion) and response.message.content is not None:
                                 valid_response_received = True
@@ -119,6 +130,8 @@ async def api_verify_credentials(
                             credentials=provider_credentials,
                             configs=config,
                             functions=[ChatCompletionFunction(**function_dict)],
+                            proxy=data.proxy,
+                            custom_headers=data.custom_headers,
                         )
                         if response.message.content is None and not response.message.function_calls:
                             raise_http_error(ErrorCode.CREDENTIALS_VALIDATION_ERROR, error_message)
@@ -130,6 +143,8 @@ async def api_verify_credentials(
                             credentials=provider_credentials,
                             configs=config,
                             functions=[ChatCompletionFunction(**function_dict)],
+                            proxy=data.proxy,
+                            custom_headers=data.custom_headers,
                         ):
                             if isinstance(response, ChatCompletion) and (
                                 response.message.content is not None or response.message.function_calls
@@ -145,6 +160,8 @@ async def api_verify_credentials(
                     messages=[message],
                     credentials=provider_credentials,
                     configs=config,
+                    proxy=data.proxy,
+                    custom_headers=data.custom_headers,
                 )
                 if response.message.content is None:
                     raise_http_error(ErrorCode.CREDENTIALS_VALIDATION_ERROR, error_message)
@@ -160,6 +177,8 @@ async def api_verify_credentials(
                 properties=properties,
                 configs=TextEmbeddingModelConfiguration(),
                 input_type=None,
+                proxy=data.proxy,
+                custom_headers=data.custom_headers,
             )
             actual_embedding_size = len(response.data[0].embedding)
             if not actual_embedding_size == properties.embedding_size:
@@ -180,6 +199,8 @@ async def api_verify_credentials(
                 ],
                 top_n=3,
                 credentials=provider_credentials,
+                proxy=data.proxy,
+                custom_headers=data.custom_headers,
             )
         else:
             raise_http_error(

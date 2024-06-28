@@ -241,3 +241,33 @@ class TestValidation:
         assert res.json()["status"] == "error"
         assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"
         await asyncio.sleep(1)
+
+    @pytest.mark.parametrize("test_data", generate_test_cases_for_validation(), ids=lambda d: d["model_schema_id"])
+    @pytest.mark.parametrize("provider_url", Config.PROVIDER_URL_BLACK_LIST)
+    @pytest.mark.asyncio
+    @pytest.mark.test_id("inference_028")
+    async def test_validation_with_error_proxy(self, test_data, provider_url):
+        model_schema_id = test_data["model_schema_id"]
+        if "openai" not in test_data["model_schema_id"]:
+            pytest.skip("Test not applicable for this model type")
+        model_type = test_data["model_type"]
+        credentials = {
+            key: provider_credentials.aes_decrypt(test_data["credentials"][key])
+            for key in test_data["credentials"].keys()
+        }
+        custom_headers = {"Helicone-Auth": f"Bearer {Config.HELICONE_API_KEY}"}
+        request_data = {
+            "model_schema_id": model_schema_id,
+            "model_type": model_type,
+            "credentials": credentials,
+            "proxy": provider_url,
+            "custom_headers": custom_headers,
+        }
+        try:
+            res = await asyncio.wait_for(verify_credentials(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        assert res.status_code == 422, f"test_validation failed: result={res.json()}"
+        assert res.json()["status"] == "error"
+        assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"
+        await asyncio.sleep(1)

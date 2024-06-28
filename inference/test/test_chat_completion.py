@@ -594,6 +594,38 @@ class TestChatCompletion:
         assert res_json.get("data").get("message").get("function_calls") is None
 
     @pytest.mark.asyncio
+    @pytest.mark.test_id("inference_030")
+    @pytest.mark.flaky(reruns=3, reruns_delay=1)
+    @pytest.mark.parametrize("provider_url", Config.PROVIDER_URL_BLACK_LIST)
+    async def test_chat_completion_by_error_proxy(self, provider_url):
+        model_schema_id = "openai/gpt-4o"
+        message = [{"role": "user", "content": "Hello, nice to meet you, what is your name"}]
+        configs = {
+            "temperature": 0.5,
+            "top_p": 0.5,
+        }
+        proxy = provider_url
+        custom_headers = {"Helicone-Auth": f"Bearer {Config.HELICONE_API_KEY}"}
+        request_data = {
+            "model_schema_id": model_schema_id,
+            "messages": message,
+            "stream": False,
+            "configs": configs,
+            "proxy": proxy,
+            "custom_headers": custom_headers,
+        }
+        try:
+            res = await asyncio.wait_for(chat_completion(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        if is_provider_service_error(res):
+            pytest.skip("Skip the test case with provider service error.")
+        assert res.status_code == 422, f"test_validation failed: result={res.json()}"
+        assert res.json()["status"] == "error"
+        assert res.json()["error"]["code"] == "REQUEST_VALIDATION_ERROR"
+        await asyncio.sleep(1)
+
+    @pytest.mark.asyncio
     @pytest.mark.parametrize(
         "test_data",
         generate_test_cases("chat_completion") + generate_wildcard_test_cases("chat_completion"),
