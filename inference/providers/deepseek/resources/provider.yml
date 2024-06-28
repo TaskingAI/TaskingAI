@@ -3,6 +3,9 @@ name: "i18n:deepseek_name"
 description: "i18n:deepseek_description"
 updated_timestamp: 1716545924
 
+return_token_usage: true
+return_stream_token_usage: true
+
 credentials_schema:
   type: object
   properties:
