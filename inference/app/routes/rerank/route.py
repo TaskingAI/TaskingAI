@@ -9,6 +9,7 @@ from app.error import raise_http_error, ErrorCode, TKHttpException, error_messag
 from app.models.tokenizer import string_tokens
 from app.models.rerank import *
 from .schema import *
+from config import CONFIG
 import logging
 
 logger = logging.getLogger(__name__)
@@ -50,6 +51,13 @@ async def api_rerank(
             raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Model type should be rerank, but got " + model_type)
 
     (model_schema, provider_model_id, properties, _) = model_infos[0]
+
+    # check if proxy is blacklisted
+    if data.proxy:
+        for url in CONFIG.PROVIDER_URL_BLACK_LIST:
+            if url in data.proxy:
+                raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, f"Invalid provider url: {url}")
+
     try:
         model = get_rerank_model(provider_id=model_schema.provider_id)
         if not model:

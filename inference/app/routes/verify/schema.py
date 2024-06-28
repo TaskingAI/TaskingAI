@@ -47,3 +47,14 @@ class VerifyModelCredentialsSchema(BaseModel):
         description="The encrypted credentials of the model provider to be verified.",
         examples=[None],
     )
+
+    proxy: Optional[str] = Field(None, description="The proxy of the model.")
+
+    custom_headers: Optional[Dict[str, str]] = Field(
+        None,
+        min_items=0,
+        max_items=16,
+        description="The custom headers can store up to 16 key-value pairs where each key's "
+        "length is less than 64 and value's length is less than 512.",
+        examples=[{"key1": "value1"}, {"key2": "value2"}],
+    )
