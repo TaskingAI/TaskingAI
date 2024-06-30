@@ -1,0 +1,53 @@
+description: i18n:get_flight_information_description
+id: get_flight_information
+input_schema:
+  arrival_id:
+    description: i18n:get_flight_information_input_arrival_id_description
+    name: i18n:get_flight_information_input_arrival_id_name
+    required: true
+    type: string
+  departure_id:
+    description: i18n:get_flight_information_input_departure_id_description
+    name: i18n:get_flight_information_input_departure_id_name
+    required: true
+    type: string
+  max_duration:
+    description: i18n:get_flight_information_input_max_duration_description
+    name: i18n:get_flight_information_input_max_duration_name
+    required: false
+    type: string
+  max_price:
+    description: i18n:get_flight_information_input_max_price_description
+    name: i18n:get_flight_information_input_max_price_name
+    required: false
+    type: string
+  outbound_date:
+    description: i18n:get_flight_information_input_outbound_date_description
+    name: i18n:get_flight_information_input_outbound_date_name
+    required: true
+    type: string
+  return_date:
+    description: i18n:get_flight_information_input_return_date_description
+    name: i18n:get_flight_information_input_return_date_name
+    required: false
+    type: string
+  type:
+    description: i18n:get_flight_information_input_type_description
+    name: i18n:get_flight_information_input_type_name
+    required: true
+    type: integer
+name: i18n:get_flight_information_name
+output_schema:
+  result:
+    description: i18n:get_flight_information_output_result_description
+    name: i18n:get_flight_information_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      arrival_id: AUS
+      departure_id: CDG
+      outbound_date: '2024-07-30'
+      type: 2
+  mode: schema
