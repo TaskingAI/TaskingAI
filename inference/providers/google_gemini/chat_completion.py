@@ -165,6 +165,10 @@ class GoogleGeminiChatCompletionModel(BaseChatCompletionModel):
             raise_provider_api_error(json.dumps(response_data))
         return response_data["candidates"][0]
 
+    def extract_usage_data(self, response_data: Dict, **kwargs) -> Tuple[Optional[int], Optional[int]]:
+        usage_metadata = response_data.get("usageMetadata") if response_data else {}
+        return usage_metadata.get("promptTokenCount", None), usage_metadata.get("candidatesTokenCount", None)
+
     def extract_text_content(self, data: Dict, **kwargs) -> Optional[str]:
         # Directly access the nested 'text' if all keys exist, else return None
         return data.get("content", {}).get("parts", [{}])[0].get("text") if data else None
@@ -198,6 +202,15 @@ class GoogleGeminiChatCompletionModel(BaseChatCompletionModel):
         if sse_data.get("candidates") is None:
             return None
         return sse_data["candidates"][0]
+
+    def stream_extract_usage_data(
+        self, sse_data: Dict, input_tokens: int, output_tokens: int, **kwargs
+    ) -> Tuple[int, int]:
+        usage_metadata = sse_data.get("usageMetadata") if sse_data else None
+        if usage_metadata is not None:
+            input_tokens = max(input_tokens or 0, usage_metadata.get("promptTokenCount", 0))
+            output_tokens = max(output_tokens or 0, usage_metadata.get("candidatesTokenCount", 0))
+        return input_tokens, output_tokens
 
     def stream_extract_chunk(
         self, index: int, chunk_data: Dict, text_content: str, **kwargs
