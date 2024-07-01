@@ -1,0 +1,31 @@
+description: i18n:news_search_description
+id: news_search
+input_schema:
+  begin_date:
+    description: i18n:news_search_input_begin_date_description
+    name: i18n:news_search_input_begin_date_name
+    required: false
+    type: string
+  end_date:
+    description: i18n:news_search_input_end_date_description
+    name: i18n:news_search_input_end_date_name
+    required: false
+    type: string
+  query:
+    description: i18n:news_search_input_query_description
+    name: i18n:news_search_input_query_name
+    required: true
+    type: string
+name: i18n:news_search_name
+output_schema:
+  results:
+    description: i18n:news_search_output_results_description
+    name: i18n:news_search_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      end_date: '20191231'
+      query: Trump
+  mode: schema
