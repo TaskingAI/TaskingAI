@@ -3,6 +3,9 @@ name: "i18n:llama_api_name"
 description: "i18n:llama_api_description"
 updated_timestamp: 1707152831000
 
+return_token_usage: true
+return_stream_token_usage: false
+
 credentials_schema:
   type: object
   properties:
