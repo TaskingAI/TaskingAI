@@ -3,6 +3,9 @@ name: "i18n:leptonai_name"
 description: "i18n:leptonai_description"
 updated_timestamp: 1716431009
 
+return_token_usage: true
+return_stream_token_usage: true
+
 credentials_schema:
   type: object
   properties:
