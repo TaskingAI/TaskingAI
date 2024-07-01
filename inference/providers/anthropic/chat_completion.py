@@ -159,6 +159,10 @@ class AnthropicChatCompletionModel(BaseChatCompletionModel):
             return None
         return response_data
 
+    def extract_usage_data(self, response_data: Dict, **kwargs) -> Tuple[Optional[int], Optional[int]]:
+        usage = response_data.get("usage") if response_data else None
+        return usage.get("input_tokens", None), usage.get("output_tokens", None)
+
     def extract_text_content(self, data: Dict, **kwargs) -> Optional[str]:
         message_data = data.get("content")
         if message_data and message_data[0].get("text"):
@@ -200,6 +204,20 @@ class AnthropicChatCompletionModel(BaseChatCompletionModel):
         if sse_data.get("delta") is None:
             return None
         return sse_data
+
+    def stream_extract_usage_data(
+        self, sse_data: Dict, input_tokens: int, output_tokens: int, **kwargs
+    ) -> Tuple[int, int]:
+        if sse_data and sse_data.get("usage"):
+            usage = sse_data.get("usage")
+            input_tokens = max(input_tokens or 0, usage.get("input_tokens", 0))
+            output_tokens = max(output_tokens or 0, usage.get("output_tokens", 0))
+        else:
+            sse_core_data = sse_data.get("message")
+            usage = sse_core_data.get("usage") if sse_core_data else {}
+            input_tokens = max(input_tokens or 0, usage.get("input_tokens", 0))
+            output_tokens = max(output_tokens or 0, usage.get("output_tokens", 0))
+        return input_tokens, output_tokens
 
     def stream_extract_chunk(
         self, index: int, chunk_data: Dict, text_content: str, **kwargs
