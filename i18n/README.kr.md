@@ -5,13 +5,12 @@
 # TaskingAI
 
 <p align="center">
-  <a href="https://docs.tasking.ai"><img alt="Docs" src="https://img.shields.io/badge/docs-latest-brightgreen"></a>
   <a href="https://hub.docker.com/u/taskingai"><img alt="Docker Image Version (latest semver)" src="https://img.shields.io/docker/v/taskingai/taskingai-server?label=docker"></a>
   <a href="https://github.com/TaskingAI/TaskingAI/blob/master/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/taskingai/taskingai"></a>
   <a href="https://pypi.org/project/taskingai"><img alt="PyPI version" src="https://img.shields.io/pypi/v/taskingai?color=blue"></a>
   <a href="https://twitter.com/TaskingAI"><img alt="X (formerly Twitter) URL" src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FTaskingAI"></a>
   <a href="https://www.youtube.com/@TaskingAI"><img alt="YouTube Channel Subscribers" src="https://img.shields.io/youtube/channel/subscribers/UCxUnOM-ZbZKmyR_Q5vAUSTA"></a>
-  <a href="https://discord.gg/FsNQXFj9"><img alt="Discord" src="https://img.shields.io/discord/1244486619914834110"></a>
+  <a href="https://discord.gg/RqwcD3vG3k"><img alt="Discord" src="https://img.shields.io/discord/1244486619914834110"></a>
 </p>
 
 <p align="center">
@@ -224,7 +223,7 @@ print(assistant_message)
 
 또한, TaskingAI가 공식 디스코드 커뮤니티를 개설했다는 소식을 전하게 되어 기쁩니다! 🎊
 
-[저희 디스코드 서버에 가입하세요](https://discord.gg/BNCSWXmV)하시고 다음과 같은 활동에 참여하세요:
+[저희 디스코드 서버에 가입하세요](https://discord.gg/RqwcD3vG3k)하시고 다음과 같은 활동에 참여하세요:
 
     • 💬 TaskingAI에 대한 토론을 하고, 아이디어를 공유하며, 피드백을 제공하세요.
     • 📚 다른 사용자 및 저희 팀으로부터 지원, 팁, 및 최고의 실천 방법을 얻으세요.
