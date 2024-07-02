@@ -17,5 +17,5 @@ credentials_schema:
 resources:
   taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/moonshot"
   official_site_url: "https://www.moonshot.cn/"
-  official_pricing_url: "https://platform.moonshot.cn/docs/price/pricing"
+  official_pricing_url: "https://platform.moonshot.cn/docs/price/chat"
   official_credentials_url: "https://platform.moonshot.cn/console/api-keys"
