@@ -1,4 +1,6 @@
 from typing import Dict, Tuple
+
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 
 logger = logging.getLogger(__name__)
@@ -79,7 +81,7 @@ class CohereChatCompletionModel(BaseChatCompletionModel):
 
     # ------------------- prepare request data -------------------
 
-    def prepare_request(
+    async def prepare_request(
         self,
         stream: bool,
         provider_model_id: str,
@@ -88,6 +90,7 @@ class CohereChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
         api_url = "https://api.cohere.ai/v1/chat"

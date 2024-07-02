@@ -82,7 +82,6 @@ class BaseChatCompletionModel(ABC):
 
     async def chat_completion(
         self,
-        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -91,10 +90,11 @@ class BaseChatCompletionModel(ABC):
         functions: Optional[List[ChatCompletionFunction]] = None,
         proxy: Optional[str] = None,
         custom_headers: Optional[Dict[str, str]] = None,
+        model_schema: ModelSchema = None,
     ):
         # Convert ChatCompletionMessages to the required format
-        api_url, headers, payload = self.prepare_request(
-            False, provider_model_id, messages, credentials, configs, function_call, functions
+        api_url, headers, payload = await self.prepare_request(
+            False, provider_model_id, messages, credentials, configs, function_call, functions, model_schema
         )
         if proxy:
             if not proxy.startswith("https://"):
@@ -146,7 +146,6 @@ class BaseChatCompletionModel(ABC):
 
     async def chat_completion_stream(
         self,
-        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -155,9 +154,10 @@ class BaseChatCompletionModel(ABC):
         functions: Optional[List[ChatCompletionFunction]] = None,
         proxy: Optional[str] = None,
         custom_headers: Optional[Dict[str, str]] = None,
+        model_schema: ModelSchema = None,
     ):
-        api_url, headers, payload = self.prepare_request(
-            True, provider_model_id, messages, credentials, configs, function_call, functions
+        api_url, headers, payload = await self.prepare_request(
+            True, provider_model_id, messages, credentials, configs, function_call, functions, model_schema
         )
         if proxy:
             if not proxy.startswith("https://"):
@@ -232,7 +232,7 @@ class BaseChatCompletionModel(ABC):
 
     # ------------------- prepare request and response data -------------------
 
-    def prepare_request(
+    async def prepare_request(
         self,
         stream: bool,
         provider_model_id: str,
@@ -241,6 +241,7 @@ class BaseChatCompletionModel(ABC):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         """
         Prepare the request for the chat completion model.

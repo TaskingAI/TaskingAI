@@ -1,4 +1,6 @@
 from typing import Tuple, Dict
+
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 from .utils import *
 
@@ -90,7 +92,7 @@ class AzureOpenaiChatCompletionModel(BaseChatCompletionModel):
 
     # ------------------- prepare request data -------------------
 
-    def prepare_request(
+    async def prepare_request(
         self,
         stream: bool,
         provider_model_id: str,
@@ -99,6 +101,7 @@ class AzureOpenaiChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
         api_url = build_azure_chat_url(credentials)

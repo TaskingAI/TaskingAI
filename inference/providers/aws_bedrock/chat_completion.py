@@ -121,7 +121,6 @@ class AwsBedrockChatCompletionModel(BaseChatCompletionModel):
 
     async def chat_completion(
         self,
-        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -130,6 +129,7 @@ class AwsBedrockChatCompletionModel(BaseChatCompletionModel):
         functions: Optional[List[ChatCompletionFunction]] = None,
         proxy: Optional[str] = None,
         custom_headers: Optional[Dict[str, str]] = None,
+        model_schema: ModelSchema = None,
     ):
         payload = _build_aws_bedrock_chat_completion_payload(messages, False, provider_model_id, configs)
         input_tokens = estimate_input_tokens(

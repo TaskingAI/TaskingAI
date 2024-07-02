@@ -1,5 +1,7 @@
 import json
 
+from app.models import ModelSchema
+from app.utils.utils import fetch_image_format, get_image_base64_string
 from provider_dependency.chat_completion import *
 from typing import Tuple, Dict
 
@@ -23,11 +25,36 @@ def _build_google_gemini_header(credentials: ProviderCredentials):
     }
 
 
-def _build_google_gemini_chat_completion_payload(
+async def split_markdown_to_objects_preserve_order(markdown_content):
+    import re
+
+    # Define regex pattern for extracting text and images
+    pattern = re.compile(r"(!\[.*?\]\(.*?\))|([^!]+)", re.MULTILINE)
+
+    # Find all matches
+    matches = pattern.findall(markdown_content)
+
+    # Split the content into a list of objects
+    result = []
+
+    for match in matches:
+        if match[0]:  # This is an image
+            image_url = re.findall(r"!\[.*?\]\((.*?)\)", match[0])[0]
+            image_format = await fetch_image_format(image_url)
+            base64_string = await get_image_base64_string(image_url)
+            result.append({"inlineData": {"mimeType": f"image/{image_format}", "data": base64_string}})
+        elif match[1].strip():  # This is text
+            result.append({"text": match[1].strip()})
+
+    return result
+
+
+async def _build_google_gemini_chat_completion_payload(
     messages: List[ChatCompletionMessage],
     configs: ChatCompletionModelConfiguration,
     function_call: Optional[str],
     functions: Optional[List[ChatCompletionFunction]],
+    vision_support: bool = False,
 ):
     # Convert ChatCompletionMessages to the required format
     if len(messages) > 1 and messages[0].role == "system":
@@ -36,10 +63,13 @@ def _build_google_gemini_chat_completion_payload(
         # Remove the system message from the list.
         del messages[0]
 
-    def format_message(msg: ChatCompletionMessage):
+    async def format_message(msg: ChatCompletionMessage, should_send_image_if_possible=False):
         if msg.role == ChatCompletionRole.user:
             if isinstance(msg.content, str):
-                return {"role": msg.role.name, "parts": [{"text": msg.content}]}
+                if vision_support and should_send_image_if_possible:
+                    return {"role": msg.role.name, "parts": await split_markdown_to_objects_preserve_order(msg.content)}
+                else:
+                    return {"role": msg.role.name, "parts": [{"text": msg.content}]}
             elif isinstance(msg.content, List):
                 check_valid_list_content(msg.content)
                 formatted_msg = {"role": "user", "parts": []}
@@ -98,8 +128,11 @@ def _build_google_gemini_chat_completion_payload(
         for msg in messages
         if is_assistant_function_calls_message(msg)
     }
-
-    formatted_messages = [format_message(msg) for msg in messages]
+    formatted_messages = []
+    for message in messages[:-1]:
+        formatted_message = await format_message(message, should_send_image_if_possible=False)
+        formatted_messages.append(formatted_message)
+    formatted_messages.append(await format_message(messages[-1], should_send_image_if_possible=True))
     generation_config = {}
     config_dict = configs.model_dump()
     for key, value in config_dict.items():
@@ -130,7 +163,7 @@ class GoogleGeminiChatCompletionModel(BaseChatCompletionModel):
 
     # ------------------- prepare request data -------------------
 
-    def prepare_request(
+    async def prepare_request(
         self,
         stream: bool,
         provider_model_id: str,
@@ -139,6 +172,7 @@ class GoogleGeminiChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         # todo accept user's api_url
         if credentials.GOOGLE_GEMINI_API_VERSION == "v1" and functions:
@@ -154,7 +188,9 @@ class GoogleGeminiChatCompletionModel(BaseChatCompletionModel):
         action = "streamGenerateContent?alt=sse" if stream else "generateContent"
         api_url = f"https://generativelanguage.googleapis.com/{api_version}/models/{provider_model_id}:{action}"
 
-        payload = _build_google_gemini_chat_completion_payload(messages, configs, function_call, functions)
+        payload = await _build_google_gemini_chat_completion_payload(
+            messages, configs, function_call, functions, model_schema.allow_vision_input()
+        )
         headers = _build_google_gemini_header(credentials)
         return api_url, headers, payload
 

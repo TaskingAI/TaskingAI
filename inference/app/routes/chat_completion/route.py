@@ -52,7 +52,6 @@ async def chat_completion(
 
         try:
             response = await model.chat_completion(
-                model_schema=model_schema,
                 provider_model_id=provider_model_id,
                 messages=messages,
                 credentials=credentials,
@@ -61,6 +60,7 @@ async def chat_completion(
                 functions=functions,
                 proxy=proxy,
                 custom_headers=custom_headers,
+                model_schema=model_schema,
             )
             if i > 0:
                 response.fallback_index = i - 1
@@ -125,7 +125,6 @@ async def chat_completion_stream(
 
         try:
             async for response in model.chat_completion_stream(
-                model_schema=model_schema,
                 provider_model_id=provider_model_id,
                 messages=messages,
                 credentials=credentials,
@@ -134,6 +133,7 @@ async def chat_completion_stream(
                 functions=functions,
                 proxy=proxy,
                 custom_headers=custom_headers,
+                model_schema=model_schema,
             ):
                 if isinstance(response, ChatCompletion):
                     if i:

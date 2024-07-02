@@ -1,3 +1,4 @@
+from app.models import ModelSchema
 from provider_dependency.chat_completion import *
 from app.models.tokenizer import estimate_input_tokens, estimate_response_tokens
 from typing import List, Dict, Optional
@@ -19,7 +20,6 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
 
     async def chat_completion(
         self,
-        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -28,6 +28,7 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
         functions: Optional[List[ChatCompletionFunction]] = None,
         proxy: Optional[str] = None,
         custom_headers: Optional[Dict[str, str]] = None,
+        model_schema: ModelSchema = None,
     ):
         if provider_model_id == "debug-error" and messages[-1].content != "Only say your name":
             raise_http_error(ErrorCode.PROVIDER_ERROR, "Debug error for test")
@@ -52,7 +53,6 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
 
     async def chat_completion_stream(
         self,
-        model_schema: ModelSchema,
         provider_model_id: str,
         messages: List[ChatCompletionMessage],
         credentials: ProviderCredentials,
@@ -61,6 +61,7 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
         functions: Optional[List[ChatCompletionFunction]] = None,
         proxy: Optional[str] = None,
         custom_headers: Optional[Dict[str, str]] = None,
+        model_schema: ModelSchema = None,
     ):
         if not messages:
             raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "No messages provided")

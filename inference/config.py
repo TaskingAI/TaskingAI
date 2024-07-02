@@ -92,5 +92,6 @@ class Config:
             self.PROVIDER_URL_BLACK_LIST = self.PROVIDER_URL_BLACK_LIST.split(",")
             self.PROVIDER_URL_BLACK_LIST = [url.strip() for url in self.PROVIDER_URL_BLACK_LIST]
 
+        self.PATH_TO_VOLUME = load_str_env("PATH_TO_VOLUME")
 
 CONFIG = Config()
