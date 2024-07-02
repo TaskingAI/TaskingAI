@@ -24,6 +24,7 @@ def _build_google_gemini_header(credentials: ProviderCredentials):
         "Content-Type": "application/json",
     }
 
+
 async def split_markdown_to_objects_preserve_order(markdown_content):
     import re
 
@@ -62,10 +63,10 @@ async def _build_google_gemini_chat_completion_payload(
         # Remove the system message from the list.
         del messages[0]
 
-    async def format_message(msg: ChatCompletionMessage):
+    async def format_message(msg: ChatCompletionMessage, should_send_image_if_possible=False):
         if msg.role == ChatCompletionRole.user:
             if isinstance(msg.content, str):
-                if vision_support:
+                if vision_support and should_send_image_if_possible:
                     return {"role": msg.role.name, "parts": await split_markdown_to_objects_preserve_order(msg.content)}
                 else:
                     return {"role": msg.role.name, "parts": [{"text": msg.content}]}
@@ -127,8 +128,11 @@ async def _build_google_gemini_chat_completion_payload(
         for msg in messages
         if is_assistant_function_calls_message(msg)
     }
-
-    formatted_messages = [await format_message(msg) for msg in messages]
+    formatted_messages = []
+    for message in messages[:-1]:
+        formatted_message = await format_message(message, should_send_image_if_possible=False)
+        formatted_messages.append(formatted_message)
+    formatted_messages.append(await format_message(messages[-1], should_send_image_if_possible=True))
     generation_config = {}
     config_dict = configs.model_dump()
     for key, value in config_dict.items():
@@ -184,7 +188,9 @@ class GoogleGeminiChatCompletionModel(BaseChatCompletionModel):
         action = "streamGenerateContent?alt=sse" if stream else "generateContent"
         api_url = f"https://generativelanguage.googleapis.com/{api_version}/models/{provider_model_id}:{action}"
 
-        payload = await _build_google_gemini_chat_completion_payload(messages, configs, function_call, functions, model_schema.allow_vision_input())
+        payload = await _build_google_gemini_chat_completion_payload(
+            messages, configs, function_call, functions, model_schema.allow_vision_input()
+        )
         headers = _build_google_gemini_header(credentials)
         return api_url, headers, payload
 

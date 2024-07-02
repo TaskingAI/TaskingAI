@@ -7,6 +7,7 @@ from .utils import *
 
 logger = logging.getLogger(__name__)
 
+
 async def construct_image_data(image_url: str) -> dict:
     if image_url_is_on_localhost(image_url):
         image_format = await fetch_image_format(image_url)
@@ -15,10 +16,11 @@ async def construct_image_data(image_url: str) -> dict:
         return {"type": "image_url", "image_url": {"url": f"data:image/{image_format};base64,{base64_string}"}}
 
     # Normal image url
-    if 'http' in image_url:
+    if "http" in image_url:
         return {"type": "image_url", "image_url": {"url": image_url}}
 
     raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid image url.")
+
 
 async def split_markdown_to_objects_preserve_order(markdown_content):
     import re
@@ -41,13 +43,19 @@ async def split_markdown_to_objects_preserve_order(markdown_content):
 
     return result
 
+
 async def _build_openai_message(message: ChatCompletionMessage, vision_support: bool = False):
     if message.role == ChatCompletionRole.system:
         return {"role": message.role.name, "content": message.content}
 
     if message.role == ChatCompletionRole.user:
         if isinstance(message.content, str):
-            return {"role": message.role.name, "content": await split_markdown_to_objects_preserve_order(message.content) if vision_support else message.content}
+            return {
+                "role": message.role.name,
+                "content": await split_markdown_to_objects_preserve_order(message.content)
+                if vision_support
+                else message.content,
+            }
         elif isinstance(message.content, List):
             return {
                 "role": message.role.name,
@@ -94,7 +102,10 @@ async def _build_openai_chat_completion_payload(
     vision_support: bool = False,
 ):
     # Convert ChatCompletionMessages to the required format
-    formatted_messages = [await _build_openai_message(msg, vision_support) for msg in messages]
+    formatted_messages = []
+    for message in messages[:-1]:
+        formatted_messages.append(await _build_openai_message(message, vision_support=False))
+    formatted_messages.append(await _build_openai_message(messages[-1], vision_support=vision_support))
     logger.debug("formatted_messages: %s", formatted_messages)
     payload = {
         "messages": formatted_messages,
