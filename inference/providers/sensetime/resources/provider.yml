@@ -3,6 +3,9 @@ name: "i18n:sensetime_name"
 description: "i18n:sensetime_description"
 updated_timestamp: 1716974560000
 
+return_token_usage: true
+return_stream_token_usage: true
+
 credentials_schema:
   type: object
   properties:
