@@ -3,6 +3,9 @@ name: "i18n:reka_name"
 description: "i18n:reka_description"
 updated_timestamp: 1716456299
 
+return_token_usage: true
+return_stream_token_usage: true
+
 credentials_schema:
   type: object
   properties:
