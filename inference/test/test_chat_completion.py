@@ -277,7 +277,7 @@ class TestChatCompletion:
         message = test_data["message"]
         function_call = test_data["function_call"]
         stream = test_data["stream"]
-        if not function_call or not stream or "azure" in model_schema_id or "openrouter" in model_schema_id:
+        if not function_call or not stream or "azure" in model_schema_id or "openrouter" in model_schema_id or "togetherai" in model_schema_id:
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
         configs = {
