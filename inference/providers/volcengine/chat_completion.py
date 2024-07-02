@@ -80,6 +80,10 @@ class VolcengineChatCompletionModel(BaseChatCompletionModel):
             return None
         return response_data["choices"][0]
 
+    def extract_usage_data(self, response_data: Dict, **kwargs) -> Tuple[Optional[int], Optional[int]]:
+        usage = response_data.get("usage") if response_data else {}
+        return usage.get("prompt_tokens", None), usage.get("completion_tokens", None)
+
     def extract_text_content(self, data: Dict, **kwargs) -> Optional[str]:
         message_data = data.get("message") if data else None
         if message_data and message_data.get("content"):
