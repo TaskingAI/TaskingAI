@@ -68,7 +68,9 @@ def _build_togetherai_chat_completion_payload(
         if configs.response_format == "json_object":
 
             if payload["messages"][0]["role"] == "system":
-                payload["messages"][0]["content"] = f"{payload['messages'][0]['content']} You are designed to output JSON."
+                payload["messages"][0][
+                    "content"
+                ] = f"{payload['messages'][0]['content']} You are designed to output JSON."
             else:
                 payload["messages"].insert(0, {"role": "system", "content": "You are designed to output JSON."})
 
@@ -114,6 +116,10 @@ class TogetheraiChatCompletionModel(BaseChatCompletionModel):
             return None
         return response_data["choices"][0]
 
+    def extract_usage_data(self, response_data: Dict, **kwargs) -> Tuple[Optional[int], Optional[int]]:
+        usage = response_data.get("usage") if response_data else {}
+        return usage.get("prompt_tokens", None), usage.get("completion_tokens", None)
+
     def extract_text_content(self, data: Dict, **kwargs) -> Optional[str]:
         message_data = data.get("message") if data else None
         if message_data and message_data.get("content"):
@@ -157,6 +163,12 @@ class TogetheraiChatCompletionModel(BaseChatCompletionModel):
         if not sse_data.get("choices"):
             return None
         return sse_data["choices"][0]
+
+    def stream_extract_usage_data(
+        self, sse_data: Dict, input_tokens: int, output_tokens: int, **kwargs
+    ) -> Tuple[int, int]:
+        # todo the stream mode of TogetherAI currently does not provide the token usage parameter.
+        return None, None
 
     def stream_extract_chunk(
         self, index: int, chunk_data: Dict, text_content: str, **kwargs
