@@ -5,13 +5,12 @@
 # TaskingAI
 
 <p align="center">
-  <a href="https://docs.tasking.ai"><img alt="Docs" src="https://img.shields.io/badge/docs-latest-brightgreen"></a>
   <a href="https://hub.docker.com/u/taskingai"><img alt="Docker Image Version (latest semver)" src="https://img.shields.io/docker/v/taskingai/taskingai-server?label=docker"></a>
   <a href="https://github.com/TaskingAI/TaskingAI/blob/master/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/taskingai/taskingai"></a>
   <a href="https://pypi.org/project/taskingai"><img alt="PyPI version" src="https://img.shields.io/pypi/v/taskingai?color=blue"></a>
   <a href="https://twitter.com/TaskingAI"><img alt="X (formerly Twitter) URL" src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FTaskingAI"></a>
   <a href="https://www.youtube.com/@TaskingAI"><img alt="YouTube Channel Subscribers" src="https://img.shields.io/youtube/channel/subscribers/UCxUnOM-ZbZKmyR_Q5vAUSTA"></a>
-  <a href="https://discord.gg/FsNQXFj9"><img alt="Discord" src="https://img.shields.io/discord/1244486619914834110"></a>
+  <a href="https://discord.gg/RqwcD3vG3k"><img alt="Discord" src="https://img.shields.io/discord/1244486619914834110"></a>
 </p>
 
 <p align="center">
@@ -223,7 +222,7 @@ Please see our [contribution guidelines](./CONTRIBUTING.md) for how to contribut
 
 Also, we’re excited to announce that TaskingAI now has an official Discord community! 🎊
 
-[Join our Discord server](https://discord.gg/BNCSWXmV) to:
+[Join our Discord server](https://discord.gg/RqwcD3vG3k) to:
 
     •	💬 Engage in discussions about TaskingAI, share ideas, and provide feedback.
     •	📚 Get support, tips, and best practices from other users and our team.
