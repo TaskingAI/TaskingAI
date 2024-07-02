@@ -1,0 +1,12 @@
+{
+    "apiKeyName": "API Key Name",
+    "apiKeyNameDeletePlaceholder": "Enter name to confirm",
+    "apiKeyNameRequired": "Please input API Key Name.",
+    "createApiKey": "Create API Key",
+    "deleteApiKey": "Delete API Key",
+    "deleteItem": "Are you sure you want to delete <0>{{deleteValue}}</0>?",
+    "deleteDesc": "Please be aware that once the API Key is deleted,it will no longer have the access to your project.",
+    "editApiKey": "Edit API Key",
+    "newApiKey": "New API Key",
+    "requiredApiKeyName": "Please input API Key Name."
+}

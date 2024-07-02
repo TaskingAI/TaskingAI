@@ -28,7 +28,7 @@ const DeleteModal = (props: deleteProjectType) => {
                 {t('cancel')}
             </Button>
             <Button key="submit"  onClick={handleOk} loading={deleteLoading} className={`${buttonType} ${styles.button}`}>
-                {buttonType === 'delete-button' ? t('delete') : 'Confirm'}
+                {buttonType === 'delete-button' ? t('delete') : t('confirm')}
             </Button>
         </div>
     );

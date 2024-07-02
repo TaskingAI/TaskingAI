@@ -1,0 +1,15 @@
+{
+    "billingAmount": "Amount",
+    "billingDate": "Billing date",
+    "billingInvoiceID": "Invoice ID",
+    "bundleColumnName": "Bundle name",
+    "endpoint": "Endpoint",
+    "joinedAt": "Joined at",
+    "key": "Key",
+    "method": "Method",
+    "promptTemp": "Prompt template",
+    "role": "Role",
+    "untitledAssistant": "Untitled Assistant",
+    "untitledCollection": "Untitled Collection",
+    "untitledModel": "Untitled Model"
+}

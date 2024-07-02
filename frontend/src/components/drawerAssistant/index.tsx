@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import PluginComponent from '../pluginComponent/index'
 const DrawerAssistant = forwardRef((props: any, ref: any) => {
-    const { t } = useTranslation()
+    const { t } = useTranslation(['components/drawerAssistant/index'])
     const { handleAddPromptInput, handleNewBundle,modelName,drawerTitle,openDrawer,selectedPluginGroup,selectedActionsSelected, handleNewActionModal, topk, maxTokens, bundilesList, handleMaxToken, handleToks, handleNewCollection, selectedCollectionList, collectionHasMore, actionHasMore, retrievalList, actionList, handleMemoryChange1, handleRetrievalConfigChange1, retrievalConfig, inputValue1, memoryValue, handleInputValueOne, handleInputValueTwo, inputValue2, selectedActionsRows, drawerName, systemPromptTemplate, handleDeletePromptInput, handleInputPromptChange, handleSelectModelId, handleChangeName, drawerDesc, handleDescriptionChange } = props
     const [collectionModal, setCollectionModal] = useState(false)
     const [actionModal, setActionModal] = useState(false)
@@ -43,13 +43,13 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
         setSelectedPluginList(selectedPluginGroup)
     }, [selectedPluginGroup])
     useEffect(() => {
-        if(drawerTitle === 'Create Assistant' && openDrawer) {
+        if(drawerTitle === t('createAssistant') && openDrawer) {
             setSelectedPluginList([]) 
             setActionSelectedList([])
             setRetrievalSelectedList([])
             setPluginActionList([])
             setRetrievalFormList([''])
-        } else if(drawerTitle === 'Edit Assistant' && openDrawer) {
+        } else if(drawerTitle === t('editAssistant') && openDrawer) {
             const retrievalFormList1 = selectedCollectionList.map((item: any) => ({ collection_id: item.collection_id,name: item.name })).length > 0 ? selectedCollectionList.map((item: any) => ({ collection_id: item.collection_id,name: item.name })) : ['']
             setRetrievalSelectedList(retrievalFormList1)
             setRetrievalFormList(retrievalFormList1)
@@ -73,7 +73,7 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
     const handleSelectedItem = (value: any) => {
         const data = value
         if(!data.name) {
-          data.name = 'Untitled Collection'
+          data.name = t('untitledCollection')
         }
         setRetrievalSelectedList((prev) => {
             const newRetrievalSelectedList = [...prev, data]
@@ -272,28 +272,28 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
         <div className='drawer-assistant'>
             <div className='left-assistant'>
                 <div className='basic-information'>
-                    Basic Information
+                    {t('basicInformation')}
                 </div>
                 <div className='name-prompt'>
-                    {t('projectModelColumnName')}
+                    {t('name')}
                 </div>
-                <Input value={drawerName} onChange={handleChangeNames} className='input' placeholder='Enter name'></Input>
+                <Input value={drawerName} onChange={handleChangeNames} className='input' placeholder={t('enterName')}></Input>
                 <div className='label'>
-                    {t('projectAssistantsColumnDescription')}
+                    {t('description')}
                 </div>
                 <div className='label-desc'>
-                The description should serve as an internal note to clarify the purpose of the assistant; it will not be used as a system prompt.
+                    {t('descriptionDesc')}
                 </div>
-                <Input.TextArea placeholder='Enter description' className='input' autoSize={{ minRows: 3, maxRows: 10 }} showCount
+                <Input.TextArea placeholder={t('enterDescription')} className='input' autoSize={{ minRows: 3, maxRows: 10 }} showCount
                     maxLength={200} value={drawerDesc} onChange={(e) => handleDescriptionChanges(e as any)} />
                 <div className='hr'></div>
                 <div className='label'>
                     <span className='span'>*</span>
-                    <span>{t('projectAssistantsColumnLangModel')}</span>
+                    <span>{t('langModel')}</span>
                 </div>
-                <div className='label-desc'>{t('projectAssistantsLanguageModelDesc')}</div>
+                <div className='label-desc'>{t('langModelSelect')}</div>
                 <Select
-                    placeholder={t('projectSelectModel')}
+                    placeholder={t('selectModel')}
                     open={false}
                     mode="multiple"
                     suffixIcon={<RightOutlined />}
@@ -304,11 +304,11 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                 >
                 </Select>
                 <div className='label'>
-                    <span>{t('projectSystemPromptTemplate')}</span>
+                    <span>{t('systemPromptTemplate')}</span>
                 </div>
-                <div className='label-desc'>A system prompt is the initial instruction that guides assistant’s response.  Prompt variables can be defined using double curly brackets, like {"{{language}}"}. Those variables are then populated during the generation process. 
+                <div className='label-desc'>{t('systemPromptTemplateDescPart1')}{"{{language}}"}{t('systemPromptTemplateDescPart2')} 
                 &nbsp;<a className='referToTheDocumentationFor href' href="https://docs.tasking.ai/docs/guide/product_modules/assistant/components/system-prompt-template" target="_blank">
-                        <span className='referToThe'>Learn more</span>
+                        <span className='referToThe'>{t('learnMore')}</span>
                     </a>
                 </div>
                 {systemPromptTemplate?.map((value: any, index: number) => (
@@ -317,28 +317,28 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                             autoSize={{ minRows: 1, maxRows: 10 }}
                             value={value}
                             className='inputs'
-                            placeholder={t('projectSystemPromptPlaceholder')}
+                            placeholder={t('systemPromptPlaceholder')}
                             onChange={(e) => handleInputPromptChanges(index, e.target.value)}
                         />
                         <DeleteInputIcon onClick={() => handleDeletePromptInputs(index)} style={{ marginTop: '8px' }} /></div>
                 ))}
                 <div className='add-bottom'>
-                    <Button onClick={handleAddPrompt} disabled={systemPromptTemplate.length === 10} icon={<PlusOutlined />}>Add</Button>
+                    <Button onClick={handleAddPrompt} disabled={systemPromptTemplate.length === 10} icon={<PlusOutlined />}>{t('add')}</Button>
                     <span>{systemPromptTemplate.length}/10</span>
                 </div>
                 <div className='hr'></div>
                 <div className='label'>
                     <span className='span'>*</span>
-                    <span>{t('projectAssistantsColumnMemory')}</span>
+                    <span>{t('memory')}</span>
 
                 </div>
-                <div className='label-desc'>The context memory allows the assistant to remember past conversations, thereby enabling stateful invocations. 
+                <div className='label-desc'>{t('contextMemoryDescription')} 
                 &nbsp;<a className='referToTheDocumentationFor href'   href="https://docs.tasking.ai/docs/guide/product_modules/assistant/components/memory" target="_blank">
-                         <span className='referToThe'>Learn more</span>
+                         <span className='referToThe'>{t('learnMore')}</span>
                     </a>
                 </div>
                 <div className='memory-type'>
-                    <Button className='button-type' >Type</Button>
+                    <Button className='button-type' >{t('type')}</Button>
                     <Select
                         onChange={handleMemoryChange}
                         value={memoryValue}
@@ -347,15 +347,15 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                         options={[
                             {
                                 value: 'message_window',
-                                label: 'Message Window',
+                                label: t('messageWindow'),
                             },
                             {
                                 value: 'zero',
-                                label: 'Zero',
+                                label: t('zero'),
                             },
                             {
                                 value: 'naive',
-                                label: 'Naive',
+                                label: t('naive'),
                             }
 
                         ]}>
@@ -364,19 +364,19 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                 {
                     memoryValue === 'message_window' && <div className='input-double'>
                         <div className='input-children'>
-                            <Button className='button-type' >Max messages</Button>
+                            <Button className='button-type' >{t('maxMessages')}</Button>
                             <InputNumber
                                 parser={(value: any) => (isNaN(value) ? 1 : parseInt(value, 10))}
                                 min={1}
                                 max={128}
-                                placeholder='From 1 to 128'
+                                placeholder={t('messagesPlaceholder')}
                                 value={inputValue1}
                                 onChange={(value) => handleInputValue1(value as number)}
                             />
                         </div>
                         <div className='input-children1'>
-                            <Button className='button-type' >Max tokens</Button>
-                            <InputNumber parser={(value: any) => (isNaN(value) ? 1 : parseInt(value, 10))} min={1} max={8192} placeholder='From 1 to 8192' value={inputValue2} onChange={(e) => handleInputValue2(e as number)}></InputNumber>
+                            <Button className='button-type' >{t('maxTokens')}</Button>
+                            <InputNumber parser={(value: any) => (isNaN(value) ? 1 : parseInt(value, 10))} min={1} max={8192} placeholder={t('maxTokensPlaceholder')} value={inputValue2} onChange={(e) => handleInputValue2(e as number)}></InputNumber>
                         </div>
 
                     </div>
@@ -384,33 +384,33 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
             </div>
             <div className='right-assistant'>
                 <div className='basic-information'>
-                    Integrations
+                    {t('integrations')}
                 </div>
                 <div className='desc-retrieval'>
-                    {t('projectRetrievalTitle')}
+                    {t('retrieval')}
                 </div>
                 <div className='label-desc'>
-                    Incorporate retrieval sources into your assistant to facilitate effective retrieval-augmented generation. <a href="https://docs.tasking.ai/docs/guide/product_modules/retrieval/overview" target='_blank'  className='referToTheDocumentationFor'>Learn more</a>
+                    {t('retrievalDescription')} <a href="https://docs.tasking.ai/docs/guide/product_modules/retrieval/overview" target='_blank'  className='referToTheDocumentationFor'>{t('learnMore')}</a>
                 </div>
                 {retrievalFormList.map((item: any, index: number) => (
                     <div className='retrieval-list' key={item.collection_id}>
                         <Select options={[
-                            { value: 'Collection', label: 'Collection' }
+                            { value: 'Collection', label: t('collection') }
                         ]} defaultValue='Collection'   className='retrieval-type'></Select>
-                        <Select className='input' mode="multiple" placeholder={!item.name && t('projectAssistantRetrievalPlaceHolder')} style={{caretColor:'transparent'}} onClick={() => handleCollectionModal(index, item.collection_id)} suffixIcon={<RightOutlined />} open={false} value={item.name ? item.name : undefined} removeIcon={null} />
+                        <Select className='input' mode="multiple" placeholder={!item.name && t('retrievalPlaceHolder')} style={{caretColor:'transparent'}} onClick={() => handleCollectionModal(index, item.collection_id)} suffixIcon={<RightOutlined />} open={false} value={item.name ? item.name : undefined} removeIcon={null} />
                         <div> <DeleteInputIcon onClick={() => handleDeleteRetrieval(item.collection_id,index)} style={{ marginTop: '8px' }} /></div>
                     </div>
                 ))}
                 <div className={`add-bottom ${retrievalFormList.length === 10 && 'disabled-button'}`} >
-                    <Button onClick={handleAddRetrieval} disabled={retrievalFormList.length === 10} icon={<PlusOutlined />}>Add</Button>
+                    <Button onClick={handleAddRetrieval} disabled={retrievalFormList.length === 10} icon={<PlusOutlined />}>{t('add')}</Button>
                     <span>{retrievalFormList.length}/10</span>
                 </div>
                 {isShowRetrievalConfig && <>
                     <div className='desc-retrieval' style={{ marginBottom: '12px' }}>
-                        Retrieval Configs
+                        {t('retrievalConfigs')}
                     </div>
                     <div className='memory-type'>
-                        <Button className='button-type' >Method</Button>
+                        <Button className='button-type' >{t('method')}</Button>
                         <Select
                             onChange={handleRetrievalConfigChange}
                             value={retrievalConfig}
@@ -418,15 +418,15 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                             options={[
                                 {
                                     value: 'function_call',
-                                    label: 'Function Call',
+                                    label: t('functionCall'),
                                 },
                                 {
                                     value: 'user_message',
-                                    label: 'User Message',
+                                    label: t('userMessage'),
                                 },
                                 {
                                     value: 'memory',
-                                    label: 'Memory',
+                                    label: t('memory'),
                                 }
                             ]}>
                         </Select>
@@ -438,14 +438,14 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                                 parser={(value: any) => (isNaN(value) ? 1 : parseInt(value, 10))}
                                 min={1}
                                 max={128}
-                                placeholder='From 1 to 20'
+                                placeholder={t('topKPlaceholder')}
                                 value={topk}
                                 onChange={(value) => handleTopk(value as number)}
                             />
                         </div>
                         <div className='input-children1'>
-                            <Button className='button-type' >Max tokens</Button>
-                            <InputNumber parser={(value: any) => (isNaN(value) ? 1 : parseInt(value, 10))} min={1} max={8192} placeholder='From 1 to 8192' value={maxTokens} onChange={(e) => handleMaxTokens(e as number)}></InputNumber>
+                            <Button className='button-type' >{t('maxTokens')}</Button>
+                            <InputNumber parser={(value: any) => (isNaN(value) ? 1 : parseInt(value, 10))} min={1} max={8192} placeholder={t('maxTokensPlaceholder')} value={maxTokens} onChange={(e) => handleMaxTokens(e as number)}></InputNumber>
                         </div>
 
                     </div>
@@ -453,20 +453,20 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
 
                 <div className='hr'></div>
                 <div className='desc-retrieval'>
-                    Tools
+                    {t('tools')}
                 </div>
                 <div className='label-desc'>
-                    Integrate tools into your assistant to extend its capabilities to address different user needs. <a href="https://docs.tasking.ai/docs/guide/product_modules/tool/overview" target='_blank' className='referToTheDocumentationFor'> Learn more</a>
+                    {t('toolsDesc')} <a href="https://docs.tasking.ai/docs/guide/product_modules/tool/overview" target='_blank' className='referToTheDocumentationFor'>{t('learnMore')}</a>
                 </div>
                 {pluginActionList.map((item: any, index: number) => {
                     return (
                         <div className='retrieval-list'>
                             <Select options={[
-                                { value: 'plugin', label: 'Plugin' },
-                                { value: 'action', label: 'Action' }
+                                { value: 'plugin', label: t('plugin') },
+                                { value: 'action', label: t('action') }
                             ]} defaultValue='plugin' className='retrieval-type' onChange={(value) => handleToolsChange(value, index, item)} value={item.type}></Select>
                             <Select
-                                placeholder={item.type === 'plugin' ? 'Select a plugin' : 'Select a action'}
+                                placeholder={item.type === 'plugin' ? t('selectPlugin') : t('selectAction')}
                                 open={false}
                                 removeIcon={null}
                                 mode="multiple"
@@ -481,12 +481,12 @@ const DrawerAssistant = forwardRef((props: any, ref: any) => {
                     )
                 })}
                 <div style={{ marginBottom: '24px' }} className={`add-bottom ${pluginActionList.length === 10 && 'disabled-button'}`} >
-                    <Button onClick={handleAddTool} disabled={pluginActionList.length === 10} icon={<PlusOutlined />}>Add</Button>
+                    <Button onClick={handleAddTool} disabled={pluginActionList.length === 10} icon={<PlusOutlined />}>{t('add')}</Button>
                     <span>{pluginActionList.length}/10</span>
                 </div>
             </div>
-            {collectionModal && <ModalSelect collectionSelectedId={collectionSelectedId} id='collection_id' handleNewModal={handleNewCollection1} title='Collection' nameTitle='Select Collection' newTitle='New collection' hasMore={collectionHasMore} handleSelectedItem={handleSelectedItem} retrievalModal={collectionModal} retrievalSelectedList={retrievalSelectedList} retrievalList={retrievalList} handleClose={handleCancelCollectionModal}></ModalSelect>}
-            {actionModal && <ModalSelect id='action_id' collectionSelectedId={actionSelectedId} nameTitle='Select Action' handleNewModal={handleNewAction} title='Action' newTitle='New action' hasMore={actionHasMore} handleSelectedItem={handleActionItem} retrievalModal={actionModal} retrievalSelectedList={actionSelectedList} retrievalList={actionList} handleClose={handleCancelActionModal}></ModalSelect>}
+            {collectionModal && <ModalSelect collectionSelectedId={collectionSelectedId} id='collection_id' handleNewModal={handleNewCollection1} title={t('collection')} nameTitle={t('selectCollection')} newTitle={t('newCollection')} hasMore={collectionHasMore} handleSelectedItem={handleSelectedItem} retrievalModal={collectionModal} retrievalSelectedList={retrievalSelectedList} retrievalList={retrievalList} handleClose={handleCancelCollectionModal}></ModalSelect>}
+            {actionModal && <ModalSelect id='action_id' collectionSelectedId={actionSelectedId} nameTitle={t('selectActionTitle')} handleNewModal={handleNewAction} title={t('action')} newTitle={t('newAction')} hasMore={actionHasMore} handleSelectedItem={handleActionItem} retrievalModal={actionModal} retrievalSelectedList={actionSelectedList} retrievalList={actionList} handleClose={handleCancelActionModal}></ModalSelect>}
             {pluginModal && <PluginComponent bundleSelectedItem={bundleSelectedItem} pluginSelectedId={pluginSelectedId}  selectedData={selectedPluginList} handleSelectedItem={handlePluginConfirm} open={pluginModal} handleCreateBundle={handleCreateBundle} bundleList={bundilesList} handleClose={handleClosePluginModal}></PluginComponent>}
         </div >
     );

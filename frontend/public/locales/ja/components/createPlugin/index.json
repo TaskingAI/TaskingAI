@@ -1,0 +1,9 @@
+{
+    "bundleDesc": "条件を似合うするのバンドルを選択",
+    "bundleSelection": "バンドルを選択",
+    "createPlugin": "新規プラグイン",
+    "credentialsDesc": "保存された認証はAES-256で暗号化している、そして送信する時にTLS 1.2を使います。",
+    "enterKey": "{{key}}を入力する",
+    "inputParameters": "インプットのパラメーター",
+    "pleaseInputKey": "{{key}}を入力してください。"
+}
