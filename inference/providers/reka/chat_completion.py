@@ -104,6 +104,10 @@ class RekaChatCompletionModel(BaseChatCompletionModel):
             return None
         return response_data
 
+    def extract_usage_data(self, response_data: Dict, **kwargs) -> Tuple[Optional[int], Optional[int]]:
+        usage = response_data.get("metadata") if response_data else {}
+        return usage.get("input_tokens", None), usage.get("generated_tokens", None)
+
     def extract_text_content(self, data: Dict, **kwargs) -> Optional[str]:
         message_data = data.get("text")
         if message_data:
@@ -127,6 +131,15 @@ class RekaChatCompletionModel(BaseChatCompletionModel):
         if not sse_data:
             return None
         return sse_data
+
+    def stream_extract_usage_data(
+        self, sse_data: Dict, input_tokens: int, output_tokens: int, **kwargs
+    ) -> Tuple[int, int]:
+        usage = sse_data.get("metadata") if sse_data else None
+        if usage is not None:
+            input_tokens = max(input_tokens or 0, usage.get("input_tokens", 0))
+            output_tokens = max(output_tokens or 0, usage.get("generated_tokens", 0))
+        return input_tokens, output_tokens
 
     def stream_extract_chunk(
         self, index: int, chunk_data: Dict, text_content: str, **kwargs
