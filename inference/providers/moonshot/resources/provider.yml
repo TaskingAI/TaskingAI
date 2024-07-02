@@ -3,6 +3,9 @@ name: "i18n:moonshot_name"
 description: "i18n:moonshot_description"
 updated_timestamp: 1711074909
 
+return_token_usage: true
+return_stream_token_usage: true
+
 credentials_schema:
   type: object
   properties:
