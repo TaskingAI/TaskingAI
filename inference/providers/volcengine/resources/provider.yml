@@ -3,6 +3,9 @@ name: "i18n:volcengine_name"
 description: "i18n:volcengine_description"
 updated_timestamp: 1716342841
 
+return_token_usage: true
+return_stream_token_usage: false
+
 credentials_schema:
   type: object
   properties:
