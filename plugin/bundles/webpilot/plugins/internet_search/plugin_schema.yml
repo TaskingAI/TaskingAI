@@ -1,0 +1,26 @@
+description: i18n:internet_search_description
+id: internet_search
+input_schema:
+  content:
+    description: i18n:internet_search_input_content_description
+    name: i18n:internet_search_input_content_name
+    required: true
+    type: string
+  model:
+    description: i18n:internet_search_input_model_description
+    name: i18n:internet_search_input_model_name
+    required: false
+    type: string
+name: i18n:internet_search_name
+output_schema:
+  results:
+    description: i18n:internet_search_output_results_description
+    name: i18n:internet_search_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      content: Who is the founder of Nintendo? https://en.wikipedia.org/wiki/Nintendo
+      model: wp-watt-3.52-16k
+  mode: schema
