@@ -1,0 +1,26 @@
+description: i18n:internet_search_4_02_16k_description
+id: internet_search_4_02_16k
+input_schema:
+  content:
+    description: i18n:internet_search_4_02_16k_input_content_description
+    name: i18n:internet_search_4_02_16k_input_content_name
+    required: true
+    type: string
+  url:
+    description: i18n:internet_search_4_02_16k_input_url_description
+    name: i18n:internet_search_4_02_16k_input_url_name
+    required: false
+    type: string
+name: i18n:internet_search_4_02_16k_name
+output_schema:
+  results:
+    description: i18n:internet_search_4_02_16k_output_results_description
+    name: i18n:internet_search_4_02_16k_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      content: Who is the founder of Nintendo?
+      url: https://en.wikipedia.org/wiki/Nintendo
+  mode: schema
