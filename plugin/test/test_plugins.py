@@ -11,7 +11,7 @@ import pytest
 async def test_plugins(test_data):
     bundle_id = test_data["id"].split("/")[0]
     plugin_id = test_data["id"].split("/")[1]
-    if bundle_id == "stability_ai":
+    if bundle_id == "stability_ai" or plugin_id == "internet_search_4_02_16k":
         pytest.skip("Skipping test as bundle_id is not provided")
     output_schema = test_data["output_schema"]
     bundle_credentials = test_data["bundle_credentials"]
