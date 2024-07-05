@@ -12,7 +12,7 @@ class GetFlightInformation(PluginHandler):
         departure_id: str = plugin_input.input_params.get("departure_id")
         arrival_id: str = plugin_input.input_params.get("arrival_id")
         outbound_date: str = plugin_input.input_params.get("outbound_date")
-        type: int = plugin_input.input_params.get("type")
+        type: int = plugin_input.input_params.get("type", 2)
         return_date: str = plugin_input.input_params.get("return_date")
         max_duration: str = plugin_input.input_params.get("max_duration")
         max_price: str = plugin_input.input_params.get("max_price")
@@ -22,7 +22,7 @@ class GetFlightInformation(PluginHandler):
             base_url += f"&max_duration={max_duration}"
         if max_price:
             base_url += f"&max_price={max_price}"
-        if type == 1:
+        if type == 1 and return_date:
             base_url += f"&return_date={return_date}"
         async with ClientSession() as session:
             async with session.get(base_url, proxy=CONFIG.PROXY) as response:
