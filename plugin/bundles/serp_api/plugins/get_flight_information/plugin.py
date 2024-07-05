@@ -17,7 +17,7 @@ class GetFlightInformation(PluginHandler):
         max_duration: str = plugin_input.input_params.get("max_duration")
         max_price: str = plugin_input.input_params.get("max_price")
 
-        base_url = f"https://serpapi.com/search?engine=google_flights&departure_id= {departure_id}&arrival_id={arrival_id}&outbound_date={outbound_date}&api_key={SERP_API_API_KEY}&type={type}"
+        base_url = f"https://serpapi.com/search?engine=google_flights&departure_id={departure_id}&arrival_id={arrival_id}&outbound_date={outbound_date}&api_key={SERP_API_API_KEY}&type={type}"
         if max_duration:
             base_url += f"&max_duration={max_duration}"
         if max_price:
