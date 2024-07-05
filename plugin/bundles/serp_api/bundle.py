@@ -12,7 +12,7 @@ class SerpApi(BundleHandler):
         outbound_date: str = "2024-07-30"
         type: int = 2
 
-        base_url = f"https://serpapi.com/search?engine=google_flights&departure_id= {departure_id}&arrival_id={arrival_id}&outbound_date={outbound_date}&api_key={SERP_API_API_KEY}&type={type}"
+        base_url = f"https://serpapi.com/search?engine=google_flights&departure_id={departure_id}&arrival_id={arrival_id}&outbound_date={outbound_date}&api_key={SERP_API_API_KEY}&type={type}"
         async with ClientSession() as session:
             async with session.get(base_url, proxy=CONFIG.PROXY) as response:
                 if response.status == 200:
