@@ -1,0 +1,11 @@
+credentials_schema:
+  FIRE_CRAWL_API_KEY:
+    description: i18n:credential_fire_crawl_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: fire_crawl
+name: i18n:bundle_name
+provider: FireCrawl

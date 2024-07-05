@@ -1,0 +1,32 @@
+description: i18n:scrape_web_description
+id: scrape_web
+input_schema:
+  only_main_content:
+    description: i18n:scrape_web_input_only_main_content_description
+    name: i18n:scrape_web_input_only_main_content_name
+    required: false
+    type: boolean
+  screenshot:
+    description: i18n:scrape_web_input_screenshot_description
+    name: i18n:scrape_web_input_screenshot_name
+    required: false
+    type: boolean
+  url:
+    description: i18n:scrape_web_input_url_description
+    name: i18n:scrape_web_input_url_name
+    required: true
+    type: string
+name: i18n:scrape_web_name
+output_schema:
+  results:
+    description: i18n:scrape_web_output_results_description
+    name: i18n:scrape_web_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      only_main_content: true
+      screenshot: true
+      url: https://tasking.ai
+  mode: schema
