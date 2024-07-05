@@ -1,0 +1,50 @@
+description: i18n:discover_movie_description
+id: discover_movie
+input_schema:
+  language:
+    description: i18n:discover_movie_input_language_description
+    name: i18n:discover_movie_input_language_name
+    required: false
+    type: string
+  page:
+    description: i18n:discover_movie_input_page_description
+    name: i18n:discover_movie_input_page_name
+    required: false
+    type: integer
+  primary_release_year:
+    description: i18n:discover_movie_input_primary_release_year_description
+    name: i18n:discover_movie_input_primary_release_year_name
+    required: false
+    type: integer
+  sort_by:
+    description: i18n:discover_movie_input_sort_by_description
+    name: i18n:discover_movie_input_sort_by_name
+    required: false
+    type: string
+  with_origin_country:
+    description: i18n:discover_movie_input_with_origin_country_description
+    name: i18n:discover_movie_input_with_origin_country_name
+    required: false
+    type: string
+  with_original_language:
+    description: i18n:discover_movie_input_with_original_language_description
+    name: i18n:discover_movie_input_with_original_language_name
+    required: false
+    type: string
+name: i18n:discover_movie_name
+output_schema:
+  results:
+    description: i18n:discover_movie_output_results_description
+    name: i18n:discover_movie_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      language: cn
+      page: 2
+      primary_release_year: 2020
+      sort_by: primary_release_date.asc
+      with_origin_country: us
+      with_original_language: en
+  mode: schema
