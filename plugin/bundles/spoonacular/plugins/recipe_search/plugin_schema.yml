@@ -1,0 +1,67 @@
+description: i18n:recipe_search_description
+id: recipe_search
+input_schema:
+  cuisine:
+    description: i18n:recipe_search_input_cuisine_description
+    name: i18n:recipe_search_input_cuisine_name
+    required: false
+    type: string
+  diet:
+    description: i18n:recipe_search_input_diet_description
+    name: i18n:recipe_search_input_diet_name
+    required: false
+    type: string
+  excludeIngredients:
+    description: i18n:recipe_search_input_excludeingredients_description
+    name: i18n:recipe_search_input_excludeingredients_name
+    required: false
+    type: string
+  includeIngredients:
+    description: i18n:recipe_search_input_includeingredients_description
+    name: i18n:recipe_search_input_includeingredients_name
+    required: false
+    type: string
+  max_calories:
+    description: i18n:recipe_search_input_max_calories_description
+    name: i18n:recipe_search_input_max_calories_name
+    required: false
+    type: integer
+  max_protein:
+    description: i18n:recipe_search_input_max_protein_description
+    name: i18n:recipe_search_input_max_protein_name
+    required: false
+    type: integer
+  min_calories:
+    description: i18n:recipe_search_input_min_calories_description
+    name: i18n:recipe_search_input_min_calories_name
+    required: false
+    type: integer
+  min_protein:
+    description: i18n:recipe_search_input_min_protein_description
+    name: i18n:recipe_search_input_min_protein_name
+    required: false
+    type: integer
+  number:
+    description: i18n:recipe_search_input_number_description
+    name: i18n:recipe_search_input_number_name
+    required: false
+    type: integer
+  query:
+    description: i18n:recipe_search_input_query_description
+    name: i18n:recipe_search_input_query_name
+    required: true
+    type: string
+name: i18n:recipe_search_name
+output_schema:
+  results:
+    description: i18n:recipe_search_output_results_description
+    name: i18n:recipe_search_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      max_calories: 1000
+      number: 1
+      query: pasta
+  mode: schema
