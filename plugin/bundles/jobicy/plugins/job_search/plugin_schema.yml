@@ -1,0 +1,37 @@
+description: i18n:job_search_description
+id: job_search
+input_schema:
+  count:
+    description: i18n:job_search_input_count_description
+    name: i18n:job_search_input_count_name
+    required: false
+    type: integer
+  geo:
+    description: i18n:job_search_input_geo_description
+    name: i18n:job_search_input_geo_name
+    required: false
+    type: string
+  industry:
+    description: i18n:job_search_input_industry_description
+    name: i18n:job_search_input_industry_name
+    required: false
+    type: string
+  tag:
+    description: i18n:job_search_input_tag_description
+    name: i18n:job_search_input_tag_name
+    required: false
+    type: string
+name: i18n:job_search_name
+output_schema:
+  results:
+    description: i18n:job_search_output_results_description
+    name: i18n:job_search_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      count: 2
+      geo: canada
+      tag: python
+  mode: schema
