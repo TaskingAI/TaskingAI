@@ -1,0 +1,30 @@
+description: i18n:get_jobs_information_description
+id: get_jobs_information
+input_schema:
+  gl:
+    description: i18n:get_jobs_information_input_gl_description
+    name: i18n:get_jobs_information_input_gl_name
+    required: false
+    type: string
+  hl:
+    description: i18n:get_jobs_information_input_hl_description
+    name: i18n:get_jobs_information_input_hl_name
+    required: false
+    type: string
+  q:
+    description: i18n:get_jobs_information_input_q_description
+    name: i18n:get_jobs_information_input_q_name
+    required: true
+    type: string
+name: i18n:get_jobs_information_name
+output_schema:
+  result:
+    description: i18n:get_jobs_information_output_result_description
+    name: i18n:get_jobs_information_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      q: barista new york
+  mode: schema
