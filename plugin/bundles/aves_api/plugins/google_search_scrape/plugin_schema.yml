@@ -1,0 +1,61 @@
+description: i18n:google_search_scrape_description
+id: google_search_scrape
+input_schema:
+  device:
+    description: i18n:google_search_scrape_input_device_description
+    name: i18n:google_search_scrape_input_device_name
+    required: false
+    type: string
+  gl:
+    description: i18n:google_search_scrape_input_gl_description
+    name: i18n:google_search_scrape_input_gl_name
+    required: false
+    type: string
+  google_domain:
+    description: i18n:google_search_scrape_input_google_domain_description
+    name: i18n:google_search_scrape_input_google_domain_name
+    required: false
+    type: string
+  hl:
+    description: i18n:google_search_scrape_input_hl_description
+    name: i18n:google_search_scrape_input_hl_name
+    required: false
+    type: string
+  location:
+    description: i18n:google_search_scrape_input_location_description
+    name: i18n:google_search_scrape_input_location_name
+    required: false
+    type: string
+  num:
+    description: i18n:google_search_scrape_input_num_description
+    name: i18n:google_search_scrape_input_num_name
+    required: false
+    type: integer
+  page:
+    description: i18n:google_search_scrape_input_page_description
+    name: i18n:google_search_scrape_input_page_name
+    required: false
+    type: integer
+  query:
+    description: i18n:google_search_scrape_input_query_description
+    name: i18n:google_search_scrape_input_query_name
+    required: true
+    type: string
+  type:
+    description: i18n:google_search_scrape_input_type_description
+    name: i18n:google_search_scrape_input_type_name
+    required: true
+    type: string
+name: i18n:google_search_scrape_name
+output_schema:
+  results:
+    description: i18n:google_search_scrape_output_results_description
+    name: i18n:google_search_scrape_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      query: UIUC
+      type: web
+  mode: schema
