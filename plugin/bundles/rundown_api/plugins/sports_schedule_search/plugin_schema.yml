@@ -1,0 +1,32 @@
+description: i18n:sports_schedule_search_description
+id: sports_schedule_search
+input_schema:
+  from_date:
+    description: i18n:sports_schedule_search_input_from_date_description
+    name: i18n:sports_schedule_search_input_from_date_name
+    required: false
+    type: string
+  limit:
+    description: i18n:sports_schedule_search_input_limit_description
+    name: i18n:sports_schedule_search_input_limit_name
+    required: false
+    type: integer
+  sport:
+    description: i18n:sports_schedule_search_input_sport_description
+    name: i18n:sports_schedule_search_input_sport_name
+    required: true
+    type: string
+name: i18n:sports_schedule_search_name
+output_schema:
+  results:
+    description: i18n:sports_schedule_search_output_results_description
+    name: i18n:sports_schedule_search_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      from_date: '2024-01-01'
+      limit: 10
+      sport: NBA
+  mode: schema
