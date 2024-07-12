@@ -162,6 +162,10 @@ class AnthropicChatCompletionModel(BaseChatCompletionModel):
             return None
         return response_data
 
+    def extract_usage_data(self, response_data: Dict, **kwargs) -> Tuple[Optional[int], Optional[int]]:
+        usage = response_data.get("usage") if response_data else None
+        return usage.get("input_tokens", None), usage.get("output_tokens", None)
+
     def extract_text_content(self, data: Dict, **kwargs) -> Optional[str]:
         message_data = data.get("content")
         if message_data and message_data[0].get("text"):
@@ -200,9 +204,25 @@ class AnthropicChatCompletionModel(BaseChatCompletionModel):
             raise_provider_api_error(sse_data["error"])
 
     def stream_extract_chunk_data(self, sse_data: Dict, **kwargs) -> Optional[Dict]:
+        if sse_data.get("content_block", None):
+            return sse_data
         if sse_data.get("delta") is None:
             return None
         return sse_data
+
+    def stream_extract_usage_data(
+        self, sse_data: Dict, input_tokens: int, output_tokens: int, **kwargs
+    ) -> Tuple[int, int]:
+        if sse_data and sse_data.get("usage"):
+            usage = sse_data.get("usage")
+            input_tokens = max(input_tokens or 0, usage.get("input_tokens", 0))
+            output_tokens = max(output_tokens or 0, usage.get("output_tokens", 0))
+        else:
+            sse_core_data = sse_data.get("message")
+            usage = sse_core_data.get("usage") if sse_core_data else {}
+            input_tokens = max(input_tokens or 0, usage.get("input_tokens", 0))
+            output_tokens = max(output_tokens or 0, usage.get("output_tokens", 0))
+        return input_tokens, output_tokens
 
     def stream_extract_chunk(
         self, index: int, chunk_data: Dict, text_content: str, **kwargs
@@ -230,4 +250,26 @@ class AnthropicChatCompletionModel(BaseChatCompletionModel):
     def stream_handle_function_calls(
         self, chunk_data: Dict, function_calls_content: ChatCompletionFunctionCallsContent, **kwargs
     ) -> Optional[ChatCompletionFunctionCallsContent]:
-        pass
+
+        tool_call_function = chunk_data.get("content_block", {})
+        if tool_call_function and tool_call_function.get("type") == "tool_use":
+            toll_call_index = chunk_data["index"] - 1
+
+            function_calls_content.arguments_strs.append("")
+            function_calls_content.names.append(tool_call_function["name"])
+            function_calls_content.index = toll_call_index
+            return function_calls_content
+
+        delta = chunk_data.get("delta", {})
+        if delta and delta.get("type") == "input_json_delta":
+            toll_call_index = chunk_data["index"] - 1
+            tool_call_function = delta
+
+            if toll_call_index == function_calls_content.index:
+                # append to the current function call argument string
+                function_calls_content.arguments_strs[function_calls_content.index] += tool_call_function[
+                    "partial_json"
+                ]
+            return function_calls_content
+
+        return None
