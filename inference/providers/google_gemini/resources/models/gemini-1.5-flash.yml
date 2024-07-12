@@ -12,9 +12,19 @@ properties:
 
 config_schemas:
   - config_id: temperature
+    type: float
+    default: 0.7
+    min: 0.0
+    max: 2.0
+    step: 0.1
   - config_id: top_p
   - config_id: top_k
   - config_id: max_tokens
+    type: int
+    default: 8192
+    min: 1
+    max: 8192
+    step: 1
   - config_id: stop
 
 

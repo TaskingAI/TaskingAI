@@ -3,7 +3,7 @@ name: "i18n:model_config_top_k_name"
 description: "i18n:model_config_top_k_description"
 schema:
   type: int
-  default: 0
+  default: 1
   min: 0
   max: 10
   step: 1
