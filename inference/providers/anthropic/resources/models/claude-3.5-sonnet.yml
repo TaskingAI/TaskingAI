@@ -9,13 +9,18 @@ properties:
   function_call: true
   streaming: true
   input_token_limit: 200000
-  output_token_limit: 4096
+  output_token_limit: 8192
 
 config_schemas:
   - config_id: temperature
   - config_id: top_p
   - config_id: top_k
   - config_id: max_tokens
+    type: int
+    default: 8192
+    min: 1
+    max: 8192
+    step: 1
   - config_id: stop
   - config_id: response_format
 
