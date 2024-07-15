@@ -16,6 +16,11 @@ config_schemas:
   - config_id: temperature
   - config_id: top_p
   - config_id: max_tokens
+    type: int
+    default: 1024
+    min: 1
+    max: 16192
+    step: 1
   - config_id: stop
 
 pricing:

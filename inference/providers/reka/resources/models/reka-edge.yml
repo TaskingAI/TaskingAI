@@ -19,6 +19,11 @@ config_schemas:
   - config_id: top_p
   - config_id: top_k
   - config_id: max_tokens
+    type: int
+    default: 1024
+    min: 1
+    max:
+    step: 1
   - config_id: stop
 
 pricing:
