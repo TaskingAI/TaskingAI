@@ -94,7 +94,7 @@ class CustomHostChatCompletionModel(BaseChatCompletionModel):
                 f"Provider model id only supports 'openai-function-call' and 'openai-tool-calls', but got {provider_model_id}",
             )
         model_id = credentials.CUSTOM_HOST_MODEL_ID
-        api_url, headers, payload = instance.prepare_request(
+        api_url, headers, payload = await instance.prepare_request(
             True, model_id, messages, credentials, configs, function_call, functions, model_schema
         )
 
