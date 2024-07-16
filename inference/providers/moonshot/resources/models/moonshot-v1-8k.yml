@@ -16,7 +16,24 @@ config_schemas:
   - config_id: temperature
   - config_id: top_p
   - config_id: max_tokens
+    type: int
+    default: 8096
+    min: 1
+    max: 8096
+    step: 1
   - config_id: stop
+  - config_id: presence_penalty
+    type: float
+    default: 0.0
+    min: -2.0
+    max: 2.0
+    step: 0.01
+  - config_id: frequency_penalty
+    type: float
+    default: 0.0
+    min: -2.0
+    max: 2.0
+    step: 0.01
 
 pricing:
   input_token: 12.00

@@ -14,6 +14,12 @@ properties:
 config_schemas:
   - config_id: temperature
   - config_id: top_p
+  - config_id: max_tokens
+    type: int
+    default: 2048
+    min: 2
+    max: 2048
+    step: 1
 
 pricing:
   input_token: 0.008
