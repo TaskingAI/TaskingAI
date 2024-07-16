@@ -433,6 +433,7 @@ class TestChatCompletion:
             or "sensetime" in model_schema_id
             or "leptonai" in model_schema_id
             or "openrouter" in model_schema_id
+            or "anthropic" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
