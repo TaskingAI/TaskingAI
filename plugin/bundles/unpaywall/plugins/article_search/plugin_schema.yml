@@ -1,0 +1,31 @@
+description: i18n:article_search_description
+id: article_search
+input_schema:
+  email:
+    description: i18n:article_search_input_email_description
+    name: i18n:article_search_input_email_name
+    required: true
+    type: string
+  page:
+    description: i18n:article_search_input_page_description
+    name: i18n:article_search_input_page_name
+    required: false
+    type: integer
+  query:
+    description: i18n:article_search_input_query_description
+    name: i18n:article_search_input_query_name
+    required: true
+    type: string
+name: i18n:article_search_name
+output_schema:
+  results:
+    description: i18n:article_search_output_results_description
+    name: i18n:article_search_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      email: taskingai@wanmoai.com
+      query: wave -ocean
+  mode: schema
