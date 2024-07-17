@@ -3,11 +3,11 @@ name: Backend - Build, Test and Release
 on:
   push:
     tags:
-      - "v*.*.*"
-  pull_request:
-    branches: ["master"]
-    paths:
-      - ".github/workflows/release-backend.yml"
+      - "backend-v*.*.*"
+#  pull_request:
+#    branches: ["master"]
+#    paths:
+#      - ".github/workflows/release-backend.yml"
 
 env:
   WORK_DIR: backend
