@@ -3,11 +3,11 @@ name: Inference - Build, Test, Deploy and Release
 on:
   push:
     tags:
-      - "v*.*.*"
-  pull_request:
-    branches: ["master"]
-    paths:
-      - ".github/workflows/release-inference.yml"
+      - "inference-v*.*.*"
+#  pull_request:
+#    branches: ["master"]
+#    paths:
+#      - ".github/workflows/release-inference.yml"
 
 env:
   WORK_DIR: inference

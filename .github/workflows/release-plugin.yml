@@ -3,11 +3,11 @@ name: Plugin - Build, Test, Deploy and Release
 on:
   push:
     tags:
-      - "v*.*.*"
-  pull_request:
-    branches: ["master"]
-    paths:
-      - ".github/workflows/release-plugin.yml"
+      - "plugin-v*.*.*"
+#  pull_request:
+#    branches: ["master"]
+#    paths:
+#      - ".github/workflows/release-plugin.yml"
 
 env:
   WORK_DIR: plugin

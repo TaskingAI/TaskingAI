@@ -3,11 +3,11 @@ name: Frontend - Build and Release
 on:
   push:
     tags:
-      - "v*.*.*"
-  pull_request:
-    branches: ["master"]
-    paths:
-      - ".github/workflows/release-frontend.yml"
+      - "frontend-v*.*.*"
+#  pull_request:
+#    branches: ["master"]
+#    paths:
+#      - ".github/workflows/release-frontend.yml"
 
 env:
   WORK_DIR: frontend
