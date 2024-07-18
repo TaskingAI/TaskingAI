@@ -1,0 +1,26 @@
+model_schema_id: mistralai/codestral-latest
+provider_model_id: codestral-latest
+type: chat_completion
+name: "i18n:codestral_latest_name"
+description: "i18n:codestral_latest_description"
+
+properties:
+  function_call: false
+  streaming: true
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+    type: int
+    default: 32000
+    min: 1
+    max: 32000
+    step: 1
+  - config_id: response_format
+
+pricing:
+ input_token: 1
+ output_token: 3
+ unit: 1000000
+ currency: USD

@@ -1,0 +1,26 @@
+model_schema_id: mistralai/codestral-mamba-latest
+provider_model_id: codestral-mamba-latest
+type: chat_completion
+name: "i18n:codestral_mamba_latest_name"
+description: "i18n:codestral_mamba_latest_description"
+
+properties:
+  function_call: false
+  streaming: true
+
+config_schemas:
+  - config_id: temperature
+  - config_id: top_p
+  - config_id: max_tokens
+    type: int
+    default: 256000
+    min: 1
+    max: 256000
+    step: 1
+  - config_id: response_format
+
+pricing:
+ input_token: 0
+ output_token: 0
+ unit: 1000000
+ currency: USD
