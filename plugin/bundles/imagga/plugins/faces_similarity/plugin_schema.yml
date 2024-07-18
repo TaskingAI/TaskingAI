@@ -1,0 +1,26 @@
+description: i18n:faces_similarity_description
+id: faces_similarity
+input_schema:
+  face_id:
+    description: i18n:faces_similarity_input_face_id_description
+    name: i18n:faces_similarity_input_face_id_name
+    required: true
+    type: string
+  second_face_id:
+    description: i18n:faces_similarity_input_second_face_id_description
+    name: i18n:faces_similarity_input_second_face_id_name
+    required: true
+    type: string
+name: i18n:faces_similarity_name
+output_schema:
+  score:
+    description: i18n:faces_similarity_output_score_description
+    name: i18n:faces_similarity_output_score_name
+    required: true
+    type: number
+test:
+  cases:
+  - input:
+      face_id: 31cafa62153144b426abdf13a9e2091371f0b9a22ec6c4d18d64a3c03cb71694
+      second_face_id: b64f09043ed72e700eb2920f6d9411976714b144c8af32a6601fa2bd96ec4bee
+  mode: schema

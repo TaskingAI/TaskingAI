@@ -1,0 +1,26 @@
+description: i18n:image_crop_description
+id: image_crop
+input_schema:
+  image_url:
+    description: i18n:image_crop_input_image_url_description
+    name: i18n:image_crop_input_image_url_name
+    required: true
+    type: string
+  resolution:
+    description: i18n:image_crop_input_resolution_description
+    name: i18n:image_crop_input_resolution_name
+    required: false
+    type: string
+name: i18n:image_crop_name
+output_schema:
+  result:
+    description: i18n:image_crop_output_result_description
+    name: i18n:image_crop_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      image_url: https://imagga.com/static/images/tagging/wind-farm-538576_640.jpg
+      resolution: 100x100,500x300
+  mode: schema
