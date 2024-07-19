@@ -1,0 +1,34 @@
+description: i18n:webpage_retrieve_description
+id: webpage_retrieve
+input_schema:
+  cmd:
+    description: i18n:webpage_retrieve_input_cmd_description
+    name: i18n:webpage_retrieve_input_cmd_name
+    required: true
+    type: string
+  fields:
+    description: i18n:webpage_retrieve_input_fields_description
+    name: i18n:webpage_retrieve_input_fields_name
+    required: false
+    type: string_array
+  url:
+    description: i18n:webpage_retrieve_input_url_description
+    name: i18n:webpage_retrieve_input_url_name
+    required: false
+    type: string
+name: i18n:webpage_retrieve_name
+output_schema:
+  results:
+    description: i18n:webpage_retrieve_output_results_description
+    name: i18n:webpage_retrieve_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      cmd: Find the top post on Hackernews and get its title and points.
+      fields:
+      - title
+      - points
+      url: https://news.ycombinator.com/
+  mode: schema
