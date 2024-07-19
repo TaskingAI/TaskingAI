@@ -1,0 +1,48 @@
+model_schema_id: openai/gpt-4o-mini
+provider_model_id: gpt-4o-mini
+type: chat_completion
+name: "i18n:gpt_4o_mini_name"
+description: "i18n:gpt_4o_mini_description"
+default_endpoint_url: https://api.openai.com/v1/chat/completions
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit: 128000
+  output_token_limit: 4096
+
+config_schemas:
+  - config_id: temperature
+    type: float
+    default: 0.7
+    min: 0.0
+    max: 2.0
+    step: 0.1
+  - config_id: frequency_penalty
+    type: float
+    default: 0.0
+    min: -2.0
+    max: 2.0
+    step: 0.1
+  - config_id: presence_penalty
+    type: float
+    default: 0.0
+    min: -2.0
+    max: 2.0
+    step: 0.1
+  - config_id: top_p
+  - config_id: max_tokens
+    type: int
+    default: 4096
+    min: 1
+    max: 4096
+    step: 1
+  - config_id: stop
+  - config_id: seed
+  - config_id: response_format
+
+pricing:
+  input_token: 0.00015
+  output_token: 0.0006
+  unit: 1000
+  currency: USD
