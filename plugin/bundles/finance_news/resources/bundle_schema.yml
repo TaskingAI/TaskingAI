@@ -1,0 +1,11 @@
+credentials_schema:
+  FINANCE_NEWS_API_KEY:
+    description: i18n:credential_finance_news_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: finance_news
+name: i18n:bundle_name
+provider: Finance News
