@@ -78,6 +78,8 @@ class Provider(BaseModel):
             "icon_svg_url": self.icon_svg_url,
             "resources": self.resources.model_dump(),
             "updated_timestamp": self.updated_timestamp,
+            "enable_proxy": self.enable_proxy,
+            "enable_custom_headers": self.enable_custom_headers,
         }
 
     def allowed_credential_names(self):
