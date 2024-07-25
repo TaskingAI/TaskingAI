@@ -21,6 +21,7 @@ white_list_providers = [
     "minimax",
     "sensetime",
     "leptonai",
+    "volcengine"
 ]
 white_list_models = [
     "google_gemini/gemini-1.0-pro-vision",
