@@ -6,6 +6,7 @@ description: "i18n:gpt_4o_mini_description"
 default_endpoint_url: https://api.openai.com/v1/chat/completions
 
 properties:
+  vision: true
   function_call: true
   streaming: true
   input_token_limit: 128000

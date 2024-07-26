@@ -85,8 +85,9 @@ def build_url(base_url, path):
             message=f"Failed to build url: {e}",
         )
 
+
 def image_url_is_on_localhost(url):
-    local_url_identifiers = ['localhost', '0.0.0.0', '127.0.0.1', '::1']
+    local_url_identifiers = ["localhost", "0.0.0.0", "127.0.0.1", "::1"]
 
     if any(item in url for item in local_url_identifiers):
         if "/imgs/" not in url:
@@ -95,11 +96,10 @@ def image_url_is_on_localhost(url):
 
     return False
 
-async def fetch_image_format(url):
 
+async def fetch_image_format(url):
     # Image in local file system
     if image_url_is_on_localhost(url):
-
         local_file_path = CONFIG.PATH_TO_VOLUME + "/imgs/" + url.split("/imgs/")[1]
         with open(local_file_path, "rb") as image_file:
             image_bytes = image_file.read()
@@ -114,10 +114,10 @@ async def fetch_image_format(url):
             # Load the image into a PIL Image object
             image = Image.open(BytesIO(image_bytes))
             # Output the format of the image
-            return image.format
+            return image.format.lower()
+
 
 async def get_image_base64_string(image_uri):
-
     # Image in local file system
     if image_url_is_on_localhost(image_uri):
         local_file_path = CONFIG.PATH_TO_VOLUME + "/imgs/" + image_uri.split("/imgs/")[1]
@@ -137,4 +137,3 @@ async def get_image_base64_string(image_uri):
                 return base64_string
             else:
                 raise_provider_api_error(f"Failed to fetch image from {image_uri}")
-

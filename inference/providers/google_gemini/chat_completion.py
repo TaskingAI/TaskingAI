@@ -130,8 +130,7 @@ async def _build_google_gemini_chat_completion_payload(
     }
     formatted_messages = []
     for message in messages[:-1]:
-        formatted_message = await format_message(message, should_send_image_if_possible=False)
-        formatted_messages.append(formatted_message)
+        formatted_messages.append(await format_message(message, should_send_image_if_possible=False))
     formatted_messages.append(await format_message(messages[-1], should_send_image_if_possible=True))
     generation_config = {}
     config_dict = configs.model_dump()

@@ -5,6 +5,7 @@ name: "i18n:gemini_1_5_flash_latest_name"
 description: "i18n:gemini_1_5_flash_latest_description"
 
 properties:
+  vision: true
   function_call: true
   streaming: true
   input_token_limit: 1048576
@@ -26,7 +27,6 @@ config_schemas:
     max: 8192
     step: 1
   - config_id: stop
-
 
 pricing:
   input_token: 0.35
