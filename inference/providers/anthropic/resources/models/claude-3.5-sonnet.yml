@@ -6,6 +6,7 @@ description: "i18n:claude_3_5_sonnet_description"
 default_endpoint_url: https://api.anthropic.com/v1/messages
 
 properties:
+  vision: true
   function_call: true
   streaming: true
   input_token_limit: 200000

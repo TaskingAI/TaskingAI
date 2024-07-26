@@ -7,7 +7,7 @@ deprecated: true
 
 properties:
   vision: true
-  function_call: false
+  function_call: true
   streaming: true
   input_token_limit: 12288
   output_token_limit: 4096

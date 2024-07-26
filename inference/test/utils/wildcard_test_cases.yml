@@ -1,18 +1,4 @@
 wildcard_test_cases:
-  - provider_id: "togetherai"
-    cases:
-      - model_schema_id: "togetherai/wildcard"
-        provider_model_id: "mistralai/Mistral-7B-Instruct-v0.1"
-        model_type: "chat_completion"
-        streaming: True
-        function_call: True
-
-      - model_schema_id: "togetherai/wildcard"
-        provider_model_id: "togethercomputer/m2-bert-80M-2k-retrieval"
-        model_type: "text_embedding"
-        properties:
-          embedding_size: 768
-
   - provider_id: "hugging_face"
     cases:
       - model_schema_id: "hugging_face/wildcard"

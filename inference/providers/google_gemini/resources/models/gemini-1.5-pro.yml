@@ -5,6 +5,7 @@ name: "i18n:gemini_1_5_pro_name"
 description: "i18n:gemini_1_5_pro_description"
 
 properties:
+  vision: true
   function_call: true
   streaming: true
   input_token_limit: 2097152
@@ -27,7 +28,6 @@ config_schemas:
     step: 1
   - config_id: stop
   - config_id: response_format
-
 
 pricing:
   input_token: 0.007
