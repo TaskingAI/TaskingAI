@@ -1,0 +1,24 @@
+provider_id: fireworks
+name: "i18n:fireworks_name"
+description: "i18n:fireworks_description"
+updated_timestamp: 1722318984000
+
+return_token_usage: true
+return_stream_token_usage: true
+
+credentials_schema:
+  type: object
+  properties:
+    FIREWORKS_API_KEY:
+      type: string
+      description: "i18n:fireworks_api_key_description"
+      secret: true
+  required:
+    - FIREWORKS_API_KEY
+
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/fireworks"
+  official_site_url: "https://fireworks.ai/"
+  official_pricing_url: "https://fireworks.ai/pricing"
+  official_credentials_url: "https://fireworks.ai/account/api-keys"

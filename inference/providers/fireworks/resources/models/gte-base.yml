@@ -1,0 +1,18 @@
+model_schema_id: fireworks/gte-base
+provider_model_id: thenlper/gte-base
+type: text_embedding
+name: "i18n:gte_base_name"
+description: "i18n:gte_base_description"
+default_endpoint_url: https://api.fireworks.ai/inference/v1/embeddings
+
+properties:
+  embedding_size: 768
+  input_token_limit: 8192
+  max_batch_size: 2048
+
+config_schemas:
+
+pricing:
+  input_token: 0.008
+  unit: 1000000
+  currency: USD

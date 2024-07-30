@@ -1,0 +1,18 @@
+model_schema_id: fireworks/nomic-embed-text-v1.5
+provider_model_id: nomic-ai/nomic-embed-text-v1.5
+type: text_embedding
+name: "i18n:nomic_embed_text_name"
+description: "i18n:nomic_embed_text_description"
+default_endpoint_url: https://api.fireworks.ai/inference/v1/embeddings
+
+properties:
+  embedding_size: 768
+  input_token_limit: 8192
+  max_batch_size: 2048
+
+config_schemas:
+
+pricing:
+  input_token: 0.008
+  unit: 1000000
+  currency: USD

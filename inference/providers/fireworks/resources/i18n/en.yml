@@ -1,0 +1,14 @@
+fireworks_name: "Fireworks AI"
+fireworks_description: "Fireworks AI offers an innovative platform for developers focused on generative AI. The Fireworks AI platform emphasizes speed, reliability, and enterprise scalability, adhering to HIPAA and SOC2 standards. It specializes in small open-source models designed to meet specific business needs, making them easier to use and customize. Rather than building its models from scratch, Fireworks AI assists enterprises in fine-tuning and customizing other models to meet specific requirements."
+
+fireworks_api_key_description: "Your Fireworks API Key for authentication."
+
+
+nomic_embed_text_name: "nomic-embed-text-v1.5"
+nomic_embed_text_description: "nomic-embed-text-v1.5 model generates high-dimensional text embeddings, capturing semantic nuances and context. It enhances document classification, semantic search, and text clustering with optimized efficiency and accuracy, ideal for both real-time and large-scale applications."
+
+gte_base_name: "gte-base"
+gte_base_description: "The gte-base model is a general-purpose text embedding model designed to generate dense vector representations of text. It captures contextual and semantic information, making it ideal for tasks such as text classification, similarity measurement, and clustering. The model balances performance and efficiency, ensuring applicability in various natural language processing applications."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Fireworks' model hub with custom configurations."
