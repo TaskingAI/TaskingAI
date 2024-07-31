@@ -17,5 +17,11 @@ llama3_70b_description: "Meta has launched Llama 3, a new generation of its open
 llama3_8b_name: "Llama3 8B"
 llama3_8b_description: "A smaller version of the Llama3 model, with a 8,192 token context window."
 
+llama_3_1_70b_versatile_name: "Llama3.1 70B Versatile"
+llama_3_1_70b_versatile_description: "Llama 3.1 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety."
+
+llama_3_1_8b_instant_name: "Llama3.1 8B Instant"
+llama_3_1_8b_instant_description: "Llama 3.1 is an auto-regressive language model that uses an optimized transformer architecture. The tuned versions use supervised fine-tuning (SFT) and reinforcement learning with human feedback (RLHF) to align with human preferences for helpfulness and safety."
+
 wildcard_name: "Wildcard"
 wildcard_description: "Wildcard allows you to use any model from Groq with custom configurations."

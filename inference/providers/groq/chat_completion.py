@@ -29,6 +29,8 @@ def _build_groq_chat_completion_payload(
     stream: bool,
     provider_model_id: str,
     configs: ChatCompletionModelConfiguration,
+    function_call: Optional[str],
+    functions: Optional[List[ChatCompletionFunction]],
 ):
     # Convert ChatCompletionMessages to the required format
     formatted_messages = [_build_groq_message(msg) for msg in messages]
@@ -42,6 +44,15 @@ def _build_groq_chat_completion_payload(
     for key, value in config_dict.items():
         if value is not None:
             payload[key] = value
+
+    if function_call:
+        if function_call in ["none", "auto"]:
+            payload["tool_choice"] = function_call
+        else:
+            payload["tool_choice"] = {"name": function_call}
+    if functions:
+        payload["tools"] = [{"type": "function", "function": f.model_dump()} for f in functions]
+    logger.debug(f"_build_groq_chat_completion_payload: {payload}")
 
     return payload
 
@@ -66,7 +77,9 @@ class GroqChatCompletionModel(BaseChatCompletionModel):
         # todo accept user's api_url
         api_url = "https://api.groq.com/openai/v1/chat/completions"
         headers = build_groq_header(credentials)
-        payload = _build_groq_chat_completion_payload(messages, stream, provider_model_id, configs)
+        payload = _build_groq_chat_completion_payload(
+            messages, stream, provider_model_id, configs, function_call, functions
+        )
         return api_url, headers, payload
 
     # ------------------- handle non-stream chat completion response -------------------
