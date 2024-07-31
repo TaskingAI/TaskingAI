@@ -277,7 +277,13 @@ class TestChatCompletion:
         message = test_data["message"]
         function_call = test_data["function_call"]
         stream = test_data["stream"]
-        if not function_call or not stream or "azure" in model_schema_id or "openrouter" in model_schema_id or "togetherai" in model_schema_id:
+        if (
+            not function_call
+            or not stream
+            or "azure" in model_schema_id
+            or "openrouter" in model_schema_id
+            or "togetherai" in model_schema_id
+        ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
         configs = {
@@ -399,7 +405,12 @@ class TestChatCompletion:
             pytest.skip("Skipping test due to timeout after 2 minutes.")
         if is_provider_service_error(res):
             pytest.skip("Skip the test case with provider service error.")
-        if "anthropic" in model_schema_id or "togetherai" in model_schema_id or "openrouter" in model_schema_id:
+        if (
+            "anthropic" in model_schema_id
+            or "togetherai" in model_schema_id
+            or "openrouter" in model_schema_id
+            or "groq" in model_schema_id
+        ):
             assert res.status_code == 200, res.json()
             assert res.json().get("status") == "success"
             assert res.json().get("data").get("finish_reason") == "length"
@@ -434,6 +445,7 @@ class TestChatCompletion:
             or "leptonai" in model_schema_id
             or "openrouter" in model_schema_id
             or "anthropic" in model_schema_id
+            or "groq" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
@@ -637,18 +649,10 @@ class TestChatCompletion:
         if "response_format" not in test_data["allowed_configs"]:
             pytest.skip("Skip the test case without response_format.")
         model_schema_id = test_data["model_schema_id"]
-        message = [
-            {
-                "role": "user",
-                "content": "What does 42 mean"
-            }
-        ]
+        message = [{"role": "user", "content": "What does 42 mean"}]
         if "debug-error" in model_schema_id or "azure" in model_schema_id or "hugging_face" in model_schema_id:
             pytest.skip("Skip the test case with debug-error.")
-        configs = {
-            "temperature": 0.5,
-            "response_format": "json_object"
-        }
+        configs = {"temperature": 0.5, "response_format": "json_object"}
         request_data = {
             "model_schema_id": model_schema_id,
             "messages": message,
@@ -684,20 +688,11 @@ class TestChatCompletion:
         if "response_format" not in test_data["allowed_configs"]:
             pytest.skip("Skip the test case without response_format.")
         model_schema_id = test_data["model_schema_id"]
-        message = [
-            {
-                "role": "user",
-                "content": "What does 42 mean"
-            }
-        ]
+        message = [{"role": "user", "content": "What does 42 mean"}]
         stream = test_data["stream"]
         if not stream or "debug" in model_schema_id or "azure" in model_schema_id:
             pytest.skip("Skip the test case without stream.")
-        configs = {
-            "temperature": 0.5,
-            "response_format": "json_object"
-
-        }
+        configs = {"temperature": 0.5, "response_format": "json_object"}
         request_data = {
             "model_schema_id": model_schema_id,
             "messages": message,
@@ -740,8 +735,11 @@ class TestChatCompletion:
         if not vision:
             pytest.skip("Skip the test case without vision.")
         message = [
-            {"role": "user",
-             "content": "# Sample Document\n\nHere is an example image:\n\n![Alt text for image](https://tp.tkai.cloud/test_proj3/BW5eJ/pgIMgxNY8KQt.png)\n\nAnd also this one: \n\n ![Another Image](https://tp.tkai.cloud/test_proj4/BW5eH/pgIMNger1hRp.png)\n\nThis image is crucial for understanding the next steps in the process."}]
+            {
+                "role": "user",
+                "content": "# Sample Document\n\nHere is an example image:\n\n![Alt text for image](https://tp.tkai.cloud/test_proj3/BW5eJ/pgIMgxNY8KQt.png)\n\nAnd also this one: \n\n ![Another Image](https://tp.tkai.cloud/test_proj4/BW5eH/pgIMNger1hRp.png)\n\nThis image is crucial for understanding the next steps in the process.",
+            }
+        ]
         if "debug-error" in model_schema_id or "azure" in model_schema_id or "hugging_face" in model_schema_id:
             pytest.skip("Skip the test case with debug-error.")
         configs = {
@@ -779,8 +777,11 @@ class TestChatCompletion:
     async def test_chat_completion_by_stream_vision(self, test_data):
         model_schema_id = test_data["model_schema_id"]
         message = [
-            {"role": "user",
-             "content": "# Sample Document\n\nHere is an example image:\n\n![Alt text for image](https://tp.tkai.cloud/test_proj3/BW5eJ/pgIMgxNY8KQt.png)\n\nAnd also this one: \n\n ![Another Image](https://tp.tkai.cloud/test_proj4/BW5eH/pgIMNger1hRp.png)\n\nThis image is crucial for understanding the next steps in the process."}]
+            {
+                "role": "user",
+                "content": "# Sample Document\n\nHere is an example image:\n\n![Alt text for image](https://tp.tkai.cloud/test_proj3/BW5eJ/pgIMgxNY8KQt.png)\n\nAnd also this one: \n\n ![Another Image](https://tp.tkai.cloud/test_proj4/BW5eH/pgIMNger1hRp.png)\n\nThis image is crucial for understanding the next steps in the process.",
+            }
+        ]
         stream = test_data["stream"]
         vision = test_data.get("vision")
         if not vision:
@@ -818,4 +819,3 @@ class TestChatCompletion:
                 assert False, f"response_dict={response_dict}"
         assert default, "stream failed"
         assert "pie chart" in content
-

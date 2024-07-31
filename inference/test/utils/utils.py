@@ -29,6 +29,8 @@ white_list_models = [
     "google_gemini/gemini-1.5-pro",
     "togetherai/meta-llama/Llama-2-70b-chat-hf",
     "mistralai/mistral-small-latest",
+    "groq/llama-3.1-8b-instant",
+    "groq/gemma-7b",
 ]
 
 load_dotenv()
