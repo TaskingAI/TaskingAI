@@ -1,23 +1,23 @@
-model_schema_id: groq/llama3-70b
-provider_model_id: llama3-70b-8192
+model_schema_id: groq/llama-3.1-8b-instant
+provider_model_id: llama-3.1-8b-instant
 type: chat_completion
-name: "i18n:llama3_70b_name"
-description: "i18n:llama3_70b_description"
+name: "i18n:llama_3_1_8b_instant_name"
+description: "i18n:llama_3_1_8b_instant_description"
 default_endpoint_url: https://api.groq.com/openai/v1/chat/completions
 
 properties:
   function_call: true
   streaming: true
-  input_token_limit: 8192
+  input_token_limit: 131072
 
 config_schemas:
   - config_id: temperature
   - config_id: top_p
   - config_id: max_tokens
     type: int
-    default: 8192
+    default: 131072
     min: 1
-    max: 8192
+    max: 131072
     step: 1
   - config_id: stop
   - config_id: frequency_penalty
@@ -34,7 +34,7 @@ config_schemas:
     step: 0.1
 
 pricing:
-  input_token: 0.59
-  output_token: 0.79
+  input_token: 0
+  output_token: 0
   unit: 1000000
   currency: USD
