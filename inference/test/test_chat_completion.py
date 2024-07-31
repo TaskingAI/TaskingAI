@@ -405,7 +405,12 @@ class TestChatCompletion:
             pytest.skip("Skipping test due to timeout after 2 minutes.")
         if is_provider_service_error(res):
             pytest.skip("Skip the test case with provider service error.")
-        if "anthropic" in model_schema_id or "togetherai" in model_schema_id or "openrouter" in model_schema_id:
+        if (
+            "anthropic" in model_schema_id
+            or "togetherai" in model_schema_id
+            or "openrouter" in model_schema_id
+            or "groq" in model_schema_id
+        ):
             assert res.status_code == 200, res.json()
             assert res.json().get("status") == "success"
             assert res.json().get("data").get("finish_reason") == "length"
@@ -442,6 +447,7 @@ class TestChatCompletion:
             or "anthropic" in model_schema_id
             or "fireworks" in model_schema_id
             or "deepseek" in model_schema_id
+            or "groq" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
