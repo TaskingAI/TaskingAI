@@ -24,5 +24,11 @@ gpt_4_turbo_description: "GPT-4 Turbo model featuring improved instruction follo
 gpt_4_vision_name: "GPT-4-Turbo-Vision"
 gpt_4_vision_description: "GPT-4 with the ability to understand images, in addition to all other GPT-4 Turbo capabilities."
 
+gpt_4o_name: "GPT-4o"
+gpt_4o_description: "GPT-4o integrates text and images in a single model, enabling it to handle multiple data types simultaneously."
+
+gpt_4o_mini_name: "GPT-4o-Mini"
+gpt_4o_mini_description: "GPT-4o-Mini is a smaller version of GPT-4o that is only capable of handling natural language and images."
+
 text_embedding_ada_002_name: "text-embedding-ada-002"
 text_embedding_ada_002_description: "Stronger performance. It outperforms all the old embedding models on text search, code search, and sentence similarity tasks and gets comparable performance on text classification."

@@ -6,7 +6,7 @@ description: "i18n:deepseek_coder_description"
 default_endpoint_url: https://api.deepseek.com/chat/completions
 
 properties:
-  function_call: false
+  function_call: true
   streaming: true
   input_token_limit: 128000
   output_token_limit: 4000

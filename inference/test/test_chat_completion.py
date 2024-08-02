@@ -441,6 +441,7 @@ class TestChatCompletion:
             or "openrouter" in model_schema_id
             or "anthropic" in model_schema_id
             or "fireworks" in model_schema_id
+            or "deepseek" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
