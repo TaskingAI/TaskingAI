@@ -49,13 +49,13 @@ def _build_deepseek_chat_completion_payload(
         if value is not None:
             payload[key] = value
 
-    # if function_call:
-    #     if function_call in ["none", "auto"]:
-    #         payload["tool_choice"] = function_call
-    #     else:
-    #         payload["tool_choice"] = {"name": function_call}
-    # if functions:
-    #     payload["tools"] = [{"type": "function", "function": f.model_dump()} for f in functions]
+    if function_call:
+        if function_call in ["none", "auto"]:
+            payload["tool_choice"] = function_call
+        else:
+            payload["tool_choice"] = {"name": function_call}
+    if functions:
+        payload["tools"] = [{"type": "function", "function": f.model_dump()} for f in functions]
     logger.debug(f"_build_deepseek_chat_completion_payload: {payload}")
     return payload
 
