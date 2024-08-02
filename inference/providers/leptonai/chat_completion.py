@@ -1,5 +1,6 @@
 from typing import Tuple, Dict
 from provider_dependency.chat_completion import *
+from app.models import ModelSchema
 from .utils import *
 
 logger = logging.getLogger(__name__)
@@ -75,7 +76,7 @@ class LeptonaiChatCompletionModel(BaseChatCompletionModel):
 
     # ------------------- prepare request data -------------------
 
-    def prepare_request(
+    async def prepare_request(
         self,
         stream: bool,
         provider_model_id: str,
@@ -84,6 +85,7 @@ class LeptonaiChatCompletionModel(BaseChatCompletionModel):
         configs: ChatCompletionModelConfiguration,
         function_call: Optional[str] = None,
         functions: Optional[List[ChatCompletionFunction]] = None,
+        model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
         api_url = f"https://{provider_model_id}.lepton.run/api/v1/chat/completions"
 

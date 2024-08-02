@@ -72,7 +72,7 @@ class TestChatCompletion:
         if is_provider_service_error(res):
             pytest.skip("Skip the test case with provider service error.")
         res_json = res.json()
-        assert res.status_code == 200, res_json.get("error").get("message")
+        assert res.status_code == 200
         assert res_json.get("status") == "success"
         assert res_json.get("data").get("finish_reason") == "stop"
         assert res_json.get("data").get("message").get("role") == "assistant"
