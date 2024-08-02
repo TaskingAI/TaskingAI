@@ -1,13 +1,13 @@
-model_schema_id: azure_openai/gpt-3.5-turbo
-provider_model_id: gpt-35-turbo-1106
+model_schema_id: azure_openai/gpt-4o
+provider_model_id: gpt-4o
 type: chat_completion
-name: "i18n:gpt_3_5_turbo_name"
-description: "i18n:gpt_3_5_turbo_description"
+name: "i18n:gpt_4o_name"
+description: "i18n:gpt_4o_description"
 
 properties:
   function_call: true
   streaming: true
-  input_token_limit: 16385
+  input_token_limit: 128000
   output_token_limit: 4096
 
 config_schemas:
@@ -34,7 +34,7 @@ config_schemas:
   - config_id: stop
 
 pricing:
-  input_token: 0.001
-  output_token: 0.002
+  input_token: 0.005
+  output_token: 0.015
   unit: 1000
   currency: USD

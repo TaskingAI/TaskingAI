@@ -8,7 +8,8 @@ default_endpoint_url: https://api.cohere.com/v1/messages
 properties:
   function_call: false
   streaming: true
-  input_token_limit: 8192
+  input_token_limit: 128000
+  output_token_limit: 128000
 
 config_schemas:
   - config_id: temperature
