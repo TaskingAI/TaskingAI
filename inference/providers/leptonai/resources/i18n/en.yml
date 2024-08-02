@@ -35,8 +35,5 @@ openchat_3_5_description: "OpenChat 3.5 is a sophisticated AI language model des
 toppy_m_7b_name: "Toppy M 7B"
 toppy_m_7b_description: "Toppy M 7B is a state-of-the-art AI language model featuring 7 billion parameters, designed for advanced natural language processing tasks, providing high-quality text comprehension and generation, multilingual capabilities, and efficient, ethical performance in various applications."
 
-wizardlm_2_7b_name: "WizardLM-2 7B"
-wizardlm_2_7b_description: "WizardLM-2 7B is a highly advanced AI language model with 7 billion parameters, engineered for superior natural language processing tasks, excelling in text comprehension, generation, and multilingual support, while ensuring efficient and ethical performance across diverse applications."
-
 wizardlm_2_8x22b_name: "WizardLM-2 8x22B"
 wizardlm_2_8x22b_description: "WizardLM-2 8x22B is an exceptionally powerful AI language model comprising eight interconnected sub-models, each with 22 billion parameters, totaling 176 billion parameters, designed for advanced natural language processing tasks, offering unparalleled text comprehension, generation, and multilingual capabilities, with a focus on scalability, efficiency, and ethical use."

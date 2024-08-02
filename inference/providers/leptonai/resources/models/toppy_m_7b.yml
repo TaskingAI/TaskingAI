@@ -1,9 +1,9 @@
-model_schema_id: leptonai/mistral_7b
-provider_model_id: mistral-7b
+model_schema_id: leptonai/toppy_m_7b
+provider_model_id: toppy-m-7b
 type: chat_completion
-name: "i18n:mistral_7b_name"
-description: "i18n:mistral_7b_description"
-default_endpoint_url: https://mistral-7b.lepton.run/api/v1/chat/completions
+name: "i18n:toppy_m_7b_name"
+description: "i18n:toppy_m_7b_description"
+default_endpoint_url: https://toppy-m-7b.lepton.run/api/v1/chat/completions
 
 properties:
   function_call: true

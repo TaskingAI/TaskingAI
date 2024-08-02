@@ -165,6 +165,40 @@ def generate_test_cases(model_type):
                 rerank_case = {**base_test_case}
                 cases.append(rerank_case)
 
+    if model_type == "chat_completion":
+        cases.append(
+            {
+                "model_schema_id": "leptonai/llama2_13b",
+                "allowed_configs": ["temperature", "top_p", "max_tokens", "stop"],
+                "function_call": True,
+                "message": [{"role": "user", "content": "Draw a scatter plot with x values 1, 2 and y values 3, 4"}],
+                "functions": [
+                    {
+                        "name": "make_scatter_plot",
+                        "description": "Generate a scatter plot from the given data",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "x_values": {
+                                    "type": "array",
+                                    "items": {"type": "number"},
+                                    "description": "The x-axis values for the data points",
+                                },
+                                "y_values": {
+                                    "type": "array",
+                                    "items": {"type": "number"},
+                                    "description": "The y-axis values for the data points",
+                                },
+                            },
+                            "required": ["x_values", "y_values"],
+                        },
+                    }
+                ],
+                "stream": False,
+                "vision": False,
+            }
+        )
+
     return cases
 
 
