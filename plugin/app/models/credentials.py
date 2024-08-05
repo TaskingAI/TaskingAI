@@ -55,9 +55,11 @@ class BundleCredentials(BaseModel):
         try:
             from app.cache import get_bundle
 
-            default_credentials = get_bundle(bundle_id).allowed_credential_names()
-            for name in default_credentials:
-                self.credentials[name] = load_str_env(name, required=True)
+            bundle_schemas = get_bundle(bundle_id).credentials_schema
+            for credential_name in bundle_schemas:
+                credential_schema = bundle_schemas[credential_name]
+                credential_required = credential_schema.get("required", True)
+                self.credentials[credential_name] = load_str_env(credential_name, required=credential_required)
             return self
         except Exception as e:
             raise ValueError(f"error loading credentials from env: {e}")
@@ -96,6 +98,7 @@ def validate_bundle_credentials(data: Dict) -> BundleCredentials:
         credentials.load_input(bundle_id, data.get("encrypted_credentials"))
         credentials.decrypt()
     else:
+
         try:
             credentials.load_default(bundle_id)
         except Exception as e:
