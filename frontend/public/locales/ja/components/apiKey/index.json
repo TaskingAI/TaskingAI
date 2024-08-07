@@ -1,0 +1,12 @@
+{
+    "apiKeyName": "APIキー名",
+    "apiKeyNameDeletePlaceholder": "確認のためにAPI名を入力",
+    "apiKeyNameRequired": "APIキー名を入力してください。",
+    "createApiKey": "新規APIキー",
+    "deleteApiKey": "APIキーを削除",
+    "deleteItem": "「<0>{{deleteValue}}</0>」を本当に削除しますか？",
+    "deleteDesc": "APIキーを削除するとプロジェクトからアクセスできません。",
+    "editApiKey": "APIキーを編集",
+    "newApiKey": "新規APIキー",
+    "requiredApiKeyName": "APIキー名を入力してください。"
+}

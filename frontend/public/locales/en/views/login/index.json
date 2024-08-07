@@ -1,0 +1,11 @@
+{
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "passwordRequiredMessage": "Please input your password.",
+    "signinButton": "Sign in",
+    "signinSuccessful": "Signin successful",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "usernameRequiredMessage": "Please input your username.",
+    "welcomeBack": "Welcome back"
+}

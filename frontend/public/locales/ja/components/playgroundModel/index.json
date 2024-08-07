@@ -1,0 +1,17 @@
+{
+    "configuration": "コンフィグレーション",
+    "enterAssistantMessage": "アシスタントメッセージを入力する",
+    "enterSystemMessage": "システムメッセージを入力する",
+    "enterUserMessage": "ユーザーメッセージを入力する",
+    "generate": "生成",
+    "generationOptions": "生成のオプション",
+    "model": "モデル",
+    "lastMessageNotAssistant": "最後のメッセージはアシスタントからではありません",
+    "pleaseEnterMessage": "メッセージを入力してください",
+    "selectAModel": "モデルを選択する",
+    "selectAModelToStart": "始めるためにチャットコンプリションモデルを選択する",
+    "stopSequences": "ストップシーケンス",
+    "stream": "ストリーム",
+    "system": "システム",
+    "user": "ユーザー"
+}

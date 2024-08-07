@@ -17,7 +17,7 @@ import ModelModal from '@/components/modelModal';
 import closeIcon from '../../assets/img/x-close.svg'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom'
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import IconComponent from '@/commonComponent/iconComponent';
 import { setLoading } from '../../Redux/actions.ts'
 import ApiErrorResponse, { RecordType, ChildRefType, formDataType } from '../../constant/index.ts'
@@ -78,8 +78,8 @@ function ModelsPage() {
     }
     const content = (
         <div style={{ cursor: 'pointer' }}>
-            <p className={styles['popover-eidt']} onClick={handleViewCode}>View code</p>
-            <p className={styles['popover-delete']} onClick={() => handleDelete(record as RecordType)}>Delete</p>
+            <p className={styles['popover-eidt']} onClick={handleViewCode}>{t('viewCode')}</p>
+            <p className={styles['popover-delete']} onClick={() => handleDelete(record as RecordType)}>{t('delete')}</p>
         </div>
     );
     useEffect(() => {
@@ -125,7 +125,7 @@ function ModelsPage() {
     const columns = [...modelsTableColumn]
     columns.push(
         {
-            title: `${t('projectColumnActions')}`,
+            title: `${t('actions')}`,
             key: 'action',
             width: 157,
             fixed: 'right',
@@ -380,11 +380,11 @@ function ModelsPage() {
     return (
         <div className={styles["models-page"]}>
             <Spin spinning={loading} wrapperClassName={styles.spinloading}>
-                <ModalTable title='New model' updatePrevButton={updatePrevButton} onChildEvent={handleChildEvent} name="model" hasMore={hasMore} id='model_id' columns={columns} ifSelect={false} onOpenDrawer={handleCreateModel} dataSource={modelList} />
+                <ModalTable title={t('newModel')} updatePrevButton={updatePrevButton} onChildEvent={handleChildEvent} name="model" hasMore={hasMore} id='model_id' columns={columns} ifSelect={false} onOpenDrawer={handleCreateModel} dataSource={modelList} />
             </Spin>
             <ModelModal getOptionsList={fetchData1} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>
 
-            <Drawer title={t('projectEditModel')} width={700} closeIcon={<img src={closeIcon} alt="closeIcon" />} footer={[
+            <Drawer title={t('editModel')} width={700} closeIcon={<img src={closeIcon} alt="closeIcon" />} footer={[
                 <Button key="cancel" onClick={onClose} className='cancel-button'>
                     {t('cancel')}
                 </Button>,
@@ -394,7 +394,7 @@ function ModelsPage() {
             ]} placement="right" onClose={onClose} open={drawerEditOpen} className={styles['editModal']}>
                 <Spin spinning={editLoading}>
                     <div className={styles['second-modal']}>
-                        <div className={styles['label']}>{t('projectModelColumnBaseModel')}</div>
+                        <div className={styles['label']}>{t('baseModel')}</div>
                         <div className={styles['frameParent']}>
                             <div className={styles['modelproviderParent']}>
                                 <IconComponent providerId={providerId} />
@@ -412,25 +412,25 @@ function ModelsPage() {
                                 <Form.Item rules={[
                                     {
                                         required: true,
-                                        message: `${t('projectInputName')}`,
+                                        message: `${t('nameRequired')}`,
                                     },
-                                ]} label={t('projectModelCreateModelName')} name="name">
-                                    <Input className={styles['input-name']} placeholder={t('projectModelCreatePlaceholder')} key={secondModalNameValue} />
+                                ]} label={t('modelName')} name="name">
+                                    <Input className={styles['input-name']} placeholder={t('enterModelName')} key={secondModalNameValue} />
                                 </Form.Item>
                                 {modelType === 'wildcard' && <Form.Item rules={[
                                     {
                                         required: true,
-                                        message: 'please enter provider model ID',
+                                        message: t('modelIDRequired'),
                                     },
-                                ]} label='Provider model ID' name="provider_model_id">
-                                    <Input className={styles['input-name']} placeholder='Enter provider model ID' />
+                                ]} label={t('providerModelID')} name="provider_model_id">
+                                    <Input className={styles['input-name']} placeholder={t('providerModelIDPlaceholder')} />
                                 </Form.Item>}
                             </Form>
                         </ConfigProvider>
                         {
                             modelType === 'wildcard' && <>
                                 <div className={styles['hr']}></div>
-                                <div className={styles['credentials']}>{t('projectModelColumnProperties')}</div>
+                                <div className={styles['credentials']}>{t('properties')}</div>
                                 <ConfigProvider theme={{
                                     components: {
                                         Form: {
@@ -439,52 +439,52 @@ function ModelsPage() {
                                     }
                                 }}>
                                     <Form layout="vertical" className={styles['second-form']} form={wildcardForm}>
-                                        <Form.Item label='Model type' required>
-                                            <Select placeholder='Select model type' options={[{
-                                                label: 'Text Embedding',
+                                        <Form.Item label={t('modelType')} required>
+                                            <Select placeholder={t('selectModelType')} options={[{
+                                                label: t('textEmbedding'),
                                                 value: 'text_embedding'
                                             }, {
-                                                label: 'Chat Completion',
+                                                label: t('chatCompletion'),
                                                 value: 'chat_completion'
                                             }
                                             ]} onChange={handleModelTypes} value={type}>
                                             </Select>
                                         </Form.Item>
                                         {type === 'text_embedding' && <>
-                                            <Form.Item label={t('projectModelEmbeddingSize')} required name='embedding_size' rules={[
+                                            <Form.Item label={t('embeddingSize')} required name='embedding_size' rules={[
                                                 {
                                                     required: true,
-                                                    message: `${t('projectModelEmbeddingSizeRequired')}`,
+                                                    message: `${t('embeddingSizeRequired')}`,
                                                 },
                                             ]}>
-                                                <div className={styles['description']}>{t('projectModelEmbeddingSizeDesc')}</div>
+                                                <div className={styles['description']}>{t('embeddingSizeDesc')}</div>
                                                 <Form.Item required name='embedding_size' rules={[
                                                     {
                                                         required: true,
-                                                        message: `${t('projectModelEmbeddingSizeRequired')}`,
+                                                        message: `${t('embeddingSizeRequired')}`,
                                                     },
                                                 ]}>
-                                                    <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('projectModelEmbeddingSizePlaceholder')} />
+                                                    <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('embeddingSizePlaceholder')} />
                                                 </Form.Item>
                                             </Form.Item>
-                                            <Form.Item label={t('projectModelInputMaxTokens')} name='input_token_limit'>
-                                                <div className={styles['description']}>{t('projectModelInputMaxTokensDesc')}</div>
+                                            <Form.Item label={t('inputMaxTokens')} name='input_token_limit'>
+                                                <div className={styles['description']}>{t('inputMaxTokensDesc')}</div>
 
                                                 <Form.Item name='input_token_limit'>
-                                                    <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('projectModelInputMaxTokensPlaceholder')} />
+                                                    <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('inputMaxTokensPlaceholder')} />
                                                 </Form.Item>
                                             </Form.Item>
-                                            <Form.Item label={'Max batch size'} name='max_batch_size'>
-                                                <div className={styles['description']}>The maximum number of text chunks that a provider's API can process in one call. Default value is 512.</div>
+                                            <Form.Item label={t('maxBatchSize')} name='max_batch_size'>
+                                                <div className={styles['description']}>{t('maxBatchSizeDesc')}</div>
 
                                                 <Form.Item name='max_batch_size'>
-                                                    <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={'Enter batch size'} />
+                                                    <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('maxBatchSizePlaceholder')} />
                                                 </Form.Item>
                                             </Form.Item>
                                         </>}
                                         {type === 'chat_completion' && <>
-                                            <Form.Item label="Function call" required name='function_call' valuePropName="checked">
-                                                <div className={styles['description']}>{t('projectModelPropertiesDesc')}</div>
+                                            <Form.Item label={t('functionCall')} required name='function_call' valuePropName="checked">
+                                                <div className={styles['description']}>{t('propertiesDesc')}</div>
                                                 <ConfigProvider theme={{
                                                     components: {
                                                         Switch: {
@@ -498,8 +498,8 @@ function ModelsPage() {
                                                     </Form.Item>
                                                 </ConfigProvider>
                                             </Form.Item>
-                                            <Form.Item label="Streaming" required name='streaming' valuePropName="checked">
-                                                <div className={styles['description']}>{t('projectModelStreamingDesc')}</div>
+                                            <Form.Item label={t('streaming')} required name='streaming' valuePropName="checked">
+                                                <div className={styles['description']}>{t('streamingDesc')}</div>
                                                 <ConfigProvider theme={{
                                                     components: {
                                                         Switch: {
@@ -513,16 +513,16 @@ function ModelsPage() {
                                                     </Form.Item>
                                                 </ConfigProvider>
                                             </Form.Item>
-                                            <Form.Item label={t('projectModelInputMaxTokens')} name='input_token_limit'>
-                                                <div className={styles['description']}>{t('projectModelInputMaxTokensDesc')}</div>
+                                            <Form.Item label={t('inputMaxTokens')} name='input_token_limit'>
+                                                <div className={styles['description']}>{t('inputMaxTokensDesc')}</div>
                                                 <Form.Item name='input_token_limit'>
-                                                    <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('projectModelInputMaxTokensPlaceholder')} />
+                                                    <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('inputMaxTokensPlaceholder')} />
                                                 </Form.Item>
                                             </Form.Item>
-                                            <Form.Item label="Output max tokens" name='output_token_limit'>
-                                                <div className={styles['description']}>{t('projectModelOutputMaxTokensDesc')}</div>
+                                            <Form.Item label={t('outputMaxTokens')} name='output_token_limit'>
+                                                <div className={styles['description']}>{t('outputMaxTokensDesc')}</div>
                                                 <Form.Item name='output_token_limit'>
-                                                    <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('projectModelOutputMaxTokensPlaceholder')} />
+                                                    <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('outputMaxTokensPlaceholder')} />
                                                 </Form.Item>
                                             </Form.Item>
                                         </>}
@@ -534,12 +534,12 @@ function ModelsPage() {
                             !properties && <>
                                 {modelType !== 'wildcard' && <>
                                     <div className={styles['hr']}></div>
-                                    <div className='credentials'>{t('projectModelColumnProperties')}</div>
+                                    <div className='credentials'>{t('properties')}</div>
                                 </>}
 
                                 {modelType === 'chat_completion' && <Form layout="vertical" className='second-form' form={propertyForm}>
-                                    <Form.Item label="Function call" required name='function_call' valuePropName="checked">
-                                        <div className={styles['description']}>{t('projectModelPropertiesDesc')}</div>
+                                    <Form.Item label={t('functionCall')} required name='function_call' valuePropName="checked">
+                                        <div className={styles['description']}>{t('propertiesDesc')}</div>
                                         <ConfigProvider theme={{
                                             components: {
                                                 Switch: {
@@ -553,8 +553,8 @@ function ModelsPage() {
                                             </Form.Item>
                                         </ConfigProvider>
                                     </Form.Item>
-                                    <Form.Item label="Streaming" required name='streaming' valuePropName="checked">
-                                        <div className={styles['description']}>{t('projectModelStreamingDesc')}</div>
+                                    <Form.Item label={t('streaming')} required name='streaming' valuePropName="checked">
+                                        <div className={styles['description']}>{t('streamingDesc')}</div>
                                         <ConfigProvider theme={{
                                             components: {
                                                 Switch: {
@@ -568,32 +568,32 @@ function ModelsPage() {
                                             </Form.Item>
                                         </ConfigProvider>
                                     </Form.Item>
-                                    <Form.Item label={t('projectModelInputMaxTokens')} name='input_token_limit'>
-                                        <div className={styles['description']}>{t('projectModelInputMaxTokensDesc')}</div>
+                                    <Form.Item label={t('inputMaxTokens')} name='input_token_limit'>
+                                        <div className={styles['description']}>{t('inputMaxTokensDesc')}</div>
 
                                         <Form.Item name='input_token_limit'>
-                                            <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('projectModelInputMaxTokensPlaceholder')} />
+                                            <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} style={{ width: '100%' }} placeholder={t('inputMaxTokensPlaceholder')} />
                                         </Form.Item>
                                     </Form.Item>
-                                    <Form.Item label="Output max tokens" name='output_token_limit'>
-                                        <div className={styles['description']}>{t('projectModelOutputMaxTokensDesc')}</div>
+                                    <Form.Item label={t('outputMaxTokens')} name='output_token_limit'>
+                                        <div className={styles['description']}>{t('outputMaxTokensDesc')}</div>
                                         <Form.Item name='output_token_limit'>
-                                            <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('projectModelOutputMaxTokensPlaceholder')} />
+                                            <InputNumber parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('outputMaxTokensPlaceholder')} />
                                         </Form.Item>
                                     </Form.Item>
                                 </Form>}
                                 {
                                     modelType === 'text_embedding' && <Form layout="vertical" className={styles['second-form']} form={propertyForm} autoComplete='off'>
-                                        <Form.Item label={t('projectModelEmbeddingSize')} required name='embedding_size' rules={[
+                                        <Form.Item label={t('embeddingSize')} required name='embedding_size' rules={[
                                             {
                                                 required: true,
-                                                message: `${t('projectModelEmbeddingSizeRequired')}`,
+                                                message: `${t('embeddingSizeRequired')}`,
                                             },
                                         ]}>
-                                            <div className={styles['description']}>{t('projectModelEmbeddingSizeDesc')}</div>
+                                            <div className={styles['description']}>{t('embeddingSizeDesc')}</div>
 
                                             <Form.Item required name='embedding_size'>
-                                                <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('projectModelEmbeddingSizePlaceholder')} />
+                                                <InputNumber style={{ width: '100%' }} parser={(value: any) => (isNaN(value) ? '' : parseInt(value, 10))} placeholder={t('embeddingSizePlaceholder')} />
                                             </Form.Item>
                                         </Form.Item>
                                     </Form>
@@ -602,12 +602,12 @@ function ModelsPage() {
                         }
                         <div className={styles['hr']}></div>
 
-                        <div className={styles['credentials']} style={{ marginBottom: '8px' }}>{t('projectModelCredentials')}</div>
+                        <div className={styles['credentials']} style={{ marginBottom: '8px' }}>{t('credentials')}</div>
                         <div className={styles['label-desc']} >
-                            {t('projectModelCredentialsDesc')} {t('referTo')} <a className='href' href='https://docs.tasking.ai/docs/guide/model/overview#required-credentials-for-model-access' target='_blank' rel='noopener noreferrer'>{t('projectModelCredentialsLink')}</a> {t('projectModelCredentialsDescEnd')}
+                            {t('credentialsDesc')} <Trans i18nKey="common:credentialsDescEnd" values={{ linkText: t('documentationLow')}} components={[<a className='href' href='https://docs.tasking.ai/docs/guide/model/overview#required-credentials-for-model-access' target='_blank' rel='noopener noreferrer'>{t('documentationLow')}</a>]} />
                         </div>
                         {resetButtonShow && <div className={styles['formbuttoncancel']} onClick={handleResetCredentials}>
-                            <div className={styles['text1']}>{t('projectModelResetCredentials')}</div>
+                            <div className={styles['text1']}>{t('resetCredentials')}</div>
                         </div>}
                         <Form
                             layout="vertical"
@@ -621,7 +621,7 @@ function ModelsPage() {
                                 <Form.Item label={key} key={key} name={key} rules={[
                                     {
                                         required: formData.required.includes(key) ? true : false,
-                                        message: `Please input ${key}.`,
+                                        message: t('pleaseInput',{ key}),
                                     },
                                 ]}>
                                     <div className={styles['description']}>{(property as { description: string }).description}</div>
@@ -630,7 +630,7 @@ function ModelsPage() {
                                         key={key}
                                         className={styles['form-item']}
                                     >
-                                        <Input placeholder={`Enter ${key}`} className={styles['input']} />
+                                        <Input placeholder={t('enter',{ key})} className={styles['input']} />
                                     </Form.Item>
                                 </Form.Item>
                             ))}
@@ -641,7 +641,7 @@ function ModelsPage() {
 
             </Drawer>
             <ViewCode open={viewCodeOpen} data={viewCodeData} handleClose={handleCloseViewCode}/>
-            <Modal title={t('projectDeleteModelTitle')}
+            <Modal title={t('deleteModel')}
                 onCancel={handleDeleteCancel}
                 open={openDeleteModal}
                 centered
@@ -656,8 +656,8 @@ function ModelsPage() {
                     </Button>
                 ]}
             >
-                <p className={styles.desc}>{t('deleteItem')}<span className={styles.span}> {record.name}</span>? {t('projectDeleteModelDesc')} </p>
-                <Input value={deleteValue} onChange={handleDeleteValue} placeholder={t('projectDeleteModelPlaceholder')}></Input>
+                <p className={styles.desc}>{t('deleteItem')}<span className={styles.span}> {record.name}</span>? {t('deleteModelDesc')} </p>
+                <Input value={deleteValue} onChange={handleDeleteValue} placeholder={t('deleteModelPlaceholder')}></Input>
             </Modal>
         </div>
 

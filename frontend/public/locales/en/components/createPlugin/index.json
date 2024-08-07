@@ -1,0 +1,9 @@
+{
+    "bundleDesc": "Select a bundle that fits your requirement",
+    "bundleSelection": "Bundle Selection",
+    "createPlugin": "Create Plugin",
+    "credentialsDesc": "All plugin credentials are encrypted at rest with AES-256 and in transit with TLS 1.2.",
+    "enterKey": "Enter {{key}}",
+    "inputParameters": "Input parameters",
+    "pleaseInputKey": "Please input {{key}}."
+}

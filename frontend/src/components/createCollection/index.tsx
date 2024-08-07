@@ -162,31 +162,31 @@ function CreateCollection(props: createCollectionType) {
     }
     return (
         <>
-            <Modal zIndex={10000}  onCancel={handleCancel} className={styles['create-collection']} width={1000} centered closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} title='Create Collection' open={OpenDrawer} footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
+            <Modal zIndex={10000}  onCancel={handleCancel} className={styles['create-collection']} width={1000} centered closeIcon={<img src={closeIcon} alt="closeIcon" className='img-icon-close' />} title={t('createCollection')} open={OpenDrawer} footer={<ModalFooterEnd handleOk={() => handleRequest()} onCancel={handleCancel} />}>
                 <div className={styles['drawer-retrieval']}>
                     <div className={styles['name-prompt']}>
-                        {t('projectModelColumnName')}
+                        {t('name')}
                     </div>
-                    <Input value={drawerName} onChange={handleNameChange} className={styles['input']}></Input>
+                    <Input value={drawerName} onChange={handleNameChange} className={styles['input']} placeholder={t('enterName')}></Input>
                     <div className={styles['desc-prompt']}>
-                        {t('projectAssistantsColumnDescription')}
+                        {t('description')}
                     </div>
                     <div className={styles['label-desc']}>
-                    {t('projectRetrievalCreateDesc')}
+                    {t('retrievalCreateDesc')}
                     </div>
                     <Input.TextArea className={styles['input']} autoSize={{ minRows: 3, maxRows: 10 }} showCount
-                         placeholder={t('projectRecordEnterDescription')}
+                         placeholder={t('recordEnterDescription')}
                         value={descriptionText}
                         onChange={(e) => setDescriptionText(e.target.value)}
                         maxLength={200} />
                     <div className={styles['hr']}></div>
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
-                        <span>{t('projectRetrievalEmbeddingModel')}</span>
+                        <span>{t('embeddingModel')}</span>
                     </div>
-                    <div className={styles['label-desc']}>{t('projectRetrievalEmbeddingModelDesc')}</div>
+                    <div className={styles['label-desc']}>{t('embeddingModelDesc')}</div>
                     <Select
-                       placeholder={t('projectSelectModel')}
+                        placeholder={t('selectModel')}
                         open={false}
                         mode="multiple"
                         className={styles['input']}
@@ -201,13 +201,13 @@ function CreateCollection(props: createCollectionType) {
 
                     <div className={styles['label']}>
                         <span className={styles['span']}>*</span>
-                        <span>{t('projectRetrievalColumnCapacity')}</span>
+                        <span>{t('capacity')}</span>
                     </div>
                     <div className={styles['label-desc']}>
-                    {t('projectRetrievalCapacityDesc')}
+                    {t('capacityDesc')}
                     </div>
                     <Select
-                       placeholder={t('projectRetrievalCapacityPlaceholder')}
+                       placeholder={t('capacityPlaceholder')}
                         onChange={handleSelectValue}
                         value={selectValue}
                         className={styles['input']}
@@ -222,11 +222,11 @@ function CreateCollection(props: createCollectionType) {
             <Modal zIndex={10001} closeIcon={<img src={closeIcon} alt="closeIcon" className={styles['img-icon-close']} />} onCancel={handleModalClose} centered footer={[
                 <div className='footer-group' key='footer'>
                     <Button key="model" icon={<PlusOutlined />} onClick={handleCreateModelId} className='cancel-button'>
-                        {t('projectNewModel')}
+                        {t('newModel')}
                     </Button>
                     <div>
                         <span className='select-record'>
-                            {recordsSelected.length} {recordsSelected.length > 1 ? `${t('projectItemsSelected')}` : `${t('projectItemSelected')}`}
+                            {recordsSelected.length} {recordsSelected.length > 1 ? `${t('itemsSelected')}` : `${t('itemSelected')}`}
                         </span>
                         <Button key="cancel" onClick={handleModalClose} className={`cancel-button ${styles.cancelButton}`}>
                             {t('cancel')}
@@ -238,8 +238,8 @@ function CreateCollection(props: createCollectionType) {
 
                 </div>
 
-            ]} title={t('projectSelectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
-                <ModalTable title='New model' name="model" onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
+            ]} title={t('selectModel')} open={modalTableOpen} width={1000} className={`modal-inner-table ${styles['retrieval-model']}`}>
+                <ModalTable title={t('newModel')} name="model" onOpenDrawer={handleCreateModelId} updatePrevButton={updatePrevButton} defaultSelectedRowKeys={defaultSelectedRowKeys} handleRecordsSelected={handleRecordsSelected} ifSelect={true} columns={modelsTableColumn} hasMore={modelHasMore} id='model_id' dataSource={options} onChildEvent={handleChildModelEvent}></ModalTable>
             </Modal>
             <ModelModal type='text_embedding'  getOptionsList={fetchModelsList} ref={childRef} open={modelOne} handleSetModelOne={handleModalCancel} modelType='text_embedding' handleSetModelConfirmOne={handleSetModelConfirmOne}></ModelModal>
         </>

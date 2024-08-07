@@ -22,11 +22,11 @@ function ModalSelect(prop: any) {
 
         {
             value: 'All Records',
-            label: 'All Records',
+            label: t('allRecords'),
         },
         {
             value: 'Selected Records',
-            label: 'Selected Records',
+            label: t('selectedRecords'),
         }
     ]
     const empty: Record<string, any> = {
@@ -124,7 +124,7 @@ function ModalSelect(prop: any) {
                 </Button>
                 <div>
                     <span className='select-record'>
-                        {collectionId ? 1 : 0}   {t('projectItemSelected')}
+                        {collectionId ? 1 : 0}   {t('itemSelected')}
                     </span>
                     <Button key="cancel" onClick={handleRetrievlCancel} className='cancel-button' style={{ marginRight: '8px' }}>
                         {t('cancel')}
@@ -144,8 +144,8 @@ function ModalSelect(prop: any) {
                             label: 'ID',
                         }
                     ]} className={'select-name'} />
-                    <Input placeholder='Enter ID' className={'input-name'} onChange={handleInputChange} value={inputValue} />
-                    <Button className='cancel-button' onClick={handleSearch}>Search</Button>
+                    <Input placeholder={t('enterID')} className={'input-name'} onChange={handleInputChange} value={inputValue} />
+                    <Button className='cancel-button' onClick={handleSearch}>{t('search')}</Button>
                     <Select defaultValue="All Records" onChange={handleSelectEndChange} options={optionsEnd} className={'select-data'} />
 
                 </div>
@@ -159,8 +159,8 @@ function ModalSelect(prop: any) {
                             {contentList.map((item: any, index: number) => (
                                 <div className={`retrieval-single ${retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) && 'selected-retrieval'} ${item[id] === collectionId && 'retrieval-selected-single'}`} key={index} onClick={retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) ? undefined : () => handleSelectCollection(item)}>
                                     <div className='top'>
-                                        <span className='name'>{item.name || `Untitled ${title}`}</span>
-                                        {retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) && item[id] !== collectionId ? <span className='text'>Selected</span> : <Radio checked={item[id] === collectionId}></Radio>}
+                                        <span className='name'>{item.name || t('untitledTitle',{ title})}</span>
+                                        {retrievalSelectedList.map((item1: any) => item1[id]).includes(item[id]) && item[id] !== collectionId ? <span className='text'>{t('selected')}</span> : <Radio checked={item[id] === collectionId}></Radio>}
                                     </div>
                                     <div className='desc'>
                                         {item.description}
