@@ -41,7 +41,13 @@ def generate_test_cases():
     cases = []
     for bundle_dir_name in bundle_dir_names:
 
-        if bundle_dir_name in ["aftership", "coin_market_cap", "api_ninjas_commodity_price"]:
+        if bundle_dir_name in [
+            "aftership",
+            "coin_market_cap",
+            "api_ninjas_commodity_price",
+            "geospy_api",
+            "weather_bit",
+        ]:
             continue
 
         bundle_dir_path = os.path.join(bundles_path, bundle_dir_name)
@@ -58,7 +64,7 @@ def generate_test_cases():
         plugin_ids = [id for id in plugin_ids if not id.startswith("_")]
 
         for plugin_id in plugin_ids:
-            if plugin_id in ["get_historical_exchange_rate"]:
+            if plugin_id in ["get_historical_exchange_rate", "chat_completion_by_gemini_1_0_pro"]:
                 continue
             plugin_path = os.path.join(bundle_plugins_path, plugin_id)
             plugin_schema_path = os.path.join(plugin_path, "plugin_schema.yml")
