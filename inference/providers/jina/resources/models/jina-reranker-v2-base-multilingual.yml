@@ -1,0 +1,12 @@
+model_schema_id: jina/jina-reranker-v2-base-multilingual
+provider_model_id: jina-reranker-v2-base-multilingual
+type: rerank
+name: "i18n:jina_reranker_v2_base_multilingual_name"
+description: "i18n:jina_reranker_v2_base_multilingual_description"
+default_endpoint_url: https://api.jina.ai/v1/rerank
+
+
+pricing:
+  input_token: 0.02
+  unit: 1000000
+  currency: USD
