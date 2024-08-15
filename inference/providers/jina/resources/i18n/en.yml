@@ -32,3 +32,9 @@ jina_reranker_v1_tiny_en_description: "Optimized for performance with 30M parame
 
 jina_colbert_v1_en_name: "jina-colbert-v1-en"
 jina_colbert_v1_en_description: "Improved ColBERT with 8K-token length for embedding and reranking tasks."
+
+jina_reranker_v2_base_multilingual_name: "jina-reranker-v2-base-multilingual"
+jina_reranker_v2_base_multilingual_description: "The latest and best reranker model with multilingual, function calling and search support."
+
+jina_clip_v1_name: "jina-clip-v1"
+jina_clip_v1_description: "The latest multimodal embeddings for text and image retrieval."
