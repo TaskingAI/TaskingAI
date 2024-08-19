@@ -45,6 +45,16 @@ class RunToolRequest(BaseModel):
             }
         ],
     )
+    execution_config: Dict = Field(
+        {},
+        description="The execution configuration of the plugin.",
+        examples=[
+            {
+                "config_1": "value_1",
+                "config_2": "value_2",
+            }
+        ],
+    )
     credentials: BundleCredentials = Field(
         ...,
         description="The credentials of the model provider.",
@@ -120,6 +130,7 @@ async def api_execute(
     try:
         plugin_output = await plugin.execute(
             credentials=data.credentials,
+            execution_config=data.execution_config,
             plugin_input=PluginInput(input_params=data.input_params, project_id=data.project_id),
         )
     except TKHttpException as e:

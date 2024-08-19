@@ -1,0 +1,54 @@
+name: i18n:send_email_name
+description: i18n:send_email_description
+id: send_email
+execution_config_schema:
+  - smtp_server:
+      name: i18n:smtp_server_name
+      description: i18n:smtp_server_description
+      required: true
+      type: string
+  - smtp_port:
+      name: i18n:smtp_port_name
+      description: i18n:smtp_port_description
+      required: true
+      type: integer
+  - smtp_username:
+      name: i18n:smtp_username_name
+      description: i18n:smtp_username_description
+      required: true
+      type: string
+  - smtp_password:
+      name: i18n:smtp_password_name
+      description: i18n:smtp_password_description
+      required: true
+      type: string
+input_schema:
+  recipient_email:
+    description: i18n:recipient_email_description
+    name: i18n:recipient_email_name
+    required: true
+    type: string
+  subject:
+    description: i18n:subject_description
+    name: i18n:subject_name
+    required: true
+    type: string
+  body:
+    description: i18n:body_description
+    name: i18n:body_name
+    required: true
+    type: string
+output_schema:
+  result:
+    description: i18n:send_email_output_result_description
+    name: i18n:send_email_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      recipient_email: "linkwang955@gmail.com"
+      subject: "Test Subject"
+      body: "This is a test email sent using Python."
+
+  mode: schema
