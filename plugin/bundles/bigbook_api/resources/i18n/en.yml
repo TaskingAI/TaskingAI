@@ -14,7 +14,7 @@ book_search_input_number_description: "The number of books to return in range [1
 book_search_input_min_rating_name: "Min Rating"
 book_search_input_min_rating_description:  "This parameter sets the minimum allowable rating for a book, where the rating is expressed as a decimal between 0 and 1. Books must meet or exceed this rating to be included."
 book_search_input_max_rating_name: "Max Rating"
-book_search_input_max_rating_description: "This parameter sets the maximum allowable rating for a book, where the rating is expressed as a decimal between 0 and 1. Books must meet or exceed this rating to be included."
+book_search_input_max_rating_description: "This parameter sets the maximum allowable rating for a book, where the rating is expressed as a decimal between 0 and 1. Books must meet or be under this rating to be included."
 book_search_output_results_name: "Results"
 book_search_output_results_description: "The results of the search."
 book_search_name: "Book Search"
