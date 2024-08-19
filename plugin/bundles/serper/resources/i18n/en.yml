@@ -1,4 +1,4 @@
-bundle_name: "Serper search"
+bundle_name: "Serper Search"
 bundle_description: "An aggregator for different Google search services."
 credential_serper_api_key_description: "API Key for authentication. Get it from https://serper.dev/api-key"
 text_search_input_query_name: "Query"

@@ -1,4 +1,4 @@
-bundle_name: "nasa"
+bundle_name: "NASA"
 bundle_description: "Obtain astronomical information"
 credential_nasa_api_key_description: "API Key for authentication. Get it from https://api.nasa.gov/"
 get_apod_information_input_date_name: "date"

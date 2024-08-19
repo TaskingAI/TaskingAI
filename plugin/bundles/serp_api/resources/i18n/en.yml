@@ -1,4 +1,4 @@
-bundle_name: "Serp Api"
+bundle_name: "SerpApi"
 bundle_description: "Serp API is an API service that provides data on the Search Engine Results Page (SERP) in real time. It supports various search engines such as Google, Bing, etc., and offers the ability to perform batch queries and compare historical data. "
 credential_serp_api_api_key_description: "API Key for authentication. Get it from https://serpapi.com/dashboard"
 get_flight_information_input_departure_id_name: "Departure ID"

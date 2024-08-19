@@ -1,4 +1,4 @@
-bundle_name: "Coin Market Cap"
+bundle_name: "CoinMarketCap"
 bundle_description: "Get the latest information about cryptocurrencies from Coin Market Cap"
 credential_coin_market_cap_api_key_description: "API Key for authentication. Get it from https://coinmarketcap.com/api/"
 get_latest_coin_data_input_symbol_name: "symbol"
