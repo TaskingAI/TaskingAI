@@ -1,4 +1,4 @@
-bundle_name: "Aftership"
+bundle_name: "AfterShip"
 bundle_description: "Aftership is a shipment tracking platform that allows you to track shipments from over 700 couriers worldwide."
 credential_aftership_api_key_description: "API Key for authentication. Get it from https://www.aftership.com/docs/tracking/quickstart/api-quick-start"
 get_tracking_info_input_tracking_number_name: "Tracking number"

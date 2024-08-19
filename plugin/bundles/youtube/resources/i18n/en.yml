@@ -1,4 +1,4 @@
-bundle_name: "Youtube"
+bundle_name: "YouTube"
 bundle_description: "Search YouTube videos."
 credential_google_api_key_description: "API Key for authentication. Get it from https://console.developers.google.com/"
 search_video_input_query_name: "query"

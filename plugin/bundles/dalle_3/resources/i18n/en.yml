@@ -1,4 +1,4 @@
-bundle_name: "DALL·E 3"
+bundle_name: "DALL-E 3"
 bundle_description: "DALL·E 3 is a powerful image generation model that can generate images from textual descriptions."
 credential_openai_api_key_description: "API Key for authentication. Get it from https://platform.openai.com/"
 generate_image_input_prompt_name: "prompt"

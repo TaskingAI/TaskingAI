@@ -1,4 +1,4 @@
-bundle_name: "Calorie Ninjas"
+bundle_name: "CalorieNinjas"
 bundle_description: "Get nutrition information and recipes from Calorie Ninjas"
 credential_calorie_ninjas_api_key_description: "API Key for authentication. Get it from https://calorieninjas.com/api"
 get_nutrition_info_input_food_description_name: "Food Description"

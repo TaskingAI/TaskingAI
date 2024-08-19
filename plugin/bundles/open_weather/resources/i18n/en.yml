@@ -1,4 +1,4 @@
-bundle_name: "Open Weather"
+bundle_name: "OpenWeather"
 bundle_description: "Weather data and forecasts."
 credential_open_weather_api_key_description: "API Key for Open Weather."
 get_current_weather_input_lat_name: "Latitude"

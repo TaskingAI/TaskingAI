@@ -1,4 +1,4 @@
-bundle_name: "New York Times"
+bundle_name: "The New York Times"
 bundle_description: "Search for NYT articles by keywords and filters."
 credential_new_york_times_api_key_description: "API Key for authentication. Get it from https://developer.nytimes.com/my-apps"
 news_search_input_query_name: "Query"

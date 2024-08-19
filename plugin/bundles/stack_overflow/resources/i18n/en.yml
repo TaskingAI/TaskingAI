@@ -1,4 +1,4 @@
-bundle_name: "StackOverflow"
+bundle_name: "Stack Overflow"
 bundle_description: "Stack Overflow is an IT-focused question-and-answer website specializing in programming. Users can submit questions, browse issues, and index relevant content on this platform for free."
 stack_overflow_search_input_tagged_name: "Tagged"
 stack_overflow_search_input_tagged_description: "The search tag"

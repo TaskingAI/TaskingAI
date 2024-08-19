@@ -1,4 +1,4 @@
-bundle_name: "Spoonacular"
+bundle_name: "Spoonacular API"
 bundle_description: "The spoonacular Nutrition, Recipe, and Food API allows you to access over 365,000 recipes and 86,000 food products."
 credential_spoonacular_api_key_description: "API Key for authentication. Get it from https://spoonacular.com/food-api/console#Profile"
 recipe_search_input_query_name: "Query"

@@ -1,4 +1,4 @@
-bundle_name: "Trip Advisor"
+bundle_name: "Tripadvisor"
 bundle_description: "Search for hotels, restaurants, and attractions for your trip."
 credential_trip_advisor_api_key_description: "API Key for authentication. Get it from https://www.tripadvisor.com/developers?screen=credentials"
 search_location_input_query_name: "Query"
