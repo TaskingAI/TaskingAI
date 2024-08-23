@@ -52,7 +52,7 @@ class Config:
 
     def __init__(self):
         # version
-        self.VERSION = "v0.2.18"
+        self.VERSION = "v0.2.19"
 
         # mode
         self.MODE = load_str_env("MODE", required=True)
