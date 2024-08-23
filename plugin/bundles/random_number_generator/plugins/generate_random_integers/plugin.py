@@ -7,7 +7,7 @@ class GenerateRandomIntegers(PluginHandler):
     async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
         min: int = plugin_input.input_params.get("min")
         max: int = plugin_input.input_params.get("max")
-        number: int = plugin_input.input_params.get("number")
+        number: int = plugin_input.input_params.get("number", 1)
 
         if min >= max:
             raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "min should be less than max")
