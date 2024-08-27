@@ -3,7 +3,7 @@ import sympy as sp
 
 
 class Evaluate(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         expression: str = plugin_input.input_params.get("expression")
         try:
             expression = sp.sympify(expression)

@@ -5,7 +5,7 @@ from config import CONFIG
 
 
 class GetApodInformation(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         NASA_API_KEY: str = credentials.credentials.get("NASA_API_KEY")
         input_params = plugin_input.input_params or {}
 

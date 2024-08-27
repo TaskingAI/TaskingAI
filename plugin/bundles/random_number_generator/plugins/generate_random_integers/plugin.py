@@ -4,7 +4,7 @@ from bundle_dependency import *
 
 
 class GenerateRandomIntegers(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         min: int = plugin_input.input_params.get("min")
         max: int = plugin_input.input_params.get("max")
         number: int = plugin_input.input_params.get("number", 1)

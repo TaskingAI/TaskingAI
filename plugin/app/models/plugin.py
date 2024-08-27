@@ -33,7 +33,7 @@ class Plugin(BaseModel):
     plugin_id: str
     name: str
     description: str
-    execution_config_schema: List
+    execution_config_schema: Dict[str, ParameterSchema]
     input_schema: Dict[str, ParameterSchema]
     output_schema: Dict[str, ParameterSchema]
 
@@ -84,9 +84,9 @@ class Plugin(BaseModel):
             "output_schema": output_schema_dict,
         }
 
-    def validate_input(self, input_params: Dict[str, Any]):
+    def validate_input_and_schema(self, input_params: Dict[str, Any], schema_dict: Dict[str, ParameterSchema]):
         # Iterate over the input_schema to validate each parameter
-        for key, schema in self.input_schema.items():
+        for key, schema in schema_dict.items():
             # Check if the parameter is required but missing
             if schema.required and key not in input_params:
                 raise ValueError(f"'{key}' is required but not provided.")
@@ -129,3 +129,7 @@ class Plugin(BaseModel):
                     if not isinstance(value, list) or not all(isinstance(item, bool) for item in value):
                         raise ValueError(f"Expected '{key}' to be a list of booleans.")
                 # Additional type checks can be added here for other types if necessary
+
+    def validate_input(self, input_params: Dict[str, Any], execution_config: Dict[str, Any]):
+        self.validate_input_and_schema(input_params, self.input_schema)
+        self.validate_input_and_schema(execution_config, self.execution_config_schema)

@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class NowPlaying(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         language: str = plugin_input.input_params.get("language", "en-US")
         page: int = plugin_input.input_params.get("page", 1)
         region: str = plugin_input.input_params.get("region")

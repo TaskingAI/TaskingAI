@@ -7,7 +7,7 @@ from config import CONFIG
 
 
 class WikipediaSearch(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         q: str = plugin_input.input_params.get("q")
         limit: str = plugin_input.input_params.get("limit", 10)
 

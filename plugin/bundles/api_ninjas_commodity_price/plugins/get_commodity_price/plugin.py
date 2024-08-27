@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class GetCommodityPrice(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         name: str = plugin_input.input_params.get("name")
         api_ninjas_api_key: str = credentials.credentials.get("API_NINJAS_API_KEY")
         name = name.title()

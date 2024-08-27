@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class GetNutritionInfo(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         food_description: str = plugin_input.input_params.get("food_description")
         calorie_ninjas_api_key: str = credentials.credentials.get("CALORIE_NINJAS_API_KEY")
 

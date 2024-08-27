@@ -19,7 +19,7 @@ async def construct_image_data(image_url: str) -> dict:
     raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Invalid image url.")
 
 class ChatCompletionByGpt4Turbo(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         image_url: str = plugin_input.input_params.get("image_url")
         prompt: str = plugin_input.input_params.get("prompt")
 

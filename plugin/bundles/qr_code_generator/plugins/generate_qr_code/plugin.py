@@ -9,7 +9,7 @@ from config import CONFIG
 
 
 class GenerateQrCode(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         text: str = plugin_input.input_params.get("text")
         img = qrcode.make(text)
 

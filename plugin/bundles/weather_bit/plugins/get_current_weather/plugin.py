@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class GetCurrentWeather(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         lat: float = plugin_input.input_params.get("lat")
         lon: float = plugin_input.input_params.get("lon")
         units: str = plugin_input.input_params.get("units", "")

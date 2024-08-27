@@ -10,7 +10,7 @@ from config import CONFIG
 
 
 class SearchLocation(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         query: str = plugin_input.input_params.get("query")
         category: str = plugin_input.input_params.get("category")
         TRIP_ADVISOR_API_KEY: str = credentials.credentials.get("TRIP_ADVISOR_API_KEY")

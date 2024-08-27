@@ -10,7 +10,7 @@ from config import CONFIG
 
 
 class MakePieChart(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         labels: List[str] = plugin_input.input_params.get("labels")
         values: List[float] = plugin_input.input_params.get("values")
         title: str = plugin_input.input_params.get("title", "Pie Chart")

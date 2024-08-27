@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class ImageGeolocatePredict(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         image: str = plugin_input.input_params.get("image")
         top_k: int = plugin_input.input_params.get("top_k")
         GEOSPY_API_API_KEY: str = credentials.credentials.get("GEOSPY_API_API_KEY")

@@ -9,7 +9,7 @@ import plotly.express as px
 
 
 class MakeLineChart(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         x_values: List[float] = plugin_input.input_params.get("x_values")
         y_values: List[float] = plugin_input.input_params.get("y_values")
         title: str = plugin_input.input_params.get("title", "Line Chart")

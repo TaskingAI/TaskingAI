@@ -3,7 +3,7 @@ from duckduckgo_search import AsyncDDGS
 
 
 class SearchText(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         try:
             keywords: str = plugin_input.input_params.get("keywords")
             safe_search = "moderate"

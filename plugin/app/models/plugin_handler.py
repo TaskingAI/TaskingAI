@@ -25,6 +25,7 @@ class PluginHandler(ABC):
     async def execute(
         self,
         credentials: BundleCredentials,
+        execution_config: Dict,
         plugin_input: PluginInput,
     ) -> PluginOutput:
         raise NotImplementedError

@@ -45,7 +45,7 @@ class RunToolRequest(BaseModel):
             }
         ],
     )
-    execution_config: Dict = Field(
+    execution_config: Optional[Dict] = Field(
         {},
         description="The execution configuration of the plugin.",
         examples=[
@@ -84,7 +84,7 @@ class RunToolRequest(BaseModel):
             raise_http_error(ErrorCode.OBJECT_NOT_FOUND, "Plugin not found")
 
         # validate input_params
-        plugin.validate_input(data.input_params)
+        plugin.validate_input(data.input_params, data.execution_config)
 
         return data
 

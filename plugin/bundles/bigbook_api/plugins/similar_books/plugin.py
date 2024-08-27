@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class SimilarBooks(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         id: str = plugin_input.input_params.get("id")
         number: int = plugin_input.input_params.get("number", None)
         bigbook_api_key: str = credentials.credentials.get("BIGBOOK_API_API_KEY")

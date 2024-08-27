@@ -6,7 +6,7 @@ from config import CONFIG
 
 
 class ReadWebPage(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         url: str = plugin_input.input_params.get("url")
 
         async with aiohttp.ClientSession() as session:

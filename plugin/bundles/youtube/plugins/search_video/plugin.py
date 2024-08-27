@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class SearchVideo(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         query: str = plugin_input.input_params.get("query")
         GOOGLE_API_KEY: str = credentials.credentials.get("GOOGLE_API_KEY")
 

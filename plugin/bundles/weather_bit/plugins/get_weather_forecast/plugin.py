@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class GetWeatherForecast(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         interval: str = plugin_input.input_params.get("interval")
         lat: float = plugin_input.input_params.get("lat")
         lon: float = plugin_input.input_params.get("lon")

@@ -7,7 +7,7 @@ from bundle_dependency import *
 
 
 class ListExchangeRates(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         base_currency: str = plugin_input.input_params.get("base_currency")
         exchangerate_api_key: str = credentials.credentials.get("EXCHANGERATE_API_API_KEY")
 

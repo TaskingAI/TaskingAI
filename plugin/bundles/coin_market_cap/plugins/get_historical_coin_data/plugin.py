@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class GetHistoricalCoinData(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         symbol: str = plugin_input.input_params.get("symbol")
         time_start: str = plugin_input.input_params.get("time_start")
         time_end: str = plugin_input.input_params.get("time_end")

@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class MovieTrends(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         time_window: str = plugin_input.input_params.get("time_window", "day")
         language: str = plugin_input.input_params.get("language", "en-US")
 

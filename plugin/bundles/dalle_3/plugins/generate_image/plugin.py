@@ -10,7 +10,7 @@ from config import CONFIG
 
 
 class GenerateImage(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         prompt: str = plugin_input.input_params.get("prompt")
         openai_api_key: str = credentials.credentials.get("OPENAI_API_KEY")
         project_id: str = plugin_input.project_id

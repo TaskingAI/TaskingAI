@@ -10,7 +10,7 @@ from config import CONFIG
 
 
 class MakeHistogram(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         values: List[str] = plugin_input.input_params.get("values")
         title: str = plugin_input.input_params.get("title", "Histogram")
         x_title: str = plugin_input.input_params.get("x_title", "x")

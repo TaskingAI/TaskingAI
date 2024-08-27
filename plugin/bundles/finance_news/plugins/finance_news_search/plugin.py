@@ -27,7 +27,7 @@ def is_valid_date(date: str):
 
 
 class FinanceNewsSearch(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         date: str = plugin_input.input_params.get("date", None)
         keyword: str = plugin_input.input_params.get("keyword", None)
         limit: int = plugin_input.input_params.get("limit", 25)

@@ -12,7 +12,7 @@ from config import CONFIG
 
 
 class ChatCompletionByGemini15Pro(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         image_url: str = plugin_input.input_params.get("image_url")
         prompt: str = plugin_input.input_params.get("prompt")
         google_gemini_api_key: str = credentials.credentials.get("GOOGLE_GEMINI_API_KEY")

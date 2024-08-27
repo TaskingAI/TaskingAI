@@ -7,7 +7,7 @@ from config import CONFIG
 
 
 class GetJobsInformation(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         SERP_API_API_KEY: str = credentials.credentials.get("SERP_API_API_KEY")
         q: str = plugin_input.input_params.get("q")
         hl: str = plugin_input.input_params.get("hl")

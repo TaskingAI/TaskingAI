@@ -17,7 +17,7 @@ class NewsSearch(PluginHandler):
             raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "The date format is incorrect.")
         return True
 
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         query: str = plugin_input.input_params.get("query", "")
         begin_date: str = plugin_input.input_params.get("begin_date", "")
         end_date: str = plugin_input.input_params.get("end_date", "")

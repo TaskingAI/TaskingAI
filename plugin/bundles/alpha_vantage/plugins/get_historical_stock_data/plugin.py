@@ -7,7 +7,7 @@ from bundle_dependency import *
 
 
 class GetHistoricalStockData(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         symbol: str = plugin_input.input_params.get("symbol")
         interval: str = plugin_input.input_params.get("interval")
         start_date: str = plugin_input.input_params.get("start_date")

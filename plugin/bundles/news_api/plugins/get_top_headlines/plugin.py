@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class GetTopHeadlines(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         country: str = plugin_input.input_params.get("country")
         category: str = plugin_input.input_params.get("category")
         count: int = plugin_input.input_params.get("count", 10)

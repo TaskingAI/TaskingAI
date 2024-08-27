@@ -7,7 +7,7 @@ from config import CONFIG
 
 
 class ShoppingSearch(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         query: str = plugin_input.input_params.get("query")
         SERPER_API_KEY: str = credentials.credentials.get("SERPER_API_KEY")
 

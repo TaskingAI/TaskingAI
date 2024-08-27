@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class GenerateImage(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         prompt: str = plugin_input.input_params.get("prompt")
         engine_id: str = plugin_input.input_params.get("engine_id", "stable-diffusion-v1-6")
         steps: int = plugin_input.input_params.get("steps", 30)

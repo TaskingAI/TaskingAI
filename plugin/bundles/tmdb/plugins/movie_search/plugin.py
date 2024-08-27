@@ -8,7 +8,7 @@ from config import CONFIG
 
 
 class MovieSearch(PluginHandler):
-    async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
+    async def execute(self, credentials: BundleCredentials, execution_config: Dict, plugin_input: PluginInput) -> PluginOutput:
         query: str = plugin_input.input_params.get("query")
         language: str = plugin_input.input_params.get("language", "en-US")
         page: int = plugin_input.input_params.get("page", 1)
