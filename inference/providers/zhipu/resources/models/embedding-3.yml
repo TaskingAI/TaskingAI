@@ -1,12 +1,12 @@
-model_schema_id: zhipu/embedding-2
-provider_model_id: embedding-2
+model_schema_id: zhipu/embedding-3
+provider_model_id: embedding-3
 type: text_embedding
-name: "i18n:embedding_2_name"
-description: "i18n:embedding_2_description"
+name: "i18n:embedding_3_name"
+description: "i18n:embedding_3_description"
 default_endpoint_url: https://open.bigmodel.cn/api/paas/v4/embeddings
 
 properties:
-  embedding_size: 1024
+  embedding_size: 2000
   input_token_limit: 8000
   max_batch_size: 1
 
