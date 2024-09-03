@@ -9,8 +9,23 @@ glm_3_turbo_description: "Suitable for scenarios requiring extensive knowledge, 
 glm_4_name: "GLM-4"
 glm_4_description: "It offers enhanced Q&A and text generation capabilities, suitable for complex dialogue interactions and deep content creation. Supports tool invocation (Function Call, Retrieval, Web_search)."
 
+glm_4_flash_name: "GLM-4-Flash"
+glm_4_flash_description: "GLM-4-Flash is a free large language model that can do all of the same tasks as GLM-4, but with a much simpler and faster implementation, zero cost to call large models."
+
+glm_4_long_name: "GLM-4-Long"
+glm_4_long_description: "GLM-4-Long is a large language model that can do all of the same tasks as GLM-4, designed for handling extremely long text and memory-based tasks."
+
+glm_4_plus_name: "GLM-4-Plus"
+glm_4_plus_description: "GLM-4-Plus uses a large number of models to assist in constructing high-quality synthetic data to improve model performance, and uses PPO to effectively improve model reasoning (math, code algorithm, etc.) performance to better reflect human preferences. GLM-4-Plus has reached the same level as the first echelon models such as GPT-4o in terms of various performance indicators."
+
 glm_4v_name: "GLM-4V"
 glm_4v_description: "GLM-4V achieves deep integration of visual and linguistic features without sacrificing performance on any NLP tasks; supports various image understanding tasks such as visual question answering, image captioning, visual localization, and complex object detection."
 
+glm_4v_plus_name: "GLM-4V-Plus"
+glm_4v_plus_description: "Glm-4v-plus improves the image understanding ability on the basis of GLM-4V, and can understand and analyze complex video content, as well as have the ability of time perception."
+
 embedding_2_name: "Embedding-2"
 embedding_2_description: "A text embedding model from Zhipu AI, with 512 input token limit and 1024-dimensional embeddings."
+
+embedding_3_name: "Embedding-3"
+embedding_3_description: "The model supports custom vector dimensions, with recommended choices being 256, 512, 1024, or 2048 dimensions."

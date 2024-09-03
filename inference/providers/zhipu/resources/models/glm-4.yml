@@ -9,7 +9,7 @@ properties:
   function_call: true
   streaming: true
   input_token_limit: 128000
-  # output_token_limit: TODO
+  output_token_limit: 4095
 
 config_schemas:
   - config_id: temperature

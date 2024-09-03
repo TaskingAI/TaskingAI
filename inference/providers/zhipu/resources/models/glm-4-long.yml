@@ -1,16 +1,15 @@
-model_schema_id: zhipu/glm-4v
-provider_model_id: glm-4v
+model_schema_id: zhipu/glm-4-long
+provider_model_id: glm-4-long
 type: chat_completion
-name: "i18n:glm_4v_name"
-description: "i18n:glm_4v_description"
+name: "i18n:glm_4_long_name"
+description: "i18n:glm_4_long_description"
 default_endpoint_url: https://open.bigmodel.cn/api/paas/v4/chat/completions
 
 properties:
-  vision: true
   function_call: true
   streaming: true
-  input_token_limit: 2000
-  # output_token_limit: TODO
+  input_token_limit: 1000000
+  output_token_limit: 4095
 
 config_schemas:
   - config_id: temperature
@@ -24,7 +23,7 @@ config_schemas:
   - config_id: stop
 
 pricing:
-  input_token: 0.05
-  output_token: 0.05
+  input_token: 0.001
+  output_token: 0.001
   unit: 1000
   currency: CNY
