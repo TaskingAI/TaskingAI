@@ -33,7 +33,7 @@ wildcard_test_cases:
   - provider_id: "openrouter"
     cases:
       - model_schema_id: "openrouter/wildcard"
-        provider_model_id: "nousresearch/nous-capybara-7b:free"
+        provider_model_id: "mattshumer/reflection-70b:free"
         model_type: "chat_completion"
         streaming: True
         function_call: True
