@@ -31,6 +31,8 @@ white_list_models = [
     "mistralai/mistral-small-latest",
     "groq/llama-3.1-8b-instant",
     "groq/gemma-7b",
+    "reka/reka-edge",  # This model temporarily encountered an internal server error in inference version 0.2.19
+    "jina/jina-colbert-v1-en",  # The relevance_score returned by this model lacks a defined range
 ]
 
 load_dotenv()

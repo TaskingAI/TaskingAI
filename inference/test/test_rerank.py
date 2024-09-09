@@ -79,10 +79,7 @@ class TestRerank:
         for result in results:
             assert result.get("document").get("text") in self.documents
             assert result.get("relevance_score") >= 0.0
-            if "jina-colbert-v1-en" in model_schema_id:
-                assert result.get("relevance_score") <= 10.0
-            else:
-                assert result.get("relevance_score") <= 1.0
+            assert result.get("relevance_score") <= 1.0
             assert result.get("index") == self.documents.index(result.get("document").get("text"))
 
     @pytest.mark.test_id("inference_032")
