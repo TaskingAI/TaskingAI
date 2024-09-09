@@ -10,7 +10,6 @@ import math
 
 white_list_providers = [
     "azure_openai",
-    "zhipu",
     "baichuan",
     "hugging_face",
     "tongyi",
@@ -31,6 +30,7 @@ white_list_models = [
     "mistralai/mistral-small-latest",
     "groq/llama-3.1-8b-instant",
     "groq/gemma-7b",
+    "zhipu/embedding-3",
 ]
 
 load_dotenv()
