@@ -15,17 +15,19 @@ def _build_debug_response(message: ChatCompletionMessage):
     return message.content
 
 
-TOOL_CALL_HALLUCINATION_MESSAGE = ChatCompletionAssistantMessage(
-    content=None,
-    role=ChatCompletionRole.assistant,
-    function_calls=[
-        {
-            "id": "P3lffDFvUpOJW3PxfB8ecoqw",
-            "name": "make_scatter_plot",
-            "arguments": {"x_values": [1, 2], "y_values": [3, 4]},
-        }
-    ],
-)
+def create_tool_call_hallucination_message():
+    return ChatCompletionAssistantMessage(
+        content=None,
+        role=ChatCompletionRole.assistant,
+        function_calls=[
+            {
+                "id": generate_random_function_call_id(),
+                "name": "make_scatter_plot",
+                "arguments": {"x_values": [1, 2], "y_values": [3, 4]},
+            }
+        ],
+    )
+
 
 ASSISTANT_CONTENT_DEBUG_MESSAGE = ChatCompletionAssistantMessage(
     content="Test Message",
@@ -58,13 +60,13 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
         )
         if provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.user:
             finish_reason = ChatCompletionFinishReason.function_calls
-            message = copy.deepcopy(TOOL_CALL_HALLUCINATION_MESSAGE)
+            message = create_tool_call_hallucination_message()
         elif provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.function:
             finish_reason = ChatCompletionFinishReason.stop
             message = copy.deepcopy(ASSISTANT_CONTENT_DEBUG_MESSAGE)
         elif provider_model_id == "debug-tool-call-hallucinations-2":
             finish_reason = ChatCompletionFinishReason.function_calls
-            message = copy.deepcopy(TOOL_CALL_HALLUCINATION_MESSAGE)
+            message = create_tool_call_hallucination_message()
         else:
             finish_reason = ChatCompletionFinishReason.stop
             message_content = _build_debug_response(messages[-1])
@@ -98,13 +100,13 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
             raise_http_error(ErrorCode.PROVIDER_ERROR, "Debug error for test")
 
         if provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.user:
-            output_message = copy.deepcopy(TOOL_CALL_HALLUCINATION_MESSAGE)
+            output_message = create_tool_call_hallucination_message()
             finish_reason = ChatCompletionFinishReason.function_calls
         elif provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.function:
             output_message = copy.deepcopy(ASSISTANT_CONTENT_DEBUG_MESSAGE)
             finish_reason = ChatCompletionFinishReason.stop
         elif provider_model_id == "debug-tool-call-hallucinations-2":
-            output_message = copy.deepcopy(TOOL_CALL_HALLUCINATION_MESSAGE)
+            output_message = create_tool_call_hallucination_message()
             finish_reason = ChatCompletionFinishReason.function_calls
         else:
             # Extract the last message
