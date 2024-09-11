@@ -27,6 +27,11 @@ TOOL_CALL_HALLUCINATION_MESSAGE = ChatCompletionAssistantMessage(
     ],
 )
 
+ASSISTANT_CONTENT_DEBUG_MESSAGE = ChatCompletionAssistantMessage(
+    content="Test Message",
+    role=ChatCompletionRole.assistant,
+)
+
 
 class DebugChatCompletionModel(BaseChatCompletionModel):
     def __init__(self):
@@ -51,9 +56,12 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
             [function.model_dump() for function in functions] if functions else None,
             function_call,
         )
-        if provider_model_id == "debug-tool-call-hallucinations":
+        if provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.user:
             finish_reason = ChatCompletionFinishReason.function_calls
             message = copy.deepcopy(TOOL_CALL_HALLUCINATION_MESSAGE)
+        elif provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.function:
+            finish_reason = ChatCompletionFinishReason.stop
+            message = copy.deepcopy(ASSISTANT_CONTENT_DEBUG_MESSAGE)
         else:
             finish_reason = ChatCompletionFinishReason.stop
             message_content = _build_debug_response(messages[-1])
@@ -86,10 +94,12 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
         if provider_model_id == "debug-error":
             raise_http_error(ErrorCode.PROVIDER_ERROR, "Debug error for test")
 
-        if provider_model_id == "debug-tool-call-hallucinations":
+        if provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.user:
             output_message = copy.deepcopy(TOOL_CALL_HALLUCINATION_MESSAGE)
             finish_reason = ChatCompletionFinishReason.function_calls
-
+        elif provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.function:
+            output_message = copy.deepcopy(ASSISTANT_CONTENT_DEBUG_MESSAGE)
+            finish_reason = ChatCompletionFinishReason.stop
         else:
             # Extract the last message
             message_content = _build_debug_response(messages[-1])
