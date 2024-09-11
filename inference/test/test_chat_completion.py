@@ -51,7 +51,12 @@ class TestChatCompletion:
     async def test_chat_completion_by_normal(self, test_data):
         model_schema_id = test_data["model_schema_id"]
         message = [{"role": "user", "content": "Hello, nice to meet you, what is your name"}]
-        if "debug-error" in model_schema_id or "azure" in model_schema_id or "hugging_face" in model_schema_id:
+        if (
+            "debug-error" in model_schema_id
+            or "azure" in model_schema_id
+            or "hugging_face" in model_schema_id
+            or "debug-tool-call-hallucinations" in model_schema_id
+        ):
             pytest.skip("Skip the test case with debug-error.")
         configs = {
             "temperature": 0.5,
@@ -379,6 +384,7 @@ class TestChatCompletion:
         if (
             not function_call
             or "google_gemini" in model_schema_id
+            or "debug-tool-call-hallucinations" in model_schema_id
             or "sensetime" in model_schema_id
             or "openrouter" in model_schema_id
         ):
@@ -439,6 +445,7 @@ class TestChatCompletion:
             not function_call
             or not stream
             or "azure" in model_schema_id
+            or "debug-tool-call-hallucinations" in model_schema_id
             or "mistralai" in model_schema_id
             or "google_gemini" in model_schema_id
             or "sensetime" in model_schema_id
