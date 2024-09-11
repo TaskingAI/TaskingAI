@@ -163,7 +163,7 @@ async def api_verify_credentials(
                     proxy=data.proxy,
                     custom_headers=data.custom_headers,
                 )
-                if response.message.content is None:
+                if not response.message.content and not response.message.function_calls:
                     raise_http_error(ErrorCode.CREDENTIALS_VALIDATION_ERROR, error_message)
         elif model_type == ModelType.TEXT_EMBEDDING:
             from ..text_embedding.route import embed_text
