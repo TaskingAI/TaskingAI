@@ -62,6 +62,9 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
         elif provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.function:
             finish_reason = ChatCompletionFinishReason.stop
             message = copy.deepcopy(ASSISTANT_CONTENT_DEBUG_MESSAGE)
+        elif provider_model_id == "debug-tool-call-hallucinations-2":
+            finish_reason = ChatCompletionFinishReason.function_calls
+            message = copy.deepcopy(TOOL_CALL_HALLUCINATION_MESSAGE)
         else:
             finish_reason = ChatCompletionFinishReason.stop
             message_content = _build_debug_response(messages[-1])
@@ -100,6 +103,9 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
         elif provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.function:
             output_message = copy.deepcopy(ASSISTANT_CONTENT_DEBUG_MESSAGE)
             finish_reason = ChatCompletionFinishReason.stop
+        elif provider_model_id == "debug-tool-call-hallucinations-2":
+            output_message = copy.deepcopy(TOOL_CALL_HALLUCINATION_MESSAGE)
+            finish_reason = ChatCompletionFinishReason.function_calls
         else:
             # Extract the last message
             message_content = _build_debug_response(messages[-1])

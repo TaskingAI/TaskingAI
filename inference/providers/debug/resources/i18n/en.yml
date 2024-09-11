@@ -11,6 +11,9 @@ debug_error_description: "Debug error model for testing purposes."
 debug_tool_call_hallucinations_name: "Debug Tool Call Hallucinations"
 debug_tool_call_hallucinations_description: "Debug chat completion model with tool call hallucinations for testing purposes."
 
+debug_tool_call_hallucinations_2_name: "Debug Tool Call Hallucinations 2"
+debug_tool_call_hallucinations_2_description: "Debug chat completion model with tool call hallucinations 2 for testing purposes."
+
 debug_text_embedding_256_name: "Debug Text Embedding 256"
 debug_text_embedding_256_description: "Debug text embedding model with 256 dimensions for testing purposes."
 
