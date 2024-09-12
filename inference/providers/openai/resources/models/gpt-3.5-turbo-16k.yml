@@ -1,9 +1,10 @@
 model_schema_id: openai/gpt-3.5-turbo-16k
-provider_model_id: gpt-3.5-turbo-16k
+provider_model_id: gpt-3.5-turbo
 type: chat_completion
 name: "i18n:gpt_3_5_turbo_16k_name"
 description: "i18n:gpt_3_5_turbo_16k_description"
 default_endpoint_url: https://api.openai.com/v1/chat/completions
+deprecated: true
 
 properties:
   function_call: true

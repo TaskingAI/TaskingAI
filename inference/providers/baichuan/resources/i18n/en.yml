@@ -7,7 +7,7 @@ baichuan2_turbo_name: "BaiChuan 2 Turbo"
 baichuan2_turbo_description: "BaiChuan 2 Turbo is a high-performance chat completion model from Baichuan."
 
 baichuan2_turbo_192k_name: "BaiChuan 2 Turbo 192K"
-baichuan2_turbo_192k_description: "BaiChuan 2 Turbo 192K is a high-performance chat completion model from Baichuan with a 192K token limit."
+baichuan2_turbo_192k_description: "The model is deprecated. All calls to it will now be rerouted to the BaiChuan 3 Turbo 128K model."
 
 baichuan3_turbo_name: "BaiChuan 3 Turbo"
 baichuan3_turbo_description: "BaiChuan 3 Turbo is a high-performance chat completion model from Baichuan."
