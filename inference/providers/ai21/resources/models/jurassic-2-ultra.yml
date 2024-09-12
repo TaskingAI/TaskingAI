@@ -4,6 +4,7 @@ type: chat_completion
 name: "i18n:jurassic_2_ultra_name"
 description: "i18n:jurassic_2_ultra_description"
 default_endpoint_url: https://api.ai21.com/studio/v1/j2-ultra/chat
+deprecated: true
 
 properties:
   function_call: false

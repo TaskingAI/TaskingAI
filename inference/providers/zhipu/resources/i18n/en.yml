@@ -4,7 +4,7 @@ zhipu_description: "ZHIPU AI, co-developed by Tsinghua University's KEG Lab and 
 zhipu_api_key_description: "Your Zhipu API Key for authentication."
 
 glm_3_turbo_name: "GLM-3-Turbo"
-glm_3_turbo_description: "Suitable for scenarios requiring extensive knowledge, reasoning ability, and creativity, such as advertising copywriting, novel writing, knowledge-based writing, and code generation. Supports tool invocation (Function Call, Retrieval, Web_search)."
+glm_3_turbo_description: "The model is deprecated. All calls to it will now be rerouted to the GLM-4 model."
 
 glm_4_name: "GLM-4"
 glm_4_description: "It offers enhanced Q&A and text generation capabilities, suitable for complex dialogue interactions and deep content creation. Supports tool invocation (Function Call, Retrieval, Web_search)."
