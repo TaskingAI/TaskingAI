@@ -1,9 +1,10 @@
 model_schema_id: openai/gpt-4-vision
-provider_model_id: gpt-4-vision-preview
+provider_model_id: gpt-4o-mini
 type: chat_completion
 name: "i18n:gpt_4_vision_name"
 description: "i18n:gpt_4_vision_description"
 default_endpoint_url: https://api.openai.com/v1/chat/completions
+deprecated: true
 
 properties:
   vision: true

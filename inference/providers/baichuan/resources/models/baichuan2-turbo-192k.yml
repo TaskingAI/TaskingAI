@@ -1,9 +1,10 @@
 model_schema_id: baichuan/baichuan2-turbo-192k
-provider_model_id: baichuan2-turbo-192k
+provider_model_id: baichuan3-turbo-128k
 type: chat_completion
 name: "i18n:baichuan2_turbo_192k_name"
 description: "i18n:baichuan2_turbo_192k_description"
 default_endpoint_url: https://api.baichuan-ai.com/v1/chat/completions
+deprecated: true
 
 properties:
   function_call: false

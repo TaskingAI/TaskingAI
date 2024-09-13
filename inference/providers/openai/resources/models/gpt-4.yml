@@ -1,9 +1,10 @@
 model_schema_id: openai/gpt-4
-provider_model_id: gpt-4
+provider_model_id: gpt-4o-mini
 type: chat_completion
 name: "i18n:gpt_4_name"
 description: "i18n:gpt_4_description"
 default_endpoint_url: https://api.openai.com/v1/chat/completions
+deprecated: true
 
 properties:
   function_call: true

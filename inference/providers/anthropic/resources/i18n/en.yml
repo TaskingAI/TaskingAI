@@ -11,7 +11,7 @@ claude_2_0_name: "Claude 2.0"
 claude_2_0_description: "Claude 2.0 enhanced user interaction, improved in coding, math, logical reasoning, handled 100K tokens, and focused on safety and performance."
 
 claude_instant_1_2_name: "Claude Instant 1.2"
-claude_instant_1_2_description: "Claude Instant 1.2 is a smaller, faster, and more efficient version of Claude 2.1, designed for real-time applications."
+claude_instant_1_2_description: "The model is deprecated. All calls to it will now be rerouted to the Claude 3 Opus model."
 
 claude_3_opus_name: "Claude 3 Opus"
 claude_3_opus_description: "Most powerful model for highly complex tasks."
