@@ -3,9 +3,7 @@ moonshot_description: "Moonshot AI Technology Co., Ltd. specializes in developin
 moonshot_api_key_description: "Your Moonshot API Key for authentication."
 
 moonshot_v1_8k_name: "Moonshot V1 8K"
-moonshot_v1_8k_description: "Moonshot V1 8K model, developed by Moonshot AI, excels in NLP with high-resolution
-understanding, multilingual support, context awareness, security, wide applicability, and continuous learning. It
-allows 8k tokens of input and output"
+moonshot_v1_8k_description: "Moonshot V1 8K model, developed by Moonshot AI, excels in NLP with high-resolution understanding, multilingual support, context awareness, security, wide applicability, and continuous learning. It allows 8k tokens of input and output."
 
 moonshot_v1_32k_name: "Moonshot V1 32K"
 moonshot_v1_32k_description: "Moonshot V1 32K model, has the same features as Moonshot V1 8K, but allows 32k tokens of input and output."

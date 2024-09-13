@@ -1,5 +1,5 @@
 bundle_name: "QR Code Generator"
-bundle_description: "Generate QR codes from textual input"
+bundle_description: "Generate QR codes from textual input."
 generate_qr_code_input_text_name: "Text"
 generate_qr_code_input_text_description: "The text to encode in the QR code"
 generate_qr_code_output_url_name: "Url"

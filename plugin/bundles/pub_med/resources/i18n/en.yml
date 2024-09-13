@@ -10,4 +10,4 @@ biomedical_search_input_journal_description: "The journal to search for(e.g. sci
 biomedical_search_output_results_name: "Results"
 biomedical_search_output_results_description: "The results of the search"
 biomedical_search_name: "Biomedical Literature Search"
-biomedical_search_description: "Search engine for biomedical literature."
+biomedical_search_description: "Search engine for biomedical literature"

@@ -1,5 +1,5 @@
 bundle_name: "Jina Web Reader"
-bundle_description: "Converts any URL to an LLM-friendly input"
+bundle_description: "Converts any URL to an LLM-friendly input."
 read_url_input_url_name: "Url"
 read_url_input_url_description: "The URL to be converted"
 read_url_output_result_name: "Results"

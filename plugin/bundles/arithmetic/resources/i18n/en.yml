@@ -1,5 +1,5 @@
 arithmetic_name: "Arithmetic"
-arithmetic_description: "A bundle of plugins for performing arithmetic operations"
+arithmetic_description: "A bundle of plugins for performing arithmetic operations."
 
 add_name: "Add"
 add_description: "Add two numbers together"
@@ -36,4 +36,3 @@ subtract_number_2_name: "Number 2"
 subtract_number_2_description: "The second number"
 subtract_result_name: "Result"
 subtract_result_description: "The result of subtracting two numbers"
-

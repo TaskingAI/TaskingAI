@@ -1,5 +1,5 @@
 bundle_name: "Bing Search"
-bundle_description: "Web search provided by bing"
+bundle_description: "Web search provided by bing."
 credential_bing_search_api_key_description: "API Key for authentication. Get it from https://portal.azure.com/#home"
 web_search_input_query_name: "Query"
 web_search_input_query_description: "The search query"
