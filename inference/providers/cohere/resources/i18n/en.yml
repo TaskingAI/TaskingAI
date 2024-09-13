@@ -4,7 +4,7 @@ cohere_description: "Cohere is a Canadian startup that provides natural language
 cohere_api_key_description: "Your Cohere API key for authentication."
 
 embed_english_light_v2_0_name: "embed-english-light-v2.0"
-embed_english_light_v2_0_description: "A smaller, faster version of embed-english-v2.0. Almost as capable, but a lot faster. English only.	"
+embed_english_light_v2_0_description: "A smaller, faster version of embed-english-v2.0. Almost as capable, but a lot faster. English only."
 
 embed_multilingual_v2_0_name: "embed-multilingual-v2.0"
 embed_multilingual_v2_0_description: "Provides multilingual classification and embedding support."

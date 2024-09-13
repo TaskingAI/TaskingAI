@@ -1,5 +1,5 @@
 bundle_name: "arXiv Search"
-bundle_description: "Search for academic papers on arXiv"
+bundle_description: "Search for academic papers on arXiv."
 arxiv_search_input_query_name: "Query"
 arxiv_search_input_query_description: "The search query. Example: quantum computing"
 arxiv_search_input_max_results_name: "Max Results"

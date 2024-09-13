@@ -1,5 +1,5 @@
 bundle_name: "GitHub"
-bundle_description: "Get information from GitHub"
+bundle_description: "Get information from GitHub."
 credential_github_api_key_description: "API Key for authentication. Get it from https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token"
 search_repositories_input_query_name: "Query"
 search_repositories_input_query_description: "The search query. Example: python web crawler"

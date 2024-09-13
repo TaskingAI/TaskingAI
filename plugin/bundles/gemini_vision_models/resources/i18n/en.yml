@@ -8,7 +8,7 @@ chat_completion_by_gemini_1_0_pro_input_prompt_description: "The prompt for the 
 chat_completion_by_gemini_1_0_pro_output_result_name: "Result"
 chat_completion_by_gemini_1_0_pro_output_result_description: "The textual response from the model"
 chat_completion_by_gemini_1_0_pro_name: "(Deprecated) Chat completion by gemini 1.0 pro"
-chat_completion_by_gemini_1_0_pro_description: "This plugin is deprecated by Google since July 12, 2024, and should not be used. Original description: Get textual responses from Gemini 1.0 Pro Vision model. Input an image url and a textual prompt."
+chat_completion_by_gemini_1_0_pro_description: "This plugin is deprecated by Google since July 12, 2024, and should not be used. Original description: Get textual responses from Gemini 1.0 Pro Vision model. Input an image url and a textual prompt"
 
 chat_completion_by_gemini_1_5_pro_input_image_url_name: "Image Url"
 chat_completion_by_gemini_1_5_pro_input_image_url_description: "The url of the image"
@@ -17,4 +17,4 @@ chat_completion_by_gemini_1_5_pro_input_prompt_description: "The prompt for the 
 chat_completion_by_gemini_1_5_pro_output_result_name: "Result"
 chat_completion_by_gemini_1_5_pro_output_result_description: "The textual response from the model"
 chat_completion_by_gemini_1_5_pro_name: "Chat completion by gemini 1.5 pro"
-chat_completion_by_gemini_1_5_pro_description: "Get textual responses from Gemini 1.5 Pro Vision model. Input an image url and a textual prompt."
+chat_completion_by_gemini_1_5_pro_description: "Get textual responses from Gemini 1.5 Pro Vision model. Input an image url and a textual prompt"

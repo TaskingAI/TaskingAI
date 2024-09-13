@@ -1,5 +1,5 @@
 bundle_name: "TimeAPI"
-bundle_description: "Get the current time in a specific timezone or by geographic coordinates"
+bundle_description: "Get the current time in a specific timezone or by geographic coordinates."
 get_time_by_timezone_input_timezone_name: "Timezone"
 get_time_by_timezone_input_timezone_description: "The timezone to get the current time, in full IANA format, e.g. 'America/New_York'"
 get_time_by_timezone_output_result_name: "Result"

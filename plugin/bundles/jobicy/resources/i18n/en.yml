@@ -9,6 +9,6 @@ job_search_input_industry_description: "Filter by industry (default: all industr
 job_search_input_tag_name: "Tag"
 job_search_input_tag_description: "Search by job title and description (default: all jobs). e.g. python"
 job_search_output_results_name: "Results"
-job_search_output_results_description: "The results of the search."
+job_search_output_results_description: "The results of the search"
 job_search_name: "Job Search"
-job_search_description: "To retrieve the latest remote job listings."
+job_search_description: "To retrieve the latest remote job listings"

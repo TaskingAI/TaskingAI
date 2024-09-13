@@ -23,7 +23,7 @@ claude_3_haiku_name: "Claude 3 Haiku"
 claude_3_haiku_description: "Fast and efficient model for simple tasks."
 
 claude_3_5_sonnet_name: "Claude 3.5 Sonnet"
-claude_3_5_sonnet_description: "Claude 3.5 Sonnet raises the industry bar for intelligence, outperforming competitor models and Claude 3 Opus on a wide range of evaluations"
+claude_3_5_sonnet_description: "Claude 3.5 Sonnet raises the industry bar for intelligence, outperforming competitor models and Claude 3 Opus on a wide range of evaluations."
 
 wildcard_name: "Wildcard"
 wildcard_description: "Wildcard allows you to use any model from Anthropic with custom configurations."
