@@ -264,6 +264,9 @@ class BaseChatCompletionModel(ABC):
         """
         message = None
 
+        if text_content:
+            text_content = text_content.strip()
+
         if function_calls:
             finish_reason = ChatCompletionFinishReason.function_calls
             message = ChatCompletionAssistantMessage(function_calls=function_calls)
