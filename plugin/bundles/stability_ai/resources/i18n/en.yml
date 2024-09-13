@@ -1,5 +1,5 @@
 bundle_name: "Stability AI - Image Generation"
-bundle_description: "Generate an image from a textual description by Stability AI"
+bundle_description: "Generate an image from a textual description by Stability AI."
 credential_stability_ai_api_key_description: "API Key for authentication. Get it from https://stability-ai.com/"
 generate_image_input_prompt_name: "prompt"
 generate_image_input_prompt_description: "The textual description to generate the image from"

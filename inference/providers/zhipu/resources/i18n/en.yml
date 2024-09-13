@@ -13,5 +13,4 @@ glm_4v_name: "GLM-4V"
 glm_4v_description: "GLM-4V achieves deep integration of visual and linguistic features without sacrificing performance on any NLP tasks; supports various image understanding tasks such as visual question answering, image captioning, visual localization, and complex object detection."
 
 embedding_2_name: "Embedding-2"
-embedding_2_description: "A text embedding model from Zhipu AI, with 512 input token limit and 1024-dimensional
-embeddings."
+embedding_2_description: "A text embedding model from Zhipu AI, with 512 input token limit and 1024-dimensional embeddings."

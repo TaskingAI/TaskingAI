@@ -1,5 +1,5 @@
 bundle_name: "Wolfram|Alpha"
-bundle_description: "The easy way to integrate top‑of‑the‑line computational knowledge into your applications"
+bundle_description: "The easy way to integrate top‑of‑the‑line computational knowledge into your applications."
 credential_wolfram_alpha_app_id_description: "The App ID from Wolfram Alpha. Get it from https://developer.wolframalpha.com/access"
 query_input_query_name: "Query"
 query_input_query_description: "The search query. Example: the second highest mountain in the world"

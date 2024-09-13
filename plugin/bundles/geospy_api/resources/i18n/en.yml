@@ -8,4 +8,4 @@ image_geolocate_predict_input_top_k_description: "The number of top predictions 
 image_geolocate_predict_output_results_name: "Results"
 image_geolocate_predict_output_results_description: "The predictions result in json string"
 image_geolocate_predict_name: "Image Geolocate Predict"
-image_geolocate_predict_description: "Given a url of the image, GeoSpy will attempt to predict a list of possible locations where the image may have been taken."
+image_geolocate_predict_description: "Given a url of the image, GeoSpy will attempt to predict a list of possible locations where the image may have been taken"

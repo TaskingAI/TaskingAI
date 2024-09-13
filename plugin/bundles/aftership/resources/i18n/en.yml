@@ -4,7 +4,7 @@ credential_aftership_api_key_description: "API Key for authentication. Get it fr
 get_tracking_info_input_tracking_number_name: "Tracking number"
 get_tracking_info_input_tracking_number_description: "The tracking number of the shipment"
 get_tracking_info_input_slug_name: "Slug"
-get_tracking_info_input_slug_description: "The slug of the courier. e.g. dhl, fedex, ups, etc."
+get_tracking_info_input_slug_description: "The slug of the courier. e.g. dhl, fedex, ups, etc"
 get_tracking_info_output_result_name: "result"
 get_tracking_info_output_result_description: "The tracking information of the shipment in json format"
 get_tracking_info_name: "Get tracking info"

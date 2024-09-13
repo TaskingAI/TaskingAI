@@ -1,5 +1,5 @@
 bundle_name: "Random Number Generator"
-bundle_description: "Generates random numbers based on the input parameters"
+bundle_description: "Generates random numbers based on the input parameters."
 generate_random_integers_input_min_name: "Minimum Value"
 generate_random_integers_input_min_description: "The minimum value of the random integer"
 generate_random_integers_input_max_name: "Maximum Value"

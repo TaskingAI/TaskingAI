@@ -1,5 +1,5 @@
 bundle_name: "Alpha Vantage"
-bundle_description: "Get the latest and historical information about stocks from Alpha Vantage"
+bundle_description: "Get the latest and historical information about stocks from Alpha Vantage."
 credential_alpha_vantage_api_key_description: "API Key for authentication. Get it from https://www.alphavantage.co/support/#api-key"
 get_latest_stock_data_input_symbol_name: "symbol"
 get_latest_stock_data_input_symbol_description: "The symbol of the stock. e.g. AAPL, TSLA, MSFT, etc. For stocks other than US stocks, please use the following format: 'stock_symbol.stock_exchange_symbol'. e.g. 000002.SHZ for code 000002 in Shenzhen Stock Exchange, TSCO.LON for code TSCO in London Stock Exchange, etc."

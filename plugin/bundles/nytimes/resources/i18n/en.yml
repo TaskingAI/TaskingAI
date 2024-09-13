@@ -16,4 +16,4 @@ top_stories_search_input_section_description: "The following values are allowed:
 top_stories_search_output_results_name: "Results"
 top_stories_search_output_results_description: "The search results in json string"
 top_stories_search_name: "Top Stories Search"
-top_stories_search_description: "The Top Stories API returns an array of articles currently on the specified section."
+top_stories_search_description: "The Top Stories API returns an array of articles currently on the specified section"

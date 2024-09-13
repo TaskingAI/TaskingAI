@@ -1,5 +1,5 @@
 bundle_name: "API Ninjas Commodity Price"
-bundle_description: "Provides access to real-time commodity prices for dozens of commonly-traded commodities in major exchanges (CME, NYMEX, etc.)"
+bundle_description: "Provides access to real-time commodity prices for dozens of commonly-traded commodities in major exchanges (CME, NYMEX, etc.)."
 credential_api_ninjas_api_key_description: "API Key for authentication. Get it from https://api-ninjas.com/"
 get_commodity_price_input_name_name: "Name"
 get_commodity_price_input_name_description: "The name of the commodity, example: Gold Futures"

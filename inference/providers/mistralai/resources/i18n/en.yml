@@ -26,7 +26,7 @@ mistral_large_latest_name: "mistral-large"
 mistral_large_latest_description: "Mistral AI's most powerful model. Supports a context window of 32k tokens (around 24,000 words) and is stronger than Mistral-Medium, Mixtral-8x7b and Mistral-7b on benchmarks across the board."
 
 codestral_latest_name: "codestral-latest"
-codestral_latest_description: "A cutting-edge generative model that has been specifically designed and optimized for code generation tasks, including fill-in-the-middle and code completion"
+codestral_latest_description: "A cutting-edge generative model that has been specifically designed and optimized for code generation tasks, including fill-in-the-middle and code completion."
 
 codestral_mamba_latest_name: "codestral-mamba-latest"
 codestral_mamba_latest_description: "A Mamba 2 language model specialized in code generation."

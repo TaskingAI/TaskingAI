@@ -1,5 +1,5 @@
 bundle_name: "Google Search"
-bundle_description: "Web search provided by google"
+bundle_description: "Web search provided by google."
 credential_google_custom_search_api_key_description: "API Key for authentication. Get it from https://developers.google.com/custom-search/v1/introduction"
 credential_google_custom_search_engine_id_description: "Custom search engine ID. Get it from https://cse.google.com/cse/create/new"
 web_search_input_query_name: "Query"
