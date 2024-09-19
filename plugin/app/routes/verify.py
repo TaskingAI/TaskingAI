@@ -38,9 +38,7 @@ async def api_verify_credentials(
     bundle_handler: BundleHandler = get_bundle_handler(data.bundle_id)
     if not bundle_handler:
         raise_http_error(ErrorCode.OBJECT_NOT_FOUND, f"Bundle {data.bundle_id} not found.")
-
     try:
-
         await bundle_handler.verify(data.credentials)
 
     except TKHttpException as e:
@@ -48,13 +46,13 @@ async def api_verify_credentials(
             message = e.detail.get("message")
             if message:
                 message = " " + message
-            e.detail["message"] = f"Model credentials validation failed.{message}"
+            e.detail["message"] = f"Plugin credentials validation failed.{message}"
         raise e
 
     except Exception as e:
         raise_http_error(
             ErrorCode.CREDENTIALS_VALIDATION_ERROR,
-            message="Model credentials validation failed, please check if your credentials are correct.",
+            message="Plugin credentials validation failed, please check if your credentials are correct.",
         )
 
     data.credentials.encrypt()
