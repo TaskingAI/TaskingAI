@@ -1,0 +1,11 @@
+credentials_schema:
+  YOUTUBE_TRANSCRIBE_API_KEY:
+    description: i18n:credential_youtube_transcribe_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: transcribe_tube
+name: i18n:bundle_name
+provider: Transcribe Tube
