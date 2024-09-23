@@ -1,0 +1,18 @@
+model_schema_id: jina/jina-embeddings-v3
+provider_model_id: jina-embeddings-v3
+type: text_embedding
+name: "i18n:jina_embeddings_v3_name"
+description: "i18n:jina_embeddings_v3_description"
+default_endpoint_url: https://api.jina.ai/v1/embeddings
+
+properties:
+  embedding_size: 1024
+  input_token_limit: 8192
+  max_batch_size: 500
+
+config_schemas:
+
+pricing:
+  input_token: 0.02
+  unit: 1000000
+  currency: USD
