@@ -1,0 +1,20 @@
+description: i18n:get_sport_teams_description
+id: get_sport_teams
+input_schema:
+  sport:
+    description: i18n:get_sport_teams_input_sport_description
+    name: i18n:get_sport_teams_input_sport_name
+    required: true
+    type: string
+name: i18n:get_sport_teams_name
+output_schema:
+  results:
+    description: i18n:get_sport_teams_output_results_description
+    name: i18n:get_sport_teams_output_results_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      sport: NBA
+  mode: schema
