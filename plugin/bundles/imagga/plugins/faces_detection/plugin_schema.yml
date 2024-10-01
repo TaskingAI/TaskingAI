@@ -1,0 +1,26 @@
+description: i18n:faces_detection_description
+id: faces_detection
+input_schema:
+  image_url:
+    description: i18n:faces_detection_input_image_url_description
+    name: i18n:faces_detection_input_image_url_name
+    required: true
+    type: string
+  return_face_id:
+    description: i18n:faces_detection_input_return_face_id_description
+    name: i18n:faces_detection_input_return_face_id_name
+    required: false
+    type: integer
+name: i18n:faces_detection_name
+output_schema:
+  result:
+    description: i18n:faces_detection_output_result_description
+    name: i18n:faces_detection_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      image_url: https://previews.123rf.com/images/zagorodnaya/zagorodnaya1602/zagorodnaya160200507/51594791-portrait-of-two-little-girls-twins.jpg
+      return_face_id: 1
+  mode: schema
