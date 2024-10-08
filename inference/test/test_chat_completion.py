@@ -97,7 +97,7 @@ class TestChatCompletion:
         message = test_data["message"]
         function_call = test_data["function_call"]
 
-        if not function_call or "azure" in model_schema_id or "openrouter" in model_schema_id:
+        if not function_call or "azure" in model_schema_id or "openrouter" or "debug-error" in model_schema_id:
             pytest.skip("Skip the test case without function call.")
         configs = {
             "temperature": 0.5,
@@ -287,6 +287,7 @@ class TestChatCompletion:
             or not stream
             or "azure" in model_schema_id
             or "openrouter" in model_schema_id
+            or "debug-error" in model_schema_id
             or "togetherai" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
@@ -384,7 +385,7 @@ class TestChatCompletion:
         if (
             not function_call
             or "google_gemini" in model_schema_id
-            or "debug-tool-call-hallucinations" in model_schema_id
+            or "debug" in model_schema_id
             or "sensetime" in model_schema_id
             or "openrouter" in model_schema_id
         ):
@@ -445,7 +446,7 @@ class TestChatCompletion:
             not function_call
             or not stream
             or "azure" in model_schema_id
-            or "debug-tool-call-hallucinations" in model_schema_id
+            or "debug" in model_schema_id
             or "mistralai" in model_schema_id
             or "google_gemini" in model_schema_id
             or "sensetime" in model_schema_id

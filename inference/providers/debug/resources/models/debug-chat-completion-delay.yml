@@ -1,13 +1,13 @@
-model_schema_id: debug/debug-error
-provider_model_id: debug-error
+model_schema_id: debug/debug-chat-completion-delay
+provider_model_id: debug-chat-completion-delay
 type: chat_completion
-name: "i18n:debug_error_name"
-description: "i18n:debug_error_description"
+name: "i18n:debug_chat_completion_delay_name"
+description: "i18n:debug_chat_completion_delay_description"
 default_endpoint_url:
 
 
 properties:
-  function_call: true
+  function_call: false
   streaming: true
   input_token_limit: 8096
   output_token_limit: 8096
