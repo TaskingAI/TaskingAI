@@ -5,6 +5,9 @@ debug_api_key_description: "debug"
 debug_chat_completion_name: "Debug Chat Completion"
 debug_chat_completion_description: "Debug chat completion model for testing purposes."
 
+debug_chat_completion_delay_name: "Debug Chat Completion Delay"
+debug_chat_completion_delay_description: "Chat completion model with a delay for testing response latency and behavior."
+
 debug_error_name: "Debug Error"
 debug_error_description: "Debug error model for testing purposes."
 

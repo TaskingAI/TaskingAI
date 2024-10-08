@@ -53,6 +53,15 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
     ):
         if provider_model_id == "debug-error" and messages[-1].content != "Only say your name":
             raise_http_error(ErrorCode.PROVIDER_ERROR, "Debug error for test")
+
+        if provider_model_id == "debug-chat-completion-delay":
+            # content format should be "#number#some other content"
+            message = messages[-1].content
+            second = int(message.split("#")[1]) if message.startswith("#") else 30
+            import asyncio
+
+            await asyncio.sleep(second)
+
         input_tokens = estimate_input_tokens(
             [message.model_dump() for message in messages],
             [function.model_dump() for function in functions] if functions else None,
@@ -98,6 +107,14 @@ class DebugChatCompletionModel(BaseChatCompletionModel):
 
         if provider_model_id == "debug-error":
             raise_http_error(ErrorCode.PROVIDER_ERROR, "Debug error for test")
+
+        if provider_model_id == "debug-chat-completion-delay":
+            # content format should be "#number#some other content"
+            message = messages[-1].content
+            second = int(message.split("#")[1]) if message.startswith("#") else 30
+            import asyncio
+
+            await asyncio.sleep(second)
 
         if provider_model_id == "debug-tool-call-hallucinations" and messages[-1].role == ChatCompletionRole.user:
             output_message = create_tool_call_hallucination_message()
