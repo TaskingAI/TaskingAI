@@ -38,3 +38,6 @@ jina_reranker_v2_base_multilingual_description: "The latest and best reranker mo
 
 jina_clip_v1_name: "jina-clip-v1"
 jina_clip_v1_description: "The latest multimodal embeddings for text and image retrieval."
+
+jina_embeddings_v3_name: "jina-embeddings-v3"
+jina_embeddings_v3_description: "A frontier multilingual text embedding model with 570M parameters and 8192 token-length, outperforming the latest proprietary embeddings from OpenAI and Cohere on MTEB."
