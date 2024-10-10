@@ -96,4 +96,5 @@ jobs:
         run: |
           cd ${{ env.WORKING_DIRECTORY }}
           export PROVIDER_URL_BLACK_LIST="tasking.ai"
+          export MODE=test
           bash ./test/run_test.sh /tmp/changed_files.txt
