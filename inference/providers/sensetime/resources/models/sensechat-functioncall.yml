@@ -1,5 +1,5 @@
 model_schema_id: sensetime/sensechat-functioncall
-provider_model_id: SenseChat-FunctionCall
+provider_model_id: sensechat-functioncall
 type: chat_completion
 name: "i18n:sensechat_functioncall_name"
 description: "i18n:sensechat_functioncall_description"

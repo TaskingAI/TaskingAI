@@ -1,5 +1,5 @@
 model_schema_id: sensetime/sensechat-turbo
-provider_model_id: SenseChat-Turbo
+provider_model_id: sensechat-turbo
 type: chat_completion
 name: "i18n:sensechat_turbo_name"
 description: "i18n:sensechat_turbo_description"

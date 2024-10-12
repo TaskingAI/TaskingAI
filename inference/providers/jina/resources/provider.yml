@@ -3,6 +3,10 @@ name: "i18n:jina_name"
 description: "i18n:jina_description"
 updated_timestamp: 1707152831000
 
+default_credential_verification_model_type: rerank
+default_credential_verification_provider_model_id: jina-reranker-v1-base-en
+pass_provider_level_credential_check: false
+
 credentials_schema:
   type: object
   properties:
