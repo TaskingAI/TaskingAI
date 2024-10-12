@@ -3,6 +3,10 @@ name: "i18n:debug_name"
 description: "i18n:debug_description"
 updated_timestamp: 1711074909
 
+default_credential_verification_model_type: chat_completion
+default_credential_verification_provider_model_id: debug-chat-completion
+pass_provider_level_credential_check: false
+
 credentials_schema:
   type: object
   properties:

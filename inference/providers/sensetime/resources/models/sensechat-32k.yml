@@ -1,5 +1,5 @@
 model_schema_id: sensetime/sensechat-32k
-provider_model_id: SenseChat-32K
+provider_model_id: sensechat-32K
 type: chat_completion
 name: "i18n:sensechat_32k_name"
 description: "i18n:sensechat_32k_description"

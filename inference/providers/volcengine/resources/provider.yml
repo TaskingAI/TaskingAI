@@ -6,6 +6,10 @@ updated_timestamp: 1716342841
 return_token_usage: true
 return_stream_token_usage: false
 
+default_credential_verification_model_type: chat_completion
+default_credential_verification_provider_model_id: doubao-lite-4k
+pass_provider_level_credential_check: false
+
 credentials_schema:
   type: object
   properties:

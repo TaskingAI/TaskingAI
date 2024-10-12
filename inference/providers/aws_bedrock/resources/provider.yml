@@ -3,6 +3,10 @@ name: "i18n:aws_bedrock_name"
 description: "i18n:aws_bedrock_description"
 updated_timestamp: 1707152831000
 
+default_credential_verification_model_type: chat_completion
+default_credential_verification_provider_model_id: anthropic/claude-v2.1
+pass_provider_level_credential_check: false
+
 credentials_schema:
   type: object
   properties:

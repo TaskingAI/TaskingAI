@@ -58,3 +58,26 @@ class VerifyModelCredentialsSchema(BaseModel):
         "length is less than 64 and value's length is less than 512.",
         examples=[{"key1": "value1"}, {"key2": "value2"}],
     )
+
+
+class VerifyProviderCredentialsSchema(BaseModel):
+
+    provider_id: str = Field(
+        ...,
+        min_length=1,
+        max_length=127,
+        description="The ID of the model schema.",
+        examples=["openai"],
+    )
+
+    credentials: Optional[Dict] = Field(
+        None,
+        description="The credentials of the model provider to be verified. "
+        "Only one of credentials or encrypted_credentials is required.",
+    )
+
+    encrypted_credentials: Optional[Dict] = Field(
+        None,
+        description="The encrypted credentials of the model provider to be verified.",
+        examples=[None],
+    )

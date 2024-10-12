@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Dict
 from .utils import i18n_text
+from app.models import ModelType
 
 __all__ = ["Provider"]
 
@@ -26,6 +27,9 @@ class Provider(BaseModel):
     enable_custom_headers: bool
     return_token_usage: bool
     return_stream_token_usage: bool
+    pass_provider_level_credential_check: bool
+    default_credential_verification_model_type: ModelType
+    default_credential_verification_provider_model_id: str
 
     @staticmethod
     def object_name():
@@ -50,6 +54,13 @@ class Provider(BaseModel):
                 enable_custom_headers=row.get("enable_custom_headers", False),
                 return_token_usage=row.get("return_token_usage", False),
                 return_stream_token_usage=row.get("return_stream_token_usage", False),
+                pass_provider_level_credential_check=row.get("pass_provider_level_credential_check", True),
+                default_credential_verification_model_type=row.get(
+                    "default_credential_verification_model_type", ModelType.WILDCARD
+                ),
+                default_credential_verification_provider_model_id=row.get(
+                    "default_credential_verification_provider_model_id", ""
+                ),
             )
         except KeyError as e:
             error_msg = f"Missing key '{e.args[0]}' for provider '{provider_id}'. Please check the data."

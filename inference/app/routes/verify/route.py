@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from app.models import BaseSuccessDataResponse
-from .schema import VerifyModelCredentialsSchema
+from app.cache import get_provider
+from .schema import VerifyModelCredentialsSchema, VerifyProviderCredentialsSchema
 from app.models import (
     ChatCompletionModelConfiguration,
     ChatCompletionModelProperties,
@@ -23,6 +24,131 @@ logger = logging.getLogger(__name__)
 
 
 router = APIRouter()
+
+
+@router.post(
+    "/verify_provider_credentials",
+    response_model=BaseSuccessDataResponse,
+    include_in_schema=False,
+)
+async def api_verify_provider_credentials(
+    data: VerifyProviderCredentialsSchema,
+):
+    provider_id = data.provider_id
+    provider = get_provider(provider_id)
+
+    if provider.pass_provider_level_credential_check:
+        from app.models import ProviderCredentials
+
+        provider_credentials = ProviderCredentials()
+        provider_credentials.load_input(provider_id, data.credentials)
+        provider_credentials.encrypt()
+        return BaseSuccessDataResponse(
+            data={
+                "provider_id": provider_id,
+                "encrypted_credentials": provider_credentials.credentials,
+            }
+        )
+
+    provider_model_id = provider.default_credential_verification_provider_model_id
+    model_type = provider.default_credential_verification_model_type
+    model_schema_id = f"{provider_id}/{provider_model_id}"
+    model_infos = [
+        validate_model_info(
+            model_schema_id=model_schema_id,
+            provider_model_id=provider_model_id,
+            properties_dict=None,
+            model_type=model_type,
+        )
+    ]
+    provider_credentials = validate_credentials(
+        model_infos=model_infos,
+        credentials_dict=data.credentials,
+        encrypted_credentials_dict=data.encrypted_credentials,
+    )
+    model_schema, provider_model_id, properties, model_type = model_infos[0]
+    try:
+        if model_type == ModelType.CHAT_COMPLETION:
+            from ..chat_completion.route import chat_completion
+
+            config = ChatCompletionModelConfiguration(max_tokens=10)
+            message = ChatCompletionUserMessage.model_validate({"role": "user", "content": "Only say your name"})
+
+            response = await chat_completion(
+                model_infos=model_infos,
+                messages=[message],
+                credentials=provider_credentials,
+                configs=config,
+            )
+        elif model_type == ModelType.TEXT_EMBEDDING:
+            from ..text_embedding.route import embed_text
+
+            properties: TextEmbeddingModelProperties
+            response = await embed_text(
+                provider_id=provider_id,
+                provider_model_id=provider_model_id,
+                input=["Hello"],
+                credentials=provider_credentials,
+                properties=properties,
+                configs=TextEmbeddingModelConfiguration(),
+                input_type=None,
+            )
+        elif model_type == ModelType.RERANK:
+            from app.cache import get_rerank_model
+
+            model = get_rerank_model(provider_id=provider_id)
+            response = await model.rerank(
+                provider_model_id=provider_model_id,
+                query="skin",
+                documents=[
+                    "Organic cotton baby clothes for sensitive skin",
+                ],
+                top_n=3,
+                credentials=provider_credentials,
+            )
+
+        else:
+            raise_http_error(
+                ErrorCode.REQUEST_VALIDATION_ERROR,
+                message=f"model_type {model_type} is not valid",
+            )
+    except TKHttpException as e:
+        if isinstance(getattr(e, "detail"), dict):
+            message = e.detail.get("message")
+            if message:
+                message = " " + message
+            e.detail["message"] = f"Model credentials validation failed.{message}"
+        raise e
+    except client_exceptions.InvalidURL as e:
+        logger.error(f"chat_completion: provider {model_schema.provider_id} error = {e}")
+        last_exception = TKHttpException(
+            status_code=error_messages[ErrorCode.REQUEST_VALIDATION_ERROR]["status_code"],
+            detail={"error_code": ErrorCode.REQUEST_VALIDATION_ERROR, "message": str(e)},
+        )
+    except client_exceptions.ClientConnectionError as e:
+        logger.error(f"chat_completion: provider {model_schema.provider_id} error = {e}")
+        last_exception = TKHttpException(
+            status_code=error_messages[ErrorCode.REQUEST_VALIDATION_ERROR]["status_code"],
+            detail={"error_code": ErrorCode.REQUEST_VALIDATION_ERROR, "message": str(e)},
+        )
+    except Exception as e:
+        raise_http_error(
+            ErrorCode.CREDENTIALS_VALIDATION_ERROR,
+            message="Model credentials validation has failed. Please check whether your credentials are correct "
+            "and if you have enough quota with the provider. " + "More details: " + str(e),
+        )
+
+    provider_credentials.encrypt()
+    return BaseSuccessDataResponse(
+        data={
+            "provider_id": provider_id,
+            "model_schema_id": model_schema_id,
+            "provider_model_id": provider_model_id,
+            "properties": properties,
+            "model_type": model_type,
+            "encrypted_credentials": provider_credentials.credentials,
+        }
+    )
 
 
 @router.post(

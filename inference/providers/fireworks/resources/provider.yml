@@ -6,6 +6,10 @@ updated_timestamp: 1722318984000
 return_token_usage: true
 return_stream_token_usage: true
 
+default_credential_verification_model_type: text_embedding
+default_credential_verification_provider_model_id: gte-base
+pass_provider_level_credential_check: false
+
 credentials_schema:
   type: object
   properties:

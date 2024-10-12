@@ -9,6 +9,10 @@ enable_custom_headers: true
 return_token_usage: true
 return_stream_token_usage: true
 
+default_credential_verification_model_type: chat_completion
+default_credential_verification_provider_model_id: gemini-1.0-pro
+pass_provider_level_credential_check: false
+
 credentials_schema:
   type: object
   properties:

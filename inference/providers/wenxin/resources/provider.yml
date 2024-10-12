@@ -6,6 +6,10 @@ updated_timestamp: 1708236934318
 return_token_usage: true
 return_stream_token_usage: true
 
+default_credential_verification_model_type: chat_completion
+default_credential_verification_provider_model_id: ernie-bot
+pass_provider_level_credential_check: false
+
 credentials_schema:
   type: object
   properties:

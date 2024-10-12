@@ -3,6 +3,8 @@ name: "i18n:ollama_name"
 description: "i18n:ollama_description"
 updated_timestamp: 1707152831000
 
+pass_provider_level_credential_check: true
+
 credentials_schema:
   type: object
   properties:
