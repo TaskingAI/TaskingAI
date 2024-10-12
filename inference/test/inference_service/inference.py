@@ -32,6 +32,13 @@ async def verify_credentials(data: Dict):
         return ResponseWrapper(response.status, await response.json())
 
 
+async def verify_provider_credentials(data: Dict):
+    async with aiohttp.ClientSession() as session:
+        request_url = f"{Config.BASE_URL}/verify_provider_credentials"
+        response = await session.post(request_url, json=data)
+        return ResponseWrapper(response.status, await response.json())
+
+
 async def caches():
     async with aiohttp.ClientSession() as session:
         request_url = f"{Config.BASE_URL}/caches"

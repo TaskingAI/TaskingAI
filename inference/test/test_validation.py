@@ -1,5 +1,5 @@
-from test.utils.utils import generate_test_cases_for_validation, generate_wildcard_test_case_for_validation
-from test.inference_service.inference import verify_credentials
+from test.utils.utils import generate_test_cases_for_validation, generate_test_cases_for_provider_validation, generate_wildcard_test_case_for_validation
+from test.inference_service.inference import verify_credentials, verify_provider_credentials
 from app.models import provider_credentials
 import pytest
 import asyncio
@@ -73,6 +73,47 @@ class TestValidation:
         assert res.status_code == 200, f"test_validation failed: result={res.json()}"
         assert res.json()["status"] == "success", f"test_validation failed: result={res.json()}"
         await asyncio.sleep(1.5)
+
+    @pytest.mark.parametrize("test_data", generate_test_cases_for_provider_validation(), ids=lambda d: d["provider_id"])
+    @pytest.mark.asyncio
+    @pytest.mark.test_id("inference_016-017")
+    async def test_provider_validation(self, test_data):
+        provider_id = test_data["provider_id"]
+        print("provider_id: ", provider_id)
+
+        credentials = {
+            key: provider_credentials.aes_decrypt(test_data["credentials"][key])
+            for key in test_data["credentials"].keys()
+        }
+
+        request_data = {"provider_id": provider_id, "credentials": credentials}
+        try:
+            res = await asyncio.wait_for(verify_provider_credentials(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        assert res.status_code == 200, f"test_validation failed: result={res.json()}"
+        assert res.json()["status"] == "success", f"test_validation failed: result={res.json()}"
+        await asyncio.sleep(1)
+
+    @pytest.mark.parametrize("test_data", generate_test_cases_for_provider_validation(), ids=lambda d: d["provider_id"])
+    @pytest.mark.asyncio
+    @pytest.mark.test_id("inference_016-017")
+    async def test_provider_validation_with_error_credential(self, test_data):
+        provider_id = test_data["provider_id"]
+        print("provider_id: ", provider_id)
+        if test_data["provider_id"] in ["debug", "custom_host", "openrouter", "replicate", "lm_studio", "ollama", "siliconcloud", "llama_api", "localai"]:
+            pytest.skip("Test not applicable for this provider")
+        credentials = {key: "12345678" for key in test_data["credentials"].keys()}
+
+        request_data = {"provider_id": provider_id, "credentials": credentials}
+        try:
+            res = await asyncio.wait_for(verify_provider_credentials(request_data), timeout=120)
+        except asyncio.TimeoutError:
+            pytest.skip("Skipping test due to timeout after 2 minutes.")
+        assert res.status_code == 400, f"test_validation failed: result={res.json()}"
+        assert res.json()["status"] == "error"
+        assert res.json()["error"]["code"] == "PROVIDER_ERROR"
+        await asyncio.sleep(1)
 
     @pytest.mark.parametrize("test_data", generate_test_cases_for_validation(), ids=lambda d: d["model_schema_id"])
     @pytest.mark.asyncio
