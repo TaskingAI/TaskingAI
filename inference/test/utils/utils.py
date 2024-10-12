@@ -13,6 +13,7 @@ white_list_providers = [
     "zhipu",
     "baichuan",
     "hugging_face",
+    "hugging_face_inference_endpoint",
     "tongyi",
     "wenxin",
     "moonshot",
@@ -300,6 +301,40 @@ def generate_test_cases_for_validation():
         base_test_case = {
             "model_schema_id": yaml_data["model_schema_id"],
             "model_type": yaml_data["type"],
+            "credentials": credentials,
+        }
+        cases.append(base_test_case)
+
+    return cases
+
+
+def generate_test_cases_for_provider_validation():
+    providers_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../providers")
+    provider_ids = [name for name in os.listdir(providers_path) if os.path.isdir(os.path.join(providers_path, name))]
+    provider_ids = [name for name in provider_ids if not name.startswith("_") and not name.startswith("template")]
+
+    cases = []
+    for provider_id in provider_ids:
+        if provider_id in white_list_providers:
+            continue
+        if provider_id == "debug" and CONFIG.PROD:
+            continue
+        print("Adding test cases for provider: ", provider_id)
+        provider_path = os.path.join(providers_path, provider_id, "resources")
+
+        provider_yaml_data = load_yaml(os.path.join(provider_path, "provider.yml"))
+        if provider_yaml_data["provider_id"] in ["localai", "lm_studio", "ollama"]:
+            continue
+        pass_provider_level_credential_check = provider_yaml_data.get("pass_provider_level_credential_check")
+        # if pass_provider_level_credential_check:
+        #     continue
+        credentials_schema = provider_yaml_data["credentials_schema"]
+
+        credentials = {
+            key: provider_credentials.aes_encrypt(os.environ.get(key)) for key in credentials_schema["required"]
+        }
+        base_test_case = {
+            "provider_id": provider_yaml_data["provider_id"],
             "credentials": credentials,
         }
         cases.append(base_test_case)
