@@ -88,8 +88,8 @@ def validate_chat_completion_model(
     if stream and not model_schema.allow_stream():
         raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, f"model {model_schema_id} does not support streaming.")
 
-    if function_call and not model_schema.allow_function_call():
-        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, f"model {model_schema_id} does not support function call.")
+    # if function_call and not model_schema.allow_function_call():
+    #     raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, f"model {model_schema_id} does not support function call.")
 
     if vision_input and not model_schema.allow_vision_input():
         raise_http_error(
