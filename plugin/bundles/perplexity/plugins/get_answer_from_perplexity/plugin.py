@@ -9,7 +9,7 @@ from config import CONFIG
 class GetAnswerFromPerplexity(PluginHandler):
     async def execute(self, credentials: BundleCredentials, plugin_input: PluginInput) -> PluginOutput:
         content: str = plugin_input.input_params.get("content")
-        model: str = plugin_input.input_params.get("model", "llama-3-sonar-small-32k-online")
+        model: str = plugin_input.input_params.get("model", "llama-3.1-sonar-small-128k-online")
         perplexity_api_key: str = credentials.credentials.get("PERPLEXITY_API_KEY")
 
         headers = {

@@ -47,6 +47,7 @@ def generate_test_cases():
             "api_ninjas_commodity_price",
             "geospy_api",
             "weather_bit",
+            "duckduckgo",
         ]:
             continue
 
