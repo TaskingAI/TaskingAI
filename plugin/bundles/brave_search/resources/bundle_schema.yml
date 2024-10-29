@@ -1,0 +1,11 @@
+credentials_schema:
+  BRAVE_API_KEY:
+    description: i18n:credential_brave_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: brave_search
+name: i18n:bundle_name
+provider: Brave

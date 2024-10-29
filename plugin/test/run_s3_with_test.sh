@@ -4,6 +4,6 @@ export PYTHONPATH="${PYTHONPATH}:${parent_dir}"
 
 echo "Starting tests..."
 
-pytest  -q  --tb=no -k "test_generate_image_s3_with_public_domain"
+pytest  -q  --tb=no -k "test_generate_image_s3_with_public_domain" --reruns 2 --reruns-delay 3
 
 echo "Tests completed."

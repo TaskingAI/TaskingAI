@@ -28,3 +28,4 @@ pandas==2.2.1
 kaleido==0.2.1
 aioboto3==12.4.0
 aiofiles==23.2.1
+pytest-rerunfailures==13.0

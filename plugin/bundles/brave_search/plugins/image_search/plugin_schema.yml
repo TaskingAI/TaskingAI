@@ -1,0 +1,32 @@
+description: i18n:image_search_description
+id: image_search
+input_schema:
+  count:
+    description: i18n:image_search_input_count_description
+    name: i18n:image_search_input_count_name
+    required: false
+    type: integer
+  query:
+    description: i18n:image_search_input_query_description
+    name: i18n:image_search_input_query_name
+    required: true
+    type: string
+  safe_search:
+    description: i18n:image_search_input_safe_search_description
+    name: i18n:image_search_input_safe_search_name
+    required: false
+    type: string
+name: i18n:image_search_name
+output_schema:
+  result:
+    description: i18n:image_search_output_result_description
+    name: i18n:image_search_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      count: 5
+      query: Trump
+      safe_search: strict
+  mode: schema
