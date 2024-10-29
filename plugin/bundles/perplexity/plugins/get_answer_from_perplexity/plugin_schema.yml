@@ -22,5 +22,5 @@ test:
   cases:
   - input:
       content: How many stars are there in our galaxy?
-      model: llama-3-sonar-large-32k-online
+      model: llama-3.1-sonar-small-128k-online
   mode: schema

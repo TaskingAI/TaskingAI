@@ -4,7 +4,7 @@ credential_fire_crawl_api_key_description: "API Key for authentication. Get it f
 scrape_web_input_url_name: "URL"
 scrape_web_input_url_description: "The URL to scrape"
 scrape_web_input_only_main_content_name: "Only Main Content"
-scrape_web_input_only_main_content_description: "If True, Only return the main content of the page excluding headers, navs, footers, etc"
+scrape_web_input_only_main_content_description: "If True, Only return the main content of the page excluding headers, navs, footers, etc. Default is True."
 scrape_web_input_screenshot_name: "Screenshot"
 scrape_web_input_screenshot_description: "If True, include a screenshot url of the top of the page that you are scraping"
 scrape_web_output_results_name: "Results"
