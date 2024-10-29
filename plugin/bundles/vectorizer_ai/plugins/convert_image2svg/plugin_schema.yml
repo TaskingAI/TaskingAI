@@ -1,0 +1,47 @@
+description: i18n:convert_image2svg_description
+id: convert_image2svg
+input_schema:
+  image_base64:
+    description: i18n:convert_image2svg_input_image_base64_description
+    name: i18n:convert_image2svg_input_image_base64_name
+    required: false
+    type: string
+  image_url:
+    description: i18n:convert_image2svg_input_image_url_description
+    name: i18n:convert_image2svg_input_image_url_name
+    required: false
+    type: string
+  mode:
+    description: i18n:convert_image2svg_input_mode_description
+    name: i18n:convert_image2svg_input_mode_name
+    required: false
+    type: string
+  output_size_height:
+    description: i18n:convert_image2svg_input_output_size_height_description
+    name: i18n:convert_image2svg_input_output_size_height_name
+    required: false
+    type: number
+  output_size_unit:
+    description: i18n:convert_image2svg_input_output_size_unit_description
+    name: i18n:convert_image2svg_input_output_size_unit_name
+    required: false
+    type: string
+  output_size_width:
+    description: i18n:convert_image2svg_input_output_size_width_description
+    name: i18n:convert_image2svg_input_output_size_width_name
+    required: false
+    type: number
+name: i18n:convert_image2svg_name
+output_schema:
+  svg:
+    description: i18n:convert_image2svg_output_svg_description
+    name: i18n:convert_image2svg_output_svg_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      image_url: https://imagedelivery.net/-NqW7GztWRvGPFGeAQjQpQ/b73e8910-2c6b-49dc-7021-5771c1154a00/public
+      mode: test
+      output_size_width: 0.5
+  mode: schema

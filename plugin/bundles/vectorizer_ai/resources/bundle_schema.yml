@@ -1,0 +1,16 @@
+credentials_schema:
+  VECTORIZER_API_ID:
+    description: i18n:credential_vectorizer_api_id_description
+    required: true
+    secret: false
+    type: string
+  VECTORIZER_API_SECRET:
+    description: i18n:credential_vectorizer_api_secret_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: vectorizer_ai
+name: i18n:bundle_name
+provider: Vectorizer AI
