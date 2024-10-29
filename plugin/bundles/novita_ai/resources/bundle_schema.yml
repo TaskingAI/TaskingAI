@@ -1,0 +1,11 @@
+credentials_schema:
+  NOVITA_API_KEY:
+    description: i18n:credential_novita_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: novita_ai
+name: i18n:bundle_name
+provider: Novita AI
