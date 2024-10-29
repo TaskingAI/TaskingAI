@@ -1,0 +1,36 @@
+description: i18n:accurate_search_description
+id: accurate_search
+input_schema:
+  open_access_pdf:
+    description: i18n:accurate_search_input_open_access_pdf_description
+    name: i18n:accurate_search_input_open_access_pdf_name
+    required: false
+    type: boolean
+  publication_date_or_year:
+    description: i18n:accurate_search_input_publication_date_or_year_description
+    name: i18n:accurate_search_input_publication_date_or_year_name
+    required: false
+    type: string
+  publication_types:
+    description: i18n:accurate_search_input_publication_types_description
+    name: i18n:accurate_search_input_publication_types_name
+    required: false
+    type: string
+  query:
+    description: i18n:accurate_search_input_query_description
+    name: i18n:accurate_search_input_query_name
+    required: true
+    type: string
+name: i18n:accurate_search_name
+output_schema:
+  result:
+    description: i18n:accurate_search_output_result_description
+    name: i18n:accurate_search_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      publication_types: JournalArticle
+      query: Explainable Artificial Intelligence
+  mode: schema

@@ -1,0 +1,43 @@
+description: i18n:paper_search_description
+id: paper_search
+input_schema:
+  limit:
+    description: i18n:paper_search_input_limit_description
+    name: i18n:paper_search_input_limit_name
+    required: false
+    type: integer
+  offset:
+    description: i18n:paper_search_input_offset_description
+    name: i18n:paper_search_input_offset_name
+    required: false
+    type: integer
+  open_access_pdf:
+    description: i18n:paper_search_input_open_access_pdf_description
+    name: i18n:paper_search_input_open_access_pdf_name
+    required: false
+    type: boolean
+  publication_date_or_year:
+    description: i18n:paper_search_input_publication_date_or_year_description
+    name: i18n:paper_search_input_publication_date_or_year_name
+    required: false
+    type: string
+  query:
+    description: i18n:paper_search_input_query_description
+    name: i18n:paper_search_input_query_name
+    required: true
+    type: string
+name: i18n:paper_search_name
+output_schema:
+  result:
+    description: i18n:paper_search_output_result_description
+    name: i18n:paper_search_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      limit: 2
+      open_access_pdf: true
+      publication_date_or_year: '2018'
+      query: deep learning
+  mode: schema
