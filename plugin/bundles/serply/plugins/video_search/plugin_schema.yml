@@ -5,7 +5,7 @@ input_schema:
     description: i18n:video_search_input_count_description
     name: i18n:video_search_input_count_name
     required: false
-    type: number
+    type: integer
   query:
     description: i18n:video_search_input_query_description
     name: i18n:video_search_input_query_name
