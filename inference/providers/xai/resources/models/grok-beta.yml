@@ -1,0 +1,42 @@
+model_schema_id: xai/grok-beta
+provider_model_id: grok-beta
+type: chat_completion
+name: "i18n:grok_beta_name"
+description: "i18n:grok_beta_description"
+default_endpoint_url: https://api.x.ai/v1/chat/completions
+
+properties:
+  function_call: true
+  streaming: true
+  input_token_limit:
+  output_token_limit:
+
+config_schemas:
+  - config_id: temperature
+    type: float
+    default: 0.7
+    min: 0.0
+    max: 2.0
+    step: 0.1
+  - config_id: frequency_penalty
+    type: float
+    default: 0.0
+    min: -2.0
+    max: 2.0
+    step: 0.1
+  - config_id: presence_penalty
+    type: float
+    default: 0.0
+    min: -2.0
+    max: 2.0
+    step: 0.1
+  - config_id: top_p
+  - config_id: max_tokens
+  - config_id: stop
+  - config_id: seed
+
+pricing:
+  input_token: 0
+  output_token: 0
+  unit: 1000
+  currency: USD

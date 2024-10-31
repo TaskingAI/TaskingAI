@@ -1,0 +1,6 @@
+xai_name: "xAI"
+xai_description: "xAI is a company working on building artificial intelligence to accelerate human scientific discovery."
+xai_api_key_description: "Your xAI API Key for authentication."
+
+grok_beta_name: "Grok Beta"
+grok_beta_description: "Grok is a general purpose model that can be used for a variety of tasks, including generating and understanding text, code, and function calling. Comparable performance to Grok 2 but with improved efficiency, speed and capabilities."

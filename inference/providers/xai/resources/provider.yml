@@ -1,0 +1,30 @@
+provider_id: xai
+name: "i18n:xai_name"
+description: "i18n:xai_description"
+updated_timestamp: 1730359035000
+
+enable_proxy: true
+enable_custom_headers: true
+
+return_token_usage: true
+return_stream_token_usage: true
+
+default_credential_verification_model_type: chat_completion
+default_credential_verification_provider_model_id: grok-beta
+pass_provider_level_credential_check: false
+
+credentials_schema:
+  type: object
+  properties:
+    XAI_API_KEY:
+      type: string
+      description: "i18n:xai_api_key_description"
+      secret: true
+  required:
+    - XAI_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/integration/models/language_models/xai"
+  official_site_url: "https://x.ai/"
+  official_pricing_url: "https://console.x.ai/team/61cb5fa8-3e1d-43b7-a7dc-6e687a5a1883/billing/credits"
+  official_credentials_url: "https://console.x.ai/team/61cb5fa8-3e1d-43b7-a7dc-6e687a5a1883/api-keys"
