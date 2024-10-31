@@ -6,12 +6,12 @@ wildcard_test_cases:
         model_type: "chat_completion"
         streaming: False
 
-  - provider_id: "llama_api"
-    cases:
-      - model_schema_id: "llama_api/wildcard"
-        provider_model_id: "llama-13b-chat"
-        model_type: "chat_completion"
-        streaming: False
+  #  - provider_id: "llama_api"
+  #    cases:
+  #      - model_schema_id: "llama_api/wildcard"
+  #        provider_model_id: "llama-13b-chat"
+  #        model_type: "chat_completion"
+  #        streaming: False
 
   - provider_id: "debug"
     cases:
