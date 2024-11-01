@@ -58,6 +58,9 @@ def generate_test_cases():
         bundle_id = bundle_dir_name
         bundle_credentials = [name for name in bundle_yaml_data.get("credentials_schema", {}).keys()]
 
+        if bundle_id in ["semantic_scholar"]:
+            bundle_credentials = []
+
         bundle_plugins_path = os.path.join(bundle_dir_path, "plugins")
         plugin_ids = [
             id for id in os.listdir(bundle_plugins_path) if os.path.isdir(os.path.join(bundle_plugins_path, id))
