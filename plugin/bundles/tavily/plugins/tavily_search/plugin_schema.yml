@@ -1,0 +1,61 @@
+description: i18n:tavily_search_description
+id: tavily_search
+input_schema:
+  include_answer:
+    description: i18n:tavily_search_input_include_answer_description
+    name: i18n:tavily_search_input_include_answer_name
+    required: false
+    type: boolean
+  include_image:
+    description: i18n:tavily_search_input_include_image_description
+    name: i18n:tavily_search_input_include_image_name
+    required: false
+    type: boolean
+  include_raw_content:
+    description: i18n:tavily_search_input_include_raw_content_description
+    name: i18n:tavily_search_input_include_raw_content_name
+    required: false
+    type: boolean
+  max_results:
+    description: i18n:tavily_search_input_max_results_description
+    name: i18n:tavily_search_input_max_results_name
+    required: false
+    type: integer
+  query:
+    description: i18n:tavily_search_input_query_description
+    name: i18n:tavily_search_input_query_name
+    required: true
+    type: string
+  search_depth:
+    description: i18n:tavily_search_input_search_depth_description
+    name: i18n:tavily_search_input_search_depth_name
+    required: false
+    type: string
+  topic:
+    description: i18n:tavily_search_input_topic_description
+    name: i18n:tavily_search_input_topic_name
+    required: false
+    type: string
+  use_cache:
+    description: i18n:tavily_search_input_use_cache_description
+    name: i18n:tavily_search_input_use_cache_name
+    required: false
+    type: boolean
+name: i18n:tavily_search_name
+output_schema:
+  result:
+    description: i18n:tavily_search_output_result_description
+    name: i18n:tavily_search_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      include_answer: true
+      include_image: true
+      include_raw_content: true
+      max_results: 2
+      query: Trump
+      search_depth: advanced
+      topic: news
+  mode: schema
