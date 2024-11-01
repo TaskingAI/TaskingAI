@@ -1,0 +1,25 @@
+description: i18n:get_commodity_price_latest_description
+id: get_commodity_price_latest
+input_schema:
+  symbols:
+    description: i18n:get_commodity_price_latest_input_symbols_description
+    name: i18n:get_commodity_price_latest_input_symbols_name
+    required: true
+    type: string
+  base:
+    description: i18n:get_commodity_price_latest_input_base_description
+    name: i18n:get_commodity_price_latest_input_base_name
+    required: false
+    type: string
+name: i18n:get_commodity_price_latest_name
+output_schema:
+  result:
+    description: i18n:get_commodity_price_latest_output_result_description
+    name: i18n:get_commodity_price_latest_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      symbols: RICE,WHEAT
+  mode: schema

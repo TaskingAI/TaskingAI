@@ -1,0 +1,26 @@
+description: i18n:get_commodity_price_historical_description
+id: get_commodity_price_historical
+input_schema:
+  date:
+    description: i18n:get_commodity_price_historical_input_date_description
+    name: i18n:get_commodity_price_historical_input_date_name
+    required: true
+    type: string
+  symbol:
+    description: i18n:get_commodity_price_historical_input_symbol_description
+    name: i18n:get_commodity_price_historical_input_symbol_name
+    required: true
+    type: string
+name: i18n:get_commodity_price_historical_name
+output_schema:
+  result:
+    description: i18n:get_commodity_price_historical_output_result_description
+    name: i18n:get_commodity_price_historical_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      symbol: CORN
+      date: '2022-06-01'
+  mode: schema
