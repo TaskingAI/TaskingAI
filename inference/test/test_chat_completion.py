@@ -388,6 +388,7 @@ class TestChatCompletion:
             or "debug" in model_schema_id
             or "sensetime" in model_schema_id
             or "openrouter" in model_schema_id
+            or "xai" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call.")
 
@@ -456,6 +457,7 @@ class TestChatCompletion:
             or "fireworks" in model_schema_id
             or "deepseek" in model_schema_id
             or "groq" in model_schema_id
+            or "xai" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
