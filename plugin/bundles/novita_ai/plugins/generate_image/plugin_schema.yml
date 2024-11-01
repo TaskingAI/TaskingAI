@@ -1,0 +1,78 @@
+description: i18n:generate_image_description
+id: generate_image
+input_schema:
+  guidance_scale:
+    description: i18n:generate_image_input_guidance_scale_description
+    name: i18n:generate_image_input_guidance_scale_name
+    required: true
+    type: number
+  height:
+    description: i18n:generate_image_input_height_description
+    name: i18n:generate_image_input_height_name
+    required: true
+    type: integer
+  image_num:
+    description: i18n:generate_image_input_image_num_description
+    name: i18n:generate_image_input_image_num_name
+    required: true
+    type: integer
+  model_name:
+    description: i18n:generate_image_input_model_name_description
+    name: i18n:generate_image_input_model_name_name
+    required: false
+    type: string
+  negative_prompt:
+    description: i18n:generate_image_input_negative_prompt_description
+    name: i18n:generate_image_input_negative_prompt_name
+    required: false
+    type: string
+  prompt:
+    description: i18n:generate_image_input_prompt_description
+    name: i18n:generate_image_input_prompt_name
+    required: true
+    type: string
+  response_image_type:
+    description: i18n:generate_image_input_response_image_type_description
+    name: i18n:generate_image_input_response_image_type_name
+    required: false
+    type: string
+  sampler_name:
+    description: i18n:generate_image_input_sampler_name_description
+    name: i18n:generate_image_input_sampler_name_name
+    required: true
+    type: string
+  seed:
+    description: i18n:generate_image_input_seed_description
+    name: i18n:generate_image_input_seed_name
+    required: false
+    type: integer
+  steps:
+    description: i18n:generate_image_input_steps_description
+    name: i18n:generate_image_input_steps_name
+    required: true
+    type: integer
+  width:
+    description: i18n:generate_image_input_width_description
+    name: i18n:generate_image_input_width_name
+    required: true
+    type: integer
+name: i18n:generate_image_name
+output_schema:
+  url:
+    description: i18n:generate_image_output_url_description
+    name: i18n:generate_image_output_url_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      guidance_scale: 7.5
+      height: 512
+      image_num: 1
+      negative_prompt: nsfw, bottle, bad face
+      prompt: a cute dog
+      sampler_name: Euler a
+      seed: 123
+      steps: 20
+      width: 512
+  mode: schema
