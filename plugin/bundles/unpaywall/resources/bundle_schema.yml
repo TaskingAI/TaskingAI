@@ -1,0 +1,5 @@
+description: i18n:bundle_description
+developer: TaskingAI
+id: unpaywall
+name: i18n:bundle_name
+provider: Unpaywall
