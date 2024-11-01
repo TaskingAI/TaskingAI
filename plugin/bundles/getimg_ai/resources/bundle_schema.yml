@@ -1,0 +1,11 @@
+credentials_schema:
+  GETIMG_API_KEY:
+    description: i18n:credential_getimg_api_key_description
+    required: true
+    secret: true
+    type: string
+description: i18n:bundle_description
+developer: TaskingAI
+id: getimg_ai
+name: i18n:bundle_name
+provider: getimg.ai

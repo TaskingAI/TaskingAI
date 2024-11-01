@@ -1,0 +1,78 @@
+description: i18n:text2image_xl_description
+id: text2image_xl
+input_schema:
+  guidance:
+    description: i18n:text2image_xl_input_guidance_description
+    name: i18n:text2image_xl_input_guidance_name
+    required: false
+    type: number
+  height:
+    description: i18n:text2image_xl_input_height_description
+    name: i18n:text2image_xl_input_height_name
+    required: false
+    type: integer
+  model:
+    description: i18n:text2image_xl_input_model_description
+    name: i18n:text2image_xl_input_model_name
+    required: false
+    type: string
+  negative_prompt:
+    description: i18n:text2image_xl_input_negative_prompt_description
+    name: i18n:text2image_xl_input_negative_prompt_name
+    required: false
+    type: string
+  negative_prompt_2:
+    description: i18n:text2image_xl_input_negative_prompt_2_description
+    name: i18n:text2image_xl_input_negative_prompt_2_name
+    required: false
+    type: string
+  output_format:
+    description: i18n:text2image_xl_input_output_format_description
+    name: i18n:text2image_xl_input_output_format_name
+    required: false
+    type: string
+  prompt:
+    description: i18n:text2image_xl_input_prompt_description
+    name: i18n:text2image_xl_input_prompt_name
+    required: true
+    type: string
+  prompt_2:
+    description: i18n:text2image_xl_input_prompt_2_description
+    name: i18n:text2image_xl_input_prompt_2_name
+    required: false
+    type: string
+  response_format:
+    description: i18n:text2image_xl_input_response_format_description
+    name: i18n:text2image_xl_input_response_format_name
+    required: false
+    type: string
+  seed:
+    description: i18n:text2image_xl_input_seed_description
+    name: i18n:text2image_xl_input_seed_name
+    required: false
+    type: integer
+  steps:
+    description: i18n:text2image_xl_input_steps_description
+    name: i18n:text2image_xl_input_steps_name
+    required: false
+    type: integer
+  width:
+    description: i18n:text2image_xl_input_width_description
+    name: i18n:text2image_xl_input_width_name
+    required: false
+    type: integer
+name: i18n:text2image_xl_name
+output_schema:
+  result:
+    description: i18n:text2image_xl_output_result_description
+    name: i18n:text2image_xl_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      height: 512
+      model: juggernaut-xl-v10
+      prompt: a photograph of an astronaut riding a horse
+      width: 512
+  mode: schema
