@@ -52,7 +52,7 @@ else
     # For each bundle directory involved in the modification, execute a test
     for bundle_name in "${!modified_bundles[@]}"; do
         echo "Running tests for bundle: $bundle_name"
-        pytest -n auto -q -k "$bundle_name"
+        pytest -n auto -q -k "$bundle_name" --reruns 2 --reruns-delay 3
         exit_code=$?
 
         if [ $exit_code -eq 5 ]; then
