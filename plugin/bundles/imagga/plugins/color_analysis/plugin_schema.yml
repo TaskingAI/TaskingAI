@@ -1,0 +1,35 @@
+description: i18n:color_analysis_description
+id: color_analysis
+input_schema:
+  extract_object_colors:
+    description: i18n:color_analysis_input_extract_object_colors_description
+    name: i18n:color_analysis_input_extract_object_colors_name
+    required: false
+    type: integer
+  extract_overall_colors:
+    description: i18n:color_analysis_input_extract_overall_colors_description
+    name: i18n:color_analysis_input_extract_overall_colors_name
+    required: false
+    type: integer
+  image_url:
+    description: i18n:color_analysis_input_image_url_description
+    name: i18n:color_analysis_input_image_url_name
+    required: true
+    type: string
+  overall_count:
+    description: i18n:color_analysis_input_overall_count_description
+    name: i18n:color_analysis_input_overall_count_name
+    required: false
+    type: integer
+name: i18n:color_analysis_name
+output_schema:
+  result:
+    description: i18n:color_analysis_output_result_description
+    name: i18n:color_analysis_output_result_name
+    required: true
+    type: string
+test:
+  cases:
+  - input:
+      image_url: https://i.ytimg.com/vi/IJLwidSohO8/maxresdefault.jpg
+  mode: schema
