@@ -10,7 +10,6 @@ import math
 
 white_list_providers = [
     "azure_openai",
-    "zhipu",
     "baichuan",
     "hugging_face",
     "hugging_face_inference_endpoint",
@@ -34,6 +33,7 @@ white_list_models = [
     "groq/gemma-7b",
     "reka/reka-edge",  # This model temporarily encountered an internal server error in inference version 0.2.19
     "jina/jina-colbert-v1-en",  # The relevance_score returned by this model lacks a defined range
+    "zhipu/embedding-3",
 ]
 
 load_dotenv()

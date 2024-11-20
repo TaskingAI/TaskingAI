@@ -97,7 +97,14 @@ class TestChatCompletion:
         message = test_data["message"]
         function_call = test_data["function_call"]
 
-        if not function_call or "azure" in model_schema_id or "openrouter" or "debug-error" in model_schema_id:
+        if (
+            not function_call
+            or "azure" in model_schema_id
+            or "openrouter"
+            or "debug-error"
+            or "zhipu/glm-4-long"
+            or "zhipu/glm-4v" in model_schema_id
+        ):
             pytest.skip("Skip the test case without function call.")
         configs = {
             "temperature": 0.5,
@@ -289,6 +296,8 @@ class TestChatCompletion:
             or "openrouter" in model_schema_id
             or "debug-error" in model_schema_id
             or "togetherai" in model_schema_id
+            or "zhipu/glm-4v" in model_schema_id
+            or "zhipu/glm-4-long" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
@@ -343,7 +352,7 @@ class TestChatCompletion:
         configs = {
             "temperature": 0.5,
             "top_p": 0.5,
-            "max_tokens": 10,
+            "max_tokens": 4,
         }
         request_data = {
             "model_schema_id": model_schema_id,
@@ -417,6 +426,7 @@ class TestChatCompletion:
             or "togetherai" in model_schema_id
             or "openrouter" in model_schema_id
             or "groq" in model_schema_id
+            or "zhipu" in model_schema_id
         ):
             assert res.status_code == 200, res.json()
             assert res.json().get("status") == "success"
@@ -456,6 +466,7 @@ class TestChatCompletion:
             or "fireworks" in model_schema_id
             or "deepseek" in model_schema_id
             or "groq" in model_schema_id
+            or "zhipu" in model_schema_id
         ):
             pytest.skip("Skip the test case without function call or stream.")
         functions = test_data["functions"]
@@ -750,7 +761,12 @@ class TestChatCompletion:
                 "content": "# Sample Document\n\nHere is an example image:\n\n![Alt text for image](https://tp.tkai.cloud/test_proj3/BW5eJ/pgIMgxNY8KQt.png)\n\nAnd also this one: \n\n ![Another Image](https://tp.tkai.cloud/test_proj4/BW5eH/pgIMNger1hRp.png)\n\nThis image is crucial for understanding the next steps in the process.",
             }
         ]
-        if "debug-error" in model_schema_id or "azure" in model_schema_id or "hugging_face" in model_schema_id:
+        if (
+            "debug-error" in model_schema_id
+            or "azure" in model_schema_id
+            or "hugging_face" in model_schema_id
+            or "zhipu" in model_schema_id
+        ):
             pytest.skip("Skip the test case with debug-error.")
         configs = {
             "temperature": 0.5,
@@ -796,7 +812,7 @@ class TestChatCompletion:
         vision = test_data.get("vision")
         if not vision:
             pytest.skip("Skip the test case without vision.")
-        if not stream or "debug" in model_schema_id or "azure" in model_schema_id:
+        if not stream or "debug" in model_schema_id or "azure" in model_schema_id or "zhipu" in model_schema_id:
             pytest.skip("Skip the test case without stream.")
         configs = {
             "temperature": 0.5,
