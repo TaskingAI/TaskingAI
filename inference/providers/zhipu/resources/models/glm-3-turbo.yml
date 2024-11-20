@@ -1,9 +1,10 @@
 model_schema_id: zhipu/glm-3-turbo
-provider_model_id: glm-3-turbo
+provider_model_id: glm-4
 type: chat_completion
 name: "i18n:glm_3_turbo_name"
 description: "i18n:glm_3_turbo_description"
 default_endpoint_url: https://open.bigmodel.cn/api/paas/v4/chat/completions
+deprecated: true
 
 properties:
   function_call: true
