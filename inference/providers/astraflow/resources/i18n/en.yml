@@ -1,0 +1,7 @@
+astraflow_name: "Astraflow"
+astraflow_description: "Astraflow by UCloud — OpenAI-compatible platform supporting 200+ models (global endpoint)"
+
+astraflow_api_key_description: "Your Astraflow API Key for authentication."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Wildcard allows you to use any model from Astraflow with custom configurations."
