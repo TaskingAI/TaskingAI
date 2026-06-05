@@ -1,21 +1,30 @@
-minimax_name: "Minimax"
-minimax_description: "MiniMax, founded in December 2021, is a leading general artificial intelligence technology company dedicated to co-creating intelligence with users. MiniMax has independently developed various large-scale models across different modalities, including a trillion-parameter MoE text model, a speech model, and an image model."
-minimax_api_key_description: "Your Minimax API Key for authentication."
+minimax_name: "MiniMax"
+minimax_description: "MiniMax, founded in December 2021, is a leading general artificial intelligence technology company. MiniMax has independently developed large-scale models across different modalities, including the flagship M3 text model with a 512K token context window, speech models, and image models."
+minimax_api_key_description: "Your MiniMax API Key for authentication."
 
-abab5_5_chat_name: "ABAB 5.5 Chat"
-abab5_5_chat_description: "ABAB 5.5 is a large-scale language model developed by MiniMax. The total tokens limit for input and output is 16,384 tokens. Suitable for productivity scenarios."
+minimax_m3_name: "MiniMax-M3"
+minimax_m3_description: "MiniMax-M3 is MiniMax's latest flagship model with a 512K context window and 128K maximum output. It supports text and image input, function calling, and streaming. Ideal for complex reasoning, long-context understanding, and production workloads."
 
-abab5_5s_chat_name: "ABAB 5.5s Chat"
-abab5_5s_chat_description: "ABAB 5.5s is a smaller version of the ABAB 5.5 model developed by MiniMax. The total tokens limit for input and output is 8,192 tokens. Suitable for character setting."
+minimax_m2_7_name: "MiniMax-M2.7"
+minimax_m2_7_description: "MiniMax-M2.7 is MiniMax's previous-generation flagship model with a 192K token context window. It supports text, vision, function calling, and streaming. Suitable for complex reasoning and long-context understanding."
 
-abab6_chat_name: "ABAB 6 Chat"
-abab6_chat_description: "ABAB 6 is a large-scale language model developed by MiniMax. The total tokens limit for input and output is 32,768 tokens. Suitable for more complex formatted text generation."
+minimax_m2_7_highspeed_name: "MiniMax-M2.7-highspeed"
+minimax_m2_7_highspeed_description: "MiniMax-M2.7-highspeed is a faster, cost-efficient variant of M2.7 with the same 192K token context window. Optimized for high-throughput scenarios where speed and cost matter."
 
-abab6_5_chat_name: "ABAB 6.5 Chat"
-abab6_5_chat_description: "ABAB 6.5 is a large-scale language model developed by MiniMax. The total tokens limit for input and output is 8,192 tokens. Suitable for more complex formatted text generation."
+abab5_5_chat_name: "ABAB 5.5 Chat (Deprecated)"
+abab5_5_chat_description: "ABAB 5.5 is a legacy large-scale language model developed by MiniMax. The total tokens limit for input and output is 16,384 tokens. Consider using MiniMax-M3 instead."
 
-abab6_5s_chat_name: "ABAB 6.5s Chat"
-abab6_5s_chat_description: "ABAB 6.5s is a smaller version of the ABAB 6.5 model developed by MiniMax. The total tokens limit for input and output is 245,760 tokens. Suitable for character setting."
+abab5_5s_chat_name: "ABAB 5.5s Chat (Deprecated)"
+abab5_5s_chat_description: "ABAB 5.5s is a legacy smaller version of the ABAB 5.5 model. The total tokens limit for input and output is 8,192 tokens. Consider using MiniMax-M2.7-highspeed instead."
 
-abab6_5g_chat_name: "ABAB 6.5g Chat"
-abab6_5g_chat_description: "ABAB 6.5g is a smaller version of the ABAB 6.5 model developed by MiniMax. The total tokens limit for input and output is 8,192 tokens. Suitable for more complex formatted text generation."
+abab6_chat_name: "ABAB 6 Chat (Deprecated)"
+abab6_chat_description: "ABAB 6 is a legacy large-scale language model developed by MiniMax. The total tokens limit for input and output is 32,768 tokens. Consider using MiniMax-M3 instead."
+
+abab6_5_chat_name: "ABAB 6.5 Chat (Deprecated)"
+abab6_5_chat_description: "ABAB 6.5 is a legacy large-scale language model developed by MiniMax. The total tokens limit for input and output is 8,192 tokens. Consider using MiniMax-M3 instead."
+
+abab6_5s_chat_name: "ABAB 6.5s Chat (Deprecated)"
+abab6_5s_chat_description: "ABAB 6.5s is a legacy smaller version of the ABAB 6.5 model. The total tokens limit for input and output is 245,760 tokens. Consider using MiniMax-M2.7-highspeed instead."
+
+abab6_5g_chat_name: "ABAB 6.5g Chat (Deprecated)"
+abab6_5g_chat_description: "ABAB 6.5g is a legacy smaller version of the ABAB 6.5 model. The total tokens limit for input and output is 8,192 tokens. Consider using MiniMax-M3 instead."

@@ -1,9 +1,10 @@
 model_schema_id: minimax/abab5.5s-chat
+deprecated: true
 provider_model_id: abab5.5s-chat
 type: chat_completion
 name: "i18n:abab5_5s_chat_name"
 description: "i18n:abab5_5s_chat_description"
-default_endpoint_url: https://api.minimax.chat/v1/text/chatcompletion_v2
+default_endpoint_url: https://api.minimax.io/v1/chat/completions
 
 properties:
   function_call: false

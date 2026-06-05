@@ -8,14 +8,6 @@ from typing import List, Dict, Any, Optional
 logger = logging.getLogger(__name__)
 
 
-def _model_dump_str(function: ChatCompletionFunction, **kwargs: Any):
-    return {
-        "name": function.name,
-        "description": function.description,
-        "parameters": str(function.parameters.model_dump(**kwargs)),
-    }
-
-
 def _build_minimax_message(message: ChatCompletionMessage):
     if message.role == ChatCompletionRole.system:
         return {"role": message.role.name, "content": message.content}
@@ -74,17 +66,19 @@ def _build_minimax_chat_completion_payload(
         "messages": formatted_messages,
         "model": provider_model_id,
         "stream": stream,
-        "max_tokens": 4096,
     }
     config_dict = configs.model_dump()
     for key, value in config_dict.items():
         if value is not None:
+            # MiniMax requires temperature in (0, 1]
+            if key == "temperature":
+                value = max(0.01, min(value, 1.0))
             payload[key] = value
 
     if function_call in ["none", "auto"]:
         payload["tool_choice"] = function_call
     if functions:
-        payload["tools"] = [{"type": "function", "function": _model_dump_str(f)} for f in functions]
+        payload["tools"] = [{"type": "function", "function": f.model_dump()} for f in functions]
     return payload
 
 
@@ -105,8 +99,7 @@ class MinimaxChatCompletionModel(BaseChatCompletionModel):
         functions: Optional[List[ChatCompletionFunction]] = None,
         model_schema: ModelSchema = None,
     ) -> Tuple[str, Dict, Dict]:
-        # todo accept user's api_url
-        api_url = "https://api.minimax.chat/v1/text/chatcompletion_v2"
+        api_url = "https://api.minimax.io/v1/chat/completions"
         headers = build_minimax_header(credentials)
         payload = _build_minimax_chat_completion_payload(
             messages, stream, provider_model_id, configs, function_call, functions
@@ -119,6 +112,12 @@ class MinimaxChatCompletionModel(BaseChatCompletionModel):
         if not response_data.get("choices"):
             return None
         return response_data["choices"][0]
+
+    def extract_usage_data(self, response_data: Dict, **kwargs) -> Tuple[Optional[int], Optional[int]]:
+        usage = response_data.get("usage") if response_data else None
+        if usage:
+            return usage.get("prompt_tokens", None), usage.get("completion_tokens", None)
+        return None, None
 
     def extract_text_content(self, data: Dict, **kwargs) -> Optional[str]:
         message_data = data.get("message") if data else None
@@ -146,7 +145,7 @@ class MinimaxChatCompletionModel(BaseChatCompletionModel):
         if finish_reason == "tool_calls":
             finish_reason = ChatCompletionFinishReason.function_calls
         if finish_reason == "content_filter":
-            raise_provider_api_error("Minimax content filter triggered, content was omitted")
+            raise_provider_api_error("MiniMax content filter triggered, content was omitted")
         return ChatCompletionFinishReason.__members__.get(finish_reason, ChatCompletionFinishReason.unknown)
 
     # ------------------- handle stream chat completion response -------------------
@@ -159,6 +158,15 @@ class MinimaxChatCompletionModel(BaseChatCompletionModel):
         if not sse_data.get("choices") or sse_data["choices"][0].get("delta") is None:
             return None
         return sse_data["choices"][0]
+
+    def stream_extract_usage_data(
+        self, sse_data: Dict, input_tokens: int, output_tokens: int, **kwargs
+    ) -> Tuple[int, int]:
+        usage = sse_data.get("usage") if sse_data else None
+        if usage is not None:
+            input_tokens = max(input_tokens or 0, usage.get("prompt_tokens", 0))
+            output_tokens = max(output_tokens or 0, usage.get("completion_tokens", 0))
+        return input_tokens, output_tokens
 
     def stream_extract_chunk(
         self, index: int, chunk_data: Dict, text_content: str, **kwargs
@@ -178,7 +186,7 @@ class MinimaxChatCompletionModel(BaseChatCompletionModel):
             if reason == "tool_calls":
                 reason = ChatCompletionFinishReason.function_calls
             if reason == "content_filter":
-                raise_provider_api_error("Minimax content filter triggered, content was omitted")
+                raise_provider_api_error("MiniMax content filter triggered, content was omitted")
             return ChatCompletionFinishReason.__members__.get(reason, ChatCompletionFinishReason.unknown)
         return None
 
@@ -188,7 +196,7 @@ class MinimaxChatCompletionModel(BaseChatCompletionModel):
         delta = chunk_data.get("delta", {}) if chunk_data else None
         if delta and delta.get("tool_calls"):
             tool_call = delta["tool_calls"][0]
-            toll_call_index = 0
+            toll_call_index = tool_call.get("index", 0)
             tool_call_function = tool_call["function"]
 
             if toll_call_index == function_calls_content.index:
