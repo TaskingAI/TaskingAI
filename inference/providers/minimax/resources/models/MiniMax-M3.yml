@@ -1,16 +1,16 @@
-model_schema_id: minimax/MiniMax-M2.5-highspeed
-provider_model_id: MiniMax-M2.5-highspeed
+model_schema_id: minimax/MiniMax-M3
+provider_model_id: MiniMax-M3
 type: chat_completion
-name: "i18n:minimax_m2_5_highspeed_name"
-description: "i18n:minimax_m2_5_highspeed_description"
+name: "i18n:minimax_m3_name"
+description: "i18n:minimax_m3_description"
 default_endpoint_url: https://api.minimax.io/v1/chat/completions
 
 properties:
   function_call: true
   streaming: true
   vision: true
-  input_token_limit: 204800
-  output_token_limit: 131072
+  input_token_limit: 512000
+  output_token_limit: 128000
 
 config_schemas:
   - config_id: temperature
@@ -24,11 +24,11 @@ config_schemas:
     type: int
     default: 4096
     min: 1
-    max: 131072
+    max: 128000
     step: 1
 
 pricing:
-  input_token: 0.0005
-  output_token: 0.004
+  input_token: 0.0006
+  output_token: 0.0024
   unit: 1000
-  currency: CNY
+  currency: USD

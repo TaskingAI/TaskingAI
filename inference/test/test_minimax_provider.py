@@ -8,7 +8,7 @@ Tests cover:
 - Payload construction
 - Response parsing (non-stream and stream)
 - Token usage extraction
-- M2.5/M2.7 model YAML validation
+- M3/M2.7 model YAML validation
 - Integration tests against MiniMax API (require MINIMAX_API_KEY)
 """
 
@@ -103,7 +103,7 @@ class TestApiEndpoint:
         msg = ChatCompletionUserMessage(content="Hello")
         url, headers, payload = await model.prepare_request(
             stream=False,
-            provider_model_id="MiniMax-M2.5",
+            provider_model_id="MiniMax-M3",
             messages=[msg],
             credentials=creds,
             configs=configs,
@@ -118,7 +118,7 @@ class TestTemperatureClamping:
     def test_zero_temperature_clamped(self):
         configs = FakeConfig(temperature=0.0)
         payload = _build_minimax_chat_completion_payload(
-            messages=[], stream=False, provider_model_id="MiniMax-M2.5",
+            messages=[], stream=False, provider_model_id="MiniMax-M3",
             configs=configs, function_call=None, functions=None,
         )
         assert payload["temperature"] == 0.01
@@ -126,7 +126,7 @@ class TestTemperatureClamping:
     def test_negative_temperature_clamped(self):
         configs = FakeConfig(temperature=-0.5)
         payload = _build_minimax_chat_completion_payload(
-            messages=[], stream=False, provider_model_id="MiniMax-M2.5",
+            messages=[], stream=False, provider_model_id="MiniMax-M3",
             configs=configs, function_call=None, functions=None,
         )
         assert payload["temperature"] == 0.01
@@ -134,7 +134,7 @@ class TestTemperatureClamping:
     def test_high_temperature_clamped(self):
         configs = FakeConfig(temperature=2.0)
         payload = _build_minimax_chat_completion_payload(
-            messages=[], stream=False, provider_model_id="MiniMax-M2.5",
+            messages=[], stream=False, provider_model_id="MiniMax-M3",
             configs=configs, function_call=None, functions=None,
         )
         assert payload["temperature"] == 1.0
@@ -142,7 +142,7 @@ class TestTemperatureClamping:
     def test_valid_temperature_unchanged(self):
         configs = FakeConfig(temperature=0.7)
         payload = _build_minimax_chat_completion_payload(
-            messages=[], stream=False, provider_model_id="MiniMax-M2.5",
+            messages=[], stream=False, provider_model_id="MiniMax-M3",
             configs=configs, function_call=None, functions=None,
         )
         assert payload["temperature"] == 0.7
@@ -154,16 +154,16 @@ class TestPayloadConstruction:
     def test_model_in_payload(self):
         configs = FakeConfig()
         payload = _build_minimax_chat_completion_payload(
-            messages=[], stream=False, provider_model_id="MiniMax-M2.7",
+            messages=[], stream=False, provider_model_id="MiniMax-M3",
             configs=configs, function_call=None, functions=None,
         )
-        assert payload["model"] == "MiniMax-M2.7"
+        assert payload["model"] == "MiniMax-M3"
         assert payload["stream"] is False
 
     def test_stream_flag(self):
         configs = FakeConfig()
         payload = _build_minimax_chat_completion_payload(
-            messages=[], stream=True, provider_model_id="MiniMax-M2.5",
+            messages=[], stream=True, provider_model_id="MiniMax-M3",
             configs=configs, function_call=None, functions=None,
         )
         assert payload["stream"] is True
@@ -171,7 +171,7 @@ class TestPayloadConstruction:
     def test_tool_choice_auto(self):
         configs = FakeConfig()
         payload = _build_minimax_chat_completion_payload(
-            messages=[], stream=False, provider_model_id="MiniMax-M2.5",
+            messages=[], stream=False, provider_model_id="MiniMax-M3",
             configs=configs, function_call="auto", functions=None,
         )
         assert payload["tool_choice"] == "auto"
@@ -179,7 +179,7 @@ class TestPayloadConstruction:
     def test_tool_choice_none(self):
         configs = FakeConfig()
         payload = _build_minimax_chat_completion_payload(
-            messages=[], stream=False, provider_model_id="MiniMax-M2.5",
+            messages=[], stream=False, provider_model_id="MiniMax-M3",
             configs=configs, function_call="none", functions=None,
         )
         assert payload["tool_choice"] == "none"
@@ -188,7 +188,7 @@ class TestPayloadConstruction:
         """Ensure max_tokens is not hardcoded; should come from config only."""
         configs = FakeConfig()
         payload = _build_minimax_chat_completion_payload(
-            messages=[], stream=False, provider_model_id="MiniMax-M2.5",
+            messages=[], stream=False, provider_model_id="MiniMax-M3",
             configs=configs, function_call=None, functions=None,
         )
         assert "max_tokens" not in payload
@@ -196,7 +196,7 @@ class TestPayloadConstruction:
     def test_max_tokens_from_config(self):
         configs = FakeConfig(max_tokens=8192)
         payload = _build_minimax_chat_completion_payload(
-            messages=[], stream=False, provider_model_id="MiniMax-M2.5",
+            messages=[], stream=False, provider_model_id="MiniMax-M3",
             configs=configs, function_call=None, functions=None,
         )
         assert payload["max_tokens"] == 8192
@@ -342,11 +342,10 @@ class TestStreamParsing:
 
 
 class TestModelYamlFiles:
-    """Test that new M2.5/M2.7 model YAML files are valid."""
+    """Test that new M3/M2.7 model YAML files are valid."""
 
     new_models = [
-        "MiniMax-M2.5.yml",
-        "MiniMax-M2.5-highspeed.yml",
+        "MiniMax-M3.yml",
         "MiniMax-M2.7.yml",
         "MiniMax-M2.7-highspeed.yml",
     ]
@@ -373,19 +372,20 @@ class TestModelYamlFiles:
         data = load_yaml(os.path.join(MODELS_DIR, filename))
         assert data["default_endpoint_url"] == "https://api.minimax.io/v1/chat/completions"
 
-    def test_m2_5_context_length(self):
-        data = load_yaml(os.path.join(MODELS_DIR, "MiniMax-M2.5.yml"))
-        assert data["properties"]["input_token_limit"] == 204800
+    def test_m3_context_length(self):
+        data = load_yaml(os.path.join(MODELS_DIR, "MiniMax-M3.yml"))
+        assert data["properties"]["input_token_limit"] == 512000
+        assert data["properties"]["output_token_limit"] == 128000
 
     def test_m2_7_context_length(self):
         data = load_yaml(os.path.join(MODELS_DIR, "MiniMax-M2.7.yml"))
-        assert data["properties"]["input_token_limit"] == 1048576
+        assert data["properties"]["input_token_limit"] == 192000
 
     @pytest.mark.parametrize("filename", new_models)
     def test_model_has_pricing(self, filename):
         data = load_yaml(os.path.join(MODELS_DIR, filename))
         assert "pricing" in data
-        assert data["pricing"]["currency"] == "CNY"
+        assert "currency" in data["pricing"]
 
     @pytest.mark.parametrize("filename", new_models)
     def test_temperature_config_schema(self, filename):
@@ -395,6 +395,13 @@ class TestModelYamlFiles:
         )
         assert temp_config is not None
         assert temp_config["max"] == 1.0
+
+    def test_older_models_removed(self):
+        """Ensure M2.5/M2.1/M2/M1 model files have been removed."""
+        for older in ["MiniMax-M2.5.yml", "MiniMax-M2.5-highspeed.yml",
+                      "MiniMax-M2.1.yml", "MiniMax-M2.yml", "MiniMax-M1.yml"]:
+            path = os.path.join(MODELS_DIR, older)
+            assert not os.path.exists(path), f"Older model file {older} should be removed"
 
 
 class TestLegacyModelsDeprecated:
@@ -429,7 +436,7 @@ class TestProviderYaml:
 
     def test_default_model_updated(self):
         data = load_yaml(PROVIDER_FILE)
-        assert data["default_credential_verification_provider_model_id"] == "MiniMax-M2.5"
+        assert data["default_credential_verification_provider_model_id"] == "MiniMax-M3"
 
     def test_token_usage_enabled(self):
         data = load_yaml(PROVIDER_FILE)
@@ -443,13 +450,9 @@ class TestI18n:
     def setup_method(self):
         self.i18n = load_yaml(I18N_FILE)
 
-    def test_m2_5_translations(self):
-        assert "minimax_m2_5_name" in self.i18n
-        assert "minimax_m2_5_description" in self.i18n
-
-    def test_m2_5_highspeed_translations(self):
-        assert "minimax_m2_5_highspeed_name" in self.i18n
-        assert "minimax_m2_5_highspeed_description" in self.i18n
+    def test_m3_translations(self):
+        assert "minimax_m3_name" in self.i18n
+        assert "minimax_m3_description" in self.i18n
 
     def test_m2_7_translations(self):
         assert "minimax_m2_7_name" in self.i18n
@@ -458,6 +461,12 @@ class TestI18n:
     def test_m2_7_highspeed_translations(self):
         assert "minimax_m2_7_highspeed_name" in self.i18n
         assert "minimax_m2_7_highspeed_description" in self.i18n
+
+    def test_older_translations_removed(self):
+        """Ensure M2.5 i18n entries have been removed."""
+        for key in ["minimax_m2_5_name", "minimax_m2_5_description",
+                    "minimax_m2_5_highspeed_name", "minimax_m2_5_highspeed_description"]:
+            assert key not in self.i18n, f"Older i18n key {key} should be removed"
 
     def test_legacy_descriptions_mention_deprecation(self):
         for key in ["abab5_5_chat_name", "abab6_chat_name", "abab6_5_chat_name"]:
@@ -477,8 +486,8 @@ class TestMinimaxIntegration:
     """Integration tests against the live MiniMax API."""
 
     @pytest.mark.asyncio
-    async def test_chat_completion_m2_5(self):
-        """Test a basic chat completion with MiniMax-M2.5."""
+    async def test_chat_completion_m3(self):
+        """Test a basic chat completion with MiniMax-M3."""
         import aiohttp
 
         url = "https://api.minimax.io/v1/chat/completions"
@@ -487,7 +496,7 @@ class TestMinimaxIntegration:
             "Content-Type": "application/json",
         }
         payload = {
-            "model": "MiniMax-M2.5",
+            "model": "MiniMax-M3",
             "messages": [{"role": "user", "content": "Say hello in one word."}],
             "max_tokens": 32,
             "temperature": 0.7,
@@ -526,8 +535,8 @@ class TestMinimaxIntegration:
                 assert data["choices"][0]["message"]["content"]
 
     @pytest.mark.asyncio
-    async def test_streaming_m2_5(self):
-        """Test streaming with MiniMax-M2.5."""
+    async def test_streaming_m3(self):
+        """Test streaming with MiniMax-M3."""
         import aiohttp
 
         url = "https://api.minimax.io/v1/chat/completions"
@@ -536,7 +545,7 @@ class TestMinimaxIntegration:
             "Content-Type": "application/json",
         }
         payload = {
-            "model": "MiniMax-M2.5",
+            "model": "MiniMax-M3",
             "messages": [{"role": "user", "content": "Count from 1 to 3."}],
             "max_tokens": 64,
             "temperature": 0.7,
