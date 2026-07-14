@@ -1,0 +1,25 @@
+provider_id: daoxe
+name: "i18n:daoxe_name"
+description: "i18n:daoxe_description"
+updated_timestamp: 1721001600000
+
+return_token_usage: true
+return_stream_token_usage: true
+
+pass_provider_level_credential_check: true
+
+credentials_schema:
+  type: object
+  properties:
+    DAOXE_API_KEY:
+      type: string
+      description: "i18n:daoxe_api_key_description"
+      secret: true
+  required:
+    - DAOXE_API_KEY
+
+resources:
+  taskingai_documentation_url: "https://docs.tasking.ai/docs/guide/model/overview"
+  official_site_url: "https://daoxe.com"
+  official_pricing_url: "https://daoxe.com/pricing"
+  official_credentials_url: "https://daoxe.com"

@@ -1,0 +1,7 @@
+daoxe_name: "DaoXE"
+daoxe_description: "DaoXE is a multi-model multi-protocol AI API gateway. It exposes OpenAI-compatible Chat Completions (and related OpenAI-compatible routes) plus Anthropic Messages and other protocols. TaskingAI uses the OpenAI-compatible chat completions path at https://daoxe.com/v1. Model availability can vary by account; use your dashboard or GET /v1/models. Not available in mainland China."
+
+daoxe_api_key_description: "Your DaoXE API key for authentication (dashboard at https://daoxe.com)."
+
+wildcard_name: "Wildcard"
+wildcard_description: "Use any chat model ID available to your DaoXE account. Set provider_model_id to an account-visible model ID from the DaoXE catalog (https://daoxe.com/pricing) or GET /v1/models. Availability can vary by account."
