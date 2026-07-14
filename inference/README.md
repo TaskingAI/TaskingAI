@@ -131,6 +131,66 @@ curl "http://localhost:8002/v1/chat_completion" \
 
 Note that `$OPENAI_API_KEY` is an environment variable that stores your OpenAI API key. You can replace it with your actual API key.
 
+### Custom Host (OpenAI-compatible endpoints)
+
+TaskingAI-Inference includes a **Custom Host** provider for any endpoint that speaks the OpenAI chat completions (or embeddings) schema. Credential fields are:
+
+| Field | Meaning |
+| --- | --- |
+| `CUSTOM_HOST_ENDPOINT_URL` | **Full** request URL (must include path), e.g. `https://api.example.com/v1/chat/completions` |
+| `CUSTOM_HOST_MODEL_ID` | Model id sent in the OpenAI payload |
+| `CUSTOM_HOST_API_KEY` | Bearer token for the upstream host |
+
+Example using [DaoXE](https://daoxe.com), a multi-model multi-protocol API gateway. TaskingAI Custom Host uses the **OpenAI-compatible** path (`/v1/chat/completions`); DaoXE also exposes other protocols (e.g. Anthropic Messages) outside this provider.
+
+```bash
+# Discover account-visible model IDs (do not hardcode a public catalog)
+curl "https://daoxe.com/v1/models" \
+  -H "Authorization: Bearer $DAOXE_API_KEY"
+
+# Optional: verify Chat Completions against the gateway directly
+curl "https://daoxe.com/v1/chat/completions" \
+  -H "Authorization: Bearer $DAOXE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "YOUR_ACCOUNT_VISIBLE_MODEL_ID",
+    "messages": [{"role": "user", "content": "ping"}]
+  }'
+```
+
+Wire the same gateway into TaskingAI-Inference:
+
+```bash
+curl "http://localhost:8002/v1/chat_completion" \
+-X POST \
+-H "Content-Type: application/json" \
+-d '{
+    "model_schema_id": "custom_host/openai-tool-calls",
+    "credentials": {
+      "CUSTOM_HOST_ENDPOINT_URL": "https://daoxe.com/v1/chat/completions",
+      "CUSTOM_HOST_MODEL_ID": "YOUR_ACCOUNT_VISIBLE_MODEL_ID",
+      "CUSTOM_HOST_API_KEY": "$DAOXE_API_KEY"
+    },
+    "stream": false,
+    "configs": {
+      "temperature": 0.8
+    },
+    "messages": [
+        {
+            "role": "user",
+            "content": "What is machine learning?"
+        }
+    ]
+}'
+```
+
+Notes:
+
+- Prefer model schema `custom_host/openai-tool-calls` for modern tool-calling chat models; use `custom_host/openai-function-call` only if the upstream still expects the older `functions` shape.
+- For embeddings, set `CUSTOM_HOST_ENDPOINT_URL` to `https://daoxe.com/v1/embeddings` and use `custom_host/openai-text-embedding`.
+- Model availability is **account-scoped** — copy an exact id from `GET /v1/models` for your key.
+- DaoXE is **not available in mainland China**. See [daoxe.com](https://daoxe.com) and [DaoXE-AI examples](https://github.com/seven7763/DaoXE-AI).
+
 You can explore the API reference in http://localhost:8002/redoc. For more usage details, please refer to the [documentation](https://docs.tasking.ai/docs/taskingai-inference/overview).
 
 ## Resources

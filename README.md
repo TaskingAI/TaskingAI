@@ -42,7 +42,7 @@
 
 ### Integrations
 
-**Models**: TaskingAI connects with hundreds of LLMs from various providers, including OpenAI, Anthropic, and more. We also allow users to integrate local host models through Ollama, LM Studio and Local AI.
+**Models**: TaskingAI connects with hundreds of LLMs from various providers, including OpenAI, Anthropic, and more. We also allow users to integrate local host models through Ollama, LM Studio and Local AI, and any OpenAI-compatible remote endpoint through **Custom Host** (for example a multi-model gateway such as [DaoXE](https://daoxe.com) at `https://daoxe.com/v1/chat/completions`; see `inference/README.md`).
 
 <p>
 <img src="./static/img/model_providers.png" alt="">
