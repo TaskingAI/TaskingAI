@@ -35,9 +35,13 @@ For frontend:
 - [Node.js v18.x (LTS)](http://nodejs.org) or higher
 - [npm](https://www.npmjs.com/) version 10.1.0 or higher
 
-For backend/inference/plugin:
+For backend/inference:
 
 - [Python 3.8+](https://www.python.org/downloads/)
+
+For plugins:
+
+- [Python 3.10+](https://www.python.org/downloads/)
 
 ## Local Development
 
