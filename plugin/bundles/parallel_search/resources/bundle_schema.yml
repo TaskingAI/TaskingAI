@@ -1,0 +1,5 @@
+description: i18n:bundle_description
+developer: TaskingAI
+id: parallel_search
+name: i18n:bundle_name
+provider: Parallel

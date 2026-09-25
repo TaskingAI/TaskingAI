@@ -1,0 +1,1 @@
+"""Parallel Search plugin handlers."""
