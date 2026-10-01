@@ -1,7 +1,9 @@
 import base64
 import os
-import string
 import random
+import re
+import string
+from pathlib import Path
 
 from aiohttp import ClientSession
 import aioboto3
@@ -24,6 +26,7 @@ def base62_encode(num):
     # Return the result reversed (since we've computed it backwards)
     return "".join(reversed(result))
 
+
 def get_base62_date():
     # Get the current date
     current_date = datetime.utcnow()
@@ -43,34 +46,51 @@ def generate_random_id(length):
     return random.choice(first_letter) + "".join(random.choice(letters) for _ in range(length - 1))
 
 
+def _validate_storage_component(value: str, name: str) -> str:
+    if not isinstance(value, str) or not value or value in {".", ".."} or re.search(r"[/\\\x00]", value):
+        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, f"Invalid {name}")
+    return value
+
+
+def _resolve_local_image_path(image_path: str) -> Path:
+    storage_root = Path(CONFIG.PATH_TO_VOLUME).resolve()
+    resolved_path = Path(image_path).resolve()
+    try:
+        resolved_path.relative_to(storage_root)
+    except ValueError:
+        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "Image path escapes the configured storage directory")
+    return resolved_path
+
+
 def save_base64_image(image_data: str, file_format="png", specific_path=None):
-    image_data = base64.b64decode(image_data)
+    _validate_storage_component(file_format, "file format")
     image_id = generate_random_id(16)
-    image_path = f"{CONFIG.PATH_TO_VOLUME}/{image_id}.{file_format}" if specific_path is None else specific_path
+    candidate_path = f"{CONFIG.PATH_TO_VOLUME}/{image_id}.{file_format}" if specific_path is None else specific_path
+    image_path = _resolve_local_image_path(candidate_path)
+    image_data = base64.b64decode(image_data)
 
-    directory = os.path.dirname(image_path)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    image_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(image_path, "wb") as file:
+    with image_path.open("wb") as file:
         file.write(image_data)
 
-    return image_path
+    return str(image_path)
+
 
 async def save_url_image(image_url: str, file_format="png", specific_path=None):
+    _validate_storage_component(file_format, "file format")
     image_id = generate_random_id(16)
-    image_path = f"{CONFIG.PATH_TO_VOLUME}/{image_id}.{file_format}" if specific_path is None else specific_path
+    candidate_path = f"{CONFIG.PATH_TO_VOLUME}/{image_id}.{file_format}" if specific_path is None else specific_path
+    image_path = _resolve_local_image_path(candidate_path)
 
-    directory = os.path.dirname(image_path)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    image_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(image_path, "wb") as file:
+    with image_path.open("wb") as file:
         async with ClientSession() as session:
             async with session.get(image_url) as response:
                 file.write(await response.read())
 
-    return image_path
+    return str(image_path)
 
 
 def delete_image(image_path: str):
@@ -79,6 +99,8 @@ def delete_image(image_path: str):
 
 
 def generate_s3_path(project_id: str, file_format: str):
+    project_id = _validate_storage_component(project_id, "project_id")
+    file_format = _validate_storage_component(file_format, "file format")
     file_category = "imgs/p/" if CONFIG.INCLUDE_FILE_CATEGORY_IN_STORAGE_PATH else ""
     return f"{file_category}{project_id}/{get_base62_date()}/pgIM{generate_random_id(8)}.{file_format}"
 
@@ -134,24 +156,30 @@ async def upload_base64_image_to_s3(
 
     return url
 
-async def save_base64_image_to_s3_or_local(base64_image_string: str, project_id: str, file_format: str, plugin_id: str, metadata: dict = None):
-    if CONFIG.OBJECT_STORAGE_TYPE == 's3':
+
+async def save_base64_image_to_s3_or_local(
+    base64_image_string: str, project_id: str, file_format: str, plugin_id: str, metadata: dict = None
+):
+    if CONFIG.OBJECT_STORAGE_TYPE == "s3":
         return await upload_base64_image_to_s3(base64_image_string, project_id, file_format, plugin_id, metadata)
-    elif CONFIG.OBJECT_STORAGE_TYPE == 'local':
+    elif CONFIG.OBJECT_STORAGE_TYPE == "local":
         generated_s3_path = generate_s3_path(project_id, file_format)
         specific_path = f"{CONFIG.PATH_TO_VOLUME}/{generated_s3_path}"
         image_path = save_base64_image(base64_image_string, file_format, specific_path)
         return f"{CONFIG.HOST_URL}/{generated_s3_path}"
     else:
-        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR,"No image storage service available")
+        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "No image storage service available")
 
-async def save_url_image_to_s3_or_local(image_url: str, project_id: str, file_format: str, plugin_id: str, metadata: dict = None):
-    if CONFIG.OBJECT_STORAGE_TYPE == 's3':
+
+async def save_url_image_to_s3_or_local(
+    image_url: str, project_id: str, file_format: str, plugin_id: str, metadata: dict = None
+):
+    if CONFIG.OBJECT_STORAGE_TYPE == "s3":
         return await upload_url_image_to_s3(image_url, project_id, file_format, plugin_id, metadata)
-    elif CONFIG.OBJECT_STORAGE_TYPE == 'local':
+    elif CONFIG.OBJECT_STORAGE_TYPE == "local":
         generated_s3_path = generate_s3_path(project_id, file_format)
         specific_path = f"{CONFIG.PATH_TO_VOLUME}/{generated_s3_path}"
         image_path = await save_url_image(image_url, file_format, specific_path)
         return f"{CONFIG.HOST_URL}/{generated_s3_path}"
     else:
-        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR,"No image storage service available")
+        raise_http_error(ErrorCode.REQUEST_VALIDATION_ERROR, "No image storage service available")

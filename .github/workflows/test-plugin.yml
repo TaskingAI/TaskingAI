@@ -1,7 +1,16 @@
 name: Plugin - Build and Test
 
 on:
-  pull_request_target:
+  pull_request:
+    branches: ["master"]
+    paths:
+      - "plugin/**"
+      - ".github/workflows/test-plugin.yml"
+      - "!**.md"
+      - "!**.svg"
+      - "!**.jpg"
+      - "!**.png"
+  push:
     branches: ["master"]
     paths:
       - "plugin/**"
@@ -21,34 +30,59 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: plugin
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run image storage regression tests
+        env:
+          OBJECT_STORAGE_TYPE: local
+          HOST_URL: http://localhost:8000
+          PATH_TO_VOLUME: ${{ runner.temp }}/plugin-test-volume
+        run: python -m pytest -q test/test_image_storage.py
+
+      - name: Build Docker image
+        run: docker build -t taskingai-plugin-test .
+
+  integration-tests:
+    if: github.event_name == 'push' && github.repository == 'TaskingAI/TaskingAI'
+    needs: build-and-test
+    runs-on: ubuntu-latest
     environment: test
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.pull_request.base.ref }}
-          repository: ${{ github.repository }}
-
-      - name: Checkout forked repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          path: fork
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Set working directory
-        run: echo "WORKING_DIRECTORY=fork/${{ env.WORK_DIR }}" >> $GITHUB_ENV
+        run: echo "WORKING_DIRECTORY=${{ env.WORK_DIR }}" >> $GITHUB_ENV
 
       - name: Get list of changed files
-        id: files
+        env:
+          BASE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
         run: |
-          cd ${{ env.WORKING_DIRECTORY }}
-          git fetch origin +${{ github.event.pull_request.base.sha }}:refs/remotes/origin/pr-base +${{ github.event.pull_request.head.sha }}:refs/remotes/origin/pr-head
-          git diff --name-only origin/pr-base origin/pr-head > /tmp/changed_files.txt
-          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
-          cat /tmp/changed_files.txt >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          echo "::set-output name=changed_files::$(cat /tmp/changed_files.txt)"
+          if [[ "$BASE_SHA" == "0000000000000000000000000000000000000000" ]]; then
+            git ls-files > /tmp/changed_files.txt
+          else
+            git diff --name-only "$BASE_SHA" "$HEAD_SHA" > /tmp/changed_files.txt
+          fi
 
       - name: Set short SHA for image tag
         run: |
@@ -64,9 +98,9 @@ jobs:
           fi
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
-          python-version: 3.x
+          python-version: "3.12"
 
       - name: Install Dependencies
         run: |
