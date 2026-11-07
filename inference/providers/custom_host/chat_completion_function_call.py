@@ -19,8 +19,30 @@ def _build_custom_host_chat_completion_payload_openai_function_call(
     function_call: Optional[str],
     functions: Optional[List[ChatCompletionFunction]],
 ):
-    # Convert ChatCompletionMessages to the required format
-    formatted_messages = [build_custom_host_openai_message(msg) for msg in messages]
+    # Legacy function messages use names instead of tool call IDs.
+    functions_map = {}
+    formatted_messages = []
+    for msg in messages:
+        if is_assistant_function_calls_message(msg):
+            if len(msg.function_calls) != 1:
+                raise_http_error(
+                    ErrorCode.REQUEST_VALIDATION_ERROR,
+                    "openai-function-call requires one function call per assistant message. "
+                    "Use openai-tool-calls for parallel function calls.",
+                )
+            call = msg.function_calls[0]
+            functions_map[call.id] = call.name
+            formatted_messages.append(
+                {
+                    "role": "assistant",
+                    "content": None,
+                    "function_call": {"name": call.name, "arguments": json.dumps(call.arguments)},
+                }
+            )
+        elif msg.role == ChatCompletionRole.function:
+            formatted_messages.append({"role": "function", "content": msg.content, "name": functions_map[msg.id]})
+        else:
+            formatted_messages.append(build_custom_host_openai_message(msg))
     logger.debug("formatted_messages: %s", formatted_messages)
     payload = {
         "messages": formatted_messages,
