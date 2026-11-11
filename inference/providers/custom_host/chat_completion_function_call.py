@@ -153,18 +153,14 @@ class CustomHostFunctionCallChatCompletionModel(BaseChatCompletionModel):
     ) -> Optional[ChatCompletionFunctionCallsContent]:
         delta = chunk_data["delta"]
         if delta.get("function_call"):
-            tool_call = delta["function_call"]
-            toll_call_index = 0
+            function_call = delta["function_call"]
+            if function_calls_content.index < 0:
+                function_calls_content.arguments_strs.append("")
+                function_calls_content.names.append("")
+                function_calls_content.index = 0
 
-            if toll_call_index == function_calls_content.index:
-                # append to the current function call argument string
-                function_calls_content.arguments_strs[function_calls_content.index] += tool_call["arguments"]
-
-            elif toll_call_index > function_calls_content.index:
-                # trigger another function call
-                function_calls_content.arguments_strs.append(tool_call["arguments"])
-                function_calls_content.names.append(tool_call["name"])
-                function_calls_content.index = toll_call_index
+            function_calls_content.arguments_strs[0] += function_call.get("arguments") or ""
+            function_calls_content.names[0] += function_call.get("name") or ""
             return function_calls_content
 
         return None
