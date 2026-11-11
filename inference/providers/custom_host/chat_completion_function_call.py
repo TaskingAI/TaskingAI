@@ -19,8 +19,30 @@ def _build_custom_host_chat_completion_payload_openai_function_call(
     function_call: Optional[str],
     functions: Optional[List[ChatCompletionFunction]],
 ):
-    # Convert ChatCompletionMessages to the required format
-    formatted_messages = [build_custom_host_openai_message(msg) for msg in messages]
+    # Legacy function messages use names instead of tool call IDs.
+    functions_map = {}
+    formatted_messages = []
+    for msg in messages:
+        if is_assistant_function_calls_message(msg):
+            if len(msg.function_calls) != 1:
+                raise_http_error(
+                    ErrorCode.REQUEST_VALIDATION_ERROR,
+                    "openai-function-call requires one function call per assistant message. "
+                    "Use openai-tool-calls for parallel function calls.",
+                )
+            call = msg.function_calls[0]
+            functions_map[call.id] = call.name
+            formatted_messages.append(
+                {
+                    "role": "assistant",
+                    "content": msg.content if isinstance(msg.content, str) else None,
+                    "function_call": {"name": call.name, "arguments": json.dumps(call.arguments)},
+                }
+            )
+        elif msg.role == ChatCompletionRole.function:
+            formatted_messages.append({"role": "function", "content": msg.content, "name": functions_map[msg.id]})
+        else:
+            formatted_messages.append(build_custom_host_openai_message(msg))
     logger.debug("formatted_messages: %s", formatted_messages)
     payload = {
         "messages": formatted_messages,
@@ -131,18 +153,14 @@ class CustomHostFunctionCallChatCompletionModel(BaseChatCompletionModel):
     ) -> Optional[ChatCompletionFunctionCallsContent]:
         delta = chunk_data["delta"]
         if delta.get("function_call"):
-            tool_call = delta["function_call"]
-            toll_call_index = 0
+            function_call = delta["function_call"]
+            if function_calls_content.index < 0:
+                function_calls_content.arguments_strs.append("")
+                function_calls_content.names.append("")
+                function_calls_content.index = 0
 
-            if toll_call_index == function_calls_content.index:
-                # append to the current function call argument string
-                function_calls_content.arguments_strs[function_calls_content.index] += tool_call["arguments"]
-
-            elif toll_call_index > function_calls_content.index:
-                # trigger another function call
-                function_calls_content.arguments_strs.append(tool_call["arguments"])
-                function_calls_content.names.append(tool_call["name"])
-                function_calls_content.index = toll_call_index
+            function_calls_content.arguments_strs[0] += function_call.get("arguments") or ""
+            function_calls_content.names[0] += function_call.get("name") or ""
             return function_calls_content
 
         return None
