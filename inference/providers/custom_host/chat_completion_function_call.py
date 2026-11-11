@@ -35,7 +35,7 @@ def _build_custom_host_chat_completion_payload_openai_function_call(
             formatted_messages.append(
                 {
                     "role": "assistant",
-                    "content": None,
+                    "content": msg.content if isinstance(msg.content, str) else None,
                     "function_call": {"name": call.name, "arguments": json.dumps(call.arguments)},
                 }
             )

@@ -93,6 +93,25 @@ def test_legacy_function_call_history_uses_function_messages(messages, stream):
 
 
 @pytest.mark.parametrize("stream", [False, True])
+@pytest.mark.parametrize("content", ["I will search for agents.\n随后查找作者。", ""])
+def test_legacy_function_call_preserves_assistant_text(messages, stream, content):
+    messages[2].content = content
+    messages[4].content = "I found a paper and will look up its authors."
+    original = [message.model_dump() for message in messages]
+
+    payload = prepare_payload(CustomHostFunctionCallChatCompletionModel(), messages, stream)
+
+    for index in (2, 4):
+        call = messages[index].function_calls[0]
+        assert payload["messages"][index] == {
+            "role": "assistant",
+            "content": messages[index].content,
+            "function_call": {"name": call.name, "arguments": json.dumps(call.arguments)},
+        }
+    assert [message.model_dump() for message in messages] == original
+
+
+@pytest.mark.parametrize("stream", [False, True])
 def test_tool_call_history_keeps_tool_messages(messages, stream):
     payload = prepare_payload(CustomHostToolCallsChatCompletionModel(), messages, stream)
 
